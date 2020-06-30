@@ -1,9 +1,9 @@
-import Position from './Position.js'
-import Direction from './Direction.js'
-import ParticipantController from '../../server/controller/ParticipantController.js'
-import * as TypeChecker from '../../utils/TypeChecker.js'
+var Position = require('./Position.js')
+var Direction = require('./Direction.js')
+var ParticipantController = require('../../server/controller/ParticipantController.js')
+var TypeChecker = require('../../utils/TypeChecker.js')
 
-export default class Participant {
+module.exports = class Participant {
 
     constructor(id, position, direction, participantController)
     {

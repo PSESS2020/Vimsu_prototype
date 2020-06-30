@@ -1,8 +1,8 @@
-import PositionClient from './PositionClient.js'
-import DirectionClient from './DirectionClient.js'
-import * as TypeChecker from '../../utils/TypeChecker.js'
+var PositionClient = require('./PositionClient.js')
+var DirectionClient = require('./DirectionClient.js')
+var TypeChecker = require('../../utils/TypeChecker.js')
 
-export default class ParticipantClient {
+module.exports = class ParticipantClient {
     
     constructor(position, direction) 
     {
