@@ -12,16 +12,23 @@ module.exports = class ParticipantClient {
      * 
      * @author Klaudia
      * 
-     * @param {Position} position 
-     * @param {Direction} direction 
+     * @param {PositionClient} position 
+     * @param {DirectionClient} direction 
      */
-    constructor(position, direction) 
+    constructor(id, position, direction) 
     {
+        TypeChecker.isInt(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, DirectionClient);
 
+        this.#id = id;
         this.#position = position;
         this.#direction = direction;
+    }
+
+    getId()
+    {
+        return this.#id;
     }
 
     getPosition() 
