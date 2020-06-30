@@ -1,4 +1,4 @@
-class Views {
+module.exports = class Views {
     constructor() {
     }
 
