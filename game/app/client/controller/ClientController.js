@@ -25,14 +25,15 @@ class ClientController {
     }
  
     setPort(port) {
-        this.#port = portSend;
+        this.#port = port;
     }
 
     openSocketConnection() {
-        if (port !== null && this.#socket === null) {
-            this.#socket = io(`ws://localhost:${port}`); // TODO: set socket server
+        if (this.#port && !this.#socket) {
+            this.#socket = io(`ws://localhost:${this.#port}`); // TODO: set socket server
             this.#socket.on('connected', (socket) => {
-                socket.on('handleFromServerRankings', handleFromServerRankings);
+                this.#socket.on('handleFromServerRankings', this.handleFromServerRankings);
+                this.#socket.on('handleFromServerNewMessage', this.handleFromServerNewMessage)
             });
         }
         else {
@@ -41,9 +42,19 @@ class ClientController {
     }
 
     handleFromServerRankings({participantIds, scores}) {
-        // TODO: handle
+        // TODO: this.#gameView. update game model etc.
     }
 
+    handleFromServerNewMessage({name, message}) {
+        // TODO: ...
+    }
 
+    handleFromViewNewMessage(message) {
+        if (!this.#socket) {
+            // TODO: throw error
+        }
+
+        this.#socket.emit('handleFromViewNewMessage', { participantId: 12345, message: message }); // instantiate message and update view, get participant id
+    }
 }
 

@@ -1,1 +1,28 @@
 
+
+<html>
+    <head>
+        <!-- TODO: Meta Tags -->
+    </head>
+    <body>
+
+        <input id="chatInputField" type="text"></input>
+        <input type="button" onclick="sendButtonClicked()">Send</input>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+        <script type="text/javascript" src="/controller/ClientController.js"></script>
+        <script>
+            var clientController = new ClientController(null); // TODO: pass gameView
+            clientController.setPort(3000);
+            clientController.openSocketConnection();
+
+            function sendButtonClicked() {
+                var messageText = document.getElementById("chatInputField").value;
+                clientController.handleFromViewNewMessage(messageText)
+            }
+            
+            //
+        </script>
+    </body>
+</html>
