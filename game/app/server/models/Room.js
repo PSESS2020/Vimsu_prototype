@@ -103,7 +103,7 @@ module.exports = class Room {
     exitParticipant(participantId) {
         TypeChecker.isInt(participantId);
         if (this.#listOfPPants.includes(participantId)) {
-            let index = this.#listOfPPants.getIndex(participantId);
+            let index = this.#listOfPPants.indexOf(participantId);
             this.#listOfPPants.splice(index, 1);
         }
     }
