@@ -5,18 +5,23 @@ var TypeChecker = require('../../utils/TypeChecker.js')
 
 module.exports = class Participant {
 
+    #id;
+    #position;
+    #direction;
+    #participantController;
+    
     constructor(id, position, direction, participantController)
     {
         TypeChecker.isInt(id);
         TypeChecker.isInstanceOf(participantController, ParticipantController);
 
-        this.id = id;
-        this.participantController = participantController;
+        this.#id = id;
+        this.#participantController = participantController;
 
         if (!position || !direction)
         {
-            this.position = new Position(1, 1, 1);
-            this.direction = Direction.DOWNRIGHT;
+            this.#position = new Position(1, 1, 1);
+            this.#direction = Direction.DOWNRIGHT;
         }
 
         else 
@@ -24,40 +29,40 @@ module.exports = class Participant {
             TypeChecker.isInstanceOf(position, Position);
             TypeChecker.isEnumOf(direction, Direction);
 
-            this.position = position;
-            this.direction = direction;
+            this.#position = position;
+            this.#direction = direction;
         }
     }
 
     getId() 
     {
-        return this.id;
+        return this.#id;
     }
 
     getPosition() 
     {
-        return this.position;
+        return this.#position;
     }
 
     setPosition(position) 
     {
         TypeChecker.isInstanceOf(position, Position);
-        this.position = position;
+        this.#position = position;
     }
 
     getDirection() {
-        return this.direction;
+        return this.#direction;
     }
 
     setDirection(direction) 
     {
         TypeChecker.isEnumOf(direction, Direction);
-        this.direction = direction;
+        this.#direction = direction;
     }
 
     getParticipantController() 
     {
-        return this.participantController;
+        return this.#participantController;
     }
 }
 
