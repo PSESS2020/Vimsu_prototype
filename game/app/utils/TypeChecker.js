@@ -60,3 +60,11 @@ export function isFunction(value)
         throw new TypeError(value + ' is not a function!')
     }
 }
+
+export function isEnumOf(object, Enum)
+{
+    if (!Object.values(Enum).includes(object)) 
+    {
+        throw new TypeError(object + ' is not an enum of ' + Enum + '!')
+    }
+}
