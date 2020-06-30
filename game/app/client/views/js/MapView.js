@@ -2,7 +2,7 @@ var Views = require('./Views.js')
 
 module.exports = class MapView extends Views {
     constructor() {
-
+        super();
     }
 
     draw() {
