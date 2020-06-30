@@ -38,6 +38,7 @@ module.exports = class Room {
         
         //Initialisiert width*length Feld gefüllt mit 0
         this.#occupationMap = new Array(width);
+        var i;
         for (i = 0; i < width; i++) {
             this.#occupationMap[i] = new Array(length).fill(0);
         }
@@ -55,7 +56,7 @@ module.exports = class Room {
             //this.#listOfGameObjects.push(new GameObject());
             //this.#listOfGameObjects.push(new GameObject());
 
-
+            var i;
             //Geht jedes Objekt in der Objektliste durch
             for (i = 0; i < this.#listOfGameObjects.length; i++) {
                 
@@ -66,8 +67,10 @@ module.exports = class Room {
                     let objectWidth = this.#listOfGameObjects.getWidth();
                     let objectLength = this.#listOfGameObjects.getLength();
 
+                    var j;
                     //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
                     for (j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
+                        var k;
                         for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
                             this.#occupationMap[j][k] = 1;      
                         }
@@ -103,7 +106,7 @@ module.exports = class Room {
     exitParticipant(participantId) {
         TypeChecker.isInt(participantId);
         if (this.#listOfPPants.includes(participantId)) {
-            let index = this.#listOfPPants.getIndex(participantId);
+            let index = this.#listOfPPants.indexOf(participantId);
             this.#listOfPPants.splice(index, 1);
         }
     }
