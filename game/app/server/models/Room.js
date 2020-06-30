@@ -3,6 +3,7 @@ var TypeOfRoom = require('./TypeOfRoom.js');
 const { FOYER } = require('./TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
+var Participant = require('./Participant.js');
 
 module.exports = class Room {
 
@@ -41,7 +42,7 @@ module.exports = class Room {
             this.#occupationMap[i] = new Array(length).fill(0);
         }
 
-        //anderen Fälle später
+        //andere Fälle später
         if (typeOfRoom == FOYER) {
             
             //random Werte
@@ -57,18 +58,66 @@ module.exports = class Room {
 
             //Geht jedes Objekt in der Objektliste durch
             for (i = 0; i < this.#listOfGameObjects.length; i++) {
-                let objectPosition = this.#listOfGameObjects[i].getPosition();
-                let objectWidth = this.#listOfGameObjects.getWidth();
-                let objectLength = this.#listOfGameObjects.getLength();
+                
+                //Check ob Objekt fest ist oder nicht
+                if (this.#listOfGameObjects[i].isStatic()) {
 
-                //Jedes Feld, das Objekt bedeckt, auf 1 setzen
-                for (j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
-                    for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;
-                           
+                    let objectPosition = this.#listOfGameObjects[i].getPosition();
+                    let objectWidth = this.#listOfGameObjects.getWidth();
+                    let objectLength = this.#listOfGameObjects.getLength();
+
+                    //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
+                    for (j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
+                        for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
+                            this.#occupationMap[j][k] = 1;      
+                        }
                     }
-                }
+                } 
             }
+        }
+    }
+
+    getRoomId() {
+        return this.#roomId;
+    }
+
+    getRoomController() {
+        return this.#roomController;
+    }
+
+    getWidth() {
+        return this.#width;
+    }
+
+    getLength() {
+        return this.#length;
+    }
+
+    enterParticipant(participantId) {
+        TypeChecker.isInt(participantId);
+        if (!this.#listOfPPants.includes(participantId)) {
+            this.#listOfPPants.push(participantId);
+        }
+    }
+
+    exitParticipant(participantId) {
+        TypeChecker.isInt(participantId);
+        if (this.#listOfPPants.includes(participantId)) {
+            let index = this.#listOfPPants.getIndex(participantId);
+            this.#listOfPPants.splice(index, 1);
+        }
+    }
+
+    checkForCollision(position) {
+        TypeChecker.isInstanceOf(position, Position);
+        let cordX = position.getCordX();
+        let cordY = position.getCordY();
+
+        if (this.#occupationMap[cordX][cordY] == 1) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }
