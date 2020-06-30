@@ -12,8 +12,8 @@ module.exports = class ParticipantClient {
      * 
      * @author Klaudia
      * 
-     * @param {Position} position 
-     * @param {Direction} direction 
+     * @param {PositionClient} position 
+     * @param {DirectionClient} direction 
      */
     constructor(id, position, direction) 
     {
