@@ -1,34 +1,62 @@
+export function isValidString(value) 
+{
+    if ((typeof value !== 'string') || !(value instanceof String) || !value) 
+    {
+        throw new TypeError(value + ' is not a string or is an empty string!')
+    }
+}
+
 export function isString(value) 
 {
-    return typeof value === 'string' || value instanceof String;
+    if ((typeof value !== 'string') || !(value instanceof String)) 
+    {
+        throw new TypeError(value + ' is not a string!')
+    }
 }
 
 export function isInt(value) 
 {
-    return typeof value === 'number' && isFinite(value) && value % 1 === 0;
+    if ((typeof value !== 'number') || value % 1 !== 0 || !(isFinite(value))) 
+    {
+        throw new TypeError(value + ' is not an integer!')
+    }
 }
 
-export function isFloat(value) 
+export function isValidFloat(value) 
 {
-    return typeof value === 'number' && isFinite(value) && value % 1 !== 0;
+    if ((typeof value !== 'number') || value % 1 === 0 || !(isFinite(value))) 
+    {
+        throw new TypeError(value + ' is not a float!')
+    }
 }
 
 export function isBoolean(value) 
 {
-    return typeof value === 'boolean';
+    if (typeof value !== 'boolean') 
+    {
+        throw new TypeError(value + ' is not a boolean!')
+    }
 }
 
 export function isDate(value) 
 {
-    return value instanceof Date;
+    if (!(value instanceof Date)) 
+    {
+        throw new TypeError(value + ' is not a Date!')
+    }
 }
 
 export function isInstanceOf(object, objectClass)
 {
-    return object instanceof objectClass;
+    if (!(object instanceof objectClass))
+    {
+        throw new TypeError(object + ' is not an instance of ' + objectClass + ' class!')
+    }
 }
 
-export function isFunction (value) 
+export function isFunction(value) 
 {
-    return typeof value === 'function';
+    if(typeof value !== 'function') {
+        throw new TypeError(value + ' is not a function!')
+    }
 }
