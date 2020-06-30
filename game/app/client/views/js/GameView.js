@@ -12,26 +12,45 @@ module.exports = class GameView {
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
-    constructor() {
+    constructor() 
+    {
         this.#roomId = 1;
         this.addToUpdateList(this.#foyerView);
         this.addToUpdateList(this.#ownAvatarView);
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
     }
 
+    getFoyerView() {
+        return this.#foyerView;
+    }
+
+    getOwnAvatarView() {
+        return this.#ownAvatarView;
+    }
+
+    getAnotherParticipantAvatarViews() {
+        return this.#anotherParticipantAvatarViews;
+    }
+
     addToUpdateList(viewInstance)
     {
         TypeChecker.isInstanceOf(viewInstance, Views);
-        this.#updateList.push(viewInstance);
+        
+        if(!this.#updateList.includes(viewInstance))
+        {
+            this.#updateList.push(viewInstance);
+        }
     }
 
     removeFromUpdateList(viewInstance)
     {
-        if(!this.#updateList.includes(viewInstance)){
+        if(!this.#updateList.includes(viewInstance))
+        {
             throw new Error(viewInstance + " is not in update list")
         }
-        //TODO: splice viewInstance from updateList
-        //this.#updateList.splice(this.#updateList.findIndex(viewInstance), 1)
+        
+        let index = this.#updateList.indexOf(viewInstance);
+        this.#updateList.splice(index, 1)
     }
 
     getUpdateList()
@@ -49,12 +68,37 @@ module.exports = class GameView {
 
     }
 
+    /**
+     * 
+     * @param {ParticipantClient} participants list of another participants excluding the current client
+     */
     initAnotherAvatarViews(participants)
     {
-        participants.forEach(participant => 
+        if(!(this.#ownAvatarView instanceof AvatarView))
+        {
+            throw new Error("Please initialize the current client's avatar view first using initOwnAvatarView(participant)");
+        }
+
+        var i;
+        for(i = 0; i < participants.length; i++)
+        {
+            TypeChecker.isInstanceOf(participants[i], ParticipantClient);
+
+            if(this.#anotherParticipantAvatarViews.includes(participants[i])) {
+                throw new Error(participants[i] + " is already in list of participants")
+            }
+
+            if(participants[i] !== this.#ownAvatarView) 
+            {
+                this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()));
+            }
+        }
+
+
+        /*participants.forEach(participant => 
             TypeChecker.isInstanceOf(participant, ParticipantClient),
             this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()))
-        );
+        );*/
     }
 
     updateAnotherAvatarViews(participants)
@@ -64,9 +108,25 @@ module.exports = class GameView {
 
     removeAnotherAvatarViews(participantIds)
     {
-        participantIds.forEach(id => 
-            this.#updateList.splice(this.#updateList.findIndex(participant => participant.getId() === id), 1)
-        );
+        var i;
+        for (i = 0; i < participantIds.length; i++)
+        {
+            TypeChecker.isInt(id);
+
+            let index = this.#updateList.findIndex(participant => participant.getId() === participantIds[i]);
+
+            if (index < 0) 
+            {
+                throw new Error(participantsIds[i] + " is not in list of participants")
+            }
+
+            this.#updateList.splice(index, 1)
+        }
+
+        /*participantIds.forEach(id => 
+            TypeChecker.isInt(id),
+            this.#updateList.splice(index, 1)
+        );*/
     }
 
     setRoomId(roomId)
@@ -91,5 +151,10 @@ module.exports = class GameView {
     {
         TypeChecker.isEnumOf(direction, DirectionClient);
         this.#ownAvatarView.setDirection(direction);
+    }
+
+    removeOwnAvatarView()
+    {
+        this.#ownAvatarView = undefined;
     }
 }
