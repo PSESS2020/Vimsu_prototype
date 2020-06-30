@@ -3,6 +3,10 @@ var TypeChecker = require('../../utils/TypeChecker.js');
 
 module.exports = class Position {
 
+    #roomId;
+    #cordX;
+    #cordY;
+
     /**
      * Erstellt Positionsinstanz
      * 
@@ -17,20 +21,20 @@ module.exports = class Position {
         TypeChecker.isInt(cordX);
         TypeChecker.isInt(cordY);
 
-        this.roomId = roomId;
-        this.cordX = cordX;
-        this.cordY = cordY;
+        this.#roomId = roomId;
+        this.#cordX = cordX;
+        this.#cordY = cordY;
     }
 
     getRoomId() {
-        return this.roomId;
+        return this.#roomId;
     }
 
     getCordX() {
-        return this.cordX;
+        return this.#cordX;
     }
 
     getCordY() {
-        return this.cordY;
+        return this.#cordY;
     }
 }
