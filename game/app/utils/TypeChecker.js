@@ -22,7 +22,7 @@ export function isInt(value)
     }
 }
 
-export function isValidFloat(value) 
+export function isFloat(value) 
 {
     if ((typeof value !== 'number') || value % 1 === 0 || !(isFinite(value))) 
     {
