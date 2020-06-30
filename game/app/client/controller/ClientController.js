@@ -1,8 +1,11 @@
 class ClientController {
 
+    #port;
+    #socket;
     #gameView;
 
-    //creates an instance of ClientController only if there is not an instance already
+    /*creates an instance of ClientController only if there is not an instance already.
+    Otherwise the existing instance will be returned.*/
     constructor(gameView) {
         if (!!ClientController.instance) {
             return ClientController.instance;
@@ -11,25 +14,36 @@ class ClientController {
         ClientController.instance = this;
 
         this.#gameView = gameView;
+        
 
         return this;
     }
 
 
-    getPortListen() {
-        return this.portListen;
+    getPort() {
+        return this.#port;
+    }
+ 
+    setPort(port) {
+        this.#port = portSend;
     }
 
-    getPortSend() {
-        return this.portSend;
+    openSocketConnection() {
+        if (port !== null && this.#socket === null) {
+            this.#socket = io(`ws://localhost:${port}`); // TODO: set socket server
+            this.#socket.on('connected', (socket) => {
+                socket.on('handleFromServerRankings', handleFromServerRankings);
+            });
+        }
+        else {
+            // TODO: error state
+        }
     }
 
-    setPortListen(portListen) {
-        this.portListen = portListen;
+    handleFromServerRankings({participantIds, scores}) {
+        // TODO: handle
     }
 
-    setPortSend(portSend) {
-        this.portSend = portSend;
-    }
+
 }
 
