@@ -9,7 +9,17 @@ module.exports = class Participant {
     #position;
     #direction;
     #participantController;
-    
+
+    /**
+     * Erstellt Participant Instanz
+     * 
+     * @author Klaudia
+     * 
+     * @param {int} id 
+     * @param {Position} position 
+     * @param {Direction} direction 
+     * @param {ParticipantController} participantController 
+     */
     constructor(id, position, direction, participantController)
     {
         TypeChecker.isInt(id);

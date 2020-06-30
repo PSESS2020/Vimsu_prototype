@@ -6,7 +6,15 @@ module.exports = class ParticipantClient {
     
     #position;
     #direction;
-    
+
+    /**
+     * Erstellt ParticipantClient Instanz
+     * 
+     * @author Klaudia
+     * 
+     * @param {Position} position 
+     * @param {Direction} direction 
+     */
     constructor(position, direction) 
     {
         TypeChecker.isInstanceOf(position, PositionClient);
