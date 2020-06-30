@@ -3,6 +3,10 @@ var Views = require('./Views.js')
 module.exports = class MapView extends Views {
     constructor() {
         super();
+
+        if (new.target === Views) {
+            throw new Error("Cannot construct abstract MapView instances directly");
+        }
     }
 
     draw() {
@@ -12,6 +16,4 @@ module.exports = class MapView extends Views {
     #drawGameObjects(objectType) {
         throw new Error('drawGameObjects() has to be implemented!');
     }
-
-
 }
