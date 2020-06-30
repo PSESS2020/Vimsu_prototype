@@ -7,3 +7,5 @@ const DirectionClient =
 };
 
 Object.freeze(DirectionClient)
+
+export default DirectionClient

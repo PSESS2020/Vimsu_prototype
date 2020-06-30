@@ -7,3 +7,5 @@ const Direction =
 };
 
 Object.freeze(Direction)
+
+export default Direction
