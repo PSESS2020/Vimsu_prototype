@@ -39,6 +39,8 @@ module.exports = class GameObject {
         this.#name = name;
         this.#width = width;
         this.#length = length;
+
+        //Position der linken, unteren Objektecke
         this.#position = position;
         this.#isSolid = isSolid;
     }
