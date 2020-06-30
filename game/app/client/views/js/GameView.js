@@ -30,8 +30,8 @@ module.exports = class GameView {
         if(!this.#updateList.includes(viewInstance)){
             throw new Error(viewInstance + " is not in update list")
         }
-
-        this.#updateList.pop(viewInstance);
+        //TODO: splice viewInstance from updateList
+        //this.#updateList.splice(this.#updateList.findIndex(viewInstance), 1)
     }
 
     getUpdateList()
