@@ -3,7 +3,7 @@ import Direction from './Direction.js'
 import ParticipantController from '../../server/controller/ParticipantController.js'
 import * as TypeChecker from '../../utils/TypeChecker.js'
 
-export class Participant {
+export default class Participant {
 
     constructor(id, position, direction, participantController)
     {
