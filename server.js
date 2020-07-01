@@ -1,4 +1,4 @@
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const express = require('express');
 const socketio = require('socket.io');
 
