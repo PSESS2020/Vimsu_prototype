@@ -2,6 +2,7 @@ var ConferenceController = require('./ConferenceController.js');
 var ParticipantController = require('./ParticipantController.js');
 var Room = require('../models/Room.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
+var Position = require('../models/Position.js');
 
 module.exports = class RoomController {
 
@@ -43,7 +44,7 @@ module.exports = class RoomController {
         }
 
         //TODO: Falls (1,1) die Spawnposition ist
-        this.notifyNewPosition(participantController, new Position(this.#room.getId(), 1, 1));
+        this.#notifyNewPosition(participantController, new Position(this.#room.getId(), 1, 1));
     }
 
     /**
@@ -62,7 +63,7 @@ module.exports = class RoomController {
             this.#room.exitParticipant(participantController.getParticipant());
         }
 
-        this.notifyLeftRoom(participantController);
+        this.#notifyLeftRoom(participantController);
     }
 
     /**
@@ -82,7 +83,7 @@ module.exports = class RoomController {
 
         //Wenn es zu keiner Kollision kommt, müssen alle anderen ParticipantController davon erfahren
         if(!collision) {
-            this.notifyNewPosition(participantController, position);
+            this.#notifyNewPosition(participantController, position);
         }
 
         return !collision;
@@ -92,9 +93,7 @@ module.exports = class RoomController {
     //TODO: handleNewMessage()
     
 
-
-    //TODO: Private Methode
-    notifyNewPosition(participantController, position) {
+    #notifyNewPosition = function(participantController, position) {
         TypeChecker(participantController, ParticipantController);
         let participantId = participantController.getParticipant().getId();
 
@@ -106,8 +105,7 @@ module.exports = class RoomController {
         });
     }
 
-    //TODO: Private Methode
-    notifyLeftRoom(participantController) {
+    #notifyLeftRoom = function(participantController) {
         TypeChecker(participantController, ParticipantController);
         let participantId = participantController.getParticipant().getId();
 
