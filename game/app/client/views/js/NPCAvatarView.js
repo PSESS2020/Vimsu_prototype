@@ -1,4 +1,4 @@
-const AvatarView = require("./AvatarView");
+const AvatarView = require("./AvatarView.js");
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
 module.exports = class NPCAvatarView extends AvatarView {

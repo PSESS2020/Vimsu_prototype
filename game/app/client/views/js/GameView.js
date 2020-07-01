@@ -41,7 +41,7 @@ module.exports = class GameView {
 
     addToUpdateList(viewInstance)
     {
-        TypeChecker.isInstanceOf(viewInstance, Views);
+        //TypeChecker.isInstanceOf(viewInstance, Views);
         
         if(!this.#updateList.includes(viewInstance))
         {
@@ -158,9 +158,9 @@ module.exports = class GameView {
             let index = this.#updateList.findIndex(participant => participant.getId() === participantIds);
 
             if (index < 0) 
-                {
-                    throw new Error(participantsIds + " is not in list of participants")
-                }
+            {
+                throw new Error(participantsIds + " is not in list of participants")
+            }
             
             this.#updateList.splice(index, 1)
         }

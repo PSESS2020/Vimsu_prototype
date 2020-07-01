@@ -1,3 +1,5 @@
+var GameObjectView = require('./GameObjectView.js')
+
 module.exports = class TileView extends GameObjectView {
 
 

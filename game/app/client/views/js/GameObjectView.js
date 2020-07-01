@@ -1,4 +1,5 @@
 var TypeChecker = require('../../../utils/TypeChecker.js')
+var Views = require('./Views.js')
 
 module.exports = class GameObjectView extends Views{
 

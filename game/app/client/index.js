@@ -1,8 +1,10 @@
-var GameView = require('./views/js/GameView')
-var ClientController = require('./controller/ClientController')
+var GameView = require('./views/js/GameView.js')
+var ClientController = require('./controller/ClientController.js')
 
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+//document.getElementById("demo").innerHTML = "abc";
+
+//let canvas = document.getElementById("canvas");
+//let ctx = canvas.getContext("2d");
 
 const GAME_WIDTH = 600;
 const GAME_HEIGHT = 300;
@@ -11,7 +13,7 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(3000);
 clientController.openSocketConnection();
-
+/*
 //TODO: anpassen
 let lastTime = 0;
 
@@ -28,3 +30,5 @@ function gameLoop(timestamp) {
 }
 
 requestAnimationFrame(gameLoop);
+
+*/
