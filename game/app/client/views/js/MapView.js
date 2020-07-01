@@ -13,7 +13,7 @@ module.exports = class MapView extends Views {
         throw new Error('draw() has to be implemented!');
     }
 
-    #drawGameObjects(objectType) {
+    #drawGameObjects = function(objectType) {
         throw new Error('drawGameObjects() has to be implemented!');
     }
 }
