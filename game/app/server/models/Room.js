@@ -116,12 +116,12 @@ module.exports = class Room {
 
     /**
      * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
-     * Gibt true zurück, wenn es zu einer Kollision komtm
-     * false, sonst
      * 
      * @author Philipp
      * 
      * @param {Position} position 
+     * @returns true, bei Kollision
+     * @returns false, sonst
      */
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
