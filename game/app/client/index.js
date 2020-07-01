@@ -8,12 +8,10 @@ const GAME_WIDTH = 600;
 const GAME_HEIGHT = 300;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
-/*
-let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(3000);
-clientController.openSocketConnection();*/
-/*
+clientController.openSocketConnection();
+
 //TODO: anpassen
 let lastTime = 0;
 
@@ -31,4 +29,3 @@ function gameLoop(timestamp) {
 
 requestAnimationFrame(gameLoop);
 
-*/
