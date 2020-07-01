@@ -37,7 +37,6 @@ module.exports = class RoomController {
     addParticipantController(participantController) {
         TypeChecker.isInstanceOf(participantController, ParticipantController);
 
-
         if (!this.#listOfPPantController.includes(participantController)) {
             this.#listOfPPantController.push(participantController);
             this.#room.enterParticipant(participantController.getParticipant());
@@ -78,6 +77,7 @@ module.exports = class RoomController {
      */
     handleMove(participantController, position) {
         TypeChecker.isInstanceOf(participantController, ParticipantController);
+        TypeChecker.isInstanceOf(position, Position);
 
         let collision = this.#room.checkForCollision(position);
 
@@ -94,7 +94,8 @@ module.exports = class RoomController {
     
 
     #notifyNewPosition = function(participantController, position) {
-        TypeChecker(participantController, ParticipantController);
+        TypeChecker.isInstanceOf(participantController, ParticipantController);
+        TypeChecker.isInstanceOf(position, Position);
         let participantId = participantController.getParticipant().getId();
 
         //Teilt jedem anderem ParticipantController mit, dass Participant mit participantId eine neue Position hat
@@ -106,7 +107,7 @@ module.exports = class RoomController {
     }
 
     #notifyLeftRoom = function(participantController) {
-        TypeChecker(participantController, ParticipantController);
+        TypeChecker.isInstanceOf(participantController, ParticipantController);
         let participantId = participantController.getParticipant().getId();
 
         //Teilt jedem anderem ParticipantController mit, dass Participant mit participantId den Raum verlassen hat
