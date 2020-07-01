@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-   "start": "node server"
+    "start": "node server"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/PSESS2020/Vimsu_prototype#readme",
   "dependencies": {
-    "express": "^4.17.1", 
+    "express": "^4.17.1",
     "feathers": "^2.2.4",
     "mongodb": "^3.5.9",
     "socket.io": "^2.3.0"
