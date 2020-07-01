@@ -56,7 +56,7 @@ class ClientController {
     Throws an error if there is already an existing socket */
     openSocketConnection() {
         if (this.#port && !this.#socket) {
-            this.#socket = io('ws://localhost:${this.#port}'); // TODO: set socket server
+            this.#socket = io('http://localhost:' + this.#port); // TODO: set socket server
             this.#socket.on('connected', (socket) => {
                 this.#socket.on('roomEnterecByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);

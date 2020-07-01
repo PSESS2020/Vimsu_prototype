@@ -9,7 +9,7 @@ const GAME_HEIGHT = 300;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView, 1);
-clientController.setPort(3000);
+clientController.setPort(5000);
 clientController.openSocketConnection();
 
 //TODO: anpassen
