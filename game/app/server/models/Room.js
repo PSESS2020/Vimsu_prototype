@@ -100,6 +100,8 @@ module.exports = class Room {
         if (!this.#listOfPPants.includes(participant)) {
             this.#listOfPPants.push(participant);
         }
+
+        //TODO: Einfügen in Allchat
     }
 
     exitParticipant(participantId) {
@@ -108,8 +110,17 @@ module.exports = class Room {
             let index = this.#listOfPPants.indexOf(participant);
             this.#listOfPPants.splice(index, 1);
         }
+
+        //TODO: Entfernen aus Allchat
     }
 
+    /**
+     * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
+     * Gibt true zurück, wenn es zu einer Kollision komtm
+     * false, sonst
+     * 
+     * @param {Position} position 
+     */
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
