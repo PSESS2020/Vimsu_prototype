@@ -1,10 +1,10 @@
-var Views = require('./Views.js')
-var FoyerView = require('./FoyerView.js')
+/*var Views = require('./Views.js')
+/var FoyerView = require('./FoyerView.js')
 var AvatarView = require('./AvatarView.js')
 var TypeChecker = require('../../../utils/TypeChecker.js')
-const ParticipantClient = require('../../models/ParticipantClient.js')
+const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
-module.exports = class GameView {
+/*module.exports =*/ class GameView {
 
     #gameWidth;
     #gameHeight;

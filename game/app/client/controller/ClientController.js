@@ -1,21 +1,17 @@
-const ParticipantClient = require("../models/ParticipantClient");
-const GameView = require("../views/js/GameView");
-
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
-
-module.exports = class ClientController {
+class ClientController {
 
     #port;
     #socket;
     #gameView;
     #currentRoom;
-    #participantId;
+    #participant;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
      * Otherwise the existing instance will be returned.
      * 
-     * @author Eric, Laura
+     * @author Laura, Eric
      * 
      * @param {GameView} gameView 
      * @param {ParticipantClient} participant
@@ -33,7 +29,7 @@ module.exports = class ClientController {
         ClientController.instance = this;
 
         this.#gameView = gameView;
-        this.#participantId = participantId;
+        this.participant = participant;
         
 
         return this;

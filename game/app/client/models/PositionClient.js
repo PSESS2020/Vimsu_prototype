@@ -1,6 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
-
-module.exports = class PositionClient {
+class PositionClient {
 
     #cordX;
     #cordY;

@@ -4,9 +4,39 @@
         <meta charset="UTF-8">
     </head>
     <body>
+        <script src="../libraries/require.js"></script>
+        <script>
+            requirejs([
+                        /* Utilities */
+                        '../../utils/TypeChecker',
+
+                        /* Model */
+                        '../models/DirectionClient',
+                        '../models/ParticipantClient',
+                        '../models/PositionClient',
+                        '../models/RoomClient',
+
+                        /* Views */
+                        'js/Views', 
+                        'js/MapView', 'js/FoyerView',
+                        'js/GameObjectView', 'js/TileView',
+                        'js/AvatarView', 'js/NPCAvatarView', 'js/ParticipantAvatarView',
+                        'js/GameView', 
+
+                        /* Controller */
+                        '../controller/ClientController',
+
+                        /* Initialization */
+                        '../index'], 
+                (loaded) => {
+                            // game is running, everything loaded
+            });
+            
+        </script>
+       
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <canvas id="canvas" width="600" height="300"></canvas>
-
-        <script type="text/javascript" src="../index.js"></script>
+        
+        <!--<script type="text/javascript" src="../index.js"></script>-->
     </body>
 </html>

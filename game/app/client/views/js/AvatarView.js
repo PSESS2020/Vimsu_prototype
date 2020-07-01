@@ -1,7 +1,7 @@
-var Views = require('./Views.js')
+/*var Views = require('./Views.js')
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
-module.exports = class AvatarView extends Views {
+module.exports =*/ class AvatarView extends Views {
 
     #position;
     #direction;

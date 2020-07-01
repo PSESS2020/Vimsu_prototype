@@ -1,7 +1,7 @@
-const AvatarView = require("./AvatarView.js");
+/*const AvatarView = require("./AvatarView.js");
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
-module.exports = class ParticipantAvatarView extends AvatarView {
+module.exports = */class ParticipantAvatarView extends AvatarView {
 
     #participantId;
 

@@ -1,5 +1,4 @@
-module.exports = class TypeChecker {
-
+class TypeChecker {
 
     static isValidString(value) 
     {

@@ -1,7 +1,5 @@
-var GameView = require('./views/js/GameView.js')
+//var GameView = require('./views/js/GameView.js')
 //var ClientController = require('./controller/ClientController.js')
-
-document.getElementById("demo").innerHTML = "abc";
 
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");

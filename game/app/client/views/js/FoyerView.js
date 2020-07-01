@@ -1,7 +1,7 @@
-var MapView = require('./MapView.js')
+/*var MapView = require('./MapView.js')
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
-module.exports = class FoyerView extends MapView {
+module.exports = */class FoyerView extends MapView {
     constructor() {
         super();
     }
@@ -10,7 +10,7 @@ module.exports = class FoyerView extends MapView {
         
     }
 
-    #drawGameObjects(objectType) {
+    drawGameObjects(objectType) {
         TypeChecker.isInt(objectType);
     }
 

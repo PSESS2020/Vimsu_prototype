@@ -1,8 +1,4 @@
-var PositionClient = require('./PositionClient.js')
-var DirectionClient = require('./DirectionClient.js')
-var TypeChecker = require('../../utils/TypeChecker.js')
-
-module.exports = class ParticipantClient {
+class ParticipantClient {
     
     #id;
     #position;

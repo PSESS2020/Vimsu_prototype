@@ -1,4 +1,4 @@
-module.exports = Object.freeze
+Object.freeze
 ({
     UPLEFT: "UPLEFT",
     DOWNLEFT: "DOWNLEFT",
