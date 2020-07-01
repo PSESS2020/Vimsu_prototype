@@ -3,7 +3,7 @@ module.exports = class TypeChecker {
 
     static isValidString(value) 
     {
-        if ((typeof value !== 'string') || !(value instanceof String) || !value) 
+        if ((typeof value !== 'string') || !value) 
         {   
             throw new TypeError(value + ' is not a string or is an empty string!')
         }
@@ -11,7 +11,7 @@ module.exports = class TypeChecker {
 
     static isString(value) 
     {
-        if ((typeof value !== 'string') || !(value instanceof String)) 
+        if (typeof value !== 'string') 
         {
             throw new TypeError(value + ' is not a string!')
         }
