@@ -7,7 +7,7 @@ let ctx = canvas.getContext("2d");
 const GAME_WIDTH = 600;
 const GAME_HEIGHT = 300;
 
-gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 /*
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView, 1);
