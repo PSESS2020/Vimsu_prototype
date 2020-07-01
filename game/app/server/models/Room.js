@@ -104,7 +104,7 @@ module.exports = class Room {
         //TODO: Einfügen in Allchat
     }
 
-    exitParticipant(participantId) {
+    exitParticipant(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
         if (this.#listOfPPants.includes(participant)) {
             let index = this.#listOfPPants.indexOf(participant);
@@ -118,6 +118,8 @@ module.exports = class Room {
      * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
      * Gibt true zurück, wenn es zu einer Kollision komtm
      * false, sonst
+     * 
+     * @author Philipp
      * 
      * @param {Position} position 
      */
