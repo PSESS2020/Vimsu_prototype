@@ -5,10 +5,25 @@ class GameObjectView {
     #canCollideWithPlayer;
     
 
-    constructor(objectId, position, canCollideWithPlayer) {
+    constructor(objectId, position) {
         this.#objectId = objectId;
-        this.#objectId = position;
+        this.#objectId = position;;
+    }
+
+    setCollision(canCollideWithPlayer) {
         this.#canCollideWithPlayer = canCollideWithPlayer;
+    }
+
+    getCollision() {
+        return this.#canCollideWithPlayer;
+    }
+
+    draw() {
+
+    }
+
+    onclick() {
+        
     }
 
     
