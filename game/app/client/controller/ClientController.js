@@ -5,7 +5,7 @@ const ParticipantClient = require("../models/ParticipantClient");
 
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
-class ClientController {
+module.exports = class ClientController {
 
     #port;
     #socket;
@@ -27,7 +27,7 @@ class ClientController {
      */
 
 
-    constructor(gameView, participant) {
+    constructor(gameView, participantId) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
@@ -66,6 +66,7 @@ class ClientController {
             this.#socket.on('connected', (socket) => {
                 this.#socket.on('roomEnterecByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);
+                //other events handled from the server
             });
         }
         else {
