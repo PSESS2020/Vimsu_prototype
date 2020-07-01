@@ -95,17 +95,17 @@ module.exports = class Room {
         return this.#length;
     }
 
-    enterParticipant(participantId) {
-        TypeChecker.isInt(participantId);
-        if (!this.#listOfPPants.includes(participantId)) {
-            this.#listOfPPants.push(participantId);
+    enterParticipant(participant) {
+        TypeChecker.isInstanceOf(participant, Participant);
+        if (!this.#listOfPPants.includes(participant)) {
+            this.#listOfPPants.push(participant);
         }
     }
 
     exitParticipant(participantId) {
-        TypeChecker.isInt(participantId);
-        if (this.#listOfPPants.includes(participantId)) {
-            let index = this.#listOfPPants.indexOf(participantId);
+        TypeChecker.isInstanceOf(participant, Participant);
+        if (this.#listOfPPants.includes(participant)) {
+            let index = this.#listOfPPants.indexOf(participant);
             this.#listOfPPants.splice(index, 1);
         }
     }
