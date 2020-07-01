@@ -1,10 +1,30 @@
-const ClientController = require("./controller/ClientController");
-const GameView = require("./views/js/GameView");
+var GameView = require('./views/js/GameView')
+var ClientController = require('./controller/ClientController')
 
-var gameView = new GameView();
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
 
-var clientController = new ClientController(gameView);
+const GAME_WIDTH = 600;
+const GAME_HEIGHT = 300;
+
+let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+let clientController = new ClientController(gameView, 1);
 clientController.setPort(3000);
 clientController.openSocketConnection();
 
+//TODO: anpassen
+let lastTime = 0;
 
+function gameLoop(timestamp) {
+  let deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
+
+  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+  gameView.update(deltaTime);
+  gameView.draw(ctx);
+
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);

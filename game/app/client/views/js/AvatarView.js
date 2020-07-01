@@ -1,4 +1,7 @@
-module.exports = class AvatarView {
+var Views = require('./Views.js')
+var TypeChecker = require('../../../utils/TypeChecker.js')
+
+module.exports = class AvatarView extends Views {
 
     #position;
     #direction;
@@ -6,12 +9,20 @@ module.exports = class AvatarView {
     #spriteSheet;
 
     constructor(position, direction) {
+        super();
+        TypeChecker.isInstanceOf(position, PositionClient);
+        TypeChecker.isEnumOf(direction, DirectionClient);
         this.#position = position;
         this.#direction = direction;
+
+        if (new.target === AvatarView) {
+            throw new Error("Cannot construct abstract AvatarView instances directly");
+        }    
     }
 
 
     setPosition(position) {
+        TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
     }
 
@@ -20,6 +31,7 @@ module.exports = class AvatarView {
     }
 
     setDirection(direction) {
+        TypeChecker.isEnumOf(direction, DirectionClient);
         this.#direction = direction;
     }
 
@@ -41,14 +53,15 @@ module.exports = class AvatarView {
     }
 
     setWalking(walking) {
-        this.walking;
+        TypeChecker.isBoolean(walking);
+        this.#walking = walking;
     }
 
     draw() {
-
+        throw new Error('draw() has to be implemented!');
     }
 
     onClick() {
-          
+        throw new Error('onClick() has to be implemented!');
     }
 }
