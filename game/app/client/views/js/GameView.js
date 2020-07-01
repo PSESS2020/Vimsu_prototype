@@ -6,14 +6,21 @@ const ParticipantClient = require('../../models/ParticipantClient.js')
 
 module.exports = class GameView {
 
+    #gameWidth;
+    #gameHeight;
     #roomId;
     #updateList = [];
     #foyerView = new FoyerView();
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
-    constructor() 
+    constructor(gameWidth, gameHeight) 
     {
+        TypeChecker.isInt(gameWidth);
+        TypeChecker.isInt(gameHeight);
+        this.#gameWidth = gameWidth;
+        this.#gameHeight = gameHeight;
+
         this.#roomId = 1;
         this.addToUpdateList(this.#foyerView);
         this.addToUpdateList(this.#ownAvatarView);
@@ -58,12 +65,12 @@ module.exports = class GameView {
         return this.#updateList;
     }
 
-    draw()
+    draw(ctx)
     {
 
     }
 
-    update()
+    update(deltaTime)
     {
 
     }
