@@ -4,7 +4,7 @@ module.exports = class MapView extends Views {
     constructor() {
         super();
 
-        if (new.target === Views) {
+        if (new.target === MapView) {
             throw new Error("Cannot construct abstract MapView instances directly");
         }
     }
