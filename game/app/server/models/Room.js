@@ -1,6 +1,5 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var TypeOfRoom = require('./TypeOfRoom.js');
-const { FOYER } = require('./TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
