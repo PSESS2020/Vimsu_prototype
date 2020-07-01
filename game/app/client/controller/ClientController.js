@@ -5,7 +5,7 @@ class ClientController {
     #socket;
     #gameView;
     #currentRoom;
-    #participant;
+    #participantId;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -29,7 +29,7 @@ class ClientController {
         ClientController.instance = this;
 
         this.#gameView = gameView;
-        this.participant = participant;
+        this.#participantId = participantId;
         
 
         return this;
