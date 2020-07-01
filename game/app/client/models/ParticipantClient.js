@@ -4,6 +4,7 @@ var TypeChecker = require('../../utils/TypeChecker.js')
 
 module.exports = class ParticipantClient {
     
+    #id;
     #position;
     #direction;
 
