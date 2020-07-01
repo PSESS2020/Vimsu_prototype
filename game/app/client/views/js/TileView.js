@@ -1,4 +1,4 @@
-class TileView extends GameObjectView {
+module.exports = class TileView extends GameObjectView {
 
 
     constructor(tileId, position) {
