@@ -21,4 +21,9 @@ module.exports = class ParticipantController {
     sendRoomLeftByOther(participantId) {
 
     }
+
+    //TODO: Schickt ClientController Ergebnis der Kollisionserkennung, collision ist ein bool
+    sendResultCollisionDetection(collision) {
+        
+    }
 }
