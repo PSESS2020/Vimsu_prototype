@@ -45,7 +45,7 @@
 
         
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
-        if(RoomClient.instance) {
+        if(!!RoomClient.instance) {
             return RoomClient.instance;
         }
 

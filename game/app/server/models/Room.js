@@ -3,11 +3,12 @@ var TypeOfRoom = require('./TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
+var GameObjectService = require('../services/GameObjectService.js');
 
 module.exports = class Room {
 
     #roomId;
-    #roomController;
+    //roomController;
     //roomChat
     #length;
     #width;
@@ -23,16 +24,15 @@ module.exports = class Room {
      * @author Philipp
      * 
      * @param {int} roomId 
-     * @param {RoomController} roomController
      * @param {TypeOfRoom} typeOfRoom 
      */
-    constructor(roomId, roomController, typeOfRoom) {
+    constructor(roomId, typeOfRoom) {
         TypeChecker.isInt(roomId);
-        TypeChecker.isInstanceOf(roomController, RoomController);
+        //TypeChecker.isInstanceOf(roomController, RoomController);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         this.#roomId = roomId;
-        this.#roomController = roomController;
+        //this.#roomController = roomController;
         this.#listOfPPants = [];
 
         //andere Fälle später
@@ -49,11 +49,10 @@ module.exports = class Room {
                 this.#occupationMap[i] = new Array(this.#length).fill(0);
             }
             
-            //Alle GameObjekte die in diesen Raum gehören instanziieren und in Liste einfügen
+            //Alle GameObjekte die in diesen Raum gehören von Service holen
 
-            //this.#listOfGameObjects.push(new GameObject());
-            //this.#listOfGameObjects.push(new GameObject());
-            //this.#listOfGameObjects.push(new GameObject());
+            let objService = new GameObjectService();
+            this.#listOfGameObjects = objService.getObjects(this.#roomId);
 
             var i;
             //Geht jedes Objekt in der Objektliste durch
@@ -83,9 +82,11 @@ module.exports = class Room {
         return this.#roomId;
     }
 
+    /*
     getRoomController() {
         return this.#roomController;
     }
+    */
 
     getWidth() {
         return this.#width;
