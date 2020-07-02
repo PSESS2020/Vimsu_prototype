@@ -1,13 +1,14 @@
 //var GameView = require('./views/js/GameView.js')
 //var ClientController = require('./controller/ClientController.js')
 
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
 const GAME_WIDTH = 600;
 const GAME_HEIGHT = 300;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+gameView.initOwnAvatarView(" ");
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(5000);
 clientController.openSocketConnection();
@@ -15,7 +16,7 @@ clientController.openSocketConnection();
 //TODO: anpassen
 let lastTime = 0;
 
-function gameLoop(timestamp) {
+/*function gameLoop(timestamp) {
   let deltaTime = timestamp - lastTime;
   lastTime = timestamp;
 
@@ -24,8 +25,36 @@ function gameLoop(timestamp) {
   gameView.update(deltaTime);
   gameView.draw(ctx);
 
-  requestAnimationFrame(gameLoop);
-}
+  //requestAnimationFrame(gameLoop);
+}*/
+
+/*var keyCodes = {
+  38: 'up',
+  37: 'left',
+  39: 'right',
+  40: 'down',
+}*/
+
+window.setInterval(function(){
+  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+  gameView.update();
+  gameView.draw();
+
+}, 50);
+
+document.onkeypress = function(e) {
+  if (e.keyCode === 97 || e.keyCode === 37) { // A or left arrow key to turn left
+    clientController.handleLeftArrowClick();
+  } else if (e.keyCode === 119 || e.keyCode === 38) {
+    clientController.handleUpArrowClick();
+  } else if (e.keyCode === 100 || e.keyCode === 39) {
+    clientController.handleRightArrowClick();
+  } else if (e.keyCode === 115 || e.keyCode === 40) {
+    clientController.handleDownArrowClick();
+  }
+};
+
 
 //requestAnimationFrame(gameLoop);
 

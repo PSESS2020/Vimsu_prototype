@@ -1,4 +1,4 @@
-Object.freeze
+const DirectionClient = Object.freeze
 ({
     UPLEFT: "UPLEFT",
     DOWNLEFT: "DOWNLEFT",
