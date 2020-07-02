@@ -11,7 +11,7 @@
         <script> const socket = io('http://localhost:5000'); </script>
         <script>
             requirejs(['../../utils/TypeChecker', '../models/DirectionClient', '../models/ParticipantClient', 
-                        '../models/PositionClient', '../models/RoomClient'], () => {
+                        '../models/PositionClient', '../models/RoomClient', '../models/GameObjectClient'], () => {
                 requirejs(['js/Views'], () => {
                     requirejs(['js/MapView', 'js/GameObjectView', 'js/AvatarView'], () => {
                         requirejs(['js/FoyerView', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView'], () => {
