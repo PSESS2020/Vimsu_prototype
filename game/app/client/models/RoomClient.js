@@ -38,7 +38,7 @@
 
         occupationMap.forEach(element => {
             TypeChecker.isInstanceOf(element, Array);
-            element.forEach(item, item => {
+            element.forEach(item => {
                 TypeChecker.isInt(item);
             });
         });
