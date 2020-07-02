@@ -95,6 +95,13 @@ module.exports = class Room {
         return this.#length;
     }
 
+    /**
+     * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
+     * 
+     * @author Philipp
+     * 
+     * @param {Participant} participant 
+     */
     enterParticipant(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
         if (!this.#listOfPPants.includes(participant)) {
@@ -104,6 +111,13 @@ module.exports = class Room {
         //TODO: Einfügen in Allchat
     }
 
+     /**
+     * Entfernt Participant aus Raumliste, falls dieser darin ist
+     * 
+     * @author Philipp
+     * 
+     * @param {Participant} participant 
+     */
     exitParticipant(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
         if (this.#listOfPPants.includes(participant)) {
