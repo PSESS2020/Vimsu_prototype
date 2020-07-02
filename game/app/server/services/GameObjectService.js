@@ -63,8 +63,8 @@ module.exports = class GameObjectService {
             }
         }
 
-        this.#objects.push(new GameObject(100*100+1, "Wall" + 1, 100, 50, new Position(1, 1, 1), false));
-        this.#objects.push(new GameObject(100*100+2, "Wall" + 2, 100, 50, new Position(1, 100, 1), false));
+        //this.#objects.push(new GameObject(100*100+1, "Wall" + 1, 100, 50, new Position(1, 1, 1), false));
+        //this.#objects.push(new GameObject(100*100+2, "Wall" + 2, 100, 50, new Position(1, 100, 1), false));
     
     }
 }
