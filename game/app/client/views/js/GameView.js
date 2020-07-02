@@ -23,8 +23,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#roomId = 1;
         this.addToUpdateList(this.#foyerView);
-        this.addToUpdateList(this.#ownAvatarView);
-        this.addToUpdateList(this.#anotherParticipantAvatarViews);
     }
 
     getFoyerView() {
@@ -41,7 +39,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     addToUpdateList(viewInstance)
     {
-        //TypeChecker.isInstanceOf(viewInstance, Views);
+        if(viewInstance instanceof Array) {
+            var i;
+            for(i = 0; i < viewInstance.length; i++) {
+                TypeChecker.isInstanceOf(viewInstance[i], Views);
+            }
+        }
+
+        TypeChecker.isInstanceOf(viewInstance, Views);
         
         if(!this.#updateList.includes(viewInstance))
         {
@@ -81,7 +86,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
      */
     initAnotherAvatarViews(participants)
     {
-        if(!(this.#ownAvatarView instanceof AvatarView))
+        if(!(this.#ownAvatarView instanceof ParticipantAvatarView))
         {
             throw new Error("Please initialize the current client's avatar view first using initOwnAvatarView(participant)");
         }
@@ -100,7 +105,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 if(participants[i] !== this.#ownAvatarView) 
                 {
-                    this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
                 }
             }
         }
@@ -115,7 +120,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
             }
         }
 
@@ -180,7 +185,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initOwnAvatarView(participant)
     {
         TypeChecker.isInstanceOf(participant, ParticipantClient);
-        this.#ownAvatarView = new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection());
+        this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
     }
 
     updateOwnAvatarPosition(newPosition)
