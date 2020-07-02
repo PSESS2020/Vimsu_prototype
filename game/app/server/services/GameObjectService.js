@@ -57,11 +57,14 @@ module.exports = class GameObjectService {
     initAllObjects()
     {
         var i, j;
-        for (i = 1; i < 21; i++) {
-            for (j = 1; j< 21; i++) {
-                this.#objects.push(new GameObject(20*i+j, "Tile" + 20*i+j, 1, 1, new Position(1, i, j), false));
+        for (i = 1; i < 101; i++) {
+            for (j = 1; j< 101; i++) {
+                this.#objects.push(new GameObject(100*(i-1)+j, "Tile" + 100*(i-1)+j, 1, 1, new Position(1, i, j), false));
             }
         }
 
+        this.#objects.push(new GameObject(100*100+1, "Wall" + 1, 100, 50, new Position(1, 1, 1), false));
+        this.#objects.push(new GameObject(100*100+2, "Wall" + 2, 100, 50, new Position(1, 100, 1), false));
+    
     }
 }
