@@ -8,10 +8,12 @@ module.exports =*/ class AvatarView extends Views {
     #walking = false;
     #spriteSheet;
 
+
+
     constructor(position, direction) {
         super();
-        TypeChecker.isInstanceOf(position, PositionClient);
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        //TypeChecker.isInstanceOf(position, PositionClient);
+        //TypeChecker.isEnumOf(direction, DirectionClient);
         this.#position = position;
         this.#direction = direction;
 
@@ -52,10 +54,10 @@ module.exports =*/ class AvatarView extends Views {
         return this.#walking;
     }
 
-    setWalking(walking) {
-        TypeChecker.isBoolean(walking);
-        this.#walking = walking;
-    }
+    //setWalking(walking) {
+        //TypeChecker.isBoolean(walking);
+        //this.#walking = walking;
+    //}
 
     draw() {
         throw new Error('draw() has to be implemented!');
@@ -64,4 +66,10 @@ module.exports =*/ class AvatarView extends Views {
     onClick() {
         throw new Error('onClick() has to be implemented!');
     }
+
+    update() {
+        throw new Error('update() has to be implemented!' )
+    }
+
+    
 }

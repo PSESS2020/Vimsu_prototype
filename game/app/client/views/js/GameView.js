@@ -22,7 +22,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#gameHeight = gameHeight;
 
         this.#roomId = 1;
-        this.addToUpdateList(this.#foyerView);
+        //this.addToUpdateList(this.#foyerView);
     }
 
     getFoyerView() {
@@ -70,14 +70,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         return this.#updateList;
     }
 
-    draw(ctx)
+    draw()
     {
-
+        for (var view in this.#updateList) {
+            this.#updateList[view].draw();
+        }
     }
 
-    update(deltaTime)
+    update()
     {
-
+        for (var view in this.#updateList) {
+            console.log('1');
+            this.#updateList[view].update();
+        }
     }
 
     /**
@@ -184,8 +189,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initOwnAvatarView(participant)
     {
-        TypeChecker.isInstanceOf(participant, ParticipantClient);
-        this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        //TypeChecker.isInstanceOf(participant, ParticipantClient);
+        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        this.#ownAvatarView = new ParticipantAvatarView("(1,2)", 'DOWNLEFT', 1); 
+        this.addToUpdateList(this.#ownAvatarView);
     }
 
     updateOwnAvatarPosition(newPosition)
@@ -198,6 +205,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         TypeChecker.isEnumOf(direction, DirectionClient);
         this.#ownAvatarView.setDirection(direction);
+    }
+
+    updateOwnAvatarWalking(isMoving) {
+        this.#ownAvatarView.updateCurrentAnimation();
+        this.#ownAvatarView.updateWalking(isMoving);
     }
 
     removeOwnAvatarView()
