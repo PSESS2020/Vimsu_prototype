@@ -2,7 +2,6 @@ class GameObjectView extends Views {
 
     #objectId;
     #position;
-    #canCollideWithPlayer;
     
 
     constructor(objectId, position) {
@@ -15,15 +14,6 @@ class GameObjectView extends Views {
         if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
         }
-    }
-
-    setCollision(canCollideWithPlayer) {
-        TypeChecker.isBoolean(canCollideWithPlayer);
-        this.#canCollideWithPlayer = canCollideWithPlayer;
-    }
-
-    getCollision() {
-        return this.#canCollideWithPlayer;
     }
 
     draw() {
