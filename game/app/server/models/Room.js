@@ -36,7 +36,7 @@ module.exports = class Room {
         this.#listOfPPants = [];
 
         //andere Fälle später
-        if (typeOfRoom == FOYER) {
+        if (typeOfRoom == "FOYER") {
             
             //random Werte
             this.#length = 100;
@@ -93,6 +93,10 @@ module.exports = class Room {
 
     getLength() {
         return this.#length;
+    }
+
+    getListOfPPants() {
+        return this.#listOfPPants;
     }
 
     /**

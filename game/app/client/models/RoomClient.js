@@ -70,6 +70,10 @@
         return this.#length;
     }
 
+    getListOfPPants() {
+        return this.#listOfPPants;
+    }
+
     /**
      * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
      * 
