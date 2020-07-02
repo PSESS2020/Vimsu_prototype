@@ -34,13 +34,6 @@ module.exports = class Room {
         this.#roomId = roomId;
         this.#roomController = roomController;
         this.#listOfPPants = [];
-        
-        //Initialisiert width*length Feld gefüllt mit 0
-        this.#occupationMap = new Array(width);
-        var i;
-        for (i = 0; i < width; i++) {
-            this.#occupationMap[i] = new Array(length).fill(0);
-        }
 
         //andere Fälle später
         if (typeOfRoom == FOYER) {
@@ -48,6 +41,13 @@ module.exports = class Room {
             //random Werte
             this.#length = 100;
             this.#width = 100;
+
+            //Initialisiert width*length Feld gefüllt mit 0
+            this.#occupationMap = new Array(this.#width);
+            var i;
+            for (i = 0; i < this.#width; i++) {
+                this.#occupationMap[i] = new Array(this.#length).fill(0);
+            }
             
             //Alle GameObjekte die in diesen Raum gehören instanziieren und in Liste einfügen
 
