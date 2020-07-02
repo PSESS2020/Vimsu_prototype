@@ -1,7 +1,7 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
-var ParticipantClient = require('./ParticipantClient.js');
+//var TypeChecker = require('../../utils/TypeChecker.js');
+//var ParticipantClient = require('./ParticipantClient.js');
 
-module.exports = class RoomClient {
+/*module.exports = */class RoomClient {
 
     #roomId;
     //clientRoomChat
