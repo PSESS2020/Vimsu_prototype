@@ -51,7 +51,7 @@ module.exports = class Room {
             
             //Alle GameObjekte die in diesen Raum gehören von Service holen
 
-            let objService = new GameObjectService();
+            let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
             this.#listOfGameObjects = objService.getObjects(this.#roomId);
 
             var i;

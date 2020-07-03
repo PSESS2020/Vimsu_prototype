@@ -5,15 +5,26 @@ var Position = require('../models/Position.js')
 module.exports = class GameObjectService {
 
     #objects = [];
+    #roomId;
+    #roomWidth;
+    #roomLength;
 
-    constructor() 
+    constructor(roomId, roomWidth, roomLength) 
     {
         if(!!ObjectService.instance){
             return ObjectService.instance
         }
  
         ObjectService.instance = this;
-        this.#initAllObjects;
+
+        TypeChecker.isInt(roomId);
+        TypeChecker.isInt(roomWidth);
+        TypeChecker.isInt(roomLength);
+        this.#roomId = roomId;
+        this.#roomWidth = roomWidth;
+        this.#roomLength = roomLength;
+
+        this.initAllObjects();
     }
 
     getAllObjects()
@@ -56,10 +67,11 @@ module.exports = class GameObjectService {
 
     initAllObjects()
     {
-        var i, j;
-        for (i = 1; i < 101; i++) {
-            for (j = 1; j< 101; i++) {
-                this.#objects.push(new GameObject(100*(i-1)+j, "Tile" + 100*(i-1)+j, 1, 1, new Position(1, i, j), false));
+        var max = Math.max(this.#roomWidth, this.#roomLength);
+        
+        for (var i = 1; i < this.#roomWidth+1; i++) {
+            for (var j = 1; j< this.#roomLength+1; i++) {
+                this.#objects.push(new GameObject(max*(i-1)+j, "Tile" + max*(i-1)+j, 1, 1, new Position(this.#roomId, i, j), false));
             }
         }
 
