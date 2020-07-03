@@ -58,7 +58,14 @@ document.onkeypress = function(e) {
 document.onkeyup = function(e) {
   if (e.keyCode === 65 || e.keyCode === 37) { 
     clientController.handleArrowUp();
+  } else if (e.keyCode === 87 || e.keyCode === 38) {
+    clientController.handleArrowUp();
+  } else if (e.keyCode === 68 || e.keyCode === 39) {
+    clientController.handleArrowUp();
+  } else if (e.keyCode === 83 || e.keyCode === 40) {
+    clientController.handleArrowUp();
   }
+
 }
   /*} else if (e.keyCode === 119 || e.keyCode === 38) {
     clientController.handleArrowUp();

@@ -43,7 +43,7 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
 
     updateCurrentAnimation() {
         var direction = super.getDirection();
-        if (this.#walking = true) {
+        if (this.#walking === true) {
             if (direction === 'UPLEFT') {
                 this.#currentAnimation = this.#walkingUpLeftAnimation;
             } else if (direction === 'UPRIGHT') {
