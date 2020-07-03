@@ -14,7 +14,6 @@ module.exports = class GameObjectService {
 
         ObjectService.instance = this;
         this.#objects = [];
-        this.#counter = 1;
     }
 
     getObjects(roomId, typeOfRoom)
