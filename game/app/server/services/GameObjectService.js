@@ -56,9 +56,9 @@ module.exports = class GameObjectService {
     #initAllObjects = function(roomId, typeOfRoom) 
     {    
         if (typeOfRoom === 'FOYER') {
-            for (var i = 1; i < RoomDimensions.FOYER_WIDTH; i++) {
-                for (var j = 1; j< RoomDimensions.FOYER_LENGTH; i++) {
-                    this.#objects.push(new GameObject(RoomDimensions.FOYER_LENGTH*(i-1)+j, "Tile" + (i-1)+j, 1, 1, new Position(roomId, i, j), false));
+            for (var i = 1; i < RoomDimensions.FOYER_WIDTH + 1; i++) {
+                for (var j = 1; j < RoomDimensions.FOYER_LENGTH + 1; i++) {
+                    this.#objects.push(new GameObject(RoomDimensions.FOYER_LENGTH*(i-1)+j, "Tile" + RoomDimensions.FOYER_LENGTH*(i-1)+j, 1, 1, new Position(roomId, i, j), false));
                 }
             }
 
