@@ -20,11 +20,11 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         super(position, direction);
         TypeChecker.isInt(participantId)
         this.#participantId = participantId;
-        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 1, 4);
-        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 11, 14);
-        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 6, 9);
-        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 16, 19);
-        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);
+        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 3, 1, 4);
+        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 3, 11, 14);
+        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 6, 9);
+        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 16, 19);
+        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 0, 0);
         this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0); 
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);

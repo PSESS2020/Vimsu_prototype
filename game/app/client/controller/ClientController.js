@@ -146,24 +146,28 @@ class ClientController {
         }
     }
 
-    handleLeftArrowClick() {
+    handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
-    handleRightArrowClick() {
+    handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
-    handleUpArrowClick() {
+    handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
-    handleDownArrowClick() {
+    handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
         this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleArrowUp() {
+        this.#gameView.updateOwnAvatarWalking(false);
     }
 
 

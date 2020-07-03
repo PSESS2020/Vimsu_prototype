@@ -45,16 +45,29 @@ window.setInterval(function(){
 
 document.onkeypress = function(e) {
   if (e.keyCode === 97 || e.keyCode === 37) { // A or left arrow key to turn left
-    clientController.handleLeftArrowClick();
+    clientController.handleLeftArrowDown();
   } else if (e.keyCode === 119 || e.keyCode === 38) {
-    clientController.handleUpArrowClick();
+    clientController.handleUpArrowDown();
   } else if (e.keyCode === 100 || e.keyCode === 39) {
-    clientController.handleRightArrowClick();
+    clientController.handleRightArrowDown();
   } else if (e.keyCode === 115 || e.keyCode === 40) {
-    clientController.handleDownArrowClick();
+    clientController.handleDownArrowDown();
   }
 };
 
+document.onkeyup = function(e) {
+  if (e.keyCode === 65 || e.keyCode === 37) { 
+    clientController.handleArrowUp();
+  }
+}
+  /*} else if (e.keyCode === 119 || e.keyCode === 38) {
+    clientController.handleArrowUp();
+  } else if (e.keyCode === 100 || e.keyCode === 39) {
+    clientController.handleArrowUp();
+  } else if (e.keyCode === 115 || e.keyCode === 40) {
+    clientController.handleArrowUp();
+  }
+};*/
 
 //requestAnimationFrame(gameLoop);
 
