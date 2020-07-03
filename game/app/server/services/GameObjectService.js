@@ -2,6 +2,7 @@ var GameObject = require('../models/GameObject.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
 var TypeOfRoom = require('../models/TypeOfRoom.js');
+var RoomDimensions = require('../models/RoomDimensions.js');
 
 module.exports = class GameObjectService {
 
@@ -55,9 +56,9 @@ module.exports = class GameObjectService {
     #initAllObjects = function(roomId, typeOfRoom) 
     {    
         if (typeOfRoom === 'FOYER') {
-            for (var i = 1; i < 100; i++) {
-                for (var j = 1; j< 100; i++) {
-                    this.#objects.push(new GameObject(100*(i-1)+j, "Tile" + (i-1)+j, 1, 1, new Position(roomId, i, j), false));
+            for (var i = 1; i < RoomDimensions.FOYER_WIDTH; i++) {
+                for (var j = 1; j< RoomDimensions.FOYER_LENGTH; i++) {
+                    this.#objects.push(new GameObject(RoomDimensions.FOYER_LENGTH*(i-1)+j, "Tile" + (i-1)+j, 1, 1, new Position(roomId, i, j), false));
                 }
             }
 

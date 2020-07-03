@@ -4,6 +4,7 @@ var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
 var GameObjectService = require('../services/GameObjectService.js');
+var RoomDimensions = require('./RoomDimensions.js');
 
 module.exports = class Room {
 
@@ -38,9 +39,9 @@ module.exports = class Room {
         //andere Fälle später
         if (typeOfRoom == "FOYER") {
             
-            //random Werte
-            this.#length = 100;
-            this.#width = 100;
+            
+            this.#length = RoomDimensions.FOYER_LENGTH;
+            this.#width = RoomDimensions.FOYER_WIDTH;
 
             //Initialisiert width*length Feld gefüllt mit 0
             this.#occupationMap = new Array(this.#width);
