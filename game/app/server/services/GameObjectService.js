@@ -1,42 +1,30 @@
 var GameObject = require('../models/GameObject.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
+var TypeOfRoom = require('../models/TypeOfRoom.js');
 
 module.exports = class GameObjectService {
 
-    #objects = [];
-    #roomId;
-    #roomWidth;
-    #roomLength;
+    #objects;
 
-    constructor(roomId, roomWidth, roomLength) 
-    {
+    constructor() {
         if(!!ObjectService.instance){
-            return ObjectService.instance
+            return ObjectService.instance;
         }
- 
+
         ObjectService.instance = this;
-
-        TypeChecker.isInt(roomId);
-        TypeChecker.isInt(roomWidth);
-        TypeChecker.isInt(roomLength);
-        this.#roomId = roomId;
-        this.#roomWidth = roomWidth;
-        this.#roomLength = roomLength;
-
-        this.initAllObjects();
+        this.#objects = [];
+        this.#counter = 1;
     }
 
-    getAllObjects()
-    {
-        return this.#objects;
-    }
-
-    getObjects(roomId)
+    getObjects(roomId, typeOfRoom)
     {
         TypeChecker.isInt(roomId);
+        TypeChecker.isEnum(typeOfRoom, TypeOfRoom);
 
         var roomObjects = [], i;
+
+        this.#initAllObjects(roomId, typeOfRoom);
 
         for(i = 0; i < this.#objects.length; i++){
             if (this.#objects[i].getPosition().getRoomId() === roomId) {
@@ -65,18 +53,23 @@ module.exports = class GameObjectService {
         return this.#objects[index];
     }
 
-    initAllObjects()
-    {
-        var max = Math.max(this.#roomWidth, this.#roomLength);
-        
-        for (var i = 1; i < this.#roomWidth+1; i++) {
-            for (var j = 1; j< this.#roomLength+1; i++) {
-                this.#objects.push(new GameObject(max*(i-1)+j, "Tile" + max*(i-1)+j, 1, 1, new Position(this.#roomId, i, j), false));
+    #initAllObjects = function(roomId, typeOfRoom) 
+    {    
+        if (typeOfRoom === 'FOYER') {
+            for (var i = 1; i < 100; i++) {
+                for (var j = 1; j< 100; i++) {
+                    this.#objects.push(new GameObject(100*(i-1)+j, "Tile" + (i-1)+j, 1, 1, new Position(roomId, i, j), false));
+                }
             }
+
+            //Anderen Objekte für Foyer
+        }
+
+        else if (typeOfRoom === 'RECEPTION') {
+            //Objekte für Rezeption
         }
 
         //this.#objects.push(new GameObject(100*100+1, "Wall" + 1, 100, 50, new Position(1, 1, 1), false));
         //this.#objects.push(new GameObject(100*100+2, "Wall" + 2, 100, 50, new Position(1, 100, 1), false));
-    
     }
 }
