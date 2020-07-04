@@ -20,7 +20,7 @@ module.exports = class GameObjectService {
     getObjects(roomId, typeOfRoom)
     {
         TypeChecker.isInt(roomId);
-        TypeChecker.isEnum(typeOfRoom, TypeOfRoom);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         var roomObjects = [], i;
 
