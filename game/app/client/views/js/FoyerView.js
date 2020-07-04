@@ -2,8 +2,8 @@
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
 module.exports = */class FoyerView extends MapView {
-    #tileColumnOffset = 64;
-    #tileRowOffset = 32;
+    #tileColumnOffset = 50;
+    #tileRowOffset = 25;
     #originX = 0;
     #originY = 0;
 
@@ -42,22 +42,24 @@ module.exports = */class FoyerView extends MapView {
         });
         this.updateCanvasSize();
         this.tileImage.onload = () => {
-                this.draw();
-    
-            };
+            this.draw();
+        };
     }
 
     updateCanvasSize() {
-        var width = $(window).width();
-        var height = $(window).height();
+        
+        var width = window.screen.width;
+        var height = window.screen.height;
         this.ctx.canvas.width  = width;
         this.ctx.canvas.height = height;
 
-        this.#originX = this.#tileColumnOffset * 2;
-        this.#originY = height / 2;
+        this.#originX = this.#tileColumnOffset - 45;
+        this.#originY = height / 2 - 20;
       }
 
+
     draw() {
+        
         for(var x = (this.xNumTiles - 1); x >= 0; x--) {
             for(var y = 0; y < this.yNumTiles; y++) {
                 this.drawTile(x, y);

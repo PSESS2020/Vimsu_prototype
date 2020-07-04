@@ -8,3 +8,8 @@ body {
   height: 100%;
   background-color: black;
 }
+
+canvas {
+  width: 1280px;
+  height: 640px;
+}
