@@ -8,7 +8,7 @@ const GAME_WIDTH = 0;
 const GAME_HEIGHT = 0;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
-gameView.initOwnAvatarView(" ");
+
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(5000);
 clientController.openSocketConnection();
@@ -35,6 +35,7 @@ let lastTime = 0;
   40: 'down',
 }*/
 
+
 window.setInterval(function(){
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
@@ -42,6 +43,7 @@ window.setInterval(function(){
   gameView.draw();
 
 }, 50);
+
 
 document.onkeypress = function(e) {
   if (e.keyCode === 97 || e.keyCode === 37) { // A or left arrow key to turn left

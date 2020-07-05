@@ -42,4 +42,10 @@ class SpriteAnimation {
         this.spritesheet.frameWidth, this.spritesheet.frameHeight);
     }
 
+    undraw(x,y) {
+        
+    }
+
+
+
 }

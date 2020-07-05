@@ -10,7 +10,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #gameHeight;
     #roomId;
     #updateList = [];
-    #foyerView = new FoyerView();
+    #foyerView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
@@ -22,7 +22,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#gameHeight = gameHeight;
 
         this.#roomId = 1;
+        this.#foyerView = new FoyerView();
         //this.addToUpdateList(this.#foyerView);
+        this.initOwnAvatarView(" ");
     }
 
     getFoyerView() {
@@ -191,7 +193,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView("(1,2)", 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(40, 260), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
     }
 
