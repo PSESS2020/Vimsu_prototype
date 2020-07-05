@@ -35,8 +35,8 @@ module.exports = */class FoyerView extends MapView {
     run() {
         this.canvas = $('#canvas');
         this.ctx = this.canvas[0].getContext("2d");
-        this.ctx.canvas.width = 1800;
-        this.ctx.canvas.height = 900;
+        this.ctx.canvas.width = 1900;
+        this.ctx.canvas.height = 950;
         this.xNumTiles = FoyerMap.map.length;
         this.yNumTiles = FoyerMap.map[0].length;
 
@@ -65,8 +65,8 @@ module.exports = */class FoyerView extends MapView {
 
     updateCanvasSize() {
 
-        var width = window.screen.width;
-        var height = window.screen.height;
+        //var width = window.screen.width;
+        //var height = window.screen.height;
         //this.ctx.canvas.width  = width;
         //this.ctx.canvas.height = height;
 
@@ -106,14 +106,13 @@ module.exports = */class FoyerView extends MapView {
             screenY += doorOffsetY;
         } else if (imageType == 4)
             screenY += doorOffsetY;
-        else if (imageType == 5) {
+        else if (imageType == 5 || imageType == 6) {
             screenX -= this.#tileColumnOffset;
             screenY += doorOffsetY;
-        }
-        else if (imageType == 6) {
+        } else if (imageType == 7) {
             this.drawLeftDoorTile(imageType, x, y);
             return;
-        } else if (imageType == 7) {
+        } else if (imageType == 8) {
             this.drawRightDoorTile(imageType, x, y);
             return;
         }
@@ -122,7 +121,7 @@ module.exports = */class FoyerView extends MapView {
     }
 
     drawLeftDoorTile(imageType, x, y) {
-        if (imageType == 6) {
+        if (imageType == 7) {
 
             var screenX = x * this.#tileColumnOffset / 2 + (y + 1) * this.#tileColumnOffset / 2 + this.#originX;
             var screenY = (y + 1) * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
@@ -131,7 +130,7 @@ module.exports = */class FoyerView extends MapView {
         } else throw new Error("Wrong Image Type for the floor of a left door.");
     }
     drawRightDoorTile(imageType, x, y) {
-        if (imageType == 7) {
+        if (imageType == 8) {
 
             var screenX = (x - 1) * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
             var screenY = y * this.#tileRowOffset / 2 - (x - 1) * this.#tileRowOffset / 2 + this.#originY;
