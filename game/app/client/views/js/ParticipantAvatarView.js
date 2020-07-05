@@ -24,9 +24,9 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 3, 11, 14);
         this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 6, 9);
         this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 16, 19);
-        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 0, 0);
-        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0); 
-        this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);
+        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 15, 15);
+        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 10, 10); 
+        this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
 
