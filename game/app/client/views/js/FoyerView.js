@@ -35,15 +35,15 @@ module.exports = */class FoyerView extends MapView {
     run() {
         this.canvas = $('#canvas');
         this.ctx = this.canvas[0].getContext("2d");
-        this.ctx.canvas.width = 1900;
-        this.ctx.canvas.height = 950;
         this.xNumTiles = FoyerMap.map.length;
         this.yNumTiles = FoyerMap.map[0].length;
+        this.ctx.canvas.width = 1900;
+        this.ctx.canvas.height = 950;
 
-        $(window).on('resize', () => {
+        /*$(window).on('resize', () => {
             this.updateCanvasSize();
             this.draw();
-        });
+        });*/
 
         $(window).on('mousemove', function (e) {
             //Calc the mouseposition in the game world.
@@ -71,7 +71,7 @@ module.exports = */class FoyerView extends MapView {
         //this.ctx.canvas.height = height;
 
         this.#originX = this.ctx.canvas.width / 2 - this.xNumTiles * this.#tileColumnOffset / 2;
-        this.#originY = (this.yNumTiles + 3) * this.#tileRowOffset / 2;
+        this.#originY = this.ctx.canvas.height / 2;
     }
 
 
