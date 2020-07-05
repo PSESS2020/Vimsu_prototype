@@ -6,6 +6,7 @@ module.exports = */class FoyerView extends MapView {
     #tileRowOffset = 32;
     #wallColumnOffset = 128;
     #wallRowOffset = 158;
+    #tableRowOffset = 53;
     #originX = 0;
     #originY = 0;
 
@@ -91,28 +92,30 @@ module.exports = */class FoyerView extends MapView {
     }
 
     drawTile(imageType, x, y) {
+            //calculates the screen position where to draw the tile
+            var screenX = x * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
+            var screenY = y * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
 
-        //calculates the screen position where to draw the tile
-        var screenX = x * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
-        var screenY = y * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
-
-        //because the door image has a diffrent size.
-        var doorOffsetY = this.#tileRowOffset / 2 - this.#wallColumnOffset + 1;
+            //because the door image has a diffrent size.
+            var doorOffsetY = this.#tileRowOffset / 2 - this.#wallColumnOffset + 1;
+            var tableOffsetY = this.#tileRowOffset - this.#tableRowOffset + 7;
 
         if (imageType == 2)
             screenY += doorOffsetY;
         else if (imageType == 3) {
             screenX -= this.#tileColumnOffset;
             screenY += doorOffsetY;
-        } else if (imageType == 4)
+        } else if (imageType == 4) {
             screenY += doorOffsetY;
-        else if (imageType == 5 || imageType == 6) {
+        } else if (imageType == 5 || imageType == 6) {
             screenX -= this.#tileColumnOffset;
             screenY += doorOffsetY;
         } else if (imageType == 7) {
+            screenY += tableOffsetY;
+        } else if (imageType == 8) {
             this.drawLeftDoorTile(imageType, x, y);
             return;
-        } else if (imageType == 8) {
+        } else if (imageType == 9) {
             this.drawRightDoorTile(imageType, x, y);
             return;
         }
@@ -121,7 +124,7 @@ module.exports = */class FoyerView extends MapView {
     }
 
     drawLeftDoorTile(imageType, x, y) {
-        if (imageType == 7) {
+        if (imageType == 8) {
 
             var screenX = x * this.#tileColumnOffset / 2 + (y + 1) * this.#tileColumnOffset / 2 + this.#originX;
             var screenY = (y + 1) * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
@@ -130,7 +133,7 @@ module.exports = */class FoyerView extends MapView {
         } else throw new Error("Wrong Image Type for the floor of a left door.");
     }
     drawRightDoorTile(imageType, x, y) {
-        if (imageType == 8) {
+        if (imageType == 9) {
 
             var screenX = (x - 1) * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
             var screenY = y * this.#tileRowOffset / 2 - (x - 1) * this.#tileRowOffset / 2 + this.#originY;
