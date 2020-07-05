@@ -198,24 +198,21 @@
             }
         }
 
-        this.#map = new Array(this.#width + 2);
+        var mapLength = this.#width + 2;
+        this.#map = new Array(mapLength);
         
-        for (var i = 0; i < this.#map.length; i++) {
+        for (var i = 0; i < mapLength; i++) {
             this.#map[i] = new Array(this.#length + 2).fill(1);
         }
 
-        for (var i = 0; i < this.#map.length - 2; i++) {
+        for (var i = 0; i < mapLength; i++) {
             this.#map[i][0] = 0;
-            this.#map[this.#map.length - 1][i] = 0;
+            this.#map[mapLength - 1][i] = 0;
 
             //walls
-            this.#map[i][1] = 2;
-            this.#map[this.#map.length - 2][i+2] = 3;
-        }
-
-        for (var i = this.#map.length - 2; i < this.#map.length; i++) {
-            this.#map[i][0] = 0;
-            this.#map[this.#map.length - 1][i] = 0;
+            if(i < mapLength - 2)
+                this.#map[i][1] = 2;
+                this.#map[mapLength - 2][i+2] = 3;
         }
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
@@ -229,10 +226,10 @@
         if (this.#typeOfRoom == "FOYER") {
             this.#map[2][0] = 8;
             this.#map[2][1] = 4;
-            this.#map[this.#map.length - 2][4] = 5;
-            this.#map[this.#map.length - 1][4] = 9;
-            this.#map[this.#map.length - 2][this.#map[0].length - 3] = 6;
-            this.#map[this.#map.length - 1][this.#map[0].length - 3] = 9;      
+            this.#map[mapLength - 2][4] = 5;
+            this.#map[mapLength - 1][4] = 9;
+            this.#map[mapLength - 2][this.#map[0].length - 3] = 6;
+            this.#map[mapLength - 1][this.#map[0].length - 3] = 9;      
         }        
     }
 
