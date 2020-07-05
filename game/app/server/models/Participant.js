@@ -1,7 +1,7 @@
 var Position = require('./Position.js')
 var Direction = require('./Direction.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
-var TypeChecker = require('../../utils/TypeChecker.js')
+var TypeChecker = require('../../client/utils/TypeChecker.js')
 
 module.exports = class Participant {
 

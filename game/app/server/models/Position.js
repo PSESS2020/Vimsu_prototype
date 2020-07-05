@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../client/utils/TypeChecker.js');
 
 
 module.exports = class Position {

@@ -11,7 +11,7 @@ app.use(express.static(__dirname + '/website'));
 
 //Temporärer "asset Service" der es erlaubt alle statischen
 //assets zu hosten. Clienten können auf die assets zugreifen.
-app.use(express.static(__dirname + '/game'));
+app.use('/client', express.static(__dirname + '/game/app/client'));
 
 //Parse JSON
 app.use(express.json());

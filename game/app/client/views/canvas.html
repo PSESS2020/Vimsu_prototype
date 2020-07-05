@@ -10,7 +10,7 @@
         <script src="../libraries/require.js"></script>
         <script> const socket = io('http://localhost:5000'); </script>
         <script>
-            requirejs(['../../utils/TypeChecker', '../models/DirectionClient', '../models/ParticipantClient', 
+            requirejs(['../utils/TypeChecker', '../models/DirectionClient', '../models/ParticipantClient', 
                         '../models/PositionClient', '../models/RoomClient', '../models/GameObjectClient'], () => {
                 requirejs(['js/Views'], () => {
                     requirejs(['js/MapView', 'js/GameObjectView', 'js/AvatarView'], () => {
