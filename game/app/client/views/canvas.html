@@ -13,11 +13,13 @@
             requirejs(['../../utils/TypeChecker', '../models/DirectionClient', '../models/ParticipantClient', 
                         '../models/PositionClient', '../models/RoomClient', '../models/GameObjectClient'], () => {
                 requirejs(['js/Views'], () => {
+                    requirejs(['../utils/SpriteAnimation', '../utils/SpriteSheet'], () => {
                     requirejs(['js/MapView', 'js/GameObjectView', 'js/AvatarView'], () => {
                         requirejs(['js/FoyerView', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView'], () => {
                             requirejs(['js/GameView', '../controller/ClientController'], () => {
                                 requirejs(['../index'], () => {
-                                    
+
+                                    });
                                 });
                             });
                         });
