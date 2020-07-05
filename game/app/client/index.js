@@ -4,8 +4,8 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
-const GAME_WIDTH = 600;
-const GAME_HEIGHT = 300;
+const GAME_WIDTH = 0;
+const GAME_HEIGHT = 0;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 gameView.initOwnAvatarView(" ");
