@@ -1,13 +1,15 @@
 //var GameView = require('./views/js/GameView.js')
 //var ClientController = require('./controller/ClientController.js')
 
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+var canvas = $('#canvas');
+var ctx = canvas[0].getContext("2d");
+this.ctx.canvas.width = 1900;
+this.ctx.canvas.height = 950;
 
 const GAME_WIDTH = 0;
 const GAME_HEIGHT = 0;
 
-let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT, canvas, ctx);
 
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(5000);

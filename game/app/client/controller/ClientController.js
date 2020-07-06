@@ -150,7 +150,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 32, currPos.getCordY() - 16));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -158,7 +158,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 32, currPos.getCordY() + 16));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -166,7 +166,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 32, currPos.getCordY() - 16));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -174,7 +174,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 32, currPos.getCordY() + 16));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 

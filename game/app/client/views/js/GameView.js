@@ -6,6 +6,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
 /*module.exports =*/ class GameView {
 
+    #ctx;
+    #canvas;
     #gameWidth;
     #gameHeight;
     #roomId;
@@ -14,12 +16,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
-    constructor(gameWidth, gameHeight) 
+    constructor(gameWidth, gameHeight, canvas, ctx) 
     {
         TypeChecker.isInt(gameWidth);
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
+        this.#ctx = ctx;
+        this.#canvas = canvas;
 
         this.#roomId = 1;
         this.#foyerView = new FoyerView();
@@ -191,10 +195,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initOwnAvatarView(participant)
     {
+        var initX = 2 * 32 + this.#ctx.canvas.width / 2 - 27 * 64 / 2;
+        var initY = 2 * 16 + this.#ctx.canvas.height / 2 - (64 + 32)/4 - 64;
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(initX, initY), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
+
+        //TypeChecker.isInstanceOf(participant, ParticipantClient);
+        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        //this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
+        //this.addToUpdateList(this.#ownAvatarView);
     }
 
     updateOwnAvatarPosition(newPosition)
