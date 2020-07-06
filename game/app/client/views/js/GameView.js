@@ -26,6 +26,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#canvas = canvas;
 
         this.#roomId = 1;
+
         this.#foyerView = new FoyerView();
         //this.addToUpdateList(this.#foyerView);
         this.initOwnAvatarView(" ");
@@ -213,7 +214,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
         this.#foyerView.draw();
-        this.#ownAvatarView.draw();
+        //this.#ownAvatarView.draw();        //Not necessary, already in update list
     }
 
     updateOwnAvatarDirection(direction)
