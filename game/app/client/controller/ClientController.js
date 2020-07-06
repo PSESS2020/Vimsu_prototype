@@ -176,7 +176,6 @@ class ClientController {
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
         this.#gameView.updateOwnAvatarWalking(true);
-        this.#gameView.draw();
     }
 
     handleArrowUp() {
