@@ -214,7 +214,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
         this.#foyerView.draw();
-        //this.#ownAvatarView.draw();        //Not necessary, already in update list
+        this.#ownAvatarView.draw();        
     }
 
     updateOwnAvatarDirection(direction)
