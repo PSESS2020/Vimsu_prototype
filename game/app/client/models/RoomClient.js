@@ -1,6 +1,8 @@
 //var TypeChecker = require('../../utils/TypeChecker.js');
 //var ParticipantClient = require('./ParticipantClient.js');
 
+const GameObject = require("../../server/models/GameObject");
+
 /*module.exports = */class RoomClient {
 
     #roomId;
@@ -202,34 +204,34 @@
         this.#map = new Array(mapLength);
         
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i] = new Array(this.#length + 2).fill(1);
+            this.#map[i] = new Array(this.#length + 2).fill(GameObjectTypeClient.TILE);
         }
 
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i][0] = 0;
-            this.#map[mapLength - 1][i] = 0;
+            this.#map[i][0] = GameObjectTypeClient.BLANK;
+            this.#map[mapLength - 1][i] = GameObjectTypeClient.BLANK;
 
             //walls
             if(i < mapLength - 2)
-                this.#map[i][1] = 2;
-                this.#map[mapLength - 2][i+2] = 3;
+                this.#map[i][1] = GameObjectTypeClient.LEFTWALL;
+                this.#map[mapLength - 2][i+2] = GameObjectTypeClient.RIGHTWALL;
         }
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
             if(this.#listOfGameObjects[i].getName().startsWith("Table")) {
                 var positionX = this.#listOfGameObjects[i].getPosition().getCordX();
                 var positionY = this.#listOfGameObjects[i].getPosition().getCordY();
-                this.#map[positionX + 2][positionY] = 7;
+                this.#map[positionX + 2][positionY] = GameObjectTypeClient.TABLE;
             }
         }
 
         if (this.#typeOfRoom == "FOYER") {
-            this.#map[2][0] = 8;
-            this.#map[2][1] = 4;
-            this.#map[mapLength - 2][4] = 5;
-            this.#map[mapLength - 1][4] = 9;
-            this.#map[mapLength - 2][this.#map[0].length - 3] = 6;
-            this.#map[mapLength - 1][this.#map[0].length - 3] = 9;      
+            this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+            this.#map[2][1] = GameObjectTypeClient.LECTUREDOOR;
+            this.#map[mapLength - 2][4] = GameObjectTypeClient.FOODCOURTDOOR;
+            this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
+            this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
+            this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;      
         }        
     }
 
