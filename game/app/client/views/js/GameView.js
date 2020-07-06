@@ -193,7 +193,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(40, 260), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
     }
 
@@ -201,6 +201,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
+        this.#foyerView.draw();
+        this.#ownAvatarView.draw();
     }
 
     updateOwnAvatarDirection(direction)
@@ -211,7 +213,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
-        this.#foyerView.draw();
         this.#ownAvatarView.updateCurrentAnimation();
     }
 

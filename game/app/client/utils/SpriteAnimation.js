@@ -1,4 +1,6 @@
 class SpriteAnimation {
+
+        
     constructor(spritesheet, frameRate, firstFrame, lastFrame) {
         this.currentFrame = 0;
         this.counter = 0;
@@ -7,6 +9,8 @@ class SpriteAnimation {
         this.firstFrame = firstFrame;
         this.lastFrame = lastFrame;
         this.frameRate = frameRate;
+        
+    
 
 
         for (var frameNumber = this.firstFrame; frameNumber <= this.lastFrame; frameNumber++) {
@@ -40,12 +44,5 @@ class SpriteAnimation {
         this.spritesheet.frameWidth, this.spritesheet.frameHeight,
         x, y,
         this.spritesheet.frameWidth, this.spritesheet.frameHeight);
-    }
-
-    undraw(x,y) {
-        
-    }
-
-
-
+        }
 }
