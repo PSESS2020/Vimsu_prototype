@@ -3,13 +3,10 @@
 
 var canvas = $('#canvas');
 var ctx = canvas[0].getContext("2d");
-this.ctx.canvas.width = 1900;
-this.ctx.canvas.height = 950;
+const GAME_WIDTH = this.ctx.canvas.width = 1900;
+const GAME_HEIGHT = this.ctx.canvas.height = 950;
 
-const GAME_WIDTH = 0;
-const GAME_HEIGHT = 0;
-
-let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT, canvas, ctx);
+let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(5000);
@@ -39,7 +36,7 @@ let lastTime = 0;
 
 
 window.setInterval(function(){
-  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+  ctx.clearRect(0, 0, 0, 0);
 
   gameView.update();
   gameView.draw();
