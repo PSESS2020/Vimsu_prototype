@@ -97,19 +97,19 @@ document.onkeyup = function(event) {
   switch(event.code) {
     case "KeyW":
     case "ArrowUp":
-      clientController.handleUpArrowUp();
+      clientController.handleArrowUp();
       break;
     case "KeyS":
     case "ArrowDown":
-      clientController.handleDownArrowUp();
+      clientController.handleArrowUp();
       break;
     case "KeyD":
     case "ArrowRight":
-      clientController.handleRightArrowUp();
+      clientController.handleArrowUp();
       break;
     case "KeyA":
     case "ArrowLeft":
-      clientController.handleLeftArrowUp();
+      clientController.handleArrowUp();
       break;
   }
 
