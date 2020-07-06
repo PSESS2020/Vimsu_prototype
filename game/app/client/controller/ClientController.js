@@ -1,7 +1,13 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
+
+/* For quicker changing of the movement-rate. 
+ * - (E) */
+const movementX = 4,
+      movementY = 2; // this should always movementX / 2
+
 class ClientController {
 
-    #port;
+    #port; // Does this class even need this? - (E)
     #socket;
     #gameView;
     #currentRoom;
@@ -29,8 +35,7 @@ class ClientController {
         ClientController.instance = this;
 
         this.#gameView = gameView;
-        this.#participantId = participantId;
-        
+        this.#participantId = participantId; 
 
         return this;
     }
@@ -48,6 +53,10 @@ class ClientController {
         return this.#socket;
     }
 
+    setSocket(socket) {
+        this.#socket = socket;
+    }
+
     setCurrentRoom(currentRoom) {
         this.#currentRoom = currentRoom;
     }
@@ -60,8 +69,13 @@ class ClientController {
     Throws an error if there is already an existing socket */
     openSocketConnection() {
         if (this.#port && !this.#socket) {
-            this.#socket = io('http://localhost:' + this.#port); // TODO: set socket server
-            this.#socket.on('connected', (socket) => {
+            /* It seems you don't need to pass an argument here - socket.io figures it out by itself.
+             * - (E) */
+            this.#socket = io();
+            this.#socket.emit('new participant'); // this should probably also pass like the name
+            this.#socket.on('connect', (socket) => {
+                // Here, there needs to be something to make sure the ppantID of the CC is the same
+                // as the one saved for this ppant on the server - (E)
                 this.#socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);
                 //other events handled from the server
@@ -78,24 +92,11 @@ class ClientController {
         this.#socket.emit('requestGameStateUpdate');
     }
 
-    /*Handles the user input for moving the avatar. Triggers the collisionDetection event and emits 
-    the new position to server.*/
-    // Is this still needed with handleArrowDown and handleArrowUp? (E)?
-    handleFromViewMovementInput(position) {
+    sendMovementToServer(direction) {
         this.socketReady;
-        //TODO: Clientseitige Kollisionserkennung
-        this.#socket.emit('collisionDetection', position);
-    }
-    
-    /* So the idea here is that on every frame (see index.js), the client sends
-     * his own position to the server (you could also just send this on movement,
-     * I am not a hundred percent sure if that would guarantee a smooth gameplay-
-     * experience). I am, however, incapable of understanding where to find the
-     * up-to-date position of the client atm (E) */
-    sendMovementToServer() {
-        this.socketReady;
-        this.#socket.emit('movement', /* this.getPosition() */);
-    }
+        // add type-Checking for direction
+        this.#socket.emit('movement', direction);
+   }
 
     handleFromViewEnterDoor(doorId) {
         this.socketReady;
@@ -164,42 +165,43 @@ class ClientController {
 
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+        this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 32, currPos.getCordY() - 16));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - movementX, currPos.getCordY() - movementY));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+        this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 32, currPos.getCordY() + 16));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + movementX, currPos.getCordY() + movementY));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+        this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 32, currPos.getCordY() - 16));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + movementX, currPos.getCordY() - movementY));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+        this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 32, currPos.getCordY() + 16));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - movementX, currPos.getCordY() + movementY));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleArrowUp() {
         this.#gameView.updateOwnAvatarWalking(false);
     }
-
-
-
 
     //checks if there is an existing socket. Throws an error if there is no socket.
     socketReady() {

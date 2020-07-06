@@ -1,6 +1,3 @@
-//var GameView = require('./views/js/GameView.js')
-//var ClientController = require('./controller/ClientController.js')
-
 var canvas = $('#canvas');
 var ctx = canvas[0].getContext("2d");
 this.ctx.canvas.width = 1900;
@@ -11,10 +8,11 @@ const GAME_HEIGHT = 0;
 
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT, canvas, ctx);
 
-/* The participantID can not be one (as we want to make sure it is congruent with the
+/* The participantID should not be one (as we want to make sure it is congruent with the
  * server).
  * - (E) */
 let clientController = new ClientController(gameView, 1);
+
 clientController.setPort(5000);
 clientController.openSocketConnection();
 
@@ -33,14 +31,6 @@ let lastTime = 0;
   //requestAnimationFrame(gameLoop);
 }*/
 
-/*var keyCodes = {
-  38: 'up',
-  37: 'left',
-  39: 'right',
-  40: 'down',
-}*/
-
-
 window.setInterval(function(){
   ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
@@ -50,13 +40,15 @@ window.setInterval(function(){
   // As a part of the gameplay loop, the client does emit on each frame
   // whether he is moving and in which direction (E)
   // This will probably be removed in my next proper commit.
-  clientController.sendMovementToServer();
+  // clientController.sendMovementToServer();
 
-// is this meant to be "update every 50 ms" or "update 50 times per second" (in which case it should be 20) (E)?
-}, 50); // can we replace this by a global constant in a settings file somewhere (E)?
+}, 1000/24); // can we replace this by a global constant in a settings file somewhere (E)?
 
 
 document.onkeydown = function(event) {
+  /* This little code-block (plus the one on the bottom) prevents a single input from being
+   * handled twice (according to the mozilla-doc on this function).
+   * - (E) */
   if (event.defaultPrevented) {
     return;
   }

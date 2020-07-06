@@ -6,6 +6,7 @@ const express = require('express');
  * protocol easier to handle - I am not sure how it would be of use here, but
  * I have included since it was included in the example I am mostly working from,
  * see also below.
+ * Add.: Without this, the server won't work.
  * - (E) */
 const http = require('http');
 
@@ -20,7 +21,14 @@ const socketio = require('socket.io');
 /* We require the Position-Class here so that we can create new
  * pseudo-participants at a proper position.
  * - (E) */
-const position = require ('./game/app/server/models/Position.js');
+const Position = require ('./game/app/server/models/Position.js');
+const ParticipantController = require('./game/app/server/controller/ParticipantController.js');
+/* Stuff we require:
+ *  ParticipantController
+ *  Participant
+ *  - (E) */
+
+
 
 /* Set up port s.t. the app should work both on heroku
  * and on localhost. - (E) */
@@ -32,8 +40,11 @@ const PORT = process.env.PORT || 5000;
  *   (iii) creating a socket-Server on top of that for real-time interaction
  * - (E) */
 const app = express();
-const server = http.Server(app);
-const io = socketio(server);
+const httpServer = http.createServer(app);
+const io = socketio(httpServer);
+
+/* This is a placeholder to generate new ppantIDs - (E) */
+var counter = 0;
 
 /* Sets the port-Field of the express-Instance to the proper port.
  * Why?
@@ -57,8 +68,12 @@ app.get('/', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/index.html'));
 });
 
-/* Maybe change this to server.listen() - (E) */
-app.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT} . . .`));
+/* The http-Server starts listening on the port.
+ * If this does not happen (if the express-instance 'app' listen here),
+ * then socket.io will not work.
+ * I don't know why this is, but thanks StackOverflow!
+ * - (E) */
+httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT} . . .`));
 
 
 /* Now, we're going to implement the socketIO-functionality that makes our server capable
@@ -71,29 +86,62 @@ app.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT} . . .
  * This should later be replaced with an array of
  * ParticipantControllers etc.
  * - (E) */
-var participants = {};
+var ppantControllers = {};
 
 /* This is the program logic handling new connections.
- * Part of this will later be moved into a separate class.
+ * This may late be moved into the server or conference-controller?
  * - (E) */
 io.on('connection', (socket) => {
-
     /* When a new player connects, we create a participant instance, initialize it to
      * the right position (whatever that is) and the emit that to all the other players,
      * unless we're just doing regular game-state updates.
      * - (E) */
     socket.on('new participant', () => {
+        
+        // If we already have a ppant connected on this socket
+        // we do nothing
+        // - (E)
+        if ( ppantControllers[socket.id] ) {
+            return;
+        }
+
         console.log('Participant ' + socket.id + ' has connected to the game . . . ');
-        /* As some prerequisites of the participant-Class do not yet exist - i.e. the
-         * ParticipantController-Class - we create a Pseudoparticipant instead.
+        
+        /* What should happen here:
+         *  (i) We generate a new participantID - DONE
+         *  (ii) We create a new ParticipantController-Instance - DONE
+         *  (iii) We create a new Participant-Instance with that ID, - DONE
+         *        linked to that controller (happens inside of the ppantController-constructor)
+         *  (iv) We properly initialize the position and all that shebang
+         *  (v) We emit the new participant to the others
+         *
+         * I may have forgotten something.
          * - (E) */
-	    participants[socket.id] = {
-            /* The starting position is a fixed point.
-             * We also want to add a name-field here later.
-             * The '1' is a placeholder-RoomID.
-             * - (E) */
-            position: new Position(1, 200, 200)
-        };
+
+        var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
+        ppantControllers[socket.id] = new ParticipantController(ppantID); // let's hope this works
+
+        // The client should be set to a default starting position by the server
+        // The server should then share this position with the client
+        // - (E)
+        
+        /* Sends the newly generated ID back to the client to make sure that the
+         * client's game state is consistent with the one on the server.
+         * NOTE: This should probably be extended so that more information
+         * can be shared.
+         * - (E) */
+        io.to(socket.id).emit('your ID', ppantID);
+
+        /* Emits the ppantID of the new participant to all other participants
+         * connected to the server so that they may create a new client-side
+         * participant-instance corresponding to it.
+         * NOTE: since no information about the participant in shared here,
+         * this will need to be changed at a later point in time.
+         * - (E) */
+        // This should send to all other connected sockets but not to the one
+        // that just connected - (E)
+        socket.broadcast.emit('new participant', ppantID);
+
     });
     
     /* Now we handle receiving a movement-input from a participant.
@@ -111,8 +159,16 @@ io.on('connection', (socket) => {
          * Can I call the functions of the client-side version of the position-
          * class here?
          * - (E) */
-        var newPos = new Position(1, position.getCordX(), position.getCordY());
-        participant.position = newPos;
+        // var newPos = new Position(1, position.getCordX(), position.getCordY());
+        // participant.position = newPos;
+    });
+
+    socket.on('disconnect', () => {
+        /* This still needs error-Handling for when no such ppantCont exists - (E) */
+        var ppantID = participantControllers[socket.id].getParticipant().getId();
+        io.sockets.emit('remove player', ppantID);
+        console.log('Participant ' + socket.id + ' has disconnected from the game . . .');
+        /* Also the ppant-Controller should be removed from the list probably. - (E) */
     });
 });
 
