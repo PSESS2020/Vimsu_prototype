@@ -1,8 +1,6 @@
 //var TypeChecker = require('../../utils/TypeChecker.js');
 //var ParticipantClient = require('./ParticipantClient.js');
 
-const GameObject = require("../../server/models/GameObject");
-
 /*module.exports = */class RoomClient {
 
     #roomId;
