@@ -148,22 +148,35 @@ class ClientController {
 
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() - 1));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() + 1));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() - 1));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
     handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
         this.#gameView.updateOwnAvatarWalking(true);
+        this.#gameView.draw();
     }
 
     handleArrowUp() {
