@@ -58,7 +58,7 @@ class ClientController {
         if (this.#port && !this.#socket) {
             this.#socket = io('http://localhost:' + this.#port); // TODO: set socket server
             this.#socket.on('connected', (socket) => {
-                this.#socket.on('roomEnterecByParticipant', this.handleFromServerRoomEnteredByParticipant);
+                this.#socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);
                 //other events handled from the server
             });
@@ -146,7 +146,34 @@ class ClientController {
         }
     }
 
-    //checks if there is a existing socket. Throws an error if there is no socket.
+    handleLeftArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleRightArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleUpArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleDownArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleArrowUp() {
+        this.#gameView.updateOwnAvatarWalking(false);
+    }
+
+
+
+
+    //checks if there is an existing socket. Throws an error if there is no socket.
     socketReady() {
         if (!this.#socket) {
             //TODO: exception
