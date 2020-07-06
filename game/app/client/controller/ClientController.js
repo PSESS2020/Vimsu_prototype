@@ -44,6 +44,10 @@ class ClientController {
         this.#port = port;
     }
 
+    getSocket() {
+        return this.#socket;
+    }
+
     setCurrentRoom(currentRoom) {
         this.#currentRoom = currentRoom;
     }
@@ -76,10 +80,21 @@ class ClientController {
 
     /*Handles the user input for moving the avatar. Triggers the collisionDetection event and emits 
     the new position to server.*/
+    // Is this still needed with handleArrowDown and handleArrowUp? (E)?
     handleFromViewMovementInput(position) {
         this.socketReady;
         //TODO: Clientseitige Kollisionserkennung
         this.#socket.emit('collisionDetection', position);
+    }
+    
+    /* So the idea here is that on every frame (see index.js), the client sends
+     * his own position to the server (you could also just send this on movement,
+     * I am not a hundred percent sure if that would guarantee a smooth gameplay-
+     * experience). I am, however, incapable of understanding where to find the
+     * up-to-date position of the client atm (E) */
+    sendMovementToServer() {
+        this.socketReady;
+        this.#socket.emit('movement', /* this.getPosition() */);
     }
 
     handleFromViewEnterDoor(doorId) {
@@ -137,7 +152,8 @@ class ClientController {
         this.#gameView.initAnotherAvatarViews(participant);
 
     }
-
+    
+    // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
     handleFromServerCollisionDetectionAnswer(isOccupied) {
         if (isOccupied) {
             //TODO: Bewegung wird nicht zugelassen

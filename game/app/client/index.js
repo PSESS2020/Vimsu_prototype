@@ -41,8 +41,13 @@ window.setInterval(function(){
 
   gameView.update();
   gameView.draw();
+  
+  // As a part of the gameplay loop, the client does emit on each frame
+  // whether he is moving and in which direction (E)
+  clientController.sendMovementToServer();
 
-}, 50);
+// is this meant to be "update every 50 ms" or "update 50 times per second" (in which case it should be 20) (E)?
+}, 50); // can we replace this by a global constant in a settings file somewhere (E)?
 
 
 document.onkeypress = function(e) {
