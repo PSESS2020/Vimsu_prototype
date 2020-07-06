@@ -2,7 +2,7 @@ const feathers = require('@feathersjs/feathers');
 const express = require('express');
 const socketio = require('socket.io');
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const app = express(feathers());
 
 

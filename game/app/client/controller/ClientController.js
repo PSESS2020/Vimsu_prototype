@@ -58,7 +58,7 @@ class ClientController {
         if (this.#port && !this.#socket) {
             this.#socket = io('http://localhost:' + this.#port); // TODO: set socket server
             this.#socket.on('connected', (socket) => {
-                this.#socket.on('roomEnterecByParticipant', this.handleFromServerRoomEnteredByParticipant);
+                this.#socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);
                 //other events handled from the server
             });
@@ -146,7 +146,46 @@ class ClientController {
         }
     }
 
-    //checks if there is a existing socket. Throws an error if there is no socket.
+    handleLeftArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleRightArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleUpArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleDownArrowDown() {
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+        //TODO: Collision Check
+        let currPos = this.#gameView.getOwnAvatarView().getPosition();
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarWalking(true);
+    }
+
+    handleArrowUp() {
+        this.#gameView.updateOwnAvatarWalking(false);
+    }
+
+
+
+
+    //checks if there is an existing socket. Throws an error if there is no socket.
     socketReady() {
         if (!this.#socket) {
             //TODO: exception

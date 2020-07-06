@@ -6,23 +6,30 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
 /*module.exports =*/ class GameView {
 
+    #ctx;
+    #canvas;
     #gameWidth;
     #gameHeight;
     #roomId;
     #updateList = [];
-    #foyerView = new FoyerView();
+    #foyerView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
-    constructor(gameWidth, gameHeight) 
+    constructor(gameWidth, gameHeight, canvas, ctx) 
     {
         TypeChecker.isInt(gameWidth);
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
+        this.#ctx = ctx;
+        this.#canvas = canvas;
 
         this.#roomId = 1;
-        this.addToUpdateList(this.#foyerView);
+
+        this.#foyerView = new FoyerView();
+        //this.addToUpdateList(this.#foyerView);
+        this.initOwnAvatarView(" ");
     }
 
     getFoyerView() {
@@ -70,14 +77,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         return this.#updateList;
     }
 
-    draw(ctx)
+    draw()
     {
-
+        for (var view in this.#updateList) {
+            this.#updateList[view].draw();
+        }
     }
 
-    update(deltaTime)
+    update()
     {
-
+        for (var view in this.#updateList) {
+            console.log('1');
+            this.#updateList[view].update();
+        }
     }
 
     /**
@@ -184,20 +196,36 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initOwnAvatarView(participant)
     {
-        TypeChecker.isInstanceOf(participant, ParticipantClient);
-        this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        var initX = 2 * 32 + this.#ctx.canvas.width / 2 - 27 * 64 / 2;
+        var initY = 2 * 16 + this.#ctx.canvas.height / 2 - (64 + 32)/4 - 64;
+        //TypeChecker.isInstanceOf(participant, ParticipantClient);
+        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(initX, initY), 'DOWNLEFT', 1); 
+        this.addToUpdateList(this.#ownAvatarView);
+
+        //TypeChecker.isInstanceOf(participant, ParticipantClient);
+        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
+        //this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
+        //this.addToUpdateList(this.#ownAvatarView);
     }
 
     updateOwnAvatarPosition(newPosition)
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
+        this.#foyerView.draw();
+        this.#ownAvatarView.draw();        
     }
 
     updateOwnAvatarDirection(direction)
     {
         TypeChecker.isEnumOf(direction, DirectionClient);
         this.#ownAvatarView.setDirection(direction);
+    }
+
+    updateOwnAvatarWalking(isMoving) {
+        this.#ownAvatarView.updateWalking(isMoving);
+        this.#ownAvatarView.updateCurrentAnimation();
     }
 
     removeOwnAvatarView()

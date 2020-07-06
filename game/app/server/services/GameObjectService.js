@@ -53,14 +53,17 @@ module.exports = class GameObjectService {
         return this.#objects[index];
     }
 
-    #initAllObjects = function(roomId, typeOfRoom) 
+    initAllObjects(roomId, typeOfRoom)
     {    
         if (typeOfRoom === 'FOYER') {
-            for (var i = 1; i < RoomDimensions.FOYER_WIDTH + 1; i++) {
+            /**for (var i = 1; i < RoomDimensions.FOYER_WIDTH + 1; i++) {
                 for (var j = 1; j < RoomDimensions.FOYER_LENGTH + 1; i++) {
                     this.#objects.push(new GameObject(RoomDimensions.FOYER_LENGTH*(i-1)+j, "Tile" + RoomDimensions.FOYER_LENGTH*(i-1)+j, 1, 1, new Position(roomId, i, j), false));
                 }
-            }
+            }*/
+
+            for (var i = 4; i < 10; i++)
+                this.#objects.push(new GameObject(1, "Table" + 1, 1, 1, new Position(roomId, i, 2), true))
 
             //Anderen Objekte für Foyer
         }
@@ -68,8 +71,5 @@ module.exports = class GameObjectService {
         else if (typeOfRoom === 'RECEPTION') {
             //Objekte für Rezeption
         }
-
-        //this.#objects.push(new GameObject(100*100+1, "Wall" + 1, 100, 50, new Position(1, 1, 1), false));
-        //this.#objects.push(new GameObject(100*100+2, "Wall" + 2, 100, 50, new Position(1, 100, 1), false));
     }
 }
