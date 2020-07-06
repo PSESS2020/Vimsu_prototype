@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
      * unless we're just doing regular game-state updates.
      * - (E) */
     socket.on('new participant', () => {
-        console.log('Participant ' + socket.id ' has connected to the game . . . ');
+        console.log('Participant ' + socket.id + ' has connected to the game . . . ');
         /* As some prerequisites of the participant-Class do not yet exist - i.e. the
          * ParticipantController-Class - we create a Pseudoparticipant instead.
          * - (E) */
@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
              * We also want to add a name-field here later.
              * The '1' is a placeholder-RoomID.
              * - (E) */
-            position: new Position(1, 200, 200);
+            position: new Position(1, 200, 200)
         };
     });
     
@@ -122,7 +122,7 @@ io.on('connection', (socket) => {
  * (for now). This will, however, later be fixed when the system is a bit
  * further down development.
  * - (E) */
-setInterval( () =>
+setInterval( () => {
     io.sockets.emit('gameStateUpdate', participants);
 }, 50);
 
