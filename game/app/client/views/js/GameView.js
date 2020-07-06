@@ -211,6 +211,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
+        this.#foyerView.draw();
         this.#ownAvatarView.updateCurrentAnimation();
     }
 
