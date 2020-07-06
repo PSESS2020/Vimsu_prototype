@@ -51,7 +51,6 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
                 this.#currentAnimation = this.#walkingUpRightAnimation;
             } else if (direction === 'DOWNLEFT') {
                 this.#currentAnimation = this.#walkingDownLeftAnimation;
-                this.setPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
             } else if (direction === 'DOWNRIGHT') {
                 this.#currentAnimation = this.#walkingDownRightAnimation;
             }
