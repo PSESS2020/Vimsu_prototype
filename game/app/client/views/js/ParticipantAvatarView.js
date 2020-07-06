@@ -47,19 +47,15 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         if (this.#walking === true) {
             if (direction === 'UPLEFT') {
                 this.#currentAnimation = this.#walkingUpLeftAnimation;
-                this.setPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() - 1));
             } else if (direction === 'UPRIGHT') {
                 this.#currentAnimation = this.#walkingUpRightAnimation;
-                this.setPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() - 1));
             } else if (direction === 'DOWNLEFT') {
                 this.#currentAnimation = this.#walkingDownLeftAnimation;
                 this.setPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
             } else if (direction === 'DOWNRIGHT') {
                 this.#currentAnimation = this.#walkingDownRightAnimation;
-                this.setPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() + 1));
             }
         
-            this.draw();
 
         } else {
             if (direction === 'UPLEFT') {
