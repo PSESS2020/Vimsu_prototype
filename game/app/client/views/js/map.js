@@ -1,13 +1,13 @@
 // Map between index and filename
 var FoyerMap = {
   tiles: [
-  "tile1.png",
-  "wall1.png",
-  "wall2.png",
-  "door1.png",
-  "door2.png",
-  "door3.png",
-  "table.png",
+  "../assets/tile1.png",
+  "../assets/wall1.png",
+  "../assets/wall2.png",
+  "../assets/door1.png",
+  "../assets/door2.png",
+  "../assets/door3.png",
+  "../assets/table.png",
 ],
     
   map: [

@@ -4,7 +4,7 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 module.exports = */class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('CharacterSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheet.png', 64, 128);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
