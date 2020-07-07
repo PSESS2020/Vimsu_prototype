@@ -69,11 +69,23 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         }
     }
 
+    //only there for testing, TODO: remove
+    getPosition() {
+        return super.getPosition();
+    }
+
     updateWalking(isMoving) {
         this.#walking = isMoving;
     }
 
     draw() {
-        this.#currentAnimation.draw(super.getPosition().getCordX(), super.getPosition().getCordY()); //TODO pass position of avatar
+        let cordX = super.getPosition().getCordX();
+        let cordY = super.getPosition().getCordY();
+
+        //should be done somewhere else, 86 and 419 are room dependent
+        let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 86;
+        let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+
+        this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
 }

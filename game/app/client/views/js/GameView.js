@@ -192,11 +192,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initOwnAvatarView(participant)
     {
-        var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
-        var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
+        //var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
+        //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(initX, initY), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(1, 1), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
@@ -209,8 +209,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
-        this.#foyerView.draw();
-        this.#ownAvatarView.draw();        
+    
+           
     }
 
     updateOwnAvatarDirection(direction)
@@ -222,6 +222,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
+
+        //this.#ownAvatarView.draw();   
+        this.#foyerView.draw();
+        this.#ownAvatarView.draw();   
     }
 
     removeOwnAvatarView()

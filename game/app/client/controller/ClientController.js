@@ -32,6 +32,8 @@ class ClientController {
         this.#participantId = participantId;
         
 
+        //this.#currentRoom = new RoomClient(1, "FOYER", 1900, 950, [], []);
+
         return this;
     }
 
@@ -150,7 +152,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 0, currPos.getCordY() - 1));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -158,7 +160,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 0, currPos.getCordY() + 1));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -166,7 +168,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 2, currPos.getCordY() - 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 1, currPos.getCordY() - 0));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
@@ -174,7 +176,7 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 2, currPos.getCordY() + 1));
+        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 1, currPos.getCordY()));
         this.#gameView.updateOwnAvatarWalking(true);
     }
 
