@@ -9,11 +9,11 @@ module.exports = class GameObjectService {
     #objects;
 
     constructor() {
-        if(!!ObjectService.instance){
+        if(!!GameObjectService.instance){
             return ObjectService.instance;
         }
 
-        ObjectService.instance = this;
+        GameObjectService.instance = this;
         this.#objects = [];
     }
 
