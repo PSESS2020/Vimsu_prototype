@@ -143,6 +143,8 @@ module.exports = class Room {
      * @returns true, bei Kollision
      * @returns false, sonst
      */
+
+     /*
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
@@ -155,4 +157,5 @@ module.exports = class Room {
             return false;
         }
     }
+    */
 }

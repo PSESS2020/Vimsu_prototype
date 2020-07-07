@@ -141,12 +141,12 @@
         let cordY = position.getCordY();
 
         //WALLS
-        if (cordX <= 0 || cordY <= 0 || cordX >= this.#width + 1 || cordY >= this.#length + 1) {
+        if (cordX <= 0 || cordY <= 0 || cordX > this.#width || cordY > this.#length) {
             return true;
         }
     
         //GAMEOBJECTS in room
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        if (this.#occupationMap[cordX - 1][cordY - 1] == 1) {
             return true;
         }
         else {
@@ -265,7 +265,7 @@
                 for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
                 
                     for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;      
+                        this.#occupationMap[j - 1][k - 1] = 1;      
                     }
                 }
             } 
