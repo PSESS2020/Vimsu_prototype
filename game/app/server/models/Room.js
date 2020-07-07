@@ -55,27 +55,25 @@ module.exports = class Room {
             let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
             this.#listOfGameObjects = objService.getObjects(this.#roomId);
 
-            var i;
-            //Geht jedes Objekt in der Objektliste durch
-            for (i = 0; i < this.#listOfGameObjects.length; i++) {
+            for (var i = 0; i < this.#listOfGameObjects.length; i++) {
                 
                 //Check ob Objekt fest ist oder nicht
-                if (this.#listOfGameObjects[i].isStatic()) {
-
+                if (this.#listOfGameObjects[i].getSolid()) {
+    
                     let objectPosition = this.#listOfGameObjects[i].getPosition();
-                    let objectWidth = this.#listOfGameObjects.getWidth();
-                    let objectLength = this.#listOfGameObjects.getLength();
-
-                    var j;
+                    let objectWidth = this.#listOfGameObjects[i].getWidth();
+                    let objectLength = this.#listOfGameObjects[i].getLength();
+    
                     //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                    for (j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
-                        var k;
-                        for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
+                    for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
+                    
+                        for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
                             this.#occupationMap[j][k] = 1;      
                         }
                     }
                 } 
             }
+            
         }
     }
 
@@ -143,6 +141,8 @@ module.exports = class Room {
      * @returns true, bei Kollision
      * @returns false, sonst
      */
+
+     /*
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
@@ -155,4 +155,5 @@ module.exports = class Room {
             return false;
         }
     }
+    */
 }
