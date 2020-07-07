@@ -28,7 +28,7 @@
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of Array of int} occupationMap 
      */
-    constructor(roomId, typeOfRoom, length, width, listOfPPants, listOfGameObjects, occupationMap) {
+    constructor(roomId, typeOfRoom, length, width, listOfPPants, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient)
         TypeChecker.isInt(length);
@@ -42,16 +42,9 @@
 
         listOfGameObjects.forEach(element => {
             TypeChecker.isInstanceOf(element, GameObjectClient);
-        })
-
-        TypeChecker.isInstanceOf(occupationMap, Array);
-
-        occupationMap.forEach(element => {
-            TypeChecker.isInstanceOf(element, Array);
-            element.forEach(item => {
-                TypeChecker.isInt(item);
-            });
         });
+
+        
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
         if(!!RoomClient.instance) {
@@ -65,9 +58,19 @@
         this.#length = length;
         this.#width = width;
         this.#listOfPPants = listOfPPants;
-        this.#occupationMap = occupationMap;
+        //this.#occupationMap = occupationMap;
         this.#listOfGameObjects = listOfGameObjects;
-        this.buildMapArray();
+        //this.buildMapArray();
+
+        //Initialisiert width*length Feld gefüllt mit 0
+        this.#occupationMap = new Array(this.#width);
+        for (var i = 0; i < this.#width; i++) {
+            this.#occupationMap[i] = new Array(this.#length).fill(0);
+        }
+
+        this.#buildOccMap();
+            
+        
     }
 
     getRoomId() {
@@ -137,6 +140,12 @@
         let cordX = position.getCordX();
         let cordY = position.getCordY();
 
+        //WALLS
+        if (cordX <= 0 || cordY <= 0 || cordX >= this.#width + 1 || cordY >= this.#length + 1) {
+            return true;
+        }
+    
+        //GAMEOBJECTS in room
         if (this.#occupationMap[cordX][cordY] == 1) {
             return true;
         }
@@ -157,34 +166,35 @@
      * @param {Array of ParticipantClient} listOfPPants 
      * @param {Array of Array of int} occupationMap 
      */
-    swapRoom(roomId, typeOfRoom, length, width, listOfPPants, occupationMap) {
+    swapRoom(roomId, typeOfRoom, length, width, listOfPPants, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInt(length);
         TypeChecker.isInt(width);
         TypeChecker.isInstanceOf(listOfPPants, Array);
+        TypeChecker.isInstanceOf(listOfGameObjects, Array);
 
         listOfPPants.forEach(element => {
             TypeChecker.isInstanceOf(element, ParticipantClient);
         });
 
-        TypeChecker.isInstanceOf(occupationMap, Array);
-
-        occupationMap.forEach(element => {
-            TypeChecker.isInstanceOfOf(element, Array);
-            element.forEach(item, item => {
-                TypeChecker.isInt(item);
-            });
+        listOfGameObjects.forEach(element => {
+            TypeChecker.isInstanceOf(element, GameObjectClient);
         });
+
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         this.#length = length;
         this.#width = width;
         this.#listOfPPants = listOfPPants;
-        this.#occupationMap = occupationMap;
-        this.buildMapArray();
+        this.#listOfGameObjects = listOfGameObjects;
+        this.#buildOccMap();
+        //this.#occupationMap = occupationMap;
+        //this.buildMapArray();
     }
+
+    /*
 
     buildMapArray() {
 
@@ -234,7 +244,31 @@
         }        
     }
 
+
     getMap() {
         return this.#map;
+    }
+    */
+
+    #buildOccMap = function() {
+        //Geht jedes Objekt in der Objektliste durch
+        for (var i = 0; i < this.#listOfGameObjects.length; i++) {
+                
+            //Check ob Objekt fest ist oder nicht
+            if (this.#listOfGameObjects[i].isStatic()) {
+
+                let objectPosition = this.#listOfGameObjects[i].getPosition();
+                let objectWidth = this.#listOfGameObjects.getWidth();
+                let objectLength = this.#listOfGameObjects.getLength();
+
+                //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
+                for (var j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
+                
+                    for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
+                        this.#occupationMap[j][k] = 1;      
+                    }
+                }
+            } 
+        }
     }
 }

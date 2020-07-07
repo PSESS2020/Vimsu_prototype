@@ -31,8 +31,15 @@ class ClientController {
         this.#gameView = gameView;
         this.#participantId = participantId;
         
+        //TODO: Muss alles automatisiert werden
+        let listOfGameObjects = new Array();
+        let table1 = new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 1), true);
+        let table2 = new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 1), true);
+        let table3 = new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 1), true);
+        let table4 = new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 1), true);
+        let table5 = new GameObjectClient(1, "table", 1, 1, new PositionClient(9, 1), true);
 
-        //this.#currentRoom = new RoomClient(1, "FOYER", 1900, 950, [], []);
+        this.#currentRoom = new RoomClient(1, "FOYER", 25, 25, [], listOfGameObjects);
 
         return this;
     }
@@ -152,32 +159,44 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 0, currPos.getCordY() - 1));
-        this.#gameView.updateOwnAvatarWalking(true);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
+        if (!this.#currentRoom.checkForCollision(newPos)) {
+            this.#gameView.updateOwnAvatarPosition(newPos);
+            this.#gameView.updateOwnAvatarWalking(true);
+        }
     }
 
     handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 0, currPos.getCordY() + 1));
-        this.#gameView.updateOwnAvatarWalking(true);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
+        if (!this.#currentRoom.checkForCollision(newPos)) {
+            this.#gameView.updateOwnAvatarPosition(newPos);
+            this.#gameView.updateOwnAvatarWalking(true);
+        }
     }
 
     handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() + 1, currPos.getCordY() - 0));
-        this.#gameView.updateOwnAvatarWalking(true);
+        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
+        if (!this.#currentRoom.checkForCollision(newPos)) {
+            this.#gameView.updateOwnAvatarPosition(newPos);
+            this.#gameView.updateOwnAvatarWalking(true);
+        }
     }
 
     handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        this.#gameView.updateOwnAvatarPosition(new PositionClient(currPos.getCordX() - 1, currPos.getCordY()));
-        this.#gameView.updateOwnAvatarWalking(true);
+        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
+        if (!this.#currentRoom.checkForCollision(newPos)) {
+            this.#gameView.updateOwnAvatarPosition(newPos);
+            this.#gameView.updateOwnAvatarWalking(true);
+        }
     }
 
     handleArrowUp() {

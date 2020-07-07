@@ -68,9 +68,9 @@ module.exports = class Room {
 
                     var j;
                     //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                    for (j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
+                    for (j = objectPosition.getCordX(); j < objectPosition.getCordX + objectWidth; j++) {
                         var k;
-                        for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
+                        for (k = objectPosition.getCordY(); k < objectPosition.getCordY + objectLength; k++) {
                             this.#occupationMap[j][k] = 1;      
                         }
                     }
