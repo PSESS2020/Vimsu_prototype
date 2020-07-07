@@ -18,11 +18,14 @@ module.exports = class RoomController {
      * @param {ConferenceController} conferenceController 
      * @param {Room} room 
      */
-    constructor(conferenceController, room) {
-        TypeChecker.isInstanceOf(conferenceController, ConferenceController);
+    /* I did, for now, comment out all references to the ConfCont-Class, to allow
+     * for use of this class in the first version of the server.js class.
+     * - (E) */
+    constructor(/*conferenceController,*/ room) {
+        //TypeChecker.isInstanceOf(conferenceController, ConferenceController);
         TypeChecker.isInstanceOf(room, Room);
 
-        this.#conferenceController = conferenceController;
+        //this.#conferenceController = conferenceController;
         this.#listOfPPantController = [];
         this.#room = room;
     }
@@ -41,9 +44,14 @@ module.exports = class RoomController {
             this.#listOfPPantController.push(participantController);
             this.#room.enterParticipant(participantController.getParticipant());
         }
+        
+        // Set the position of the participant to the proper starting position
+        participantController.getParticipant().setPosition(this.#room.getStartPosition());
 
-        //TODO: Falls (1,1) die Spawnposition ist
-        this.#notifyNewPosition(participantController, new Position(this.#room.getId(), 1, 1));
+        /* Now uses startPosition-field from the room attached to the controller.
+         * - (E) */
+        // Commented out for now, while this is still being handled in the server.js
+        //this.#notifyNewPosition(participantController, this.#room.getStartPosition());
     }
 
     /**
@@ -61,8 +69,9 @@ module.exports = class RoomController {
             this.#listOfPPantController.splice(index, 1);
             this.#room.exitParticipant(participantController.getParticipant());
         }
-
-        this.#notifyLeftRoom(participantController);
+        
+        // Commented out for now, while this is still being handled in the server.js
+        //this.#notifyLeftRoom(participantController);
     }
 
     /**

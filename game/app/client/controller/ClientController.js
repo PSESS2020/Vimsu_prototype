@@ -65,6 +65,18 @@ class ClientController {
         return this.#currentRoom;
     }
 
+
+    /* #################################################### */    
+    /* ###################### SOCKET ###################### */
+    /* #################################################### */
+
+    //checks if there is an existing socket. Throws an error if there is no socket.
+    socketReady() {
+        if (!this.#socket) {
+            //TODO: exception
+        }
+    }
+
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
     Throws an error if there is already an existing socket */
     openSocketConnection() {
@@ -76,6 +88,8 @@ class ClientController {
             this.#socket.on('connect', (socket) => {
                 // Here, there needs to be something to make sure the ppantID of the CC is the same
                 // as the one saved for this ppant on the server - (E)
+                this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID);
+                this.#socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition);
                 this.#socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant);
                 this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);
                 //other events handled from the server
@@ -85,6 +99,11 @@ class ClientController {
             // TODO: error state
         }
     }
+    
+
+    /* #################################################### */    
+    /* ################## SEND TO SERVER ################## */
+    /* #################################################### */
 
     //asks the server for an update of the current game state
     requestGameStateUpdate() {
@@ -96,7 +115,38 @@ class ClientController {
         this.socketReady;
         // add type-Checking for direction
         this.#socket.emit('movement', direction);
-   }
+    }
+
+
+    /* #################################################### */    
+    /* ############### RECEIVE FROM SERVER ################ */
+    /* #################################################### */
+    
+    /* COMMENT TODO
+     * - (E) */ 
+    handleFromServerRoomEnteredByParticipant(initInfo) {
+        //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
+        //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
+        participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
+        this.#currentRoom.enterParticipant(participant);
+        this.#gameView.initAnotherAvatarViews(participant);
+
+    }
+    
+    // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
+    handleFromServerCollisionDetectionAnswer(isOccupied) {
+        if (isOccupied) {
+            //TODO: Bewegung wird nicht zugelassen
+        } else {
+            //TODO: Avatar wird bewegt
+        }
+    }
+
+
+    /* #################################################### */    
+    /* ################# HANDLE FROM VIEW ################# */
+    /* #################################################### */
 
     handleFromViewEnterDoor(doorId) {
         this.socketReady;
@@ -145,23 +195,7 @@ class ClientController {
         this.#socket.emit('newFriendRequest', {senderId, responderId});
     }
 
-    handleFromServerRoomEnteredByParticipant(participantId) {
-        var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
-        var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
-        participant = new ParticipantClient(participantId, entrancePosition, entranceDirection);
-        // this.#currentRoom.addParticipant(participant);
-        this.#gameView.initAnotherAvatarViews(participant);
-
-    }
-    
-    // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
-    handleFromServerCollisionDetectionAnswer(isOccupied) {
-        if (isOccupied) {
-            //TODO: Bewegung wird nicht zugelassen
-        } else {
-            //TODO: Avatar wird bewegt
-        }
-    }
+   
 
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
@@ -202,12 +236,8 @@ class ClientController {
     handleArrowUp() {
         this.#gameView.updateOwnAvatarWalking(false);
     }
+    
 
-    //checks if there is an existing socket. Throws an error if there is no socket.
-    socketReady() {
-        if (!this.#socket) {
-            //TODO: exception
-        }
-    }
+   
 }
 

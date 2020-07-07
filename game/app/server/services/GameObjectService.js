@@ -24,7 +24,7 @@ module.exports = class GameObjectService {
 
         var roomObjects = [], i;
 
-        this.#initAllObjects(roomId, typeOfRoom);
+        this.initAllObjects(roomId, typeOfRoom);
 
         for(i = 0; i < this.#objects.length; i++){
             if (this.#objects[i].getPosition().getRoomId() === roomId) {
