@@ -60,7 +60,7 @@ module.exports = class Room {
             for (i = 0; i < this.#listOfGameObjects.length; i++) {
                 
                 //Check ob Objekt fest ist oder nicht
-                if (this.#listOfGameObjects[i].isStatic()) {
+                if (this.#listOfGameObjects[i].isSolid()) {
 
                     let objectPosition = this.#listOfGameObjects[i].getPosition();
                     let objectWidth = this.#listOfGameObjects.getWidth();
@@ -68,10 +68,11 @@ module.exports = class Room {
 
                     var j;
                     //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                    for (j = objectPosition.getCordX(); j < objectPosition.getCordX + objectWidth; j++) {
+                    for (j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
                         var k;
-                        for (k = objectPosition.getCordY(); k < objectPosition.getCordY + objectLength; k++) {
-                            this.#occupationMap[j][k] = 1;      
+                        for (k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
+                            //TODO: Eventuell Positionen so anpassen, dass 0 0 linkes Eck ist. -1 muss dann weg
+                            this.#occupationMap[j - 1][k - 1]  = 1;      
                         }
                     }
                 } 
