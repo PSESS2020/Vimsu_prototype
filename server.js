@@ -156,8 +156,11 @@ io.on('connection', (socket) => {
 
         // (i) to (iii)
         var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
+        console.log("test1");
         var ppantCont = new ParticipantController(ppantID);
+        console.log("test2");
         ppantControllers.set(socket.id, ppantCont);
+        console.log("test3");
 
         // (iv)
         // The position of the participant-Instance is also set here
@@ -172,13 +175,14 @@ io.on('connection', (socket) => {
          * Where as the second one will probably be called more often
          * - (E) */ 
         // Sends the newly generated ppantID back to the client so the game-states are consistent
-        io.to(socket.id).emit('currentGameStarteYourID', ppantID);
+        io.to(socket.id).emit('currentGameStateYourID', ppantID);
+        console.log("test4");
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
         var x = 1; /* gameRoom.getStartPosition().getCordX(); */
         var y = 1; /* gameRoom.getStartPosition().getCordY(); */
         var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
         io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
-        
+        console.log("test5");
         // (vi)
         /* Emits the ppantID of the new participant to all other participants
          * connected to the server so that they may create a new client-side
@@ -190,7 +194,7 @@ io.on('connection', (socket) => {
         // later on
         // - (E)
         socket.broadcast.emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
-
+        console.log("test6");
     });
     
     /* Now we handle receiving a movement-input from a participant.

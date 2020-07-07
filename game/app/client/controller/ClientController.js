@@ -86,6 +86,7 @@ class ClientController {
             this.#socket = io();
             this.#socket.emit('new participant'); // this should probably also pass like the name
             this.#socket.on('connect', (socket) => {
+                console.log("test1");
                 // Here, there needs to be something to make sure the ppantID of the CC is the same
                 // as the one saved for this ppant on the server - (E)
                 this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID);
@@ -114,7 +115,7 @@ class ClientController {
     sendMovementToServer(direction) {
         this.socketReady;
         // add type-Checking for direction
-        this.#socket.emit('movement', direction);
+        // this.#socket.emit('movement', direction);
     }
 
 
@@ -122,9 +123,38 @@ class ClientController {
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
     
+    handleFromServerUpdateId(id) {
+        console.log("test update id");
+        // Doesn't actually do anything yet, until i figured how to set the ID from here
+    }
+
+    handleFromServerUpdatePosition(posInfo) {
+        console.log("test update pos");
+        var posUpdate = new Position(posInfo.cordX, posInfo.cordY);
+        this.#gameView.updateOwnAvatarPosition(posUpdate);
+
+        // This is probably overkill, but better safe than sorry
+        switch(posInfo.dir) {
+            case DirectionClient.UPRIGHT:
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+                break;
+            case DirectionClient.DOWNRIGHT:
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+                break;
+            case DirectionClient.UPLEFT:
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+                break;
+            case DirectionClient.DOWNLEFT:
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+                break;
+        }
+        console.log("test finish update pos");
+    }
+ 
     /* COMMENT TODO
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
+        console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
