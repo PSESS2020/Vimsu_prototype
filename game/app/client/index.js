@@ -41,7 +41,7 @@ window.setInterval(function(){
   gameView.update();
   gameView.draw();
 
-}, 50);
+}, 1000/25);
 
 
 document.onkeypress = function(e) {
