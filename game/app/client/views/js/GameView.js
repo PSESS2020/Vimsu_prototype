@@ -208,20 +208,23 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     updateOwnAvatarPosition(newPosition)
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
-        this.#ownAvatarView.setPosition(newPosition);
-        this.#foyerView.draw();
-        this.#ownAvatarView.draw();        
+        this.#ownAvatarView.setPosition(newPosition);    
+        
     }
 
     updateOwnAvatarDirection(direction)
     {
         TypeChecker.isEnumOf(direction, DirectionClient);
         this.#ownAvatarView.setDirection(direction);
+        
     }
 
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
+
+        this.#foyerView.draw();
+        this.#ownAvatarView.draw();
     }
 
     removeOwnAvatarView()
