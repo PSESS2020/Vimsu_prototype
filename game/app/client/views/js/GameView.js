@@ -196,7 +196,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
-        this.#anotherParticipantAvatarViews[index].updateCurrentAnimation;
+        this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
     }
 
     /**
