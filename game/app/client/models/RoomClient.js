@@ -66,6 +66,7 @@
         this.#width = width;
         this.#listOfPPants = listOfPPants;
         this.#occupationMap = occupationMap;
+        this.#listOfGameObjects = listOfGameObjects;
         this.buildMapArray();
     }
 
