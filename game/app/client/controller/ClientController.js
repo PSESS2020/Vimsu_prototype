@@ -33,11 +33,11 @@ class ClientController {
         
         //TODO: Muss alles automatisiert werden
         let listOfGameObjects = new Array();
-        let table1 = new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 1), true);
-        let table2 = new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 1), true);
-        let table3 = new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 1), true);
-        let table4 = new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 1), true);
-        let table5 = new GameObjectClient(1, "table", 1, 1, new PositionClient(9, 1), true);
+        let table1 = new GameObjectClient(1, "table", 1, 1, new PositionClient(4, 0), true);
+        let table2 = new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 0), true);
+        let table3 = new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 0), true);
+        let table4 = new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 0), true);
+        let table5 = new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 0), true);
 
         listOfGameObjects.push(table1);
         listOfGameObjects.push(table2);

@@ -196,7 +196,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(1, 1), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
