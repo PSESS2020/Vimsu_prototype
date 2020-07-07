@@ -39,6 +39,12 @@ class ClientController {
         let table4 = new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 1), true);
         let table5 = new GameObjectClient(1, "table", 1, 1, new PositionClient(9, 1), true);
 
+        listOfGameObjects.push(table1);
+        listOfGameObjects.push(table2);
+        listOfGameObjects.push(table3);
+        listOfGameObjects.push(table4);
+        listOfGameObjects.push(table5);
+
         this.#currentRoom = new RoomClient(1, "FOYER", 25, 25, [], listOfGameObjects);
 
         return this;

@@ -255,16 +255,16 @@
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
                 
             //Check ob Objekt fest ist oder nicht
-            if (this.#listOfGameObjects[i].isStatic()) {
+            if (this.#listOfGameObjects[i].getSolid()) {
 
                 let objectPosition = this.#listOfGameObjects[i].getPosition();
-                let objectWidth = this.#listOfGameObjects.getWidth();
-                let objectLength = this.#listOfGameObjects.getLength();
+                let objectWidth = this.#listOfGameObjects[i].getWidth();
+                let objectLength = this.#listOfGameObjects[i].getLength();
 
                 //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                for (var j = objectPosition.getCordX(); j <= objectPosition.getCordX + objectWidth; j++) {
+                for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
                 
-                    for (k = objectPosition.getCordY(); k <= objectPosition.getCordY + objectLength; k++) {
+                    for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
                         this.#occupationMap[j][k] = 1;      
                     }
                 }
