@@ -117,6 +117,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 if(participants[i] !== this.#ownAvatarView) 
                 {
+                    var participant = participants[i];
                     this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
                 }
             }
@@ -132,7 +133,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
             }
         }
 

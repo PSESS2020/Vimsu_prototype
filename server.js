@@ -178,8 +178,8 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('currentGameStateYourID', ppantID);
         console.log("test4");
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
-        var x = 1; /* gameRoom.getStartPosition().getCordX(); */
-        var y = 1; /* gameRoom.getStartPosition().getCordY(); */
+        var x = 100; /* gameRoom.getStartPosition().getCordX(); */
+        var y = 100; /* gameRoom.getStartPosition().getCordY(); */
         var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
         io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
         console.log("test5");

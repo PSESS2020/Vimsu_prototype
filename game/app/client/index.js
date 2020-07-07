@@ -12,9 +12,10 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT, canvas, ctx);
  * server).
  * - (E) */
 let clientController = new ClientController(gameView, 1);
-
 clientController.setPort(5000);
 clientController.openSocketConnection();
+//clientController.setPort(5000); // Does this even do anything?
+//clientController.openSocketConnection();
 
 //TODO: anpassen
 let lastTime = 0;
