@@ -10,7 +10,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #gameHeight;
     #roomId;
     #updateList = [];
-    #foyerView = new FoyerView();
+    #foyerView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
@@ -22,7 +22,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#gameHeight = gameHeight;
 
         this.#roomId = 1;
-        this.addToUpdateList(this.#foyerView);
+        //this.addToUpdateList(this.#foyerView);
     }
 
     getFoyerView() {
@@ -77,6 +77,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     update(deltaTime)
     {
+
+    }
+
+    initFoyerView(map) {
+        this.#foyerView = new FoyerView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
 
     }
 

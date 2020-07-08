@@ -6,6 +6,7 @@ class ClientController {
     #gameView;
     #currentRoom;
     #participantId;
+    #roomClient;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -50,6 +51,22 @@ class ClientController {
 
     getCurrentRoom() {
         return this.#currentRoom;
+    }
+
+    /*Initializes a copy from the game state of the server . 
+    Includes the initialization of an room model for the client.*/
+    initializeGameState() {
+        this.#roomClient = new RoomClient(1, TypeOfRoomClient.FOYER, 25, 25, [], []);
+    }
+
+    /*Initializes the initial view for the player*/
+    initGameView() {
+        var map = this.#roomClient.getMap();
+
+        if (map !== null)
+        this.#gameView.initFoyerView(map);
+        //TODO this.#gameView.initOwnAvatarView(participant);
+        //TODO this.#gameView.initAnotherAvatarViews(participants);
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.

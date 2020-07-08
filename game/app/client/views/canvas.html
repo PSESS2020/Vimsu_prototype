@@ -11,12 +11,13 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <script src="../libraries/require.js"></script>
         <script> const socket = io('http://localhost:5000'); </script>
-        <script>
+        
+<script>
             requirejs(['../utils/TypeChecker', '../models/TypeOfRoomClient', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', 
                         '../models/PositionClient', '../models/RoomClient', '../models/GameObjectClient'], () => {
                 requirejs(['js/Views'], () => {
-                    requirejs(['js/MapView', 'js/GameObjectView', 'js/AvatarView'], () => {
-                        requirejs(['js/FoyerView','js/map', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView'], () => {
+                    requirejs(['js/MapView', 'js/GameObjectView', 'js/GameObjectViewFactory', 'js/AvatarView'], () => {
+                        requirejs(['js/FoyerView', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView', 'js/WallView', 'js/TableView', 'js/DoorView'], () => {
                             requirejs(['js/GameView', '../controller/ClientController'], () => {
                                 requirejs(['../index'], () => {
                                     
