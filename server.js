@@ -16,6 +16,10 @@ app.use(express.static(__dirname + '/game'));
 //Parse JSON
 app.use(express.json());
 
+app.get('/avatar', function(req, res) {
+        res.send('hallo');
+});
+
 //Enable REST services
 //TODO
 
