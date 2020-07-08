@@ -48,9 +48,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 TypeChecker.isInstanceOf(viewInstance[i], Views);
             }
         }
+        else {
+            TypeChecker.isInstanceOf(viewInstance, Views);
+        }
 
-        TypeChecker.isInstanceOf(viewInstance, Views);
-        
         if(!this.#updateList.includes(viewInstance))
         {
             this.#updateList.push(viewInstance);
@@ -75,16 +76,31 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        for (var view in this.#updateList) {
-            this.#updateList[view].draw();
+        for (var i = 0; i < this.#updateList.length; i++) {
+
+            if (this.#updateList[i] instanceof Array) {
+                for(var j = 0; j < this.#updateList[i].length; j++) {
+                    this.#updateList[i][j].draw();
+                }
+            }
+            else {
+                this.#updateList[i].draw();
+            }
         }
     }
 
     update()
     {
-        for (var view in this.#updateList) {
-            console.log('1');
-            this.#updateList[view].update();
+        for (var i = 0; i < this.#updateList.length; i++) {
+
+            if (this.#updateList[i] instanceof Array) {
+                for(var j = 0; j < this.#updateList[i].length; j++) {
+                    this.#updateList[i][j].update();
+                }
+            }
+            else {
+                this.#updateList[i].update();
+            }
         }
     }
 
@@ -113,9 +129,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 if(participants[i] !== this.#ownAvatarView) 
                 {
+                    var participant = participants[i];
                     this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
                 }
             }
+            this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
         else 
         {
@@ -128,19 +146,53 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
             }
+            this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
-
-        /*participants.forEach(participant => 
-            TypeChecker.isInstanceOf(participant, ParticipantClient),
-            this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()))
-        );*/
     }
         
-    updateAnotherAvatarViews(participants)
+    updateAnotherAvatarPosition(participantId, newPosition)
     {
+        TypeChecker.isInstanceOf(newPosition, PositionClient);
 
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantsIds + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
+        this.#foyerView.draw();
+        this.#anotherParticipantAvatarViews[index].draw();        
+    }
+
+    updateAnotherAvatarDirection(participantId, direction)
+    {
+        TypeChecker.isEnumOf(direction, DirectionClient);
+ 
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantsIds + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].setDirection(direction);
+    }
+
+    updateAnotherAvatarWalking(participantId, isMoving) {
+
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantsIds + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
+        this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
     }
 
     /**
@@ -156,7 +208,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             {
                 TypeChecker.isInt(participantIds[i]);
 
-                let index = this.#updateList.findIndex(participant => participant.getId() === participantIds[i]);
+                let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
 
                 if (index < 0) 
                 {

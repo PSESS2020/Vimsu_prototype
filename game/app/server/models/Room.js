@@ -5,6 +5,8 @@ var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
 var GameObjectService = require('../services/GameObjectService.js');
 var RoomDimensions = require('./RoomDimensions.js');
+const Position = require('./Position.js');
+const Direction = require('./Direction.js');
 
 module.exports = class Room {
 
@@ -17,6 +19,9 @@ module.exports = class Room {
     //listOfNPCs
     #listOfGameObjects;
     //listOfDoors;
+    #startPosition; // The position in which new participants are initialized - (E)
+    #startDirection; // The direction in which new particpants are looking on initialization - (E)
+    
 
     /**
      * Erstellt Rauminstanz
@@ -38,6 +43,10 @@ module.exports = class Room {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
+            this.#startPosition = new Position(roomId, 0, 0); // Sets the startPosition to (1,1).
+                                                              // This should prolly be a constant loaded from
+                                                              // a settings file somewhere - (E)
+            this.#startDirection = Direction.DOWNRIGHT; // See above
 
             //Initialisiert width*length Feld gefüllt mit 0
             this.#occupationMap = new Array(this.#width);
@@ -46,6 +55,8 @@ module.exports = class Room {
             }
             
             //Alle GameObjekte die in diesen Raum gehören von Service holen
+            
+            
 
             let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
             this.#listOfGameObjects = objService.getObjects(this.#roomId);
@@ -74,6 +85,21 @@ module.exports = class Room {
 
     getListOfPPants() {
         return this.#listOfPPants;
+    }
+
+    /* A simple getter for the startPosition-field.
+     * Is needed to make sure positions of new participants
+     * can be set correctly. 
+     * - (E) */
+    getStartPosition() {
+        return this.#startPosition;
+    }
+    
+    /* A simple getter for the startDirection-field
+     * Is needed because see above.
+     * - (E) */
+    getStartDirection() {
+        return this.#startDirection;
     }
 
     /**

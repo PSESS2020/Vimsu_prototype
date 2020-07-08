@@ -20,13 +20,13 @@ module.exports = class Participant {
      * @param {Direction} direction 
      * @param {ParticipantController} participantController 
      */
-    constructor(id, position, direction, participantController)
+    constructor(id, position, direction)
     {
         TypeChecker.isInt(id);
-        TypeChecker.isInstanceOf(participantController, ParticipantController);
+        //TypeChecker.isInstanceOf(participantController, ParticipantController);
 
         this.#id = id;
-        this.#participantController = participantController;
+        //this.#participantController = participantController;
 
         if (!position || !direction)
         {
