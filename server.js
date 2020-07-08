@@ -158,15 +158,9 @@ io.on('connection', (socket) => {
         // (i) to (iii)
         var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
         console.log("test1");
-<<<<<<< HEAD
-        var x = 1; /* gameRoom.getStartPosition().getCordX(); */
-        var y = 1; /* gameRoom.getStartPosition().getCordY(); */
-        var d = Direction.UPRIGHT; /* gameRoom.getStartDirection(); */
-=======
         var x = 0; /* gameRoom.getStartPosition().getCordX(); */
         var y = 0; /* gameRoom.getStartPosition().getCordY(); */
         var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
->>>>>>> 2c578aa1795dcf54f2773ca4ef3c010086b54a6a
         var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
         var ppantCont = new ParticipantController(ppant);
         console.log("test2");
