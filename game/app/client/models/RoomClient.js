@@ -1,6 +1,7 @@
 //var TypeChecker = require('../../utils/TypeChecker.js');
 //var ParticipantClient = require('./ParticipantClient.js');
 
+
 /*module.exports = */class RoomClient {
 
     #roomId;
@@ -11,7 +12,7 @@
     #listOfPPants;
     #occupationMap;
     //listOfNPCs
-    #listOfGameObjects;
+    #listOfGameObjects = [];
     //listOfDoors
     #map;
 
@@ -28,23 +29,14 @@
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of Array of int} occupationMap 
      */
-    constructor(roomId, typeOfRoom, length, width, listOfPPants, listOfGameObjects) {
+    constructor(roomId, typeOfRoom, listOfPPants) {
         TypeChecker.isInt(roomId);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient)
-        TypeChecker.isInt(length);
-        TypeChecker.isInt(width);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInstanceOf(listOfPPants, Array);
-        TypeChecker.isInstanceOf(listOfGameObjects, Array);
 
         listOfPPants.forEach(element => {
             TypeChecker.isInstanceOf(element, ParticipantClient);
         });
-
-        listOfGameObjects.forEach(element => {
-            TypeChecker.isInstanceOf(element, GameObjectClient);
-        });
-
-        
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
         if(!!RoomClient.instance) {
@@ -55,12 +47,20 @@
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
-        this.#length = length;
-        this.#width = width;
         this.#listOfPPants = listOfPPants;
         //this.#occupationMap = occupationMap;
-        this.#listOfGameObjects = listOfGameObjects;
         //this.buildMapArray();
+
+        if (this.#typeOfRoom === "FOYER") {
+            this.#width = RoomDimensionsClient.FOYER_WIDTH;
+            this.#length = RoomDimensionsClient.FOYER_LENGTH;
+
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(4, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 0), true));
+        }
 
         //Initialisiert width*length Feld gefüllt mit 0
         this.#occupationMap = new Array(this.#width);
@@ -69,8 +69,6 @@
         }
 
         this.#buildOccMap();
-            
-        
     }
 
     getRoomId() {

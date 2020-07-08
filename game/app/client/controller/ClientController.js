@@ -31,21 +31,8 @@ class ClientController {
         this.#gameView = gameView;
         this.#participantId = participantId;
         
-        //TODO: Muss alles automatisiert werden
-        let listOfGameObjects = new Array();
-        let table1 = new GameObjectClient(1, "table", 1, 1, new PositionClient(4, 0), true);
-        let table2 = new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 0), true);
-        let table3 = new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 0), true);
-        let table4 = new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 0), true);
-        let table5 = new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 0), true);
-
-        listOfGameObjects.push(table1);
-        listOfGameObjects.push(table2);
-        listOfGameObjects.push(table3);
-        listOfGameObjects.push(table4);
-        listOfGameObjects.push(table5);
-
-        this.#currentRoom = new RoomClient(1, "FOYER", 25, 25, [], listOfGameObjects);
+        //TODO: add Participant List from Server
+        this.#currentRoom = new RoomClient(1, "FOYER", []);
 
         return this;
     }
