@@ -213,8 +213,7 @@ class ClientController {
         // Type-Checking handled in gameView
         //TypeChecker.isInt(ppantID);
         //TypeChecker.isEnumOf(direction, DirectionClient);
-        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);
-        this.#gameView.updateAnotherAvatarWalking(ppantID, true);        
+        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);      
         
         console.log(ppantID);
         
@@ -240,7 +239,12 @@ class ClientController {
                 break;
        }
 
-        this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+        if (!this.#currentRoom.checkForCollision(newPos)) {
+            this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+            this.#gameView.updateAnotherAvatarWalking(ppantID, true);
+        }
+
+        //this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
 
     }
 
