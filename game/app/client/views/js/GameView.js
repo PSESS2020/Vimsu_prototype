@@ -165,8 +165,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
 
         this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
-        this.#foyerView.draw();
-        this.#anotherParticipantAvatarViews[index].draw();        
     }
 
     updateAnotherAvatarDirection(participantId, direction)
@@ -180,7 +178,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
            throw new Error(participantsIds + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].setDirection(direction);
+        this.#anotherParticipantAvatarViews[index].setDirection(direction); 
     }
 
     updateAnotherAvatarWalking(participantId, isMoving) {
@@ -194,6 +192,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
         this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
+        
+        this.#foyerView.draw();
+        this.#anotherParticipantAvatarViews[index].draw(); 
+         
     }
 
     /**
@@ -262,8 +264,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
-    
-           
     }
 
     updateOwnAvatarDirection(direction)
@@ -276,9 +276,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
 
-        //this.#ownAvatarView.draw();   
-        this.#foyerView.draw();
         this.#ownAvatarView.draw();   
+        this.#foyerView.draw();
     }
 
     removeOwnAvatarView()

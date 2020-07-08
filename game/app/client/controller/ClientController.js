@@ -145,7 +145,7 @@ class ClientController {
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
         this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
-        this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStartMovementOther.bind(this));  // onKeyUp, check if position fits server 
+        this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
     }
     
 
