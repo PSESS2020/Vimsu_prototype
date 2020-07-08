@@ -146,6 +146,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
+                    console.log(participants.getId());
                     this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);

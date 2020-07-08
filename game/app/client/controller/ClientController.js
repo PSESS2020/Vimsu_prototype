@@ -1,9 +1,42 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
+/* ******************************************************************************* */
+/* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
+/* ******************************************************************************* */
+/*                                                                                 */
+/* As development moves on, this class will need to be massively rewritten in order
+ * to be compatible with the other parts of the software.
+ * 
+ * Stuff that will be altered in the following steps:
+ *
+ *   (i) Every constant will be moved into a shared /utils/Settings.js file (name
+ *       not final).
+ *
+ *  (ii) This class will set up the game in the final product. The idea here being
+ *       that the index.js will call a method setUpGame() from this class.
+ *       The CC will then
+ *          (a) open a socket-Connection, inform the server about a new ppant
+ *              entering and request an up-to-date game-state
+ *          (b) use that game-state to properly initialize the client-side models
+ *          (c) create the gameView-instance, hand her the models and command her
+ *              to draw the game.
+ *
+ * (iii) The index.js file thus needs to wait for this class to finalize setting 
+ *       up the game.
+ *
+ *  (iv) This also means that the constructor will no longer take any arguments 
+ *       and will not set the currentRoom-field. All of this will be created/set
+ *       only once the necessary information has been supplied from the server.
+ *
+ * - (E) */
+
+
+
+
 /* For quicker changing of the movement-rate. 
  * - (E) */
-const movementX = 4,
-      movementY = 2; // this should always movementX / 2
+const movementX = 1,
+      movementY = 1;
 
 class ClientController {
 
@@ -107,10 +140,12 @@ class ClientController {
 
     setUpSocket() {
         console.log("test set up socket");
-        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID);
+        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this));
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); // The bind(this) fixes scoping-issues
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
-        this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer);         
+        this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
+        this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
+        this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStartMovementOther.bind(this));  // onKeyUp, check if position fits server 
     }
     
 
@@ -124,10 +159,17 @@ class ClientController {
         this.socket.emit('requestGameStateUpdate');
     }
 
-    sendMovementToServer(direction) {
+    sendToServerRequestMovStart(direction) {
         this.socketReady;
-        // add type-Checking for direction
-        // this.#socket.emit('movement', direction);
+        TypeChecker.isEnumOf(direction, DirectionClient);
+        
+        this.socket.emit('requestMovementStart', this.#participantId, direction);
+    }
+
+    sendToServerRequestMovStop() {
+        this.socketReady;
+        
+        this.socket.emit('requestMovementStop', this.#participantId);
     }
 
 
@@ -138,44 +180,90 @@ class ClientController {
     handleFromServerUpdateID(id) {
         console.log("test update id");
         // Throws the error that this is not a function?
-        //this.setParticipantId(id);
+        this.setParticipantId(id);
+        console.log(this.#participantId);
     }
 
     handleFromServerUpdatePosition(posInfo) {
         console.log("test update pos");
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
-        /* This will not work and throws error
-         * Uncaught TypeError: Cannot read property updateOwnAvatarPosition of undefined 
-        this.gameView.updateOwnAvatarPosition(posUpdate);
+        // This will not work and throws error
+        // Uncaught TypeError: Cannot read property updateOwnAvatarPosition of undefined 
+        this.#gameView.updateOwnAvatarPosition(posUpdate);
 
         // This is probably overkill, but better safe than sorry
         switch(posInfo.dir) {
             case DirectionClient.UPRIGHT:
-                this.gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
                 break;
             case DirectionClient.DOWNRIGHT:
-                this.gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
                 break;
             case DirectionClient.UPLEFT:
-                this.gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
                 break;
             case DirectionClient.DOWNLEFT:
-                this.gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
                 break;
         }
-        */
         console.log("test finish update pos");
     }
+
+    handleFromServerStartMovementOther(ppantID, direction) {
+        // Type-Checking handled in gameView
+        //TypeChecker.isInt(ppantID);
+        //TypeChecker.isEnumOf(direction, DirectionClient);
+        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);
+        this.#gameView.updateAnotherAvatarWalking(ppantID, true);        
+        
+        console.log(ppantID);
+        
+        // This is very unwieldy. Can we maybe just change the updatePosition()-function to take two arguments,
+        // offsetX and offsetY, and then do all the other stuff inside the method?
+        var index = this.#gameView.getAnotherParticipantAvatarViews().findIndex(participant => participant.getId() === ppantID);
+        console.log(index); //index = -1
+        var oldPos = this.#gameView.getAnotherParticipantAvatarViews()[index].getPosition();        
+        var newPos;
+
+        switch(direction) {
+            case DirectionClient.UPRIGHT:
+                newPos = new PositionClient(oldPos.getCordX() + 1, oldPos.getCordY());
+                break;
+            case DirectionClient.UPLEFT:
+                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() - 1);
+                break;
+            case DirectionClient.DOWNLEFT:
+                newPos = new PositionClient(oldPos.getCordX() - 1, oldPos.getCordY());
+                break;
+            case DirectionClient.DOWNRIGHT:
+                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() + 1);
+                break;
+       }
+
+        this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+
+    }
+
+    handleFromServerStopMovementOther(ppantID) {
+        // TODO:
+        // Typechecking
+        // comparing position with the one saved in the server
+        
+        this.#gameView.updateAnotherAvatarWalking(ppantID, false);
+    }
  
-    /* COMMENT TODO
+    /* TODO
+     * Change argument from object into list (nicer to read)
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
 
+        console.log(initInfo.id);
+        var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
+        console.log(participant.getId());
         // Here we get another error (which we always get on handling the private fields 
         // in these methods
         // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it
@@ -247,10 +335,10 @@ class ClientController {
     }
 
    
-
+    // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
-        this.sendMovementToServer(DirectionClient.UPLEFT);
+        //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
@@ -258,11 +346,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
+        this.sendToServerRequestMovStart(DirectionClient.UPLEFT);
     }
 
     handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
-        this.sendMovementToServer(DirectionClient.DOWNRIGHT);
+        //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
@@ -270,11 +359,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
+        this.sendToServerRequestMovStart(DirectionClient.DOWNRIGHT);
     }
 
     handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
-        this.sendMovementToServer(DirectionClient.UPRIGHT);
+        //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
@@ -282,11 +372,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
+        this.sendToServerRequestMovStart(DirectionClient.UPRIGHT);
     }
 
     handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
-        this.sendMovementToServer(DirectionClient.DOWNLEFT);
+        //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
@@ -294,10 +385,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
+        this.sendToServerRequestMovStart(DirectionClient.DOWNLEFT);
     }
 
     handleArrowUp() {
         this.#gameView.updateOwnAvatarWalking(false);
+        this.sendToServerRequestMovStop();
     }
     
 

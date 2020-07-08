@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
         console.log("test1");
         var x = 1; /* gameRoom.getStartPosition().getCordX(); */
         var y = 1; /* gameRoom.getStartPosition().getCordY(); */
-        var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
+        var d = Direction.UPRIGHT; /* gameRoom.getStartDirection(); */
         var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
         var ppantCont = new ParticipantController(ppant);
         console.log("test2");
@@ -206,9 +206,22 @@ io.on('connection', (socket) => {
      * INFORMS ABOUT EACH MOVEMENT ACTION SEPERATELY, NOT COLLECTING
      * THEM INTO A SINGLE MESSAGE THAT GETS SEND OUT REGULARLY
      * - (E) */
-    socket.on('movement', (position) => {
+    socket.on('requestMovementStart', (ppantID, direction) => {
+        // TODO
+        // Update Position server-side
+
+        socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction);
     });
 
+    socket.on('requestMovementStop', ppantID => {
+        // TODO
+        // handle this properly server-side
+        
+        socket.broadcast.emit('movementOfAnotherPPantStop', ppantID);
+    });
+    
+    // This will need a complete rewrite once the server-side models are properly implemented
+    // as of now, this is completely broken
     socket.on('disconnect', () => {
         /* This still needs error-Handling for when no such ppantCont exists - (E) */
         var ppantID = 1; //ppantControllers.get(socket.id).getParticipant().getId();
