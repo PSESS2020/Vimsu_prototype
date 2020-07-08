@@ -14,33 +14,33 @@ clientController.openSocketConnection();
 //clientController.setPort(5000); // Does this even do anything?
 //clientController.openSocketConnection();
 
-//TODO: anpassen
-let lastTime = 0;
+function gameLoop() {
+  //let deltaTime = timestamp - lastTime;
+  //lastTime = timestamp;
 
-/*function gameLoop(timestamp) {
-  let deltaTime = timestamp - lastTime;
-  lastTime = timestamp;
-
-  ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-  gameView.update(deltaTime);
-  gameView.draw(ctx);
-
-  //requestAnimationFrame(gameLoop);
-}*/
-
-window.setInterval(function(){
   ctx.clearRect(0, 0, 0, 0);
 
   gameView.update();
-  gameView.draw();
+  gameView.draw();  
+}
+
+window.setInterval(function(){
+
+  requestAnimationFrame(gameLoop);
+  //ctx.clearRect(0, 0, 0, 0);
+
+  //gameView.update();
+  //gameView.draw();
   
   // As a part of the gameplay loop, the client does emit on each frame
   // whether he is moving and in which direction (E)
   // This will probably be removed in my next proper commit.
   // clientController.sendMovementToServer();
 
-}, 1000/24); // can we replace this by a global constant in a settings file somewhere (E)?
+  //bei dem eigenen Avatar sieht man ein ständiges Zeichnen auch wenn man sich nicht bewegt wenn man den 
+  //Timer auf höher als 0 setzt. Daher hab ich den Timer auf 0 gesetzt (K)
+
+}, 0); // can we replace this by a global constant in a settings file somewhere (E)?
 
 
 document.onkeydown = function(event) {
