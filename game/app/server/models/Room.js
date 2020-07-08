@@ -9,7 +9,6 @@ var RoomDimensions = require('./RoomDimensions.js');
 module.exports = class Room {
 
     #roomId;
-    //roomController;
     //roomChat
     #length;
     #width;
@@ -29,24 +28,20 @@ module.exports = class Room {
      */
     constructor(roomId, typeOfRoom) {
         TypeChecker.isInt(roomId);
-        //TypeChecker.isInstanceOf(roomController, RoomController);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         this.#roomId = roomId;
-        //this.#roomController = roomController;
         this.#listOfPPants = [];
 
         //andere Fälle später
         if (typeOfRoom == "FOYER") {
-            
-            
+
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
 
             //Initialisiert width*length Feld gefüllt mit 0
             this.#occupationMap = new Array(this.#width);
-            var i;
-            for (i = 0; i < this.#width; i++) {
+            for (var i = 0; i < this.#width; i++) {
                 this.#occupationMap[i] = new Array(this.#length).fill(0);
             }
             
@@ -54,27 +49,9 @@ module.exports = class Room {
 
             let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
             this.#listOfGameObjects = objService.getObjects(this.#roomId);
-
-            for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-                
-                //Check ob Objekt fest ist oder nicht
-                if (this.#listOfGameObjects[i].getSolid()) {
-    
-                    let objectPosition = this.#listOfGameObjects[i].getPosition();
-                    let objectWidth = this.#listOfGameObjects[i].getWidth();
-                    let objectLength = this.#listOfGameObjects[i].getLength();
-    
-                    //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                    for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
-                    
-                        for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                            this.#occupationMap[j][k] = 1;      
-                        }
-                    }
-                } 
-            }
-            
         }
+
+        this.#buildOccMap();
     }
 
     getRoomId() {
@@ -132,6 +109,7 @@ module.exports = class Room {
         //TODO: Entfernen aus Allchat
     }
 
+    //Not needed at this points
     /**
      * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
      * 
@@ -156,4 +134,26 @@ module.exports = class Room {
         }
     }
     */
+
+   #buildOccMap = function() {
+        //Geht jedes Objekt in der Objektliste durch
+        for (var i = 0; i < this.#listOfGameObjects.length; i++) {
+            
+            //Check ob Objekt fest ist oder nicht
+            if (this.#listOfGameObjects[i].getSolid()) {
+
+                let objectPosition = this.#listOfGameObjects[i].getPosition();
+                let objectWidth = this.#listOfGameObjects[i].getWidth();
+                let objectLength = this.#listOfGameObjects[i].getLength();
+
+                //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
+                for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
+            
+                    for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
+                        this.#occupationMap[j][k] = 1;      
+                    }
+                }
+            } 
+        }
+    }
 }

@@ -79,14 +79,14 @@ module.exports = class RoomController {
         TypeChecker.isInstanceOf(participantController, ParticipantController);
         TypeChecker.isInstanceOf(position, Position);
 
-        let collision = this.#room.checkForCollision(position);
+        //let collision = this.#room.checkForCollision(position);
 
         //Wenn es zu keiner Kollision kommt, müssen alle anderen ParticipantController davon erfahren
-        if(!collision) {
+        //if(!collision) {
             this.#notifyNewPosition(participantController, position);
-        }
+        //}
 
-        return !collision;
+        //return !collision;
     }
 
 
