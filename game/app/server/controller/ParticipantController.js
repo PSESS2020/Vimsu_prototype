@@ -1,5 +1,5 @@
 const Participant = require('../../server/models/Participant.js');
-const TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../client/utils/TypeChecker.js');
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
 

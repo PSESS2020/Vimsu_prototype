@@ -36,7 +36,7 @@ const Room  = require('./game/app/server/models/Room.js');
 const RoomController = require('./game/app/server/controller/RoomController.js');
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 
-const TypeChecker = require=('./game/app/utils/TypeChecker.js');
+const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */

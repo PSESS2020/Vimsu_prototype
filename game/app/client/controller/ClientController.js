@@ -9,7 +9,7 @@ class ClientController {
 
     #port; // Does this class even need this? - (E)
     socket;
-    gameView;
+    #gameView;
     #currentRoom;
     #participantId;
 
@@ -34,7 +34,7 @@ class ClientController {
 
         ClientController.instance = this;
 
-        this.gameView = gameView;
+        this.#gameView = gameView;
         this.#participantId = participantId;
         
         //TODO: add Participant List from Server
@@ -181,7 +181,7 @@ class ClientController {
         // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it
         // this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
-        this.gameView.initAnotherAvatarViews(participant);
+        this.#gameView.initAnotherAvatarViews(participant);
 
     }
     
@@ -249,7 +249,7 @@ class ClientController {
    
 
     handleLeftArrowDown() {
-        this.gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
         this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
@@ -261,7 +261,7 @@ class ClientController {
     }
 
     handleRightArrowDown() {
-        this.gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
         this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
@@ -273,7 +273,7 @@ class ClientController {
     }
 
     handleUpArrowDown() {
-        this.gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
         this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
@@ -285,7 +285,7 @@ class ClientController {
     }
 
     handleDownArrowDown() {
-        this.gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
+        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
         this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
@@ -297,7 +297,7 @@ class ClientController {
     }
 
     handleArrowUp() {
-        this.gameView.updateOwnAvatarWalking(false);
+        this.#gameView.updateOwnAvatarWalking(false);
     }
     
 
