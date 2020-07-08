@@ -4,25 +4,21 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 module.exports = */class FoyerView extends MapView {
     #originX = 0;
     #originY = 0;
-    #tileColumnOffset = 64;
     #map;
     #tiles;
     #tilePaths = ["../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
-
-    
 
     constructor(foyerMap) {
         super();
         this.#map = foyerMap;
         this.#tiles = new Array();
-        this.initProperties();
         this.loadImages();
     }
 
-    initProperties() {
+    initProperties(tileColumnOffset) {
         this.xNumTiles = this.#map.length;
         this.yNumTiles = this.#map[0].length;
-        this.#originX = ctx.canvas.width / 2 - this.xNumTiles * this.#tileColumnOffset / 2;
+        this.#originX = ctx.canvas.width / 2 - this.xNumTiles * tileColumnOffset / 2;
         this.#originY = ctx.canvas.height / 2;
     }
 
@@ -32,13 +28,25 @@ module.exports = */class FoyerView extends MapView {
         this.tileImages = new Array();
         var loadedImages = 0;
         var totalImages = this.#tilePaths.length;
+        var tileColumnOffset;
+
+        this.tileImages[0] = new Image();
+        this.tileImages[0].onload = function () {
+            loadedImages++;
+            tileColumnOffset = this.width;
+        }
+
+        this.tileImages[0].src = this.#tilePaths[0];
+
+        
 
         // Load all the images before we run the app
-        for (var i = 0; i < totalImages; i++) {
+        for (var i = 1; i < totalImages; i++) {
 
             this.tileImages[i] = new Image();
             this.tileImages[i].onload = () => {
                 if (++loadedImages >= totalImages) {
+                    this.initProperties(tileColumnOffset);
                     this.buildMap();
                 }
             };
