@@ -12,7 +12,7 @@ module.exports = class ParticipantController {
        TypeChecker.isInt(ppantID);
 
        // Throws an error-Message that this is not a constructor?
-       this.#participant = new Participant(ppantID, new Position(1,1,1), Direction.DOWNRIGHT); // PLACEHOLDER
+       this.#participant = new Participant(ppantID, new Position(1,0,0), Direction.DOWNRIGHT); // PLACEHOLDER
     }
     
 
