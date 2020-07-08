@@ -23,11 +23,7 @@
      * 
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
-     * @param {int} length 
-     * @param {int} width 
      * @param {Array of ParticipantClient} listOfPPants 
-     * @param {Array of GameObjectClient} listOfGameObjects
-     * @param {Array of Array of int} occupationMap 
      */
     constructor(roomId, typeOfRoom, listOfPPants) {
         TypeChecker.isInt(roomId);
