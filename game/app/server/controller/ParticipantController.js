@@ -1,4 +1,4 @@
-const Participant = require('../../server/models/Participant.js');
+const Participant = require('../models/Participant.js');
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
@@ -8,11 +8,13 @@ module.exports = class ParticipantController {
     #participant;
 
 
-    constructor(ppantID) {
-       TypeChecker.isInt(ppantID);
+    constructor(participant) {
+       //TypeChecker.isInstanceOf(participant, Participant);
+
+       this.#participant = participant;
 
        // Throws an error-Message that this is not a constructor?
-       this.#participant = new Participant(ppantID, new Position(1,0,0), Direction.DOWNRIGHT); // PLACEHOLDER
+       //this.#participant = new Participant(ppantID, new Position(1,0,0), Direction.DOWNRIGHT); // PLACEHOLDER
     }
     
 

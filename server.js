@@ -158,7 +158,11 @@ io.on('connection', (socket) => {
         // (i) to (iii)
         var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
         console.log("test1");
-        var ppantCont = new ParticipantController(ppantID);
+        var x = 1; /* gameRoom.getStartPosition().getCordX(); */
+        var y = 1; /* gameRoom.getStartPosition().getCordY(); */
+        var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
+        var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
+        var ppantCont = new ParticipantController(ppant);
         console.log("test2");
         ppantControllers.set(socket.id, ppantCont);
         console.log("test3");
@@ -179,9 +183,6 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('currentGameStateYourID', ppantID);
         console.log("test4");
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
-        var x = 100; /* gameRoom.getStartPosition().getCordX(); */
-        var y = 100; /* gameRoom.getStartPosition().getCordY(); */
-        var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
         io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
         console.log("test5");
         // (vi)
