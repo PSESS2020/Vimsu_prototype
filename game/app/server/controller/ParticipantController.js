@@ -1,5 +1,5 @@
 const Participant = require('../../server/models/Participant.js');
-const TypeChecker = require('../../client/utils/TypeChecker.js');
+const TypeChecker = require('../../utils/TypeChecker.js');
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
 
@@ -10,8 +10,9 @@ module.exports = class ParticipantController {
 
     constructor(ppantID) {
        TypeChecker.isInt(ppantID);
+
        // Throws an error-Message that this is not a constructor?
-       // this.#participant = new Participant(ppantID, new Position(1,1,1), Direction.DOWNRIGHT); // PLACEHOLDER
+       this.#participant = new Participant(ppantID, new Position(1,1,1), Direction.DOWNRIGHT); // PLACEHOLDER
     }
     
 

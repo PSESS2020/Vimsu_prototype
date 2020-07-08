@@ -1,7 +1,7 @@
 var ConferenceController = require('./ConferenceController.js');
 var ParticipantController = require('./ParticipantController.js');
 var Room = require('../models/Room.js');
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js');
 
 module.exports = class RoomController {

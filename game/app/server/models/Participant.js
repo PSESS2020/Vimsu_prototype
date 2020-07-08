@@ -1,7 +1,7 @@
 var Position = require('./Position.js')
 var Direction = require('./Direction.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
-var TypeChecker = require('../../client/utils/TypeChecker.js')
+var TypeChecker = require('../../utils/TypeChecker.js')
 
 module.exports = class Participant {
 
@@ -18,7 +18,6 @@ module.exports = class Participant {
      * @param {int} id 
      * @param {Position} position 
      * @param {Direction} direction 
-     * @param {ParticipantController} participantController 
      */
     constructor(id, position, direction)
     {

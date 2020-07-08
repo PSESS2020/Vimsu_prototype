@@ -1,4 +1,4 @@
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var TypeOfRoom = require('./TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
