@@ -223,14 +223,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
         else {
             TypeChecker.isInt(participantIds);
-            let index = this.#updateList.findIndex(participant => participant.getId() === participantIds);
+
+            //Searches in Array of other Avatars in Update List for participant with this ID
+            let index = this.#updateList[1].forEach(participant => participant.getId() === participantIds);
 
             if (index < 0) 
             {
                 throw new Error(participantsIds + " is not in list of participants")
             }
             
-            this.#updateList.splice(index, 1)
+            //Removes disconnected Avatar from Update List
+            this.#updateList[1].splice(index, 1)
         }
         
         /*participantIds.forEach(id => 
