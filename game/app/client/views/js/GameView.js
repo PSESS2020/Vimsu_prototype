@@ -267,7 +267,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
         this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNLEFT', 0); 
         this.addToUpdateList(this.#ownAvatarView);
-        //this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
+        this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
