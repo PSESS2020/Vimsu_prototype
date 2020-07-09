@@ -223,7 +223,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
         else {
             TypeChecker.isInt(participantIds);
-            let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
+            let index = this.#updateList.findIndex(participant => participant.getId() === participantIds);
 
             if (index < 0) 
             {
