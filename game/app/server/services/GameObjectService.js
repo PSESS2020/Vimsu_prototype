@@ -10,7 +10,7 @@ module.exports = class GameObjectService {
 
     constructor() {
         if(!!GameObjectService.instance){
-            return ObjectService.instance;
+            return GameObjectService.instance;
         }
 
         GameObjectService.instance = this;
@@ -63,7 +63,7 @@ module.exports = class GameObjectService {
             }*/
 
             for (var i = 4; i < 10; i++)
-                this.#objects.push(new GameObject(1, "Table" + 1, 1, 1, new Position(roomId, i, 2), true))
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, i, 2), true))
 
             //Anderen Objekte für Foyer
         }
