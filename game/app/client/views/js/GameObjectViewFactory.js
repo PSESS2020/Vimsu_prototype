@@ -1,9 +1,8 @@
 class GameObjectViewFactory {
-    #tileColumnOffset = 64;
-    #tileRowOffset = 32;
-    #wallColumnOffset = 128;
-    #wallRowOffset = 158;
-    #tableRowOffset = 53;
+    #tileColumnOffset;
+    #tileRowOffset;
+    #wallColumnOffset;
+    #tableRowOffset;
     #loadedImages;
 
     constructor(loadedImages){
@@ -13,10 +12,15 @@ class GameObjectViewFactory {
     /*
     *calculates the screenpostition of an game object and creates it.
     */
-    createGameObjectView(gameObjectType, pos, originXY) {
+    createGameObjectView(gameObjectType, pos, originXY, offset) {
         var gameObjectView;
         var gameObjectImage;
         var screenPos;
+
+        this.#tileColumnOffset = offset.tileColumnOffset;
+        this.#tileRowOffset = offset.tileRowOffset;
+        this.#wallColumnOffset = offset.wallColumnOffset;
+        this.#tableRowOffset = offset.tableRowOffset;
         
         //calculates the screen position where to draw the tile
         var screenX = pos.getCordX() * this.#tileColumnOffset / 2 + pos.getCordY() * this.#tileColumnOffset / 2 + originXY.x;
@@ -72,7 +76,6 @@ class GameObjectViewFactory {
             case GameObjectTypeClient.TABLE:
                 screenPos = new PositionClient(screenX, screenY + tableOffsetY);
                 gameObjectImage = this.#loadedImages[6];
-
                 gameObjectView = new TableView(gameObjectImage, screenPos);
             break;
             

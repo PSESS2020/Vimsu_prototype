@@ -23,7 +23,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#roomId = 1;
 
-        this.#foyerView = new FoyerView();
         //this.addToUpdateList(this.#foyerView);
         this.initOwnAvatarView(" ");
     }
@@ -170,7 +169,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
@@ -184,7 +183,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].setDirection(direction); 
@@ -196,7 +195,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
@@ -262,6 +261,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
         this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNLEFT', 1); 
         this.addToUpdateList(this.#ownAvatarView);
+        this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());

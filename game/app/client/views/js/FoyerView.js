@@ -1,7 +1,4 @@
-/*var MapView = require('./MapView.js')
-var TypeChecker = require('../../../utils/TypeChecker.js')
-
-module.exports = */class FoyerView extends MapView {
+class FoyerView extends MapView {
     #originX = 0;
     #originY = 0;
     #map;
@@ -30,7 +27,6 @@ module.exports = */class FoyerView extends MapView {
         this.tileImages = new Array();
         var loadedImages = 0;
         var totalImages = this.#tilePaths.length;
-        var tileColumnOffset;
 
         // Load all the images before we run the app
         for (var i = 0; i < totalImages; i++) {
@@ -44,9 +40,16 @@ module.exports = */class FoyerView extends MapView {
 
                 if (loadedImages >= totalImages) {
                     this.#loader.doneLoading();
-                    tileColumnOffset = this.tileImages[0].width;
-                    this.initProperties(tileColumnOffset);
-                    this.buildMap();
+                    
+                    var offset = {
+                        tileColumnOffset: this.tileImages[0].width,
+                        tileRowOffset: this.tileImages[0].width / 2,
+                        wallColumnOffset: this.tileImages[1].width,
+                        tableRowOffset: this.tileImages[totalImages - 1].height
+                    };
+
+                    this.initProperties(offset.tileColumnOffset);
+                    this.buildMap(offset);
                 }
             };
             
@@ -55,7 +58,7 @@ module.exports = */class FoyerView extends MapView {
     }
 
     //Creates a map of gameobjects to draw on screen.
-    buildMap() {
+    buildMap(offset) {
         var gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
         var originXY = {
             x: this.#originX,
@@ -68,10 +71,10 @@ module.exports = */class FoyerView extends MapView {
 
                 var position = new PositionClient(row, col);
                 var tileType = this.#map[row][col];
-                var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY);
+                var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
                     
                 if( tile != null)
-                this.#tiles.push(tile);
+                    this.#tiles.push(tile);
                 
             };
         };

@@ -11,7 +11,6 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView, 1);
 clientController.setPort(5000);
 clientController.openSocketConnection();
-clientController.initializeGameState();
 clientController.initGameView();
 
 function gameLoop() {

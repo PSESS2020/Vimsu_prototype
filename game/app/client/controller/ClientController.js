@@ -72,7 +72,7 @@ class ClientController {
         this.#participantId = participantId;
         
         //TODO: add Participant List from Server
-        this.#currentRoom = new RoomClient(1, "FOYER", []);
+        this.#currentRoom = new RoomClient(1, TypeOfRoomClient.FOYER, []);
 
         console.log("fully init cc");
         return this;
@@ -117,18 +117,15 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
-    /*Initializes a copy from the game state of the server . 
-    Includes the initialization of an room model for the client.*/
-    initializeGameState() {
-        this.#roomClient = new RoomClient(1, TypeOfRoomClient.FOYER, 25, 25, [], []);
     }
 
     /*Initializes the initial view for the player*/
     initGameView() {
-        var map = this.#roomClient.getMap();
-
+        
+        var map = this.#currentRoom.getMap();
         if (map !== null)
-        this.#gameView.initFoyerView(map);
+            this.#gameView.initFoyerView(map);
+        
         //TODO this.#gameView.initOwnAvatarView(participant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
     }
@@ -196,7 +193,7 @@ class ClientController {
         console.log("test update id");
         // Throws the error that this is not a function?
         this.setParticipantId(id);
-        console.log(this.#participantId);
+        console.log("my id " + this.#participantId);
     }
 
     handleFromServerUpdatePosition(posInfo) {
@@ -280,9 +277,9 @@ class ClientController {
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
-        console.log(initInfo.id);
+        console.log("init info id" + initInfo.id);
         var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
-        console.log(participant.getId());
+        console.log(" get id " + participant.getId());
         // Here we get another error (which we always get on handling the private fields 
         // in these methods
         // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it

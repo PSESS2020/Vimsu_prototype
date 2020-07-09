@@ -10,7 +10,7 @@
     #length;
     #width;
     #listOfPPants;
-    //#occupationMap;
+    #occupationMap;
     //listOfNPCs
     #listOfGameObjects = [];
     //listOfDoors
@@ -192,7 +192,7 @@
     buildMapArray() {
 
         //force minimal room sizes for foyer
-        if (this.#typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom === "FOYER") {
             if (this.#width < 6) {
                 this.#width = 5;
             }
@@ -220,14 +220,14 @@
         }
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-            if (this.#listOfGameObjects[i].getName().startsWith("Table")) {
+            if (this.#listOfGameObjects[i].getName().startsWith("table")) {
                 var positionX = this.#listOfGameObjects[i].getPosition().getCordX();
                 var positionY = this.#listOfGameObjects[i].getPosition().getCordY();
-                this.#map[positionX + 2][positionY] = GameObjectTypeClient.TABLE;
+                this.#map[positionX][positionY + 2] = GameObjectTypeClient.TABLE;
             }
         }
 
-        if (this.#typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom === "FOYER") {
             this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
             this.#map[2][1] = GameObjectTypeClient.LECTUREDOOR;
             this.#map[mapLength - 2][4] = GameObjectTypeClient.FOODCOURTDOOR;
