@@ -211,23 +211,23 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             {
                 TypeChecker.isInt(participantIds[i]);
 
-                let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
+                var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
 
-                if (index < 0) 
+                if (!(index >= 0)) 
                 {
                     throw new Error(participantsIds[i] + " is not in list of participants")
                 }
 
-                this.#updateList.splice(index, 1)
+                this.#anotherParticipantAvatarViews.splice(index, 1)
             }
         }
         else {
             TypeChecker.isInt(participantIds);
 
             //Searches in Array of other Avatars for participant with this ID
-            let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
-
-            if (index < 0) 
+            var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
+            
+            if (!(index >= 0)) 
             {
                 throw new Error(participantsIds + " is not in list of participants")
             }
