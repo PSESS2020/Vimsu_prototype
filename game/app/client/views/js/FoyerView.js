@@ -5,6 +5,7 @@ module.exports = */class FoyerView extends MapView {
     #originX = 0;
     #originY = 0;
     #map;
+    #loader;
     #tiles;
     #tilePaths = ["../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
 
@@ -12,6 +13,7 @@ module.exports = */class FoyerView extends MapView {
         super();
         this.#map = foyerMap;
         this.#tiles = new Array();
+        this.#loader = new LoadingView();
         this.loadImages();
     }
 
@@ -30,22 +32,19 @@ module.exports = */class FoyerView extends MapView {
         var totalImages = this.#tilePaths.length;
         var tileColumnOffset;
 
-        this.tileImages[0] = new Image();
-        this.tileImages[0].onload = function () {
-            loadedImages++;
-            tileColumnOffset = this.width;
-        }
-
-        this.tileImages[0].src = this.#tilePaths[0];
-
-        
-
         // Load all the images before we run the app
-        for (var i = 1; i < totalImages; i++) {
+        for (var i = 0; i < totalImages; i++) {
 
             this.tileImages[i] = new Image();
+            
             this.tileImages[i].onload = () => {
-                if (++loadedImages >= totalImages) {
+                loadedImages++;
+
+                this.#loader.contentLoaded(totalImages, loadedImages);
+
+                if (loadedImages >= totalImages) {
+                    this.#loader.doneLoading();
+                    tileColumnOffset = this.tileImages[0].width;
                     this.initProperties(tileColumnOffset);
                     this.buildMap();
                 }
@@ -64,19 +63,19 @@ module.exports = */class FoyerView extends MapView {
         };
 
 
-            for (var row = (this.xNumTiles - 1); row >= 0; row--) {
-                for (var col = 0; col < this.yNumTiles; col++) {
+        for (var row = (this.xNumTiles - 1); row >= 0; row--) {
+            for (var col = 0; col < this.yNumTiles; col++) {
 
-                    var position = new PositionClient(row, col);
-                    var tileType = this.#map[row][col];
-                    var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY);
+                var position = new PositionClient(row, col);
+                var tileType = this.#map[row][col];
+                var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY);
                     
-                    if( tile != null)
-                    this.#tiles.push(tile);
+                if( tile != null)
+                this.#tiles.push(tile);
                 
-                };
             };
-            this.draw();
+        };
+        this.draw();
     }
 
     draw() {
