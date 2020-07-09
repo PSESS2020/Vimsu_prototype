@@ -163,8 +163,10 @@ class ClientController {
     sendToServerRequestMovStart(direction) {
         this.socketReady;
         TypeChecker.isEnumOf(direction, DirectionClient);
-        
-        this.socket.emit('requestMovementStart', this.#participantId, direction);
+        var currPos = this.#gameView.getOwnAvatarView().getPosition();
+        var currPosX = currPos.getCordX();
+        var currPosY = currPos.getCordY();
+        this.socket.emit('requestMovementStart', this.#participantId, direction, currPosX, currPosY);
     }
 
     sendToServerRequestMovStop() {
