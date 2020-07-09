@@ -161,7 +161,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantsId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
@@ -175,7 +175,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].setDirection(direction); 
@@ -187,7 +187,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         if (index < 0) 
         {
-           throw new Error(participantsIds + " is not in list of participants")
+           throw new Error(participantId + " is not in list of participants")
         }
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
@@ -223,7 +223,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
         else {
             TypeChecker.isInt(participantIds);
-            let index = this.#updateList.findIndex(participant => participant.getId() === participantIds);
+            let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
 
             if (index < 0) 
             {
@@ -245,19 +245,25 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#roomId = roomId;
     }
 
-    initOwnAvatarView(participant)
+    initOwnAvatarView()
     {
         //var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
         //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNLEFT', 0); 
         this.addToUpdateList(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
         //this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
         //this.addToUpdateList(this.#ownAvatarView);
+    }
+
+    //is called after server sends participantId
+    setOwnAvatarViewId(participantId) {
+        TypeChecker.isInt(participantId);
+        this.#ownAvatarView.setId(participantId);
     }
 
     updateOwnAvatarPosition(newPosition)

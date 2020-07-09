@@ -60,7 +60,7 @@ class ClientController {
      */
 
 
-    constructor(gameView, participantId) { //TODO: instanciate ParticipantClient
+    constructor(gameView/*, participantId*/) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
@@ -68,7 +68,7 @@ class ClientController {
         ClientController.instance = this;
 
         this.#gameView = gameView;
-        this.#participantId = participantId;
+        //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
         this.#currentRoom = new RoomClient(1, "FOYER", []);
@@ -146,6 +146,7 @@ class ClientController {
         this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
+        this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
     }
     
 
@@ -181,6 +182,7 @@ class ClientController {
         console.log("test update id");
         // Throws the error that this is not a function?
         this.setParticipantId(id);
+        this.#gameView.setOwnAvatarViewId(id);
         console.log(this.#participantId);
     }
 
@@ -284,6 +286,17 @@ class ClientController {
         } else {
             //TODO: Avatar wird bewegt
         }
+    }
+
+    // Removes disconnected Player from Model and View (P)
+    handleFromServerRemovePlayer(ppantId) {
+        //TypeChecker.isInt(ppantId);
+
+        this.#currentRoom.exitParticipant(ppantId);
+
+        
+        this.#gameView.removeAnotherAvatarViews(ppantId);
+        
     }
 
 
@@ -395,9 +408,5 @@ class ClientController {
     handleArrowUp() {
         this.#gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
-    }
-    
-
-   
+    } 
 }
-

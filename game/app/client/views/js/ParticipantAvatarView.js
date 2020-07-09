@@ -45,6 +45,11 @@ class ParticipantAvatarView extends AvatarView {
         return this.#participantId;
     }
 
+    //Is called after server sends participantId
+    setId(participantId) {
+        this.#participantId = participantId;
+    }
+
     update() {
         this.#currentAnimation.update();
     }

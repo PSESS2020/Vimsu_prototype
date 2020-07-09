@@ -110,14 +110,16 @@
      * 
      * @author Philipp
      * 
-     * @param {ParticipantClient} participant 
+     * @param {int} participantId 
      */
-    exitParticipant(participant) {
-        TypeChecker.isInstanceOf(participant, ParticipantClient);
-        if (this.#listOfPPants.includes(participant)) {
-            let index = this.#listOfPPants.indexOf(participant);
-            this.#listOfPPants.splice(index, 1);
-        }
+    exitParticipant(participantId) {
+        TypeChecker.isInt(participantId);
+        this.#listOfPPants.forEach(participant => {
+            if (participant.getId() === participantId) {
+                let index = this.#listOfPPants.indexOf(participant);
+                this.#listOfPPants.splice(index, 1);
+            }
+        });
     }
 
     /**

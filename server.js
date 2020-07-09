@@ -224,11 +224,12 @@ io.on('connection', (socket) => {
     // as of now, this is completely broken
     socket.on('disconnect', () => {
         /* This still needs error-Handling for when no such ppantCont exists - (E) */
-        var ppantID = 1; //ppantControllers.get(socket.id).getParticipant().getId();
+        var ppantID = ppantControllers.get(socket.id).getParticipant().getId();
         
         // gameRoomController.removeParticipantController(ppantControllers.get(socket.id);
         // The next line can probably be just handled inside the previous one
         io.sockets.emit('remove player', ppantID);
+        //socket.broadcast.emit('remove player', ppantID);
         console.log('Participant ' + socket.id + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);

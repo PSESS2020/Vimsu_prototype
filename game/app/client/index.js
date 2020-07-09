@@ -8,7 +8,7 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 /* The participantID should not be one (as we want to make sure it is congruent with the
  * server).
  * - (E) */
-let clientController = new ClientController(gameView, 1);
+let clientController = new ClientController(gameView);
 clientController.setPort(5000);
 clientController.openSocketConnection();
 //clientController.setPort(5000); // Does this even do anything?
