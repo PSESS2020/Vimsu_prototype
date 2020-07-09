@@ -225,7 +225,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             TypeChecker.isInt(participantIds);
 
             //Searches in Array of other Avatars for participant with this ID
-            let index = this.#anotherParticipantAvatarViews.forEach(participant => participant.getId() === participantIds);
+            let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
 
             if (index < 0) 
             {

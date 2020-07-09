@@ -230,7 +230,7 @@ io.on('connection', (socket) => {
         // The next line can probably be just handled inside the previous one
         //io.sockets.emit('remove player', ppantID);
         socket.broadcast.emit('remove player', ppantID);
-        console.log('Participant ' + socket.id + ' has disconnected from the game . . .');
+        console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);
         // Destroy ppant and his controller
