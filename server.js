@@ -116,6 +116,7 @@ const gameRoomController = new RoomController(gameRoom); // Creates a controller
 /* First, we create a map that will hold all ppantControllers, indexed by their socket.ids 
  * - (E) */
 const ppantControllers = new Map();
+const ppants = new Map();  // Array to hold all participants
 
 /* This is the program logic handling new connections.
  * This may late be moved into the server or conference-controller?
@@ -164,6 +165,7 @@ io.on('connection', (socket) => {
         var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
         var ppantCont = new ParticipantController(ppant);
         console.log("test2");
+        ppants.set(ppantID, ppant);
         ppantControllers.set(socket.id, ppantCont);
         console.log("test3");
 
@@ -185,6 +187,16 @@ io.on('connection', (socket) => {
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
         io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
         console.log("test5");
+        ppants.forEach( (value, key, map) => {
+            if(key != ppantID) {
+                var tempPos = value.getPosition();
+                var tempX = tempPos.getCordX();
+                var tempY = tempPos.getCordY();
+                var tempDir = value.getDirection();
+                io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir });
+                console.log("Participant " + key + " is being initialized at the view of participant " + ppantID);
+            }   
+        });
         // (vi)
         /* Emits the ppantID of the new participant to all other participants
          * connected to the server so that they may create a new client-side
@@ -206,17 +218,18 @@ io.on('connection', (socket) => {
      * INFORMS ABOUT EACH MOVEMENT ACTION SEPERATELY, NOT COLLECTING
      * THEM INTO A SINGLE MESSAGE THAT GETS SEND OUT REGULARLY
      * - (E) */
-    socket.on('requestMovementStart', (ppantID, direction) => {
+    socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
         // TODO
         // Update Position server-side
-
+        var newPos = new Position(1, newCordX, newCordY);
+        ppants.get(ppantID).setPosition(newPos);
+        ppants.get(ppantID).setDirection(direction);
         socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction);
     });
 
     socket.on('requestMovementStop', ppantID => {
         // TODO
         // handle this properly server-side
-        
         socket.broadcast.emit('movementOfAnotherPPantStop', ppantID);
     });
     
