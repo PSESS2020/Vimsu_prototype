@@ -233,7 +233,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             }
             
             //Removes disconnected Avatar from Update List
-            this.#updateList[1].splice(index, 1)
+            this.#updateList[1].splice(index, 1);
+
+            //draws Foyerview, so the disconnected Avatar disappers from View
+            this.#foyerView.draw();
         }
         
         /*participantIds.forEach(id => 
@@ -285,7 +288,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
 
-        this.#ownAvatarView.draw();   
+        //this.#ownAvatarView.draw();   
+
+        //Foyer needs to be drawn every time a Avatar moves
         this.#foyerView.draw();
     }
 

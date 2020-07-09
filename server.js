@@ -228,8 +228,8 @@ io.on('connection', (socket) => {
         
         // gameRoomController.removeParticipantController(ppantControllers.get(socket.id);
         // The next line can probably be just handled inside the previous one
-        io.sockets.emit('remove player', ppantID);
-        //socket.broadcast.emit('remove player', ppantID);
+        //io.sockets.emit('remove player', ppantID);
+        socket.broadcast.emit('remove player', ppantID);
         console.log('Participant ' + socket.id + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);
