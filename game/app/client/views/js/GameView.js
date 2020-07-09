@@ -104,6 +104,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
     }
 
+    initFoyerView(map) {
+        this.#foyerView = new FoyerView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
+    }
+
     /**
      * 
      * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
