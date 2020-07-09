@@ -224,16 +224,16 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         else {
             TypeChecker.isInt(participantIds);
 
-            //Searches in Array of other Avatars in Update List for participant with this ID
-            let index = this.#updateList[1].forEach(participant => participant.getId() === participantIds);
+            //Searches in Array of other Avatars for participant with this ID
+            let index = this.#anotherParticipantAvatarViews.forEach(participant => participant.getId() === participantIds);
 
             if (index < 0) 
             {
                 throw new Error(participantsIds + " is not in list of participants")
             }
             
-            //Removes disconnected Avatar from Update List
-            this.#updateList[1].splice(index, 1);
+            //Removes disconnected Avatar from participant avatar views
+            this.#anotherParticipantAvatarViews.splice(index, 1);
 
             //draws Foyerview, so the disconnected Avatar disappers from View
             this.#foyerView.draw();
