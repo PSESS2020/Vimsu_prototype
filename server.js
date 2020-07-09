@@ -246,6 +246,7 @@ io.on('connection', (socket) => {
         console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);
+        ppants.delete(ppantID);
         // Destroy ppant and his controller
     });
 });
