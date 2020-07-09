@@ -45,6 +45,7 @@ class ClientController {
     #gameView;
     #currentRoom;
     #participantId;
+    #roomClient;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -71,7 +72,7 @@ class ClientController {
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
-        this.#currentRoom = new RoomClient(1, "FOYER", []);
+        this.#currentRoom = new RoomClient(1, TypeOfRoomClient.FOYER, []);
 
         console.log("fully init cc");
         return this;
@@ -116,6 +117,17 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
+    }
+
+    /*Initializes the initial view for the player*/
+    initGameView() {
+        
+        var map = this.#currentRoom.getMap();
+        if (map !== null)
+            this.#gameView.initFoyerView(map);
+        
+        //TODO this.#gameView.initOwnAvatarView(participant);
+        //TODO this.#gameView.initAnotherAvatarViews(participants);
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -269,9 +281,9 @@ class ClientController {
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
-        console.log(initInfo.id);
+        console.log("init info id" + initInfo.id);
         var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
-        console.log(participant.getId());
+        console.log(" get id " + participant.getId());
         // Here we get another error (which we always get on handling the private fields 
         // in these methods
         // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it
