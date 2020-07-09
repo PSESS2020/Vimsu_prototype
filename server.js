@@ -221,6 +221,7 @@ io.on('connection', (socket) => {
     socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
         // TODO
         // Update Position server-side
+
         var newPos = new Position(1, newCordX, newCordY);
         ppants.get(ppantID).setPosition(newPos);
         ppants.get(ppantID).setDirection(direction);

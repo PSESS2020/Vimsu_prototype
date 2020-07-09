@@ -6,10 +6,10 @@ module.exports = */
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('CharacterSpriteSheetBody.png', 64, 128);
-    #topClothing = new SpriteSheet('TopClothingBlueShirtSpriteSheet.png', 64, 128);
-    #bottomClothing = new SpriteSheet('BottomBlackTrousersSpriteSheet.png', 64, 128);
-    #shoes = new SpriteSheet('ShoesBlackSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheetBody.png', 64, 128);
+    #topClothing = new SpriteSheet('../assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
+    #bottomClothing = new SpriteSheet('../assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
+    #shoes = new SpriteSheet('../assets/ShoesBlackSpriteSheet.png', 64, 128);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
@@ -94,7 +94,8 @@ class ParticipantAvatarView extends AvatarView {
     draw() {
         let cordX = super.getPosition().getCordX();
         let cordY = super.getPosition().getCordY();
-
+        this.updateCurrentAnimation();
+    
         //should be done somewhere else, 86 and 419 are room dependent
         let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
         let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
