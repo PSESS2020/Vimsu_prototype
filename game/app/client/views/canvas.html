@@ -16,8 +16,8 @@
                         '../models/PositionClient','../models/GameObjectClient', '../models/RoomClient'], () => {
                 requirejs(['js/Views'], () => {
                     requirejs(['../utils/SpriteAnimation', '../utils/SpriteSheet'], () => {
-                    requirejs(['js/MapView', 'js/GameObjectView', 'js/AvatarView'], () => {
-                        requirejs(['js/FoyerView','js/map', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView'], () => {
+                    requirejs(['js/MapView', 'js/GameObjectView', 'js/GameObjectViewFactory', 'js/AvatarView', 'js/LoadingView'], () => {
+                        requirejs(['js/FoyerView', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView', 'js/WallView', 'js/TableView', 'js/DoorView'], () => {
                             requirejs(['js/GameView', '../controller/ClientController'], () => {
                                 requirejs(['../index'], () => {
 
@@ -30,5 +30,10 @@
             });
         </script>
         <!--<script type="text/javascript" src="../index.js"></script>-->
+
+        <div id="overlay">
+            <div id="progressbar"></div>
+            <div id="progressstatus"></div>
+        </div>
     </body>
 </html>

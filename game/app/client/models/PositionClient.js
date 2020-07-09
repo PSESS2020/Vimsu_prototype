@@ -12,8 +12,9 @@ class PositionClient {
      * @param {int} cordY 
      */
     constructor(cordX, cordY) {
-        TypeChecker.isInt(cordX);
-        TypeChecker.isInt(cordY);
+        if (typeof cordX !== 'number' || typeof cordX !== 'number') {
+            throw new TypeError(value + ' is not a number!')
+        }
 
         this.#cordX = cordX;
         this.#cordY = cordY;

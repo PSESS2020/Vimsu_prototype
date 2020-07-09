@@ -15,7 +15,7 @@
     #listOfGameObjects = [];
     //listOfDoors
     #map;
-
+    
     /**
      * Erzeugt RoomClient Instanz
      * 
@@ -35,7 +35,7 @@
         });
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
-        if(!!RoomClient.instance) {
+        if (!!RoomClient.instance) {
             return RoomClient.instance;
         }
 
@@ -65,6 +65,7 @@
         }
 
         this.#buildOccMap();
+        this.buildMapArray();
     }
 
     getRoomId() {
@@ -187,15 +188,13 @@
         this.#listOfGameObjects = listOfGameObjects;
         this.#buildOccMap();
         //this.#occupationMap = occupationMap;
-        //this.buildMapArray();
+        this.buildMapArray();
     }
-
-    /*
 
     buildMapArray() {
 
         //force minimal room sizes for foyer
-        if (this.#typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom === "FOYER") {
             if (this.#width < 6) {
                 this.#width = 5;
             }
@@ -207,7 +206,7 @@
 
         var mapLength = this.#width + 2;
         this.#map = new Array(mapLength);
-        
+
         for (var i = 0; i < mapLength; i++) {
             this.#map[i] = new Array(this.#length + 2).fill(GameObjectTypeClient.TILE);
         }
@@ -217,34 +216,34 @@
             this.#map[mapLength - 1][i] = GameObjectTypeClient.BLANK;
 
             //walls
-            if(i < mapLength - 2)
+            if (i < mapLength - 2)
                 this.#map[i][1] = GameObjectTypeClient.LEFTWALL;
-                this.#map[mapLength - 2][i+2] = GameObjectTypeClient.RIGHTWALL;
+            this.#map[mapLength - 2][i + 2] = GameObjectTypeClient.RIGHTWALL;
         }
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-            if(this.#listOfGameObjects[i].getName().startsWith("Table")) {
+            if (this.#listOfGameObjects[i].getName().startsWith("table")) {
                 var positionX = this.#listOfGameObjects[i].getPosition().getCordX();
                 var positionY = this.#listOfGameObjects[i].getPosition().getCordY();
-                this.#map[positionX + 2][positionY] = GameObjectTypeClient.TABLE;
+                this.#map[positionX][positionY + 2] = GameObjectTypeClient.TABLE;
             }
         }
 
-        if (this.#typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom === "FOYER") {
             this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
             this.#map[2][1] = GameObjectTypeClient.LECTUREDOOR;
             this.#map[mapLength - 2][4] = GameObjectTypeClient.FOODCOURTDOOR;
             this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
             this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
-            this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;      
-        }        
+            this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;
+        }
     }
 
 
     getMap() {
         return this.#map;
     }
-    */
+    
 
     #buildOccMap = function() {
         //Geht jedes Objekt in der Objektliste durch

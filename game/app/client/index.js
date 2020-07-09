@@ -11,8 +11,7 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView);
 clientController.setPort(5000);
 clientController.openSocketConnection();
-//clientController.setPort(5000); // Does this even do anything?
-//clientController.openSocketConnection();
+clientController.initGameView();
 
 function gameLoop() {
   //let deltaTime = timestamp - lastTime;
