@@ -237,9 +237,10 @@ io.on('connection', (socket) => {
     // as of now, this is completely broken
     socket.on('disconnect', () => {
         //Prevents server crash because client sends sometimes disconnect" event on connection to server.
-        if(!ppantControllers.has(socket.id))
-        console.log("disconnect");
-        return;
+        if(!ppantControllers.has(socket.id)) {
+            console.log("disconnect");
+            return;
+        }
 
         /* This still needs error-Handling for when no such ppantCont exists - (E) */
         var ppantID = ppantControllers.get(socket.id).getParticipant().getId();
