@@ -1,5 +1,5 @@
-const mongo = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017'
+const MongoClient = require('mongodb').MongoClient;
+const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 var TypeChecker = require('../game/app/utils/TypeChecker')
 const ObjectID = require('mongodb').ObjectID;
 const passwordHash = require('password-hash')
@@ -12,20 +12,23 @@ module.exports = class db {
     }
 
     connectDB() {
-        mongo.connect(url, {
-            useNewUrlParser: true,
+
+        MongoClient.connect(connectionString, { 
             useUnifiedTopology: true
-        }, (err, client) => {
-            if(err) throw err;
-            console.log("Database connected");
-            this.#vimsudb = client.db("vimsudb");
-            //this.createCollection("accounts");
-            //this.createCollection("participants");
+        })
+        .then(client => {
+            console.log('Connected to Database')
+            this.#vimsudb = client.db('vimsudb');
             this.listCollections();
+        })
+        .catch(error => 
+            console.error(error)
+        )
+        
 
-            var objectId = new ObjectID();
+        var objectId = new ObjectID();
 
-            var object = {
+        var object = {
                 accountId: objectId,
                 username: "test123", 
                 title: "",
@@ -33,9 +36,7 @@ module.exports = class db {
                 forename: "test",
                 email: "test123@test.com",
                 passwordHash: passwordHash.generate("test123")
-            }
-            this.findAllDocuments("accounts");
-        })
+        }
     }
 
     listCollections() {
