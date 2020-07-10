@@ -1,4 +1,4 @@
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var TypeOfRoom = require('../models/TypeOfRoom.js');
 var Room = require('../models/Room.js');
 

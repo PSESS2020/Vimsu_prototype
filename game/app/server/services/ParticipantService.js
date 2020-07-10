@@ -1,4 +1,4 @@
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js');
 
 //TODO

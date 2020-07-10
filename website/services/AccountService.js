@@ -1,4 +1,4 @@
-var TypeChecker = require('../../game/app/client/utils/TypeChecker')
+var TypeChecker = require('../../game/app/utils/TypeChecker')
 const db = require('../../config/db')
 const vimsudb = new db();
 

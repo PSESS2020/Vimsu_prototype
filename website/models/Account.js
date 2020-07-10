@@ -1,4 +1,4 @@
-var TypeChecker = require('../../game/app/client/utils/TypeChecker')
+var TypeChecker = require('../../game/app/utils/TypeChecker')
 
 module.exports = class Account {
 
