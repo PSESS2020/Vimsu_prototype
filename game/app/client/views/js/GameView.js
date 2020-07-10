@@ -23,7 +23,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#roomId = 1;
 
-        this.#foyerView = new FoyerView();
         //this.addToUpdateList(this.#foyerView);
         this.initOwnAvatarView(" ");
     }
@@ -48,9 +47,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 TypeChecker.isInstanceOf(viewInstance[i], Views);
             }
         }
+        else {
+            TypeChecker.isInstanceOf(viewInstance, Views);
+        }
 
-        TypeChecker.isInstanceOf(viewInstance, Views);
-        
         if(!this.#updateList.includes(viewInstance))
         {
             this.#updateList.push(viewInstance);
@@ -75,17 +75,41 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        for (var view in this.#updateList) {
-            this.#updateList[view].draw();
+        for (var i = 0; i < this.#updateList.length; i++) {
+
+            if (this.#updateList[i] instanceof Array) {
+                for(var j = 0; j < this.#updateList[i].length; j++) {
+                    this.#updateList[i][j].draw();
+                }
+            }
+            else {
+                this.#updateList[i].draw();
+            }
         }
     }
 
     update()
     {
-        for (var view in this.#updateList) {
-            console.log('1');
-            this.#updateList[view].update();
+        for (var i = 0; i < this.#updateList.length; i++) {
+
+            if (this.#updateList[i] instanceof Array) {
+                for(var j = 0; j < this.#updateList[i].length; j++) {
+                    this.#updateList[i][j].update();
+                }
+            }
+            else {
+                this.#updateList[i].update();
+            }
         }
+    }
+
+    initFoyerView(map) {
+        this.#foyerView = new FoyerView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
     }
 
     /**
@@ -113,9 +137,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 if(participants[i] !== this.#ownAvatarView) 
                 {
+                    var participant = participants[i];
                     this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
                 }
             }
+            this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
         else 
         {
@@ -128,19 +154,56 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
+                    console.log(participants.getId());
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
             }
+            this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
-
-        /*participants.forEach(participant => 
-            TypeChecker.isInstanceOf(participant, ParticipantClient),
-            this.#anotherParticipantAvatarViews.push(new AvatarView(participant.getId(), participant.getPosition(), participant.getDirection()))
-        );*/
     }
         
-    updateAnotherAvatarViews(participants)
+    updateAnotherAvatarPosition(participantId, newPosition)
     {
+        TypeChecker.isInstanceOf(newPosition, PositionClient);
 
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
+    }
+
+    updateAnotherAvatarDirection(participantId, direction)
+    {
+        TypeChecker.isEnumOf(direction, DirectionClient);
+ 
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].setDirection(direction); 
+    }
+
+    updateAnotherAvatarWalking(participantId, isMoving) {
+
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+
+        if (index < 0) 
+        {
+           throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
+        this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
+        
+        this.#foyerView.draw();
+        this.#anotherParticipantAvatarViews[index].draw(); 
+         
     }
 
     /**
@@ -156,26 +219,32 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             {
                 TypeChecker.isInt(participantIds[i]);
 
-                let index = this.#updateList.findIndex(participant => participant.getId() === participantIds[i]);
+                var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
 
-                if (index < 0) 
+                if (!(index >= 0)) 
                 {
                     throw new Error(participantsIds[i] + " is not in list of participants")
                 }
 
-                this.#updateList.splice(index, 1)
+                this.#anotherParticipantAvatarViews.splice(index, 1)
             }
         }
         else {
             TypeChecker.isInt(participantIds);
-            let index = this.#updateList.findIndex(participant => participant.getId() === participantIds);
 
-            if (index < 0) 
+            //Searches in Array of other Avatars for participant with this ID
+            var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
+            
+            if (!(index >= 0)) 
             {
                 throw new Error(participantsIds + " is not in list of participants")
             }
             
-            this.#updateList.splice(index, 1)
+            //Removes disconnected Avatar from participant avatar views
+            this.#anotherParticipantAvatarViews.splice(index, 1);
+
+            //draws Foyerview, so the disconnected Avatar disappers from View
+            this.#foyerView.draw();
         }
         
         /*participantIds.forEach(id => 
@@ -190,14 +259,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#roomId = roomId;
     }
 
-    initOwnAvatarView(participant)
+    initOwnAvatarView()
     {
-        var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
-        var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
+        //var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
+        //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(initX, initY), 'DOWNLEFT', 1); 
+        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNRIGHT', 0); 
         this.addToUpdateList(this.#ownAvatarView);
+        //this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
 
         //TypeChecker.isInstanceOf(participant, ParticipantClient);
         //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
@@ -205,11 +275,16 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //this.addToUpdateList(this.#ownAvatarView);
     }
 
+    //is called after server sends participantId
+    setOwnAvatarViewId(participantId) {
+        TypeChecker.isInt(participantId);
+        this.#ownAvatarView.setId(participantId);
+    }
+
     updateOwnAvatarPosition(newPosition)
     {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
-        this.#ownAvatarView.setPosition(newPosition);    
-        
+        this.#ownAvatarView.setPosition(newPosition);
     }
 
     updateOwnAvatarDirection(direction)
@@ -223,8 +298,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
 
+        //this.#ownAvatarView.draw();   
+
+        //Foyer needs to be drawn every time a Avatar moves
         this.#foyerView.draw();
-        this.#ownAvatarView.draw();
     }
 
     removeOwnAvatarView()

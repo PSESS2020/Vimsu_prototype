@@ -29,7 +29,7 @@ class GameObjectClient {
         TypeChecker.isString(name);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
-        TypeChecker.isInstanceOf(position, Position);
+        TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isBoolean(isSolid);
         
         this.#id = id;

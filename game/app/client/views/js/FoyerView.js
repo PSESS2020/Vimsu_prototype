@@ -1,146 +1,94 @@
-/*var MapView = require('./MapView.js')
-var TypeChecker = require('../../../utils/TypeChecker.js')
-
-module.exports = */class FoyerView extends MapView {
-    #tileColumnOffset = 64;
-    #tileRowOffset = 32;
-    #wallColumnOffset = 128;
-    #wallRowOffset = 158;
-    #tableRowOffset = 53;
+class FoyerView extends MapView {
     #originX = 0;
     #originY = 0;
+    #map;
+    #loader;
+    #tiles;
+    #tilePaths = ["../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
 
-
-    constructor() {
+    constructor(foyerMap) {
         super();
-        this.load();
+        this.#map = foyerMap;
+        this.#tiles = new Array();
+        this.#loader = new LoadingView();
+        this.loadImages();
     }
-    load() {
+
+    initProperties(tileColumnOffset) {
+        this.xNumTiles = this.#map.length;
+        this.yNumTiles = this.#map[0].length;
+        this.#originX = ctx.canvas.width / 2 - this.xNumTiles * tileColumnOffset / 2;
+        this.#originY = ctx.canvas.height / 2;
+    }
+
+    //loads the images that are needed for tilecreation.
+    //this was the best not error prone way.
+    loadImages() {
         this.tileImages = new Array();
         var loadedImages = 0;
-        var totalImages = FoyerMap.tiles.length;
+        var totalImages = this.#tilePaths.length;
 
         // Load all the images before we run the app
-        var self = this;
-        for (var i = 0; i < FoyerMap.tiles.length; i++) {
+        for (var i = 0; i < totalImages; i++) {
+
             this.tileImages[i] = new Image();
+            
             this.tileImages[i].onload = () => {
-                if (++loadedImages >= totalImages) {
-                    this.run();
+                loadedImages++;
+
+                this.#loader.contentLoaded(totalImages, loadedImages);
+
+                if (loadedImages >= totalImages) {
+                    this.#loader.doneLoading();
+                    
+                    var offset = {
+                        tileColumnOffset: this.tileImages[0].width,
+                        tileRowOffset: this.tileImages[0].width / 2,
+                        wallColumnOffset: this.tileImages[1].width,
+                        tableRowOffset: this.tileImages[totalImages - 1].height
+                    };
+
+                    this.initProperties(offset.tileColumnOffset);
+                    this.buildMap(offset);
                 }
             };
-            this.tileImages[i].src = FoyerMap.tiles[i];
+            
+            this.tileImages[i].src = this.#tilePaths[i];
         }
     }
 
-    run() {
-        this.canvas = $('#canvas');
-        this.ctx = this.canvas[0].getContext("2d");
-        this.xNumTiles = FoyerMap.map.length;
-        this.yNumTiles = FoyerMap.map[0].length;
-        this.ctx.canvas.width = 1900;
-        this.ctx.canvas.height = 950;
+    //Creates a map of gameobjects to draw on screen.
+    buildMap(offset) {
+        var gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
+        var originXY = {
+            x: this.#originX,
+            y: this.#originY
+        };
 
-        /*$(window).on('resize', () => {
-            this.updateCanvasSize();
-            this.draw();
-        });*/
 
-        $(window).on('mousemove', function (e) {
-            //Calc the mouseposition in the game world.
-            //Transforms the x,y coordinates of the current mouseposition
-            //to the coordinates in the game map.
-            //coordinates origin is the middle of the left tile.
-            //e.pageX = e.pageX - this.#tileColumnOffset / 2 - this.#originX;
-            //e.pageY = e.pageY - this.#tileRowOffset / 2 - this.#originY;
+        for (var row = (this.xNumTiles - 1); row >= 0; row--) {
+            for (var col = 0; col < this.yNumTiles; col++) {
 
-            //calculate the coordinates of the tiles.
-            //tile origin is the first left tile, it has the transformed position (0,0)
-            //mapTilePosX = Math.round(e.pageX / this.#tileColumnOffset - e.pageY / this.#tileRowOffset);
-            //mapTilePosY = Math.round(e.pageX / this.#tileColumnOffset + e.pageY / this.#tileRowOffset);
-        });
-
-        this.updateCanvasSize();
+                var position = new PositionClient(row, col);
+                var tileType = this.#map[row][col];
+                var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
+                    
+                if( tile != null)
+                    this.#tiles.push(tile);
+                
+            };
+        };
         this.draw();
     }
 
-    updateCanvasSize() {
-
-        //var width = window.screen.width;
-        //var height = window.screen.height;
-        //this.ctx.canvas.width  = width;
-        //this.ctx.canvas.height = height;
-
-        this.#originX = this.ctx.canvas.width / 2 - this.xNumTiles * this.#tileColumnOffset / 2;
-        this.#originY = this.ctx.canvas.height / 2;
-    }
-
-
     draw() {
-
-        for (var x = (this.xNumTiles - 1); x >= 0; x--) {
-            for (var y = 0; y < this.yNumTiles; y++) {
-
-                var imageType = FoyerMap.map[x][y];
-
-                if (imageType == 0)
-                    continue;
-
-                this.drawTile(imageType, x, y);
-            }
+        
+        if (this.#tiles.length != 0) {
+            this.#tiles.forEach( object => object.draw());
         }
     }
 
-    drawTile(imageType, x, y) {
-            //calculates the screen position where to draw the tile
-            var screenX = x * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
-            var screenY = y * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
 
-            //because the door image has a diffrent size.
-            var doorOffsetY = this.#tileRowOffset / 2 - this.#wallColumnOffset + 1;
-            var tableOffsetY = this.#tileRowOffset - this.#tableRowOffset + 7;
-
-        if (imageType == 2)
-            screenY += doorOffsetY;
-        else if (imageType == 3) {
-            screenX -= this.#tileColumnOffset;
-            screenY += doorOffsetY;
-        } else if (imageType == 4) {
-            screenY += doorOffsetY;
-        } else if (imageType == 5 || imageType == 6) {
-            screenX -= this.#tileColumnOffset;
-            screenY += doorOffsetY;
-        } else if (imageType == 7) {
-            screenY += tableOffsetY;
-        } else if (imageType == 8) {
-            this.drawLeftDoorTile(imageType, x, y);
-            return;
-        } else if (imageType == 9) {
-            this.drawRightDoorTile(imageType, x, y);
-            return;
-        }
-
-        ctx.drawImage(this.tileImages[imageType - 1], screenX, screenY);
-    }
-
-    drawLeftDoorTile(imageType, x, y) {
-        if (imageType == 8) {
-
-            var screenX = x * this.#tileColumnOffset / 2 + (y + 1) * this.#tileColumnOffset / 2 + this.#originX;
-            var screenY = (y + 1) * this.#tileRowOffset / 2 - x * this.#tileRowOffset / 2 + this.#originY;
-
-            ctx.drawImage(this.tileImages[0], screenX, screenY);
-        } else throw new Error("Wrong Image Type for the floor of a left door.");
-    }
-    drawRightDoorTile(imageType, x, y) {
-        if (imageType == 9) {
-
-            var screenX = (x - 1) * this.#tileColumnOffset / 2 + y * this.#tileColumnOffset / 2 + this.#originX;
-            var screenY = y * this.#tileRowOffset / 2 - (x - 1) * this.#tileRowOffset / 2 + this.#originY;
-
-            ctx.drawImage(this.tileImages[0], screenX, screenY);
-        } else throw new Error("Wrong Image Type for the floor of a left door.");
-    }
 
     drawGameObjects(objectType) {
         TypeChecker.isInt(objectType);

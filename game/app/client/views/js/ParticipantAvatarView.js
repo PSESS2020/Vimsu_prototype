@@ -1,10 +1,15 @@
 /*const AvatarView = require("./AvatarView.js");
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
-module.exports = */class ParticipantAvatarView extends AvatarView {
+
+module.exports = */
+class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheetBody.png', 64, 128);
+    #topClothing = new SpriteSheet('../assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
+    #bottomClothing = new SpriteSheet('../assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
+    #shoes = new SpriteSheet('../assets/ShoesBlackSpriteSheet.png', 64, 128);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
@@ -20,21 +25,29 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         super(position, direction);
         TypeChecker.isInt(participantId);
         this.#participantId = participantId;
-        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 3, 1, 4);
-        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 3, 11, 14);
-        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 6, 9);
-        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 3, 16, 19);
-        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 15, 15);
-        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 10, 10); 
-        this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, 15, 5, 5);
-        this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, 15, 0, 0);
+        console.log(this.#participantId);
+        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 1, 4);
+        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 11, 14);
+        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 6, 9);
+        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 16, 19);
+        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
+        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10); 
+        this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
+        this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
 
 
     }
-
-    getParticipantId() {
+    
+    // changed the name here for test-purposes
+    // otherwise the whole "finding the index"-routine in the GameView will not work
+    getId() {
         return this.#participantId;
+    }
+
+    //Is called after server sends participantId
+    setId(participantId) {
+        this.#participantId = participantId;
     }
 
     update() {
@@ -69,11 +82,24 @@ module.exports = */class ParticipantAvatarView extends AvatarView {
         }
     }
 
+    //only there for testing, TODO: remove
+    getPosition() {
+        return super.getPosition();
+    }
+
     updateWalking(isMoving) {
         this.#walking = isMoving;
     }
 
     draw() {
-        this.#currentAnimation.draw(super.getPosition().getCordX(), super.getPosition().getCordY()); //TODO pass position of avatar
+        let cordX = super.getPosition().getCordX();
+        let cordY = super.getPosition().getCordY();
+        this.updateCurrentAnimation();
+    
+        //should be done somewhere else, 86 and 419 are room dependent
+        let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
+        let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+
+        this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
 }
