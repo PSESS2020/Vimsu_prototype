@@ -178,6 +178,7 @@ class ClientController {
         var currPos = this.#gameView.getOwnAvatarView().getPosition();
         var currPosX = currPos.getCordX();
         var currPosY = currPos.getCordY();
+
         this.socket.emit('requestMovementStart', this.#participantId, direction, currPosX, currPosY);
     }
 

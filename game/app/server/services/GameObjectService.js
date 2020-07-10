@@ -1,5 +1,5 @@
 var GameObject = require('../models/GameObject.js');
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
 var TypeOfRoom = require('../models/TypeOfRoom.js');
 var RoomDimensions = require('../models/RoomDimensions.js');
@@ -10,7 +10,7 @@ module.exports = class GameObjectService {
 
     constructor() {
         if(!!GameObjectService.instance){
-            return ObjectService.instance;
+            return GameObjectService.instance;
         }
 
         GameObjectService.instance = this;
