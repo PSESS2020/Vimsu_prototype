@@ -7,7 +7,7 @@ margin: 0;
   body{
     margin: 0;
     font-size: 16px;
-    font-family: 'Nunito' !important;
+    font-family: Tahoma, Geneva, sans-serif;
     height: 100vh;
     perspective: 1px;
     transform-style: preserve-3d;
@@ -26,6 +26,23 @@ margin: 0;
     border-color: #e5d80e !important;
     color: black !important;
   }
+
+  .btn-submit {
+    background-color: #028090;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #028090;
+}
+
+  .btn-submit:hover {
+    background-color: white;
+    border: 2px solid #028090;
+    color: #028090;
+}
+
   .navbrand {
     display: table-cell;
     text-align: center;

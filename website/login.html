@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <title>Login</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="website/style.css">
+        <link rel="icon" type="image/png" sizes="16x16" href="website/assets/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="website/assets/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="website/assets/apple-touch-icon.png">
+        <link rel="manifest" href="website/assets/site.webmanifest">
+        
+        </head>
+        <body>
+            <div id="header" class="headerBG clearfix" role="banner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div id="logo" class="headerBG">
+                                <a href="/">
+                                    <img id="logoimg" src="website/assets/vimsu_banner.png" type="image/png" alt="Vimsu Logo" style="width:79px;height:119px;">
+                                </a>
+                            </div>
+                            <div id="signature">
+                                <div id="site-name">
+                                    <a href="/">
+                                        <div class="site-name-child">
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <nav class="navbar navbar-expand-sm navbar-light bg-custom">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="container" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <div class="d-flex justify-content-around flex-row">
+
+                            <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/">
+                                <div class="octicons octicon octicon-home">
+                                    <p id="octicon_text">
+
+                                Home	
+                                </p>
+                                </div>
+                            </a>
+                            <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/login">
+                                <div class="octicons octicon octicon-pencil">
+                                    <p id="octicon_text">
+                                Log in	
+                                </p>
+                                </div>
+                            </a>
+                        </div>
+                        
+                    </div>
+                 
+                </div>
+            </nav>
+            <div class="container" id="logIn">
+            <div class="row mt-5">
+            <div class="col-md-6 offset-md-3 align-self-center">
+        <form action="auth" method="POST">
+            <div class="form-group">
+                <label for="usernameInput">Username</label>
+                <input type="text" class="form-control" id="usernameInput" required>
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Password</label>
+                <input type="password" class="form-control" id="passwordInput" required>
+            </div>
+            <input class="btn btn-block btn-submit" type="submit" value="Log in"></button>
+        </form>
+    </div>
+    </div>
+        </div>
+    </body>
+</html>
