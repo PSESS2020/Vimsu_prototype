@@ -10,7 +10,7 @@ module.exports = class GameObjectService {
 
     constructor() {
         if(!!GameObjectService.instance){
-            return ObjectService.instance;
+            return GameObjectService.instance;
         }
 
         GameObjectService.instance = this;
