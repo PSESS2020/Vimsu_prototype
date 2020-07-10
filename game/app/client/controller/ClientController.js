@@ -1,5 +1,7 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
+//const TypeChecker = require("../../utils/TypeChecker");
+
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -155,7 +157,7 @@ class ClientController {
         this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this));
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); // The bind(this) fixes scoping-issues
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
-        this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
+        //this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
@@ -226,14 +228,23 @@ class ClientController {
         console.log("test finish update pos");
     }
 
-    handleFromServerStartMovementOther(ppantID, direction) {
-        // Type-Checking handled in gameView
-        //TypeChecker.isInt(ppantID);
-        //TypeChecker.isEnumOf(direction, DirectionClient);
-        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);      
+    //Server does collision testing, so this method is only called when movement from other user is legit (P)
+    handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
+        TypeChecker.isInt(ppantID);
+        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isInt(newCordX);
+        TypeChecker.isInt(newCordY);
+
+        let newPos = new PositionClient(newCordX, newCordY);
+        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
+        this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+        this.#gameView.updateAnotherAvatarWalking(ppantID, true);  
         
         console.log(ppantID);
         
+        //All of this is not needed anymore, server does collision check for other participants and sends the new position (P)
+
+        /*
         // This is very unwieldy. Can we maybe just change the updatePosition()-function to take two arguments,
         // offsetX and offsetY, and then do all the other stuff inside the method?
         var index = this.#gameView.getAnotherParticipantAvatarViews().findIndex(participant => participant.getId() === ppantID);
@@ -262,7 +273,7 @@ class ClientController {
         }
 
         //this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-
+        */
     }
 
     handleFromServerStopMovementOther(ppantID) {
@@ -294,6 +305,7 @@ class ClientController {
 
     }
     
+    /*
     // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
     handleFromServerCollisionDetectionAnswer(isOccupied) {
         if (isOccupied) {
@@ -302,6 +314,7 @@ class ClientController {
             //TODO: Avatar wird bewegt
         }
     }
+    */
 
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
