@@ -8,35 +8,33 @@ module.exports = class db {
     #vimsudb;
 
     constructor() {
-        this.connectDB();
     }
 
     connectDB() {
+        var objectId = new ObjectID();
+        var object = {
+            accountId: objectId,
+            username: "test123", 
+            title: "",
+            surname: "123",
+            forename: "test",
+            email: "test123@test.com",
+            passwordHash: passwordHash.generate("test123")
+        } 
 
-        MongoClient.connect(connectionString, { 
+        return MongoClient.connect(connectionString, { 
             useUnifiedTopology: true
         })
         .then(client => {
             console.log('Connected to Database')
             this.#vimsudb = client.db('vimsudb');
+            console.log("connectDB() "  + this.#vimsudb)
             this.listCollections();
+            //this.insertOneToCollection("accounts", object)
         })
         .catch(error => 
             console.error(error)
         )
-        
-
-        var objectId = new ObjectID();
-
-        var object = {
-                accountId: objectId,
-                username: "test123", 
-                title: "",
-                surname: "123",
-                forename: "test",
-                email: "test123@test.com",
-                passwordHash: passwordHash.generate("test123")
-        }
     }
 
     listCollections() {
@@ -55,6 +53,7 @@ module.exports = class db {
     }
 
     insertOneToCollection(collectionName, object) {
+        console.log("insertOneToCollection() " + this.#vimsudb);
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
