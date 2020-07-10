@@ -17,8 +17,8 @@ class FoyerView extends MapView {
     initProperties(tileColumnOffset) {
         this.xNumTiles = this.#map.length;
         this.yNumTiles = this.#map[0].length;
-        this.#originX = ctx.canvas.width / 2 - this.xNumTiles * tileColumnOffset / 2;
-        this.#originY = ctx.canvas.height / 2;
+        this.#originX = ctx_map.canvas.width / 2 - this.xNumTiles * tileColumnOffset / 2;
+        this.#originY = ctx_map.canvas.height / 2;
     }
 
     //loads the images that are needed for tilecreation.

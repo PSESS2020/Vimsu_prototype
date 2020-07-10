@@ -1,8 +1,11 @@
-var canvas = $('#canvas');
-var ctx = canvas[0].getContext("2d");
-const GAME_WIDTH = this.ctx.canvas.width = 1900;
-const GAME_HEIGHT = this.ctx.canvas.height = 950;
+var ctx_map = document.getElementById("mapCanvas").getContext("2d");
+var ctx_avatar = document.getElementById("avatarCanvas").getContext("2d");
+var ctx_ui = document.getElementById("uiCanvas").getContext("2d");
+const GAME_WIDTH = this.ctx_map.canvas.width = 1900;
+const GAME_HEIGHT = this.ctx_map.canvas.height = 950;
 
+this.ctx_avatar.canvas.width = 1900;
+this.ctx_avatar.canvas.height = 950;
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
 /* The participantID should not be one (as we want to make sure it is congruent with the
@@ -13,34 +16,15 @@ clientController.setPort(5000);
 clientController.openSocketConnection();
 clientController.initGameView();
 
-function gameLoop() {
+setInterval( function() {
   //let deltaTime = timestamp - lastTime;
   //lastTime = timestamp;
 
-  ctx.clearRect(0, 0, 0, 0);
+  ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
   gameView.update();
   gameView.draw();  
-}
-
-window.setInterval(function(){
-
-  requestAnimationFrame(gameLoop);
-  //ctx.clearRect(0, 0, 0, 0);
-
-  //gameView.update();
-  //gameView.draw();
-  
-  // As a part of the gameplay loop, the client does emit on each frame
-  // whether he is moving and in which direction (E)
-  // This will probably be removed in my next proper commit.
-  // clientController.sendMovementToServer();
-
-  //bei dem eigenen Avatar sieht man ein ständiges Zeichnen auch wenn man sich nicht bewegt wenn man den 
-  //Timer auf höher als 0 setzt. Daher hab ich den Timer auf 0 gesetzt (K)
-
-}, 0); // can we replace this by a global constant in a settings file somewhere (E)?
-
+}, 1000 / 30);
 
 document.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being

@@ -9,7 +9,7 @@ class TableView extends GameObjectView {
     }
 
     draw() {
-        ctx.drawImage(this.#tableImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#tableImage, this.#position.getCordX(), this.#position.getCordY());
     }
 
     onclick() {
