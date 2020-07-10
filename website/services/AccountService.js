@@ -1,29 +1,38 @@
 var TypeChecker = require('../../game/app/utils/TypeChecker')
-const db = require('../../config/db')
-const vimsudb = new db();
+const dbconf = require('../../server');
+const ObjectID = require('mongodb').ObjectID;
+const passwordHash = require('password-hash');
 
 module.exports = class AccountService {
 
-    static createAccount(accountId, username, title, surname, forename, email, passwordHash) {
+    static createAccount() {
         //TypeChecker.isString(accountId);
-        TypeChecker.isString(username);
+        /*TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
         TypeChecker.isString(forename);
         TypeChecker.isString(email);
-        TypeChecker.isString(passwordHash);
+        TypeChecker.isString(passwordHash);*/
 
-        var acc = { 
+        var accountId = new ObjectID();
+
+        var acc = {
             accountId: accountId,
-            username: username, 
-            title: title,
-            surname: surname,
-            forename: forename,
-            email: email,
-            passwordHash: passwordHash 
-        };
+            username: "test123", 
+            title: "",
+            surname: "123",
+            forename: "test",
+            email: "test123@test.com",
+            passwordHash: passwordHash.generate("test123")
+        }
 
-        vimsudb.insertOneToCollection("accounts", acc);
+        
+
+        var db;
+        db = dbconf.getDB();
+        console.log(1)
+        console.log(db)
+        db.insertOneToCollection("accounts", acc);
     }
 
     static getAccountID(username) {

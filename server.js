@@ -28,7 +28,49 @@ const socketio = require('socket.io');
 /* ############################################################################### */
 
 const db = require('./config/db');
-new db();
+const AccountService = require('./website/services/AccountService')
+
+var database;
+const ObjectID = require('mongodb').ObjectID;
+const passwordHash = require('password-hash')
+
+var objectId = new ObjectID();
+var object = {
+    accountId: objectId,
+    username: "test123", 
+    title: "",
+    surname: "123",
+    forename: "test",
+    email: "test123@test.com",
+    passwordHash: passwordHash.generate("test123")
+}
+
+async function newDB() {
+        database = new db();
+        const res = await database.connectDB();
+        return res;
+}
+
+async function connectDB() {
+        try {
+                const res = await newDB();
+                return res;     // this will be the resolved value of the returned promise
+        } catch(err) {
+                console.log(err);
+                throw err;      // let caller know the promise was rejected with this reason
+        }
+    }
+    
+connectDB().then(result => {
+        console.log(result);
+        console.log(database);
+        console.log(3)
+        database.insertOneToCollection("accounts", object)
+        console.log(2)
+    }).catch(err => {
+        console.error(err)
+    });
+
 
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
