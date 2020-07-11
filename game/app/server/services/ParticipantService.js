@@ -17,7 +17,7 @@ async function getDB() {
 module.exports = class ParticipantService {
     static createParticipant(accountId, conferenceId) {
         return getDB().then(res => {
-            return this.getParticipant(accountId, conferenceId).then(par => {
+            return this.getParticipantId(accountId, conferenceId).then(par => {
                 var participant;
 
                 if(par) {
@@ -39,7 +39,7 @@ module.exports = class ParticipantService {
                     }
 
                     getDB().then(res => {
-                        vimsudb.insertOneToCollection("participants" + conferenceId, par);
+                        vimsudb.insertOneToCollection("participants_" + conferenceId, par);
                     }).catch(err => {
                         console.error(err)
                     });
@@ -55,9 +55,9 @@ module.exports = class ParticipantService {
         });
     }
 
-    static getParticipant(accountId, conferenceId) {
+    static getParticipantId(accountId, conferenceId) {
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("participants" + conferenceId, {accountId: new ObjectId(accountId)}, "").then(par => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {accountId: new ObjectId(accountId)}, {participantId: 1}).then(par => {
                 if (par) {
                     return par;
                 }
