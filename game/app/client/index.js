@@ -14,7 +14,7 @@ let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 let clientController = new ClientController(gameView);
 clientController.setPort(5000);
 clientController.openSocketConnection();
-clientController.initGameView();
+//clientController.initGameView();
 
 setInterval( function() {
   //let deltaTime = timestamp - lastTime;

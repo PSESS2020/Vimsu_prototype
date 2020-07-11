@@ -11,6 +11,7 @@ const Direction = require('./Direction.js');
 module.exports = class Room {
 
     #roomId;
+    #typeOfRoom;
     //roomChat
     #length;
     #width;
@@ -36,6 +37,7 @@ module.exports = class Room {
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         this.#roomId = roomId;
+        this.#typeOfRoom = typeOfRoom;
         this.#listOfPPants = [];
 
         //andere Fälle später
@@ -64,6 +66,10 @@ module.exports = class Room {
 
     getRoomId() {
         return this.#roomId;
+    }
+
+    getTypeOfRoom() {
+        return this.#typeOfRoom;
     }
 
     /*

@@ -96,11 +96,12 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
  * ConferenceController creates the room plus the RoomController as part of creating itself)
  * - (E) */
 
-const gameRoomId = 1; // placeholder ID
-const gameRoom = new Room(gameRoomId, TypeOfRoom.FOYER); // Creates a foyer
+ //TODO: Init other rooms for this conference
+const foyerRoomId = 1; // placeholder ID
+const foyerRoom = new Room(foyerRoomId, TypeOfRoom.FOYER); // Creates a foyer
 
 //RoomController not needed at this point (P)
-//const gameRoomController = new RoomController(gameRoom);
+//const gameRoomController = new RoomController(foyerRoom);
 
 /* ########################################################################################## */
 /* ################################## REALTIME FUNCTIONALITY ################################ */
@@ -161,14 +162,14 @@ io.on('connection', (socket) => {
         console.log("test1");
 
         //TODO: Needs to be adjusted when multiple rooms exist (P)
-        var startPosition = gameRoom.getStartPosition();
+        var startPosition = foyerRoom.getStartPosition();
         var x = startPosition.getCordX();
         var y = startPosition.getCordX();
-        var d = gameRoom.getStartDirection();
+        var d = foyerRoom.getStartDirection();
         var ppant = new Participant(ppantID, startPosition, d); 
 
         //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-        gameRoom.enterParticipant(ppant);
+        foyerRoom.enterParticipant(ppant);
 
         var ppantCont = new ParticipantController(ppant);
         console.log("test2");
@@ -191,6 +192,10 @@ io.on('connection', (socket) => {
         // Sends the newly generated ppantID back to the client so the game-states are consistent
         io.to(socket.id).emit('currentGameStateYourID', ppantID);
         console.log("test4");
+
+        //Send room information of start room (P)
+        //TODO: When multiple rooms exist, get right room (P)
+        io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
         io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                 cordY: y, 
@@ -231,10 +236,10 @@ io.on('connection', (socket) => {
         // TODO
         //When multiple Rooms exits, either the server has to get the right room or the client emits it in some way(P)
 
-        var newPos = new Position(gameRoom.getRoomId(), newCordX, newCordY);
+        var newPos = new Position(foyerRoom.getRoomId(), newCordX, newCordY);
         
         //No Collision, so every other participant gets the new position (P)
-        if (!gameRoom.checkForCollision(newPos)) {
+        if (!foyerRoom.checkForCollision(newPos)) {
             ppants.get(ppantID).setPosition(newPos);
             ppants.get(ppantID).setDirection(direction);
             socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
@@ -268,7 +273,7 @@ io.on('connection', (socket) => {
         // The next line can probably be just handled inside the previous one
         //io.sockets.emit('remove player', ppantID);
         socket.broadcast.emit('remove player', ppantID);
-        console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
+        console.log('Participant' + socket.id + ' with Participant_ID ' + ppantID + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);
         ppants.delete(ppantID);
