@@ -1,8 +1,7 @@
 var GameObject = require('../models/GameObject.js');
-var TypeChecker = require('../../client/utils/TypeChecker.js');
+var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
 var TypeOfRoom = require('../models/TypeOfRoom.js');
-var RoomDimensions = require('../models/RoomDimensions.js');
 
 module.exports = class GameObjectService {
 
@@ -10,7 +9,7 @@ module.exports = class GameObjectService {
 
     constructor() {
         if(!!GameObjectService.instance){
-            return ObjectService.instance;
+            return GameObjectService.instance;
         }
 
         GameObjectService.instance = this;
@@ -24,7 +23,7 @@ module.exports = class GameObjectService {
 
         var roomObjects = [], i;
 
-        this.#initAllObjects(roomId, typeOfRoom);
+        this.initAllObjects(roomId, typeOfRoom);
 
         for(i = 0; i < this.#objects.length; i++){
             if (this.#objects[i].getPosition().getRoomId() === roomId) {
@@ -63,7 +62,7 @@ module.exports = class GameObjectService {
             }*/
 
             for (var i = 4; i < 10; i++)
-                this.#objects.push(new GameObject(1, "Table" + 1, 1, 1, new Position(roomId, i, 2), true))
+                this.#objects.push(new GameObject(1, "Table" + 1, 1, 1, new Position(roomId, i, 0), true));
 
             //Anderen Objekte für Foyer
         }

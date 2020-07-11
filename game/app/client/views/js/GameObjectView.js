@@ -1,16 +1,14 @@
 class GameObjectView extends Views {
 
-    #objectId;
+    #tileImage;
     #position;
-    
 
-    constructor(objectId, position) {
+    constructor(tileImage, position) {
         super();
-        TypeChecker.isInt(objectId);
+        this.#tileImage = tileImage;
         TypeChecker.isInstanceOf(position, PositionClient);
-        this.#objectId = objectId;
         this.#position = position;
-
+        
         if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
         }
