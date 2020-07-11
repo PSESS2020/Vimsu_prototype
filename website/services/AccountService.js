@@ -1,9 +1,17 @@
 var TypeChecker = require('../../game/app/utils/TypeChecker')
 const dbconf = require('../../config/dbconf');
+const server = require('../../server')
 var vimsudb;
-setTimeout(() => {
-    vimsudb = dbconf.getDB()
-}, 500);
+async function getDB() {
+    return server.setDB().then(res => {
+        vimsudb = dbconf.getDB()
+        console.log("get DB success")
+    })
+    .catch(err => {
+        console.error(err)
+    });
+}
+
 const ObjectID = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 
@@ -36,16 +44,16 @@ module.exports = class AccountService {
         
     }
 
-    static async getAccountID(username) {
+    static getAccountID(username) {
         TypeChecker.isString(username);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
                 {
                     console.log(user.accountId);
                     return user.accountId;
-                });
-        }, 1000);
+                })
+        });
     }
 
     static getAccountUsername(accountId) {

@@ -29,22 +29,20 @@ const socketio = require('socket.io');
 
 const db = require('./config/db');
 const dbconf = require('./config/dbconf')
-const AccountService = require('./website/services/AccountService')
+
 
 var database = new db();
 
-async function connectDB() {
-        const res = await database.connectDB();
-        return res;
+module.exports.setDB = async() => {
+        return database.connectDB().then(result => {
+                dbconf.setDB(database);
+        })
+        .catch(err => {
+                console.error(err);
+        })
 }
 
-connectDB().then(result => {
-        dbconf.setDB(database);
-    })
-    .catch(err => {
-        console.error(err)
-    });
-
+const AccountService = require('./website/services/AccountService')
 AccountService.getAccountID("test123")
 
 /* ############################################################################### */
