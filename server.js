@@ -71,6 +71,8 @@ async function verify(username){
 AccountService.isUsernameValid("aaaaaaa")
 //createAccount();
 //getAccount("5f09bd1b403cf119ec29a408")
+
+AccountService.verifyLoginData("aaaaaaa", "123");
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
@@ -146,7 +148,7 @@ app.get('/login', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/login.html'));
 });
 
-async function verifyLogin(username, password) {
+/*async function verifyLogin(username, password) {
     return AccountService.verifyLoginData(username, password).then(res => {
         if(res) {
             return true;
@@ -157,19 +159,26 @@ async function verifyLogin(username, password) {
     }).catch(err => {
         console.error(err);
     })
-}
+}*/
 
 app.post('/login', (request, response) => {
     var username = request.body.username;
     var password = request.body.password;
-    if (verifyLogin(username, password) === true) {
-        request.session.loggedin = true;
-        request.session.username = username;
-        response.redirect('/');
-    } else {
-        response.send('Incorrect Username and/or Password!');
-    }			
-    response.end();
+    
+    return AccountService.verifyLoginData(username, password).then(res => {
+        
+        if(res) {
+            request.session.loggedin = true;
+            request.session.username = username;
+            response.redirect('/');
+        }
+        else {
+            response.send('Incorrect Username and/or Password!');
+        }
+        response.end();
+    }).catch(err => {
+        console.error(err);
+    })
 });
 
 app.get('/register', (request, response) => {
