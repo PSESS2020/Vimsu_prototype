@@ -1,20 +1,24 @@
 var TypeChecker = require('../../game/app/utils/TypeChecker')
-const dbconf = require('../../server');
+const dbconf = require('../../config/dbconf');
+var vimsudb;
+setTimeout(() => {
+    vimsudb = dbconf.getDB()
+}, 500);
 const ObjectID = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 
 module.exports = class AccountService {
 
-    static createAccount() {
-        //TypeChecker.isString(accountId);
-        /*TypeChecker.isString(username);
+    static createAccount(accountId, username, title, surname, forename, email, passwordHash) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
         TypeChecker.isString(forename);
         TypeChecker.isString(email);
-        TypeChecker.isString(passwordHash);*/
+        TypeChecker.isString(passwordHash);
 
-        var accountId = new ObjectID();
+        /*var accountId = new ObjectID();
 
         var acc = {
             accountId: accountId,
@@ -24,106 +28,154 @@ module.exports = class AccountService {
             forename: "test",
             email: "test123@test.com",
             passwordHash: passwordHash.generate("test123")
-        }
+        }*/
 
+        setTimeout(() => {
+            vimsudb.insertOneToCollection("accounts", acc);
+        }, 1000);
         
-
-        var db;
-        db = dbconf.getDB();
-        console.log(1)
-        console.log(db)
-        db.insertOneToCollection("accounts", acc);
     }
 
-    static getAccountID(username) {
+    static async getAccountID(username) {
         TypeChecker.isString(username);
 
-        var user = vimsudb.findOneInCollection("accounts", {username: username});
-        return user.id;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
+                {
+                    console.log(user.accountId);
+                    return user.accountId;
+                });
+        }, 1000);
     }
 
     static getAccountUsername(accountId) {
         TypeChecker.isString(accountId);
 
-        var user = vimsudb.findOneInCollection("accounts", {accountId: accountId});
-        return user.username;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+                {
+                    console.log(user.username);
+                    return user.username;
+                });
+        }, 1000);
     }
 
     static getAccountTitle(accountId) {
         TypeChecker.isString(accountId);
 
-        var user = vimsudb.findOneInCollection("accounts", {accountId: accountId});
-        return user.title;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+                {
+                    console.log(user.title);
+                    return user.title;
+                });
+        }, 1000);
     }
 
     static getAccountSurname(accountId) {
         TypeChecker.isString(accountId);
 
-        var user = vimsudb.findOneInCollection("accounts", {accountId: accountId});
-        return user.surname;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+                {
+                    console.log(user.surname);
+                    return user.surname
+                });
+        }, 1000);
     }
 
     static getAccountForename(accountId) {
         TypeChecker.isString(accountId);
 
-        var user = vimsudb.findOneInCollection("accounts", {accountId: accountId});
-        return user.forename;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+                {
+                    console.log(user.forename);
+                    return user.forename
+                });
+        }, 1000);
     }
 
     static getAccountEmail(accountId) {
         TypeChecker.isString(accountId);
 
-        var user = vimsudb.findOneInCollection("accounts", {accountId: accountId});
-        return user.email;
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+                {
+                    console.log(user.email);
+                    return user.email
+                });
+        }, 1000);
     }
 
     static updateUsername(accountId, newUsername) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newUsername);
 
-        vimsudb.updateOneInCollection("accounts", {accountId: accountId}, {username: newUsername});
+        setTimeout(() => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {username: newUsername});
+        }, 1000);
     }
 
     static updateTitle(accountId, newTitle) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newTitle);
 
-        vimsudb.updateOneInCollection("accounts", {accountId: accountId}, {title: newTitle});
+        setTimeout(() => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle});
+        }, 1000);
     }
 
     static updateSurname(accountId, newSurname) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newSurname);
 
-        vimsudb.updateOneInCollection("accounts", {accountId: accountId}, {surname: newSurname});
+        setTimeout(() => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {surname: newSurname});
+        }, 1000);
     }
 
     static updateForename(accountId, newForename) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newForename);
 
-        vimsudb.updateOneInCollection("accounts", {accountId: accountId}, {forename: newForename});
+        setTimeout(() => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {forename: newForename});
+        }, 1000);
     }
 
     static updateEmail(accountId, newEmail) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newEmail);
 
-        vimsudb.updateOneInCollection("accounts", {accountId: accountId}, {email: newEmail});
+        setTimeout(() => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {email: newEmail});
+        }, 1000);
+    }
+
+    static deleteAccount(accountId) {
+        TypeChecker.isString(accountId);
+
+        setTimeout(() => {
+            vimsudb.deleteOneFromCollection("accounts", {accountId: accountId});
+        }, 1000);
     }
 
     static verifyLoginData(username, passwordHash) {
         TypeChecker.isString(username);
         TypeChecker.isString(passwordHash);
 
-        var user = vimsudb.findOneInCollection("accounts", {username: username});
-
-        if (user && user.passwordHash === passwordHash){
-            console.log("User and password match")
-            return true;
-        } else {
-            console.log("Credentials wrong");
-            return false;
-        }              
+        setTimeout(() => {
+            vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
+                {
+                    if (user && user.passwordHash === passwordHash){
+                        console.log("User and password match")
+                        return true;
+                    } else {
+                        console.log("Credentials wrong");
+                        return false;
+                    }            
+                });
+        }, 1000);       
     }
 } 

@@ -1,8 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 var TypeChecker = require('../game/app/utils/TypeChecker')
-const ObjectID = require('mongodb').ObjectID;
-const passwordHash = require('password-hash')
 
 module.exports = class db {
     #vimsudb;
@@ -11,17 +9,6 @@ module.exports = class db {
     }
 
     connectDB() {
-        var objectId = new ObjectID();
-        var object = {
-            accountId: objectId,
-            username: "test123", 
-            title: "",
-            surname: "123",
-            forename: "test",
-            email: "test123@test.com",
-            passwordHash: passwordHash.generate("test123")
-        } 
-
         return MongoClient.connect(connectionString, { 
             useUnifiedTopology: true
         })
@@ -30,7 +17,7 @@ module.exports = class db {
             this.#vimsudb = client.db('vimsudb');
             console.log("connectDB() "  + this.#vimsudb)
             this.listCollections();
-            //this.insertOneToCollection("accounts", object)
+
         })
         .catch(error => 
             console.error(error)
@@ -44,20 +31,12 @@ module.exports = class db {
         });
     }
 
-    createCollection(collectionName) {
-        this.#vimsudb.createCollection(collectionName, function(err, collection) {
-            if (err) throw err;
-            console.log(collectionName + " collection created!");
-            return Promise.resolve(true);
-        });
-    }
-
     insertOneToCollection(collectionName, object) {
         console.log("insertOneToCollection() " + this.#vimsudb);
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.insertOne(object)
+        return collection.insertOne(object)
         .then(result => {
             console.log(object + " inserted into " + collectionName);
         })
@@ -66,26 +45,11 @@ module.exports = class db {
         })
     }
 
-    insertManyToCollection(collectionName, objects) {
-        TypeChecker.isString(collectionName);
-        var collection = this.#vimsudb.collection(collectionName);
-
-        for (object in objects) {
-            collection.insertMany(object)
-            .then(result => {
-                console.log(object + " inserted into " + collectionName);
-            })
-            .catch(err => {
-                console.error(err)
-            })
-        }
-    }
-
     findAllDocuments(collectionName){
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.find().toArray()
+        return collection.find().toArray()
         .then(results => {
             console.log(results);
         })
@@ -98,7 +62,7 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.find(query).toArray()
+        return collection.find(query).toArray()
         .then(results => {
             return results;
         })
@@ -111,8 +75,9 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.findOne(query)
+        return collection.findOne(query)
         .then(result => {
+            console.log(result);
             return result;
         })
         .catch(err => {
@@ -124,7 +89,7 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.updateOne(query, {'$set': newValue})
+        return collection.updateOne(query, {'$set': newValue})
         .then(result => {
             console.log("query" + " in " + collectionName + " updated to " + newValue);
         })
@@ -137,7 +102,7 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        collection.deleteOne(query)
+        return collection.deleteOne(query)
         .then(result => {
             console.log(query + " deleted from " + collectionName);
         })
