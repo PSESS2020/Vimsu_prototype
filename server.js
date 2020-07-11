@@ -34,10 +34,8 @@ dbconf.setDB();
 const AccountService = require('./website/services/AccountService')
 async function createAccount () {
         return AccountService.createAccount("aaaaaaa", "", "abc", "abcd", "employee", "google", "abcddd@abc", "123").then(res => {
-                if(res) {
-                        return res.getAccountID();
-                } else
-                        return false;
+        return res.getAccountID();
+
         }).catch(err => {
                 console.error(err);
         })
@@ -55,9 +53,9 @@ async function getAccount(accountID){
                 console.error(err);
         })
 }
-
-createAccount();
-getAccount("5f09bd1b403cf119ec29a408")
+AccountService.isUsernameValid("aaaaaaa")
+//createAccount();
+//getAccount("5f09bd1b403cf119ec29a408")
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
@@ -125,6 +123,14 @@ app.get('/', (request, response) => {
 
 app.get('/login', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/login.html'));
+});
+
+app.get('/register', (request, response) => {
+	response.sendFile(path.join(__dirname, '/website/views/register.html'));
+});
+
+app.get('/registerValid', (request, response) => {
+	response.sendFile(path.join(__dirname, '/website/views/registerValid.html'));
 });
 
 

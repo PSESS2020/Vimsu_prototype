@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-        <title>Login</title>
+        <title>Register</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="website/views/style.css">
         <link rel="icon" type="image/png" sizes="16x16" href="website/assets/favicon-16x16.png">
@@ -70,18 +70,22 @@
                  
                 </div>
             </nav>
-            <div class="container" id="logIn">
+            <div class="container" id="register">
             <div class="row mt-5">
             <div class="col-md-6 offset-md-3 align-self-center">
         <form action="auth" method="POST">
             <div class="form-group">
+
                 <input type="text" class="form-control" id="usernameInput" placeholder="Username" required>
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" id="passwordInput" placeholder="Password" required>
+
+                <input type="email" class="form-control" id="emailInput" placeholder="Email" required>
             </div>
-            <input class="btn btn-block btn-submit" type="submit" value="Log in"></button>
+            <!-- TODO: POST, check if username and email valid with AccountService functions, return /registerValid if true-->
+            <!--<input class="btn btn-block btn-submit" type="submit" value="Verify"></button>-->
         </form>
+        <a class="btn btn-block btn-submit" type="submit" href="/registerValid" value="Verify">Verify</a>
     </div>
     </div>
         </div>

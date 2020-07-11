@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-        <title>Login</title>
+        <title>Register Valid</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="website/views/style.css">
         <link rel="icon" type="image/png" sizes="16x16" href="website/assets/favicon-16x16.png">
@@ -70,17 +70,58 @@
                  
                 </div>
             </nav>
-            <div class="container" id="logIn">
+            <div class="container" id="registerValid">
             <div class="row mt-5">
-            <div class="col-md-6 offset-md-3 align-self-center">
+            <div class="col-md-8 offset-md-2 align-self-center">
         <form action="auth" method="POST">
-            <div class="form-group">
-                <input type="text" class="form-control" id="usernameInput" placeholder="Username" required>
-            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="staticUsername" class="col-form-label">Username</label>
+                    <!-- TODO: placeholder should be the value entered in /register-->
+                    <input class="form-control" type="text" placeholder="mustermann123" readonly>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="staticEmail" class="col-form-label">Email</label>
+                    <!-- TODO: placeholder should be the value entered in /register-->
+                    <input class="form-control" type="text" placeholder="email@example.com" readonly>
+                </div>
+            </div>    
+                  
             <div class="form-group">
                 <input type="password" class="form-control" id="passwordInput" placeholder="Password" required>
             </div>
-            <input class="btn btn-block btn-submit" type="submit" value="Log in"></button>
+            
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="title" required>
+                        <option selected>Title</option>
+                        <option>Mr.</option>
+                        <option>Mrs.</option>
+                        <option>Ms.</option>
+                        <option>Miss</option>
+                        <option>Dr.</option>
+                        <option>Prof.</option>
+                        <option>Rev.</option>
+                      </select>
+                  </select>
+                </div>
+                <div class="form-group col-md-5">
+                    <input type="text" class="form-control" id="inputSurname" placeholder="Surname" required>
+                </div>
+                <div class="form-group col-md-5">
+                  <input type="text" class="form-control" id="inputForename" placeholder="Forename" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="inputJob" placeholder="Job" required>
+                  </div>
+                <div class="form-group col-md-6">
+                  <input type="text" class="form-control" id="inputCompany" placeholder="Company" required>
+                </div>
+            </div>
+            <input class="btn btn-block btn-submit" type="submit" value="Register now"></button>
         </form>
     </div>
     </div>

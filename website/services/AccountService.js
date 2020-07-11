@@ -16,8 +16,7 @@ async function getDB() {
 
 module.exports = class AccountService {
 
-    static createAccount(username, title, surname, forename, job, company, email, password) {
-        
+    static isUsernameValid(username) {
         return getDB().then(res => {
             return vimsudb.findInCollection("accounts", {username: username}, {username: username}).then(results => {
                 if(results.length > 0) {
@@ -25,31 +24,54 @@ module.exports = class AccountService {
                     return false;
                 }
                 else {
-                    var accountId = new ObjectId();
-                    var account = new Account(username, title, surname, forename, job, company, email);
-                    account.setAccountID(accountId.toString());
-                
-                    var acc = {
-                        accountId: accountId,
-                        username: username, 
-                        title: title,
-                        surname: surname,
-                        forename: forename,
-                        job: job,
-                        company: company,
-                        email: email,
-                        passwordHash: passwordHash.generate(password)
-                    }
-
-                    getDB().then(res => {
-                        vimsudb.insertOneToCollection("accounts", acc);
-                    }).catch(err => {
-                        console.error(err)
-                    });
-                    
-                    return account;
+                    return true;
                 }
             })
+        })
+    }
+
+    static isEmailValid(email) {
+        return getDB().then(res => {
+            return vimsudb.findInCollection("accounts", {email: email}, {email: email}).then(results => {
+                if(results.length > 0) {
+                    console.log("this email is registered")
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            })
+        })
+    }
+    
+    static createAccount(username, title, surname, forename, job, company, email, password) {
+        
+        return getDB().then(res => {
+    
+            var accountId = new ObjectId();
+            var account = new Account(username, title, surname, forename, job, company, email);
+            account.setAccountID(accountId.toString());
+                
+            var acc = {
+                accountId: accountId,
+                username: username, 
+                title: title,
+                surname: surname,
+                forename: forename,
+                job: job,
+                company: company,
+                email: email,
+                passwordHash: passwordHash.generate(password)
+            }
+
+            getDB().then(res => {
+                vimsudb.insertOneToCollection("accounts", acc);
+            }).catch(err => {
+                console.error(err)
+            });
+                    
+            return account;
+
         }).catch(err => {
             console.error(err)
         });
