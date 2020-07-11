@@ -6,14 +6,13 @@ async function getDB() {
     return dbconf.setDB().then(res => {
         vimsudb = dbconf.getDB()
         console.log("get DB success")
-    })
-    .catch(err => {
+    }).catch(err => {
         console.error(err)
     });
 }
 
-const ObjectID = require('mongodb').ObjectID;
-const passwordHash = require('password-hash');
+//const ObjectID = require('mongodb').ObjectID;
+//const passwordHash = require('password-hash');
 
 module.exports = class AccountService {
 
@@ -38,10 +37,11 @@ module.exports = class AccountService {
             passwordHash: passwordHash.generate("test123")
         }*/
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.insertOneToCollection("accounts", acc);
-        }, 1000);
-        
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static getAccountID(username) {
@@ -49,141 +49,167 @@ module.exports = class AccountService {
 
         getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
-                {
-                    console.log(user.accountId);
-                    return user.accountId;
-                })
+            {
+                console.log(user.accountId);
+                return user.accountId;
+            })
+        }).catch(err => {
+            console.error(err)
         });
     }
 
     static getAccountUsername(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
-                {
-                    console.log(user.username);
-                    return user.username;
-                });
-        }, 1000);
+            {
+                console.log(user.username);
+                return user.username;
+            });
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static getAccountTitle(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
-                {
-                    console.log(user.title);
-                    return user.title;
-                });
-        }, 1000);
+            {
+                console.log(user.title);
+                return user.title;
+            });
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static getAccountSurname(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
-                {
-                    console.log(user.surname);
-                    return user.surname
-                });
-        }, 1000);
+            {
+                console.log(user.surname);
+                return user.surname
+            }).catch(err => {
+                console.error(err)
+            });
+        });
     }
 
     static getAccountForename(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
-                {
-                    console.log(user.forename);
-                    return user.forename
-                });
-        }, 1000);
+            {
+                console.log(user.forename);
+                return user.forename
+            });
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static getAccountEmail(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
-                {
-                    console.log(user.email);
-                    return user.email
-                });
-        }, 1000);
+            {
+                console.log(user.email);
+                return user.email
+            }).catch(err => {
+                console.error(err)
+            });
+        });
     }
 
     static updateUsername(accountId, newUsername) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newUsername);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {username: newUsername});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static updateTitle(accountId, newTitle) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newTitle);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static updateSurname(accountId, newSurname) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newSurname);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {surname: newSurname});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static updateForename(accountId, newForename) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newForename);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {forename: newForename});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static updateEmail(accountId, newEmail) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newEmail);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {email: newEmail});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static deleteAccount(accountId) {
         TypeChecker.isString(accountId);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.deleteOneFromCollection("accounts", {accountId: accountId});
-        }, 1000);
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     static verifyLoginData(username, passwordHash) {
         TypeChecker.isString(username);
         TypeChecker.isString(passwordHash);
 
-        setTimeout(() => {
+        getDB().then(res => {
             vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
-                {
-                    if (user && user.passwordHash === passwordHash){
-                        console.log("User and password match")
-                        return true;
-                    } else {
-                        console.log("Credentials wrong");
-                        return false;
-                    }            
-                });
-        }, 1000);       
+            {
+                if (user && user.passwordHash === passwordHash){
+                    console.log("User and password match")
+                    return true;
+                } else {
+                    console.log("Credentials wrong");
+                    return false;
+                }            
+            });
+        }).catch(err => {
+            console.error(err)
+        }); 
     }
 } 

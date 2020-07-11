@@ -12,8 +12,7 @@ module.exports.setDB = async() => {
         return database.connectDB().then(result => {
                 vimsudb = database;
                 console.log("set " + vimsudb + " success")
-        })
-        .catch(err => {
+        }).catch(err => {
                 console.error(err);
         })
 }
