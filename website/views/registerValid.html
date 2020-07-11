@@ -65,7 +65,7 @@
             <div class="container" id="registerValid">
             <div class="row mt-5">
             <div class="col-md-8 offset-md-2 align-self-center">
-        <form action="auth" method="POST">
+        <form action="registerValid" method="POST">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="staticUsername" class="col-form-label">Username</label>
@@ -80,12 +80,12 @@
             </div>    
                   
             <div class="form-group">
-                <input type="password" class="form-control" id="passwordInput" placeholder="Password" required>
+                <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
             </div>
             
             <div class="form-row">
                 <div class="form-group col-md-2">
-                    <select class="form-control" id="title" required>
+                    <select class="form-control" id="title" name="title" required>
                         <option selected>Title</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -98,19 +98,19 @@
                   </select>
                 </div>
                 <div class="form-group col-md-5">
-                    <input type="text" class="form-control" id="inputSurname" placeholder="Surname" required>
+                    <input type="text" class="form-control" id="inputSurname" name="surname" placeholder="Surname" required>
                 </div>
                 <div class="form-group col-md-5">
-                  <input type="text" class="form-control" id="inputForename" placeholder="Forename" required>
+                  <input type="text" class="form-control" id="inputForename" name="forename" placeholder="Forename" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control" id="inputJob" placeholder="Job" required>
+                    <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job" required>
                   </div>
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control" id="inputCompany" placeholder="Company" required>
+                  <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company" required>
                 </div>
             </div>
             <input class="btn btn-block btn-submit" type="submit" value="Register now"></button>
