@@ -1,9 +1,9 @@
 var TypeChecker = require('../../game/app/utils/TypeChecker')
 const dbconf = require('../../config/dbconf');
-const server = require('../../server')
 var vimsudb;
+
 async function getDB() {
-    return server.setDB().then(res => {
+    return dbconf.setDB().then(res => {
         vimsudb = dbconf.getDB()
         console.log("get DB success")
     })

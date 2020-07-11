@@ -1,12 +1,19 @@
-var db;
+const db = require('./db');
 
-module.exports.setDB = async(database) => {
-    db = database;
-    console.log("set " + db + " success");
-}
+var vimsudb;
+var database = new db();
 
 module.exports.getDB = function() {
+    console.log(vimsudb); 
+    return vimsudb;
+}
 
-    console.log(db); 
-    return db;
+module.exports.setDB = async() => {
+        return database.connectDB().then(result => {
+                vimsudb = database;
+                console.log("set " + vimsudb + " success")
+        })
+        .catch(err => {
+                console.error(err);
+        })
 }

@@ -27,20 +27,9 @@ const socketio = require('socket.io');
 /* ######################### SETTING UP MONGODB ################################## */
 /* ############################################################################### */
 
-const db = require('./config/db');
 const dbconf = require('./config/dbconf')
 
-
-var database = new db();
-
-module.exports.setDB = async() => {
-        return database.connectDB().then(result => {
-                dbconf.setDB(database);
-        })
-        .catch(err => {
-                console.error(err);
-        })
-}
+dbconf.setDB();
 
 const AccountService = require('./website/services/AccountService')
 AccountService.getAccountID("test123")
