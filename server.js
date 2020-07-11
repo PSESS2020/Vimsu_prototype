@@ -6,6 +6,7 @@ const express = require('express');
 const expressSession = require('express-session');
 const bodyParser = require('body-parser');
 
+
 /* This package apparently is meant to make more difficult features of the
  * protocol easier to handle - I am not sure how it would be of use here, but
  * I have included since it was included in the example I am mostly working from,
@@ -105,6 +106,10 @@ const PORT = process.env.PORT || 5000;
  *   (iii) creating a socket-Server on top of that for real-time interaction
  * - (E) */
 const app = express();
+//sets the view engine to ejs, ejs is required to render templates
+app.set('view engine', 'ejs');
+//sets the views directory for rendering the ejs templates
+app.set('views',path.join(__dirname, '/website/views'));
 const httpServer = http.createServer(app);
 const io = socketio(httpServer);
 
@@ -136,7 +141,7 @@ app.use(bodyParser.json());
  * index.html file to the user.
  * - (E) */
 app.get('/', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/index.html'));
+	response.render('index');
 });
 
 app.get('/homepage', (request, response) => {
