@@ -154,6 +154,10 @@ module.exports = class Room {
         let cordX = position.getCordX();
         let cordY = position.getCordY();
 
+        if(position.getRoomId() != this.#roomId) {
+            throw new Error('Wrong room id!');
+        }
+
         if (this.#occupationMap[cordX][cordY] == 1) {
             return true;
         }
