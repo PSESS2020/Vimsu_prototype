@@ -5,9 +5,6 @@ var TypeChecker = require('../game/app/utils/TypeChecker')
 module.exports = class db {
     #vimsudb;
 
-    constructor() {
-    }
-
     connectDB() {
         return MongoClient.connect(connectionString, { 
             useUnifiedTopology: true
@@ -36,25 +33,13 @@ module.exports = class db {
         })
     }
 
-    findAllDocuments(collectionName){
-        TypeChecker.isString(collectionName);
-        var collection = this.#vimsudb.collection(collectionName);
-
-        return collection.find().toArray()
-        .then(results => {
-            console.log(results);
-        })
-        .catch(err => {
-            console.error(err)
-        })
-    }
-
     findInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
         return collection.find(query, {projection: projection}).toArray()
         .then(results => {
+            console.log(results);
             return results;
         })
         .catch(err => {

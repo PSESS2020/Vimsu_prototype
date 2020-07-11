@@ -9,20 +9,23 @@ module.exports = class Account {
     #forename;
     #email;
 
-    constructor(accountID, username, title, surname, forename, email) {
-        TypeChecker.isInt(accountID);
+    constructor(username, title, surname, forename, email) {
         TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
         TypeChecker.isString(forename);
         TypeChecker.isString(email);
         
-        this.#accountID = accountID;
         this.#username = username;
         this.#title = title;
         this.#surname = surname;
         this.#forename = forename;
         this.#email = email;
+    }
+
+    setAccountID(accountID) {
+        TypeChecker.isString(accountID);
+        this.#accountID = accountID;
     }
 
     getAccountID() {

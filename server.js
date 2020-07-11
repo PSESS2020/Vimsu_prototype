@@ -32,8 +32,18 @@ const dbconf = require('./config/dbconf')
 dbconf.setDB();
 
 const AccountService = require('./website/services/AccountService')
-AccountService.verifyLoginData("test123", "test123")
+async function createAccount () {
+        return AccountService.createAccount("abc", "", "abc", "abcd", "abcddd@abc", "123").then(res => {
+                if(res) {
+                        return res.getAccountID();
+                } else
+                        return false;
+        }).catch(err => {
+                console.error(err);
+        })
+}
 
+createAccount();
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
