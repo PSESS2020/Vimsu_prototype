@@ -94,10 +94,6 @@ class ClientController {
         this.socket = socket;
     }
 
-    setCurrentRoom(currentRoom) {
-        this.#currentRoom = currentRoom;
-    }
-
     setParticipantId(id) {
         this.#participantId = id;
     }
