@@ -85,6 +85,8 @@ const ParticipantController = require('./game/app/server/controller/ParticipantC
 const Room  = require('./game/app/server/models/Room.js');
 const RoomController = require('./game/app/server/controller/RoomController.js');
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
+const { response } = require('express');
+const { verifyLoginData } = require('./website/services/AccountService');
 
 const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 
@@ -142,6 +144,32 @@ app.get('/homepage', (request, response) => {
 
 app.get('/login', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/login.html'));
+});
+
+async function verifyLogin(username, password) {
+    return AccountService.verifyLoginData(username).then(res => {
+        if(res) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }).catch(err => {
+        console.error(err);
+    })
+}
+
+app.post('/login', (request, response) => {
+    var username = request.body.username;
+    var password = request.body.password;
+    if (verifyLogin) {
+        request.session.loggedin = true;
+        request.session.username = username;
+        response.redirect('/');
+    } else {
+        response.send('Incorrect Username and/or Password!');
+    }			
+    response.end();
 });
 
 app.get('/register', (request, response) => {
