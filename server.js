@@ -147,7 +147,7 @@ app.get('/login', (request, response) => {
 });
 
 async function verifyLogin(username, password) {
-    return AccountService.verifyLoginData(username).then(res => {
+    return AccountService.verifyLoginData(username, password).then(res => {
         if(res) {
             return true;
         }
@@ -162,7 +162,7 @@ async function verifyLogin(username, password) {
 app.post('/login', (request, response) => {
     var username = request.body.username;
     var password = request.body.password;
-    if (verifyLogin) {
+    if (verifyLogin(username, password) === true) {
         request.session.loggedin = true;
         request.session.username = username;
         response.redirect('/');
