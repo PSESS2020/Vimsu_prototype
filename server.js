@@ -53,6 +53,21 @@ async function getAccount(accountID){
                 console.error(err);
         })
 }
+
+async function verify(username){
+        return AccountService.verifyLoginData(username).then(res => {
+                if(res) {
+                       // ...//
+                }
+                else {
+
+                }
+        }).catch(err => {
+                console.error(err);
+        })
+}
+
+
 AccountService.isUsernameValid("aaaaaaa")
 //createAccount();
 //getAccount("5f09bd1b403cf119ec29a408")
@@ -119,6 +134,10 @@ app.use(bodyParser.json());
  * - (E) */
 app.get('/', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/index.html'));
+});
+
+app.get('/homepage', (request, response) => {
+	response.sendFile(path.join(__dirname, '/website/views/homepage.html'));
 });
 
 app.get('/login', (request, response) => {
