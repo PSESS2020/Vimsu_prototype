@@ -17,6 +17,8 @@ async function getDB() {
 module.exports = class AccountService {
 
     static isUsernameValid(username) {
+        TypeChecker.isString(username);
+
         return getDB().then(res => {
             return vimsudb.findInCollection("accounts", {username: username}, {username: username}).then(results => {
                 if(results.length > 0) {
@@ -31,6 +33,8 @@ module.exports = class AccountService {
     }
 
     static isEmailValid(email) {
+        TypeChecker.isString(email);
+
         return getDB().then(res => {
             return vimsudb.findInCollection("accounts", {email: email}, {email: email}).then(results => {
                 if(results.length > 0) {
