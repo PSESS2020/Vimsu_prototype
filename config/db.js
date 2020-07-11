@@ -16,19 +16,10 @@ module.exports = class db {
             console.log('Connected to Database')
             this.#vimsudb = client.db('vimsudb');
             console.log("connectDB() "  + this.#vimsudb)
-            this.listCollections();
-
         })
         .catch(error => 
             console.error(error)
         )
-    }
-
-    listCollections() {
-        this.#vimsudb.listCollections().toArray(function(err, collInfos) {
-            if (err) throw err;
-            console.log(collInfos);
-        });
     }
 
     insertOneToCollection(collectionName, object) {
@@ -58,11 +49,11 @@ module.exports = class db {
         })
     }
 
-    findInCollection(collectionName, query) {
+    findInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.find(query).toArray()
+        return collection.find(query, {projection: projection}).toArray()
         .then(results => {
             return results;
         })
@@ -71,11 +62,11 @@ module.exports = class db {
         })
     }
 
-    findOneInCollection(collectionName, query) {
+    findOneInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.findOne(query)
+        return collection.findOne(query, {projection: projection})
         .then(result => {
             console.log(result);
             return result;
@@ -85,7 +76,7 @@ module.exports = class db {
         })
     }
 
-    updateOneInCollection(collectionName, query, newValue) {
+    updateOneToCollection(collectionName, query, newValue) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 

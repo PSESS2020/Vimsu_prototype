@@ -32,7 +32,7 @@ const dbconf = require('./config/dbconf')
 dbconf.setDB();
 
 const AccountService = require('./website/services/AccountService')
-AccountService.getAccountID("test123")
+AccountService.verifyLoginData("test123", "test123")
 
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */

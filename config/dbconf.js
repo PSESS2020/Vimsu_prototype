@@ -9,10 +9,10 @@ module.exports.getDB = function() {
 }
 
 module.exports.setDB = async() => {
-        return database.connectDB().then(result => {
-                vimsudb = database;
-                console.log("set " + vimsudb + " success")
-        }).catch(err => {
-                console.error(err);
-        })
+    return database.connectDB().then(result => {
+        vimsudb = database;
+        console.log("set " + vimsudb + " success")
+    }).catch(err => {
+        console.error(err);
+    })
 }

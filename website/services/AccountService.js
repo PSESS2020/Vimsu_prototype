@@ -1,7 +1,9 @@
 var TypeChecker = require('../../game/app/utils/TypeChecker')
 const dbconf = require('../../config/dbconf');
-var vimsudb;
+const ObjectId = require('mongodb').ObjectID;
+const passwordHash = require('password-hash');
 
+var vimsudb;
 async function getDB() {
     return dbconf.setDB().then(res => {
         vimsudb = dbconf.getDB()
@@ -11,44 +13,41 @@ async function getDB() {
     });
 }
 
-//const ObjectID = require('mongodb').ObjectID;
-//const passwordHash = require('password-hash');
-
 module.exports = class AccountService {
 
-    static createAccount(accountId, username, title, surname, forename, email, passwordHash) {
-        TypeChecker.isString(accountId);
+    static createAccount(username, title, surname, forename, email, password) {
         TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
         TypeChecker.isString(forename);
         TypeChecker.isString(email);
-        TypeChecker.isString(passwordHash);
+        TypeChecker.isString(password);
 
-        /*var accountId = new ObjectID();
-
+        var accountId = new ObjectId();
         var acc = {
             accountId: accountId,
-            username: "test123", 
-            title: "",
-            surname: "123",
-            forename: "test",
-            email: "test123@test.com",
-            passwordHash: passwordHash.generate("test123")
-        }*/
+            username: username, 
+            title: title,
+            surname: surname,
+            forename: forename,
+            email: email,
+            passwordHash: passwordHash.generate(password)
+        }
 
         getDB().then(res => {
             vimsudb.insertOneToCollection("accounts", acc);
         }).catch(err => {
             console.error(err)
         });
+        
+        return accountId;
     }
 
     static getAccountID(username) {
         TypeChecker.isString(username);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
+            vimsudb.findOneInCollection("accounts", {username: username}, {accountId: 1}).then(user => 
             {
                 console.log(user.accountId);
                 return user.accountId;
@@ -62,7 +61,7 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+            vimsudb.findOneInCollection("accounts", {accountId: new ObjectId(accountId)}, {username: 1}).then(user => 
             {
                 console.log(user.username);
                 return user.username;
@@ -76,7 +75,7 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+            vimsudb.findOneInCollection("accounts", {accountId: new ObjectId(accountId)}, {title: 1}).then(user => 
             {
                 console.log(user.title);
                 return user.title;
@@ -90,7 +89,7 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+            vimsudb.findOneInCollection("accounts", {accountId: new ObjectId(accountId)}, {surname: 1}).then(user => 
             {
                 console.log(user.surname);
                 return user.surname
@@ -104,7 +103,7 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+            vimsudb.findOneInCollection("accounts", {accountId: new ObjectId(accountId)}, {forename: 1}).then(user => 
             {
                 console.log(user.forename);
                 return user.forename
@@ -118,7 +117,7 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {accountId: accountId}).then(user => 
+            vimsudb.findOneInCollection("accounts", {accountId: new ObjectId(accountId)}, {email: 1}).then(user => 
             {
                 console.log(user.email);
                 return user.email
@@ -133,7 +132,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newUsername);
 
         getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {username: newUsername});
+            vimsudb.updateOneToCollection("accounts", {accountId: new ObjectId(accountId)}, {username: newUsername});
         }).catch(err => {
             console.error(err)
         });
@@ -144,7 +143,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newTitle);
 
         getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle});
+            vimsudb.updateOneToCollection("accounts", {accountId: new ObjectId(accountId)}, {title: newTitle});
         }).catch(err => {
             console.error(err)
         });
@@ -155,7 +154,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newSurname);
 
         getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {surname: newSurname});
+            vimsudb.updateOneToCollection("accounts", {accountId: new ObjectId(accountId)}, {surname: newSurname});
         }).catch(err => {
             console.error(err)
         });
@@ -166,7 +165,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newForename);
 
         getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {forename: newForename});
+            vimsudb.updateOneToCollection("accounts", {accountId: new ObjectId(accountId)}, {forename: newForename});
         }).catch(err => {
             console.error(err)
         });
@@ -177,7 +176,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newEmail);
 
         getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {email: newEmail});
+            vimsudb.updateOneToCollection("accounts", {accountId: new ObjectId(accountId)}, {email: newEmail});
         }).catch(err => {
             console.error(err)
         });
@@ -187,20 +186,20 @@ module.exports = class AccountService {
         TypeChecker.isString(accountId);
 
         getDB().then(res => {
-            vimsudb.deleteOneFromCollection("accounts", {accountId: accountId});
+            vimsudb.deleteOneFromCollection("accounts", {accountId: new ObjectId(accountId)});
         }).catch(err => {
             console.error(err)
         });
     }
 
-    static verifyLoginData(username, passwordHash) {
+    static verifyLoginData(username, password) {
         TypeChecker.isString(username);
-        TypeChecker.isString(passwordHash);
+        TypeChecker.isString(password);
 
         getDB().then(res => {
-            vimsudb.findOneInCollection("accounts", {username: username}).then(user => 
+            vimsudb.findOneInCollection("accounts", {username: username}, {username: 1, passwordHash: 1}).then(user => 
             {
-                if (user && user.passwordHash === passwordHash){
+                if (user && passwordHash.verify(password, user.passwordHash)){
                     console.log("User and password match")
                     return true;
                 } else {
