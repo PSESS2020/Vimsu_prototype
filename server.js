@@ -120,11 +120,11 @@ app.use(bodyParser.json());
  * index.html file to the user.
  * - (E) */
 app.get('/', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/index.html'));
+	response.sendFile(path.join(__dirname, '/website/views/index.html'));
 });
 
 app.get('/login', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/login.html'));
+	response.sendFile(path.join(__dirname, '/website/views/login.html'));
 });
 
 
