@@ -88,7 +88,6 @@ const Room  = require('./game/app/server/models/Room.js');
 const RoomController = require('./game/app/server/controller/RoomController.js');
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 const { response } = require('express');
-const { verifyLoginData } = require('./website/services/AccountService');
 
 const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 
@@ -148,19 +147,6 @@ app.get('/login', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/login.html'));
 });
 
-/*async function verifyLogin(username, password) {
-    return AccountService.verifyLoginData(username, password).then(res => {
-        if(res) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }).catch(err => {
-        console.error(err);
-    })
-}*/
-
 app.post('/login', (request, response) => {
     var username = request.body.username;
     var password = request.body.password;
@@ -185,12 +171,61 @@ app.get('/register', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/register.html'));
 });
 
+app.post('/register', (request, response) => {
+    var username = request.body.username;
+    var email = request.body.email;
+
+    return AccountService.isUsernameValid(username).then(res => {
+        if(res) {
+            return AccountService.isEmailValid(email).then(res => {
+                if(res) {
+                    request.session.verified = true;
+                    request.session.username = username;
+                    response.redirect('/registerValid');
+                }
+                else {
+                    response.send('Email is already registered!');
+                }
+                response.end();
+            }).catch(err => {
+                console.error(err);
+            })
+        }
+        else {
+            response.send('Username is already taken!');
+        }
+        response.end();
+    }).catch(err => {
+        console.error(err);
+    })
+});
+
 app.get('/registerValid', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/views/registerValid.html'));
 });
 
+app.post('/registerValid', (request, response) => {
+    //var username = request.body.username;
+    var username = "abcdefgh";
+    var title = request.body.title;
+    var surname = request.body.surname;
+    var forename = request.body.forename;
+    var job = request.body.job;
+    var company = request.body.company;
+    var email = "abc@example.com";
+    //var email = request.body.email;
+    var password = request.body.password;
 
-
+    return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
+        request.session.registered = true;
+        request.session.accountId = res.getAccountID();
+        response.redirect('/');
+        response.end();
+    }).catch(err => {
+        response.send('Registration failed');
+        console.error(err);
+    })
+});
 
 /* The http-Server starts listening on the port.
  * If this does not happen (if the express-instance 'app' listen here),
