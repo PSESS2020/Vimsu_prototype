@@ -3,6 +3,8 @@
 /* ############################################################################### */
 
 const express = require('express');
+const expressSession = require('express-session');
+const bodyParser = require('body-parser');
 
 /* This package apparently is meant to make more difficult features of the
  * protocol easier to handle - I am not sure how it would be of use here, but
@@ -91,8 +93,17 @@ app.set('port', PORT);
 
 /* Tbh I don't really know what this does. I copied it from the old server.js.
  * - (E) */
-app.use(express.static(path.join(__dirname + '/website')));
+app.use('/website', express.static(path.join(__dirname + '/website')));
 app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
+
+app.use(expressSession({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
 
 /* On receiving a get-Request, the express-Server will deliver the
  * index.html file to the user.
@@ -100,6 +111,12 @@ app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
 app.get('/', (request, response) => {
 	response.sendFile(path.join(__dirname, '/website/index.html'));
 });
+
+app.get('/login', (request, response) => {
+	response.sendFile(path.join(__dirname, '/website/login.html'));
+});
+
+
 
 
 /* The http-Server starts listening on the port.
