@@ -7,19 +7,25 @@ module.exports = class Account {
     #title;
     #surname;
     #forename;
+    #job;
+    #company;
     #email;
 
-    constructor(username, title, surname, forename, email) {
+    constructor(username, title, surname, forename, job, company, email) {
         TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
         TypeChecker.isString(forename);
+        TypeChecker.isString(job);
+        TypeChecker.isString(company);
         TypeChecker.isString(email);
         
         this.#username = username;
         this.#title = title;
         this.#surname = surname;
         this.#forename = forename;
+        this.#job = job;
+        this.#company = company;
         this.#email = email;
     }
 
@@ -48,11 +54,19 @@ module.exports = class Account {
         return this.#forename;
     }
 
+    getJob() {
+        return this.#job;
+    }
+
+    getCompany() {
+        return this.#company;
+    }
+
     getEmail() {
         return this.#email;
     }
 
-    setUsername(newUsername) {
+    /*setUsername(newUsername) {
         TypeChecker.isString(newUsername);
         this.#username = username;
     }
@@ -72,8 +86,18 @@ module.exports = class Account {
         this.#forename = forename;
     }
 
+    setJob(newJob) {
+        TypeChecker.isString(newJob);
+        this.#job = job;
+    }
+
+    setCompany(newCompany) {
+        TypeChecker.isString(newCompany);
+        this.#company = company;
+    }
+
     setEmail(newEmail) {
         TypeChecker.isString(newEmail);
         this.#email = email;
-    }
+    }*/
 }

@@ -33,7 +33,7 @@ dbconf.setDB();
 
 const AccountService = require('./website/services/AccountService')
 async function createAccount () {
-        return AccountService.createAccount("abc", "", "abc", "abcd", "abcddd@abc", "123").then(res => {
+        return AccountService.createAccount("aaaaaaa", "", "abc", "abcd", "employee", "google", "abcddd@abc", "123").then(res => {
                 if(res) {
                         return res.getAccountID();
                 } else
@@ -43,7 +43,21 @@ async function createAccount () {
         })
 }
 
+async function getAccount(accountID){
+        return AccountService.getAccount(accountID).then(res => {
+                if(res) {
+                        console.log(res.id)
+                        console.log(res.username)
+                        console.log(res.forename);
+                        //...//
+                }
+        }).catch(err => {
+                console.error(err);
+        })
+}
+
 createAccount();
+getAccount("5f09bd1b403cf119ec29a408")
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
