@@ -72,6 +72,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
+
+        if(this.#foyerView.selectionOnMap)
+        this.#foyerView.drawSelectedTile();
+
         for (var i = 0; i < this.#updateList.length; i++) {
 
             if (this.#updateList[i] instanceof Array) {
@@ -98,6 +102,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#updateList[i].update();
             }
         }
+        
     }
 
     initFoyerView(map) {
