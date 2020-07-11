@@ -164,13 +164,13 @@ app.get('/login', (request, response) => {
 app.post('/login', (request, response) => {
     var username = request.body.username;
     var password = request.body.password;
-    
+
     return AccountService.verifyLoginData(username, password).then(res => {
         
         if(res) {
             request.session.loggedin = true;
             request.session.username = username;
-            response.redirect('/');
+            response.redirect('/homepage');
         }
         else {
             response.send('Incorrect Username and/or Password!');
