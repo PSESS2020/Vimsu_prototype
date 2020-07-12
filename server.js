@@ -92,15 +92,11 @@ app.use(bodyParser.json());
  * index.html file to the user.
  * - (E) */
 app.get('/', (request, response) => {
-    if (request.session.loggedin === true) {
+	if (request.session.loggedin === true) {
         response.render('index', {loggedIn: true});
     } else {
     response.render('index');
     }
-});
-
-app.get('/homepage', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/homepage.html'));
 });
 
 app.get('/login', (request, response) => {
@@ -117,9 +113,9 @@ app.post('/login', (request, response) => {
 
     return AccountService.verifyLoginData(username, password).then(user => {
         
-        if(res) {
+        if(user) {
             request.session.loggedin = true;
-            request.session.username = username;
+            request.session.user = user;
             response.redirect('/');
         }
         else {
