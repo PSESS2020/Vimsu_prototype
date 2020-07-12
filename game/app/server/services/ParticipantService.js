@@ -1,6 +1,7 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js');
 var Participant = require('../models/Participant')
+var Direction = require('../models/Direction')
 
 const dbconf = require('../../config/dbconf');
 

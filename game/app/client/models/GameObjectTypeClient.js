@@ -1,5 +1,6 @@
 const GameObjectTypeClient = Object.freeze
 ({
+    SELECTED_TILE: -1,
     BLANK: 0,
     TILE: 1,
     LEFTWALL: 2,

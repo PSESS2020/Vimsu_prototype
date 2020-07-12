@@ -40,25 +40,25 @@ class SpriteAnimation {
             return;
         }
 
-        ctx.drawImage(
+        ctx_avatar.drawImage(
             this.spritesheetBody.image, col * this.spritesheetBody.frameWidth, row * this.spritesheetBody.frameHeight,
             this.spritesheetBody.frameWidth, this.spritesheetBody.frameHeight,
             x, y,
             this.spritesheetBody.frameWidth, this.spritesheetBody.frameHeight);
 
-        ctx.drawImage(
+        ctx_avatar.drawImage(
             this.spritesheetTopCloth.image, col * this.spritesheetTopCloth.frameWidth, row * this.spritesheetTopCloth.frameHeight,
             this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight,
             x, y,
             this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight);
 
-        ctx.drawImage(
+        ctx_avatar.drawImage(
             this.spriteSheetBottomClothing.image, col * this.spriteSheetBottomClothing.frameWidth, row * this.spriteSheetBottomClothing.frameHeight,
             this.spriteSheetBottomClothing.frameWidth, this.spriteSheetBottomClothing.frameHeight,
             x, y,
             this.spriteSheetBottomClothing.frameWidth, this.spriteSheetBottomClothing.frameHeight);
 
-        ctx.drawImage(
+        ctx_avatar.drawImage(
             this.spriteSheetShoes.image, col * this.spriteSheetShoes.frameWidth, row * this.spriteSheetShoes.frameHeight,
             this.spriteSheetShoes.frameWidth, this.spriteSheetShoes.frameHeight,
             x, y,

@@ -249,12 +249,13 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
  * (The idea being: server.js calls ServerController to create new conference and the
  * ConferenceController creates the room plus the RoomController as part of creating itself)
  * - (E) */
-/*
-const gameRoomId = 1000; // placeholder ID
-const gameRoom = new Room(gameRoomId, TypeOfRoom.FOYER); // Creates a foyer
-const gameRoomController = new RoomController(gameRoom); // Creates a controller for that foyer
-*/
-// On trying out some stuff, the roomClass is broken, as the objectClass is broken.
+
+ //TODO: Init other rooms for this conference
+const foyerRoomId = 1; // placeholder ID
+const foyerRoom = new Room(foyerRoomId, TypeOfRoom.FOYER); // Creates a foyer
+
+//RoomController not needed at this point (P)
+//const gameRoomController = new RoomController(foyerRoom);
 
 /* ########################################################################################## */
 /* ################################## REALTIME FUNCTIONALITY ################################ */
@@ -313,10 +314,17 @@ io.on('connection', (socket) => {
         // (i) to (iii)
         var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
         console.log("test1");
-        var x = 0; /* gameRoom.getStartPosition().getCordX(); */
-        var y = 0; /* gameRoom.getStartPosition().getCordY(); */
-        var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
-        var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
+
+        //TODO: Needs to be adjusted when multiple rooms exist (P)
+        var startPosition = foyerRoom.getStartPosition();
+        var x = startPosition.getCordX();
+        var y = startPosition.getCordY();
+        var d = foyerRoom.getStartDirection();
+        var ppant = new Participant(ppantID, startPosition, d); 
+
+        //At this point kind of useless, maybe usefull when multiple rooms exist (P)
+        foyerRoom.enterParticipant(ppant);
+
         var ppantCont = new ParticipantController(ppant);
         console.log("test2");
         ppants.set(ppantID, ppant);
@@ -338,8 +346,14 @@ io.on('connection', (socket) => {
         // Sends the newly generated ppantID back to the client so the game-states are consistent
         io.to(socket.id).emit('currentGameStateYourID', ppantID);
         console.log("test4");
+
+        //Send room information of start room (P)
+        //TODO: When multiple rooms exist, get right room (P)
+        io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
         // Sends the start-position back to the client so the avatar can be displayed in the right cell
-        io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
+        io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
+                                                                cordY: y, 
+                                                                dir: d});
         console.log("test5");
         ppants.forEach( (value, key, map) => {
             if(key != ppantID) {
@@ -374,12 +388,21 @@ io.on('connection', (socket) => {
      * - (E) */
     socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
         // TODO
-        // Update Position server-side
+        //When multiple Rooms exits, either the server has to get the right room or the client emits it in some way(P)
 
-        var newPos = new Position(1, newCordX, newCordY);
-        ppants.get(ppantID).setPosition(newPos);
-        ppants.get(ppantID).setDirection(direction);
-        socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction);
+        var newPos = new Position(foyerRoom.getRoomId(), newCordX, newCordY);
+        
+        //No Collision, so every other participant gets the new position (P)
+        if (!foyerRoom.checkForCollision(newPos)) {
+            ppants.get(ppantID).setPosition(newPos);
+            ppants.get(ppantID).setDirection(direction);
+            socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+        } else {
+            //Server resets client position to old Position (P)
+            var oldPos = ppants.get(ppantID).getPosition();
+            var oldDir = ppants.get(ppantID).getDirection();
+            io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
+        }
     });
 
     socket.on('requestMovementStop', ppantID => {
@@ -404,7 +427,7 @@ io.on('connection', (socket) => {
         // The next line can probably be just handled inside the previous one
         //io.sockets.emit('remove player', ppantID);
         socket.broadcast.emit('remove player', ppantID);
-        console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
+        console.log('Participant ' + socket.id + ' with Participant_ID ' + ppantID + ' has disconnected from the game . . .');
         
         ppantControllers.delete(socket.id);
         ppants.delete(ppantID);

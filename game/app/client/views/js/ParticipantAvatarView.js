@@ -96,9 +96,14 @@ class ParticipantAvatarView extends AvatarView {
         let cordY = super.getPosition().getCordY();
         this.updateCurrentAnimation();
     
-        //should be done somewhere else, 86 and 419 are room dependent
+        //should be done somewhere else, 150 and 419 are room dependent
         let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
         let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+
+        ctx_avatar.font = "1em Verdana";
+        ctx_avatar.fillStyle = "black";
+        ctx_avatar.textAlign = "left";
+        ctx_avatar.fillText("Player1", screenX, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
