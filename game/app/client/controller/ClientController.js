@@ -46,6 +46,7 @@ class ClientController {
     #gameView;
     #currentRoom;
     #participantId;
+    #ownParticipant;
     #roomClient;
 
     /**
@@ -94,10 +95,6 @@ class ClientController {
         this.socket = socket;
     }
 
-    setParticipantId(id) {
-        this.#participantId = id;
-    }
-
     getCurrentRoom() {
         return this.#currentRoom;
     }
@@ -123,7 +120,7 @@ class ClientController {
             this.#gameView.initFoyerView(map);
         }
         
-        //TODO this.#gameView.initOwnAvatarView(participant);
+        this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
     }
 
@@ -149,9 +146,9 @@ class ClientController {
 
     setUpSocket() {
         console.log("test set up socket");
-        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this));
-        this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); // The bind(this) fixes scoping-issues
-        this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
+        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
+        this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this)); 
+        this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
         //this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
@@ -191,49 +188,46 @@ class ClientController {
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
     
+    //First Message from Server, gives you your ID
     handleFromServerUpdateID(id) {
         console.log("test update id");
-        // Throws the error that this is not a function?
-        this.setParticipantId(id);
-        this.#gameView.setOwnAvatarViewId(id);
+        
+
+        this.#participantId = id;
         console.log(this.#participantId);
     }
 
-    handleFromServerUpdatePosition(posInfo) {
-        console.log("test update pos");
-        var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
-        // This will not work and throws error
-        // Uncaught TypeError: Cannot read property updateOwnAvatarPosition of undefined 
-        this.#gameView.updateOwnAvatarPosition(posUpdate);
-
-        // This is probably overkill, but better safe than sorry
-        switch(posInfo.dir) {
-            case DirectionClient.UPRIGHT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
-                break;
-            case DirectionClient.DOWNRIGHT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
-                break;
-            case DirectionClient.UPLEFT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
-                break;
-            case DirectionClient.DOWNLEFT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
-                break;
-        }
-        console.log("test finish update pos");
-    }
-
+    //Second message from Server, gives you information of starting room
     handleFromServerUpdateRoom(roomId, typeOfRoom) {
+
+        //First room? 
         if(!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom);
+        
+        //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom);
         }
+    }
 
-        //draw new room
-        this.initGameView();
+    //Third message from server, gives you information of starting position
+    //After that, there is everything to init the game view
+    handleFromServerUpdatePosition(posInfo) {
+        var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
+        var dirUpdate = posInfo.dir;
 
+        //First Call to this method? If so, create own participant client model and init game view
+        if (!this.#ownParticipant) {
+            this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
+            this.initGameView();
+        } else {
+            this.#ownParticipant.setPosition(posUpdate);
+            this.#ownParticipant.setDirection(dirUpdate);
+            this.#gameView.updateOwnAvatarPosition(posUpdate);
+            this.#gameView.updateOwnAvatarDirection(dirUpdate);
+        }
+        
+        console.log("test finish update pos");
     }
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
@@ -249,39 +243,6 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, true);  
         
         console.log(ppantID);
-        
-        //All of this is not needed anymore, server does collision check for other participants and sends the new position (P)
-
-        /*
-        // This is very unwieldy. Can we maybe just change the updatePosition()-function to take two arguments,
-        // offsetX and offsetY, and then do all the other stuff inside the method?
-        var index = this.#gameView.getAnotherParticipantAvatarViews().findIndex(participant => participant.getId() === ppantID);
-        console.log(index); //index = -1
-        var oldPos = this.#gameView.getAnotherParticipantAvatarViews()[index].getPosition();        
-        var newPos;
-
-        switch(direction) {
-            case DirectionClient.UPRIGHT:
-                newPos = new PositionClient(oldPos.getCordX() + 1, oldPos.getCordY());
-                break;
-            case DirectionClient.UPLEFT:
-                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() - 1);
-                break;
-            case DirectionClient.DOWNLEFT:
-                newPos = new PositionClient(oldPos.getCordX() - 1, oldPos.getCordY());
-                break;
-            case DirectionClient.DOWNRIGHT:
-                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() + 1);
-                break;
-       }
-
-        if (!this.#currentRoom.checkForCollision(newPos)) {
-            this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-            this.#gameView.updateAnotherAvatarWalking(ppantID, true);
-        }
-
-        //this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-        */
     }
 
     handleFromServerStopMovementOther(ppantID) {
@@ -307,7 +268,6 @@ class ClientController {
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
         this.#gameView.initAnotherAvatarViews(participant);
-
     }
     
     /*

@@ -4,26 +4,38 @@ class FoyerView extends MapView {
     #map;
     #loader;
     #tiles;
-    #tilePaths = ["../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
+    #xNumTiles;
+    #yNumTiles;
+    #selectedTile;
+    selectionOnMap = false;
+    #tilePaths = ["../assets/tile_selected.png", "../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
 
     constructor(foyerMap) {
         super();
         this.#map = foyerMap;
+
+        //map components that are drawn on screen
         this.#tiles = new Array();
+
         this.#loader = new LoadingView();
         this.loadImages();
     }
 
     initProperties(tileColumnOffset) {
-        this.xNumTiles = this.#map.length;
-        this.yNumTiles = this.#map[0].length;
-        this.#originX = ctx_map.canvas.width / 2 - this.xNumTiles * tileColumnOffset / 2;
+
+        this.#xNumTiles = this.#map.length;
+        this.#yNumTiles = this.#map[0].length;
+
+        //origin that indicates where to start drawing the map assets.
+        this.#originX = ctx_map.canvas.width / 2 - this.#xNumTiles * tileColumnOffset / 2;
         this.#originY = ctx_map.canvas.height / 2;
+    
     }
 
     //loads the images that are needed for tilecreation.
     //this was the best not error prone way.
     loadImages() {
+
         this.tileImages = new Array();
         var loadedImages = 0;
         var totalImages = this.#tilePaths.length;
@@ -42,9 +54,9 @@ class FoyerView extends MapView {
                     this.#loader.doneLoading();
                     
                     var offset = {
-                        tileColumnOffset: this.tileImages[0].width,
-                        tileRowOffset: this.tileImages[0].width / 2,
-                        wallColumnOffset: this.tileImages[1].width,
+                        tileColumnOffset: this.tileImages[1].width,
+                        tileRowOffset: this.tileImages[1].width / 2,
+                        wallColumnOffset: this.tileImages[2].width,
                         tableRowOffset: this.tileImages[totalImages - 1].height
                     };
 
@@ -57,17 +69,22 @@ class FoyerView extends MapView {
         }
     }
 
+    
+
     //Creates a map of gameobjects to draw on screen.
     buildMap(offset) {
+
+        this.tileColumnOffset = offset.tileColumnOffset;
+        this.tileRowOffset = offset.tileRowOffset;
+            
         var gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
         var originXY = {
             x: this.#originX,
             y: this.#originY
         };
 
-
-        for (var row = (this.xNumTiles - 1); row >= 0; row--) {
-            for (var col = 0; col < this.yNumTiles; col++) {
+        for (var row = (this.#xNumTiles - 1); row >= 0; row--) {
+            for (var col = 0; col < this.#yNumTiles; col++) {
 
                 var position = new PositionClient(row, col);
                 var tileType = this.#map[row][col];
@@ -78,7 +95,66 @@ class FoyerView extends MapView {
                 
             };
         };
+        
         this.draw();
+
+        
+        var canvas = document.getElementById('avatarCanvas');
+        var self = this;
+        this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0,2), originXY, offset);
+        
+        $('#avatarCanvas').on('mousemove', function(e) {
+
+            //Translates the current mouse position to the mouse position on the map.
+            var newPosition = self.getMousePos(canvas, e);
+        
+            //Adjusts mouse position to the tile position. 
+            var newPosX = newPosition.x - self.tileColumnOffset / 2 - self.#originX;
+            var newPosY = newPosition.y - self.tileRowOffset / 2 - self.#originY;
+             
+            //Calculate the tile at which the current mouse cursor points.
+            var selectedTileX = Math.round(newPosX/ offset.tileColumnOffset - newPosY / offset.tileRowOffset);
+            var selectedTileY = Math.round(newPosX / offset.tileColumnOffset + newPosY / offset.tileRowOffset);
+
+            if(self.isCursorOnMap(selectedTileX, selectedTileY)) 
+                self.selectionOnMap = true;
+            else 
+                self.selectionOnMap = false;
+            
+                //Calculate new screen Position.
+            var screenX = selectedTileX * offset.tileColumnOffset / 2 + selectedTileY * offset.tileColumnOffset / 2 + originXY.x;
+            var screenY = selectedTileY * offset.tileRowOffset / 2 - selectedTileX * offset.tileRowOffset / 2 + originXY.y;
+
+            var position = new PositionClient(screenX, screenY);
+            
+            self.#selectedTile.updatePos(position);
+
+        });
+    }
+
+    isCursorOnMap(cordX, cordY) {
+        return !(cordX < 0 || cordY < 2 || cordX >= this.#xNumTiles - 2 || cordY >= this.#yNumTiles);
+    }
+
+    getMousePos(canvas, e) {
+
+        //gets the absolute size of canvas and calculates the scaling factor
+        var rect = canvas.getBoundingClientRect();
+        var scaleX = canvas.width / rect.width;
+        var scaleY = canvas.height / rect.height;
+
+        //Apply scaling factor to cursor position
+        return { 
+            x:  (e.pageX - rect.left) * scaleX,
+            y:  (e.pageY - rect.top) * scaleY,
+        }
+
+    }
+
+    drawSelectedTile() {
+
+        this.#selectedTile.draw();
+      
     }
 
     draw() {

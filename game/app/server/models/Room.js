@@ -7,6 +7,7 @@ var GameObjectService = require('../services/GameObjectService.js');
 var RoomDimensions = require('./RoomDimensions.js');
 const Position = require('./Position.js');
 const Direction = require('./Direction.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class Room {
 
@@ -45,7 +46,7 @@ module.exports = class Room {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
-            this.#startPosition = new Position(this.#roomId, 0, 0); // Sets the startPosition to (0,0).
+            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y); // Sets the startPosition to (0,0).
                                                               // This should prolly be a constant loaded from
                                                               // a settings file somewhere - (E)
             this.#startDirection = Direction.DOWNRIGHT; // See above
@@ -158,7 +159,12 @@ module.exports = class Room {
             throw new Error('Wrong room id!');
         }
 
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        //WALLS
+        if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
+            return true;
+        }
+
+        if (this.#occupationMap[cordX][cordY]  == 1) {
             return true;
         }
         else {

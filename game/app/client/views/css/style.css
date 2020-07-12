@@ -17,6 +17,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
   background-color: black;
   z-index: 3;
   transition: 1s 0.4s;
@@ -46,6 +47,7 @@ width: 1280px;
 height: 640px;
 top: 0;
 left: 0;
+pointer-events: none;
 z-index: 0;
 }
 
@@ -63,6 +65,7 @@ position: absolute;
 width: 1280px;
 height: 640px;
 top: 0;
+pointer-events: none;
 left: 0;
 z-index: 2;
 }

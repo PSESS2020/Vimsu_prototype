@@ -96,7 +96,7 @@ class ParticipantAvatarView extends AvatarView {
         let cordY = super.getPosition().getCordY();
         this.updateCurrentAnimation();
     
-        //should be done somewhere else, 86 and 419 are room dependent
+        //should be done somewhere else, 150 and 419 are room dependent
         let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
         let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
 

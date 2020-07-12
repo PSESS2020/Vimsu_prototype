@@ -13,6 +13,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #foyerView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
+    #gameViewInit;
 
     constructor(gameWidth, gameHeight) 
     {
@@ -21,7 +22,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
         this.#roomId = 1;
-        this.initOwnAvatarView(" ");
+        //this.initOwnAvatarView(" ");
+
+        //bool to check, if game view is already initialized. If not, draw is not possible
+        this.#gameViewInit = false;
     }
 
     getFoyerView() {
@@ -72,15 +76,23 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        for (var i = 0; i < this.#updateList.length; i++) {
 
-            if (this.#updateList[i] instanceof Array) {
-                for(var j = 0; j < this.#updateList[i].length; j++) {
-                    this.#updateList[i][j].draw();
+        //check if game view is already initalized
+        if (this.#gameViewInit) {
+            if(this.#foyerView.selectionOnMap) {
+                this.#foyerView.drawSelectedTile();
+            }   
+
+            for (var i = 0; i < this.#updateList.length; i++) {
+
+                if (this.#updateList[i] instanceof Array) {
+                    for(var j = 0; j < this.#updateList[i].length; j++) {
+                        this.#updateList[i][j].draw();
+                    }
                 }
-            }
-            else {
-                this.#updateList[i].draw();
+                else {
+                    this.#updateList[i].draw();
+                }
             }
         }
     }
@@ -98,6 +110,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#updateList[i].update();
             }
         }
+        
     }
 
     initFoyerView(map) {
@@ -252,26 +265,20 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#roomId = roomId;
     }
 
-    initOwnAvatarView()
+    //inits ownAvatarView with information from ownParticipant model instance
+    initOwnAvatarView(ownParticipant)
     {
-        //var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
-        //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
-        //TypeChecker.isInstanceOf(participant, ParticipantClient);
-        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNRIGHT', 0); 
+        TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
+        
+        let startingPos = ownParticipant.getPosition();
+        let startingDir = ownParticipant.getDirection();
+        let id = ownParticipant.getId();
+
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id); 
         this.addToUpdateList(this.#ownAvatarView);
-        //this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
 
-        //TypeChecker.isInstanceOf(participant, ParticipantClient);
-        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        //this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
-        //this.addToUpdateList(this.#ownAvatarView);
-    }
-
-    //is called after server sends participantId
-    setOwnAvatarViewId(participantId) {
-        TypeChecker.isInt(participantId);
-        this.#ownAvatarView.setId(participantId);
+        //Game View is now fully initialized
+        this.#gameViewInit = true;
     }
 
     updateOwnAvatarPosition(newPosition)
