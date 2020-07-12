@@ -44,9 +44,14 @@
             </div>
             
         </div>
-        <!--<form class="form-inline">
-            <a class="btn btn-outline-warning" type="button" href="client/views/canvas.html">Play Now</a>
-        </form>-->
+        <% if (locals.loggedIn === true) { %>
+            <form class="form-inline">
+                <a class="btn btn-outline-warning" type="button" href="client/views/canvas.html">Play Now</a>
+            </form>
+		 <% } else { %> 
+ 
+		 <% } %>
+       
     </div>
 </nav>
 <div>

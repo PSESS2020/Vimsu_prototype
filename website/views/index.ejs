@@ -5,6 +5,14 @@
 </head>
 <body>
 	<%- include('partials/header') %>
+
+	<div class="col-sm-12" id="loggedInInfo">
+		<% if (locals.name) { %>
+			<h1><%= name %></h1> 
+		 <% } else { %> 
+ 
+		 <% } %>
+	</div>
 		<canvas id="gameCanvas" width="600" height="300">
 			<p>Unfortunately your browser is not supporting this web page.</p>
 		</canvas>

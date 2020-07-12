@@ -92,7 +92,11 @@ app.use(bodyParser.json());
  * index.html file to the user.
  * - (E) */
 app.get('/', (request, response) => {
-	response.render('index');
+    if (request.session.loggedin === true) {
+        response.render('index', {loggedIn: true});
+    } else {
+    response.render('index');
+    }
 });
 
 app.get('/homepage', (request, response) => {
@@ -116,7 +120,7 @@ app.post('/login', (request, response) => {
         if(res) {
             request.session.loggedin = true;
             request.session.username = username;
-            response.redirect('/homepage');
+            response.redirect('/');
         }
         else {
             response.send('Incorrect Username and/or Password!');
