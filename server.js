@@ -104,7 +104,7 @@ app.get('/login', (request, response) => {
 });
 
 app.get('/game', (request, response) => {
-    response.sendFile(path.join(__dirname, 'client/views/canvas.html'));
+    response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
 })
 
 app.post('/login', (request, response) => {
