@@ -164,7 +164,7 @@ io.on('connection', (socket) => {
         //TODO: Needs to be adjusted when multiple rooms exist (P)
         var startPosition = foyerRoom.getStartPosition();
         var x = startPosition.getCordX();
-        var y = startPosition.getCordX();
+        var y = startPosition.getCordY();
         var d = foyerRoom.getStartDirection();
         var ppant = new Participant(ppantID, startPosition, d); 
 
