@@ -7,7 +7,7 @@ module.exports = Object.freeze
 
     /* Start-Position Constants */
     STARTPOSITION_X: 0,
-    STARTPOSITION_Y: 2
+    STARTPOSITION_Y: 0
 
 
 
