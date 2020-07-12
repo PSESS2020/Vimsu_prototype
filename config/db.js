@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
-var TypeChecker = require('../game/app/utils/TypeChecker')
+const TypeChecker = require('../game/app/utils/TypeChecker');
+const fs = require('fs');
 
 module.exports = class db {
     #vimsudb;
@@ -86,4 +87,55 @@ module.exports = class db {
             console.error(err)
         })
     }
+
+    uploadFile(collectionName, fileName) {
+        TypeChecker.isString(collectionName);
+        TypeChecker.isString(fileName);
+
+        const bucket = new GridFSBucket(this.#vimsudb, {
+            chunkSizeBytes: 1024*1024,
+            bucketName: collectionName
+        });
+
+        var readStream = fs.createReadStream('../upload/' + collectionName + '/'+ fileName);
+        var uploadStream = bucket.openUploadStream(fileName);
+    
+        return new Promise((resolve, reject) => {
+            readStream.pipe(uploadStream)
+            .on('finish', function() {
+                console.log(fileName + ' uploaded')
+                resolve();
+            })
+            .on('error', function() {
+                console.error(err);
+                reject();
+            });
+        });
+    }
+
+    downloadFile(collectionName, fileName) {
+        TypeChecker.isString(collectionName);
+        TypeChecker.isString(fileName);
+
+        const bucket = new GridFSBucket(this.#vimsudb, {
+            chunkSizeBytes: 1024*1024,
+            bucketName: collectionName
+        });
+          
+        var downloadStream = bucket.openDownloadStreamByName(fileName);
+        var writeStream = fs.createWriteStream('../download/' + collectionName + '/'+ fileName)
+
+        return new Promise((resolve, reject) => {
+            downloadStream.pipe(writeStream)
+            .on('finish', function() {
+                console.log(fileName + ' downloaded')
+                resolve();
+            })
+            .on('error', function() {
+                console.error(err);
+                reject();
+            });
+        });
+    }
+
 }
