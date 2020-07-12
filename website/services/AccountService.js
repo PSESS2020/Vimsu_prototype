@@ -81,11 +81,11 @@ module.exports = class AccountService {
         });
     }
 
-    static getAccount(accountId) {
-        TypeChecker.isString(accountId);
+    static getAccount(username) {
+        TypeChecker.isString(username);
         
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("accounts", {accountId: accountId}, "").then(user => {
+            return vimsudb.findOneInCollection("accounts", {username: username}, "").then(user => {
                 if (user) {
                     return user;
                 }
@@ -300,11 +300,13 @@ module.exports = class AccountService {
         TypeChecker.isString(password);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("accounts", {username: username}, {username: 1, passwordHash: 1}).then(user => 
+            return this.getAccount(username).then(user => 
             {
                 if (user && passwordHash.verify(password, user.passwordHash)){
                     console.log("User and password match")
-                    return true;
+                    var account = new Account(user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
+                    account.setAccountID(accountId);
+                    return account;
                 } else {
                     console.log("Credentials wrong");
                     return false;
