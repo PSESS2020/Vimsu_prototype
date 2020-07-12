@@ -98,6 +98,7 @@ margin: 0;
   color: #e5e5e5;
   line-height: 30px;
 }
+
 #octicon_text {
   display: inline-block;
   vertical-align: -0.15em;
@@ -108,6 +109,15 @@ margin: 0;
 .p-2:hover .octicons {
   color: #e5d80e !important;
 }
+
+.profileIcon {
+  vertical-align: center;
+}
+
+.iconProfile {
+  color: #434343;
+}
+
 .nav-item {
   padding-left: 0 !important;
   padding-right: 5rem !important;

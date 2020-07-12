@@ -93,7 +93,8 @@ app.use(bodyParser.json());
  * - (E) */
 app.get('/', (request, response) => {
     if (request.session.loggedin === true) {
-        response.render('index', {loggedIn: true});
+        username = request.session.username;
+        response.render('index', {loggedIn: true, username: username});
     } else {
     response.render('index');
     }
@@ -117,7 +118,7 @@ app.post('/login', (request, response) => {
 
     return AccountService.verifyLoginData(username, password).then(user => {
         
-        if(res) {
+        if(response) {
             request.session.loggedin = true;
             request.session.username = username;
             response.redirect('/');
@@ -132,7 +133,12 @@ app.post('/login', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/register.html'));
+	if (request.session.loggedin === true) {
+        username = request.session.username;
+        response.render('register', {loggedIn: true, username: username});
+    } else {
+    response.render('register');
+    }
 });
 
 app.post('/register', (request, response) => {
@@ -188,6 +194,11 @@ app.post('/registerValid', (request, response) => {
         response.send('Registration failed');
         console.error(err);
     })
+});
+
+app.get('/logout', (request, response) => {
+    request.session.destroy();
+    response.redirect('/');
 });
 
 /* The http-Server starts listening on the port.
