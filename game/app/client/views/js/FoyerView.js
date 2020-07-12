@@ -133,6 +133,17 @@ class FoyerView extends MapView {
     }
 
     isCursorOnMap(cordX, cordY) {
+        //LECTURE DOOR
+        if (cordX === 2 && cordY === 1) {
+            return true;
+        //FOOD COURT DOOR
+        } else if (cordX === 25 && cordY === 4) {
+            return true;
+        //RECEPTION DOOR
+        } else if (cordX === 25 && cordY === 24) {
+            return true;
+        }
+        //OTHER TILES IN ROOM
         return !(cordX < 0 || cordY < 2 || cordX >= this.#xNumTiles - 2 || cordY >= this.#yNumTiles);
     }
 
