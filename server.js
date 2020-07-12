@@ -136,12 +136,7 @@ app.post('/login', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
-	if (request.session.loggedin === true) {
-        username = request.session.username;
-        response.render('register', {loggedIn: true, username: username});
-    } else {
     response.render('register');
-    }
 });
 
 app.post('/register', (request, response) => {
