@@ -1,4 +1,4 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/utils/TypeChecker');
 const fs = require('fs');
@@ -7,7 +7,7 @@ module.exports = class db {
     #vimsudb;
 
     connectDB() {
-        return MongoClient.connect(connectionString, { 
+        return mongodb.MongoClient.connect(connectionString, { 
             useUnifiedTopology: true
         })
         .then(client => {
@@ -92,12 +92,12 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         TypeChecker.isString(fileName);
 
-        const bucket = new GridFSBucket(this.#vimsudb, {
+        const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
             chunkSizeBytes: 1024*1024,
             bucketName: collectionName
         });
 
-        var readStream = fs.createReadStream('../upload/' + collectionName + '/'+ fileName);
+        var readStream = fs.createReadStream('./upload/' + collectionName + '/'+ fileName);
         var uploadStream = bucket.openUploadStream(fileName);
     
         return new Promise((resolve, reject) => {
@@ -106,8 +106,8 @@ module.exports = class db {
                 console.log(fileName + ' uploaded')
                 resolve();
             })
-            .on('error', function() {
-                console.error(err);
+            .on('error', function(error) {
+                console.error(error);
                 reject();
             });
         });
@@ -117,13 +117,13 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         TypeChecker.isString(fileName);
 
-        const bucket = new GridFSBucket(this.#vimsudb, {
+        const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
             chunkSizeBytes: 1024*1024,
             bucketName: collectionName
         });
           
         var downloadStream = bucket.openDownloadStreamByName(fileName);
-        var writeStream = fs.createWriteStream('../download/' + collectionName + '/'+ fileName)
+        var writeStream = fs.createWriteStream('./download/' + collectionName + '/'+ fileName)
 
         return new Promise((resolve, reject) => {
             downloadStream.pipe(writeStream)
@@ -131,8 +131,8 @@ module.exports = class db {
                 console.log(fileName + ' downloaded')
                 resolve();
             })
-            .on('error', function() {
-                console.error(err);
+            .on('error', function(error) {
+                console.error(error);
                 reject();
             });
         });
