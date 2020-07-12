@@ -23,57 +23,6 @@ const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
 
-
-/* ############################################################################### */
-/* ######################### SETTING UP MONGODB ################################## */
-/* ############################################################################### */
-
-const dbconf = require('./config/dbconf')
-
-dbconf.setDB();
-
-const AccountService = require('./website/services/AccountService')
-async function createAccount () {
-        return AccountService.createAccount("aaaaaaa", "", "abc", "abcd", "employee", "google", "abcddd@abc", "123").then(res => {
-        return res.getAccountID();
-
-        }).catch(err => {
-                console.error(err);
-        })
-}
-
-async function getAccount(accountID){
-        return AccountService.getAccount(accountID).then(res => {
-                if(res) {
-                        console.log(res.id)
-                        console.log(res.username)
-                        console.log(res.forename);
-                        //...//
-                }
-        }).catch(err => {
-                console.error(err);
-        })
-}
-
-async function verify(username){
-        return AccountService.verifyLoginData(username).then(res => {
-                if(res) {
-                       // ...//
-                }
-                else {
-
-                }
-        }).catch(err => {
-                console.error(err);
-        })
-}
-
-
-AccountService.isUsernameValid("aaaaaaa")
-//createAccount();
-//getAccount("5f09bd1b403cf119ec29a408")
-
-AccountService.verifyLoginData("aaaaaaa", "123");
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
@@ -89,6 +38,8 @@ const Room  = require('./game/app/server/models/Room.js');
 const RoomController = require('./game/app/server/controller/RoomController.js');
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 const { response } = require('express');
+
+const AccountService = require('./website/services/AccountService');
 
 const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 

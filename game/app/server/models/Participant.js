@@ -1,7 +1,8 @@
 var Position = require('./Position.js')
-var Direction = require('./Direction.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
 var TypeChecker = require('../../utils/TypeChecker.js')
+const Settings = require('../../utils/Settings.js');
+const Direction = require('../models/Direction')
 
 module.exports = class Participant {
 
@@ -21,7 +22,7 @@ module.exports = class Participant {
      */
     constructor(id, position, direction)
     {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         //TypeChecker.isInstanceOf(participantController, ParticipantController);
 
         this.#id = id;
@@ -29,8 +30,8 @@ module.exports = class Participant {
 
         if (!position || !direction)
         {
-            this.#position = new Position(1, 1, 1);
-            this.#direction = Direction.DOWNRIGHT;
+            this.#position = new Position(Settings.STARTROOM, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
+            this.#direction = Settings.STARTDIRECTION;
         }
 
         else 

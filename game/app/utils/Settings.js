@@ -1,3 +1,5 @@
+const Direction = require("../server/models/Direction");
+
 module.exports = Object.freeze
 ({
 
@@ -6,8 +8,10 @@ module.exports = Object.freeze
     MOVEMENTSPEED_Y: 1,
 
     /* Start-Position Constants */
+    STARTROOM: 1,
     STARTPOSITION_X: 0,
-    STARTPOSITION_Y: 0
+    STARTPOSITION_Y: 0,
+    STARTDIRECTION: Direction.DOWNRIGHT
 
 
 

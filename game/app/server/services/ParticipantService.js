@@ -1,9 +1,9 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
-var Position = require('../models/Position.js');
-var Participant = require('../models/Participant')
-var Direction = require('../models/Direction')
-
-const dbconf = require('../../config/dbconf');
+const TypeChecker = require('../../utils/TypeChecker.js');
+const Position = require('../models/Position.js');
+const Participant = require('../models/Participant')
+const Settings = require('../../utils/Settings.js');
+const ObjectId = require('mongodb').ObjectID;
+const dbconf = require('../../../../config/dbconf');
 
 var vimsudb;
 async function getDB() {
@@ -18,25 +18,36 @@ async function getDB() {
 module.exports = class ParticipantService {
     static createParticipant(accountId, conferenceId) {
         return getDB().then(res => {
-            return this.getParticipantId(accountId, conferenceId).then(par => {
+            return this.getParticipant(accountId, conferenceId).then(par => {
                 var participant;
 
                 if(par) {
-                    participant = new Participant(par.participantId, new Position(1, 0, 0), Direction.DOWNRIGHT);
+                    var participantId = par.participantId;
+                    var pos = {
+                        roomId: par.position.roomId,
+                        cordX: par.position.cordX,
+                        cordY: par.position.cordY
+                    }
+                    var direction = par.direction;
+                    participant = new Participant(participantId, new Position(pos.roomId, pos.cordX, pos.cordY), direction);
                 } 
                 else {
-                    var participantId = new ObjectId();
-                    participant = new Participant(participantId, new Position(1, 0, 0), Direction.DOWNRIGHT);
+                    var participantId = new ObjectId().toString();
+                    participant = new Participant(participantId, "", "");
                         
                     var par = {
                         participantId: participantId,
                         accountId: accountId,
-                        points: 0, 
-                        visitedLectureId: [],
-                        achievement: [],
+                        position: {
+                            roomId: Settings.STARTROOM,
+                            cordX: Settings.STARTPOSITION_X,
+                            cordY: Settings.STARTPOSITION_Y
+                        },
+                        direction: Settings.STARTDIRECTION,
+                        /*visitedLectureId: [],
                         friendId: [],
                         friendRequestId: [],
-                        chatId: [],
+                        chatId: [],*/
                     }
 
                     getDB().then(res => {
@@ -56,14 +67,17 @@ module.exports = class ParticipantService {
         });
     }
 
-    static getParticipantId(accountId, conferenceId) {
+    static getParticipant(accountId, conferenceId) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(conferenceId);
+
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {accountId: new ObjectId(accountId)}, {participantId: 1}).then(par => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {accountId: accountId}, {participantId: 1, position: 1, direction: 1}).then(par => {
                 if (par) {
                     return par;
                 }
                 else {
-                    console.log("participant not found");
+                    console.log("participant with accountId " + accountId + " is not found in collection participants_" + conferenceId);
                     return false;
                 }
             }).catch(err => {
@@ -72,12 +86,21 @@ module.exports = class ParticipantService {
         })
     }
 
-    /*static getRoomId(accountId) {
+    static updateParticipantPosition(participantId, conferenceId, position) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isInstanceOf(position, Position);
+
+        var pos = {
+            roomId: position.getRoomId(),
+            cordX: position.getCordX(),
+            cordY: position.getCordY()
+        }
+
+        return getDB().then(res => {
+            vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId}, {'position.roomId': pos.roomId, 'position.cordX': pos.cordX, 'position.cordY': pos.cordY});
+        }).catch(err => {
+            console.error(err)
+        });
 
     }
-
-    static updateParticipantPosition(participantId, position) {
-
-        TypeChecker.isInstanceOf(position, Position);
-    }*/
 } 
