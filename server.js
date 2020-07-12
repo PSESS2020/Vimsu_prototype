@@ -115,7 +115,7 @@ app.post('/login', (request, response) => {
     var username = request.body.username;
     var password = request.body.password;
 
-    return AccountService.verifyLoginData(username, password).then(res => {
+    return AccountService.verifyLoginData(username, password).then(user => {
         
         if(res) {
             request.session.loggedin = true;
@@ -145,6 +145,7 @@ app.post('/register', (request, response) => {
                 if(res) {
                     request.session.verified = true;
                     request.session.username = username;
+                    request.session.email = email;
                     response.redirect('/registerValid');
                 }
                 else {
@@ -169,15 +170,13 @@ app.get('/registerValid', (request, response) => {
 });
 
 app.post('/registerValid', (request, response) => {
-    //var username = request.body.username;
-    var username = "abcdefgh";
+    var username = request.session.username;
     var title = request.body.title;
     var surname = request.body.surname;
     var forename = request.body.forename;
     var job = request.body.job;
     var company = request.body.company;
-    var email = "abc@example.com";
-    //var email = request.body.email;
+    var email = request.session.email;
     var password = request.body.password;
 
     return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
