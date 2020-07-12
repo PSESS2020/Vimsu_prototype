@@ -149,7 +149,7 @@ app.get('/homepage', (request, response) => {
 });
 
 app.get('/login', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/login.html'));
+	response.render('login');
 });
 
 app.post('/login', (request, response) => {
