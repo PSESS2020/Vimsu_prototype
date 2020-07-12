@@ -108,7 +108,7 @@
      * @param {int} participantId 
      */
     exitParticipant(participantId) {
-        TypeChecker.isInt(participantId);
+        TypeChecker.isString(participantId);
         this.#listOfPPants.forEach(participant => {
             if (participant.getId() === participantId) {
                 let index = this.#listOfPPants.indexOf(participant);

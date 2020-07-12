@@ -14,7 +14,7 @@ class ParticipantClient {
      */
     constructor(id, position, direction) 
     {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, DirectionClient);
 

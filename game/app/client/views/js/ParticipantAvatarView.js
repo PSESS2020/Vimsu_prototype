@@ -23,7 +23,7 @@ class ParticipantAvatarView extends AvatarView {
 
     constructor(position, direction, participantId) {
         super(position, direction);
-        TypeChecker.isInt(participantId);
+        TypeChecker.isString(participantId);
         this.#participantId = participantId;
         console.log(this.#participantId);
         this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 1, 4);
