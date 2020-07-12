@@ -20,10 +20,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
-
         this.#roomId = 1;
-
-        //this.addToUpdateList(this.#foyerView);
         this.initOwnAvatarView(" ");
     }
 
@@ -200,8 +197,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
         this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
-        
-        this.#foyerView.draw();
         this.#anotherParticipantAvatarViews[index].draw(); 
          
     }
@@ -243,8 +238,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             //Removes disconnected Avatar from participant avatar views
             this.#anotherParticipantAvatarViews.splice(index, 1);
 
-            //draws Foyerview, so the disconnected Avatar disappers from View
-            this.#foyerView.draw();
         }
         
         /*participantIds.forEach(id => 
@@ -296,11 +289,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
-
-        //this.#ownAvatarView.draw();   
-
-        //Foyer needs to be drawn every time a Avatar moves
-        this.#foyerView.draw();
     }
 
     removeOwnAvatarView()

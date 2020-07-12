@@ -136,16 +136,6 @@ margin: 0;
 .bg-custom {
   background-color: #028090;
 }
-
-canvas {
-  max-width: 100%;
-  background: #fff;
-  padding: 0;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  display: block;
-  visibility: hidden;
-}
 #site-name {
   width: 643px;
   height: 119px;

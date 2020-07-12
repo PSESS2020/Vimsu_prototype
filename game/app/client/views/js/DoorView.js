@@ -9,7 +9,7 @@ class DoorView extends GameObjectView {
     }
 
     draw() {
-        ctx.drawImage(this.#doorImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#doorImage, this.#position.getCordX(), this.#position.getCordY());
     }
 
     onclick() {

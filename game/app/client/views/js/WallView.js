@@ -9,7 +9,7 @@ class WallView extends GameObjectView {
     }
 
     draw() {
-        ctx.drawImage(this.#wallImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#wallImage, this.#position.getCordX(), this.#position.getCordY());
     }
 
     onclick() {

@@ -9,11 +9,6 @@ body {
   background-color: black;
 }
 
-canvas {
-  width: 1280px;
-  height: 640px;
-}
-
 #overlay{
   position: fixed;
   width: 100%;
@@ -44,4 +39,30 @@ canvas {
   width: 100%;
   text-align: center;
   color: white;
+}
+#mapCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+z-index: 0;
+}
+
+#avatarCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+z-index: 1;
+}
+
+#uiCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+z-index: 2;
 }

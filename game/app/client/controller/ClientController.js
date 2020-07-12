@@ -1,5 +1,6 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
+
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -72,8 +73,6 @@ class ClientController {
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
-        this.#currentRoom = new RoomClient(1, TypeOfRoomClient.FOYER, []);
-
         console.log("fully init cc");
         return this;
     }
@@ -93,10 +92,6 @@ class ClientController {
 
     setSocket(socket) {
         this.socket = socket;
-    }
-
-    setCurrentRoom(currentRoom) {
-        this.#currentRoom = currentRoom;
     }
 
     setParticipantId(id) {
@@ -123,8 +118,10 @@ class ClientController {
     initGameView() {
         
         var map = this.#currentRoom.getMap();
-        if (map !== null)
+        var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
+        }
         
         //TODO this.#gameView.initOwnAvatarView(participant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
@@ -154,8 +151,9 @@ class ClientController {
         console.log("test set up socket");
         this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this));
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); // The bind(this) fixes scoping-issues
+        this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
-        this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
+        //this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
@@ -226,14 +224,35 @@ class ClientController {
         console.log("test finish update pos");
     }
 
-    handleFromServerStartMovementOther(ppantID, direction) {
-        // Type-Checking handled in gameView
-        //TypeChecker.isInt(ppantID);
-        //TypeChecker.isEnumOf(direction, DirectionClient);
-        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);      
+    handleFromServerUpdateRoom(roomId, typeOfRoom) {
+        if(!this.#currentRoom) {
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom);
+        } else {
+            this.#currentRoom.swapRoom(roomId, typeOfRoom);
+        }
+
+        //draw new room
+        this.initGameView();
+
+    }
+
+    //Server does collision testing, so this method is only called when movement from other user is legit (P)
+    handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
+        TypeChecker.isInt(ppantID);
+        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isInt(newCordX);
+        TypeChecker.isInt(newCordY);
+
+        let newPos = new PositionClient(newCordX, newCordY);
+        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
+        this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+        this.#gameView.updateAnotherAvatarWalking(ppantID, true);  
         
         console.log(ppantID);
         
+        //All of this is not needed anymore, server does collision check for other participants and sends the new position (P)
+
+        /*
         // This is very unwieldy. Can we maybe just change the updatePosition()-function to take two arguments,
         // offsetX and offsetY, and then do all the other stuff inside the method?
         var index = this.#gameView.getAnotherParticipantAvatarViews().findIndex(participant => participant.getId() === ppantID);
@@ -262,7 +281,7 @@ class ClientController {
         }
 
         //this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-
+        */
     }
 
     handleFromServerStopMovementOther(ppantID) {
@@ -285,15 +304,13 @@ class ClientController {
         console.log("init info id" + initInfo.id);
         var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
         console.log(" get id " + participant.getId());
-        // Here we get another error (which we always get on handling the private fields 
-        // in these methods
-        // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it
-        // this.#currentRoom.enterParticipant(participant);
+        this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
         this.#gameView.initAnotherAvatarViews(participant);
 
     }
     
+    /*
     // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
     handleFromServerCollisionDetectionAnswer(isOccupied) {
         if (isOccupied) {
@@ -302,6 +319,7 @@ class ClientController {
             //TODO: Avatar wird bewegt
         }
     }
+    */
 
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
