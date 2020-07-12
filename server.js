@@ -100,8 +100,12 @@ app.get('/homepage', (request, response) => {
 });
 
 app.get('/login', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/login.html'));
+	response.render('login');
 });
+
+app.get('/game', (request, response) => {
+    response.sendFile(path.join(__dirname, 'game/app/client/views/canvas.html'));
+})
 
 app.post('/login', (request, response) => {
     var username = request.body.username;

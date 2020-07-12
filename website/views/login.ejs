@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%- include('partials/head') %>        
+    </head>
+    <body>
+        <%- include('partials/header') %>
+    <div class="container" id="logIn">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3 align-self-center">
+                <form action="login" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
+                    </div>
+                    <input class="btn btn-block btn-submit" type="submit" value="Log in"></button>
+                </form>
+
+                <a class="btn btn-block btn-submit" type="submit" href="/homepage">Go To Logged In Page</a>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

@@ -6,10 +6,10 @@ module.exports = */
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheetBody.png', 64, 128);
-    #topClothing = new SpriteSheet('../assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
-    #bottomClothing = new SpriteSheet('../assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
-    #shoes = new SpriteSheet('../assets/ShoesBlackSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', 64, 128);
+    #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
+    #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
+    #shoes = new SpriteSheet('client/assets/ShoesBlackSpriteSheet.png', 64, 128);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
