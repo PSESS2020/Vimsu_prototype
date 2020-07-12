@@ -1,20 +1,30 @@
 var ctx_map = document.getElementById("mapCanvas").getContext("2d");
 var ctx_avatar = document.getElementById("avatarCanvas").getContext("2d");
 var ctx_ui = document.getElementById("uiCanvas").getContext("2d");
-const GAME_WIDTH = this.ctx_map.canvas.width = 1900;
-const GAME_HEIGHT = this.ctx_map.canvas.height = 950;
 
-this.ctx_avatar.canvas.width = 1900;
-this.ctx_avatar.canvas.height = 950;
+const GAME_WIDTH = GameConfig.CTX_WIDTH;
+const GAME_HEIGHT = GameConfig.CTX_HEIGHT;
+
+this.ctx_map.canvas.width = GAME_WIDTH;
+this.ctx_map.canvas.height = GAME_HEIGHT;
+
+this.ctx_avatar.canvas.width = GAME_WIDTH;
+this.ctx_avatar.canvas.height = GAME_HEIGHT;
+
+this.ctx_ui.canvas.width = GAME_WIDTH;
+this.ctx_ui.canvas.height = GAME_HEIGHT;
+
 let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
 /* The participantID should not be one (as we want to make sure it is congruent with the
  * server).
  * - (E) */
 let clientController = new ClientController(gameView);
-clientController.setPort(5000);
+clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
 //clientController.initGameView();
+
+console.log("width: " + GameConfig.width);
 
 setInterval( function() {
   //let deltaTime = timestamp - lastTime;
@@ -24,7 +34,7 @@ setInterval( function() {
 
   gameView.update();
   gameView.draw();  
-}, 1000 / 30);
+}, GameConfig.TIME_DELTA);
 
 document.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
