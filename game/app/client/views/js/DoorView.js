@@ -1,11 +1,17 @@
 class DoorView extends GameObjectView {
     #doorImage;
     #position;
+    #DOORTYPE;
 
-    constructor(doorImage, position) {
+    constructor(doorImage, position, doorType) {
         super(doorImage, position);
         this.#doorImage = doorImage;
         this.#position = position;
+        this.#DOORTYPE = doorType;
+    }
+
+    getDoorType() {
+        return this.#DOORTYPE;
     }
 
     draw() {
@@ -13,6 +19,6 @@ class DoorView extends GameObjectView {
     }
 
     onclick() {
-        //TODO
+        alert("Hi From DoorView: " + this.#DOORTYPE);
     }
 }

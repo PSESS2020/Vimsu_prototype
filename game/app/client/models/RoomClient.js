@@ -210,6 +210,7 @@
         for (var i = 0; i < mapLength; i++) {
             this.#map[i] = new Array(this.#length + 2).fill(GameObjectTypeClient.TILE);
         }
+        
 
         for (var i = 0; i < mapLength; i++) {
             this.#map[i][0] = GameObjectTypeClient.BLANK;
@@ -220,6 +221,9 @@
                 this.#map[i][1] = GameObjectTypeClient.LEFTWALL;
             this.#map[mapLength - 2][i + 2] = GameObjectTypeClient.RIGHTWALL;
         }
+
+        //Tile in the upper right corner that has not been replaced
+        this.#map[mapLength - 2][1] = GameObjectTypeClient.BLANK;
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
             if (this.#listOfGameObjects[i].getName().startsWith("table")) {
