@@ -159,7 +159,12 @@ module.exports = class Room {
             throw new Error('Wrong room id!');
         }
 
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        //WALLS
+        if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
+            return true;
+        }
+
+        if (this.#occupationMap[cordX][cordY]  == 1) {
             return true;
         }
         else {
