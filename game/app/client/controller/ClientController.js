@@ -232,7 +232,7 @@ class ClientController {
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
     handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
-        TypeChecker.isInt(ppantID);
+        TypeChecker.isString(ppantID);
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
@@ -283,7 +283,7 @@ class ClientController {
 
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
-        //TypeChecker.isInt(ppantId);
+        //TypeChecker.isString(ppantId);
 
         this.#currentRoom.exitParticipant(ppantId);
 

@@ -225,7 +225,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             var i;
             for (i = 0; i < participantIds.length; i++)
             {
-                TypeChecker.isInt(participantIds[i]);
+                TypeChecker.isString(participantIds[i]);
 
                 var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
 
@@ -238,7 +238,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             }
         }
         else {
-            TypeChecker.isInt(participantIds);
+            TypeChecker.isString(participantIds);
 
             //Searches in Array of other Avatars for participant with this ID
             var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
@@ -252,11 +252,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             this.#anotherParticipantAvatarViews.splice(index, 1);
 
         }
-        
-        /*participantIds.forEach(id => 
-            TypeChecker.isInt(id),
-            this.#updateList.splice(index, 1)
-        );*/
     }
 
     setRoomId(roomId)
