@@ -115,7 +115,14 @@ app.post('/login', (request, response) => {
         
         if(user) {
             request.session.loggedin = true;
-            request.session.user = user;
+            request.session.accountId = user.getAccountID();
+            request.session.username = username;
+            request.session.title = user.getTitle();
+            request.session.surname = user.getSurname();
+            request.session.forename = user.getForename();
+            request.session.job = user.getJob();
+            request.session.company = user.getCompany();
+            request.session.email = user.getEmail();
             response.redirect('/');
         }
         else {
