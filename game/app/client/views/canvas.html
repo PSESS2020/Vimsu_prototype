@@ -2,7 +2,7 @@
     <head>
         <!-- TODO: Meta Tags -->
         <meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="client/views/css/style.css">
 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     </head>
     <body>
@@ -21,17 +21,17 @@
 		</canvas>
              
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-        <script src="../libraries/require.js"></script>
+        <script src="client/libraries/require.js"></script>
         <!--<script> const socket = io('http://localhost:5000'); </script>-->
         <script>
-            requirejs(['../utils/TypeChecker', '../config/GameConfig', '../models/TypeOfRoomClient', '../models/RoomDimensionsClient.js', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', 
-                        '../models/PositionClient','../models/GameObjectClient', '../models/RoomClient'], () => {
-                requirejs(['js/Views'], () => {
-                    requirejs(['../utils/SpriteAnimation', '../utils/SpriteSheet'], () => {
-                    requirejs(['js/MapView', 'js/GameObjectView', 'js/GameObjectViewFactory', 'js/AvatarView', 'js/LoadingView'], () => {
-                        requirejs(['js/FoyerView', 'js/NPCAvatarView', 'js/ParticipantAvatarView', 'js/TileView', 'js/SelectedTileView', 'js/WallView', 'js/TableView', 'js/DoorView'], () => {
-                            requirejs(['js/GameView', '../controller/ClientController'], () => {
-                                requirejs(['../index'], () => {
+            requirejs(['client/utils/TypeChecker', 'client/config/GameConfig', 'client/models/TypeOfRoomClient', 'client/models/RoomDimensionsClient.js', 'client/models/GameObjectTypeClient', 'client/models/DirectionClient', 'client/models/ParticipantClient', 
+                        'client/models/PositionClient','client/models/GameObjectClient', 'client/models/RoomClient'], () => {
+                requirejs(['client/views/js/Views'], () => {
+                    requirejs(['client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
+                    requirejs(['client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
+                        requirejs(['client/views/js/FoyerView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                            requirejs(['client/views/js/GameView', 'client/controller/ClientController'], () => {
+                                requirejs(['client/index'], () => {
 
                                     });
                                 });

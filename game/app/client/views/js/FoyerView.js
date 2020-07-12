@@ -8,7 +8,7 @@ class FoyerView extends MapView {
     #yNumTiles;
     #selectedTile;
     selectionOnMap = false;
-    #tilePaths = ["../assets/tile_selected.png", "../assets/tile1.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door1.png", "../assets/door2.png", "../assets/door3.png", "../assets/table.png",];
+    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile1.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door1.png", "client/assets/door2.png", "client/assets/door3.png", "client/assets/table.png",];
 
     constructor(foyerMap) {
         super();
