@@ -100,10 +100,6 @@ app.get('/', (request, response) => {
     }
 });
 
-app.get('/homepage', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/homepage.html'));
-});
-
 app.get('/login', (request, response) => {
 	response.render('login');
 });
@@ -118,9 +114,16 @@ app.post('/login', (request, response) => {
 
     return AccountService.verifyLoginData(username, password).then(user => {
         
-        if(response) {
+        if(user) {
             request.session.loggedin = true;
+            request.session.accountId = user.getAccountID();
             request.session.username = username;
+            request.session.title = user.getTitle();
+            request.session.surname = user.getSurname();
+            request.session.forename = user.getForename();
+            request.session.job = user.getJob();
+            request.session.company = user.getCompany();
+            request.session.email = user.getEmail();
             response.redirect('/');
         }
         else {

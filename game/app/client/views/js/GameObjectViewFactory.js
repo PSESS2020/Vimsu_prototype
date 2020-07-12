@@ -64,21 +64,21 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY + doorOffsetY);
                 gameObjectImage = this.#loadedImages[4];
 
-                gameObjectView = new DoorView(gameObjectImage, screenPos);
+                gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.LECTUREDOOR);
             break;
 
             case GameObjectTypeClient.FOODCOURTDOOR:
                 screenPos = new PositionClient(screenX - this.#tileColumnOffset, screenY + doorOffsetY);
                 gameObjectImage = this.#loadedImages[5];
 
-                gameObjectView = new DoorView(gameObjectImage, screenPos);
+                gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.FOODCOURTDOOR);
             break;
 
             case  GameObjectTypeClient.RECEPTIONDOOR:
                 screenPos = new PositionClient(screenX - this.#tileColumnOffset, screenY + doorOffsetY);
                 gameObjectImage = this.#loadedImages[6];
 
-                gameObjectView = new DoorView(gameObjectImage, screenPos);
+                gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.RECEPTIONDOOR);
             break;
 
             case GameObjectTypeClient.TABLE:

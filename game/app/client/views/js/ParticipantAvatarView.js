@@ -18,7 +18,7 @@ class ParticipantAvatarView extends AvatarView {
     #standingUpRightAnimation;
     #standingDownLeftAnimation;
     #standingDownRightAnimation;
-    #currentAnimation
+    #currentAnimation;
     #walking = false;
 
     constructor(position, direction, participantId) {

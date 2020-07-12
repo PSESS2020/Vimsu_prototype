@@ -54,8 +54,7 @@
                         </p>
                         </div>
                     </a>
-                <% } %>
-                
+                    
                 <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/register">
                     <div class="octicons octicon octicon-pencil">
                         <p id="octicon_text">
@@ -63,19 +62,24 @@
                     </p>
                     </div>
                 </a>
+                <% } %>
+                <% if (locals.loggedIn === true) { %>
+                    <div class="col p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand">
+                        
+                        <a class="btn btn-outline-warning" type="button" href="client/views/canvas.html">Play Now</a>
+                    </div>
+                    </div>
+
+                 <% } else { %> 
+                   
+                 <% } %>
             </div>
-            
         </div>
-        <% if (locals.loggedIn === true) { %>
-            <div class="col">
-            <div class="pull-right">
                 
-                <a class="btn btn-outline-warning" type="button" href="client/views/canvas.html">Play Now</a>
-            </div>
-        </div>
-		 <% } else { %> 
- 
-		 <% } %>
+            
+            
+
+        
        
     </div>
 </nav>

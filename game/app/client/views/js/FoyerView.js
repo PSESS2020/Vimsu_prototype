@@ -8,6 +8,7 @@ class FoyerView extends MapView {
     #yNumTiles;
     #selectedTile;
     selectionOnMap = false;
+    #clickableTiles;
     #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile1.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door1.png", "client/assets/door2.png", "client/assets/door3.png", "client/assets/table.png",];
 
     constructor(foyerMap) {
@@ -16,6 +17,9 @@ class FoyerView extends MapView {
 
         //map components that are drawn on screen
         this.#tiles = new Array();
+
+        //map components that can be clicked
+        this.#clickableTiles = new Array();
 
         this.#loader = new LoadingView();
         this.loadImages();
@@ -70,10 +74,14 @@ class FoyerView extends MapView {
     }
 
     
+    addToClickableTiles(tile) {
+        this.#clickableTiles.push(tile);
+    }
 
     //Creates a map of gameobjects to draw on screen.
     buildMap(offset) {
 
+        this.isDoorTile = false;
         this.tileColumnOffset = offset.tileColumnOffset;
         this.tileRowOffset = offset.tileRowOffset;
             
@@ -88,11 +96,18 @@ class FoyerView extends MapView {
 
                 var position = new PositionClient(row, col);
                 var tileType = this.#map[row][col];
+
                 var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
-                    
-                if( tile != null)
-                    this.#tiles.push(tile);
                 
+                if( tile!= null) {
+
+                        this.#tiles.push(tile);
+
+                        if( tile instanceof DoorView ) 
+                         this.addToClickableTiles(tile);
+
+                }
+
             };
         };
         
@@ -103,33 +118,58 @@ class FoyerView extends MapView {
         var self = this;
         this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0,2), originXY, offset);
         
+        //Handle mouse movement on canvas
         $('#avatarCanvas').on('mousemove', function(e) {
 
-            //Translates the current mouse position to the mouse position on the map.
-            var newPosition = self.getMousePos(canvas, e);
-        
-            //Adjusts mouse position to the tile position. 
-            var newPosX = newPosition.x - self.tileColumnOffset / 2 - self.#originX;
-            var newPosY = newPosition.y - self.tileRowOffset / 2 - self.#originY;
-             
-            //Calculate the tile at which the current mouse cursor points.
-            var selectedTileX = Math.round(newPosX/ offset.tileColumnOffset - newPosY / offset.tileRowOffset);
-            var selectedTileY = Math.round(newPosX / offset.tileColumnOffset + newPosY / offset.tileRowOffset);
+            var selectedTileCords = self.translateMouseToTileCord(canvas, e, offset);
 
-            if(self.isCursorOnMap(selectedTileX, selectedTileY)) 
+            if(self.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) 
                 self.selectionOnMap = true;
             else 
                 self.selectionOnMap = false;
             
-                //Calculate new screen Position.
-            var screenX = selectedTileX * offset.tileColumnOffset / 2 + selectedTileY * offset.tileColumnOffset / 2 + originXY.x;
-            var screenY = selectedTileY * offset.tileRowOffset / 2 - selectedTileX * offset.tileRowOffset / 2 + originXY.y;
+            //Calculate new screen Position.
+            var screenX = selectedTileCords.x * offset.tileColumnOffset / 2 + selectedTileCords.y * offset.tileColumnOffset / 2 + self.#originX;
+            var screenY = selectedTileCords.y * offset.tileRowOffset / 2 - selectedTileCords.x * offset.tileRowOffset / 2 + self.#originY;
 
             var position = new PositionClient(screenX, screenY);
             
             self.#selectedTile.updatePos(position);
 
         });
+
+        //Handles mouse click on canvas
+        $('#avatarCanvas').on('click', function(e) {
+
+            var selectedTileCords = self.translateMouseToTileCord(canvas, e, offset);
+
+            if(self.isCursorOnMap(selectedTileCords.x, selectedTileCords.y))
+            
+                self.#clickableTiles.forEach( object => {
+                    if( self.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType() )
+                        object.onclick();
+            });
+        });
+    }
+
+    translateMouseToTileCord(canvas, e, offset) {
+
+            //Translates the current mouse position to the mouse position on the map.
+            var newPosition = this.getMousePos(canvas, e);
+        
+            //Adjusts mouse position to the tile position. 
+            var newPosX = newPosition.x - offset.tileColumnOffset / 2 - this.#originX;
+            var newPosY = newPosition.y - offset.tileRowOffset / 2 - this.#originY;
+             
+            //Calculate the tile at which the current mouse cursor points.
+            var selectedTileX = Math.round(newPosX/ offset.tileColumnOffset - newPosY / offset.tileRowOffset);
+            var selectedTileY = Math.round(newPosX / offset.tileColumnOffset + newPosY / offset.tileRowOffset);
+            
+            return {
+                x: selectedTileX,
+                y: selectedTileY,
+            }
+
     }
 
     isCursorOnMap(cordX, cordY) {
@@ -145,6 +185,14 @@ class FoyerView extends MapView {
         }
         //OTHER TILES IN ROOM
         return !(cordX < 0 || cordY < 2 || cordX >= this.#xNumTiles - 2 || cordY >= this.#yNumTiles);
+        
+        //Room walls
+        if(cordX >= 0 && cordY >= 1 && cordX < this.#xNumTiles - 1 && cordY < this.#yNumTiles && 
+            this.#map[cordX][cordY] !== GameObjectTypeClient.LEFTWALL && this.#map[cordX][cordY] !== GameObjectTypeClient.RIGHTWALL &&
+             this.#map[cordX][cordY] !== GameObjectTypeClient.BLANK)
+            return true;
+        else
+            return false;
     }
 
     getMousePos(canvas, e) {
@@ -173,6 +221,7 @@ class FoyerView extends MapView {
         if (this.#tiles.length != 0) {
             this.#tiles.forEach( object => object.draw());
         }
+
     }
 
 

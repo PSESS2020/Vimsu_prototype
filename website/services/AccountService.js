@@ -305,7 +305,7 @@ module.exports = class AccountService {
                 if (user && passwordHash.verify(password, user.passwordHash)){
                     console.log("User and password match")
                     var account = new Account(user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
-                    account.setAccountID(accountId);
+                    account.setAccountID(user.accountId);
                     return account;
                 } else {
                     console.log("Credentials wrong");
