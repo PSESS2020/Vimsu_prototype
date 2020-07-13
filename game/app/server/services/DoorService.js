@@ -2,7 +2,7 @@
 
 
 var TypeChecker = require('../../utils/TypeChecker.js');
-var Door = require('../models/Room.js');
+var Door = require('../models/Door.js');
 
 module.exports = class DoorService {
     #doors;
@@ -27,7 +27,7 @@ module.exports = class DoorService {
     getDoor(doorId) {
         TypeChecker.isInt(doorId);
 
-        let index = this.#doors.findIndex(room => door.getId() === doorId);
+        let index = this.#doors.findIndex(door => door.getId() === doorId);
 
         if (index < 0) 
         {
