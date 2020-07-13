@@ -16,7 +16,7 @@ module.exports = class Participant {
      * 
      * @author Klaudia
      * 
-     * @param {int} id 
+     * @param {String} id 
      * @param {Position} position 
      * @param {Direction} direction 
      */
