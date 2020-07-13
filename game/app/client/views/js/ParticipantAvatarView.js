@@ -50,10 +50,6 @@ class ParticipantAvatarView extends AvatarView {
         this.#participantId = participantId;
     }
 
-    setNickname(nickname) {
-        this.#name = name
-    }
-
     update() {
         this.#currentAnimation.update();
     }
