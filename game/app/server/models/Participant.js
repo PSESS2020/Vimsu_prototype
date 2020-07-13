@@ -3,12 +3,15 @@ var ParticipantController = require('../../server/controller/ParticipantControll
 var TypeChecker = require('../../utils/TypeChecker.js')
 const Settings = require('../../utils/Settings.js');
 const Direction = require('../models/Direction')
+const BusinessCard = require('../models/BusinessCard')
 
 module.exports = class Participant {
 
     #id;
     #position;
+    #accountId;
     #direction;
+    #businessCard;
     #participantController;
 
     /**
@@ -20,12 +23,16 @@ module.exports = class Participant {
      * @param {Position} position 
      * @param {Direction} direction 
      */
-    constructor(id, position, direction)
+    constructor(id, position, direction, accountId, businessCard)
     {
         TypeChecker.isString(id);
+        TypeChecker.isString(accountId);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
         //TypeChecker.isInstanceOf(participantController, ParticipantController);
 
         this.#id = id;
+        this.#accountId = accountId;
+        this.#businessCard = businessCard;
         //this.#participantController = participantController;
 
         if (!position || !direction)
@@ -52,6 +59,16 @@ module.exports = class Participant {
     getPosition() 
     {
         return this.#position;
+    }
+
+    getAccountId()
+    {
+        return this.#accountId;
+    }
+
+    getBusinessCard()
+    {
+        return this.#businessCard;
     }
 
     setPosition(position) 
