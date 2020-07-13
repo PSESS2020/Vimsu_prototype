@@ -12,11 +12,11 @@ async function getDB() {
 }
 
 module.exports = class SlotService {
-    static storeVideo(fileName) {
-        TypeChecker.isString(fileName);
+    static storeVideo(videoName) {
+        TypeChecker.isString(videoName);
         
         return getDB().then(res => {
-            return vimsudb.uploadFile("lectures", fileName);
+            return vimsudb.uploadFile("lectures", videoName);
         }).catch(err => {
             console.error(err)
         });

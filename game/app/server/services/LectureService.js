@@ -12,11 +12,11 @@ async function getDB() {
 }
 
 module.exports = class LectureService {
-    static getVideo(fileName) {
-        TypeChecker.isString(fileName);
-        
+    static getVideo(videoId) {
+        TypeChecker.isString(videoId);
+
         return getDB().then(res => {
-            return vimsudb.downloadFile("lectures", fileName);
+            return vimsudb.downloadFile("lectures", videoId);
         }).catch(err => {
             console.error(err)
         });

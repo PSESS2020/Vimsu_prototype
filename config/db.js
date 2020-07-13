@@ -94,17 +94,19 @@ module.exports = class db {
 
         const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
             chunkSizeBytes: 1024*1024,
-            bucketName: collectionName
+            bucketName: collectionName,
         });
 
-        var readStream = fs.createReadStream('./upload/' + collectionName + '/'+ fileName);
+        var readStream = fs.createReadStream(fileName);
         var uploadStream = bucket.openUploadStream(fileName);
+
+        var fileId = uploadStream.id.toString();
     
         return new Promise((resolve, reject) => {
             readStream.pipe(uploadStream)
             .on('finish', function() {
-                console.log(fileName + ' uploaded')
-                resolve();
+                console.log(fileName + ' with id ' + fileId + ' uploaded')
+                resolve(fileId);
             })
             .on('error', function(error) {
                 console.error(error);
@@ -113,29 +115,43 @@ module.exports = class db {
         });
     }
 
-    downloadFile(collectionName, fileName) {
+    downloadFile(collectionName, fileId) {
         TypeChecker.isString(collectionName);
-        TypeChecker.isString(fileName);
+        TypeChecker.isString(fileId);
 
         const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
             chunkSizeBytes: 1024*1024,
             bucketName: collectionName
         });
-          
-        var downloadStream = bucket.openDownloadStreamByName(fileName);
-        var writeStream = fs.createWriteStream('./download/' + collectionName + '/'+ fileName)
 
-        return new Promise((resolve, reject) => {
-            downloadStream.pipe(writeStream)
-            .on('finish', function() {
-                console.log(fileName + ' downloaded')
-                resolve();
-            })
-            .on('error', function(error) {
-                console.error(error);
-                reject();
+        var dir = './download/' + collectionName + '/';
+        this.#createDirectory(dir);
+
+        var id = new mongodb.ObjectID(fileId)
+          
+        var downloadStream = bucket.openDownloadStream(id);
+        
+        return this.findOneInCollection(collectionName + '.files', {_id: id}, {filename: 1}).then(file => {
+            var writeStream = fs.createWriteStream(dir + file.filename)
+
+            return new Promise((resolve, reject) => {
+                downloadStream.pipe(writeStream)
+                .on('finish', function() {
+                    console.log(file.filename + ' downloaded')
+                    resolve(dir + file.filename);
+                })
+                .on('error', function(error) {
+                    console.error(error);
+                    reject();
+                });
             });
-        });
+        })
+        
     }
 
+    #createDirectory = function(dir) {
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+    }
 }

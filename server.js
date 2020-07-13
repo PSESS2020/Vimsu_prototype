@@ -40,7 +40,6 @@ const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 const { response } = require('express');
 
 const AccountService = require('./website/services/AccountService');
-
 const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 
 /* ############################################################################### */
