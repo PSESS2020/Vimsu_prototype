@@ -24,7 +24,7 @@
         <script src="../libraries/require.js"></script>
         <!--<script> const socket = io('http://localhost:5000'); </script>-->
         <script>
-            requirejs(['../../utils/TypeChecker', '../../utils/Settings', '../models/TypeOfRoomClient', '../models/RoomDimensionsClient.js', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', '../models/PositionClient','../models/GameObjectClient', '../models/RoomClient'], () => {
+            requirejs(['../../utils/TypeChecker', '../../utils/Settings', '../config/GameConfig', '../models/TypeOfRoomClient', '../models/RoomDimensionsClient.js', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', '../models/PositionClient','../models/GameObjectClient', '../models/RoomClient'], () => {
                 requirejs(['js/Views'], () => {
                     requirejs(['../utils/SpriteAnimation', '../utils/SpriteSheet'], () => {
                     requirejs(['js/MapView', 'js/GameObjectView', 'js/GameObjectViewFactory', 'js/AvatarView', 'js/LoadingView'], () => {

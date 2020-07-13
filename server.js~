@@ -1,11 +1,13 @@
 /* ############################################################################### */
-/* ####################### LOADING NON-VIMSU REQUIREMENTS ######################## */
+/* ############################ LOADING REQUIREMENTS ############################# */
 /* ############################################################################### */
 
 const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
+
+const ServerController = require(./game/app/server/controller/ServerController.js');
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */

@@ -46,7 +46,7 @@ module.exports = class Room {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
-            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y); // Sets the startPosition to (0,0).
+            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X(), Settings.STARTPOSITION_Y()); // Sets the startPosition to (0,0).
                                                               // This should prolly be a constant loaded from
                                                               // a settings file somewhere - (E)
             this.#startDirection = Direction.DOWNRIGHT; // See above

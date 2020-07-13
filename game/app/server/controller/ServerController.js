@@ -5,7 +5,7 @@
 const socketio = require('socket.io');
 
 const Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');gi
+const Direction = require('../models/Direction.js');
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -116,9 +116,9 @@ module.exports = class ServerController {
                 console.log("test4");
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
-                io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
                 // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
+                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 
                                                                         dir: d});
                 console.log("test5");
@@ -169,7 +169,7 @@ module.exports = class ServerController {
                     //Server resets client position to old Position (P)
                     var oldPos = ppants.get(ppantID).getPosition();
                     var oldDir = ppants.get(ppantID).getDirection();
-                    io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
+                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
                 }
             });
 

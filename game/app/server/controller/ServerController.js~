@@ -5,7 +5,7 @@
 const socketio = require('socket.io');
 
 const Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');gi
+const Direction = require('../models/Direction.js');
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -32,6 +32,14 @@ module.exports = class ServerController {
         var counter = 0;
         const ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
+        
+        // Create a foyer-room here
+        //TODO: Init other rooms for this conference
+        const foyerRoomId = 1; // placeholder ID
+        const foyerRoom = new Room(foyerRoomId, TypeOfRoom.FOYER); // Creates a foyer
+        
+        //RoomController not needed at this point (P)
+        //const gameRoomController = new RoomController(foyerRoom);
 
         /* This is the program logic handling new connections.
          * This may late be moved into the server or conference-controller?
@@ -74,10 +82,17 @@ module.exports = class ServerController {
                 // (i) to (iii)
                 var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
                 console.log("test1");
-                var x = 0; /* gameRoom.getStartPosition().getCordX(); */
-                var y = 0; /* gameRoom.getStartPosition().getCordY(); */
-                var d = Direction.DOWNRIGHT; /* gameRoom.getStartDirection(); */
-                var ppant = new Participant(ppantID, new Position( 1, x, y ), d); // the '1' should be the roomID
+                
+                //TODO: Needs to be adjusted when multiple rooms exist (P)
+                var startPosition = foyerRoom.getStartPosition();
+                var x = startPosition.getCordX();
+                var y = startPosition.getCordY();
+                var d = foyerRoom.getStartDirection();
+                var ppant = new Participant(ppantID, startPosition, d); 
+
+                //At this point kind of useless, maybe usefull when multiple rooms exist (P)
+                foyerRoom.enterParticipant(ppant);
+        
                 var ppantCont = new ParticipantController(ppant);
                 console.log("test2");
                 ppants.set(ppantID, ppant);
@@ -99,9 +114,15 @@ module.exports = class ServerController {
                 // Sends the newly generated ppantID back to the client so the game-states are consistent
                 this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
                 console.log("test4");
+                //Send room information of start room (P)
+                //TODO: When multiple rooms exist, get right room (P)
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
                 // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
+                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
+                                                                        cordY: y, 
+                                                                        dir: d});
                 console.log("test5");
+                
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID) {
                         var tempPos = value.getPosition();
@@ -135,12 +156,21 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
                 // TODO
-                // Update Position server-side
+                //When multiple Rooms exits, either the server has to get the right room or the client emits it in some way(P)
 
-                var newPos = new Position(1, newCordX, newCordY);
-                ppants.get(ppantID).setPosition(newPos);
-                ppants.get(ppantID).setDirection(direction);
-                socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction);
+                var newPos = new Position(foyerRoom.getRoomId(), newCordX, newCordY);
+                
+                //No Collision, so every other participant gets the new position (P)
+                if (!foyerRoom.checkForCollision(newPos)) {
+                    ppants.get(ppantID).setPosition(newPos);
+                    ppants.get(ppantID).setDirection(direction);
+                    socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                } else {
+                    //Server resets client position to old Position (P)
+                    var oldPos = ppants.get(ppantID).getPosition();
+                    var oldDir = ppants.get(ppantID).getDirection();
+                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
+                }
             });
 
             socket.on('requestMovementStop', ppantID => {
