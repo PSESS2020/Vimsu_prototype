@@ -135,62 +135,67 @@ app.post('/login', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
+    if (request.session.registerValid === true) {
+        username = request.session.username;
+        email = request.session.email;
+        response.render('register', {registerValid: true, username: username, email: email});
+    } else {
     response.render('register');
+    }
 });
 
 app.post('/register', (request, response) => {
-    var username = request.body.username;
-    var email = request.body.email;
+    if (request.session.registerValid === true) {
+        var username = request.session.username;
+        var title = request.body.title;
+        var surname = request.body.surname;
+        var forename = request.body.forename;
+        var job = request.body.job;
+        var company = request.body.company;
+        var email = request.session.email;
+        var password = request.body.password;
 
-    return AccountService.isUsernameValid(username).then(res => {
-        if(res) {
-            return AccountService.isEmailValid(email).then(res => {
-                if(res) {
-                    request.session.verified = true;
-                    request.session.username = username;
-                    request.session.email = email;
-                    response.redirect('/registerValid');
-                }
-                else {
-                    response.send('Email is already registered!');
-                }
-                response.end();
-            }).catch(err => {
-                console.error(err);
-            })
-        }
-        else {
-            response.send('Username is already taken!');
-        }
-        response.end();
-    }).catch(err => {
-        console.error(err);
-    })
-});
+        return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
+            request.session.accountId = res.getAccountID();
+            response.redirect('/');
+            response.end();
+        }).catch(err => {
+            response.send('Registration failed');
+            console.error(err);
+        })
+    } else {
+        var username = request.body.username;
+        var email = request.body.email;
 
-app.get('/registerValid', (request, response) => {
-	response.sendFile(path.join(__dirname, '/website/views/registerValid.html'));
+        return AccountService.isUsernameValid(username).then(res => {
+            if(res) {
+                return AccountService.isEmailValid(email).then(res => {
+                    if(res) {
+                        request.session.registerValid = true;
+                        request.session.username = username;
+                        request.session.email = email;
+                        response.redirect('/register');
+                    }
+                    else {
+                        response.send('Email is already registered!');
+                    }
+                    response.end();
+                }).catch(err => {
+                    console.error(err);
+                })
+            }
+            else {
+                response.send('Username is already taken!');
+            }
+            response.end();
+        }).catch(err => {
+            console.error(err);
+        })
+    }
 });
 
 app.post('/registerValid', (request, response) => {
-    var username = request.session.username;
-    var title = request.body.title;
-    var surname = request.body.surname;
-    var forename = request.body.forename;
-    var job = request.body.job;
-    var company = request.body.company;
-    var email = request.session.email;
-    var password = request.body.password;
-
-    return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
-        request.session.registered = true;
-        request.session.accountId = res.getAccountID();
-        response.redirect('/');
-        response.end();
-    }).catch(err => {
-        response.send('Registration failed');
-        console.error(err);
-    })
+    
 });
 
 app.get('/logout', (request, response) => {
