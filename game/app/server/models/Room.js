@@ -8,6 +8,7 @@ var RoomDimensions = require('./RoomDimensions.js');
 const Position = require('./Position.js');
 const Direction = require('./Direction.js');
 const Settings = require('../../utils/Settings.js');
+const Door = require('./Door.js');
 
 module.exports = class Room {
 
@@ -23,6 +24,7 @@ module.exports = class Room {
     //listOfDoors;
     #startPosition; // The position in which new participants are initialized - (E)
     #startDirection; // The direction in which new particpants are looking on initialization - (E)
+    #listOfDoors; //TODO: Get right doors from service
     
 
     /**
@@ -51,16 +53,36 @@ module.exports = class Room {
                                                               // a settings file somewhere - (E)
             this.#startDirection = Direction.DOWNRIGHT; // See above
 
-            //Initialisiert width*length Feld gefüllt mit 0
-            this.#occupationMap = new Array(this.#width);
-            for (var i = 0; i < this.#width; i++) {
-                this.#occupationMap[i] = new Array(this.#length).fill(0);
-            }
-            
-            //Alle GameObjekte die in diesen Raum gehören von Service holem
-            let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
-            this.#listOfGameObjects = objService.getObjects(this.#roomId, typeOfRoom);
+        } else if (typeOfRoom === "FOODCOURT") {
+
+            this.#length = RoomDimensions.FOODCOURT_LENGTH;
+            this.#width = RoomDimensions.FOODCOURT_WIDTH;
+
+            //TODO: start position and direction should be room dependent
+           
+            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
+            this.#startDirection = Direction.DOWNRIGHT;
+        
+        } else if (typeOfRoom === "RECEPTION") {
+
+            this.#length = RoomDimensions.RECEPTION_LENGTH;
+            this.#width = RoomDimensions.RECEPTION_WIDTH;
+
+            //TODO: start position and direction should be room dependent
+        
+            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
+            this.#startDirection = Direction.DOWNRIGHT;
+
         }
+        //Initialisiert width*length Feld gefüllt mit 0
+        this.#occupationMap = new Array(this.#width);
+        for (var i = 0; i < this.#width; i++) {
+            this.#occupationMap[i] = new Array(this.#length).fill(0);
+        }
+        
+        //Alle GameObjekte die in diesen Raum gehören von Service holem
+        let objService = new GameObjectService();
+        this.#listOfGameObjects = objService.getObjects(this.#roomId, typeOfRoom);
 
         this.#buildOccMap();
     }
