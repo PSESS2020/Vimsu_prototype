@@ -23,8 +23,7 @@ module.exports = class ServerController {
     #listOfConfCont
     
     constructor(socket) {
-        this.#io = socket;
-        
+        this.#io = socket;        
     }
     
     init() {

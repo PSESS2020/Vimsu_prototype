@@ -9,11 +9,6 @@ body {
   background-color: black;
 }
 
-canvas {
-  width: 1280px;
-  height: 640px;
-}
-
 #overlay{
   position: fixed;
   width: 100%;
@@ -22,6 +17,7 @@ canvas {
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
   background-color: black;
   z-index: 3;
   transition: 1s 0.4s;
@@ -44,4 +40,32 @@ canvas {
   width: 100%;
   text-align: center;
   color: white;
+}
+#mapCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+pointer-events: none;
+z-index: 0;
+}
+
+#avatarCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+z-index: 1;
+}
+
+#uiCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+pointer-events: none;
+left: 0;
+z-index: 2;
 }

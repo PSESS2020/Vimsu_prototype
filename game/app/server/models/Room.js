@@ -7,10 +7,12 @@ var GameObjectService = require('../services/GameObjectService.js');
 var RoomDimensions = require('./RoomDimensions.js');
 const Position = require('./Position.js');
 const Direction = require('./Direction.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class Room {
 
     #roomId;
+    #typeOfRoom;
     //roomChat
     #length;
     #width;
@@ -36,6 +38,7 @@ module.exports = class Room {
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         this.#roomId = roomId;
+        this.#typeOfRoom = typeOfRoom;
         this.#listOfPPants = [];
 
         //andere Fälle später
@@ -43,7 +46,7 @@ module.exports = class Room {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
-            this.#startPosition = new Position(roomId, 0, 0); // Sets the startPosition to (1,1).
+            this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y); // Sets the startPosition to (0,0).
                                                               // This should prolly be a constant loaded from
                                                               // a settings file somewhere - (E)
             this.#startDirection = Direction.DOWNRIGHT; // See above
@@ -54,12 +57,9 @@ module.exports = class Room {
                 this.#occupationMap[i] = new Array(this.#length).fill(0);
             }
             
-            //Alle GameObjekte die in diesen Raum gehören von Service holen
-            
-            
-
+            //Alle GameObjekte die in diesen Raum gehören von Service holem
             let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
-            this.#listOfGameObjects = objService.getObjects(this.#roomId);
+            this.#listOfGameObjects = objService.getObjects(this.#roomId, typeOfRoom);
         }
 
         this.#buildOccMap();
@@ -67,6 +67,10 @@ module.exports = class Room {
 
     getRoomId() {
         return this.#roomId;
+    }
+
+    getTypeOfRoom() {
+        return this.#typeOfRoom;
     }
 
     /*
@@ -135,7 +139,6 @@ module.exports = class Room {
         //TODO: Entfernen aus Allchat
     }
 
-    //Not needed at this points
     /**
      * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
      * 
@@ -146,20 +149,28 @@ module.exports = class Room {
      * @returns false, sonst
      */
 
-     /*
+     
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
         let cordY = position.getCordY();
 
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        if(position.getRoomId() != this.#roomId) {
+            throw new Error('Wrong room id!');
+        }
+
+        //WALLS
+        if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
+            return true;
+        }
+
+        if (this.#occupationMap[cordX][cordY]  == 1) {
             return true;
         }
         else {
             return false;
         }
     }
-    */
 
    #buildOccMap = function() {
         //Geht jedes Objekt in der Objektliste durch

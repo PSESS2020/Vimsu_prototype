@@ -10,6 +10,14 @@ class Settings {
 
     // Add Room Dimensions and Start Positions
     
+    static STARTPOSITION_X() {
+        return 0;
+    }
+    
+    static STARTPOSITION_Y() {
+        return 0;
+    }
+    
 
 }
 
