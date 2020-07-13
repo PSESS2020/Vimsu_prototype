@@ -23,16 +23,16 @@ module.exports = class Participant {
      * @param {Position} position 
      * @param {Direction} direction 
      */
-    constructor(id, position, direction, accountId, businessCard)
+    constructor(id, position, direction)
     {
         TypeChecker.isString(id);
-        TypeChecker.isString(accountId);
-        TypeChecker.isInstanceOf(businessCard, BusinessCard);
+        //TypeChecker.isString(accountId);
+        //TypeChecker.isInstanceOf(businessCard, BusinessCard);
         //TypeChecker.isInstanceOf(participantController, ParticipantController);
 
         this.#id = id;
-        this.#accountId = accountId;
-        this.#businessCard = businessCard;
+        //this.#accountId = accountId;
+        //this.#businessCard = businessCard;
         //this.#participantController = participantController;
 
         if (!position || !direction)
