@@ -12,7 +12,7 @@
         <script src="../libraries/require.js"></script>
         <!--<script> const socket = io('http://localhost:5000'); </script>-->
         <script>
-            requirejs(['../utils/TypeChecker', '../models/TypeOfRoomClient', '../models/RoomDimensionsClient.js', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', 
+            requirejs(['../../utils/TypeChecker', '../../utils/Settings', '../models/TypeOfRoomClient', '../models/RoomDimensionsClient.js', '../models/GameObjectTypeClient', '../models/DirectionClient', '../models/ParticipantClient', 
                         '../models/PositionClient','../models/GameObjectClient', '../models/RoomClient'], () => {
                 requirejs(['js/Views'], () => {
                     requirejs(['../utils/SpriteAnimation', '../utils/SpriteSheet'], () => {

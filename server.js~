@@ -55,7 +55,8 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = socketio(httpServer);
 
-
+/* This is a placeholder to generate new ppantIDs - (E) */
+var counter = 0;
 
 /* Sets the port-Field of the express-Instance to the proper port.
  * Why?

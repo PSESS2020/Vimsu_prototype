@@ -8,8 +8,7 @@ class Settings {
         return 1;
     }
 
-    // Add Room Dimensions and Start Positions
-    
+
 
 }
 

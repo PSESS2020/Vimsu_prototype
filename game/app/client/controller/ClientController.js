@@ -33,10 +33,7 @@
 
 
 
-/* For quicker changing of the movement-rate. 
- * - (E) */
-const movementX = 1,
-      movementY = 1;
+//const Settings = require('../../utils/Settings')
 
 class ClientController {
 
@@ -373,7 +370,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -386,7 +383,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -399,7 +396,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X(), currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -412,7 +409,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X(), currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);

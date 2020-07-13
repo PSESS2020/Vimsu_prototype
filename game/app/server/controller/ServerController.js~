@@ -97,10 +97,10 @@ module.exports = class ServerController {
                  * Where as the second one will probably be called more often
                  * - (E) */ 
                 // Sends the newly generated ppantID back to the client so the game-states are consistent
-                this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
+                io.to(socket.id).emit('currentGameStateYourID', ppantID);
                 console.log("test4");
                 // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
+                io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
                 console.log("test5");
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID) {
@@ -108,7 +108,7 @@ module.exports = class ServerController {
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = value.getDirection();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir });
+                        io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir });
                         console.log("Participant " + key + " is being initialized at the view of participant " + ppantID);
                     }   
                 });
