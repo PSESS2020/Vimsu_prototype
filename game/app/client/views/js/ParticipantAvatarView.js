@@ -6,6 +6,7 @@ module.exports = */
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
+    #name;
     #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', 64, 128);
     #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
     #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
@@ -48,6 +49,10 @@ class ParticipantAvatarView extends AvatarView {
     //Is called after server sends participantId
     setId(participantId) {
         this.#participantId = participantId;
+    }
+
+    setNickname(nickname) {
+        this.#name = name
     }
 
     update() {
@@ -103,7 +108,7 @@ class ParticipantAvatarView extends AvatarView {
         ctx_avatar.font = "1em Verdana";
         ctx_avatar.fillStyle = "black";
         ctx_avatar.textAlign = "left";
-        ctx_avatar.fillText("Player1", screenX, screenY);
+        ctx_avatar.fillText(name, screenX, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
