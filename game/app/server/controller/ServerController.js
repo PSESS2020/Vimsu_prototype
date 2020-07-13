@@ -1,11 +1,11 @@
 /* ############################################################################### */
-/* ######################## LOADING VIMSU REQUIREMENTS ########################### */
+/* ########################### LOADING REQUIREMENTS ############################## */
 /* ############################################################################### */
 
 const socketio = require('socket.io');
 
 const Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');
+const Direction = require('../models/Direction.js');gi
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -23,7 +23,7 @@ module.exports = class ServerController {
     #listOfConfCont
     
     constructor(socket) {
-        this.#io = socket;
+        this.#io = socket;        
     }
     
     init() {
