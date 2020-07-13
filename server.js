@@ -37,10 +37,8 @@ const ParticipantController = require('./game/app/server/controller/ParticipantC
 const Room  = require('./game/app/server/models/Room.js');
 const RoomController = require('./game/app/server/controller/RoomController.js');
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
-const { response } = require('express');
 
 const AccountService = require('./website/services/AccountService');
-const TypeChecker = require=('./game/app/client/utils/TypeChecker.js');
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */
@@ -192,10 +190,6 @@ app.post('/register', (request, response) => {
             console.error(err);
         })
     }
-});
-
-app.post('/registerValid', (request, response) => {
-    
 });
 
 app.get('/logout', (request, response) => {
