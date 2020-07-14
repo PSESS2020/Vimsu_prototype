@@ -16,9 +16,7 @@ this.ctx_ui.canvas.height = GAME_HEIGHT;
 
 //let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
-/* The participantID should not be one (as we want to make sure it is congruent with the
- * server).
- * - (E) */
+
 let clientController = new ClientController();
 clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
