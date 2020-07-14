@@ -103,7 +103,7 @@ app.get('/', (request, response) => {
 
 app.get('/upload', (request, response) => {
     if (request.session.loggedin === true) {
-        response.render('upload');
+        response.render('upload', {loggedIn: true});
     } else {
         response.send('Please log in first!');
     }
