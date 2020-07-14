@@ -46,6 +46,13 @@
                         </p>
                         </div>
                     </a>
+                    <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/logout">
+                        <div class="octicons octicon octicon-sign-out">
+                            <p id="octicon_text">
+                        Log out	
+                        </p>
+                        </div>
+                    </a>
                 <% } else { %> 
                     <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/login">
                         <div class="octicons octicon octicon-sign-in">
@@ -63,18 +70,6 @@
                     </div>
                 </a>
                 <% } %>
-                <% if (locals.loggedIn === true && locals.uploaded !== true) { %>
-                    <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/logout">
-                        <div class="octicons octicon octicon-sign-out">
-                            <p id="octicon_text">
-                        Log out	
-                        </p>
-                        </div>
-                    </a>
-                    <% } else { %> 
-                   
-                <% } %>
-
                 <% if (locals.loggedIn === true) { %>
                     <div class="col p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand">
                         
@@ -85,8 +80,6 @@
                  <% } else { %> 
                    
                  <% } %>
-
-                 
             </div>
         </div>
                 
