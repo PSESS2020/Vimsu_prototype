@@ -140,7 +140,7 @@ module.exports = class db {
                 console.error(error);
                 reject();
             });
-            FileSystem.deleteFile(dir + fileName);
+            //FileSystem.deleteFile(dir + fileName);
         });
     }
 
