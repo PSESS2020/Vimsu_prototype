@@ -1,3 +1,4 @@
+/*
 class Settings {
 
     static MOVEMENTSPEED_X() {
@@ -10,7 +11,25 @@ class Settings {
 
     // Add Room Dimensions and Start Positions
     
+    static STARTPOSITION_X() {
+        return 0;
+    }
+    
+    static STARTPOSITION_Y() {
+        return 0;
+    }
+    
 
 }
+*/
+
+const Settings = Object.freeze({
+
+    MOVEMENTSPEED_X: 1,
+    MOVEMENTSPEED_Y: 1,
+    STARTPOSITION_X: 1,
+    STARTPOSITION_Y: 1
+    
+});
 
 module.exports = Settings

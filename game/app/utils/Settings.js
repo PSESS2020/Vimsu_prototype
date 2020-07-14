@@ -1,24 +1,13 @@
-class Settings {
+const Settings = {
 
-    static MOVEMENTSPEED_X() {
-        return 1;
-    }
-
-    static MOVEMENTSPEED_Y() {
-        return 1;
-    }
-
-    // Add Room Dimensions and Start Positions
+    // Movement-Speed Settings
+    MOVEMENTSPEED_X: 1,
+    MOVEMENTSPEED_Y: 1,
     
-    static STARTPOSITION_X() {
-        return 0;
-    }
+    // Position-Settings
+    STARTPOSITION_X: 1,
+    STARTPOSITION_Y: 1
     
-    static STARTPOSITION_Y() {
-        return 0;
-    }
-    
-
-}
+};
 
 module.exports = Settings

@@ -60,19 +60,30 @@ class ClientController {
      */
 
 
-    constructor(gameView/*, participantId*/) { //TODO: instanciate ParticipantClient
+    constructor(/*, participantId*/) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
-        this.#gameView = gameView;
+        this.#gameView = new GameView(GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
         console.log("fully init cc");
         return this;
+    }
+    
+    constructor() {
+        if (!!ClientController.instance) {
+            return ClientController.instance;
+        }
+
+        ClientController.instance = this;
+        
+        this.
+    
     }
 
 
@@ -152,7 +163,15 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
     }
+
+    /* #################################################### */    
+    /* #################### EDIT VIEW ##################### */
+    /* #################################################### */
     
+    updateGame() {
+        this.#gameView.update()
+        this.#gameView.draw();
+    }
 
     /* #################################################### */    
     /* ################## SEND TO SERVER ################## */
@@ -348,7 +367,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y());
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -361,7 +380,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y());
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -374,7 +393,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X(), currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -387,7 +406,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X(), currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);

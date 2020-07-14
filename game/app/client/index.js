@@ -14,7 +14,7 @@ this.ctx_avatar.canvas.height = GAME_HEIGHT;
 this.ctx_ui.canvas.width = GAME_WIDTH;
 this.ctx_ui.canvas.height = GAME_HEIGHT;
 
-let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+//let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
 /* The participantID should not be one (as we want to make sure it is congruent with the
  * server).
@@ -32,8 +32,9 @@ setInterval( function() {
 
   ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  gameView.update();
-  gameView.draw();  
+  ClientController.updateGame();
+  //gameView.update();
+  //gameView.draw();  
 }, GameConfig.TIME_DELTA);
 
 document.onkeydown = function(event) {
