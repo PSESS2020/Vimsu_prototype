@@ -21,19 +21,9 @@ const socketio = require('socket.io');
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
 
-const Position = require('./game/app/server/models/Position.js');
-const Direction = require('./game/app/server/models/Direction.js');
-
-
-const Participant = require('./game/app/server/models/Participant.js');
-const ParticipantController = require('./game/app/server/controller/ParticipantController.js');
-
-const Room  = require('./game/app/server/models/Room.js');
-const RoomController = require('./game/app/server/controller/RoomController.js');
-const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
-
+const ServerController = require('./game/app/server/controller/ServerController.js');
 const AccountService = require('./website/services/AccountService');
-const { response } = require('express');
+const { response } = require('express')
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */

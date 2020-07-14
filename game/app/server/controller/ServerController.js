@@ -80,7 +80,7 @@ module.exports = class ServerController {
                  * - (E) */ 
 
                 // (i) to (iii)
-                var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
+                var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
                 console.log("test1");
                 
                 //TODO: Needs to be adjusted when multiple rooms exist (P)

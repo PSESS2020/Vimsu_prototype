@@ -355,7 +355,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y());
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -368,7 +368,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y());
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -381,7 +381,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X(), currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -394,7 +394,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X(), currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
