@@ -220,7 +220,12 @@ app.post('/register', (request, response) => {
 
 app.post('/registerValid', (request, response) => {
         var username = request.session.username;
-        var title = request.body.title;
+        if(request.body.title === "Title") {
+            var title = "";
+        }
+        else {
+            var title = request.body.title;
+        }
         var surname = request.body.surname;
         var forename = request.body.forename;
         var job = request.body.job;
