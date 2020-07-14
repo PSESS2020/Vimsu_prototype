@@ -6,11 +6,10 @@
     <body>
         <%- include('partials/header') %>
 
-        <% if (locals.uploaded === true) { %>
             <div class="container" id="uploaded">
                 <h2 style="text-align: center; margin-top: 30px;">Create Lecture</h2>
                 
-        <form action="uploaded" method="POST" style="max-width: 600px; margin: 0 auto"> 
+        <form action="upload" method="POST" enctype="multipart/form-data" style="max-width: 600px; margin: 0 auto"> 
             <hr/>
                         <div class="form-group">
                             <input type="text" class="form-control" id="titleInput" name="title" placeholder="Title" required>
@@ -25,32 +24,18 @@
                         <div class="form-group">
                             <input type="text" class="form-control" id="remarksInput" name="remarks" placeholder="Remarks">
                         </div>
-
+                        <div class="box__input">
+                            <label for="video">Video:</label>
+                            <input type="file" name="video" id="file" accept="video/mp4"/>
+                          </div>
+                          <label style="margin-top: 0px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 500 MB</label>
                         <hr/>
-                        <input class="btn btn-block btn-submit" type="submit" value="Create Lecture"></button>
+                        <input class="btn btn-block btn-submit" type="submit" value="Create lecture and upload video" style="margin-bottom: 30px; "></button>
                         
                     </form>
                    
                 </div>
             </div>
         </div>
-
-
-        <% } else { %>     
-    <div class="container" id="upload">
-        <h2 style="text-align: center; margin-top: 30px;">Upload a Video</h2>
-                <form class="box" method="POST" action="upload" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto">
-                    <hr/>
-                    <div class="box__input">
-                        <input type="file" name="video" id="file" accept="video/mp4"/>
-                      </div>
-                      <label style="margin-top: 10px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 500 MB</label>
-                      <hr/>
-                    <input class="btn btn-block btn-submit" type="submit" value="Upload"></button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <% } %>
     </body>
 </html>
