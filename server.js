@@ -134,46 +134,47 @@ app.post('/login', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
-    response.render('register');
+    if (request.session.registerValid === true) {
+        var username = request.session.username;
+        var email = request.session.email;
+        response.render('register', {registerValid: true, username: username, email: email});
+    }
+    else {
+        response.render('register', {registerValid: false});
+    }
 });
 
 app.post('/register', (request, response) => {
-        var username = request.body.username;
-        var email = request.body.email;
+    var username = request.body.username;
+    var email = request.body.email;
 
-        return AccountService.isUsernameValid(username).then(res => {
-            if(res) {
-                return AccountService.isEmailValid(email).then(res => {
-                    if(res) {
-                        request.session.registerValid = true;
-                        request.session.username = username;
-                        request.session.email = email;
-                        response.redirect('/registerValid');
-                    }
-                    else {
-                        //TODO: return error message
-                        response.send('Email is already registered!');
-                    }
-                    response.end();
-                }).catch(err => {
-                    console.error(err);
-                })
-            }
-            else {
-                //TODO: return error message
-                response.send('Username is already taken!');
-            }
-            response.end();
-        }).catch(err => {
-            console.error(err);
-        })
+    return AccountService.isUsernameValid(username).then(res => {
+        if(res) {
+            return AccountService.isEmailValid(email).then(res => {
+                if(res) {
+                    request.session.registerValid = true;
+                    request.session.username = username;
+                    request.session.email = email;
+                    response.redirect('/register');
+                }
+                else {
+                    //TODO: return error message
+                    response.send('Email is already registered!');
+                }
+                response.end();
+            }).catch(err => {
+                console.error(err);
+            })
+        }
+        else {
+            //TODO: return error message
+            response.send('Username is already taken!');
+        }
+        response.end();
+    }).catch(err => {
+        console.error(err);
+    })
 });
-
-app.get('/registerValid', (request, response) => {
-    var username = request.session.username;
-    var email = request.session.email;
-    response.render('registerValid', {username: username, email: email});
-})
 
 app.post('/registerValid', (request, response) => {
         var username = request.session.username;
@@ -193,6 +194,12 @@ app.post('/registerValid', (request, response) => {
             response.send('Registration failed');
             console.error(err);
         })
+})
+
+app.post('/editRegistration', (request, response) => {
+    request.session.registerValid = false;
+    response.redirect('/register');
+    response.end();
 })
 
 app.get('/logout', (request, response) => {
