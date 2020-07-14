@@ -40,6 +40,21 @@ module.exports = class DoorService {
         return this.#doors[index];
     }
 
+    getDoorByRoom(startingRoomId, targetRoomId) {
+        TypeChecker.isInt(startingRoomId);
+        TypeChecker.isInt(targetRoomId);
+
+        let index = this.#doors.findIndex(door => door.getStartingRoomId() === startingRoomId 
+                                                && door.getTargetRoomId() === targetRoomId);
+
+        if (index < 0) 
+        {
+            throw new Error(doorId + " is not in list of doors");
+        }
+
+        return this.#doors[index];
+    }
+
     initAllDoors() {
         //Door from Foyer to Food Court (TODO: Adjust target position)
         this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 25, 2), new Position(FOODCOURT_ID, 0, 0)));
