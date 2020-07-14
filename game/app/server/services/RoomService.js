@@ -10,8 +10,9 @@ module.exports = class RoomService {
             return RoomService.instance;
         }
 
-        RoomService.instance = this;
         this.#rooms = [];
+        this.initAllRooms();
+        RoomService.instance = this;
     }
 
     getAllRooms() {
@@ -33,5 +34,7 @@ module.exports = class RoomService {
 
     initAllRooms() {
         this.#rooms.push(new Room(1, TypeOfRoom.FOYER));
+        this.#rooms.push(new Room(2, TypeOfRoom.FOODCOURT));
+        this.#rooms.push(new Room(3, TypeOfRoom.RECEPTION));
     }
 } 
