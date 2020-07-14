@@ -3,6 +3,7 @@
 /* ############################################################################### */
 
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const expressSession = require('express-session');
 const bodyParser = require('body-parser');
 
@@ -39,6 +40,7 @@ const RoomController = require('./game/app/server/controller/RoomController.js')
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 
 const AccountService = require('./website/services/AccountService');
+const SlotService = require('./website/services/SlotService')
 const { response } = require('express');
 
 /* ############################################################################### */
@@ -85,6 +87,7 @@ app.use(expressSession({
 
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 /* On receiving a get-Request, the express-Server will deliver the
  * index.html file to the user.
@@ -96,6 +99,41 @@ app.get('/', (request, response) => {
     } else {
     response.render('index');
     }
+});
+
+app.get('/upload', (request, response) => {
+    if (request.session.loggedin === true) {
+        response.render('upload');
+    } else {
+        response.send('Please log in first!');
+    }
+});
+
+app.post('/upload', (request, response) => {
+    if (!request.files || Object.keys(request.files).length === 0) {
+        return response.send('No files were uploaded.');
+    }
+
+    var video = request.files.video
+    console.log(video)
+    var videoName = video.name;
+    var videoSize = video.size;
+
+    if(videoName.includes(".mp4")) {
+        if(videoSize > 524288000)
+            return response.send('File size exceeded 500 MB')
+        else {
+            return SlotService.storeVideo(video).then(videoId => {
+                request.session.videoId = videoId;
+                response.redirect('/');
+            }).catch(err => {
+                console.error(err);
+            })
+        }
+    } else {
+        response.send('File type is not supported!');
+    }
+    response.end();
 });
 
 app.get('/login', (request, response) => {

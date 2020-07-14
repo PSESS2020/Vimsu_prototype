@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%- include('partials/head') %>        
+    </head>
+    <body>
+        <%- include('partials/header') %>
+    <div class="container" id="upload">
+        <h2 style="text-align: center; margin-top: 30px;">Upload a Video</h2>
+                <form class="box" method="POST" action="upload" enctype="multipart/form-data" style="max-width: 300px; margin: 0 auto">
+                    <hr/>
+                    <div class="box__input">
+                        <input type="file" name="video" id="file" accept="video/mp4"/>
+                      </div>
+                      <label style="margin-top: 10px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 500 MB</label>
+                      <hr/>
+                    <input class="btn btn-block btn-submit" type="submit" value="Upload"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
