@@ -11,7 +11,7 @@
  * Stuff that will be altered in the following steps:
  *
  *   (i) Every constant will be moved into a shared /utils/Settings.js file (name
- *       not final).
+ *       not final). DONE
  *
  *  (ii) This class will set up the game in the final product. The idea here being
  *       that the index.js will call a method setUpGame() from this class.
@@ -74,18 +74,6 @@ class ClientController {
         console.log("fully init cc");
         return this;
     }
-    
-    constructor() {
-        if (!!ClientController.instance) {
-            return ClientController.instance;
-        }
-
-        ClientController.instance = this;
-        
-        this.
-    
-    }
-
 
     getPort() {
         return this.#port;
