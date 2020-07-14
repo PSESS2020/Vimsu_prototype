@@ -308,9 +308,23 @@ class ClientController {
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
 
-    handleFromViewEnterDoor(doorId) {
+    handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterDoor', doorId);
+        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        //update currentRoom;
+        //update View
+    }
+
+    handleFromViewEnterFoodCourt() {
+        this.socketReady;
+        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        //update currentRoom;
+        //update View
+    }
+
+    handleFromViewEnterFoyer() {
+        this.socketReady;
+        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
     }

@@ -136,7 +136,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
     }
 
-    //Is called when participant enters FoodCourt
+    //Is called when participant enters Reception
     initReceptionView(map) {
         this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
     }
