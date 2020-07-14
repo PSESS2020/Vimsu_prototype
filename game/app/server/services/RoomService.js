@@ -1,6 +1,7 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var TypeOfRoom = require('../models/TypeOfRoom.js');
 var Room = require('../models/Room.js');
+var Settings = require('../../utils/Settings.js');
 
 module.exports = class RoomService {
     #rooms;
@@ -33,8 +34,8 @@ module.exports = class RoomService {
     }
 
     initAllRooms() {
-        this.#rooms.push(new Room(1, TypeOfRoom.FOYER));
-        this.#rooms.push(new Room(2, TypeOfRoom.FOODCOURT));
-        this.#rooms.push(new Room(3, TypeOfRoom.RECEPTION));
+        this.#rooms.push(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER));
+        this.#rooms.push(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT));
+        this.#rooms.push(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION));
     }
 } 
