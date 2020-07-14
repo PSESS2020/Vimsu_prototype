@@ -4,13 +4,16 @@ var AvatarView = require('./AvatarView.js')
 var TypeChecker = require('../../../utils/TypeChecker.js')
 const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
+
 /*module.exports =*/ class GameView {
 
     #gameWidth;
     #gameHeight;
-    #roomId;
+    //#roomId;
     #updateList = [];
     #foyerView;
+    #foodCourtView;
+    #receptionView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
     #gameViewInit;
@@ -21,7 +24,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
-        this.#roomId = 1;
+        //this.#roomId = 1;
         //this.initOwnAvatarView(" ");
 
         //bool to check, if game view is already initialized. If not, draw is not possible
@@ -38,6 +41,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     getAnotherParticipantAvatarViews() {
         return this.#anotherParticipantAvatarViews;
+    }
+
+    setGameViewInit(bool) {
+        TypeChecker.isBoolean(bool);
+        this.#gameViewInit = bool;
     }
 
     addToUpdateList(viewInstance)
@@ -113,6 +121,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         
     }
 
+    //Is called when participant enters Foyer
     initFoyerView(map) {
         this.#foyerView = new FoyerView(map);
         
@@ -120,6 +129,16 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //the map tile array is therefore empty.
         //this.#foyerView.draw();
 
+    }
+
+    //Is called when participant enters FoodCourt
+    initFoodCourtView(map) {
+        this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
+    }
+
+    //Is called when participant enters FoodCourt
+    initReceptionView(map) {
+        this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
     }
 
     /**
@@ -254,11 +273,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
     }
 
+    /*
     setRoomId(roomId)
     {
         TypeChecker.isInt(roomId);
         this.#roomId = roomId;
     }
+    */
 
     //inits ownAvatarView with information from ownParticipant model instance
     initOwnAvatarView(ownParticipant)
@@ -272,8 +293,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id); 
         this.addToUpdateList(this.#ownAvatarView);
 
-        //Game View is now fully initialized
-        this.#gameViewInit = true;
+        //Game View is now fully initialized (Is now set by ClientController in initGameView())
+        //this.#gameViewInit = true;
     }
 
     updateOwnAvatarPosition(newPosition)

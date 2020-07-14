@@ -118,10 +118,17 @@ class ClientController {
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
+            this.#gameView.initFoodCourtView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
+            this.#gameView.initReceptionView(map);
         }
         
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
+
+        //Game View is now fully initialised
+        this.#gameView.setGameViewInit(true);
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
