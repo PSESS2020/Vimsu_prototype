@@ -11,6 +11,7 @@ const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
 
 const Room  = require('../models/Room.js');
+const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../models/TypeOfRoom.js');
 
@@ -19,8 +20,11 @@ const TypeChecker = require=('../../utils/TypeChecker.js');
 /* This should later on be turned into a singleton */
 module.exports = class ServerController {
     
-    #io
-    #listOfConfCont
+    #io;
+    #listOfConfCont;
+
+    //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
+    #rooms;
     
     constructor(socket) {
         this.#io = socket;        
@@ -33,11 +37,14 @@ module.exports = class ServerController {
         const ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
         
-        // Create a foyer-room here
-        //TODO: Init other rooms for this conference
-        const foyerRoomId = 1; // placeholder ID
-        const foyerRoom = new Room(foyerRoomId, TypeOfRoom.FOYER); // Creates a foyer
-        
+        //Init all rooms
+        var roomService = new RoomService();
+        this.#rooms = roomService.getAllRooms();
+
+        var foyerRoom = this.#rooms[0];
+        var foodCourtRoom = this.#rooms[1];
+        var receptionRoom = this.#rooms[2];
+
         //RoomController not needed at this point (P)
         //const gameRoomController = new RoomController(foyerRoom);
 
@@ -80,10 +87,14 @@ module.exports = class ServerController {
                  * - (E) */ 
 
                 // (i) to (iii)
-                var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
+                var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
                 console.log("test1");
                 
                 //TODO: Needs to be adjusted when multiple rooms exist (P)
+                //currently every participant spawns in foyer at the start position
+                //Future Goal: Spawn returning participants at position, where he disconnected
+                //Spawn new participants at reception start position
+
                 var startPosition = foyerRoom.getStartPosition();
                 var x = startPosition.getCordX();
                 var y = startPosition.getCordY();
@@ -116,7 +127,26 @@ module.exports = class ServerController {
                 console.log("test4");
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
+
+                let gameObjects = foyerRoom.getListOfGameObjects();
+                let gameObjectData = [];
+
+                //needed to send all gameObjects of starting room to client
+                //would be nicer and easier if they both share GameObject.js
+                gameObjects.forEach(gameObject => {
+                    gameObjectData.push({ id: gameObject.getId(),
+                      name: gameObject.getName(),
+                      width: gameObject.getWidth(),
+                      length: gameObject.getLength(),
+                      cordX: gameObject.getPosition().getCordX(),
+                      cordY: gameObject.getPosition().getCordY(),
+                      isSolid: gameObject.getSolid()
+                    });
+                })
+
+                //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom(), 
+                                            gameObjectData);
                 // Sends the start-position back to the client so the avatar can be displayed in the right cell
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 

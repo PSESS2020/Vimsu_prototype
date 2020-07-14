@@ -3,13 +3,17 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 
 
 module.exports = */
+
+const AVATAR_WIDTH = 64;
+const AVATAR_HEIGHT = 128;
+
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheetBody.png', 64, 128);
-    #topClothing = new SpriteSheet('../assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
-    #bottomClothing = new SpriteSheet('../assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
-    #shoes = new SpriteSheet('../assets/ShoesBlackSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #shoes = new SpriteSheet('client/assets/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
@@ -18,12 +22,12 @@ class ParticipantAvatarView extends AvatarView {
     #standingUpRightAnimation;
     #standingDownLeftAnimation;
     #standingDownRightAnimation;
-    #currentAnimation
+    #currentAnimation;
     #walking = false;
 
     constructor(position, direction, participantId) {
         super(position, direction);
-        TypeChecker.isInt(participantId);
+        TypeChecker.isString(participantId);
         this.#participantId = participantId;
         console.log(this.#participantId);
         this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 1, 4);
@@ -100,10 +104,15 @@ class ParticipantAvatarView extends AvatarView {
         let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
         let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
 
-        ctx_avatar.font = "1em Verdana";
+        let playerName = "player1";
+        ctx_avatar.font = "1em sans-serif";
+        ctx_avatar.textBaseline = 'top';
+        ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx_avatar.textAlign = "center";
+        ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+
         ctx_avatar.fillStyle = "black";
-        ctx_avatar.textAlign = "left";
-        ctx_avatar.fillText("Player1", screenX, screenY);
+        ctx_avatar.fillText(playerName, screenX + AVATAR_WIDTH/2, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }

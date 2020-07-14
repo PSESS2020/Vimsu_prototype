@@ -7,7 +7,7 @@ margin: 0;
   body{
     margin: 0;
     font-size: 16px;
-    font-family: 'Nunito' !important;
+    font-family: sans-serif;
     height: 100vh;
     perspective: 1px;
     transform-style: preserve-3d;
@@ -26,6 +26,23 @@ margin: 0;
     border-color: #e5d80e !important;
     color: black !important;
   }
+
+  .btn-submit {
+    background-color: #028090;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #028090;
+}
+
+  .btn-submit:hover {
+    background-color: white;
+    border: 2px solid #028090;
+    color: #028090;
+}
+
   .navbrand {
     display: table-cell;
     text-align: center;
@@ -74,14 +91,16 @@ margin: 0;
   max-width: 100%;
 }
 .octicons {
-  font: normal normal 24px octicons;
+  font: normal normal 20px octicons;
   text-align: left;
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   color: #e5e5e5;
   line-height: 30px;
 }
+
 #octicon_text {
+  font: normal normal 20px sans-serif;
   display: inline-block;
   vertical-align: -0.15em;
 }
@@ -91,6 +110,15 @@ margin: 0;
 .p-2:hover .octicons {
   color: #e5d80e !important;
 }
+
+.profileIcon {
+  vertical-align: center;
+}
+
+.iconProfile {
+  color: #434343;
+}
+
 .nav-item {
   padding-left: 0 !important;
   padding-right: 5rem !important;
@@ -128,7 +156,7 @@ margin: 0;
 .site-name-child {
   width: 100%;
   height: 100%;
-  background-image: url("assets/Logo_Vimsu.png");
+  background-image: url("../assets/Logo_Vimsu.png");
   background-position: center;
   -webkit-font-smoothing: antialiased;
   background-repeat: no-repeat;

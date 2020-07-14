@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<%- include('partials/head') %>        
+    </head>
+    <body>
+        <%- include('partials/header') %>
+
+        <% if (locals.registerValid === true) { %>
+                    <div class="container" id="registerValid">
+                        <div class="row mt-5">
+                        <div class="col-md-8 offset-md-2 align-self-center">
+                    <form action="editRegistration" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="staticUsername" class="col-form-label">Username</label>
+                                <!-- TODO: placeholder should be the value entered in /register-->
+                                <input class="form-control" type="text" placeholder="<%=username%>" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="staticEmail" class="col-form-label">Email</label>
+                                <!-- TODO: placeholder should be the value entered in /register-->
+                                <input class="form-control" type="text" placeholder="<%=email%>" readonly>
+                            </div>
+                        </div>    
+                        <input class="btn btn-block btn-submit" type="submit" value="Edit Registration"></button>
+                    </form>
+                        <hr/>
+                    <form action="registerValid" method="POST">
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <select class="form-control" id="title" name="title" required>
+                                    <option selected>Title</option>
+                                    <option>Mr.</option>
+                                    <option>Mrs.</option>
+                                    <option>Ms.</option>
+                                    <option>Miss</option>
+                                    <option>Dr.</option>
+                                    <option>Prof.</option>
+                                    <option>Rev.</option>
+                                  </select>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input type="text" class="form-control" id="inputSurname" name="surname" placeholder="Surname" required>
+                            </div>
+                            <div class="form-group col-md-5">
+                              <input type="text" class="form-control" id="inputForename" name="forename" placeholder="Forename" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job" required>
+                              </div>
+                            <div class="form-group col-md-6">
+                              <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company/University" required>
+                            </div>
+                        </div>
+                        <input class="btn btn-block btn-submit" type="submit" value="Register now"></button>
+                    </form>
+                </div>
+                </div>
+                    </div>    
+
+                    <% } else { %> 
+
+
+                    <div class="container" id="register">
+                        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
+                        
+                        <form action="register" method="POST" style="max-width: 600px; margin: 0 auto">
+                            <hr/>
+                            <fieldset>
+                            <div class="form-group">                
+                                <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username (max. 10 chars)" maxlength="10" required>
+                            </div>
+                            <div class="form-group">
+                
+                                <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email" required>
+                            </div>
+                            </fieldset>
+                        <hr/>
+                           
+                            <!-- TODO: POST, check if username and email valid with AccountService functions, return /registerValid if true-->
+                            <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; margin-top: 30px;"></button>
+                        </form>
+                    </div>
+                    </div>
+                        </div>
+                    <% } %>
+            </body>
+        </html>
+        

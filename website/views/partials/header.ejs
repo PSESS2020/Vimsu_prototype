@@ -1,0 +1,86 @@
+<div id="header" class="headerBG clearfix" role="banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <div id="logo" class="headerBG">
+                    <a href="/">
+                        <img id="logoimg" src="website/assets/vimsu_banner.png" type="image/png" alt="Vimsu Logo" style="width:79px;height:119px;">
+                    </a>
+                </div>
+                <div class="col" id="signature">
+                    <div id="site-name">
+                        <a href="/">
+                            <div class="site-name-child">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col align-self-end">
+                <% if (locals.loggedIn === true) { %>
+                    <div class="profileIcon">
+                    <i class="fa fa-user fa-4x iconProfile"></i>
+                    <p><%=username%></p>
+                </div>
+                <% } else { %> 
+            
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-expand-sm navbar-light bg-custom">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <div class="d-flex justify-content-around flex-row">
+                <% if (locals.loggedIn === true) { %>
+                    <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/logout">
+                        <div class="octicons octicon octicon-sign-out">
+                            <p id="octicon_text">
+                        Log Out	
+                        </p>
+                        </div>
+                    </a>
+                <% } else { %> 
+                    <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/login">
+                        <div class="octicons octicon octicon-sign-in">
+                            <p id="octicon_text">
+                        Log in	
+                        </p>
+                        </div>
+                    </a>
+                    
+                <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/register">
+                    <div class="octicons octicon octicon-pencil">
+                        <p id="octicon_text">
+                    Register	
+                    </p>
+                    </div>
+                </a>
+                <% } %>
+                <% if (locals.loggedIn === true) { %>
+                    <div class="col p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand">
+                        
+                        <a class="btn btn-outline-warning" type="button" href="/game">Play Now</a>
+                    </div>
+                    </div>
+
+                 <% } else { %> 
+                   
+                 <% } %>
+            </div>
+        </div>
+                
+            
+            
+
+        
+       
+    </div>
+</nav>
+<div>

@@ -22,8 +22,6 @@ clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
 //clientController.initGameView();
 
-console.log("width: " + GameConfig.width);
-
 setInterval( function() {
   //let deltaTime = timestamp - lastTime;
   //lastTime = timestamp;

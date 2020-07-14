@@ -114,10 +114,17 @@ class ClientController {
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
+            this.#gameView.initFoodCourtView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
+            this.#gameView.initReceptionView(map);
         }
         
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
+
+        //Game View is now fully initialised
+        this.#gameView.setGameViewInit(true);
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -202,15 +209,22 @@ class ClientController {
     }
 
     //Second message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {
+        
+        //transform GameObjects to GameObjectClients
+        var listOfGameObjects = [];
+        listOfGameObjectsData.forEach(element => {
+            listOfGameObjects.push(new GameObjectClient(element.id, element.name, element.width, element.length,
+                new PositionClient(element.cordX, element.cordY), element.isSolid));
+        });
 
         //First room? 
         if(!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
         
         //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
         }
     }
 
@@ -236,7 +250,7 @@ class ClientController {
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
     handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
-        TypeChecker.isInt(ppantID);
+        TypeChecker.isString(ppantID);
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
@@ -287,7 +301,7 @@ class ClientController {
 
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
-        //TypeChecker.isInt(ppantId);
+        //TypeChecker.isString(ppantId);
 
         this.#currentRoom.exitParticipant(ppantId);
 

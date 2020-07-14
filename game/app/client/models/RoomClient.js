@@ -12,7 +12,7 @@
     #listOfPPants;
     #occupationMap;
     //listOfNPCs
-    #listOfGameObjects = [];
+    #listOfGameObjects;
     //listOfDoors
     #map;
     
@@ -24,7 +24,7 @@
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
      */
-    constructor(roomId, typeOfRoom) {
+    constructor(roomId, typeOfRoom, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
 
@@ -37,17 +37,18 @@
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
+        this.#listOfGameObjects = listOfGameObjects;
         this.#listOfPPants = [];
 
         if (this.#typeOfRoom === "FOYER") {
             this.#width = RoomDimensionsClient.FOYER_WIDTH;
             this.#length = RoomDimensionsClient.FOYER_LENGTH;
-
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(4, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(5, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(6, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(7, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(8, 0), true));
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
+            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+            this.#width = RoomDimensionsClient.RECEPETION_WIDTH;
+            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
 
         //TODO: add other room types
@@ -108,7 +109,7 @@
      * @param {int} participantId 
      */
     exitParticipant(participantId) {
-        TypeChecker.isInt(participantId);
+        TypeChecker.isString(participantId);
         this.#listOfPPants.forEach(participant => {
             if (participant.getId() === participantId) {
                 let index = this.#listOfPPants.indexOf(participant);
@@ -157,14 +158,14 @@
      * @param {Array of ParticipantClient} listOfPPants 
      * @param {Array of Array of int} occupationMap 
      */
-    swapRoom(roomId, typeOfRoom) {
+    swapRoom(roomId, typeOfRoom, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         //reset list of game objects, participants, occMap
-        this.#listOfGameObjects = [];
+        this.#listOfGameObjects = listOfGameObjects;
         this.#listOfPPants = [];
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
@@ -174,12 +175,12 @@
         if (this.#typeOfRoom === "FOYER") {
             this.#width = RoomDimensionsClient.FOYER_WIDTH;
             this.#length = RoomDimensionsClient.FOYER_LENGTH;
-
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(4, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(5, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(6, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(7, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(8, 0), true));
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
+            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+            this.#width = RoomDimensionsClient.RECEPETION_WIDTH;
+            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
 
         //TODO: add other rooms
@@ -196,6 +197,7 @@
         for (var i = 0; i < mapLength; i++) {
             this.#map[i] = new Array(this.#length + 2).fill(GameObjectTypeClient.TILE);
         }
+        
 
         for (var i = 0; i < mapLength; i++) {
             this.#map[i][0] = GameObjectTypeClient.BLANK;
@@ -206,6 +208,9 @@
                 this.#map[i][1] = GameObjectTypeClient.LEFTWALL;
             this.#map[mapLength - 2][i + 2] = GameObjectTypeClient.RIGHTWALL;
         }
+
+        //Tile in the upper right corner that has not been replaced
+        this.#map[mapLength - 2][1] = GameObjectTypeClient.BLANK;
 
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
             if (this.#listOfGameObjects[i].getName().startsWith("table")) {

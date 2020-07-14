@@ -1,3 +1,5 @@
+@import url("http://cdnjs.cloudflare.com/ajax/libs/octicons/3.1.0/octicons.css");
+
 * {
   margin: 0px;
   padding: 0px;
@@ -68,4 +70,20 @@ top: 0;
 pointer-events: none;
 left: 0;
 z-index: 2;
+}
+
+.navbarIcons {
+  color: antiquewhite;
+}
+
+.navbarIconsText {
+  color: antiquewhite;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.icon-align {
+vertical-align: middle;
 }
