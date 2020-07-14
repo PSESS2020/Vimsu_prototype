@@ -82,7 +82,11 @@ app.get('/login', (request, response) => {
 });
 
 app.get('/game', (request, response) => {
-    response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
+    if (request.session.loggedin === true) {
+        response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
+    } else {
+        response.send('Please log in first!');
+    }
 })
 
 app.post('/login', (request, response) => {
