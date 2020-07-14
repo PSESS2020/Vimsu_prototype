@@ -14,6 +14,7 @@ const Room  = require('../models/Room.js');
 const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../models/TypeOfRoom.js');
+const Settings = require('../../utils/Settings.js');
 
 const TypeChecker = require=('../../utils/TypeChecker.js');
 
@@ -30,12 +31,19 @@ module.exports = class ServerController {
         this.#io = socket;        
     }
     
+    //There are currently 3 differenct socketIo Channels
+    //foyerChannel: Settings.FOYER_ID.toString()
+    //foodCourtChannel: Settings.FOODCOURT_ID.toString()
+    //receptionChannel: Settings.RECEPTION_ID.toString()
+
+
     init() {
         /* First, we create a map that will hold all ppantControllers, indexed by their socket.ids 
          * - (E) */
         var counter = 0;
         const ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
+
         
         //Init all rooms
         var roomService = new RoomService();
@@ -57,10 +65,13 @@ module.exports = class ServerController {
              * unless we're just doing regular game-state updates.
              * - (E) */
             socket.on('new participant', () => {
+
+                //First Channel (P)
+                socket.join(Settings.FOYER_ID.toString());
                 
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
-                if ( ppantControllers.has(socket.id) ) {
+                if (ppantControllers.has(socket.id)) {
                     return;
                 }
 
@@ -154,7 +165,7 @@ module.exports = class ServerController {
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
-                    if(key != ppantID) {
+                    if(key != ppantID && value.getPosition().getRoomId() === Settings.FOYER_ID) {
                         var tempPos = value.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
@@ -173,7 +184,7 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                socket.broadcast.emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
                 console.log("test6");
             });
             
@@ -184,31 +195,28 @@ module.exports = class ServerController {
              * INFORMS ABOUT EACH MOVEMENT ACTION SEPERATELY, NOT COLLECTING
              * THEM INTO A SINGLE MESSAGE THAT GETS SEND OUT REGULARLY
              * - (E) */
-            socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
-                // TODO
-                //When multiple Rooms exits, either the server has to get the right room or the client emits it in some way(P)
-
-                var newPos = new Position(foyerRoom.getRoomId(), newCordX, newCordY);
+            socket.on('requestMovementStart', (ppantID, direction, currRoomId, newCordX, newCordY) => {
                 
+                var newPos = new Position(currRoomId, newCordX, newCordY);
+
                 //No Collision, so every other participant gets the new position (P)
                 if (!foyerRoom.checkForCollision(newPos)) {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
-                    socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                    this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     var oldPos = ppants.get(ppantID).getPosition();
                     var oldDir = ppants.get(ppantID).getDirection();
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
-                }
+                    }
+                });
+                
+            socket.on('requestMovementStop', (ppantID, currRoomId) => {
+                
+                this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
 
-            socket.on('requestMovementStop', ppantID => {
-                // TODO
-                // handle this properly server-side
-                socket.broadcast.emit('movementOfAnotherPPantStop', ppantID);
-            });
-            
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
             socket.on('disconnect', () => {
