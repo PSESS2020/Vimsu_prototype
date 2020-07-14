@@ -1,4 +1,3 @@
-const TypeChecker = require('../../game/app/utils/TypeChecker')
 const dbconf = require('../../config/dbconf');
 const FileSystem = require('../../config/FileSystem')
 
@@ -14,11 +13,17 @@ async function getDB() {
 
 module.exports = class SlotService {
     static storeVideo(video) {
-        var dir = "./upload/lectures/";
+        var dir = __dirname + "/upload/";
         
         return FileSystem.moveFile(video, dir).then(res => {
             return getDB().then(res => {
-                return vimsudb.uploadFile("lectures", video.name, dir);
+                return vimsudb.uploadFile("lectures", video.name, dir).then(res => {
+                    return FileSystem.deleteDirectory(dir);
+                }).catch(err => {
+                    console.error(err)
+                })
+            }).catch(err => {
+                console.error(err);
             })
         }).catch(err => {
             console.error(err)
