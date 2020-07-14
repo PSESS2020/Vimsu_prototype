@@ -8,10 +8,11 @@
 
         <% if (locals.registerValid === true) { %>
                     <div class="container" id="registerValid">
-                        <div class="row mt-5">
-                        <div class="col-md-8 offset-md-2 align-self-center">
-                    <form action="editRegistration" method="POST">
-                        <div class="form-row">
+                        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
+                        
+                    <form action="editRegistration" method="POST" style="max-width: 600px; margin: 0 auto">
+                        <hr />
+                        <div class="form-row" style="margin-bottom: -15px; margin-top: -15px">
                             <div class="form-group col-md-6">
                                 <label for="staticUsername" class="col-form-label">Username</label>
                                 <!-- TODO: placeholder should be the value entered in /register-->
@@ -23,10 +24,13 @@
                                 <input class="form-control" type="text" placeholder="<%=email%>" readonly>
                             </div>
                         </div>    
-                        <input class="btn btn-block btn-submit" type="submit" value="Edit Registration"></button>
-                    </form>
                         <hr/>
-                    <form action="registerValid" method="POST">
+                        <input class="btn btn-block btn-submit" type="submit" value="Edit Registration"></button>
+                        <hr/>
+                    </form>
+                        
+                    <form action="registerValid" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:-20px">
+                        <hr/>
                         <div class="form-group">
                             <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
                         </div>
@@ -53,7 +57,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-row">
+                        <div class="form-row" style="margin-bottom: -15px; ">
                             <div class="form-group col-md-6">
                                 <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job" required>
                               </div>
@@ -61,7 +65,8 @@
                               <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company/University" required>
                             </div>
                         </div>
-                        <input class="btn btn-block btn-submit" type="submit" value="Register now"></button>
+                        <hr/>
+                        <input class="btn btn-block btn-submit" type="submit" value="Register now" style="margin-bottom: 30px; "></button>
                     </form>
                 </div>
                 </div>
@@ -75,7 +80,6 @@
                         
                         <form action="register" method="POST" style="max-width: 600px; margin: 0 auto">
                             <hr/>
-                            <fieldset>
                             <div class="form-group">                
                                 <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username (max. 10 chars)" maxlength="10" required>
                             </div>
@@ -83,11 +87,10 @@
                 
                                 <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email" required>
                             </div>
-                            </fieldset>
-                        <hr/>
-                           
+                            <hr/>
                             <!-- TODO: POST, check if username and email valid with AccountService functions, return /registerValid if true-->
-                            <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; margin-top: 30px;"></button>
+                            <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; "></button>
+                            
                         </form>
                     </div>
                     </div>
