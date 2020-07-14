@@ -130,7 +130,7 @@ app.post('/upload', (request, response) => {
             return response.send('File size exceeded 500 MB. Please refresh the page.')
         else {
             return SlotService.storeVideo(video).then(videoId => {
-                return SlotService.createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+                return SlotService.createSlot(videoId, "1", title, remarks, startingTime, oratorId, maxParticipants).then(res => {
                     response.redirect('/');
                     response.end();
                 }).catch(err => {

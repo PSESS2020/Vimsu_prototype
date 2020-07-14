@@ -34,16 +34,17 @@ module.exports = class SlotService {
         });
     }
 
-    static createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants) {
+    static createSlot(videoId, conferenceId, title, remarks, startingTime, oratorId, maxParticipants) {
         return getDB().then(res => {
     
             var id = new ObjectId().toString();
-            var slot = new Slot(title, videoId, remarks, startingTime, oratorId, maxParticipants);
+            var slot = new Slot(title, conferenceId, videoId, remarks, startingTime, oratorId, maxParticipants);
             slot.setId(id);
 
             var lecture = {
                 id: id,
                 videoId: videoId,
+                conferenceId: conferenceId,
                 title: title,
                 remarks: remarks,
                 startingTime: startingTime,
