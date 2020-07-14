@@ -65,39 +65,4 @@ module.exports = class Account {
     getEmail() {
         return this.#email;
     }
-
-    /*setUsername(newUsername) {
-        TypeChecker.isString(newUsername);
-        this.#username = username;
-    }
-
-    setTitle(newTitle) {
-        TypeChecker.isString(newTitle);
-        this.#title = title;
-    }
-
-    setSurname(newSurname) { 
-        TypeChecker.isString(newSurname);
-        this.#surname = surname;
-    }
-
-    setForename(newForename) {
-        TypeChecker.isString(newForename);
-        this.#forename = forename;
-    }
-
-    setJob(newJob) {
-        TypeChecker.isString(newJob);
-        this.#job = job;
-    }
-
-    setCompany(newCompany) {
-        TypeChecker.isString(newCompany);
-        this.#company = company;
-    }
-
-    setEmail(newEmail) {
-        TypeChecker.isString(newEmail);
-        this.#email = email;
-    }*/
 }

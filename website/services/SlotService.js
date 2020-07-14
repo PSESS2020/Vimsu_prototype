@@ -1,5 +1,8 @@
 const dbconf = require('../../config/dbconf');
-const FileSystem = require('../../config/FileSystem')
+const FileSystem = require('../../config/FileSystem');
+const ObjectId = require('mongodb').ObjectID;
+const TypeChecker = require('../../game/app/utils/TypeChecker');
+const Slot = require('../models/Slot')
 
 var vimsudb;
 async function getDB() {
@@ -18,12 +21,40 @@ module.exports = class SlotService {
         return FileSystem.moveFile(video, dir).then(res => {
             return getDB().then(res => {
                 return vimsudb.uploadFile("lectures", video.name, dir).then(res => {
-                    return FileSystem.deleteDirectory(dir);
+                    FileSystem.deleteDirectory(dir);
+                    return res;
                 }).catch(err => {
                     console.error(err)
                 })
             }).catch(err => {
                 console.error(err);
+            })
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    static createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants) {
+        return getDB().then(res => {
+    
+            var id = new ObjectId().toString();
+            var slot = new Slot(title, videoId, remarks, startingTime, oratorId, maxParticipants);
+            slot.setId(id);
+
+            var lecture = {
+                id: id,
+                videoId: videoId,
+                title: title,
+                remarks: remarks,
+                startingTime: startingTime,
+                oratorId: oratorId,
+                maxParticipants: maxParticipants
+            }
+
+            return vimsudb.insertOneToCollection("lectures", lecture).then(res => {
+                console.log("lecture saved")
+            }).catch(err => {
+                console.error(err)  
             })
         }).catch(err => {
             console.error(err)

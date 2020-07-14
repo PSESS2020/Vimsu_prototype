@@ -95,23 +95,26 @@ app.use(fileUpload());
 app.get('/', (request, response) => {
     if (request.session.loggedin === true) {
         username = request.session.username;
-        response.render('index', {loggedIn: true, username: username});
+        response.render('index', {loggedIn: true, uploaded: false, username: username});
     } else {
-    response.render('index');
+        response.render('index');
     }
 });
 
 app.get('/upload', (request, response) => {
     if (request.session.loggedin === true) {
-        response.render('upload', {loggedIn: true});
+        if (request.session.uploaded === true) 
+            response.render('upload', {loggedIn: true, uploaded: true});
+        else   
+            response.render('upload', {loggedIn: true, uploaded: false})
     } else {
-        response.send('Please log in first!');
+        response.send('Please log in first by refreshing the page.');
     }
 });
 
 app.post('/upload', (request, response) => {
     if (!request.files || Object.keys(request.files).length === 0) {
-        return response.send('No files were uploaded.');
+        return response.send('No files were uploaded. Please refresh the page.');
     }
 
     var video = request.files.video
@@ -121,30 +124,54 @@ app.post('/upload', (request, response) => {
 
     if(videoName.includes(".mp4")) {
         if(videoSize > 524288000)
-            return response.send('File size exceeded 500 MB')
+            return response.send('File size exceeded 500 MB. Please refresh the page.')
         else {
             return SlotService.storeVideo(video).then(videoId => {
+                request.session.uploaded = true;
                 request.session.videoId = videoId;
-                response.redirect('/');
+                response.redirect('/upload');
+                response.end();
             }).catch(err => {
                 console.error(err);
             })
         }
     } else {
-        response.send('File type is not supported!');
+        response.send('File type is not supported. Please refresh the page.');
     }
     response.end();
 });
 
+app.post('/uploaded', (request,response) => {
+    var videoId = request.session.videoId;
+    var title = request.body.title;
+    var remarks = request.body.remarks;
+    var startingTime = new Date(request.body.startingTime);
+    var oratorId = request.session.accountId;
+    var maxParticipants = parseInt(request.body.maxParticipants);
+
+    return SlotService.createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+        request.session.uploaded = false;
+        response.redirect('/');
+        response.end();
+    }).catch(err => {
+        console.error(err);
+    })
+})
+
 app.get('/login', (request, response) => {
-	response.render('login');
+    if (request.session.loggedin === true) {
+        response.send('You are already logged in. Please refresh the page.');
+    } else {
+        response.render('login');
+    }
+	
 });
 
 app.get('/game', (request, response) => {
     if (request.session.loggedin === true) {
         response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
     } else {
-        response.send('Please log in first!');
+        response.send('Please log in first by refreshing the page.');
     }
 })
 
@@ -167,7 +194,7 @@ app.post('/login', (request, response) => {
             response.redirect('/');
         }
         else {
-            response.send('Incorrect Username and/or Password!');
+            response.send('Incorrect Username and/or Password. Please refresh the page.');
         }
         response.end();
     }).catch(err => {
@@ -180,6 +207,9 @@ app.get('/register', (request, response) => {
         var username = request.session.username;
         var email = request.session.email;
         response.render('register', {registerValid: true, username: username, email: email});
+    }
+    else if (request.session.loggedin === true) {
+        response.send('Cannot register while logged in. Please refresh the page.');
     }
     else {
         response.render('register', {registerValid: false});
@@ -201,7 +231,7 @@ app.post('/register', (request, response) => {
                 }
                 else {
                     //TODO: return error message
-                    response.send('Email is already registered!');
+                    response.send('Email is already registered. Please refresh the page.');
                 }
                 response.end();
             }).catch(err => {
@@ -210,7 +240,7 @@ app.post('/register', (request, response) => {
         }
         else {
             //TODO: return error message
-            response.send('Username is already taken!');
+            response.send('Username is already taken. Please refresh the page.');
         }
         response.end();
     }).catch(err => {
@@ -219,7 +249,7 @@ app.post('/register', (request, response) => {
 });
 
 app.post('/registerValid', (request, response) => {
-        var username = request.session.username;
+    var username = request.session.username;
         if(request.body.title === "Title") {
             var title = "";
         }
@@ -234,11 +264,12 @@ app.post('/registerValid', (request, response) => {
         var password = request.body.password;
         return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
             request.session.accountId = res.getAccountID();
+            request.session.registerValid = false;
             request.session.loggedin = true;
             response.redirect('/');
             response.end();
         }).catch(err => {
-            response.send('Registration failed');
+            response.send('Registration failed. Please refresh the page.');
             console.error(err);
         })
 })
