@@ -74,7 +74,7 @@ app.use(fileUpload());
 app.get('/', (request, response) => {
     if (request.session.loggedin === true) {
         username = request.session.username;
-        response.render('index', {loggedIn: true, uploaded: false, username: username});
+        response.render('index', {loggedIn: true, username: username});
     } else {
         response.render('index');
     }
@@ -82,12 +82,9 @@ app.get('/', (request, response) => {
 
 app.get('/upload', (request, response) => {
     if (request.session.loggedin === true) {
-        if (request.session.uploaded === true) 
-            response.render('upload', {loggedIn: true, uploaded: true});
-        else   
-            response.render('upload', {loggedIn: true, uploaded: false})
+        response.render('upload', {loggedIn: true});
     } else {
-        response.send('Please log in first by refreshing the page.');
+        response.redirect('/');
     }
 });
 
@@ -95,6 +92,12 @@ app.post('/upload', (request, response) => {
     if (!request.files || Object.keys(request.files).length === 0) {
         return response.send('No files were uploaded. Please refresh the page.');
     }
+
+    var title = request.body.title;
+    var remarks = request.body.remarks;
+    var startingTime = new Date(request.body.startingTime);
+    var oratorId = request.session.accountId;
+    var maxParticipants = parseInt(request.body.maxParticipants);
 
     var video = request.files.video
     console.log(video)
@@ -106,10 +109,12 @@ app.post('/upload', (request, response) => {
             return response.send('File size exceeded 500 MB. Please refresh the page.')
         else {
             return SlotService.storeVideo(video).then(videoId => {
-                request.session.uploaded = true;
-                request.session.videoId = videoId;
-                response.redirect('/upload');
-                response.end();
+                return SlotService.createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+                    response.redirect('/');
+                    response.end();
+                }).catch(err => {
+                    console.error(err);
+                })
             }).catch(err => {
                 console.error(err);
             })
@@ -117,29 +122,11 @@ app.post('/upload', (request, response) => {
     } else {
         response.send('File type is not supported. Please refresh the page.');
     }
-    response.end();
 });
-
-app.post('/uploaded', (request,response) => {
-    var videoId = request.session.videoId;
-    var title = request.body.title;
-    var remarks = request.body.remarks;
-    var startingTime = new Date(request.body.startingTime);
-    var oratorId = request.session.accountId;
-    var maxParticipants = parseInt(request.body.maxParticipants);
-
-    return SlotService.createSlot(videoId, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
-        request.session.uploaded = false;
-        response.redirect('/');
-        response.end();
-    }).catch(err => {
-        console.error(err);
-    })
-})
 
 app.get('/login', (request, response) => {
     if (request.session.loggedin === true) {
-        response.send('You are already logged in. Please refresh the page.');
+        response.redirect('/');
     } else {
         response.render('login');
     }
@@ -150,7 +137,7 @@ app.get('/game', (request, response) => {
     if (request.session.loggedin === true) {
         response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
     } else {
-        response.send('Please log in first by refreshing the page.');
+        response.redirect('/');
     }
 })
 
@@ -188,7 +175,7 @@ app.get('/register', (request, response) => {
         response.render('register', {registerValid: true, username: username, email: email});
     }
     else if (request.session.loggedin === true) {
-        response.send('Cannot register while logged in. Please refresh the page.');
+        response.redirect('/');
     }
     else {
         response.render('register', {registerValid: false});
