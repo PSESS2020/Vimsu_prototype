@@ -5,6 +5,7 @@ module.exports = class Slot {
 
     #id;
     #title;
+    #conferenceId;
     #videoId;
     #remarks;
     #startingTime;
@@ -16,13 +17,15 @@ module.exports = class Slot {
      * 
      * @param {String} title 
      * @param {String} videoId 
+     * @param {String} conferenceId
      * @param {String} remarks 
      * @param {Date} startingTime 
      * @param {String} oratorId 
      * @param {int} maxParticipants 
      */
-    constructor(title, videoId, remarks, startingTime, oratorId, maxParticipants) {
+    constructor(title, conferenceId, videoId, remarks, startingTime, oratorId, maxParticipants) {
         TypeChecker.isString(title);
+        TypeChecker.isString(conferenceId);
         TypeChecker.isString(videoId);
         TypeChecker.isString(remarks);
         TypeChecker.isInstanceOf(startingTime, Date);
@@ -31,6 +34,7 @@ module.exports = class Slot {
 
         this.#title = title;
         this.#videoId = videoId;
+        this.#conferenceId = conferenceId;
         this.#remarks = remarks;
         this.#startingTime = startingTime;
         this.#oratorId = oratorId;
@@ -48,6 +52,10 @@ module.exports = class Slot {
 
     getTitle() {
         return this.#title;
+    }
+
+    getConferenceId() {
+        return this.#conferenceId;
     }
 
     getVideoId() {
