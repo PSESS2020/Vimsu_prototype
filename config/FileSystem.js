@@ -1,19 +1,20 @@
 const fs = require('fs');
+const mkdirp = require('mkdirp')
+const rimraf = require('rimraf');
 
 module.exports = class FileSystem {
 
     static createDirectory(dir) {
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir);
-        }
+        mkdirp.sync(dir);
     }
 
-    static deleteFile(filePath) {
-        fs.unlink(filePath, (err) => {
+    static deleteDirectory(dir) {
+        fs.rmdir(dir, { recursive: true }, (err) => {
             if (err) {
-              console.error(err)
+                throw err;
             }
-        })
+            console.log(`${dir} is deleted!`);
+        });
     }
 
     static moveFile(file, dir) {

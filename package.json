@@ -24,6 +24,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "express-session": "^1.17.1",
     "merge-images": "^2.0.0",
+    "mkdirp": "^1.0.4",
     "mocha": "^8.0.1",
     "mongodb": "^3.5.9",
     "password-hash": "^1.2.2",
