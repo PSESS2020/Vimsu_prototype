@@ -68,15 +68,12 @@ module.exports = class AccountService {
                 passwordHash: passwordHash.generate(password)
             }
 
-            getDB().then(res => {
-                vimsudb.insertOneToCollection("accounts", acc);
+            return vimsudb.insertOneToCollection("accounts", acc).then(res => {
                 console.log("user saved")
+                return account;
             }).catch(err => {
-                console.error(err)
-            });
-                    
-            return account;
-
+                console.error(err);
+            })
         }).catch(err => {
             console.error(err)
         });
@@ -97,6 +94,8 @@ module.exports = class AccountService {
             }).catch(err => {
                 console.error(err);
             })
+        }).catch(err => {
+            console.error(err);
         })
     }
 
@@ -113,6 +112,8 @@ module.exports = class AccountService {
                     console.log("user not found");
                     return false;
                 }
+            }).catch(err => {
+                console.error(err);
             })
         }).catch(err => {
             console.error(err)
@@ -133,7 +134,9 @@ module.exports = class AccountService {
                     console.log("user not found");
                     return false;
                 }
-            });
+            }).catch(err => {
+                console.error(err);
+            })
         }).catch(err => {
             console.error(err)
         });
@@ -153,7 +156,9 @@ module.exports = class AccountService {
                     console.log("user not found");
                     return false;
                 }
-            });
+            }).catch(err => {
+                console.error(err);
+            })
         }).catch(err => {
             console.error(err)
         });
@@ -176,7 +181,9 @@ module.exports = class AccountService {
             }).catch(err => {
                 console.error(err)
             });
-        });
+        }).catch(err => {
+            console.error(err);
+        })
     }
 
     static getAccountForename(accountId) {
@@ -193,10 +200,12 @@ module.exports = class AccountService {
                     console.log("user not found");
                     return false;
                 }
-            });
+            }).catch(err => {
+                console.error(err)
+            })
         }).catch(err => {
-            console.error(err)
-        });
+            console.error(err);
+        })
     }
 
     static getAccountEmail(accountId) {
@@ -216,7 +225,9 @@ module.exports = class AccountService {
             }).catch(err => {
                 console.error(err)
             });
-        });
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
     static updateUsername(accountId, newUsername) {
@@ -312,7 +323,9 @@ module.exports = class AccountService {
                     console.log("Credentials wrong");
                     return false;
                 }            
-            });
+            }).catch(err => {
+                console.error(err)
+            })
         }).catch(err => {
             console.error(err)
         }); 
