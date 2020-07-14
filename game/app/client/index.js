@@ -19,7 +19,7 @@ this.ctx_ui.canvas.height = GAME_HEIGHT;
 /* The participantID should not be one (as we want to make sure it is congruent with the
  * server).
  * - (E) */
-let clientController = new ClientController(gameView);
+let clientController = new ClientController();
 clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
 //clientController.initGameView();
@@ -32,7 +32,7 @@ setInterval( function() {
 
   ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  ClientController.updateGame();
+  clientController.updateGame();
   //gameView.update();
   //gameView.draw();  
 }, GameConfig.TIME_DELTA);
