@@ -1,5 +1,6 @@
 const TypeChecker = require('../../game/app/utils/TypeChecker')
 const dbconf = require('../../config/dbconf');
+const FileSystem = require('../../config/FileSystem')
 
 var vimsudb;
 async function getDB() {
@@ -12,11 +13,13 @@ async function getDB() {
 }
 
 module.exports = class SlotService {
-    static storeVideo(videoName) {
-        TypeChecker.isString(videoName);
+    static storeVideo(video) {
+        var dir = "./upload/lectures/";
         
-        return getDB().then(res => {
-            return vimsudb.uploadFile("lectures", videoName);
+        return FileSystem.moveFile(video, dir).then(res => {
+            return getDB().then(res => {
+                return vimsudb.uploadFile("lectures", video.name, dir);
+            })
         }).catch(err => {
             console.error(err)
         });

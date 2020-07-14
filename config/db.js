@@ -1,6 +1,7 @@
 const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/utils/TypeChecker');
+const FileSystem = require('./FileSystem');
 const fs = require('fs');
 
 module.exports = class db {
@@ -28,6 +29,20 @@ module.exports = class db {
         return collection.insertOne(object)
         .then(result => {
             console.log(object + " inserted into " + collectionName);
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+
+    findAllInCollection(collectionName) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.find().toArray()
+        .then(results => {
+            console.log(results);
+            return results;
         })
         .catch(err => {
             console.error(err)
@@ -88,7 +103,20 @@ module.exports = class db {
         })
     }
 
-    uploadFile(collectionName, fileName) {
+    deleteAllFromCollection(collectionName) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.deleteMany()
+        .then(result => {
+            console.log("all documents deleted from " + collectionName);
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+
+    uploadFile(collectionName, fileName, dir) {
         TypeChecker.isString(collectionName);
         TypeChecker.isString(fileName);
 
@@ -97,7 +125,7 @@ module.exports = class db {
             bucketName: collectionName,
         });
 
-        var readStream = fs.createReadStream(fileName);
+        var readStream = fs.createReadStream(dir + fileName);
         var uploadStream = bucket.openUploadStream(fileName);
 
         var fileId = uploadStream.id.toString();
@@ -105,13 +133,14 @@ module.exports = class db {
         return new Promise((resolve, reject) => {
             readStream.pipe(uploadStream)
             .on('finish', function() {
-                console.log(fileName + ' with id ' + fileId + ' uploaded')
+                console.log(fileName + ' with id ' + fileId + ' uploaded');
                 resolve(fileId);
             })
             .on('error', function(error) {
                 console.error(error);
                 reject();
             });
+            FileSystem.deleteFile(dir + fileName);
         });
     }
 
@@ -125,7 +154,7 @@ module.exports = class db {
         });
 
         var dir = './download/' + collectionName + '/';
-        this.#createDirectory(dir);
+        FileSystem.createDirectory(dir);
 
         var id = new mongodb.ObjectID(fileId)
           
@@ -147,11 +176,5 @@ module.exports = class db {
             });
         })
         
-    }
-
-    #createDirectory = function(dir) {
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir);
-        }
     }
 }
