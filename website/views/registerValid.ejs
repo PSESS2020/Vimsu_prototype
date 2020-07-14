@@ -70,15 +70,15 @@
                 <div class="form-group col-md-6">
                     <label for="staticUsername" class="col-form-label">Username</label>
                     <!-- TODO: placeholder should be the value entered in /register-->
-                    <input class="form-control" type="text" placeholder="mustermann123" readonly>
+                    <input class="form-control" type="text" placeholder="<%=username%>" readonly>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="staticEmail" class="col-form-label">Email</label>
                     <!-- TODO: placeholder should be the value entered in /register-->
-                    <input class="form-control" type="text" placeholder="email@example.com" readonly>
+                    <input class="form-control" type="text" placeholder="<%=email%>" readonly>
                 </div>
             </div>    
-                  
+            <hr/>
             <div class="form-group">
                 <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
             </div>
@@ -110,7 +110,7 @@
                     <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job" required>
                   </div>
                 <div class="form-group col-md-6">
-                  <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company" required>
+                  <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company/University" required>
                 </div>
             </div>
             <input class="btn btn-block btn-submit" type="submit" value="Register now"></button>

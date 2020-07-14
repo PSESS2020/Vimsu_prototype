@@ -70,6 +70,7 @@ module.exports = class AccountService {
 
             getDB().then(res => {
                 vimsudb.insertOneToCollection("accounts", acc);
+                console.log("user saved")
             }).catch(err => {
                 console.error(err)
             });

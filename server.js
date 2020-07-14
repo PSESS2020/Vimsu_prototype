@@ -39,6 +39,7 @@ const RoomController = require('./game/app/server/controller/RoomController.js')
 const TypeOfRoom = require('./game/app/server/models/TypeOfRoom.js');
 
 const AccountService = require('./website/services/AccountService');
+const { response } = require('express');
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */
@@ -133,35 +134,10 @@ app.post('/login', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
-    if (request.session.registerValid === true) {
-        username = request.session.username;
-        email = request.session.email;
-        response.render('register', {registerValid: true, username: username, email: email});
-    } else {
     response.render('register');
-    }
 });
 
 app.post('/register', (request, response) => {
-    if (request.session.registerValid === true) {
-        var username = request.session.username;
-        var title = request.body.title;
-        var surname = request.body.surname;
-        var forename = request.body.forename;
-        var job = request.body.job;
-        var company = request.body.company;
-        var email = request.session.email;
-        var password = request.body.password;
-
-        return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
-            request.session.accountId = res.getAccountID();
-            response.redirect('/');
-            response.end();
-        }).catch(err => {
-            response.send('Registration failed');
-            console.error(err);
-        })
-    } else {
         var username = request.body.username;
         var email = request.body.email;
 
@@ -172,9 +148,10 @@ app.post('/register', (request, response) => {
                         request.session.registerValid = true;
                         request.session.username = username;
                         request.session.email = email;
-                        response.redirect('/register');
+                        response.redirect('/registerValid');
                     }
                     else {
+                        //TODO: return error message
                         response.send('Email is already registered!');
                     }
                     response.end();
@@ -183,14 +160,40 @@ app.post('/register', (request, response) => {
                 })
             }
             else {
+                //TODO: return error message
                 response.send('Username is already taken!');
             }
             response.end();
         }).catch(err => {
             console.error(err);
         })
-    }
 });
+
+app.get('/registerValid', (request, response) => {
+    var username = request.session.username;
+    var email = request.session.email;
+    response.render('registerValid', {username: username, email: email});
+})
+
+app.post('/registerValid', (request, response) => {
+        var username = request.session.username;
+        var title = request.body.title;
+        var surname = request.body.surname;
+        var forename = request.body.forename;
+        var job = request.body.job;
+        var company = request.body.company;
+        var email = request.session.email;
+        var password = request.body.password;
+        return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
+            request.session.accountId = res.getAccountID();
+            request.session.loggedin = true;
+            response.redirect('/');
+            response.end();
+        }).catch(err => {
+            response.send('Registration failed');
+            console.error(err);
+        })
+})
 
 app.get('/logout', (request, response) => {
     request.session.destroy();
@@ -409,8 +412,6 @@ io.on('connection', (socket) => {
 //setInterval( () => {
 //    io.sockets.emit('gameStateUpdate', participants);
 //}, 50);
-
-
 
 
 
