@@ -98,12 +98,11 @@ app.post('/upload', (request, response) => {
         return response.send('Max participants must be integer. Please refresh the page.')
     }
 
-    try {
-        var startingTime = new Date(request.body.startingTime);
-    } catch {
+    var startingTime = new Date(request.body.startingTime);
+    if (startingTime == "Invalid Date") {
         return response.send('Starting time must be a valid date. Please refresh the page.')
     }
-
+    
     var title = request.body.title;
     var remarks = request.body.remarks;
     var oratorId = request.session.accountId;
