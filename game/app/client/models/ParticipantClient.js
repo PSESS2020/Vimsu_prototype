@@ -4,6 +4,7 @@ class ParticipantClient {
     #position;
     #direction;
     #businessCard;
+    #username;
 
     /**
      * Erstellt ParticipantClient Instanz
@@ -13,8 +14,9 @@ class ParticipantClient {
      * @param {PositionClient} position 
      * @param {DirectionClient} direction
      * @param {BusinessCardClient} businessCard
+     * @param {String} username
      */
-    constructor(id, position, direction) 
+    constructor(id, position, direction, username) 
     {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
@@ -24,6 +26,7 @@ class ParticipantClient {
         this.#id = id;
         this.#position = position;
         this.#direction = direction;
+        this.#username = username;
         //this.#businessCard = businessCard;
     }
 
@@ -57,5 +60,10 @@ class ParticipantClient {
     getBusinessCard()
     {
         return this.#businessCard;
+    }
+
+    getName()
+    {
+        return this.#username;
     }
 }

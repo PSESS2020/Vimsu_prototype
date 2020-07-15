@@ -25,8 +25,9 @@ class ParticipantAvatarView extends AvatarView {
     #currentAnimation;
     #walking = false;
     #typeOfRoom;
+    #username;
 
-    constructor(position, direction, participantId, typeOfRoom) {
+    constructor(position, direction, participantId, typeOfRoom, username) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -41,7 +42,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
         this.#typeOfRoom = typeOfRoom;
-
+        this.#username = username;
 
     }
     
@@ -113,7 +114,6 @@ class ParticipantAvatarView extends AvatarView {
         }
         
 
-        let playerName = "player1";
         ctx_avatar.font = "1em sans-serif";
         ctx_avatar.textBaseline = 'top';
         ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
@@ -121,7 +121,7 @@ class ParticipantAvatarView extends AvatarView {
         ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
         ctx_avatar.fillStyle = "black";
-        ctx_avatar.fillText(playerName, screenX + AVATAR_WIDTH/2, screenY);
+        ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH/2, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
