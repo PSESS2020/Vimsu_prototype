@@ -114,7 +114,7 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
-        this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
@@ -122,6 +122,8 @@ class ClientController {
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
             this.#gameView.initReceptionView(map);
         }
+
+        this.#gameView.initOwnAvatarView(this.#ownParticipant);
         
         //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
@@ -254,6 +256,10 @@ class ClientController {
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
+ 
+        if (ppantID === this.#participantId) {
+            return;
+        }
 
         let newPos = new PositionClient(newCordX, newCordY);
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
@@ -267,6 +273,9 @@ class ClientController {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
+        if (ppantID === this.#participantId) {
+            return;
+        }
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -278,6 +287,9 @@ class ClientController {
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        if (initInfo.id === this.#participantId) {
+            return;
+        }
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         console.log("init info id" + initInfo.id);

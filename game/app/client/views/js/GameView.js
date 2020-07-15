@@ -131,7 +131,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initFoyerView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#typeOfRoom = 'FOYER';
-        this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
+        
         this.#currentMap = new FoyerView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -143,7 +143,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#typeOfRoom = 'RECEPTION';
-        this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
+        
         this.#currentMap = new ReceptionView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -155,7 +155,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#typeOfRoom = 'FOODCOURT';
-        this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
+        
         this.#currentMap = new FoodCourtView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -325,11 +325,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, this.#typeOfRoom); 
         
-        if (!this.#updateList[0]) {
-            this.addToUpdateList(this.#ownAvatarView);
-        }
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, this.#typeOfRoom); 
+        this.#updateList[0] = this.#ownAvatarView;
+        
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
         //this.#gameViewInit = true;

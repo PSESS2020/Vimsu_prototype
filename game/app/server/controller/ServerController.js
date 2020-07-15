@@ -228,7 +228,7 @@ module.exports = class ServerController {
                 let gameObjectData = [];
                 let typeOfRoom = this.#rooms[targetRoomId - 1].getTypeOfRoom();
                 this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
-                socket.leave(currentRoomId.toString());
+                
             
                 //needed to send all gameObjects of starting room to client
                 //would be nicer and easier if they both share GameObject.js
@@ -274,6 +274,7 @@ module.exports = class ServerController {
                     }   
                 });
 
+                socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
 
 
