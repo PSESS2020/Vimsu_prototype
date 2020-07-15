@@ -174,13 +174,14 @@ class ClientController {
 
     sendToServerRequestMovStart(direction) {
         if(this.socketReady()) {
-        TypeChecker.isEnumOf(direction, DirectionClient);
-        let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let currPosX = currPos.getCordX();
-        let currPosY = currPos.getCordY();
-        let currentRoomId = this.#currentRoom.getRoomId();
+            TypeChecker.isEnumOf(direction, DirectionClient);
+            let currPos = this.#gameView.getOwnAvatarView().getPosition();
+            let currPosX = currPos.getCordX();
+            let currPosY = currPos.getCordY();
+            let currentRoomId = this.#currentRoom.getRoomId();
 
-        this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
+            this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
+        }
     }
 
     sendToServerRequestMovStop() {

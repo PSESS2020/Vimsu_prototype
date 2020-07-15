@@ -85,10 +85,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-
-        if(this.#currentMap.selectionOnMap) {
-            this.#currentMap.drawSelectedTile();
-        }
+        if(this.#gameViewInit) {
+            if(this.#currentMap.selectionOnMap) {
+                this.#currentMap.drawSelectedTile();
+            }
 
             for (var i = 0; i < this.#updateList.length; i++) {
 
@@ -103,6 +103,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             }
         }
     }
+    
 
     update()
     {
@@ -148,15 +149,18 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     }
 
+    /*
     //Is called when participant enters FoodCourt
     initFoodCourtView(map) {
         this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
+
     }
 
     //Is called when participant enters Reception
     initReceptionView(map) {
         this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
     }
+    /*
 
     /**
      * 
