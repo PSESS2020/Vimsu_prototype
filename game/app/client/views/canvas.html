@@ -70,9 +70,9 @@
         <script src="client/libraries/require.js"></script>
         <!--<script> const socket = io('http://localhost:5000'); </script>-->
         <script>
-            requirejs(['client/utils/TypeChecker', 'client/models/DirectionClient','utils/Settings', 'client/config/GameConfig', 'client/models/TypeOfRoomClient', 'client/models/RoomDimensionsClient.js', 'client/models/GameObjectTypeClient', 'client/models/BusinessCardClient', 'client/models/ParticipantClient', 
+            requirejs(['client/utils/TypeChecker', 'client/models/DirectionClient', 'client/config/GameConfig', 'client/models/TypeOfRoomClient', 'client/models/RoomDimensionsClient.js', 'client/models/GameObjectTypeClient', 'client/models/BusinessCardClient', 'client/models/ParticipantClient', 
                         'client/models/PositionClient','client/models/GameObjectClient', 'client/models/RoomClient'], () => {
-                requirejs(['client/views/js/Views'], () => {
+                requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
                     requirejs(['client/views/js/LoadingView', 'client/views/js/CacheImages', 'client/views/js/ImageLoader', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
                         requirejs(['client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView'], () => {
                             requirejs(['client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {

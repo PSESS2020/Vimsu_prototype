@@ -18,7 +18,7 @@ const Settings = require('../../utils/Settings.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
 
-const TypeChecker = require=('../../utils/TypeChecker.js');
+const TypeChecker = require('../../utils/TypeChecker.js');
 
 
 /* This should later on be turned into a singleton */
