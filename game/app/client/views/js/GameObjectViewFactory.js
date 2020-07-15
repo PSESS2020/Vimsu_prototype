@@ -123,7 +123,7 @@ class GameObjectViewFactory {
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[7]);
                 
                 if(gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.RECEPTIONDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.FOYERDOOR);
                 else throw new Error("The image for the foyer door view could not be found in the cache for images. Did you reload the images after cache clear?");
                 
             break;
