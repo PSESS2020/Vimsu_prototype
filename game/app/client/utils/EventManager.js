@@ -2,7 +2,7 @@
 
 class EventManager {
 
-    #clientcontroller;
+    #clientController;
 
 
 
@@ -15,7 +15,7 @@ class EventManager {
     constructor() {
 
         //works because ClientController is singleton
-        this.#clientcontroller = new Clientcontroller();
+        this.#clientController = new ClientController();
 
     }
 
