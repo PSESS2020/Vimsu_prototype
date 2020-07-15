@@ -114,11 +114,20 @@ app.post('/upload', (request, response) => {
         return response.send('No files were uploaded. Please refresh the page.');
     }
 
+    var maxParticipants = parseInt(request.body.maxParticipants);
+    if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
+        return response.send('Max participants must be integer. Please refresh the page.')
+    }
+
+    try {
+        var startingTime = new Date(request.body.startingTime);
+    } catch {
+        return response.send('Starting time must be a valid date. Please refresh the page.')
+    }
+
     var title = request.body.title;
     var remarks = request.body.remarks;
-    var startingTime = new Date(request.body.startingTime);
     var oratorId = request.session.accountId;
-    var maxParticipants = parseInt(request.body.maxParticipants);
 
     var video = request.files.video
     console.log(video)
@@ -204,8 +213,20 @@ app.get('/register', (request, response) => {
 });
 
 app.post('/register', (request, response) => {
+
+    if (request.body.username.length > 10) {
+        return response.send('Max. username length is 10 characters. Please refresh the page.');
+    }
+
     var username = request.body.username;
     var email = request.body.email;
+
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRegex.test(String(email).toLowerCase())) {
+
+    } else {
+        return response.send('Invalid Email Address. Please refresh the page.')
+    }
 
     return AccountService.isUsernameValid(username).then(res => {
         if(res) {
@@ -217,7 +238,6 @@ app.post('/register', (request, response) => {
                     response.redirect('/register');
                 }
                 else {
-                    //TODO: return error message
                     response.send('Email is already registered. Please refresh the page.');
                 }
                 response.end();
@@ -226,7 +246,6 @@ app.post('/register', (request, response) => {
             })
         }
         else {
-            //TODO: return error message
             response.send('Username is already taken. Please refresh the page.');
         }
         response.end();
@@ -237,28 +256,32 @@ app.post('/register', (request, response) => {
 
 app.post('/registerValid', (request, response) => {
     var username = request.session.username;
-        if(request.body.title === "Title") {
-            var title = "";
-        }
-        else {
-            var title = request.body.title;
-        }
-        var surname = request.body.surname;
-        var forename = request.body.forename;
-        var job = request.body.job;
-        var company = request.body.company;
-        var email = request.session.email;
-        var password = request.body.password;
-        return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
-            request.session.accountId = res.getAccountID();
-            request.session.registerValid = false;
-            request.session.loggedin = true;
-            response.redirect('/');
-            response.end();
-        }).catch(err => {
-            response.send('Registration failed. Please refresh the page.');
-            console.error(err);
-        })
+    var title = request.body.title;
+
+    if(title === "Title") {
+        var title = "";
+    }
+    else if(title !== "Mr." || title !== "Mrs." || title !== "Ms." || title !== "Dr." || title !== "Rev." || title !== "Miss" || title !== "Prof."){
+        return response.send('Invalid title. Please refresh the page.')
+    }
+
+    var surname = request.body.surname;
+    var forename = request.body.forename;
+    var job = request.body.job;
+    var company = request.body.company;
+    var email = request.session.email;
+    var password = request.body.password;
+
+    return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
+        request.session.accountId = res.getAccountID();
+        request.session.registerValid = false;
+        request.session.loggedin = true;
+        response.redirect('/');
+        response.end();
+    }).catch(err => {
+        response.send('Registration failed. Please refresh the page.');
+        console.error(err);
+    })
 })
 
 app.post('/editRegistration', (request, response) => {
