@@ -19,7 +19,7 @@ class DoorView extends GameObjectView {
     }
 
     onclick() {
-        alert("Hi From DoorView: " + this.#DOORTYPE + " " + this.#position.getCordX() + " " + this.#position.getCordY());
+        
         let eventManager = new EventManager();
         if (this.#DOORTYPE === GameObjectTypeClient.LECTUREDOOR) {
             eventManager.handleLectureDoorClick();
