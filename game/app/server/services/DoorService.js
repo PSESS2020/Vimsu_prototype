@@ -65,9 +65,9 @@ module.exports = class DoorService {
         this.#doors.push(new Door(2, new Position(Settings.FOYER_ID, 25, 22), new Position(Settings.RECEPTION_ID, 0, 0)));
 
         //Door from FoodCourt to Foyer
-        this.#doors.push(new Door(3, new Position(Settings.FOODCOURT_ID, 2, 0), new Position(Settings.FOYER_ID, 25, 2)));
+        this.#doors.push(new Door(3, new Position(Settings.FOODCOURT_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 2)));
 
         //Door from Reception to Foyer (TODO: Adjust StartPosition)
-        this.#doors.push(new Door(4, new Position(Settings.RECEPTION_ID, 0, 0), new Position(Settings.FOYER_ID, 25, 22)));
+        this.#doors.push(new Door(4, new Position(Settings.RECEPTION_ID, 0, 0), new Position(Settings.FOYER_ID, 24, 22)));
     }
 } 
