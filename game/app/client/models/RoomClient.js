@@ -179,7 +179,7 @@
             this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
             this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
         } else if (this.#typeOfRoom === "RECEPTION") {
-            this.#width = RoomDimensionsClient.RECEPETION_WIDTH;
+            this.#width = RoomDimensionsClient.RECEPTION_WIDTH;
             this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
 
