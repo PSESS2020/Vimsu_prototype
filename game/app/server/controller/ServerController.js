@@ -165,6 +165,8 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 
                                                                         dir: d});
+                // Initialize Allchat
+                this.#io.to(socket.id).emit('initAllchat', foyerRoom.getMessages());
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
@@ -285,7 +287,7 @@ module.exports = class ServerController {
 
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
-
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getMessages());
 
             });
             

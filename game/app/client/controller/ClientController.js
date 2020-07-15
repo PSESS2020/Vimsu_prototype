@@ -161,6 +161,7 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
+        this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
     }
 
     /* #################################################### */    
@@ -200,6 +201,10 @@ class ClientController {
         this.socket.emit('requestMovementStop', this.#participantId, currentRoomId);
     }
 
+    sendToServerAllchatMessage(text) {
+        this.socketReady;
+        this.socket.emit('sendMessage', this.#participantId, text);
+    }
 
     /* #################################################### */    
     /* ############### RECEIVE FROM SERVER ################ */
@@ -330,6 +335,17 @@ class ClientController {
         
     }
 
+    // Adds a new message to the all-chat
+    handleFromServerNewAllchatMessage(ppantID, timestamp, text) {
+
+    }
+    
+    // Called when a new room is entered.
+    // The argument is an array of objects of the following structure:
+    // { senderID: <String>, timestamp: <String>, messageText: <String> }
+    handleFromServerInitAllchat(messages) {
+
+    }
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
