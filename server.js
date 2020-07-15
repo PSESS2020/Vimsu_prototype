@@ -95,9 +95,13 @@ app.use(fileUpload());
 app.get('/', (request, response) => {
     if (request.session.loggedin === true) {
         username = request.session.username;
-        response.render('index', {loggedIn: true, username: username});
+        email = request.session.email;
+        title = request.session.title;
+        forename = request.session.forename;
+        surname = request.session.surname;
+        response.render('index', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname});
     } else {
-        response.render('index');
+    response.render('index');
     }
 });
 

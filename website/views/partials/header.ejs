@@ -16,12 +16,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col align-self-end">
-                <% if (locals.loggedIn === true) { %>
-                    <div class="profileIcon">
-                    <i class="fa fa-user fa-4x iconProfile"></i>
-                    <p><%=username%></p>
+            <% if (locals.loggedIn === true) { %>
+                <div class="profileIcon" style="display:inline-block;vertical-align:top;">
+                <i class="fa fa-user fa-4x iconProfile"></i>
                 </div>
+                <div style="display:inline-block; margin-left: 10px">
+                    <div><%=title%> <%=forename%> <%=surname%> (@<%=username%>)</div>
+                    <div><%=email%></div>
+                </div>
+
                 <% } else { %> 
             
                 <% } %>
