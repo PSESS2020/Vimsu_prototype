@@ -200,10 +200,11 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('requestMovementStart', (ppantID, direction, currRoomId, newCordX, newCordY) => {
                 
-                var newPos = new Position(currRoomId, newCordX, newCordY);
+                let newPos = new Position(currRoomId, newCordX, newCordY);
+                let room = this.#rooms[currRoomId - 1];
 
                 //No Collision, so every other participant gets the new position (P)
-                if (!foyerRoom.checkForCollision(newPos)) {
+                if (!room.checkForCollision(newPos)) {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
                     this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
