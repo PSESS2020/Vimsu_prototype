@@ -106,6 +106,7 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
+        return true;
     }
 
     /*Initializes the initial view for the player*/
@@ -167,12 +168,12 @@ class ClientController {
 
     //asks the server for an update of the current game state
     requestGameStateUpdate() {
-        this.socketReady;
+        if(this.socketReady())
         this.socket.emit('requestGameStateUpdate');
     }
 
     sendToServerRequestMovStart(direction) {
-        this.socketReady;
+        if(this.socketReady()) {
         TypeChecker.isEnumOf(direction, DirectionClient);
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let currPosX = currPos.getCordX();

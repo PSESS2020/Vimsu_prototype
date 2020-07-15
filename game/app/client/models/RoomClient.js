@@ -227,6 +227,16 @@
             this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
             this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
             this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
         }
     }
 

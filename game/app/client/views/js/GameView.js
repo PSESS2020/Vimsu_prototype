@@ -14,6 +14,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #foyerView;
     #foodCourtView;
     #receptionView;
+    #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
     #gameViewInit;
@@ -87,8 +88,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         //check if game view is already initalized
         if (this.#gameViewInit) {
-            if(this.#foyerView.selectionOnMap) {
-                this.#foyerView.drawSelectedTile();
+            if(this.#currentMap.selectionOnMap) {
+                this.#currentMap.drawSelectedTile();
             }   
 
             for (var i = 0; i < this.#updateList.length; i++) {
@@ -123,7 +124,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     //Is called when participant enters Foyer
     initFoyerView(map) {
-        this.#foyerView = new FoyerView(map);
+        this.#currentMap = new FoyerView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
@@ -131,6 +132,25 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     }
 
+    initReceptionView(map) {
+        this.#currentMap = new ReceptionView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
+    }
+
+    initFoodCourtView(map) {
+        this.#currentMap = new FoodCourtView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
+    }
+
+    /*
     //Is called when participant enters FoodCourt
     initFoodCourtView(map) {
         this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
@@ -140,6 +160,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initReceptionView(map) {
         this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
     }
+    */
 
     /**
      * 
