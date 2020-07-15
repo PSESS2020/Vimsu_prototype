@@ -154,6 +154,7 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
+        this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
     }
     
 
@@ -292,6 +293,14 @@ class ClientController {
         
     }
 
+    // get the current lectures from the server to display in the UI for selection
+    handleFromServerCurrentLectures(lectures) {
+        lectures.forEach(x => {
+            $('#currentLecturesWindowContent').clear();  // TODO
+            $('#currentLecturesWindowContent').append("<button>Test</button>"); // TODO
+        })
+        $('#currentLecturesWindow').show(); // TODO
+    }
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */

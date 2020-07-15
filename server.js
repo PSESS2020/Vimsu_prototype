@@ -167,8 +167,9 @@ app.get('/login', (request, response) => {
 });
 
 app.get('/game', (request, response) => {
+    var currentLectures = ["lecture1", "lecture2"]
     if (request.session.loggedin === true) {
-        response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
+        response.render('canvas', {videos: currentLectures});
     } else {
         response.redirect('/');
     }
@@ -475,6 +476,24 @@ io.on('connection', (socket) => {
         // TODO
         // handle this properly server-side
         socket.broadcast.emit('movementOfAnotherPPantStop', ppantID);
+    });
+
+    socket.on('getCurrentLectures', () => {
+        // TODO: return the lectures here from the database, mocked for now
+        socket.emit('currentLectures', [{
+            title: 'Grundbegriffe der Informatik',
+            speaker: 'Stüker',
+            summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Genertionen.',
+            startTime: Date.now() - 600000,
+            endTime: Date.now() + 300000,
+        }, 
+        {
+            title: 'Softwaretechnik 1',
+            speaker: 'Walter F. Tichy',
+            summary: 'Spannende Entwurfsmuster für jung und alt.',
+            startTime: Date.now() - 500000,
+            endTime: Date.now() + 560000,
+        }]);
     });
     
     // This will need a complete rewrite once the server-side models are properly implemented

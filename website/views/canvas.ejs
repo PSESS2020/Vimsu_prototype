@@ -65,6 +65,45 @@
                     </li>
                 </ul>
         </nav>
+
+        </div>
+        
+        <div id="lectureVideoWindow" style="display: none; position: fixed; top: 20px; left: 20px; background-color: white; z-index: 1050; width: calc(100% - 40px); height: calc(100% - 40px)">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12"><h5>Ein Vortrag über Katzen</h5> <span>Laura Traub</span></div>
+                    <div class="col-9">
+                        <video width="100%" autoplay controls src="client/OFSL7673.mp4"></video>
+                        VIDEO
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                              <button class="btn btn-primary" type="button">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="customWindow" id="currentLectures" style="display: none; position: fixed; top: 20px; left: 20px; background-color: white; z-index: 1050; width: 600px ; height: 300px">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="windowHeader">
+                        <h5>Current Lectures</h5>
+                    </div>
+                    </div>
+                    <div id="currentLecturesContainer" class="col-3">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+          
              
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <script src="client/libraries/require.js"></script>

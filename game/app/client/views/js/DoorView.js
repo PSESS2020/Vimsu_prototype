@@ -19,6 +19,6 @@ class DoorView extends GameObjectView {
     }
 
     onclick() {
-        alert("Hi From DoorView: " + this.#DOORTYPE);
+        document.getElementById("currentLectures").style.display = "inline";
     }
 }
