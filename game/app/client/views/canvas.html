@@ -73,7 +73,7 @@
             requirejs(['client/utils/TypeChecker', 'client/config/GameConfig', 'client/models/TypeOfRoomClient', 'client/models/RoomDimensionsClient.js', 'client/models/GameObjectTypeClient', 'client/models/DirectionClient', 'client/models/BusinessCardClient', 'client/models/ParticipantClient', 
                         'client/models/PositionClient','client/models/GameObjectClient', 'client/models/RoomClient'], () => {
                 requirejs(['client/views/js/Views'], () => {
-                    requirejs(['js/ImageLoader', 'js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
+                    requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
                         requirejs(['client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
                             requirejs(['client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {

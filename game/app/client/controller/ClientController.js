@@ -174,14 +174,15 @@ class ClientController {
 
     sendToServerRequestMovStart(direction) {
         if(this.socketReady()) {
-        TypeChecker.isEnumOf(direction, DirectionClient);
-        let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let currPosX = currPos.getCordX();
-        let currPosY = currPos.getCordY();
-        let currentRoomId = this.#currentRoom.getRoomId();
+            TypeChecker.isEnumOf(direction, DirectionClient);
+            let currPos = this.#gameView.getOwnAvatarView().getPosition();
+            let currPosX = currPos.getCordX();
+            let currPosY = currPos.getCordY();
+            let currentRoomId = this.#currentRoom.getRoomId();
 
-        this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
-    }
+            this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
+        }
+    }   
 
     sendToServerRequestMovStop() {
         this.socketReady;
@@ -221,6 +222,9 @@ class ClientController {
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
         }
+
+        //Tell game view that type of room
+        this.#gameView.setTypeOfRoom(typeOfRoom);
     }
 
     //Third message from server, gives you information of starting position
