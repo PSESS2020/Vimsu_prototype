@@ -15,8 +15,11 @@ const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../models/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
+const Door = require('../models/Door.js');
+const DoorService = require('../services/DoorService.js');
 
 const TypeChecker = require=('../../utils/TypeChecker.js');
+
 
 /* This should later on be turned into a singleton */
 module.exports = class ServerController {
@@ -216,6 +219,45 @@ module.exports = class ServerController {
                 
                 this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
+
+             //Event to handle click on food court door tile
+             socket.on('enterFoodCourt', (ppantID, currentRoomId) => {
+                   
+                let gameObjects = foodCourtRoom.getListOfGameObjects();
+                let gameObjectData = [];
+                let targetId = foodCourtRoom.getRoomId();
+                let typeOfRoom = foodCourtRoom.getTypeOfRoom();
+                foodCourtRoom.enterParticipant(ppants.get(ppantID));
+                socket.join(Settings.FOODCOURT_ID.toString());
+            
+                //needed to send all gameObjects of starting room to client
+                //would be nicer and easier if they both share GameObject.js
+                gameObjects.forEach(gameObject => {
+                    gameObjectData.push({ id: gameObject.getId(),
+                    name: gameObject.getName(),
+                    width: gameObject.getWidth(),
+                    length: gameObject.getLength(),
+                    cordX: gameObject.getPosition().getCordX(),
+                    cordY: gameObject.getPosition().getCordY(),
+                    isSolid: gameObject.getSolid()
+                    });
+                });
+                    
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetId, typeOfRoom, gameObjectData);
+
+                //Singleton
+                let doorService = new DoorService();
+
+                let door = doorService.getDoorByRoom(currentRoomId, targetId);
+                    
+                let x = door.getTargetPosition().getCordX();
+                let y = door.getTargetPosition().getCordY();
+                let d = Settings.STARTDIRECTION;
+                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
+
+                this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+            });
+            
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken

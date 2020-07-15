@@ -231,7 +231,6 @@ class ClientController {
         //First Call to this method? If so, create own participant client model and init game view
         if (!this.#ownParticipant) {
             this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
-            this.initGameView();
         } else {
             this.#ownParticipant.setPosition(posUpdate);
             this.#ownParticipant.setDirection(dirUpdate);
@@ -239,6 +238,7 @@ class ClientController {
             this.#gameView.updateOwnAvatarDirection(dirUpdate);
         }
         
+        this.initGameView();
         console.log("test finish update pos");
     }
 
