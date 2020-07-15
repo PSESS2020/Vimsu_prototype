@@ -229,6 +229,8 @@ class ClientController {
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
         }
+
+        this.#gameView.setTypeOfRoom(typeOfRoom);
     }
 
     //Third message from server, gives you information of starting position
