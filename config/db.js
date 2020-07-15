@@ -2,7 +2,6 @@ const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/utils/TypeChecker');
 const FileSystem = require('./FileSystem');
-const fs = require('fs');
 
 module.exports = class db {
     #vimsudb;
@@ -125,7 +124,7 @@ module.exports = class db {
             bucketName: collectionName,
         });
 
-        var readStream = fs.createReadStream(dir + fileName);
+        var readStream = FileSystem.createReadStream(dir + fileName);
         var uploadStream = bucket.openUploadStream(fileName);
 
         var fileId = uploadStream.id.toString();
@@ -160,7 +159,7 @@ module.exports = class db {
         var downloadStream = bucket.openDownloadStream(id);
         
         return this.findOneInCollection(collectionName + '.files', {_id: id}, {filename: 1}).then(file => {
-            var writeStream = fs.createWriteStream(dir + file.filename)
+            var writeStream = FileSystem.createWriteStream(dir + file.filename)
 
             return new Promise((resolve, reject) => {
                 downloadStream.pipe(writeStream)
