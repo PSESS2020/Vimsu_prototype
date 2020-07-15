@@ -159,7 +159,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
 
-                if(gameObjectImage !== undefined)
+                if(gameObjectImage !== undefined) 
                     gameObjectView = new TileView(gameObjectImage, screenPos);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
