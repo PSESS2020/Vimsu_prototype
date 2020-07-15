@@ -8,7 +8,7 @@ module.exports = class Lecture {
     #videoId;
     #remarks;
     #startingTime;
-    #orator;
+    #oratorId;
     //#lectureChat; //TODO
     #maxParticipants;
     #activeParticipants;
@@ -24,16 +24,16 @@ module.exports = class Lecture {
      * @param {String} videoId 
      * @param {String} remarks 
      * @param {Date} startingTime 
-     * @param {Orator} orator 
+     * @param {String} oratorId
      * @param {int} maxParticipants 
      */
-    constructor(id, title, videoId, remarks, startingTime, orator, maxParticipants) {
+    constructor(id, title, videoId, remarks, startingTime, oratorId, maxParticipants) {
         TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(videoId);
         TypeChecker.isString(remarks);
         TypeChecker.isInstanceOf(startingTime, Date);
-        TypeChecker.isInstanceOf(orator, Orator);
+        TypeChecker.isString(oratorId);
         TypeChecker.isInt(maxParticipants);
 
         this.#id = id;
@@ -41,7 +41,7 @@ module.exports = class Lecture {
         this.#videoId = videoId;
         this.#remarks = remarks;
         this.#startingTime = startingTime;
-        this.#orator = orator;
+        this.#oratorId = oratorId;
         this.#maxParticipants = maxParticipants;
         this.#activeParticipants = [];
 
@@ -74,8 +74,8 @@ module.exports = class Lecture {
         return this.#startingTime;
     }
 
-    getOrator() {
-        return this.#orator;
+    getOratorId() {
+        return this.#oratorId;
     }
 
     /*

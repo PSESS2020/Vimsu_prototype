@@ -30,24 +30,12 @@ module.exports = class LectureService {
                 var lectureLists = [];
 
                 if(lectures) {
-                    var oratorLectureIds = []
-
-                    for(var lecture in lectures) {
-                        return this.getOratorLectureIds(lecture.oratorId, conferenceId).then(oratorLectures => {
-                            for(var oratorLecture in oratorLectures) {
-                                oratorLectureIds.push(oratorLecture.id);
-                            }
-
-                            lectureLists.push(new Lecture(lecture.id, lecture.title, lecture.videoId, 
-                                lecture.remarks, lecture.startingTime, new Orator(lecture.oratorId, "", "", 
-                                oratorLectureIds), lecture.maxParticipants));
-
-                            oratorLectureIds.length = 0;
-                        }).catch(err => {
-                            console.error(err)
-                        })
+                    for(var i = 0; i < lectures.length; i++) {
+                        lectureLists.push(new Lecture(lectures[i].id, lectures[i].title, lectures[i].videoId, 
+                            lectures[i].remarks, lectures[i].startingTime, lectures[i].oratorId, lectures[i].maxParticipants));
                     }
                 }
+
                 return lectureLists;
                 
             }).catch(err => {
