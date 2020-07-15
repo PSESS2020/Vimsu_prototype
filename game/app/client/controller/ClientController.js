@@ -11,7 +11,7 @@
  * Stuff that will be altered in the following steps:
  *
  *   (i) Every constant will be moved into a shared /utils/Settings.js file (name
- *       not final).
+ *       not final). DONE
  *
  *  (ii) This class will set up the game in the final product. The idea here being
  *       that the index.js will call a method setUpGame() from this class.
@@ -60,21 +60,20 @@ class ClientController {
      */
 
 
-    constructor(gameView/*, participantId*/) { //TODO: instanciate ParticipantClient
+    constructor(/*, participantId*/) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
-        this.#gameView = gameView;
+        this.#gameView = new GameView(GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
         console.log("fully init cc");
         return this;
     }
-
 
     getPort() {
         return this.#port;
@@ -160,7 +159,15 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
     }
+
+    /* #################################################### */    
+    /* #################### EDIT VIEW ##################### */
+    /* #################################################### */
     
+    updateGame() {
+        this.#gameView.update()
+        this.#gameView.draw();
+    }
 
     /* #################################################### */    
     /* ################## SEND TO SERVER ################## */
@@ -379,7 +386,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -392,7 +399,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -405,7 +412,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -418,7 +425,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
