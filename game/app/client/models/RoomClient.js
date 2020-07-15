@@ -56,6 +56,20 @@
             this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 0), true));
             this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 0), true));
             this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 0), true));
+        } else
+        if (this.#typeOfRoom === "RECEPTION") {
+            this.#width = RoomDimensionsClient.RECEPTION_WIDTH;
+            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
+        } else
+        if (this.#typeOfRoom === "FOODCOURT") {
+            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
+            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
+
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(4, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(5, 2), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(6, 0), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(7, 2), true));
+            this.#listOfGameObjects.push(new GameObjectClient(1, "table", 1, 1, new PositionClient(8, 0), true));
         }
 
         //Initialisiert width*length Feld gefüllt mit 0
@@ -240,6 +254,16 @@
             this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
             this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
             this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
         }
     }
 

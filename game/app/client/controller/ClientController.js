@@ -117,6 +117,7 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
+        return true;
     }
 
     /*Initializes the initial view for the player*/
@@ -168,18 +169,19 @@ class ClientController {
 
     //asks the server for an update of the current game state
     requestGameStateUpdate() {
-        this.socketReady;
+        if(this.socketReady())
         this.socket.emit('requestGameStateUpdate');
     }
 
     sendToServerRequestMovStart(direction) {
-        this.socketReady;
+        if(this.socketReady()) {
         TypeChecker.isEnumOf(direction, DirectionClient);
         var currPos = this.#gameView.getOwnAvatarView().getPosition();
         var currPosX = currPos.getCordX();
         var currPosY = currPos.getCordY();
 
         this.socket.emit('requestMovementStart', this.#participantId, direction, currPosX, currPosY);
+        }
     }
 
     sendToServerRequestMovStop() {

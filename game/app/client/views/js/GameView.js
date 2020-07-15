@@ -11,6 +11,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #roomId;
     #updateList = [];
     #foyerView;
+    #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
 
@@ -20,7 +21,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
+        //this.#mapViews = [new FoyerView(), new ReceptionView(), new FoodCourtView()];
         this.#roomId = 1;
+
         this.initOwnAvatarView(" ");
     }
 
@@ -73,8 +76,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     draw()
     {
 
-        if(this.#foyerView.selectionOnMap)
-        this.#foyerView.drawSelectedTile();
+        if(this.#currentMap.selectionOnMap)
+        this.#currentMap.drawSelectedTile();
 
         for (var i = 0; i < this.#updateList.length; i++) {
 
@@ -106,7 +109,25 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initFoyerView(map) {
-        this.#foyerView = new FoyerView(map);
+        this.#currentMap = new FoyerView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
+    }
+
+    initReceptionView(map) {
+        this.#currentMap = new ReceptionView(map);
+        
+        //the execution of below doesn't work because FoyerView is not creating fast enough.
+        //the map tile array is therefore empty.
+        //this.#foyerView.draw();
+
+    }
+
+    initFoodCourtView(map) {
+        this.#currentMap = new FoodCourtView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
