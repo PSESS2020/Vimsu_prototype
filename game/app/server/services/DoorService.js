@@ -4,6 +4,8 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Door = require('../models/Door.js');
 var Settings = require('../../utils/Settings.js');
+var Position = require('../models/Position.js');
+
 
 module.exports = class DoorService {
     #doors;
@@ -57,9 +59,9 @@ module.exports = class DoorService {
 
     initAllDoors() {
         //Door from Foyer to Food Court (TODO: Adjust target position)
-        this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 25, 2), new Position(FOODCOURT_ID, 0, 0)));
+        this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 0, 0)));
 
         //Door from Foyer to Reception (TODO: Adjust target position)
-        this.#doors.push(new Door(2, new Position(Settings.FOYER_ID, 25, 22), new Position(RECEPTION_ID, 0, 0)));
+        this.#doors.push(new Door(2, new Position(Settings.FOYER_ID, 25, 22), new Position(Settings.RECEPTION_ID, 0, 0)));
     }
 } 
