@@ -316,21 +316,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 3 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 2 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
         //update currentRoom;
         //update View
     }
