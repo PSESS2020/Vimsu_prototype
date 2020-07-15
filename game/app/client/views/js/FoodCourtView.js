@@ -1,16 +1,16 @@
-class FoyerView extends MapView {
-    
-    #loader;
-    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_lecturehall.png", "client/assets/door_foodcourt.png", "client/assets/door_reception.png", "client/assets/table.png",];
+class FoodCourtView extends MapView {
 
-    constructor(receptionMap) {
-        super(receptionMap);
-        
+    #loader;
+    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_foyer.png", "client/assets/table.png"];
+
+    constructor(foyerMap) {
+        super(foyerMap);
+
         this.#loader = new LoadingView();
         this.loadImages();
     }
 
-    
+
 
     //loads the images that are needed for tilecreation.
     //this was the best not error prone way.
@@ -49,30 +49,31 @@ class FoyerView extends MapView {
         }
     }
 
-    //adds a tile to the list of clickable tiles of the map.
-    addToClickableTiles(tile) {
 
-        super.addToClickableTiles(tile);
-    
+//adds a tile to the list of clickable tiles of the map.
+addToClickableTiles(tile) {
+
+    super.addToClickableTiles(tile);
+
+}
+
+
+
+
+draw() {
+
+    let tiles = super.getTiles();
+
+    if (tiles.length != 0) {
+        tiles.forEach(object => object.draw());
     }
 
-    
+}
 
 
-    draw() {
-        
-        let tiles = super.getTiles();
-        
-        if (tiles.length != 0) {
-            tiles.forEach( object => object.draw());
-        }
-
-    }
-
-
-    //TODO
-    drawGameObjects(objectType) {
-        TypeChecker.isInt(objectType);
-    }
+//TODO
+drawGameObjects(objectType) {
+    TypeChecker.isInt(objectType);
+}
 
 }

@@ -19,6 +19,16 @@ class DoorView extends GameObjectView {
     }
 
     onclick() {
-        document.getElementById("currentLectures").style.display = "inline";
+        let eventManager = new EventManager();
+        if (this.#DOORTYPE === GameObjectTypeClient.LECTUREDOOR) {
+            eventManager.handleLectureDoorClick();
+        }
+        else if (this.#DOORTYPE === GameObjectTypeClient.FOODCOURTDOOR) {
+            eventManager.handleFoodCourtDoorClick();
+        }
+        else if (this.#DOORTYPE === GameObjectTypeClient.RECEPTIONDOOR) {
+            eventManager.handleReceptionDoorClick();
+        }
+        //TODO: Foyer Door Click
     }
 }

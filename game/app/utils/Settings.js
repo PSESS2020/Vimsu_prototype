@@ -8,7 +8,9 @@ module.exports = Object.freeze
     MOVEMENTSPEED_Y: 1,
 
     /* Start-Position Constants */
-    STARTROOM: 1,
+    FOYER_ID: 1,
+    FOODCOURT_ID: 2,
+    RECEPTION_ID: 3,
     STARTPOSITION_X: 0,
     STARTPOSITION_Y: 0,
     STARTDIRECTION: Direction.DOWNRIGHT

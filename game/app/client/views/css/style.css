@@ -87,13 +87,13 @@ vertical-align: middle;
 }
 
 .customWindow {
-  background-color:rgba(34, 43, 46, 0.6) !important;
+  background-color:rgba(34, 43, 46, 0.9) !important;
   color: antiquewhite;
-  
+  padding: 0px !important;
+  overflow: hidden;
 }
 
 .windowHeader {
-  padding: 30px;
   text-align: center;
   background-color: rgba(24, 30, 32, 0.699);
   color: antiquewhite;
