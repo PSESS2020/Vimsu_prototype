@@ -10,5 +10,6 @@ const GameObjectTypeClient = Object.freeze
     RECEPTIONDOOR: 6,
     TABLE: 7,
     LEFTTILE: 8,
-    RIGHTTILE: 9
+    RIGHTTILE: 9,
+    FOYERDOOR: 10,
 });
