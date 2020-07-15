@@ -1,7 +1,7 @@
-class FoyerView extends MapView {
+class ReceptionView extends MapView {
     
     #loader;
-    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_lecturehall.png", "client/assets/door_foodcourt.png", "client/assets/door_reception.png", "client/assets/table.png",];
+    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png","client/assets/door_foyer.png"];
 
     constructor(receptionMap) {
         super(receptionMap);

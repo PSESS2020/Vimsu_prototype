@@ -128,6 +128,10 @@ module.exports = class Room {
         return this.#startDirection;
     }
 
+    getListOfGameObjects() {
+        return this.#listOfGameObjects;
+    }
+
     /**
      * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
      * 

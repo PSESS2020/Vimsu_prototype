@@ -69,7 +69,11 @@ module.exports = class GameObjectService {
         }
 
         else if (typeOfRoom === 'RECEPTION') {
-            //Objekte für Rezeption
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, 9), true));
+        }
+
+        else if (typeOfRoom === 'FOODCOURT') {
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, 10), true));
         }
     }
 }

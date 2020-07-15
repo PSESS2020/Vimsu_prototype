@@ -1,6 +1,4 @@
-// Alle Werte random, muss noch festgelegt werden
-// Move this into /utils
-// Using object.freeze would make settings immutable - is this something we want?
+//Alle Werte random, muss noch festgelegt werden
 
 module.exports = Object.freeze
 ({
