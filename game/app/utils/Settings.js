@@ -1,5 +1,3 @@
-const Direction = require("../server/models/Direction");
-
 const Settings = Object.freeze
 ({
 
@@ -13,8 +11,6 @@ const Settings = Object.freeze
     RECEPTION_ID: 3,
     STARTPOSITION_X: 0,
     STARTPOSITION_Y: 0,
-    STARTDIRECTION: Direction.DOWNRIGHT
+    STARTDIRECTION: DirectionClient.DOWNRIGHT
 
 });
-
-module.exports = Settings
