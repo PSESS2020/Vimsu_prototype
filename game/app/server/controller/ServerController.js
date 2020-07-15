@@ -190,6 +190,15 @@ module.exports = class ServerController {
                 this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
                 console.log("test6");
             });
+
+            socket.on('sendMessage', (ppantID, text) => {
+                var roomID = ppants.get(ppantID).getPosition().getRoomId();
+                // timestamping the message - (E)
+                var currentDate = new Date();
+                var currentTime = currentDate.getHours().toString() + ":" + currentDate.getMinutes().toString();
+                this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
+                this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+            }
             
             /* Now we handle receiving a movement-input from a participant.
              * NOTE:
