@@ -24,8 +24,9 @@ class ParticipantAvatarView extends AvatarView {
     #standingDownRightAnimation;
     #currentAnimation;
     #walking = false;
+    #typeOfRoom;
 
-    constructor(position, direction, participantId) {
+    constructor(position, direction, participantId, typeOfRoom) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -39,6 +40,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
+        this.#typeOfRoom = typeOfRoom;
 
 
     }
@@ -101,8 +103,15 @@ class ParticipantAvatarView extends AvatarView {
         this.updateCurrentAnimation();
     
         //should be done somewhere else, 150 and 419 are room dependent
-        let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-        let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        if (this.#typeOfRoom === 'FOYER') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'FOODCOURT') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        
 
         let playerName = "player1";
         ctx_avatar.font = "1em sans-serif";
