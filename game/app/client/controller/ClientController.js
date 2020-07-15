@@ -113,6 +113,7 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
@@ -120,8 +121,10 @@ class ClientController {
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
             this.#gameView.initReceptionView(map);
         }
-        
+
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        
+        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
@@ -230,6 +233,8 @@ class ClientController {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
         }
 
+        //Tell game view that type of room
+
         this.#gameView.setTypeOfRoom(typeOfRoom);
     }
 
@@ -259,6 +264,10 @@ class ClientController {
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
+ 
+        if (ppantID === this.#participantId) {
+            return;
+        }
 
         let newPos = new PositionClient(newCordX, newCordY);
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
@@ -272,6 +281,9 @@ class ClientController {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
+        if (ppantID === this.#participantId) {
+            return;
+        }
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -283,6 +295,9 @@ class ClientController {
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        if (initInfo.id === this.#participantId) {
+            return;
+        }
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         console.log("init info id" + initInfo.id);
@@ -322,21 +337,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 3 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 2 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
         //update currentRoom;
         //update View
     }
