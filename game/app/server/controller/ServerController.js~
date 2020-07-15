@@ -11,51 +11,33 @@ const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
 
 const Room  = require('../models/Room.js');
-const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../models/TypeOfRoom.js');
-const Settings = require('../../utils/Settings.js');
-const Door = require('../models/Door.js');
-const DoorService = require('../services/DoorService.js');
 
 const TypeChecker = require=('../../utils/TypeChecker.js');
-
 
 /* This should later on be turned into a singleton */
 module.exports = class ServerController {
     
-    #io;
-    #listOfConfCont;
-
-    //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
-    #rooms;
+    #io
+    #listOfConfCont
     
     constructor(socket) {
         this.#io = socket;        
     }
     
-    //There are currently 3 differenct socketIo Channels
-    //foyerChannel: Settings.FOYER_ID.toString()
-    //foodCourtChannel: Settings.FOODCOURT_ID.toString()
-    //receptionChannel: Settings.RECEPTION_ID.toString()
-
-
     init() {
         /* First, we create a map that will hold all ppantControllers, indexed by their socket.ids 
          * - (E) */
         var counter = 0;
         const ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
-
         
-        //Init all rooms
-        var roomService = new RoomService();
-        this.#rooms = roomService.getAllRooms();
-
-        var foyerRoom = this.#rooms[0];
-        var foodCourtRoom = this.#rooms[1];
-        var receptionRoom = this.#rooms[2];
-
+        // Create a foyer-room here
+        //TODO: Init other rooms for this conference
+        const foyerRoomId = 1; // placeholder ID
+        const foyerRoom = new Room(foyerRoomId, TypeOfRoom.FOYER); // Creates a foyer
+        
         //RoomController not needed at this point (P)
         //const gameRoomController = new RoomController(foyerRoom);
 
@@ -68,13 +50,10 @@ module.exports = class ServerController {
              * unless we're just doing regular game-state updates.
              * - (E) */
             socket.on('new participant', () => {
-
-                //First Channel (P)
-                socket.join(Settings.FOYER_ID.toString());
                 
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
-                if (ppantControllers.has(socket.id)) {
+                if ( ppantControllers.has(socket.id) ) {
                     return;
                 }
 
@@ -101,14 +80,10 @@ module.exports = class ServerController {
                  * - (E) */ 
 
                 // (i) to (iii)
-                var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
+                var ppantID = counter++; // let's hope I am a smart boy and this works - (E)
                 console.log("test1");
                 
                 //TODO: Needs to be adjusted when multiple rooms exist (P)
-                //currently every participant spawns in foyer at the start position
-                //Future Goal: Spawn returning participants at position, where he disconnected
-                //Spawn new participants at reception start position
-
                 var startPosition = foyerRoom.getStartPosition();
                 var x = startPosition.getCordX();
                 var y = startPosition.getCordY();
@@ -141,26 +116,7 @@ module.exports = class ServerController {
                 console.log("test4");
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
-
-                let gameObjects = foyerRoom.getListOfGameObjects();
-                let gameObjectData = [];
-
-                //needed to send all gameObjects of starting room to client
-                //would be nicer and easier if they both share GameObject.js
-                gameObjects.forEach(gameObject => {
-                    gameObjectData.push({ id: gameObject.getId(),
-                      name: gameObject.getName(),
-                      width: gameObject.getWidth(),
-                      length: gameObject.getLength(),
-                      cordX: gameObject.getPosition().getCordX(),
-                      cordY: gameObject.getPosition().getCordY(),
-                      isSolid: gameObject.getSolid()
-                    });
-                })
-
-                //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom(), 
-                                            gameObjectData);
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom());
                 // Sends the start-position back to the client so the avatar can be displayed in the right cell
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 
@@ -168,7 +124,7 @@ module.exports = class ServerController {
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
-                    if(key != ppantID && value.getPosition().getRoomId() === Settings.FOYER_ID) {
+                    if(key != ppantID) {
                         var tempPos = value.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
@@ -187,7 +143,7 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                socket.broadcast.emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
                 console.log("test6");
             });
             
@@ -198,68 +154,31 @@ module.exports = class ServerController {
              * INFORMS ABOUT EACH MOVEMENT ACTION SEPERATELY, NOT COLLECTING
              * THEM INTO A SINGLE MESSAGE THAT GETS SEND OUT REGULARLY
              * - (E) */
-            socket.on('requestMovementStart', (ppantID, direction, currRoomId, newCordX, newCordY) => {
-                
-                let newPos = new Position(currRoomId, newCordX, newCordY);
-                let room = this.#rooms[currRoomId - 1];
+            socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
+                // TODO
+                //When multiple Rooms exits, either the server has to get the right room or the client emits it in some way(P)
 
+                var newPos = new Position(foyerRoom.getRoomId(), newCordX, newCordY);
+                
                 //No Collision, so every other participant gets the new position (P)
-                if (!room.checkForCollision(newPos)) {
+                if (!foyerRoom.checkForCollision(newPos)) {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
-                    this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                    socket.broadcast.emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     var oldPos = ppants.get(ppantID).getPosition();
                     var oldDir = ppants.get(ppantID).getDirection();
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
-                    }
-                });
-                
-            socket.on('requestMovementStop', (ppantID, currRoomId) => {
-                
-                this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
+                }
             });
 
-             //Event to handle click on food court door tile
-             socket.on('enterFoodCourt', (ppantID, currentRoomId) => {
-                   
-                let gameObjects = foodCourtRoom.getListOfGameObjects();
-                let gameObjectData = [];
-                let targetId = foodCourtRoom.getRoomId();
-                let typeOfRoom = foodCourtRoom.getTypeOfRoom();
-                foodCourtRoom.enterParticipant(ppants.get(ppantID));
-                socket.join(Settings.FOODCOURT_ID.toString());
-            
-                //needed to send all gameObjects of starting room to client
-                //would be nicer and easier if they both share GameObject.js
-                gameObjects.forEach(gameObject => {
-                    gameObjectData.push({ id: gameObject.getId(),
-                    name: gameObject.getName(),
-                    width: gameObject.getWidth(),
-                    length: gameObject.getLength(),
-                    cordX: gameObject.getPosition().getCordX(),
-                    cordY: gameObject.getPosition().getCordY(),
-                    isSolid: gameObject.getSolid()
-                    });
-                });
-                    
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetId, typeOfRoom, gameObjectData);
-
-                //Singleton
-                let doorService = new DoorService();
-
-                let door = doorService.getDoorByRoom(currentRoomId, targetId);
-                    
-                let x = door.getTargetPosition().getCordX();
-                let y = door.getTargetPosition().getCordY();
-                let d = Settings.STARTDIRECTION;
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
-
-                this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+            socket.on('requestMovementStop', ppantID => {
+                // TODO
+                // handle this properly server-side
+                socket.broadcast.emit('movementOfAnotherPPantStop', ppantID);
             });
             
-
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
             socket.on('disconnect', () => {

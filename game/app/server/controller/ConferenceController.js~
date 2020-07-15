@@ -21,7 +21,7 @@ module.exports = class ConferenceController {
     #listOfLegalAudis
     
     // Should these list contains controllers or models?
-    #listOfSignedInMods
+    #listOfSignedIdMods
     #listOfSignedInOras
     #listOfSignedInAudis
     

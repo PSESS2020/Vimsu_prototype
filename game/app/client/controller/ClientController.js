@@ -34,10 +34,7 @@
 
 
 
-/* For quicker changing of the movement-rate. 
- * - (E) */
-const movementX = 1,
-      movementY = 1;
+//const Settings = require('../../utils/Settings')
 
 class ClientController {
 
@@ -109,6 +106,7 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
+        return true;
     }
 
     /*Initializes the initial view for the player*/
@@ -118,10 +116,17 @@ class ClientController {
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
+            this.#gameView.initFoodCourtView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
+            this.#gameView.initReceptionView(map);
         }
         
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
+
+        //Game View is now fully initialised
+        this.#gameView.setGameViewInit(true);
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -163,24 +168,26 @@ class ClientController {
 
     //asks the server for an update of the current game state
     requestGameStateUpdate() {
-        this.socketReady;
+        if(this.socketReady())
         this.socket.emit('requestGameStateUpdate');
     }
 
     sendToServerRequestMovStart(direction) {
-        this.socketReady;
-        TypeChecker.isEnumOf(direction, DirectionClient);
-        var currPos = this.#gameView.getOwnAvatarView().getPosition();
-        var currPosX = currPos.getCordX();
-        var currPosY = currPos.getCordY();
+        if(this.socketReady()) {
+            TypeChecker.isEnumOf(direction, DirectionClient);
+            let currPos = this.#gameView.getOwnAvatarView().getPosition();
+            let currPosX = currPos.getCordX();
+            let currPosY = currPos.getCordY();
+            let currentRoomId = this.#currentRoom.getRoomId();
 
-        this.socket.emit('requestMovementStart', this.#participantId, direction, currPosX, currPosY);
+            this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
+        }
     }
 
     sendToServerRequestMovStop() {
         this.socketReady;
-        
-        this.socket.emit('requestMovementStop', this.#participantId);
+        let currentRoomId = this.#currentRoom.getRoomId();
+        this.socket.emit('requestMovementStop', this.#participantId, currentRoomId);
     }
 
 
@@ -198,15 +205,22 @@ class ClientController {
     }
 
     //Second message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {
+        
+        //transform GameObjects to GameObjectClients
+        var listOfGameObjects = [];
+        listOfGameObjectsData.forEach(element => {
+            listOfGameObjects.push(new GameObjectClient(element.id, element.name, element.width, element.length,
+                new PositionClient(element.cordX, element.cordY), element.isSolid));
+        });
 
         //First room? 
         if(!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
         
         //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
         }
     }
 
@@ -219,7 +233,6 @@ class ClientController {
         //First Call to this method? If so, create own participant client model and init game view
         if (!this.#ownParticipant) {
             this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
-            this.initGameView();
         } else {
             this.#ownParticipant.setPosition(posUpdate);
             this.#ownParticipant.setDirection(dirUpdate);
@@ -227,6 +240,7 @@ class ClientController {
             this.#gameView.updateOwnAvatarDirection(dirUpdate);
         }
         
+        this.initGameView();
         console.log("test finish update pos");
     }
 
@@ -297,9 +311,23 @@ class ClientController {
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
 
-    handleFromViewEnterDoor(doorId) {
+    handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterDoor', doorId);
+        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        //update currentRoom;
+        //update View
+    }
+
+    handleFromViewEnterFoodCourt() {
+        this.socketReady;
+        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        //update currentRoom;
+        //update View
+    }
+
+    handleFromViewEnterFoyer() {
+        this.socketReady;
+        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
     }

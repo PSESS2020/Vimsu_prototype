@@ -12,7 +12,7 @@
     #listOfPPants;
     #occupationMap;
     //listOfNPCs
-    #listOfGameObjects = [];
+    #listOfGameObjects;
     //listOfDoors
     #map;
     
@@ -24,7 +24,7 @@
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
      */
-    constructor(roomId, typeOfRoom) {
+    constructor(roomId, typeOfRoom, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
 
@@ -37,17 +37,18 @@
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
+        this.#listOfGameObjects = listOfGameObjects;
         this.#listOfPPants = [];
 
         if (this.#typeOfRoom === "FOYER") {
             this.#width = RoomDimensionsClient.FOYER_WIDTH;
             this.#length = RoomDimensionsClient.FOYER_LENGTH;
-
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(4, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(5, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(6, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(7, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(8, 0), true));
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
+            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+            this.#width = RoomDimensionsClient.RECEPETION_WIDTH;
+            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
 
         //TODO: add other room types
@@ -157,14 +158,14 @@
      * @param {Array of ParticipantClient} listOfPPants 
      * @param {Array of Array of int} occupationMap 
      */
-    swapRoom(roomId, typeOfRoom) {
+    swapRoom(roomId, typeOfRoom, listOfGameObjects) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         //reset list of game objects, participants, occMap
-        this.#listOfGameObjects = [];
+        this.#listOfGameObjects = listOfGameObjects;
         this.#listOfPPants = [];
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
@@ -174,12 +175,12 @@
         if (this.#typeOfRoom === "FOYER") {
             this.#width = RoomDimensionsClient.FOYER_WIDTH;
             this.#length = RoomDimensionsClient.FOYER_LENGTH;
-
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(4, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(5, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(6, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(7, 0), true));
-            this.#listOfGameObjects.push(new GameObjectClient(1, "table" + 1, 1, 1, new PositionClient(8, 0), true));
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
+            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+            this.#width = RoomDimensionsClient.RECEPETION_WIDTH;
+            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
 
         //TODO: add other rooms
@@ -226,6 +227,16 @@
             this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
             this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
             this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;
+        } else if (this.#typeOfRoom === "RECEPTION") {
+
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
+        } else if (this.#typeOfRoom === "FOODCOURT") {
+            
+                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
+                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+
         }
     }
 
