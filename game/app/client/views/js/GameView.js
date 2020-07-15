@@ -130,7 +130,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     //Is called when participant enters Foyer
     initFoyerView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        this.#typeOfRoom = TypeOfRoomClient.FOYER;
+        this.#typeOfRoom = 'FOYER';
         this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
         this.#currentMap = new FoyerView(map);
         
@@ -142,7 +142,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        this.#typeOfRoom = TypeOfRoomClient.FOYER;
+        this.#typeOfRoom = 'RECEPTION';
         this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
         this.#currentMap = new ReceptionView(map);
         
@@ -154,7 +154,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        this.#typeOfRoom = TypeOfRoomClient.FOYER;
+        this.#typeOfRoom = 'FOODCOURT';
         this.#ownAvatarView.setTypeOfRoom(this.#typeOfRoom);
         this.#currentMap = new FoodCourtView(map);
         
