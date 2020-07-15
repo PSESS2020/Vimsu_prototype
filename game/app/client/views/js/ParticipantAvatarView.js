@@ -56,6 +56,11 @@ class ParticipantAvatarView extends AvatarView {
         this.#participantId = participantId;
     }
 
+    //Is called after room switch
+    setTypeOfRoom(typeOfRoom) {
+        this.#typeOfRoom = typeOfRoom;
+    }
+
     update() {
         this.#currentAnimation.update();
     }
@@ -108,6 +113,10 @@ class ParticipantAvatarView extends AvatarView {
             var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
         }
         else if (this.#typeOfRoom === 'FOODCOURT') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'RECEPTION') {
             var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
             var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
         }

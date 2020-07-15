@@ -114,6 +114,7 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        this.#gameView.initOwnAvatarView(this.#ownParticipant);
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
@@ -122,7 +123,7 @@ class ClientController {
             this.#gameView.initReceptionView(map);
         }
         
-        this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
