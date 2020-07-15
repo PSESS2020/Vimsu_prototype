@@ -115,17 +115,17 @@ app.get('/upload', (request, response) => {
 
 app.post('/upload', (request, response) => {
     if (!request.files || Object.keys(request.files).length === 0) {
-        return response.send('No files were uploaded. Please refresh the page.');
+        return response.send('No files were uploaded. <a href="/upload">Back to page</a>');
     }
 
     var maxParticipants = parseInt(request.body.maxParticipants);
     if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-        return response.send('Max participants must be integer. Please refresh the page.')
+        return response.send('Max participants must be integer. <a href="/upload">Try again</a>')
     }
 
     var startingTime = new Date(request.body.startingTime);
     if (startingTime == "Invalid Date") {
-        return response.send('Starting time must be a valid date. Please refresh the page.')
+        return response.send('Starting time must be a valid date. <a href="/upload">Try again</a>')
     }
     
     var title = request.body.title;
@@ -139,7 +139,7 @@ app.post('/upload', (request, response) => {
 
     if(videoName.includes(".mp4")) {
         if(videoSize > 524288000)
-            return response.send('File size exceeded 500 MB. Please refresh the page.')
+            return response.send('File size exceeded 500 MB. <a href="/upload">Back to page</a>')
         else {
             return SlotService.storeVideo(video).then(videoId => {
                 return SlotService.createSlot(videoId, "1", title, remarks, startingTime, oratorId, maxParticipants).then(res => {
@@ -153,7 +153,7 @@ app.post('/upload', (request, response) => {
             })
         }
     } else {
-        response.send('File type is not supported. Please refresh the page.');
+        response.send('File type is not supported. <a href="/upload">Back to page</a>');
     }
 });
 
@@ -193,7 +193,7 @@ app.post('/login', (request, response) => {
             response.redirect('/');
         }
         else {
-            response.send('Incorrect Username and/or Password. Please refresh the page.');
+            response.send('Incorrect Username and/or Password. <a href="/login">Try again</a>');
         }
         response.end();
     }).catch(err => {
@@ -218,7 +218,7 @@ app.get('/register', (request, response) => {
 app.post('/register', (request, response) => {
 
     if (request.body.username.length > 10) {
-        return response.send('Max. username length is 10 characters. Please refresh the page.');
+        return response.send('Max. username length is 10 characters. <a href="/register">Try again</a>');
     }
 
     var username = request.body.username;
@@ -228,7 +228,7 @@ app.post('/register', (request, response) => {
     if (emailRegex.test(String(email).toLowerCase())) {
 
     } else {
-        return response.send('Invalid Email Address. Please refresh the page.')
+        return response.send('Invalid Email Address. <a href="/register">Try again</a>')
     }
 
     return AccountService.isUsernameValid(username).then(res => {
@@ -241,7 +241,7 @@ app.post('/register', (request, response) => {
                     response.redirect('/register');
                 }
                 else {
-                    response.send('Email is already registered. Please refresh the page.');
+                    response.send('Email is already registered. <a href="/register">Try again</a>');
                 }
                 response.end();
             }).catch(err => {
@@ -249,7 +249,7 @@ app.post('/register', (request, response) => {
             })
         }
         else {
-            response.send('Username is already taken. Please refresh the page.');
+            response.send('Username is already taken. <a href="/register">Try again</a>');
         }
         response.end();
     }).catch(err => {
@@ -265,7 +265,7 @@ app.post('/registerValid', (request, response) => {
         var title = "";
     }
     else if(title !== "Mr." || title !== "Mrs." || title !== "Ms." || title !== "Dr." || title !== "Rev." || title !== "Miss" || title !== "Prof."){
-        return response.send('Invalid title. Please refresh the page.')
+        return response.send('Invalid title. <a href="/register">Try again</a>')
     }
 
     var surname = request.body.surname;
@@ -282,7 +282,7 @@ app.post('/registerValid', (request, response) => {
         response.redirect('/');
         response.end();
     }).catch(err => {
-        response.send('Registration failed. Please refresh the page.');
+        response.send('Registration failed. <a href="/register">Try again</a>');
         console.error(err);
     })
 })
