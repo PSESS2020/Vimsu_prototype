@@ -1,6 +1,7 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
 
+
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -122,13 +123,30 @@ class ClientController {
             this.#gameView.initReceptionView(map);
         }
 
-        this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
         
         //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
         this.#gameView.setGameViewInit(true);
+    }
+
+    switchRoomGameView() {
+        var map = this.#currentRoom.getMap();
+        var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        
+        if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
+            this.#gameView.initFoyerView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
+            this.#gameView.initFoodCourtView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
+            this.#gameView.initReceptionView(map);
+        }
+
+        this.#gameView.resetAnotherAvatarViews();
+        this.#gameView.updateOwnAvatarRoom(typeOfRoom);
+
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -163,6 +181,9 @@ class ClientController {
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
+
+        this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
+        this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
     }
 
     /* #################################################### */    
@@ -194,7 +215,7 @@ class ClientController {
 
             this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
         }
-    }
+    }   
 
     sendToServerRequestMovStop() {
         this.socketReady;
@@ -233,16 +254,16 @@ class ClientController {
         //First room? 
         if(!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
-        
+            
         //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
+            this.switchRoomGameView();
         }
-
         //Tell game view that type of room
 
         this.#gameView.setTypeOfRoom(typeOfRoom);
-    }
+   }
 
     //Third message from server, gives you information of starting position
     //After that, there is everything to init the game view
@@ -253,6 +274,7 @@ class ClientController {
         //First Call to this method? If so, create own participant client model and init game view
         if (!this.#ownParticipant) {
             this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
+            this.initGameView();
         } else {
             this.#ownParticipant.setPosition(posUpdate);
             this.#ownParticipant.setDirection(dirUpdate);
@@ -260,7 +282,7 @@ class ClientController {
             this.#gameView.updateOwnAvatarDirection(dirUpdate);
         }
         
-        this.initGameView();
+        
         console.log("test finish update pos");
     }
 
@@ -293,17 +315,22 @@ class ClientController {
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
+
+    handleFromServerLectureEntered(lecture) {
+        this.#gameView.updateCurrentLecture(lecture);
+    }
  
     /* TODO
      * Change argument from object into list (nicer to read)
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
-        console.log("test enter new ppant");
-        //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
-        //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         if (initInfo.id === this.#participantId) {
             return;
         }
+        console.log("test enter new ppant");
+        //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
+        //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         console.log("init info id" + initInfo.id);
@@ -311,7 +338,7 @@ class ClientController {
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
-        this.#gameView.initAnotherAvatarViews(participant);
+        this.#gameView.initAnotherAvatarViews(participant, this.#currentRoom.getTypeOfRoom());
     }
     
     /*
@@ -328,6 +355,9 @@ class ClientController {
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
         //TypeChecker.isString(ppantId);
+        if (ppantId === this.#participantId) {
+            return;
+        }
 
         this.#currentRoom.exitParticipant(ppantId);
 
@@ -351,6 +381,9 @@ class ClientController {
         messages.forEach( (message) => {
             $('#allchatMessages').append($('<div>').text("<" + message.timestamp + "> " + message.senderID + " says " + message.text));
         });
+    // get the current lectures from the server to display in the UI for selection
+    handleFromServerCurrentLectures(lectures) {
+        this.#gameView.updateCurrentLectures(lectures);
     }
 
     /* #################################################### */    
@@ -359,23 +392,28 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 3 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.RECEPTION);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 2 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOODCOURT);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOYER);
         //update currentRoom;
         //update View
+    }
+
+    handleFromViewEnterLecture(lectureId) {
+        this.socketReady;
+        this.socket.emit('enterLecture', this.#participantId, lectureId);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 

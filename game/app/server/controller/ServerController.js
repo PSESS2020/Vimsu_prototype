@@ -236,13 +236,31 @@ module.exports = class ServerController {
             });
 
              //Event to handle click on food court door tile
-             socket.on('enterRoom', (ppantID, currentRoomId, targetRoomId) => {
+             socket.on('enterRoom', (ppantID, currentRoomId, targetRoomType) => {
                    
+                //get right target room id
+                var targetRoomId;
+                if (targetRoomType === TypeOfRoom.FOYER) {
+                    targetRoomId = Settings.FOYER_ID;
+                } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
+                    targetRoomId = Settings.FOODCOURT_ID;
+                } else if (targetRoomType === TypeOfRoom.RECEPTION) {
+                    targetRoomId = Settings.RECEPTION_ID;
+                }
+
+                /*
+                /Foyer has ID 1 and is this.#rooms[0]
+                /FoodCourt has ID 2 and is this.#rooms[1]
+                /Reception has ID 3 and is this.#rooms[2]
+                */
+
+                //kind of unnecessary at this point
+                this.#rooms[currentRoomId - 1].exitParticipant(ppants.get(ppantID));
+                this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
+
+                //get all GameObjects from target room
                 let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
                 let gameObjectData = [];
-                let typeOfRoom = this.#rooms[targetRoomId - 1].getTypeOfRoom();
-                this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
-                
             
                 //needed to send all gameObjects of starting room to client
                 //would be nicer and easier if they both share GameObject.js
@@ -257,26 +275,34 @@ module.exports = class ServerController {
                     });
                 });
                     
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, typeOfRoom, gameObjectData);
+                //emit new room data to client
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData);
 
                 //Singleton
                 let doorService = new DoorService();
 
+                //get door from current room to target room
                 let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
                     
                 let newPos = door.getTargetPosition();
                 let x = newPos.getCordX();
                 let y = newPos.getCordY();
-                let d = Settings.STARTDIRECTION;
+                let d = door.getDirection();
 
+                //set new position in server model
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
                 
+                //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
 
+                //Emit to all participants in old room, that participant is leaving
                 this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+
+                //Emit to all participants in new room, that participant is joining
                 this.#io.sockets.in(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
 
+                //Emit to participant all participant positions, that were in new room before him
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID && value.getPosition().getRoomId() === targetRoomId) {
                         var tempPos = value.getPosition();
@@ -288,11 +314,45 @@ module.exports = class ServerController {
                     }   
                 });
 
+                //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
                 this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId].getMessages());
 
             });
+
+            // TODO: remove and make it work with the actual model
+            var mockedLectures = [{
+                id: 1,
+                title: 'Grundbegriffe der Informatik',
+                speaker: 'Stüker',
+                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
+                startTime: Date.now() - 600000,
+                endTime: Date.now() + 300000,
+                videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
+            }, 
+            {
+                id: 2,
+                title: 'Softwaretechnik 1',
+                speaker: 'Walter F. Tichy',
+                summary: 'Spannende Entwurfsmuster für jung und alt.',
+                startTime: Date.now() - 500000,
+                endTime: Date.now() + 560000,
+                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+            }]
+            socket.on('getCurrentLectures', () => {
+                // TODO: return the lectures here from the schedule, mocked for now
+                //something like var lectures = this.conference.getSchedule().getCurrentLectures()
+                socket.emit('currentLectures', mockedLectures);
+            });
+
+            socket.on('enterLecture', (ppantID, lectureId) => {
+                console.log('id: ' + lectureId);
+                console.log(mockedLectures.filter(x => x.id === lectureId)[0])
+                // TODO: retrieve data from the database here
+                // and also add user to the chat accordingly
+                socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
+            })
             
 
             // This will need a complete rewrite once the server-side models are properly implemented

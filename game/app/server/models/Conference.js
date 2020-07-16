@@ -1,14 +1,17 @@
 // Add required imports
 
+const Schedule = require("./Schedule");
+
 module.exports = class Conference {
      
-    // Add private fields 
+    #schedule;
      
-    constructor() {
-        
-        // intialize fields
-        // 
-    
+    constructor(lectureList) {
+        this.#schedule = new Schedule(lectureList);
+    }
+
+    getSchedule() {
+        return this.#schedule;
     }
 
 }

@@ -5,6 +5,8 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
 
+
+
 /*module.exports =*/ class GameView {
 
     #gameWidth;
@@ -18,7 +20,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
     #gameViewInit;
-    #typeOfRoom;
 
     constructor(gameWidth, gameHeight) 
     {
@@ -48,10 +49,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     setGameViewInit(bool) {
         TypeChecker.isBoolean(bool);
         this.#gameViewInit = bool;
-    }
-
-    setTypeOfRoom(typeOfRoom) {
-        this.#typeOfRoom = typeOfRoom;
     }
 
     addToUpdateList(viewInstance)
@@ -90,11 +87,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        if(this.#gameViewInit) {
+        //check if game view is already initalized
+        if (this.#gameViewInit) {
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
-            }
-
+            }   
             for (var i = 0; i < this.#updateList.length; i++) {
 
                 if (this.#updateList[i] instanceof Array) {
@@ -130,7 +127,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initFoyerView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
 
-        this.#typeOfRoom = 'FOYER';
+
+       // this.#typeOfRoom = 'FOYER';
         this.#currentMap = new FoyerView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -141,10 +139,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-
-        this.#typeOfRoom = 'RECEPTION';
-        
-        this.#currentMap = new ReceptionView(map);
+        // this.#typeOfRoom = 'RECEPTION';
+       this.#currentMap = new ReceptionView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
@@ -154,9 +150,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        this.#typeOfRoom = 'FOODCOURT';
-        
-        this.#currentMap = new FoodCourtView(map);
+ // this.#typeOfRoom = 'FOODCOURT';
+       this.#currentMap = new FoodCourtView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
@@ -181,7 +176,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
      * 
      * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
      */
-    initAnotherAvatarViews(participants)
+    initAnotherAvatarViews(participants, typeOfRoom)
     {
         if(!(this.#ownAvatarView instanceof ParticipantAvatarView))
         {
@@ -203,7 +198,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 if(participants[i] !== this.#ownAvatarView) 
                 {
                     var participant = participants[i];
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId(), this.#typeOfRoom));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId(), typeOfRoom));
                 }
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -220,7 +215,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             if(participants !== this.#ownAvatarView) 
             {
                     console.log(participants.getId());
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId(), this.#typeOfRoom));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId(), typeOfRoom));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
@@ -309,6 +304,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
     }
 
+    resetAnotherAvatarViews() {
+        console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+        
+        this.#anotherParticipantAvatarViews.forEach(element => {
+            this.removeAnotherAvatarViews(element.getId());
+        });
+
+        console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
+        console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+    }   
+
     /*
     setRoomId(roomId)
     {
@@ -317,18 +323,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
     */
 
-    //inits ownAvatarView with information from ownParticipant model instance
-    initOwnAvatarView(ownParticipant)
+    //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
+    initOwnAvatarView(ownParticipant, typeOfRoom)
     {
         TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
+       
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom); 
+        this.addToUpdateList(this.#ownAvatarView);
 
-        
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, this.#typeOfRoom); 
-        this.#updateList[0] = this.#ownAvatarView;
         
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
@@ -350,6 +357,39 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     updateOwnAvatarWalking(isMoving) {
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
+    }
+
+    updateCurrentLectures(lectures) {
+        $('#currentLecturesContainer').empty();
+        
+        lectures.forEach(lecture => {
+            // this is really messy i know, should move it somewhere else
+            $('#currentLecturesContainer').append(`
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
+                    <h5>${lecture.title}</h5>
+                    <div class="small">${lecture.speaker}</div>
+                    <div>${lecture.summary}</div>
+                    <button id="${lecture.id}" class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
+                </div>
+            `)
+        });
+
+        $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+    }
+
+    updateCurrentLecture(lecture) {
+        $('#currentLectures').hide(); // hide the overview of current lectures
+
+        $('#lectureTitleLabel').text(lecture.title);
+        $('#lectureSpeakerLabel').text(lecture.speaker);
+        $('#lectureVideo').attr('src', lecture.videoUrl);
+        $('#lectureVideo').load();
+        
+        $('#lectureVideoWindow').show();
+    }
+        
+    updateOwnAvatarRoom(typeOfRoom) {
+        this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
     }
 
     removeOwnAvatarView()
