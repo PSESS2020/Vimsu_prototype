@@ -90,6 +90,7 @@ form input {
 border: none;
 border-radius: 5px;
 padding: 4px;
+width: 250px;
 }
 
 form button {
@@ -106,7 +107,7 @@ margin: 0;
 padding: 0;
 z-index: 1;
 max-height: 400px;
-max-width: 300px;
+max-width: 250px;
 }
 
 #allchatMessages div {
