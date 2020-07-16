@@ -234,6 +234,28 @@ module.exports = class ServerController {
                     targetRoomId = Settings.RECEPTION_ID;
                 }
 
+                //Singleton
+                let doorService = new DoorService();
+
+                //get door from current room to target room
+                let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
+
+                //check if participant is in right position to enter room
+                //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
+                if (ppants.get(ppantID).getPosition().getRoomId() != door.getStartPosition().getRoomId() ||
+                    ppants.get(ppantID).getPosition().getCordX() != door.getStartPosition().getCordX() ||
+                    ppants.get(ppantID).getPosition().getCordY() != door.getStartPosition().getCordY()) {
+                    console.log('wrong position');
+                    return;
+                }
+                    
+                let newPos = door.getTargetPosition();
+                let x = newPos.getCordX();
+                let y = newPos.getCordY();
+                let d = door.getDirection();
+
+
+
                 /*
                 /Foyer has ID 1 and is this.#rooms[0]
                 /FoodCourt has ID 2 and is this.#rooms[1]
@@ -263,17 +285,6 @@ module.exports = class ServerController {
                     
                 //emit new room data to client
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData);
-
-                //Singleton
-                let doorService = new DoorService();
-
-                //get door from current room to target room
-                let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
-                    
-                let newPos = door.getTargetPosition();
-                let x = newPos.getCordX();
-                let y = newPos.getCordY();
-                let d = door.getDirection();
 
                 //set new position in server model
                 ppants.get(ppantID).setPosition(newPos);
