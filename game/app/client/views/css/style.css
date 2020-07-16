@@ -105,6 +105,8 @@ overflow-y: auto;
 margin: 0;
 padding: 0;
 z-index: 1;
+width: 200px;
+height: 444px;
 }
 
 #allchatMessages div {
