@@ -114,6 +114,7 @@ background: #222;
 color: #fff;
 border-radius: 5px;
 padding: 5px 10px;
+overflow-wrap: break-word;
 }
 
 .navbarIcons {
