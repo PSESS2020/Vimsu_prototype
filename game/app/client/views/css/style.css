@@ -164,8 +164,40 @@ vertical-align: middle;
   color: antiquewhite;
 }
 
+.modal-header {
+  text-align: center;
+  background-color: rgba(24, 30, 32, 0.699);
+  color: antiquewhite;
+  font-size: 30px;
+  border-color: transparent !important; 
+  box-shadow: 0px 0px 0px transparent;
+}
 .chatInputGroup {
   background-color: antiquewhite;
 }
 
 
+.modal-content {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow: hidden;
+  border-color: transparent !important; 
+  box-shadow: 0px 0px 0px transparent;
+ }
+
+ .close {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  opacity: 1 !important;
+  box-shadow: 0px 0px 0px transparent;
+}
+
+.close:hover {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  opacity: .5 !important;
+  box-shadow: 0px 0px 0px transparent;
+}
