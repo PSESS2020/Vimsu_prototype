@@ -9,6 +9,9 @@ class ScheduleListView extends WindowView {
     }*/
 
     onclick() {
-        
+        $('#scheduleModal').on('shown.bs.modal', function (event) {
+            event.preventDefault();
+            $(".modal-body").text('pass your text here');
+        })
     }   
 }
