@@ -58,6 +58,8 @@ class EventManager {
     }
 
 
-
+    handleLectureClicked(lectureId) {
+        this.#clientController.handleFromViewEnterLecture(lectureId);
+    }
 
 }

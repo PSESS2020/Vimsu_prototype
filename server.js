@@ -148,7 +148,7 @@ app.get('/login', (request, response) => {
 app.get('/game', (request, response) => {
     var currentLectures = ["lecture1", "lecture2"]
     if (request.session.loggedin === true) {
-        response.render('canvas', {videos: currentLectures});
+        response.sendFile(path.join(__dirname + '/game/app/client/views/canvas.html'));
     } else {
         response.redirect('/');
     }

@@ -339,17 +339,33 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         $('#currentLecturesContainer').empty();
         
         lectures.forEach(lecture => {
+            // this is really messy i know, should move it somewhere else
             $('#currentLecturesContainer').append(`
-                <div class="col-4 mb-3">
+                <div class="currentLecturesContainer col-4 m-1">
                     <h5>${lecture.title}</h5>
                     <div class="small">${lecture.speaker}</div>
                     <div>${lecture.summary}</div>
-                    <button class="btn btn-primary mt-3 align-self-end">Show</button>
+                    <button id="${lecture.id}" class="btn btn-lecture m-2" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
                 </div>
             `)
         });
 
         $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+    }
+
+    updateCurrentLecture(lecture) {
+        $('#currentLectures').hide(); // hide the overview of current lectures
+
+        $('#lectureTitleLabel').text(lecture.title);
+        $('#lectureSpeakerLabel').text(lecture.speaker);
+        $('#lectureVideo').attr('src', lecture.videoUrl);
+        $('#lectureVideo').load();
+        
+        $('#lectureVideoWindow').show();
+    }
+
+    openLectureView() {
+        
     }
 
     removeOwnAvatarView()

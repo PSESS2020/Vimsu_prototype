@@ -159,6 +159,7 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
+        this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
     }
 
     /* #################################################### */    
@@ -274,6 +275,10 @@ class ClientController {
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
+
+    handleFromServerLectureEntered(lecture) {
+        this.#gameView.updateCurrentLecture(lecture);
+    }
  
     /* TODO
      * Change argument from object into list (nicer to read)
@@ -342,6 +347,11 @@ class ClientController {
         this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
+    }
+
+    handleFromViewEnterLecture(lectureId) {
+        this.socketReady;
+        this.socket.emit('enterLecture', this.#participantId, lectureId);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
