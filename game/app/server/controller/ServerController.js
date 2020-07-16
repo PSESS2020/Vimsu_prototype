@@ -189,7 +189,7 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
                 console.log("test6");
             });
             
@@ -209,7 +209,7 @@ module.exports = class ServerController {
                 if (!room.checkForCollision(newPos)) {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
-                    this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                    socket.to(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     var oldPos = ppants.get(ppantID).getPosition();
@@ -220,7 +220,7 @@ module.exports = class ServerController {
                 
             socket.on('requestMovementStop', (ppantID, currRoomId) => {
                 
-                this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
+                    socket.to(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
 
              //Event to handle click on food court door tile
@@ -296,10 +296,10 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
 
                 //Emit to all participants in old room, that participant is leaving
-                this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+                socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
                 //Emit to all participants in new room, that participant is joining
-                this.#io.sockets.in(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
 
                 //Emit to participant all participant positions, that were in new room before him
                 ppants.forEach( (value, key, map) => {

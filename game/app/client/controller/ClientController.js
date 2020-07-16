@@ -284,10 +284,6 @@ class ClientController {
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
  
-        if (ppantID === this.#participantId) {
-            return;
-        }
-
         let newPos = new PositionClient(newCordX, newCordY);
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
         this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
@@ -300,9 +296,6 @@ class ClientController {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
-        if (ppantID === this.#participantId) {
-            return;
-        }
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -315,9 +308,7 @@ class ClientController {
      * Change argument from object into list (nicer to read)
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
-        if (initInfo.id === this.#participantId) {
-            return;
-        }
+        
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
@@ -346,9 +337,6 @@ class ClientController {
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
         //TypeChecker.isString(ppantId);
-        if (ppantId === this.#participantId) {
-            return;
-        }
 
         this.#currentRoom.exitParticipant(ppantId);
 
