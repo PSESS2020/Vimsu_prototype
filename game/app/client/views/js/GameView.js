@@ -303,7 +303,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     resetAnotherAvatarViews() {
         console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
-        this.#anotherParticipantAvatarViews = [];
+        
+        this.#anotherParticipantAvatarViews.forEach(element => {
+            this.removeAnotherAvatarViews(element.getId());
+        });
+
         console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
         console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
     }   

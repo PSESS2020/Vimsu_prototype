@@ -233,13 +233,20 @@ module.exports = class ServerController {
                 } else if (targetRoomType === TypeOfRoom.RECEPTION) {
                     targetRoomId = Settings.RECEPTION_ID;
                 }
-                let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
-                let gameObjectData = [];
-                
 
+                /*
+                /Foyer has ID 1 and is this.#rooms[0]
+                /FoodCourt has ID 2 and is this.#rooms[1]
+                /Reception has ID 3 and is this.#rooms[2]
+                */
+
+                //kind of unnecessary at this point
                 this.#rooms[currentRoomId - 1].exitParticipant(ppants.get(ppantID));
                 this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
-                
+
+                //get all GameObjects from target room
+                let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
+                let gameObjectData = [];
             
                 //needed to send all gameObjects of starting room to client
                 //would be nicer and easier if they both share GameObject.js
@@ -254,11 +261,13 @@ module.exports = class ServerController {
                     });
                 });
                     
+                //emit new room data to client
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData);
 
                 //Singleton
                 let doorService = new DoorService();
 
+                //get door from current room to target room
                 let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
                     
                 let newPos = door.getTargetPosition();
@@ -266,6 +275,7 @@ module.exports = class ServerController {
                 let y = newPos.getCordY();
                 let d = door.getDirection();
 
+                //set new position in server model
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
                 
