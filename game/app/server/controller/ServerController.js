@@ -317,7 +317,7 @@ module.exports = class ServerController {
                 //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId].getMessages());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getMessages());
 
             });
 
