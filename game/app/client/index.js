@@ -35,9 +35,12 @@ setInterval( function() {
 
 $('form').submit(function(event) {
     event.preventDefault();
-    clientController.sendToServerAllchatMessage($('#allchatMessageInput').val());
-    $('#allchatMessageInput').val('');
-    return false;
+    let messageVal = $('#allchatMessageInput').val();
+    if(messageVal !== '') {
+      clientController.sendToServerAllchatMessage(messageVal);
+      $('#allchatMessageInput').val('');
+      return false;
+    }
 });
 
 document.getElementById("allchat").onkeydown = function(event) {
