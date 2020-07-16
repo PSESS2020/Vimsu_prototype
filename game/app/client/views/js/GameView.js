@@ -125,10 +125,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     //Is called when participant enters Foyer
     initFoyerView(map) {
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-
-
-       // this.#typeOfRoom = 'FOYER';
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT)
+        $('#avatarCanvas').off();
         this.#currentMap = new FoyerView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -139,8 +137,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        // this.#typeOfRoom = 'RECEPTION';
-       this.#currentMap = new ReceptionView(map);
+        $('#avatarCanvas').off();
+        this.#currentMap = new ReceptionView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
@@ -150,8 +148,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
- // this.#typeOfRoom = 'FOODCOURT';
-       this.#currentMap = new FoodCourtView(map);
+
+        $('#avatarCanvas').off();
+        this.#currentMap = new FoodCourtView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.

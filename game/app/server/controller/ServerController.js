@@ -352,7 +352,19 @@ module.exports = class ServerController {
                 // TODO: retrieve data from the database here
                 // and also add user to the chat accordingly
                 socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
-            })
+            });
+
+            socket.on('lectureMessage', (ppantID, text) => {
+                // timestamping the message - (E)
+                var currentDate = new Date();
+                var currentTime = currentDate.getHours().toString() + ":" + currentDate.getMinutes().toString();
+                console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
+                // Getting the roomID from the ppant seems to not work?
+                this.#io.emit('lectureMessageFromServer', ppantID, currentTime, text);
+                //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+            
+
+            });
             
 
             // This will need a complete rewrite once the server-side models are properly implemented

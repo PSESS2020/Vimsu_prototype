@@ -40,7 +40,16 @@ $('form').submit(function(event) {
     return false;
 });
 
-document.getElementById("uiCanvas").onkeydown = function(event) {
+document.getElementById("allchat").onkeydown = function(event) {
+    event.stopPropagation();
+};
+
+document.getElementById("lectureChatButton").onclick = function(event) {
+    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+    $('#lectureChatInput').val('');
+};
+
+document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
@@ -71,10 +80,10 @@ document.getElementById("uiCanvas").onkeydown = function(event) {
     default:
       return;
   }
-  event.preventDefault();
+  //event.preventDefault();
 };
 
-document.getElementById("uiCanvas").onkeyup = function(event) {
+document.body.onkeyup = function(event) {
   if (event.defaultPrevented) {
     return;
   }
@@ -101,5 +110,5 @@ document.getElementById("uiCanvas").onkeyup = function(event) {
       break;
   }
 
-  event.preventDefault();
+  //event.preventDefault();
 }
