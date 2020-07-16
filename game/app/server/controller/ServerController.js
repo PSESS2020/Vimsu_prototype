@@ -315,7 +315,8 @@ module.exports = class ServerController {
                 summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
                 startTime: Date.now() - 600000,
                 endTime: Date.now() + 300000,
-                videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
+                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+                
             }, 
             {
                 id: 2,
@@ -324,7 +325,7 @@ module.exports = class ServerController {
                 summary: 'Spannende Entwurfsmuster für jung und alt.',
                 startTime: Date.now() - 500000,
                 endTime: Date.now() + 560000,
-                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+                videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
             }]
             socket.on('getCurrentLectures', () => {
                 // TODO: return the lectures here from the schedule, mocked for now
