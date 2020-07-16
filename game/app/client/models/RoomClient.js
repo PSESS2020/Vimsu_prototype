@@ -167,10 +167,6 @@
         //reset list of game objects, participants, occMap
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfPPants = [];
-        this.#occupationMap = new Array(this.#width);
-        for (var i = 0; i < this.#width; i++) {
-            this.#occupationMap[i] = new Array(this.#length).fill(0);
-        }
 
         if (this.#typeOfRoom === "FOYER") {
             this.#width = RoomDimensionsClient.FOYER_WIDTH;
@@ -182,8 +178,11 @@
             this.#width = RoomDimensionsClient.RECEPTION_WIDTH;
             this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
         }
-
         //TODO: add other rooms
+        this.#occupationMap = new Array(this.#width);
+        for (var i = 0; i < this.#width; i++) {
+            this.#occupationMap[i] = new Array(this.#length).fill(0);
+        }
     
         this.#buildOccMap();
         this.buildMapArray();

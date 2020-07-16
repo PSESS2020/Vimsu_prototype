@@ -156,9 +156,9 @@ app.get('/login', (request, response) => {
 });
 
 app.get('/game', (request, response) => {
+    var currentLectures = ["lecture1", "lecture2"]
     if (request.session.loggedin === true) {
-
-        response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
+        response.sendFile(path.join(__dirname + '/game/app/client/views/canvas.html'));
     } else {
         response.redirect('/');
     }
@@ -254,7 +254,7 @@ app.post('/registerValid', (request, response) => {
     if(title === "Title") {
         var title = "";
     }
-    else if(title !== "Mr." || title !== "Mrs." || title !== "Ms." || title !== "Dr." || title !== "Rev." || title !== "Miss" || title !== "Prof."){
+    else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
         return response.send('Invalid title. <a href="/register">Try again</a>')
     }
 
@@ -269,6 +269,9 @@ app.post('/registerValid', (request, response) => {
         request.session.accountId = res.getAccountID();
         request.session.registerValid = false;
         request.session.loggedin = true;
+        request.session.title = res.getTitle();
+        request.session.surname = res.getSurname();
+        request.session.forename = res.getForename();
         response.redirect('/');
         response.end();
     }).catch(err => {
@@ -308,7 +311,6 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 
 const controller = new ServerController(io);
 controller.init();
-
 
 
 

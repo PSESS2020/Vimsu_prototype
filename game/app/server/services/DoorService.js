@@ -5,6 +5,7 @@ var TypeChecker = require('../../utils/TypeChecker.js');
 var Door = require('../models/Door.js');
 var Settings = require('../../utils/Settings.js');
 var Position = require('../models/Position.js');
+const Direction = require('../models/Direction.js');
 
 
 module.exports = class DoorService {
@@ -51,7 +52,7 @@ module.exports = class DoorService {
 
         if (index < 0) 
         {
-            throw new Error(doorId + " is not in list of doors");
+            throw new Error("Wrong IDs");
         }
 
         return this.#doors[index];
@@ -59,15 +60,15 @@ module.exports = class DoorService {
 
     initAllDoors() {
         //Door from Foyer to Food Court 
-        this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 24, 2), new Position(Settings.FOODCOURT_ID, 2, 0)));
+        this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 24, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT));
 
         //Door from Foyer to Reception (TODO: Adjust target position)
-        this.#doors.push(new Door(2, new Position(Settings.FOYER_ID, 24, 22), new Position(Settings.RECEPTION_ID, 2, 0)));
+        this.#doors.push(new Door(2, new Position(Settings.FOYER_ID, 24, 22), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
 
         //Door from FoodCourt to Foyer
-        this.#doors.push(new Door(3, new Position(Settings.FOODCOURT_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 2)));
+        this.#doors.push(new Door(3, new Position(Settings.FOODCOURT_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
 
         //Door from Reception to Foyer (TODO: Adjust StartPosition)
-        this.#doors.push(new Door(4, new Position(Settings.RECEPTION_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 22)));
+        this.#doors.push(new Door(4, new Position(Settings.RECEPTION_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
     }
 } 

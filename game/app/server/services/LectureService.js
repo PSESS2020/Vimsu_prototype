@@ -2,6 +2,7 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 const Lecture = require('../models/Lecture')
 const Orator = require('../models/Orator')
+const AccountService = require('../../../../website/services/AccountService')
 
 var vimsudb;
 async function getDB() {
@@ -60,6 +61,37 @@ module.exports = class LectureService {
                 console.error(err);
             })
         })
+    }
+
+    static getAllLecturesWithOratorData(conferenceId) {
+        return getDB().then(res => {
+            return vimsudb.joinCollection("lectures", "accounts", "oratorId", "accountId").then(allLectures => {
+
+                if (allLectures.length > 0) {
+                    var lectures = [];
+
+                    for (var i = 0; i < allLectures.length; i++) {
+                        if(allLectures[i].conferenceId == conferenceId) {
+                            lectures.push(allLectures[i]);
+                        }
+                    }
+
+                    if (lectures.length > 0)
+                        return lectures;
+                    else {
+                        console.log("no lecture found with conferenceId " + conferenceId);
+                        return false;
+                    }
+                }
+                else {
+                    console.log("no lecture found in database");
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        })
+
     }
 
     static getOratorLectureIds(oratorId, conferenceId) {

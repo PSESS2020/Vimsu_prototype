@@ -142,6 +142,27 @@ module.exports = class AccountService {
         });
     }
 
+    static getAccountName(accountId) {
+        TypeChecker.isString(accountId);
+
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("accounts", {accountId: accountId}, {title: 1, surname: 1, forename:1}).then(user => 
+            {
+                if (user) {
+                    return user;
+                }
+                else {
+                    console.log("user not found");
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
     static getAccountTitle(accountId) {
         TypeChecker.isString(accountId);
 

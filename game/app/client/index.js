@@ -16,7 +16,6 @@ this.ctx_ui.canvas.height = GAME_HEIGHT;
 
 //let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
 
-
 let clientController = new ClientController();
 clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
@@ -61,8 +60,9 @@ document.onkeydown = function(event) {
     case "ArrowLeft":
       clientController.handleLeftArrowDown();
       break;
+    default:
+      return;
   }
-  
   event.preventDefault();
 };
 
