@@ -79,6 +79,56 @@ left: 0;
 z-index: 2;
 }
 
+form {
+position: absolute;
+border-radius: 5px;
+width: 200px;
+height: 640px;
+left: 1280px;
+top: 0;
+background: #000;
+z-index: 0;
+} 
+
+form input {
+position: relative;
+border: none;
+border-radius: 5px;
+padding: 4px;
+width: 160px;
+height: 28px;
+}
+
+form button {
+position: relative;
+height: 32px;
+width: 32px;
+background: #000;
+border: none;
+color: #fff;
+padding: 2px;
+}
+
+#allchatMessages {
+position: absolute;
+background: #000;
+overflow-y: auto;
+top: 36px;
+left: 1280px;
+width: 200px;
+height: 444px;
+margin: 0;
+padding: 0;
+z-index: 1;
+}
+
+#allchatMessages div {
+background: #222;
+color: #fff;
+border-radius: 5px;
+padding: 5px 10px;
+}
+
 .navbarIcons {
   color: antiquewhite;
 }

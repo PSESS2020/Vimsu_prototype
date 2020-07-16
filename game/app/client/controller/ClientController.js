@@ -162,6 +162,7 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
+        this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
     }
 
     /* #################################################### */    
@@ -336,15 +337,20 @@ class ClientController {
     }
 
     // Adds a new message to the all-chat
-    handleFromServerNewAllchatMessage(ppantID, timestamp, text) {
-
+    handleFromServerNewAllchatMessage(message) {
+        var msgText = "<" + message.timestamp + "> " + message.senderID + " says " + message.text;
+        console.log(msgText);
+        $('#allchatMessages').append($('<div>').text(msgText));
     }
     
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
-    // { senderID: <String>, timestamp: <String>, messageText: <String> }
+    // { senderID: <String>, timestamp: <String>, text: <String> }
     handleFromServerInitAllchat(messages) {
-
+        $('#allchatMessages').empty();
+        messages.forEach( (message) => {
+            $('#allchatMessages').append($('<div>').text("<" + message.timestamp + "> " + message.senderID + " says " + message.text));
+        });
     }
 
     /* #################################################### */    

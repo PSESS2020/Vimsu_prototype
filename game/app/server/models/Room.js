@@ -97,7 +97,7 @@ module.exports = class Room {
     }
 
     getMessages() {
-        return this.#getListOfMessages;
+        return this.#listOfMessages;
     }
     
     /*
@@ -204,7 +204,7 @@ module.exports = class Room {
     }
 
     addMessage(ppantID, date, text) {
-        var message = { senderID: ppantID, timestamp: date, messageText: text };
+        var message = { senderID: ppantID, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
 

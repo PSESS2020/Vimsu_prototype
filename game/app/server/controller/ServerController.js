@@ -198,9 +198,12 @@ module.exports = class ServerController {
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = currentDate.getHours().toString() + ":" + currentDate.getMinutes().toString();
+                console.log("<" + currentTime + "> " + ppantID + " says " + text);
                 this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
-                this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
-            }
+                // Getting the roomID from the ppant seems to not work?
+                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('newAllchatMessage', { senderID: ppantID, timestamp: currentTime, text: text });
+                //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+            });
             
             /* Now we handle receiving a movement-input from a participant.
              * NOTE:
@@ -287,7 +290,7 @@ module.exports = class ServerController {
 
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getMessages());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId].getMessages());
 
             });
             
