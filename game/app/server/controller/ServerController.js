@@ -113,7 +113,10 @@ module.exports = class ServerController {
                 var x = startPosition.getCordX();
                 var y = startPosition.getCordY();
                 var d = foyerRoom.getStartDirection();
-                var ppant = new Participant(ppantID, startPosition, d); 
+
+                let accountId = request.session.accountId;
+                
+                var ppant = new Participant(ppantID, accountId, startPosition, d); 
 
                 //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                 foyerRoom.enterParticipant(ppant);
@@ -168,12 +171,16 @@ module.exports = class ServerController {
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
+                    
                     if(key != ppantID && value.getPosition().getRoomId() === Settings.FOYER_ID) {
+                        
                         var tempPos = value.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = value.getDirection();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir });
+                        var tempName = AccountService.getAccountUsername(value.getAccountId());
+
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir , username: tempName});
                         console.log("Participant " + key + " is being initialized at the view of participant " + ppantID);
                     }   
                 });
@@ -187,7 +194,8 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                var username = AccountService.getAccountUsername(value.getAccountId());
+                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d, username: username });
                 console.log("test6");
             });
             
