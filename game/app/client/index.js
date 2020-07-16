@@ -15,7 +15,7 @@ this.ctx_ui.canvas.width = GAME_WIDTH;
 this.ctx_ui.canvas.height = GAME_HEIGHT;
 
 //let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
-
+new ScheduleListView().onclick();
 
 let clientController = new ClientController();
 clientController.setPort(GameConfig.PORT);

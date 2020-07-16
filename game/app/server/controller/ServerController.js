@@ -227,6 +227,8 @@ module.exports = class ServerController {
                 let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
                 let gameObjectData = [];
                 let typeOfRoom = this.#rooms[targetRoomId - 1].getTypeOfRoom();
+
+                this.#rooms[currentRoomId - 1].exitParticipant(ppants.get(ppantID));
                 this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
                 
             
@@ -253,16 +255,21 @@ module.exports = class ServerController {
                 let newPos = door.getTargetPosition();
                 let x = newPos.getCordX();
                 let y = newPos.getCordY();
-                let d = Settings.STARTDIRECTION;
+                let d = door.getDirection();
 
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
                 
+                //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
 
+                //Emit to all participants in old room, that participant is leaving
                 this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+
+                //Emit to all participants in new room, that participant is joining
                 this.#io.sockets.in(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
 
+                //Emit to participant all participant positions, that were in new room before him
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID && value.getPosition().getRoomId() === targetRoomId) {
                         var tempPos = value.getPosition();
@@ -274,6 +281,7 @@ module.exports = class ServerController {
                     }   
                 });
 
+                //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
 
