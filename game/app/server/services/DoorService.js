@@ -52,7 +52,7 @@ module.exports = class DoorService {
 
         if (index < 0) 
         {
-            throw new Error(doorId + " is not in list of doors");
+            throw new Error("Wrong IDs");
         }
 
         return this.#doors[index];
