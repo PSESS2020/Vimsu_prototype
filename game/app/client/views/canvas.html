@@ -77,27 +77,51 @@
         </div>
         
         <div class="lectureVideoWindow" id="lectureVideoWindow">
-            <div class="container-fluid">
+            <div class="container-fluid p-1">
                 <div class="row">
-                    <div class="lectureVideoHeader p-3 mb-3 d-flex col-12">
-                        <h5 id="lectureTitleLabel"></h5><h6 id="lectureSpeakerLabel"></h6>
-                        <button class="ml-auto pl-1 pr-1" style="background-color: transparent !important; border-color: transparent !important; color: white; box-shadow: 0px 0px 0px transparent;" id="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+                    <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
+                        <h5 id="lectureTitleLabel"></h5><div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
+                        <button class="ml-auto pl-1 pr-1" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" id="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
                     </div>
                 </div>
                     
                         
-                    
-                <div class="col-8">
-                    <video id="lectureVideo" width="100%" autoplay controls src=""></video>
+                <div class="row pl-0 pr-1 mt-4">
+                <div class="col-7 mr-4 ml-3">
+                    <video id="lectureVideo" width="100%" controls src=""></video>
                 </div>
-                <div class="col-4">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Enter message ..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                          <button class="btn btn-primary" type="button">Send</button>
+                <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1">
+                    
+                    
+                    <div class="lectureChatHeader">
+                        <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
+                    </div>
+                    <div class="mr-2 ml-2">
+                        <div>
+                            <p style="font-size: small;">Donald Knuth, 14:14: <br> <span style="font-size: medium;">Hello</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p style="font-size: small;">Robert Martin, 14:17: <br> <span style="font-size: medium;">Very interesting!</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p style="font-size: small;">Donald Knuth, 14:19: <br> <span style="font-size: medium;">I have a question.</span>
+                            </p>
                         </div>
                     </div>
-                </div>
+
+                    <div class="input-group mb-3 mr-3 ml-2 mt-auto">
+                        <input type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                        <div class="input-group-append">
+                          <button class="btn btn-lecture mr-3" type="button">Send</button>
+                        </div>
+                    </div>
+                    
+
+                
+                </div> 
+            </div>
             </div>
         </div>
 
