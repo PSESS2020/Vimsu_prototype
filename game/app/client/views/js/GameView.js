@@ -352,11 +352,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         lectures.forEach(lecture => {
             // this is really messy i know, should move it somewhere else
             $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer col-4 m-1">
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1">
                     <h5>${lecture.title}</h5>
                     <div class="small">${lecture.speaker}</div>
                     <div>${lecture.summary}</div>
-                    <button id="${lecture.id}" class="btn btn-lecture m-2" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
+                    <button id="${lecture.id}" class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
                 </div>
             `)
         });

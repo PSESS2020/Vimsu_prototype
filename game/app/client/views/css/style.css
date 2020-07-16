@@ -99,10 +99,12 @@ vertical-align: middle;
   border-style: solid;
   border-color: antiquewhite;
   border-radius: 10px;
+  background-color: rgba(24, 30, 32, 0.699)
+
 }
 
-.currentLecturesWindow {
-  background-color:rgba(34, 43, 46, 0.9) !important;
+.customWindow {
+  background-color:rgba(34, 43, 46, 0.8) !important;
   color: antiquewhite;
   padding: 0px !important;
   overflow: hidden;
@@ -119,14 +121,14 @@ vertical-align: middle;
   background-color: #1b1e24;
   border: none;
   border-radius: 3px;
-  color: #76777a;
+  color: antiquewhite;
   text-align: center;
   text-decoration: none;
   border: 2px solid #1b1e24;
 }
 
 .btn-lecture:hover {
-  background-color: #76777a;
+  background-color: antiquewhite;
   border: 2px solid #1b1e24;
   color: #1b1e24;
 }
