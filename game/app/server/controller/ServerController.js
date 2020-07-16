@@ -167,6 +167,8 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 
                                                                         dir: d});
+                // Initialize Allchat
+                this.#io.to(socket.id).emit('initAllchat', foyerRoom.getMessages());
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
@@ -191,6 +193,18 @@ module.exports = class ServerController {
                 // - (E)
                 this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
                 console.log("test6");
+            });
+
+            socket.on('sendMessage', (ppantID, text) => {
+                var roomID = ppants.get(ppantID).getPosition().getRoomId();
+                // timestamping the message - (E)
+                var currentDate = new Date();
+                var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                console.log("<" + currentTime + "> " + ppantID + " says " + text);
+                this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
+                // Getting the roomID from the ppant seems to not work?
+                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('newAllchatMessage', { senderID: ppantID, timestamp: currentTime, text: text });
+                //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
             });
             
             /* Now we handle receiving a movement-input from a participant.
@@ -316,7 +330,52 @@ module.exports = class ServerController {
                 //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId].getMessages());
 
+            });
+
+            // TODO: remove and make it work with the actual model
+            var mockedLectures = [{
+                id: 1,
+                title: 'Grundbegriffe der Informatik',
+                speaker: 'Stüker',
+                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
+                startTime: Date.now() - 600000,
+                endTime: Date.now() + 300000,
+                videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
+            }, 
+            {
+                id: 2,
+                title: 'Softwaretechnik 1',
+                speaker: 'Walter F. Tichy',
+                summary: 'Spannende Entwurfsmuster für jung und alt.',
+                startTime: Date.now() - 500000,
+                endTime: Date.now() + 560000,
+                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+            }]
+            socket.on('getCurrentLectures', () => {
+                // TODO: return the lectures here from the schedule, mocked for now
+                //something like var lectures = this.conference.getSchedule().getCurrentLectures()
+                socket.emit('currentLectures', mockedLectures);
+            });
+
+            socket.on('enterLecture', (ppantID, lectureId) => {
+                console.log('id: ' + lectureId);
+                console.log(mockedLectures.filter(x => x.id === lectureId)[0])
+                // TODO: retrieve data from the database here
+                // and also add user to the chat accordingly
+                socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
+            });
+
+            socket.on('lectureMessage', (ppantID, text) => {
+                // timestamping the message - (E)
+                var currentDate = new Date();
+                var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
+                // Getting the roomID from the ppant seems to not work?
+                this.#io.emit('lectureMessageFromServer', ppantID, currentTime, text);
+                //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+            
 
             });
 

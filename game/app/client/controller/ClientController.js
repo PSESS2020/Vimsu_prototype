@@ -182,6 +182,8 @@ class ClientController {
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
+        this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
+        this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
     }
 
     /* #################################################### */    
@@ -221,6 +223,10 @@ class ClientController {
         this.socket.emit('requestMovementStop', this.#participantId, currentRoomId);
     }
 
+    sendToServerAllchatMessage(text) {
+        this.socketReady;
+        this.socket.emit('sendMessage', this.#participantId, text);
+    }
 
     /* #################################################### */    
     /* ############### RECEIVE FROM SERVER ################ */
@@ -365,6 +371,24 @@ class ClientController {
     handleFromServerCurrentSchedule(lectures) {
         console.log("handleFromServerCurrentSchedule() " + lectures.length);
         this.#gameView.initCurrentSchedule(lectures);
+    }
+    
+    // Adds a new message to the all-chat
+    handleFromServerNewAllchatMessage(message) {
+        var msgText = "<" + message.timestamp + "> " + message.senderID + " says " + message.text;
+        $('#allchatMessages').prepend($('<div>').text(msgText));
+        $('#allchatMessages').scrollTop(0);
+    }
+    
+    // Called when a new room is entered.
+    // The argument is an array of objects of the following structure:
+    // { senderID: <String>, timestamp: <String>, text: <String> }
+    handleFromServerInitAllchat(messages) {
+        $('#allchatMessages').empty();
+        messages.forEach( (message) => {
+            $('#allchatMessages').prepend($('<div>').text("<" + message.timestamp + "> " + message.senderID + " says " + message.text));
+        });
+        $('#allchatMessages').scrollTop(0);
     }
 
     /* #################################################### */    

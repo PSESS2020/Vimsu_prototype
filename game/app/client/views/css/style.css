@@ -79,6 +79,43 @@ left: 0;
 z-index: 2;
 }
 
+form {
+border-radius: 5px;
+top: 0;
+background: #000;
+z-index: 3;
+} 
+
+form input {
+border: none;
+border-radius: 5px;
+padding: 4px;
+}
+
+form button {
+background: #000;
+border: none;
+color: #fff;
+padding: 2px;
+}
+
+#allchatMessages {
+background: #000;
+overflow-y: scroll;
+margin: 0;
+padding: 0;
+z-index: 1;
+max-height: 400px;
+max-width: 300px;
+}
+
+#allchatMessages div {
+background: #222;
+color: #fff;
+border-radius: 5px;
+padding: 5px 10px;
+}
+
 .navbarIcons {
   color: antiquewhite;
 }

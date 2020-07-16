@@ -32,7 +32,18 @@ setInterval( function() {
   //gameView.draw();  
 }, GameConfig.TIME_DELTA);
 
-document.onkeydown = function(event) {
+$('form').submit(function(event) {
+    event.preventDefault();
+    clientController.sendToServerAllchatMessage($('#allchatMessageInput').val());
+    $('#allchatMessageInput').val('');
+    return false;
+});
+
+document.getElementById("allchat").onkeydown = function(event) {
+    event.stopPropagation();
+}
+
+document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
@@ -66,7 +77,7 @@ document.onkeydown = function(event) {
   event.preventDefault();
 };
 
-document.onkeyup = function(event) {
+document.body.onkeyup = function(event) {
   if (event.defaultPrevented) {
     return;
   }
