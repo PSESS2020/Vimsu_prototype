@@ -1,6 +1,7 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
 
 
+
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -366,21 +367,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 3 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.RECEPTION);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 2 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOODCOURT);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOYER);
         //update currentRoom;
         //update View
     }

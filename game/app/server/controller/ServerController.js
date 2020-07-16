@@ -222,11 +222,20 @@ module.exports = class ServerController {
             });
 
              //Event to handle click on food court door tile
-             socket.on('enterRoom', (ppantID, currentRoomId, targetRoomId) => {
+             socket.on('enterRoom', (ppantID, currentRoomId, targetRoomType) => {
                    
+                //get right target room id
+                var targetRoomId;
+                if (targetRoomType === TypeOfRoom.FOYER) {
+                    targetRoomId = Settings.FOYER_ID;
+                } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
+                    targetRoomId = Settings.FOODCOURT_ID;
+                } else if (targetRoomType === TypeOfRoom.RECEPTION) {
+                    targetRoomId = Settings.RECEPTION_ID;
+                }
                 let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
                 let gameObjectData = [];
-                let typeOfRoom = this.#rooms[targetRoomId - 1].getTypeOfRoom();
+                
 
                 this.#rooms[currentRoomId - 1].exitParticipant(ppants.get(ppantID));
                 this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
@@ -245,7 +254,7 @@ module.exports = class ServerController {
                     });
                 });
                     
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, typeOfRoom, gameObjectData);
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData);
 
                 //Singleton
                 let doorService = new DoorService();
