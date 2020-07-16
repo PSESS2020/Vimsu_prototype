@@ -11,7 +11,7 @@
  * Stuff that will be altered in the following steps:
  *
  *   (i) Every constant will be moved into a shared /utils/Settings.js file (name
- *       not final).
+ *       not final). DONE
  *
  *  (ii) This class will set up the game in the final product. The idea here being
  *       that the index.js will call a method setUpGame() from this class.
@@ -60,21 +60,20 @@ class ClientController {
      */
 
 
-    constructor(gameView/*, participantId*/) { //TODO: instanciate ParticipantClient
+    constructor(/*, participantId*/) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
-        this.#gameView = gameView;
+        this.#gameView = new GameView(GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
         console.log("fully init cc");
         return this;
     }
-
 
     getPort() {
         return this.#port;
@@ -114,6 +113,7 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
@@ -121,8 +121,10 @@ class ClientController {
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
             this.#gameView.initReceptionView(map);
         }
-        
+
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        
+        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
@@ -166,7 +168,15 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
     }
+
+    /* #################################################### */    
+    /* #################### EDIT VIEW ##################### */
+    /* #################################################### */
     
+    updateGame() {
+        this.#gameView.update()
+        this.#gameView.draw();
+    }
 
     /* #################################################### */    
     /* ################## SEND TO SERVER ################## */
@@ -190,7 +200,6 @@ class ClientController {
             console.log("request mov start " + this.#ownParticipant.getId());
             this.socket.emit('requestMovementStart', participantId, direction, currentRoomId, currPosX, currPosY);
         }
-
     }   
 
     sendToServerRequestMovStop() {
@@ -290,6 +299,10 @@ class ClientController {
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
+ 
+        if (ppantID === this.#participantId) {
+            return;
+        }
 
         let newPos = new PositionClient(newCordX, newCordY);
         console.log("mov other: " + ppantID);
@@ -304,6 +317,9 @@ class ClientController {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
+        if (ppantID === this.#participantId) {
+            return;
+        }
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -315,6 +331,9 @@ class ClientController {
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        if (initInfo.id === this.#participantId) {
+            return;
+        }
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         let businessCard = new BusinessCardClient(
@@ -365,21 +384,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterReception', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), 3 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterFoodCourt', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), 2 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterFoyer', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), 1 /*TargetID*/);
         //update currentRoom;
         //update View
     }
@@ -431,7 +450,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -444,7 +463,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -457,7 +476,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -470,7 +489,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
