@@ -125,7 +125,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#updateList[i].update();
             }
         }
-        
     }
 
     //Is called when participant enters Foyer
@@ -136,7 +135,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
         //this.#foyerView.draw();
-
     }
 
     initReceptionView(map) {
@@ -202,7 +200,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                                                             participant.getPosition(),
                                                             participant.getDirection(),
                                                             participant.getId(),
-                                                            participant.getName()
+                                                            participant.getBusinessCard().getUsername()
                                                             ));
                 }
             }
@@ -224,7 +222,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                                                             participants.getPosition(), 
                                                             participants.getDirection(), 
                                                             participants.getId(),
-                                                            participants.getName()
+                                                            participants.getBusinessCard().getUsername()
                                                             ));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -330,8 +328,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
+        let username = ownParticipant.getBusinessCard().getUsername();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, this.#typeOfRoom); 
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, this.#typeOfRoom, username); 
+        
         this.addToUpdateList(this.#ownAvatarView);
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())

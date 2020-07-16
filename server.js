@@ -58,11 +58,21 @@ app.use('/website', express.static(path.join(__dirname + '/website')));
 app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
 app.use('/utils', express.static(path.join(__dirname + '/game/app/utils')));
 
-app.use(expressSession({
+var sessionMiddleware = expressSession({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
-}));
+});
+
+//Sets the server to websockets only.
+io.set("transports", ["websocket"]);
+
+//Allows to access the session from the server side
+io.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res || {}, next)
+});
+
+app.use(sessionMiddleware);
 
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
@@ -147,6 +157,7 @@ app.get('/login', (request, response) => {
 
 app.get('/game', (request, response) => {
     if (request.session.loggedin === true) {
+
         response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
     } else {
         response.redirect('/');

@@ -134,9 +134,14 @@ class ClientController {
     // We also need reconnection handling
     openSocketConnection() {
         if (this.#port && !this.socket) {
-            /* It seems you don't need to pass an argument here - socket.io figures it out by itself.
-             * - (E) */
-            this.socket = io();
+            
+            /* WARNING: WEBSOCKETS ONLY CONFIGURATION*/
+            /*
+            *Arguments prevent initial http polling and start the websocket directly.
+            *Without the arguments the client starts a http connection and upgrades later to websocket protocol.
+            *This caused a disconnect from the server and therefore a server scrash. 
+            */
+            this.socket = io({transports: ['websocket'], upgrade: false});
             this.socket.on('connect', (socket) => {
                 console.log("test connect");
             });
@@ -151,7 +156,8 @@ class ClientController {
 
     setUpSocket() {
         console.log("test set up socket");
-        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
+        this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
+        //this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this)); 
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
@@ -173,21 +179,28 @@ class ClientController {
     }
 
     sendToServerRequestMovStart(direction) {
+        
         if(this.socketReady()) {
             TypeChecker.isEnumOf(direction, DirectionClient);
             let currPos = this.#gameView.getOwnAvatarView().getPosition();
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
             let currentRoomId = this.#currentRoom.getRoomId();
-
-            this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
+            let participantId = this.#ownParticipant.getId();
+            console.log("request mov start " + this.#ownParticipant.getId());
+            this.socket.emit('requestMovementStart', participantId, direction, currentRoomId, currPosX, currPosY);
         }
+
     }   
 
     sendToServerRequestMovStop() {
+
         this.socketReady;
-        let currentRoomId = this.#currentRoom.getRoomId();
-        this.socket.emit('requestMovementStop', this.#participantId, currentRoomId);
+            let participantId = this.#ownParticipant.getId();
+            let currentRoomId = this.#currentRoom.getRoomId();
+
+        this.socket.emit('requestMovementStop', participantId, currentRoomId);
+
     }
 
 
@@ -195,6 +208,36 @@ class ClientController {
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
     
+
+    //Second message from server, gives you information of starting position, business card and participant id
+    //After that, there is everything to init the game view
+    handleFromServerInitOwnParticipant(initInfo) {
+        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
+
+        let businessCard = new BusinessCardClient(
+                                initInfo.businessCard.id,
+                                initInfo.businessCard.username,
+                                initInfo.businessCard.title,
+                                initInfo.businessCard.surname,
+                                initInfo.businessCard.forename,
+                                initInfo.businessCard.job,
+                                initInfo.businessCard.company,
+                                initInfo.businessCard.email
+                                );
+
+        this.#ownParticipant = new ParticipantClient(
+                                initInfo.id,
+                                businessCard,
+                                initPos, 
+                                initInfo.dir
+                                );
+        this.initGameView();
+
+    }
+    /**
+     * Not used.
+     *  
+     */
     //First Message from Server, gives you your ID
     handleFromServerUpdateID(id) {
         console.log("test update id");
@@ -227,39 +270,34 @@ class ClientController {
         this.#gameView.setTypeOfRoom(typeOfRoom);
     }
 
-    //Third message from server, gives you information of starting position
-    //After that, there is everything to init the game view
+    //updates own avatar position
     handleFromServerUpdatePosition(posInfo) {
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
 
-        //First Call to this method? If so, create own participant client model and init game view
-        if (!this.#ownParticipant) {
-            this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
-        } else {
             this.#ownParticipant.setPosition(posUpdate);
             this.#ownParticipant.setDirection(dirUpdate);
             this.#gameView.updateOwnAvatarPosition(posUpdate);
             this.#gameView.updateOwnAvatarDirection(dirUpdate);
-        }
         
-        this.initGameView();
         console.log("test finish update pos");
     }
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
     handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
+
         TypeChecker.isString(ppantID);
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
 
         let newPos = new PositionClient(newCordX, newCordY);
+        console.log("mov other: " + ppantID);
+
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
         this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
         this.#gameView.updateAnotherAvatarWalking(ppantID, true);  
         
-        console.log(ppantID);
     }
 
     handleFromServerStopMovementOther(ppantID) {
@@ -279,8 +317,19 @@ class ClientController {
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
+        let businessCard = new BusinessCardClient(
+                            initInfo.businessCard.id,
+                            initInfo.businessCard.username,
+                            initInfo.businessCard.title,
+                            initInfo.businessCard.surname,
+                            initInfo.businessCard.forename,
+                            initInfo.businessCard.job,
+                            initInfo.businessCard.company,
+                            initInfo.businessCard.email
+            );
+
         console.log("init info id" + initInfo.id);
-        var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir, initInfo.username);
+        var participant = new ParticipantClient(initInfo.id, businessCard, initPos, initInfo.dir);
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
@@ -316,21 +365,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterReception', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterFoodCourt', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterFoyer', this.#ownParticipant.getId(), this.#currentRoom.getRoomId());
         //update currentRoom;
         //update View
     }

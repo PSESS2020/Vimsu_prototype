@@ -23,7 +23,7 @@ module.exports = class Participant {
      * @param {Position} position 
      * @param {Direction} direction 
      */
-    constructor(id, accountId, position, direction)
+    constructor(id, accountId, businessCard, position, direction)
     {
         TypeChecker.isString(id);
         //TypeChecker.isString(accountId);
@@ -32,7 +32,7 @@ module.exports = class Participant {
 
         this.#id = id;
         this.#accountId = accountId;
-        //this.#businessCard = businessCard;
+        this.#businessCard = businessCard;
         //this.#participantController = participantController;
 
         if (!position || !direction)

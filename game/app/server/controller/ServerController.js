@@ -17,8 +17,12 @@ const TypeOfRoom = require('../models/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
+const AccountService = require('../../../../website/services/AccountService');
+const BusinessCard = require('../models/BusinessCard.js');
 
 const TypeChecker = require=('../../utils/TypeChecker.js');
+
+
 
 
 /* This should later on be turned into a singleton */
@@ -31,7 +35,7 @@ module.exports = class ServerController {
     #rooms;
     
     constructor(socket) {
-        this.#io = socket;        
+        this.#io = socket;
     }
     
     //There are currently 3 differenct socketIo Channels
@@ -74,7 +78,7 @@ module.exports = class ServerController {
                 
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
-                if (ppantControllers.has(socket.id)) {
+                if (ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
                     return;
                 }
 
@@ -113,10 +117,24 @@ module.exports = class ServerController {
                 var x = startPosition.getCordX();
                 var y = startPosition.getCordY();
                 var d = foyerRoom.getStartDirection();
+                console.log("accId: " + socket.request.session.accountId);
 
-                let accountId = request.session.accountId;
+                //variables for creating BusinessCard and Paricipant instance
+                let accountId = socket.request.session.accountId;
+                let username = socket.request.session.username;
+                let title = socket.request.session.title;
+                let surname = socket.request.session.surname;
+                let forename = socket.request.session.forename;
+                let job = socket.request.session.job;
+                let company = socket.request.session.company;
+                let email = socket.request.session.email;
+
+                var businessCard = new BusinessCard(ppantID, username, title, surname, forename, job, company, email);
+
+                //Needed for emiting this business card to other participants in room
+                var businessCardObject = { id: ppantID, username: username, title: title, surname: surname, forename: forename, job: job, company: company, email: email };
                 
-                var ppant = new Participant(ppantID, accountId, startPosition, d); 
+                var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d); 
 
                 //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                 foyerRoom.enterParticipant(ppant);
@@ -140,7 +158,7 @@ module.exports = class ServerController {
                  * Where as the second one will probably be called more often
                  * - (E) */ 
                 // Sends the newly generated ppantID back to the client so the game-states are consistent
-                this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
+                //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
                 console.log("test4");
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
@@ -160,27 +178,47 @@ module.exports = class ServerController {
                       isSolid: gameObject.getSolid()
                     });
                 })
-
+                
                 //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', foyerRoom.getRoomId(), foyerRoom.getTypeOfRoom(), 
                                             gameObjectData);
-                // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
-                                                                        cordY: y, 
-                                                                        dir: d});
+
+                // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
+                this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d});
+                //this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
+                  //                                                      cordY: y, 
+                    //                                                    dir: d});
                 console.log("test5");
                 
                 ppants.forEach( (value, key, map) => {
                     
                     if(key != ppantID && value.getPosition().getRoomId() === Settings.FOYER_ID) {
-                        
+
+                        var businessCard = value.getBusinessCard();
+
+                        var tempBusinessCard = {};
+                        tempBusinessCard.id = businessCard.getParticipantId();
+
+                        tempBusinessCard.username = businessCard.getUsername();
+                    
+                        tempBusinessCard.title = businessCard.getTitle();
+                    
+                        tempBusinessCard.surname = businessCard.getSurname();
+                    
+                        tempBusinessCard.forename = businessCard.getForename();
+                    
+                        tempBusinessCard.job = businessCard.getJob();
+                    
+                        tempBusinessCard.company = businessCard.getCompany();
+                    
+                        tempBusinessCard.email = businessCard.getEmail();
+
                         var tempPos = value.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = value.getDirection();
-                        var tempName = AccountService.getAccountUsername(value.getAccountId());
 
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir , username: tempName});
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, businessCard: tempBusinessCard, cordX: tempX, cordY: tempY, dir: tempDir });
                         console.log("Participant " + key + " is being initialized at the view of participant " + ppantID);
                     }   
                 });
@@ -194,9 +232,9 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                var username = AccountService.getAccountUsername(value.getAccountId());
-                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d, username: username });
-                console.log("test6");
+                    socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d });
+                    console.log("test6");                
+               
             });
             
             /* Now we handle receiving a movement-input from a participant.
@@ -215,7 +253,7 @@ module.exports = class ServerController {
                 if (!room.checkForCollision(newPos)) {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
-                    this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                    socket.to(currRoomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     var oldPos = ppants.get(ppantID).getPosition();
@@ -226,7 +264,7 @@ module.exports = class ServerController {
                 
             socket.on('requestMovementStop', (ppantID, currRoomId) => {
                 
-                this.#io.sockets.in(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
+                socket.to(currRoomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
 
              //Event to handle click on food court door tile
@@ -264,7 +302,7 @@ module.exports = class ServerController {
                 let d = Settings.STARTDIRECTION;
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
 
-                this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
+                //this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
             });
             
 
@@ -283,6 +321,7 @@ module.exports = class ServerController {
                 // gameRoomController.removeParticipantController(ppantControllers.get(socket.id);
                 // The next line can probably be just handled inside the previous one
                 //io.sockets.emit('remove player', ppantID);
+                console.log(ppantID);
                 socket.broadcast.emit('remove player', ppantID);
                 console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
                 
