@@ -285,7 +285,7 @@ module.exports = class ServerController {
                 id: 1,
                 title: 'Grundbegriffe der Informatik',
                 speaker: 'Stüker',
-                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Genertionen.',
+                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
                 startTime: Date.now() - 600000,
                 endTime: Date.now() + 300000,
                 videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
