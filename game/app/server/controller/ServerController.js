@@ -306,8 +306,8 @@ module.exports = class ServerController {
                 
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
 
-                this.#io.sockets.in(currentRoomId.toString()).emit('remove player', ppantID);
-                this.#io.sockets.in(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                socket.to(currentRoomId.toString()).emit('remove player', ppantID);
+                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
 
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID && value.getPosition().getRoomId() === targetRoomId) {

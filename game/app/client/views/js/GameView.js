@@ -223,7 +223,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    console.log(participants.getId());
+                    console.log("other avatarView init: " + participants.getId());
                     this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                                                             participants.getPosition(), 
                                                             participants.getDirection(), 
