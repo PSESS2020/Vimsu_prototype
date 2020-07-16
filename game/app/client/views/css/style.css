@@ -106,6 +106,7 @@ margin: 0;
 padding: 0;
 z-index: 1;
 max-height: 400px;
+max-width: 300px;
 }
 
 #allchatMessages div {
