@@ -244,7 +244,7 @@ app.post('/registerValid', (request, response) => {
     if(title === "Title") {
         var title = "";
     }
-    else if(title !== "Mr." || title !== "Mrs." || title !== "Ms." || title !== "Dr." || title !== "Rev." || title !== "Miss" || title !== "Prof."){
+    else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
         return response.send('Invalid title. <a href="/register">Try again</a>')
     }
 
@@ -259,6 +259,9 @@ app.post('/registerValid', (request, response) => {
         request.session.accountId = res.getAccountID();
         request.session.registerValid = false;
         request.session.loggedin = true;
+        request.session.title = res.getTitle();
+        request.session.surname = res.getSurname();
+        request.session.forename = res.getForename();
         response.redirect('/');
         response.end();
     }).catch(err => {
