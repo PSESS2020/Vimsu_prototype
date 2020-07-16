@@ -39,7 +39,7 @@ class FoyerView extends MapView {
                         wallColumnOffset: this.tileImages[2].width,
                         tableRowOffset: this.tileImages[totalImages - 1].height,
                     };
-                    console.log(this.tileImages);
+
                     super.initProperties(offset.tileColumnOffset);
                     super.buildMap(offset);
                 });
