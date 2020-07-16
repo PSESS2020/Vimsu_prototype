@@ -143,6 +143,7 @@ class ClientController {
             this.#gameView.initReceptionView(map);
         }
 
+        this.#gameView.resetAnotherAvatarViews();
         this.#gameView.updateOwnAvatarRoom(typeOfRoom);
 
     }
