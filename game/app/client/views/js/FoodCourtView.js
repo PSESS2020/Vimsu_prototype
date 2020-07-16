@@ -37,7 +37,7 @@ class FoodCourtView extends MapView {
                         tileColumnOffset: this.tileImages[1].width,
                         tileRowOffset: this.tileImages[1].width / 2,
                         wallColumnOffset: this.tileImages[2].width,
-                        tableRowOffset: this.tileImages[totalImages - 1].height
+                        tableRowOffset: this.tileImages[totalImages - 1].height,
                     };
 
                     super.initProperties(offset.tileColumnOffset);
