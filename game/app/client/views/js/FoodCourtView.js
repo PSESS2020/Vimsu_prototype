@@ -3,8 +3,8 @@ class FoodCourtView extends MapView {
     #loader;
     #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_foyer.png", "client/assets/table.png"];
 
-    constructor(foyerMap) {
-        super(foyerMap);
+    constructor(foodCourtMap) {
+        super(foodCourtMap);
 
         this.#loader = new LoadingView();
         this.loadImages();
@@ -37,7 +37,7 @@ class FoodCourtView extends MapView {
                         tileColumnOffset: this.tileImages[1].width,
                         tileRowOffset: this.tileImages[1].width / 2,
                         wallColumnOffset: this.tileImages[2].width,
-                        tableRowOffset: this.tileImages[totalImages - 1].height
+                        tableRowOffset: this.tileImages[totalImages - 1].height,
                     };
 
                     super.initProperties(offset.tileColumnOffset);

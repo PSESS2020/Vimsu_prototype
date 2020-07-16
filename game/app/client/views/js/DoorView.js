@@ -30,5 +30,8 @@ class DoorView extends GameObjectView {
             eventManager.handleReceptionDoorClick();
         }
         //TODO: Foyer Door Click
+        else if(this.#DOORTYPE === GameObjectTypeClient.FOYERDOOR) {
+            eventManager.handleFoyerDoorClick();
+        }
     }
 }

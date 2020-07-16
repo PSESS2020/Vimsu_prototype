@@ -5,10 +5,18 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="client/views/css/style.css">
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="client/views/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script> 
+            $(function(){
+              $("#modalHTML").load("client/views/modal.html"); 
+            });
+        </script> 
+	 
     </head>
     <body>
+        <div id="modalHTML"></div>
         <div id="overlay">
             <div id="progressbar"></div>
             <div id="progressstatus"></div>
@@ -38,7 +46,7 @@
                     </li>
                
                     <li class="nav-item">
-                    <a class="action_button nav-item nav-link" href="">
+                        <a href="#" class="action_button nav-item nav-link" data-toggle="modal" data-target="#scheduleModal">
                         <i class="fa fa-table fa-4x navbarIcons"></i>
                         <p class="navbarIconsText" style="margin-left: -3px;">Schedule</p>
                     </a>
@@ -115,9 +123,9 @@
             requirejs(['client/utils/TypeChecker', 'client/models/DirectionClient', 'client/config/GameConfig', 'client/models/TypeOfRoomClient', 'client/models/RoomDimensionsClient.js', 'client/models/GameObjectTypeClient', 'client/models/BusinessCardClient', 'client/models/ParticipantClient', 
                         'client/models/PositionClient','client/models/GameObjectClient', 'client/models/RoomClient'], () => {
                 requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
-                    requirejs(['client/views/js/LoadingView', 'client/views/js/CacheImages', 'client/views/js/ImageLoader', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
-                        requirejs(['client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView'], () => {
-                            requirejs(['client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                    requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
+                        requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
+                            requirejs(['client/views/js/ScheduleListView','client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
                                     requirejs(['client/index'], () => {
                                     });    

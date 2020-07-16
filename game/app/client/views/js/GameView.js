@@ -5,6 +5,8 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
 
+
+
 /*module.exports =*/ class GameView {
 
     #gameWidth;
@@ -85,10 +87,12 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        if(this.#gameViewInit) {
+
+        //check if game view is already initalized
+        if (this.#gameViewInit) {
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
-            }
+            }   
 
             for (var i = 0; i < this.#updateList.length; i++) {
 
@@ -123,6 +127,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     //Is called when participant enters Foyer
     initFoyerView(map) {
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#currentMap = new FoyerView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -132,6 +137,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initReceptionView(map) {
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#currentMap = new ReceptionView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -141,6 +147,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initFoodCourtView(map) {
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         this.#currentMap = new FoodCourtView(map);
         
         //the execution of below doesn't work because FoyerView is not creating fast enough.
@@ -160,13 +167,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initReceptionView(map) {
         this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
     }
-    /*
+    */
 
     /**
      * 
      * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
      */
-    initAnotherAvatarViews(participants)
+    initAnotherAvatarViews(participants, typeOfRoom)
     {
         if(!(this.#ownAvatarView instanceof ParticipantAvatarView))
         {
@@ -188,7 +195,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 if(participants[i] !== this.#ownAvatarView) 
                 {
                     var participant = participants[i];
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId(), typeOfRoom));
                 }
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -205,7 +212,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             if(participants !== this.#ownAvatarView) 
             {
                     console.log(participants.getId());
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId(), typeOfRoom));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
@@ -302,17 +309,21 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
     */
 
-    //inits ownAvatarView with information from ownParticipant model instance
-    initOwnAvatarView(ownParticipant)
+    //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
+    initOwnAvatarView(ownParticipant, typeOfRoom)
     {
         TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id); 
+        
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom); 
         this.addToUpdateList(this.#ownAvatarView);
+        
+        
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
         //this.#gameViewInit = true;
@@ -363,9 +374,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         
         $('#lectureVideoWindow').show();
     }
-
-    openLectureView() {
         
+    updateOwnAvatarRoom(typeOfRoom) {
+        this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
     }
 
     removeOwnAvatarView()

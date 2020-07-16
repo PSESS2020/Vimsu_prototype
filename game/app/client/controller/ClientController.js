@@ -113,6 +113,7 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
             this.#gameView.initFoyerView(map);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
@@ -120,12 +121,30 @@ class ClientController {
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
             this.#gameView.initReceptionView(map);
         }
+
+        this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
         
-        this.#gameView.initOwnAvatarView(this.#ownParticipant);
+        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
         this.#gameView.setGameViewInit(true);
+    }
+
+    switchRoomGameView() {
+        var map = this.#currentRoom.getMap();
+        var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        
+        if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
+            this.#gameView.initFoyerView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
+            this.#gameView.initFoodCourtView(map);
+        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
+            this.#gameView.initReceptionView(map);
+        }
+
+        this.#gameView.updateOwnAvatarRoom(typeOfRoom);
+
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -191,7 +210,7 @@ class ClientController {
 
             this.socket.emit('requestMovementStart', this.#participantId, direction, currentRoomId, currPosX, currPosY);
         }
-    }
+    }   
 
     sendToServerRequestMovStop() {
         this.socketReady;
@@ -226,10 +245,11 @@ class ClientController {
         //First room? 
         if(!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
-        
+            
         //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
+            this.switchRoomGameView();
         }
     }
 
@@ -242,6 +262,7 @@ class ClientController {
         //First Call to this method? If so, create own participant client model and init game view
         if (!this.#ownParticipant) {
             this.#ownParticipant = new ParticipantClient(this.#participantId, posUpdate, dirUpdate);
+            this.initGameView();
         } else {
             this.#ownParticipant.setPosition(posUpdate);
             this.#ownParticipant.setDirection(dirUpdate);
@@ -249,7 +270,7 @@ class ClientController {
             this.#gameView.updateOwnAvatarDirection(dirUpdate);
         }
         
-        this.initGameView();
+        
         console.log("test finish update pos");
     }
 
@@ -259,6 +280,10 @@ class ClientController {
         TypeChecker.isEnumOf(direction, DirectionClient);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
+ 
+        if (ppantID === this.#participantId) {
+            return;
+        }
 
         let newPos = new PositionClient(newCordX, newCordY);
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
@@ -272,6 +297,9 @@ class ClientController {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
+        if (ppantID === this.#participantId) {
+            return;
+        }
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -284,9 +312,13 @@ class ClientController {
      * Change argument from object into list (nicer to read)
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
+        if (initInfo.id === this.#participantId) {
+            return;
+        }
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         console.log("init info id" + initInfo.id);
@@ -294,7 +326,7 @@ class ClientController {
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
-        this.#gameView.initAnotherAvatarViews(participant);
+        this.#gameView.initAnotherAvatarViews(participant, this.#currentRoom.getTypeOfRoom());
     }
     
     /*
@@ -311,6 +343,9 @@ class ClientController {
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
         //TypeChecker.isString(ppantId);
+        if (ppantId === this.#participantId) {
+            return;
+        }
 
         this.#currentRoom.exitParticipant(ppantId);
 
@@ -330,21 +365,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterReception', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 3 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterFoodCourt', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 2 /*TargetID*/);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterFoyer', this.#participantId, this.#currentRoom.getRoomId());
+        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
         //update currentRoom;
         //update View
     }
