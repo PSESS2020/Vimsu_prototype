@@ -106,7 +106,7 @@
                     <div class="lectureChatHeader">
                         <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
                     </div>
-                    <div class="mr-2 ml-2">
+                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
                         <div>
                             <p style="font-size: small;">Donald Knuth, 14:14: <br> <span style="font-size: medium;">Hello</span>
                             </p>
@@ -122,9 +122,9 @@
                     </div>
 
                     <div class="input-group mb-3 mr-3 ml-2 mt-auto">
-                        <input type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
                         <div class="input-group-append">
-                          <button class="btn btn-lecture mr-3" type="button">Send</button>
+                          <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
                         </div>
                     </div>
                     

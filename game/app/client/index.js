@@ -34,14 +34,25 @@ setInterval( function() {
 
 $('form').submit(function(event) {
     event.preventDefault();
-    clientController.sendToServerAllchatMessage($('#allchatMessageInput').val());
-    $('#allchatMessageInput').val('');
-    return false;
+    let messageVal = $('#allchatMessageInput').val();
+    if(messageVal !== '') {
+      clientController.sendToServerAllchatMessage(messageVal);
+      $('#allchatMessageInput').val('');
+      return false;
+    }
 });
 
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
-}
+};
+
+document.getElementById("lectureChatButton").onclick = function(event) {
+    let messageVal = $('#lectureChatInput').val();
+    if(messageVal !== '') {
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+      $('#lectureChatInput').val('');
+    }
+};
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
@@ -74,7 +85,7 @@ document.body.onkeydown = function(event) {
     default:
       return;
   }
-  event.preventDefault();
+  //event.preventDefault();
 };
 
 document.body.onkeyup = function(event) {
@@ -104,5 +115,5 @@ document.body.onkeyup = function(event) {
       break;
   }
 
-  event.preventDefault();
+  //event.preventDefault();
 }

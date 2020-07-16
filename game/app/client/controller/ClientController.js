@@ -184,6 +184,7 @@ class ClientController {
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
+        this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
     }
 
     /* #################################################### */    
@@ -226,6 +227,11 @@ class ClientController {
     sendToServerAllchatMessage(text) {
         this.socketReady;
         this.socket.emit('sendMessage', this.#participantId, text);
+    }
+
+    sendToServerLectureChatMessage(text) {
+        this.socketReady;
+        this.socket.emit('lectureMessage', this.#participantId, text);
     }
 
     /* #################################################### */    
@@ -379,6 +385,16 @@ class ClientController {
         $('#allchatMessages').prepend($('<div>').text(msgText));
         $('#allchatMessages').scrollTop(0);
     }
+
+    handleFromServerNewLectureChatMessage(senderID, timestamp, text) {
+        var messageHeader = senderID + ", " + timestamp + ":";
+        var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+        var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+        $newMessageHeader.text(messageHeader);
+        $newMessageBody.text(text);
+        $('#lectureChatMessages').append($newMessageHeader);
+        $('#lectureChatMessages').append($newMessageBody);
+    }
     
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
@@ -389,6 +405,11 @@ class ClientController {
             $('#allchatMessages').prepend($('<div>').text("<" + message.timestamp + "> " + message.senderID + " says " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
+    }
+    
+    // get the current lectures from the server to display in the UI for selection
+    handleFromServerCurrentLectures(lectures) {
+        this.#gameView.updateCurrentLectures(lectures);
     }
 
     /* #################################################### */    
