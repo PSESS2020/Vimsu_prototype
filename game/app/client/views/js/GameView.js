@@ -301,6 +301,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
     }
 
+    resetAnotherAvatarViews() {
+        console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+        this.#anotherParticipantAvatarViews = [];
+        console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
+        console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+    }   
+
     /*
     setRoomId(roomId)
     {
@@ -352,7 +359,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         lectures.forEach(lecture => {
             // this is really messy i know, should move it somewhere else
             $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1">
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
                     <h5>${lecture.title}</h5>
                     <div class="small">${lecture.speaker}</div>
                     <div>${lecture.summary}</div>
