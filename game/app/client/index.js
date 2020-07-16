@@ -40,7 +40,7 @@ $('form').submit(function(event) {
     return false;
 });
 
-document.getElementById("uiCanvas").onkeydown = function(event) {
+document.getElementById("avatarCanvas").onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
