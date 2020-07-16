@@ -45,8 +45,11 @@ document.getElementById("allchat").onkeydown = function(event) {
 };
 
 document.getElementById("lectureChatButton").onclick = function(event) {
-    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-    $('#lectureChatInput').val('');
+    let messageVal = $('#lectureChatInput').val();
+    if(messageVal !== '') {
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+      $('#lectureChatInput').val('');
+    }
 };
 
 document.body.onkeydown = function(event) {
