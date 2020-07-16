@@ -101,10 +101,11 @@ padding: 2px;
 
 #allchatMessages {
 background: #000;
-overflow-y: auto;
+overflow-y: scroll;
 margin: 0;
 padding: 0;
 z-index: 1;
+max-height: 400px;
 }
 
 #allchatMessages div {
