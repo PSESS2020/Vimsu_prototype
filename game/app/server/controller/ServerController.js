@@ -255,9 +255,7 @@ module.exports = class ServerController {
                 let newPos = door.getTargetPosition();
                 let x = newPos.getCordX();
                 let y = newPos.getCordY();
-
-                //Should be door dependent
-                let d = Settings.STARTDIRECTION;
+                let d = door.getDirection();
 
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
