@@ -197,7 +197,7 @@ module.exports = class ServerController {
                 var roomID = ppants.get(ppantID).getPosition().getRoomId();
                 // timestamping the message - (E)
                 var currentDate = new Date();
-                var currentTime = currentDate.getHours().toString() + ":" + currentDate.getMinutes().toString();
+                var currentTime = currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
                 console.log("<" + currentTime + "> " + ppantID + " says " + text);
                 this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
                 // Getting the roomID from the ppant seems to not work?
