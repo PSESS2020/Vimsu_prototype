@@ -106,7 +106,7 @@ overflow-y: scroll;
 margin: 0;
 padding: 0;
 z-index: 1;
-max-height: 400px;
+max-height: 200px;
 max-width: 250px;
 }
 
