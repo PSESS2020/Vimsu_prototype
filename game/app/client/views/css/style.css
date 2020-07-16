@@ -107,7 +107,8 @@ vertical-align: middle;
   border-style: solid;
   border-color: antiquewhite;
   border-radius: 10px;
-  background-color: rgb(20, 25, 27)
+  background-color: rgb(33, 41, 44);
+  overflow: hidden;
 
 }
 
@@ -156,19 +157,22 @@ vertical-align: middle;
 
 }
 
+.lectureChatHeader {
+  background-color: rgba(24, 30, 32, 1);
+  color: antiquewhite;
+}
+
 .btn-lecture {
-  background-color: antiquewhite;
+  background-color: #028090;
   border: none;
   border-radius: 3px;
-  color: #1b1e24;
+  color: antiquewhite;
   text-decoration: none;
-  border: 2px solid #1b1e24;
 
 }
 
 .btn-lecture:hover {
-  background-color: #1b1e24;
-  border: 2px solid antiquewhite;
+  background-color: #015a66;
   color: antiquewhite;
 }
 
@@ -179,9 +183,6 @@ vertical-align: middle;
   font-size: 30px;
   border-color: transparent !important; 
   box-shadow: 0px 0px 0px transparent;
-}
-.chatInputGroup {
-  background-color: antiquewhite;
 }
 
 
