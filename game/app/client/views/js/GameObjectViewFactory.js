@@ -3,7 +3,7 @@ class GameObjectViewFactory {
     #tileRowOffset;
     #wallColumnOffset;
     #tableRowOffset;
-    #tilePaths = ["../assets/tile_selected.png", "../assets/tile_normal.png", "../assets/wall1.png", "../assets/wall2.png", "../assets/door_lecturehall.png", "../assets/door_foodcourt.png", "../assets/door_reception.png", "../assets/door_foyer.png", "../assets/table.png",];
+    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_lecturehall.png", "client/assets/door_foodcourt.png", "client/assets/door_reception.png", "client/assets/door_foyer.png", "client/assets/table.png",];
 
 
     constructor(){
@@ -123,7 +123,7 @@ class GameObjectViewFactory {
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[7]);
                 
                 if(gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.RECEPTIONDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.FOYERDOOR);
                 else throw new Error("The image for the foyer door view could not be found in the cache for images. Did you reload the images after cache clear?");
                 
             break;
@@ -159,7 +159,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
 
-                if(gameObjectImage !== undefined)
+                if(gameObjectImage !== undefined) 
                     gameObjectView = new TileView(gameObjectImage, screenPos);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
