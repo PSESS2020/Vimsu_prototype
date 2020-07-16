@@ -149,19 +149,19 @@ vertical-align: middle;
 }
 
 .btn-lecture {
-  background-color: #1b1e24;
+  background-color: antiquewhite;
   border: none;
   border-radius: 3px;
-  color: antiquewhite;
+  color: #1b1e24;
   text-decoration: none;
   border: 2px solid #1b1e24;
 
 }
 
 .btn-lecture:hover {
-  background-color: antiquewhite;
-  border: 2px solid #1b1e24;
-  color: #1b1e24;
+  background-color: #1b1e24;
+  border: 2px solid antiquewhite;
+  color: antiquewhite;
 }
 
 .chatInputGroup {
