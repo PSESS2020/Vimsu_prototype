@@ -146,8 +146,9 @@ app.get('/login', (request, response) => {
 });
 
 app.get('/game', (request, response) => {
+    var currentLectures = ["lecture1", "lecture2"]
     if (request.session.loggedin === true) {
-        response.sendFile(path.join(__dirname, '/game/app/client/views/canvas.html'));
+        response.sendFile(path.join(__dirname + '/game/app/client/views/canvas.html'));
     } else {
         response.redirect('/');
     }
@@ -297,7 +298,6 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 
 const controller = new ServerController(io);
 controller.init();
-
 
 
 

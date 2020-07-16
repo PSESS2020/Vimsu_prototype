@@ -279,6 +279,39 @@ module.exports = class ServerController {
 
 
             });
+
+            // TODO: remove and make it work with the actual model
+            var mockedLectures = [{
+                id: 1,
+                title: 'Grundbegriffe der Informatik',
+                speaker: 'Stüker',
+                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Genertionen.',
+                startTime: Date.now() - 600000,
+                endTime: Date.now() + 300000,
+                videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4'
+            }, 
+            {
+                id: 2,
+                title: 'Softwaretechnik 1',
+                speaker: 'Walter F. Tichy',
+                summary: 'Spannende Entwurfsmuster für jung und alt.',
+                startTime: Date.now() - 500000,
+                endTime: Date.now() + 560000,
+                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+            }]
+            socket.on('getCurrentLectures', () => {
+                // TODO: return the lectures here from the schedule, mocked for now
+                //something like var lectures = this.conference.getSchedule().getCurrentLectures()
+                socket.emit('currentLectures', mockedLectures);
+            });
+
+            socket.on('enterLecture', (ppantID, lectureId) => {
+                console.log('id: ' + lectureId);
+                console.log(mockedLectures.filter(x => x.id === lectureId)[0])
+                // TODO: retrieve data from the database here
+                // and also add user to the chat accordingly
+                socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
+            })
             
 
             // This will need a complete rewrite once the server-side models are properly implemented

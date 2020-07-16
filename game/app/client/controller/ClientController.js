@@ -177,6 +177,8 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
+        this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
+        this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
     }
 
     /* #################################################### */    
@@ -301,6 +303,10 @@ class ClientController {
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
+
+    handleFromServerLectureEntered(lecture) {
+        this.#gameView.updateCurrentLecture(lecture);
+    }
  
     /* TODO
      * Change argument from object into list (nicer to read)
@@ -348,6 +354,10 @@ class ClientController {
         
     }
 
+    // get the current lectures from the server to display in the UI for selection
+    handleFromServerCurrentLectures(lectures) {
+        this.#gameView.updateCurrentLectures(lectures);
+    }
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
@@ -372,6 +382,11 @@ class ClientController {
         this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), 1 /*TargetID*/);
         //update currentRoom;
         //update View
+    }
+
+    handleFromViewEnterLecture(lectureId) {
+        this.socketReady;
+        this.socket.emit('enterLecture', this.#participantId, lectureId);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 

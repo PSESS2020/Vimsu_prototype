@@ -61,8 +61,9 @@ document.onkeydown = function(event) {
     case "ArrowLeft":
       clientController.handleLeftArrowDown();
       break;
+    default:
+      return;
   }
-  
   event.preventDefault();
 };
 

@@ -24,9 +24,7 @@ class EventManager {
      *
      */
     handleLectureDoorClick() {
-        
         this.#clientController.handleFromViewGetCurrentLectures();
-        
     }
 
        /**
@@ -60,6 +58,8 @@ class EventManager {
     }
 
 
-
+    handleLectureClicked(lectureId) {
+        this.#clientController.handleFromViewEnterLecture(lectureId);
+    }
 
 }
