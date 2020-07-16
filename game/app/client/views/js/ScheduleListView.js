@@ -9,13 +9,9 @@ class ScheduleListView extends WindowView {
     draw(lectures) {
         for (var i = 0; i < lectures.length; i++) {
             lectures[i].startingTime = new Date(lectures[i].startingTime);
-            console.log(lectures[i].startingTime)
         }
 
-        const sortedLectures = lectures.slice().sort((a, b) => a.startingTime.getTime() - b.startingTime.getTime())
-        for (var i = 0; i < sortedLectures.length; i++) {
-            console.log(sortedLectures[i].startingTime)
-        }
+        const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime)
         this.#lectures = sortedLectures;
 
         for (var i = 0; i < this.#lectures.length; i++) {
