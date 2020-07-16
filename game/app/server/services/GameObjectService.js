@@ -69,11 +69,24 @@ module.exports = class GameObjectService {
         }
 
         else if (typeOfRoom === 'RECEPTION') {
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, 9), true));
+            for (var i = 3; i <= 9; i++) {
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, i), true));
+            }
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 11, 9), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 12, 9), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 11, 3), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 12, 3), true));
         }
 
         else if (typeOfRoom === 'FOODCOURT') {
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, 10), true));
+            for (var i = 2; i <= 10; i++) {
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 8, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 6, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 4, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 2, i), true));
+            }
+            
         }
     }
 }
