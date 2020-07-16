@@ -76,6 +76,30 @@ module.exports = class db {
         })
     }
 
+    joinCollection(localCollName, foreignCollName, localField, foreignField, projection) {
+        TypeChecker.isString(localCollName);
+        TypeChecker.isString(foreignCollName);
+
+        var collection = this.#vimsudb.collection(localCollName);
+
+        return collection.aggregate([
+            {
+                $lookup: {
+                    from: foreignCollName,
+                    localField: localField,
+                    foreignField: foreignField,
+                    as: foreignCollName + 'Data'
+                }
+            }
+        ]).toArray()
+        .then(results => {
+            return results;
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+
     updateOneToCollection(collectionName, query, newValue) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);

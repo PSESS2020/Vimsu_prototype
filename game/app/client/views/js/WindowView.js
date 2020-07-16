@@ -4,11 +4,11 @@ class WindowView extends Views {
         super();
     }
 
-    /*draw() {
+    draw() {
         throw new Error('draw() has to be implemented!');
-    }*/
+    }
 
-    onclick() {
+    /*onclick() {
         throw new Error('onclick() has to be implemented!');
-    }   
+    }   */
 }

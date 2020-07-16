@@ -201,3 +201,7 @@ vertical-align: middle;
   opacity: .5 !important;
   box-shadow: 0px 0px 0px transparent;
 }
+
+.table {
+  color: antiquewhite;
+}

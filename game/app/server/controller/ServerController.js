@@ -17,6 +17,8 @@ const TypeOfRoom = require('../models/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
+const LectureService = require('../services/LectureService')
+const AccountService = require('../../../../website/services/AccountService')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 
@@ -311,6 +313,12 @@ module.exports = class ServerController {
                 // TODO: return the lectures here from the schedule, mocked for now
                 //something like var lectures = this.conference.getSchedule().getCurrentLectures()
                 socket.emit('currentLectures', mockedLectures);
+            });
+
+            socket.on('getSchedule', () => {
+                LectureService.getAllLecturesWithOratorData("1").then(lectures => {
+                    socket.emit('currentSchedule', lectures);
+                }) 
             });
 
             socket.on('enterLecture', (ppantID, lectureId) => {

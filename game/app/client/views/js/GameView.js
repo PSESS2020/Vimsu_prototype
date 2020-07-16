@@ -16,6 +16,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #foyerView;
     #foodCourtView;
     #receptionView;
+    #scheduleListView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -369,6 +370,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         });
 
         $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+    }
+
+    initCurrentSchedule(lectures) {
+        this.#scheduleListView = new ScheduleListView().draw(lectures);
     }
 
     updateCurrentLecture(lecture) {

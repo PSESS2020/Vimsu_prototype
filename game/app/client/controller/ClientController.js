@@ -179,6 +179,7 @@ class ClientController {
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
+        this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
     }
 
@@ -360,6 +361,11 @@ class ClientController {
         this.#gameView.updateCurrentLectures(lectures);
     }
 
+    handleFromServerCurrentSchedule(lectures) {
+        console.log("handleFromServerCurrentSchedule() " + lectures.length);
+        this.#gameView.initCurrentSchedule(lectures);
+    }
+
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
@@ -416,6 +422,11 @@ class ClientController {
     handleFromViewGetCurrentLectures() {
         this.socketReady
         this.socket.emit('getCurrentLectures');
+    }
+
+    handleFromViewShowSchedule() {
+        this.socketReady
+        this.socket.emit('getSchedule');
     }
 
     handleFromViewNewFriendRequest(participantRepicientId) {

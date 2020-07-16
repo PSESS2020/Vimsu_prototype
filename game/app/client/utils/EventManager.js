@@ -62,4 +62,8 @@ class EventManager {
         this.#clientController.handleFromViewEnterLecture(lectureId);
     }
 
+    handleScheduleClicked() {
+        this.#clientController.handleFromViewShowSchedule();
+    }
+
 }
