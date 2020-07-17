@@ -25,6 +25,7 @@ module.exports = class LectureService {
         });
     }
 
+    
     static createAllLectures(conferenceId) {
         return getDB().then(res => {
             return this.getAllLecturesWithOratorData(conferenceId).then(lectures => {
@@ -46,7 +47,8 @@ module.exports = class LectureService {
         }).catch(err => {
             console.error(err)
         });
-    }
+        return;
+    } 
 
     static getAllLectures(conferenceId) {
         return getDB().then(res => {

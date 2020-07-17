@@ -319,8 +319,8 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
 
-    handleFromServerLectureEntered(lecture) {
-        this.#gameView.updateCurrentLecture(lecture);
+    handleFromServerLectureEntered(lecture, hasToken) {
+        this.#gameView.updateCurrentLecture(lecture, hasToken);
     }
  
     /* TODO

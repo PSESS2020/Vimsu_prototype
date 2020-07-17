@@ -22,12 +22,14 @@ const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
+const Conference = require('../models/Conference.js');
 
 
 /* This should later on be turned into a singleton */
 module.exports = class ServerController {
     
     #io;
+    #conference;
     #listOfConfCont;
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
@@ -54,6 +56,12 @@ module.exports = class ServerController {
         //Init all rooms
         var roomService = new RoomService();
         this.#rooms = roomService.getAllRooms();
+
+        //initilaize conference with schedule. TODO: create conference in DB and initialize conference
+        //model with id from the DB
+        var lectures = LectureService.createAllLectures("1");
+        var conference = new Conference(new Schedule(lectures));
+        this.#conference = conference;
 
         var foyerRoom = this.#rooms[0];
         var foodCourtRoom = this.#rooms[1];
@@ -381,10 +389,15 @@ module.exports = class ServerController {
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
+                
+                var schedule = this.#conference.getSchedule();
+                lecture = schedule.getLecture(lectureId);
+                lecture.enter(ppantID);
+                hasToken = lecture.hasToken(ppantID);
 
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoUrl => {
                     currentLecturesData[idx].videoUrl = videoUrl;
-                    socket.emit('lectureEntered',  currentLecturesData[idx]);
+                    socket.emit('lectureEntered',  currentLecturesData[idx], hasToken);
                 })
             })
 
@@ -403,7 +416,7 @@ module.exports = class ServerController {
                                     videoId: lecture.getVideoId(),
                                     remarks: lecture.getRemarks(),
                                     oratorName: lecture.getOratorName(),
-                                    startingTime: lecture.getStartingTime(),
+                                    startingTime: new Date.now(),  //lecture.getStartingTime(),
                                     maxParticipants: lecture.getMaxParticipants()
                                 }
                             )

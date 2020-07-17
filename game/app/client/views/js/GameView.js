@@ -381,14 +381,20 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#scheduleListView = new ScheduleListView().draw(lectures);
     }
 
-    updateCurrentLecture(lecture) {
+    updateCurrentLecture(lecture, hasToken) {
         $('#currentLectures').hide(); // hide the overview of current lectures
+
+        if(hasToken) {
+            alert('Token');
+        } else {
+            alert('no Token');
+        }
 
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
         $('#lectureVideo').attr('src', lecture.videoUrl);
         $('#lectureVideo').load();
-        
+
         $('#lectureVideoWindow').show();
     }
         
