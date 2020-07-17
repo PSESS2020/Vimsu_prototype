@@ -238,12 +238,12 @@ class ClientController {
 
     sendToServerAllchatMessage(text) {
         this.socketReady;
-        this.socket.emit('sendMessage', this.#participantId, text);
+        this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
     }
 
     sendToServerLectureChatMessage(text) {
         this.socketReady;
-        this.socket.emit('lectureMessage', this.#participantId, text);
+        this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text);
     }
 
     /* #################################################### */    
@@ -281,13 +281,13 @@ class ClientController {
      *  
      */
     //First Message from Server, gives you your ID
-    handleFromServerUpdateID(id) {
+    /*handleFromServerUpdateID(id) {
         console.log("test update id");
         
 
         this.#participantId = id;
         console.log(this.#participantId);
-    }
+    }*/
 
     //Second message from Server, gives you information of starting room
     handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {

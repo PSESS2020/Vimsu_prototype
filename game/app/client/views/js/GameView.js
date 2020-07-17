@@ -316,11 +316,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     resetAnotherAvatarViews() {
         //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
         
-        this.#anotherParticipantAvatarViews.forEach(element => {
-            this.removeAnotherAvatarViews(element.getId());
-        });
+        this.#anotherParticipantAvatarViews.length = 0;
 
-        console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
+        //console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
         //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
     }   
 
