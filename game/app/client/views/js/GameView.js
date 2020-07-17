@@ -367,12 +367,24 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             $('#currentLecturesContainer').append(`
                 <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
                     <h5>${lecture.title}</h5>
-                    <div class="small">${lecture.speaker}</div>
-                    <div>${lecture.summary}</div>
+                    <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
+                    <div>${lecture.remarks}</div>
                     <button id="${lecture.id}" class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
                 </div>
             `)
         });
+
+        /*for (var i = 0; i < lectures.length; i++) {
+            var lecture = lectures[i];
+            $('#currentLecturesContainer').append(`
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
+                    <h5>${lecture.title}</h5>
+                    <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
+                    <div>${lecture.remarks}</div>
+                    <button id=${lecture.id} class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
+                </div>
+            `)
+        }*/
 
         $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
     }
@@ -385,7 +397,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         $('#currentLectures').hide(); // hide the overview of current lectures
 
         $('#lectureTitleLabel').text(lecture.title);
-        $('#lectureSpeakerLabel').text(lecture.speaker);
+        $('#lectureSpeakerLabel').text(lecture.oratorName);
         $('#lectureVideo').attr('src', lecture.videoUrl);
         $('#lectureVideo').load();
         

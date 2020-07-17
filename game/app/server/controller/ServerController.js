@@ -19,6 +19,7 @@ const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
 const LectureService = require('../services/LectureService')
 const AccountService = require('../../../../website/services/AccountService')
+const Schedule = require('../models/Schedule')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 
@@ -366,25 +367,58 @@ module.exports = class ServerController {
                 endTime: Date.now() + 560000,
                 videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
             }]
+
+            var currentLecturesData = [];
+
+            socket.on('enterLecture', (ppantID, lectureId) => {
+                console.log('id: ' + lectureId);
+                console.log(currentLecturesData.filter(x => x.id === lectureId)[0])
+                // TODO: retrieve data from the database here
+                // and also add user to the chat accordingly
+
+                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+
+                if (idx < 0) {
+                    throw new Error(lectureId + " is not in list of current lectures")
+                }
+
+                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoUrl => {
+                    currentLecturesData[idx].videoUrl = videoUrl;
+                    socket.emit('lectureEntered',  currentLecturesData[idx]);
+                })
+            })
+
             socket.on('getCurrentLectures', () => {
-                // TODO: return the lectures here from the schedule, mocked for now
-                //something like var lectures = this.conference.getSchedule().getCurrentLectures()
-                socket.emit('currentLectures', mockedLectures);
+                LectureService.createAllLectures("1").then(lectures => {
+                    var currentLectures = new Schedule(lectures).getcurrentLectures();
+
+                    currentLectures.forEach(lecture => {
+                        currentLecturesData.push( 
+                            {
+                                id: lecture.getId(),
+                                title: lecture.getTitle(),
+                                videoId: lecture.getVideoId(),
+                                remarks: lecture.getRemarks(),
+                                oratorName: lecture.getOratorName(),
+                                startingTime: lecture.getStartingTime(),
+                                maxParticipants: lecture.getMaxParticipants()
+                            }
+                        )
+                    })
+
+                    socket.emit('currentLectures', currentLecturesData);
+                }).catch(err => {
+                    console.error(err);
+                }) 
             });
 
             socket.on('getSchedule', () => {
                 LectureService.getAllLecturesWithOratorData("1").then(lectures => {
                     socket.emit('currentSchedule', lectures);
+                }).catch(err => {
+                    console.error(err);
                 }) 
-            });
-
-            socket.on('enterLecture', (ppantID, lectureId) => {
-                console.log('id: ' + lectureId);
-                console.log(mockedLectures.filter(x => x.id === lectureId)[0])
-                // TODO: retrieve data from the database here
-                // and also add user to the chat accordingly
-                socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
-            })            
+            });    
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
