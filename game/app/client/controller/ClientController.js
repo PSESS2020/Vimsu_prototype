@@ -422,7 +422,7 @@ class ClientController {
     
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
-        var msgText = "<" + message.timestamp + "> " + message.senderID + " says " + message.text;
+        var msgText = "[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text;
         $('#allchatMessages').prepend($('<div>').text(msgText));
         $('#allchatMessages').scrollTop(0);
     }
@@ -443,7 +443,7 @@ class ClientController {
     handleFromServerInitAllchat(messages) {
         $('#allchatMessages').empty();
         messages.forEach( (message) => {
-            $('#allchatMessages').prepend($('<div>').text("<" + message.timestamp + "> " + message.senderID + " says " + message.text));
+            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
     }

@@ -203,8 +203,8 @@ module.exports = class Room {
         }
     }
 
-    addMessage(ppantID, date, text) {
-        var message = { senderID: ppantID, timestamp: date, text: text };
+    addMessage(ppantID, username, date, text) {
+        var message = { senderID: ppantID, username: username, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
 

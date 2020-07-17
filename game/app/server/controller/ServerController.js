@@ -253,16 +253,18 @@ module.exports = class ServerController {
 
             socket.on('sendMessage', (ppantID, text) => {
                 
-                var roomID = ppants.get(ppantID).getPosition().getRoomId();
-                
+                var participant = ppants.get(ppantID);
+                var roomID = participant.getPosition().getRoomId();
+                var username = participant.getBusinessCard().getUsername();
+
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
                 console.log("<" + currentTime + "> " + ppantID + " says " + text);
-                this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
+                this.#rooms[roomID - 1].addMessage(ppantID, username, currentTime, text);
                 
                 // Getting the roomID from the ppant seems to not work?
-                this.#io.in(roomID.toString()).emit('newAllchatMessage', { senderID: ppantID, timestamp: currentTime, text: text });
+                this.#io.in(roomID.toString()).emit('newAllchatMessage', { senderID: ppantID, username: username, timestamp: currentTime, text: text });
                 
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
             });
