@@ -31,12 +31,14 @@ module.exports = class ServerController {
     
     #io;
     #listOfConfCont;
+    #DEBUGMODE;
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
     
     constructor(socket) {
         this.#io = socket;
+        this.#DEBUGMODE = true;
     }
     
     //There are currently 3 differenct socketIo Channels
@@ -525,6 +527,22 @@ module.exports = class ServerController {
                 ppants.delete(ppantID);
                 // Destroy ppant and his controller
             });
+
+            //Allows debugging the server. 
+            //BEWARE: In debug mode everything can be manipulated so the server can crash easily.
+            socket.on('evalServer', (data) => {
+                if(!this.#DEBUGMODE)
+                    return;
+
+                try {
+                    var res = eval(data);
+                } catch (e) {
+                    console.log("Eval Error: Can't find " + data + " in code.");
+                    return;
+                }		
+                socket.emit('evalAnswer',res);
+            });
+
         });
 
         /* Set to the same time-Interval as the gameplay-loop, this just sends out

@@ -33,13 +33,21 @@ setInterval( function() {
 }, GameConfig.TIME_DELTA);
 
 $('form').submit(function(event) {
+    
     event.preventDefault();
     let messageVal = $('#allchatMessageInput').val();
+    
     if(messageVal !== '') {
-      clientController.sendToServerAllchatMessage(messageVal);
+      
+      if(messageVal[0] === '/') {
+          clientController.sendToServerEvalInput(messageVal.slice(1));
+        } else
+          clientController.sendToServerAllchatMessage(messageVal);
+      
       $('#allchatMessageInput').val('');
       return false;
     }
+
 });
 
 document.getElementById("allchat").onkeydown = function(event) {

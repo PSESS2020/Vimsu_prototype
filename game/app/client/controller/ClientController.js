@@ -191,6 +191,9 @@ class ClientController {
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
+                console.log(data);
+        });
     }
 
     /* #################################################### */    
@@ -237,20 +240,34 @@ class ClientController {
     }
 
     sendToServerAllchatMessage(text) {
+
         this.socketReady;
         if(this.socket.connected)
             this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+    
+        }
+
+    sendToServerEvalInput(input) {
+
+        this.socketReady;
+        if(this.socket.connected)
+            this.socket.emit('evalServer', input);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
+
     }
 
     sendToServerLectureChatMessage(text) {
+
         this.socketReady;
         if(this.socket.connected)
             this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-    }
+   
+        }
 
     /* #################################################### */    
     /* ############### RECEIVE FROM SERVER ################ */
