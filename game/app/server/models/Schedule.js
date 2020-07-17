@@ -31,8 +31,8 @@ module.exports = class Schedule {
             var lecture = this.#lectureList[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
-            var startToShow = (startingTime - (10 * 60 * 1000)); //10 Minutes in milliseconds
-            var stopToShow = (startingTime + (15 * 60 * 1000));
+            var startToShow = (startingTime - (10000000000 * 60 * 1000)); //TODO: set to 10 minutes
+            var stopToShow = (startingTime + (15000000000 * 60 * 1000)); //TODO: set to 15 minutes
             var withinMargin = startToShow <= now && now <= stopToShow;
 
             if (withinMargin) {
