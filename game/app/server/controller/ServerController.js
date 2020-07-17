@@ -498,7 +498,7 @@ module.exports = class ServerController {
                     console.log('wrong position');
                     return;
                 }
-                
+
                 LectureService.createAllLectures("1").then(lectures => {
                     var currentLectures = new Schedule(lectures).getcurrentLectures();
                     
@@ -555,7 +555,7 @@ module.exports = class ServerController {
 
                 //remove participant from room
                 var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
-                this.#rooms(currentRoomId - 1).exitParticipant(ppantID);
+                this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
                 
                 ppantControllers.delete(socket.id);
                 ppants.delete(ppantID);
