@@ -160,14 +160,36 @@ module.exports = class Room {
      * 
      * @param {Participant} participant 
      */
-    exitParticipant(participant) {
-        TypeChecker.isInstanceOf(participant, Participant);
-        if (this.#listOfPPants.includes(participant)) {
-            let index = this.#listOfPPants.indexOf(participant);
-            this.#listOfPPants.splice(index, 1);
-        }
+    exitParticipant(participantId) {
+        TypeChecker.isString(participantId);
+        this.#listOfPPants.forEach(participant => {
+            if (participant.getId() === participantId) {
+                let index = this.#listOfPPants.indexOf(participant);
+                this.#listOfPPants.splice(index, 1);
+            }
+        });
 
-        //TODO: Entfernen aus Allchat
+    }
+
+    //Checks if ppant with ppantID is currently in this room
+    includesParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+        this.#listOfPPants.forEach(ppant => {
+            if (ppant.getId() === ppantID) {
+                return true;
+            }
+        });
+        return false;
+    }
+
+    //Method to get a Participant who is currently in this room
+    getParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+        this.#listOfPPants.forEach(ppant => {
+            if (ppant.getId() === ppantID) {
+                return ppant;
+            }
+        });
     }
 
     /**
