@@ -272,6 +272,12 @@ app.post('/registerValid', (request, response) => {
         request.session.title = res.getTitle();
         request.session.surname = res.getSurname();
         request.session.forename = res.getForename();
+        
+        //Needed for creating business card during entering the conference.
+        request.session.username = res.getUsername();
+        request.session.job = res.getJob();
+        request.session.company = res.getCompany();
+        request.session.email = res.getEmail();
         response.redirect('/');
         response.end();
     }).catch(err => {

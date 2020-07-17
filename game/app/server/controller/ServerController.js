@@ -133,7 +133,16 @@ module.exports = class ServerController {
                 var businessCard = new BusinessCard(ppantID, username, title, surname, forename, job, company, email);
 
                 //Needed for emiting this business card to other participants in room
-                var businessCardObject = { id: ppantID, username: username, title: title, surname: surname, forename: forename, job: job, company: company, email: email };
+                var businessCardObject = { 
+                            id: ppantID, 
+                            username: username, 
+                            title: title, 
+                            surname: surname, 
+                            forename: forename, 
+                            job: job, 
+                            company: company, 
+                            email: email 
+                        };
                 
                 var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d); 
 
@@ -336,6 +345,26 @@ module.exports = class ServerController {
                 //set new position in server model
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
+
+                //Setting up the business card object
+                let businessCard = ppants.get(ppantID).getBusinessCard();
+                let businessCardObject = {
+                        id: businessCard.getParticipantId(),
+
+                        username: businessCard.getUsername(),
+                    
+                        title: businessCard.getTitle(),
+                    
+                        surname: businessCard.getSurname(),
+                    
+                        forename: businessCard.getForename(),
+                    
+                        job: businessCard.getJob(),
+                    
+                        company: businessCard.getCompany(),
+                    
+                        email: businessCard.getEmail(),
+                }
                 
                 //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
@@ -344,16 +373,35 @@ module.exports = class ServerController {
                 socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
                 //Emit to all participants in new room, that participant is joining
-                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, cordX: x, cordY: y, dir: d });
+                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d });
 
                 //Emit to participant all participant positions, that were in new room before him
                 ppants.forEach( (value, key, map) => {
                     if(key != ppantID && value.getPosition().getRoomId() === targetRoomId) {
+                        var businessCard = value.getBusinessCard();
+
+                        var tempBusinessCard = {};
+                        tempBusinessCard.id = businessCard.getParticipantId();
+
+                        tempBusinessCard.username = businessCard.getUsername();
+                    
+                        tempBusinessCard.title = businessCard.getTitle();
+                    
+                        tempBusinessCard.surname = businessCard.getSurname();
+                    
+                        tempBusinessCard.forename = businessCard.getForename();
+                    
+                        tempBusinessCard.job = businessCard.getJob();
+                    
+                        tempBusinessCard.company = businessCard.getCompany();
+                    
+                        tempBusinessCard.email = businessCard.getEmail();
+
                         var tempPos = value.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = value.getDirection();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, cordX: tempX, cordY: tempY, dir: tempDir });
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: key, businessCard: tempBusinessCard, cordX: tempX, cordY: tempY, dir: tempDir });
                         console.log("Participant " + key + " is being initialized at the view of participant " + ppantID);
                     }   
                 });

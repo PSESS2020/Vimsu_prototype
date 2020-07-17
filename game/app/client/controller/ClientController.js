@@ -408,28 +408,28 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.RECEPTION);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.RECEPTION);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOODCOURT);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.FOODCOURT);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#participantId, this.#currentRoom.getRoomId(), TypeOfRoomClient.FOYER);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.FOYER);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterLecture(lectureId) {
         this.socketReady;
-        this.socket.emit('enterLecture', this.#participantId, lectureId);
+        this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
