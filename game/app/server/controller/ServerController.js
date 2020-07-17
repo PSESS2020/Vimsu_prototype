@@ -318,9 +318,9 @@ module.exports = class ServerController {
 
                 //check if participant is in right position to enter room
                 //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (ppants.get(ppantID).getPosition().getRoomId() != door.getStartPosition().getRoomId() ||
-                    ppants.get(ppantID).getPosition().getCordX() != door.getStartPosition().getCordX() ||
-                    ppants.get(ppantID).getPosition().getCordY() != door.getStartPosition().getCordY()) {
+                if (ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
+                    ppants.get(ppantID).getPosition().getCordX() !== door.getStartPosition().getCordX() ||
+                    ppants.get(ppantID).getPosition().getCordY() !== door.getStartPosition().getCordY()) {
                     console.log('wrong position');
                     return;
                 }
@@ -465,9 +465,22 @@ module.exports = class ServerController {
                 endTime: Date.now() + 560000,
                 videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
             }]
-            socket.on('getCurrentLectures', () => {
+            socket.on('getCurrentLectures', (ppantID) => {
+                let doorService = new DoorService();
+                let lectureDoorPosition = doorService.getLectureDoorPosition();
+
+                //check if participant is in right position to enter room
+                //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
+                if (ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
+                    ppants.get(ppantID).getPosition().getCordX() !== lectureDoorPosition.getCordX() ||
+                    ppants.get(ppantID).getPosition().getCordY() !== lectureDoorPosition.getCordY()) {
+                    console.log('wrong position');
+                    return;
+                }
+
                 // TODO: return the lectures here from the schedule, mocked for now
                 //something like var lectures = this.conference.getSchedule().getCurrentLectures()
+
                 socket.emit('currentLectures', mockedLectures);
             });
 
@@ -479,7 +492,9 @@ module.exports = class ServerController {
 
             socket.on('enterLecture', (ppantID, lectureId) => {
                 console.log('id: ' + lectureId);
-                console.log(mockedLectures.filter(x => x.id === lectureId)[0])
+                console.log(mockedLectures.filter(x => x.id === lectureId)[0]);
+
+
                 // TODO: retrieve data from the database here
                 // and also add user to the chat accordingly
                 socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
