@@ -88,13 +88,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-
         //check if game view is already initalized
         if (this.#gameViewInit) {
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
             }   
-
             for (var i = 0; i < this.#updateList.length; i++) {
 
                 if (this.#updateList[i] instanceof Array) {

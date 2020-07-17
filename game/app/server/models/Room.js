@@ -25,7 +25,7 @@ module.exports = class Room {
     #startPosition; // The position in which new participants are initialized - (E)
     #startDirection; // The direction in which new particpants are looking on initialization - (E)
     #listOfDoors; //TODO: Get right doors from service
-    
+    #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
 
     /**
      * Erstellt Rauminstanz
@@ -42,6 +42,7 @@ module.exports = class Room {
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         this.#listOfPPants = [];
+        this.#listOfMessages = [];
 
         //andere Fälle später
         if (typeOfRoom == "FOYER") {
@@ -95,6 +96,10 @@ module.exports = class Room {
         return this.#typeOfRoom;
     }
 
+    getMessages() {
+        return this.#listOfMessages;
+    }
+    
     /*
     getRoomController() {
         return this.#roomController;
@@ -196,6 +201,11 @@ module.exports = class Room {
         else {
             return false;
         }
+    }
+
+    addMessage(ppantID, date, text) {
+        var message = { senderID: ppantID, timestamp: date, text: text };
+        this.#listOfMessages.push(message);
     }
 
    #buildOccMap = function() {
