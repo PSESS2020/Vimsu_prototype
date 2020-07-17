@@ -37,10 +37,6 @@ const PORT = process.env.PORT || 5000;
  *   (iii) creating a socket-Server on top of that for real-time interaction
  * - (E) */
 const app = express();
-//sets the view engine to ejs, ejs is required to render templates
-app.set('view engine', 'ejs');
-//sets the views directory for rendering the ejs templates
-app.set('views',path.join(__dirname, '/website/views'));
 const httpServer = http.createServer(app);
 const io = socketio(httpServer);
 
