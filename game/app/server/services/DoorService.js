@@ -10,6 +10,7 @@ const Direction = require('../models/Direction.js');
 
 module.exports = class DoorService {
     #doors;
+    #lectureDoorPosition;           //LectureDoor.js is kind of useless right now, so lectureDoorPosition is stored here
 
     /**
      * @author Philipp
@@ -58,6 +59,10 @@ module.exports = class DoorService {
         return this.#doors[index];
     }
 
+    getLectureDoorPosition() {
+        return this.#lectureDoorPosition;
+    }
+
     initAllDoors() {
         //Door from Foyer to Food Court 
         this.#doors.push(new Door(1, new Position(Settings.FOYER_ID, 24, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT));
@@ -70,5 +75,8 @@ module.exports = class DoorService {
 
         //Door from Reception to Foyer (TODO: Adjust StartPosition)
         this.#doors.push(new Door(4, new Position(Settings.RECEPTION_ID, 2, 0), new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
+
+        //Lecture Door Position
+        this.#lectureDoorPosition = new Position(Settings.FOYER_ID, 2, 0);
     }
 } 

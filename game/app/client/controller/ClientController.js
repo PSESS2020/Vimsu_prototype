@@ -508,7 +508,7 @@ class ClientController {
 
     handleFromViewGetCurrentLectures() {
         this.socketReady
-        this.socket.emit('getCurrentLectures');
+        this.socket.emit('getCurrentLectures', this.#ownParticipant.getId());
     }
 
     handleFromViewShowSchedule() {
