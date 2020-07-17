@@ -106,19 +106,7 @@
                     <div class="lectureChatHeader">
                         <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
                     </div>
-                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
-                        <div>
-                            <p style="font-size: small;">Donald Knuth, 14:14: <br> <span style="font-size: medium;">Hello</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p style="font-size: small;">Robert Martin, 14:17: <br> <span style="font-size: medium;">Very interesting!</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p style="font-size: small;">Donald Knuth, 14:19: <br> <span style="font-size: medium;">I have a question.</span>
-                            </p>
-                        </div>
+                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">                    
                     </div>
 
                     <div class="input-group mb-3 mr-3 ml-2 mt-auto">
@@ -165,7 +153,7 @@
                 requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
                     requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
                         requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
-                            requirejs(['client/views/js/ScheduleListView','client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                            requirejs(['client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
                                     requirejs(['client/index'], () => {
                                     });    

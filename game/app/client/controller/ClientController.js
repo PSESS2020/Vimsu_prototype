@@ -462,11 +462,6 @@ class ClientController {
         });
         $('#allchatMessages').scrollTop(0);
     }
-    
-    // get the current lectures from the server to display in the UI for selection
-    handleFromServerCurrentLectures(lectures) {
-        this.#gameView.updateCurrentLectures(lectures);
-    }
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */

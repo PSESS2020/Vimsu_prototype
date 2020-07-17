@@ -17,6 +17,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #foodCourtView;
     #receptionView;
     #scheduleListView;
+    #currentLecturesView;
+    #lectureView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -369,21 +371,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     updateCurrentLectures(lectures) {
-        $('#currentLecturesContainer').empty();
-        
-        lectures.forEach(lecture => {
-            // this is really messy i know, should move it somewhere else
-            $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
-                    <h5>${lecture.title}</h5>
-                    <div class="small">${lecture.speaker}</div>
-                    <div>${lecture.summary}</div>
-                    <button id="${lecture.id}" class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked(${lecture.id})">Show</button>
-                </div>
-            `)
-        });
-
-        $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+        this.#currentLecturesView = new CurrentLecturesView().draw(lectures);
     }
 
     initCurrentSchedule(lectures) {
@@ -391,14 +379,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     updateCurrentLecture(lecture) {
-        $('#currentLectures').hide(); // hide the overview of current lectures
-
-        $('#lectureTitleLabel').text(lecture.title);
-        $('#lectureSpeakerLabel').text(lecture.speaker);
-        $('#lectureVideo').attr('src', lecture.videoUrl);
-        $('#lectureVideo').load();
-        
-        $('#lectureVideoWindow').show();
+        this.#lectureView = new LectureView().draw(lecture);
     }
         
     updateOwnAvatarRoom(typeOfRoom) {

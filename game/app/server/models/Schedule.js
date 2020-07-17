@@ -1,5 +1,3 @@
-
-
 module.exports = class Schedule {
     
     #lectureList;
@@ -12,12 +10,12 @@ module.exports = class Schedule {
     */
 
     constructor(lectureList) {
-        this.lectureList = this.lectureList;
+        this.#lectureList = lectureList;
     }
 
     getLecture(lectureId) {
         for(var i = 0; i < this.#lectureList.length; i++) {
-            lecture = this.#lectureList[i];
+            var lecture = this.#lectureList[i];
             if(lecture.getId() === lectureId) {
                 return lecture;
             }
@@ -28,17 +26,17 @@ module.exports = class Schedule {
     //TODO: maybe move Timedeltas in global constants file
     getcurrentLectures() {
         var currentLectures = [];
+
         for(var i = 0; i < this.#lectureList.length; i++) {
-            lecture = this.#lectureList[i];
-            startingTime = lecture.getStartingTime().getTime();
-            now = new Date().now();
-            startToShow = (now.getTime() + (10 * 60 * 1000)); //10 Minutes in milliseconds
-            startToShowTime = startToShow.getTime();
-            stopToShow = (startingTime.getTime() + (15 * 60 * 1000));
-            stopToShowTime = stopToShow.getTime();
-            var withinMargin = startToShowTime >= now && stopToShowTime <= now;
+            var lecture = this.#lectureList[i];
+            var startingTime = lecture.getStartingTime().getTime();
+            var now = new Date().getTime();
+            var startToShow = (startingTime - (10 * 60 * 1000)); //10 Minutes in milliseconds
+            var stopToShow = (startingTime + (15 * 60 * 1000));
+            var withinMargin = startToShow <= now && now <= stopToShow;
+
             if (withinMargin) {
-                currentLectures.append(lecture);
+                currentLectures.push(lecture);
             }
         }
         return currentLectures;

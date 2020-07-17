@@ -175,7 +175,7 @@ module.exports = class db {
             bucketName: collectionName
         });
 
-        var dir = './download/' + collectionName + '/';
+        var dir = __dirname + "/download/";
         FileSystem.createDirectory(dir);
 
         var id = new mongodb.ObjectID(fileId)
@@ -189,7 +189,7 @@ module.exports = class db {
                 downloadStream.pipe(writeStream)
                 .on('finish', function() {
                     console.log(file.filename + ' downloaded')
-                    resolve(dir + file.filename);
+                    resolve(file.filename);
                 })
                 .on('error', function(error) {
                     console.error(error);
