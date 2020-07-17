@@ -3,6 +3,7 @@
 /* ############################################################################### */
 
 const socketio = require('socket.io');
+const path = require('path');
 
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
@@ -20,6 +21,7 @@ const DoorService = require('../services/DoorService.js');
 const LectureService = require('../services/LectureService')
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
+const FileSystem = require('../../../../config/FileSystem')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 
@@ -382,8 +384,8 @@ module.exports = class ServerController {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
 
-                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoUrl => {
-                    currentLecturesData[idx].videoUrl = videoUrl;
+                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
+                    currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
                     socket.emit('lectureEntered',  currentLecturesData[idx]);
                 })
             })
