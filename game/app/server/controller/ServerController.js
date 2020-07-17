@@ -391,19 +391,23 @@ module.exports = class ServerController {
             socket.on('getCurrentLectures', () => {
                 LectureService.createAllLectures("1").then(lectures => {
                     var currentLectures = new Schedule(lectures).getcurrentLectures();
-
+                    
                     currentLectures.forEach(lecture => {
-                        currentLecturesData.push( 
-                            {
-                                id: lecture.getId(),
-                                title: lecture.getTitle(),
-                                videoId: lecture.getVideoId(),
-                                remarks: lecture.getRemarks(),
-                                oratorName: lecture.getOratorName(),
-                                startingTime: lecture.getStartingTime(),
-                                maxParticipants: lecture.getMaxParticipants()
-                            }
-                        )
+                        let idx = currentLecturesData.findIndex(x => x.id === lecture.getId());
+
+                        if (idx < 0) {
+                            currentLecturesData.push( 
+                                {
+                                    id: lecture.getId(),
+                                    title: lecture.getTitle(),
+                                    videoId: lecture.getVideoId(),
+                                    remarks: lecture.getRemarks(),
+                                    oratorName: lecture.getOratorName(),
+                                    startingTime: lecture.getStartingTime(),
+                                    maxParticipants: lecture.getMaxParticipants()
+                                }
+                            )
+                        }
                     })
 
                     socket.emit('currentLectures', currentLecturesData);

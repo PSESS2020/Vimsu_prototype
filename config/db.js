@@ -2,6 +2,8 @@ const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/utils/TypeChecker');
 const FileSystem = require('./FileSystem');
+var GridStore = require('mongodb').GridStore;
+var Server = require('mongodb').Server;
 
 module.exports = class db {
     #vimsudb;
@@ -175,7 +177,7 @@ module.exports = class db {
             bucketName: collectionName
         });
 
-        var dir = './download/' + collectionName + '/';
+        var dir = __dirname + "/download/" + collectionName + '/';
         FileSystem.createDirectory(dir);
 
         var id = new mongodb.ObjectID(fileId)
