@@ -238,12 +238,18 @@ class ClientController {
 
     sendToServerAllchatMessage(text) {
         this.socketReady;
-        this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
+        if(this.socket.connected)
+            this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
     }
 
     sendToServerLectureChatMessage(text) {
         this.socketReady;
-        this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text);
+        if(this.socket.connected)
+            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
     }
 
     /* #################################################### */    
