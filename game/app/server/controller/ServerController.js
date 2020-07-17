@@ -203,7 +203,7 @@ module.exports = class ServerController {
                 console.log("<" + currentTime + "> " + ppantID + " says " + text);
                 this.#rooms[roomID - 1].addMessage(ppantID, currentTime, text);
                 // Getting the roomID from the ppant seems to not work?
-                this.#io.sockets.in(Settings.FOYER_ID.toString()).emit('newAllchatMessage', { senderID: ppantID, timestamp: currentTime, text: text });
+                this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', { senderID: ppantID, timestamp: currentTime, text: text });
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
             });
             
