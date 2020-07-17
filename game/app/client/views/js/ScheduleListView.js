@@ -25,8 +25,8 @@ class ScheduleListView extends WindowView {
                     <td>${this.#lectures[i].title}</td>
                     <td>${this.#lectures[i].maxParticipants}</td>
                     <td>${orator.title + " " + orator.forename + " " + orator.surname}</td>
-                    <td>${days[startingTime.getDay()] + ", " + startingTime.getDate() + "/" + startingTime.getMonth() + "/" + startingTime.getFullYear() 
-                    + " " + startingTime.getHours() + ":" + (startingTime.getMinutes()<10?'0':'') + startingTime.getMinutes()}</td>
+                    <td>${days[startingTime.getDay()] + ", " + (startingTime.getDate()<10?'0':'') + startingTime.getDate() + "/" + (startingTime.getMonth()<10?'0':'') + startingTime.getMonth() + "/" + startingTime.getFullYear() 
+                    + " " + (startingTime.getHours()<10?'0':'') + startingTime.getHours() + ":" + (startingTime.getMinutes()<10?'0':'') + startingTime.getMinutes()}</td>
                     <td>${(this.#lectures[i].remarks == ''?'-':'' + this.#lectures[i].remarks)}</td>
                 </tr>
             `)
