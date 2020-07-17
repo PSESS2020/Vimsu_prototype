@@ -96,7 +96,7 @@ class ClientController {
         return this.#currentRoom;
     }
 
-
+    
     /* #################################################### */    
     /* ###################### SOCKET ###################### */
     /* #################################################### */
@@ -219,10 +219,9 @@ class ClientController {
             let currPos = this.#gameView.getOwnAvatarView().getPosition();
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
-            let currentRoomId = this.#currentRoom.getRoomId();
             let participantId = this.#ownParticipant.getId();
             console.log("request mov start " + this.#ownParticipant.getId());
-            this.socket.emit('requestMovementStart', participantId, direction, currentRoomId, currPosX, currPosY);
+            this.socket.emit('requestMovementStart', participantId, direction, currPosX, currPosY);
         }
     }   
 
@@ -230,9 +229,8 @@ class ClientController {
 
         this.socketReady;
             let participantId = this.#ownParticipant.getId();
-            let currentRoomId = this.#currentRoom.getRoomId();
 
-        this.socket.emit('requestMovementStop', participantId, currentRoomId);
+        this.socket.emit('requestMovementStop', participantId);
 
     }
 
@@ -459,21 +457,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.RECEPTION);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.RECEPTION);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.FOODCOURT);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOODCOURT);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), this.#currentRoom.getRoomId(), TypeOfRoomClient.FOYER);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOYER);
         //update currentRoom;
         //update View
     }
