@@ -24,6 +24,7 @@ const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
+const Conference = require('../models/Conference.js');
 
 
 
@@ -32,6 +33,7 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 module.exports = class ServerController {
     
     #io;
+    #conference;
     #listOfConfCont;
     #DEBUGMODE;
 
@@ -65,7 +67,24 @@ module.exports = class ServerController {
         FOYER: this.#rooms[Settings.FOYER_ID - 1];
         FOODCOURT: this.#rooms[Settings.FOODCOURT_ID - 1];
         RECEPTION: this.#rooms[Settings.RECEPTION_ID - 1];
-        /*
+        */
+
+        //initilaize conference with schedule. TODO: create conference in DB and initialize conference
+        //model with id from the DB
+        LectureService.createAllLectures("1").then(lectures => {
+            var schedule = new Schedule(lectures);
+            var conference = new Conference(schedule);
+            this.#conference = conference;
+        }).catch(err => {
+            console.error(err);    
+        })
+    
+        /*var foyerRoom = this.#rooms[0];
+        var foodCourtRoom = this.#rooms[1];
+        var receptionRoom = this.#rooms[2];*/
+
+        //RoomController not needed at this point (P)
+        //const gameRoomController = new RoomController(foyerRoom);
 
         /* This is the program logic handling new connections.
          * This may late be moved into the server or conference-controller?
@@ -469,21 +488,28 @@ module.exports = class ServerController {
             var currentLecturesData = [];
 
             socket.on('enterLecture', (ppantID, lectureId) => {
-                console.log('id: ' + lectureId);
-                console.log(currentLecturesData.filter(x => x.id === lectureId)[0])
-                // TODO: retrieve data from the database here
-                // and also add user to the chat accordingly
-
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
 
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
+                
+                var schedule = this.#conference.getSchedule();
+                var lecture = schedule.getLecture(lectureId);
+                var entered = lecture.enter(ppantID);
+                var token = lecture.hasToken(ppantID);
 
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
                     currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                    socket.emit('lectureEntered',  currentLecturesData[idx]);
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token);
                 })
+            })
+
+            socket.on('leaveLecture', (participantId, lectureId) => {
+                var schedule = this.#conference.getSchedule();
+                var lecture = schedule.getLecture(lectureId);
+                lecture.leave(participantId);
+                console.log('left');
             })
 
             socket.on('getCurrentLectures', (ppantID) => {
@@ -499,35 +525,46 @@ module.exports = class ServerController {
                     return;
                 }
 
-                LectureService.createAllLectures("1").then(lectures => {
-                    var currentLectures = new Schedule(lectures).getcurrentLectures();
-                    currentLecturesData = [];
-                    currentLectures.forEach(lecture => {
-                        currentLecturesData.push( 
-                            {
-                                id: lecture.getId(),
-                                title: lecture.getTitle(),
-                                videoId: lecture.getVideoId(),
-                                remarks: lecture.getRemarks(),
-                                oratorName: lecture.getOratorName(),
-                                startingTime: lecture.getStartingTime(),
-                                maxParticipants: lecture.getMaxParticipants()
-                            }
-                        )
-                    })
+                var schedule = this.#conference.getSchedule();
+                var currentLectures = schedule.getCurrentLectures();
 
-                    socket.emit('currentLectures', currentLecturesData);
-                }).catch(err => {
-                    console.error(err);
-                }) 
+                currentLecturesData = [];
+                currentLectures.forEach(lecture => {
+                    currentLecturesData.push( 
+                        {
+                            id: lecture.getId(),
+                            title: lecture.getTitle(),
+                            videoId: lecture.getVideoId(),
+                            remarks: lecture.getRemarks(),
+                            oratorName: lecture.getOratorName(),
+                            startingTime: lecture.getStartingTime(),
+                            maxParticipants: lecture.getMaxParticipants()
+                        }
+                    )
+                })
+
+                socket.emit('currentLectures', currentLecturesData);
             });
 
             socket.on('getSchedule', () => {
-                LectureService.getAllLecturesWithOratorData("1").then(lectures => {
-                    socket.emit('currentSchedule', lectures);
-                }).catch(err => {
-                    console.error(err);
-                }) 
+                var schedule = this.#conference.getSchedule();
+                var lectures = schedule.getAllLectures();
+
+                var lecturesData = [];
+                lectures.forEach(lecture => {
+                    lecturesData.push( 
+                        {
+                            id: lecture.getId(),
+                            title: lecture.getTitle(),
+                            remarks: lecture.getRemarks(),
+                            oratorName: lecture.getOratorName(),
+                            startingTime: lecture.getStartingTime(),
+                            maxParticipants: lecture.getMaxParticipants()
+                        }
+                    )
+                })
+
+                socket.emit('currentSchedule', lecturesData);
             });    
 
             // This will need a complete rewrite once the server-side models are properly implemented

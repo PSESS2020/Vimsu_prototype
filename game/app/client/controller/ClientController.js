@@ -369,8 +369,8 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
 
-    handleFromServerLectureEntered(lecture) {
-        this.#gameView.updateCurrentLecture(lecture);
+    handleFromServerLectureEntered(lecture, hasToken) {
+        this.#gameView.updateCurrentLecture(lecture, hasToken);
     }
  
     /* TODO
@@ -491,6 +491,11 @@ class ClientController {
     handleFromViewEnterLecture(lectureId) {
         this.socketReady;
         this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
+    }
+
+    handleFromViewLectureLeft(lectureId) {
+        this.socketReady;
+        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 

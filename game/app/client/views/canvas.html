@@ -96,17 +96,26 @@
             <div class="container-fluid p-1">
                 <div class="row">
                     <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
-                        <h5 id="lectureTitleLabel"></h5><div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
-                        <button class="ml-auto pl-1 pr-1" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" id="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+                        <h5 class="ml-2" id="lectureTitleLabel"></h5><div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
+                        <div class="self-align-end ml-auto pl-1 pr-1" id="closeButton"></div>
                     </div>
                 </div>
                     
                         
                 <div class="row pl-0 pr-1 mt-4">
-                <div class="col-7 mr-4 ml-3">
-                    <video id="lectureVideo" width="100%" height = "100%" controls src=""></video>
-                </div>
-                <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1">
+                    <div class="col-7 mr-4 ml-3">
+                        <video id="lectureVideo" width="100%" height = "100%" controls src=""></video>
+                        <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">    
+
+                        <div id="tokenIcon">         
+                            
+                        </div>  
+                        <div>
+                            <p class="ml-2 mt-1" id="tokenLabel"></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
                     
                     
                     <div class="lectureChatHeader">
@@ -115,16 +124,17 @@
                     <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">                    
                     </div>
 
-                    <div class="input-group mb-3 mr-3 ml-2 mt-auto">
-                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                    <div id="lectureChatInput" class="input-group mb-3 mr-3 ml-2 mt-auto">
+                        <input id="lectureChatInputGroup" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
                         <div class="input-group-append">
-                          <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
                         </div>
                     </div>
                     
 
-                
+                </div>
                 </div> 
+            
             </div>
             </div>
         </div>
@@ -177,11 +187,14 @@
                 })
             })
 
-            $(document).ready(() => {
-                $('#closeLectureVideoButton').click(() => {
-                    $('#lectureVideoWindow').hide();
-                })
+            $(document).on('click', ".closeButton" , function() {
+                $('#lectureVideoWindow').hide();
+                var eventManager = new EventManager();
+                eventManager.handleLectureLeft(this.id);
             })
+
+
+
         </script>
     </body>
 </html>

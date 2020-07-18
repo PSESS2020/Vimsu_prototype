@@ -377,10 +377,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initCurrentSchedule(lectures) {
         this.#scheduleListView = new ScheduleListView().draw(lectures);
     }
-
-    updateCurrentLecture(lecture) {
-        this.#lectureView = new LectureView().draw(lecture);
+    
+    updateCurrentLecture(lecture, hasToken) {
+        this.#lectureView = new LectureView().draw(lecture, hasToken);
     }
+
         
     updateOwnAvatarRoom(typeOfRoom) {
         this.#ownAvatarView.setTypeOfRoom(typeOfRoom);

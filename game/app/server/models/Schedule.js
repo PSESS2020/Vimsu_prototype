@@ -1,12 +1,11 @@
 module.exports = class Schedule {
     
-    #lectureList;
+    #lectureList = [];
     
     
     /**
     * @author Laura
     * 
-    * @param {Lecture[]} lectureList
     */
 
     constructor(lectureList) {
@@ -24,15 +23,15 @@ module.exports = class Schedule {
 
     //returns the lectures that start soon or have started already.
     //TODO: maybe move Timedeltas in global constants file
-    getcurrentLectures() {
+    getCurrentLectures() {
         var currentLectures = [];
 
         for(var i = 0; i < this.#lectureList.length; i++) {
             var lecture = this.#lectureList[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
-            var startToShow = (startingTime - (10000000000 * 60 * 1000)); //TODO: set to 10 minutes
-            var stopToShow = (startingTime + (15000000000 * 60 * 1000)); //TODO: set to 15 minutes
+            var startToShow = (startingTime - (10 * 60 * 1000)); //TODO: set to 10 minutes
+            var stopToShow = (startingTime + (15 * 60 * 1000)); //TODO: set to 15 minutes
             var withinMargin = startToShow <= now && now <= stopToShow;
 
             if (withinMargin) {
@@ -40,6 +39,10 @@ module.exports = class Schedule {
             }
         }
         return currentLectures;
+    }
+
+    getAllLectures() {
+        return this.#lectureList;
     }
 
 }

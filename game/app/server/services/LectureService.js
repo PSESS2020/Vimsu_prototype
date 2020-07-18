@@ -25,6 +25,7 @@ module.exports = class LectureService {
         });
     }
 
+    
     static createAllLectures(conferenceId) {
         return getDB().then(res => {
             return this.getAllLecturesWithOratorData(conferenceId).then(lectures => {
@@ -37,7 +38,7 @@ module.exports = class LectureService {
                             lectures[i].remarks, lectures[i].startingTime, orator.title + " " + orator.forename + " " + orator.surname, lectures[i].maxParticipants));
                     }
                 }
-
+                console.log(lectureLists[0]);
                 return lectureLists;
                 
             }).catch(err => {
@@ -46,7 +47,7 @@ module.exports = class LectureService {
         }).catch(err => {
             console.error(err)
         });
-    }
+    } 
 
     static getAllLectures(conferenceId) {
         return getDB().then(res => {
