@@ -3,7 +3,9 @@ const expressSession = require('express-session');
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
+const LectureService = require('../../game/app/server/services/LectureService')
 const path = require('path');
+const FileSystem = require('../../config/FileSystem')
 
 module.exports = class RouteController {
 
@@ -122,6 +124,15 @@ module.exports = class RouteController {
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
+            } else {
+                response.redirect('/');
+            }
+        })
+
+        this.#app.get('/game/video/:videoName', (request,response) => {
+            if (request.session.loggedin === true) {
+                var rs = FileSystem.createReadStream(path.join(__dirname + '../../../config/download/' + request.params.videoName));
+                rs.pipe(response);
             } else {
                 response.redirect('/');
             }

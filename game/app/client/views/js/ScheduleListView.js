@@ -7,30 +7,28 @@ class ScheduleListView extends WindowView {
     }
 
     draw(lectures) {
-        for (var i = 0; i < lectures.length; i++) {
-            lectures[i].startingTime = new Date(lectures[i].startingTime);
-        }
+        lectures.forEach(lecture => {
+            lecture.startingTime = new Date(lecture.startingTime);
+        });
 
         const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime)
         this.#lectures = sortedLectures;
+        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        var count = 1;
 
-        for (var i = 0; i < this.#lectures.length; i++) {
-
-            var startingTime = this.#lectures[i].startingTime;
-            var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            var orator = this.#lectures[i].accountsData[0];
+        this.#lectures.forEach(lecture => {
             $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
                 <tr>
-                    <th scope="row">${i+1}</th>
-                    <td>${this.#lectures[i].title}</td>
-                    <td>${this.#lectures[i].maxParticipants}</td>
-                    <td>${orator.title + " " + orator.forename + " " + orator.surname}</td>
-                    <td>${days[startingTime.getDay()] + ", " + startingTime.getDate() + "/" + startingTime.getMonth() + "/" + startingTime.getFullYear() 
-                    + " " + startingTime.getHours() + ":" + (startingTime.getMinutes()<10?'0':'') + startingTime.getMinutes()}</td>
-                    <td>${(this.#lectures[i].remarks == ''?'-':'' + this.#lectures[i].remarks)}</td>
+                    <th scope="row">${count++}</th>
+                    <td>${lecture.title}</td>
+                    <td>${lecture.oratorName}</td>
+                    <td>${days[lecture.startingTime.getDay()] + ", " + (lecture.startingTime.getDate()<10?'0':'') + lecture.startingTime.getDate() + "/" + (lecture.startingTime.getMonth()<10?'0':'') + lecture.startingTime.getMonth() + "/" + lecture.startingTime.getFullYear() 
+                    + " " + (lecture.startingTime.getHours()<10?'0':'') + lecture.startingTime.getHours() + ":" + (lecture.startingTime.getMinutes()<10?'0':'') + lecture.startingTime.getMinutes()}</td>
+                    <td>${lecture.maxParticipants}</td>
+                    <td>${(lecture.remarks == ''?'-':'' + lecture.remarks)}</td>
                 </tr>
             `)
-        }
+        })
 
         $('#scheduleModal').on('hidden.bs.modal', function (e) {
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()

@@ -13,6 +13,12 @@
               $("#modalHTML").load("client/views/modal.html"); 
             });
         </script> 
+
+        <title>Vimsu</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="../../../../website/assets/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../../../../website/assets/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="../../../../website/assets/apple-touch-icon.png">
+        <link rel="manifest" href="../../../../website/assets/site.webmanifest">
 	 
     </head>
     <body>
@@ -31,21 +37,21 @@
 			<p>Unfortunately your browser is not supporting this web page.</p>
         </canvas>
     <div class="row mt-2">
-        <div class="d-flex flex-row-reverse col-12">
+        <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column">
                 <form id="allchat" action="">
-                    <input id="allchatMessageInput" autocomplete="off" /><button>>></button>
+                    <input id="allchatMessageInput" autocomplete="off" style="background-color: #1b1e24; color: antiquewhite" placeholder ="Enter message"/><button>>></button>
                 </form>
             <div id="allchatMessages"></div>
         </div>
     </div>
 </div>
-        <nav class="navbar fixed-bottom navbar-expand-md navbar-light style="background-color: rgba(100, 100, 100, 0)">
+        <nav class="navbar navbar-expand-md navbar-light" style="position: absolute; bottom: -5; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"> 
-                        <a class="action_button nav-item nav-link" href="/">
+                        <a class="action_button nav-item nav-link" href="/" >
                             <i class="fa fa-bars fa-4x navbarIcons" style="margin-right: 25px;"></i>
-                            <p class="navbarIconsText" style="margin-left: 6px;">Menu</p>
+                            <p class="navbarIconsText" style="margin-left: 7px;">Menu</p>
                         </a>
                     </li>
                     <li class="nav-item"> 
@@ -58,30 +64,35 @@
                     <li class="nav-item">
                         <a href="" onclick = "(new ScheduleListView()).onclick()" class="action_button nav-item nav-link" data-toggle="modal" data-target="#scheduleModal">
                         <i class="fa fa-table fa-4x navbarIcons"></i>
-                        <p class="navbarIconsText" style="margin-left: -3px;">Schedule</p>
+                        <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
                     </a>
                     </li>
                 </ul>
-                <ul class="navbar nav ml-auto">
-                    <li class="nav-item">
-                        <a class="action_button nav-item nav-link" href="">
-                            <i class="fa fa-star fa-4x navbarIcons"></i>
-                            <p class="navbarIconsText" style="margin-left: -17px;">Achievement</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="action_button nav-item nav-link" href="">
-                            <i class="fa fa-users fa-4x navbarIcons"></i>
-                            <p class="navbarIconsText" style="margin-left: 0px;">Friendlist</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="action_button nav-item nav-link" href="">
-                            <i class="fa fa-comments-o fa-4x navbarIcons"></i>
-                            <p class="navbarIconsText" style="margin-left: 8px;">Chats</p>
-                        </a>
-                    </li>
-                </ul>
+        </nav>
+
+        <nav class="navbar navbar-expand-md navbar-light" style="position: absolute; bottom: -5; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+
+            <ul class="navbar nav ml-auto">
+                <li class="nav-item">
+                    <a class="action_button nav-item nav-link" href="">
+                        <i class="fa fa-star fa-4x navbarIcons"></i>
+                        <p class="navbarIconsText" style="margin-left: -14px;">Achievement</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="action_button nav-item nav-link" href="">
+                        <i class="fa fa-users fa-4x navbarIcons"></i>
+                        <p class="navbarIconsText" style="margin-left: 3px;">Friendlist</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="action_button nav-item nav-link" href="">
+                        <i class="fa fa-comments-o fa-4x navbarIcons"></i>
+                        <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
+                    </a>
+                </li>
+            </ul>
+
         </nav>
 
         </div>
@@ -90,47 +101,45 @@
             <div class="container-fluid p-1">
                 <div class="row">
                     <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
-                        <h5 id="lectureTitleLabel"></h5><div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
-                        <button class="ml-auto pl-1 pr-1" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" id="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+                        <h5 class="ml-2" id="lectureTitleLabel"></h5><div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
+                        <div class="self-align-end ml-auto pl-1 pr-1" id="closeButton"></div>
                     </div>
                 </div>
                     
                         
                 <div class="row pl-0 pr-1 mt-4">
-                <div class="col-7 mr-4 ml-3">
-                    <video id="lectureVideo" width="100%" controls src=""></video>
-                </div>
-                <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1">
+                    <div class="col-7 mr-4 ml-3">
+                        <video id="lectureVideo" width="100%" height = "100%" controls src=""></video>
+                        <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">    
+
+                        <div id="tokenIcon">         
+                            
+                        </div>  
+                        <div>
+                            <p class="ml-2 mt-1" id="tokenLabel"></p>
+                        </div>
+                    </div>
+                    </div>
+                    <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
                     
                     
                     <div class="lectureChatHeader">
                         <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
                     </div>
-                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
-                        <div>
-                            <p style="font-size: small;">Donald Knuth, 14:14: <br> <span style="font-size: medium;">Hello</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p style="font-size: small;">Robert Martin, 14:17: <br> <span style="font-size: medium;">Very interesting!</span>
-                            </p>
-                        </div>
-                        <div>
-                            <p style="font-size: small;">Donald Knuth, 14:19: <br> <span style="font-size: medium;">I have a question.</span>
-                            </p>
-                        </div>
+                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">                    
                     </div>
 
-                    <div class="input-group mb-3 mr-3 ml-2 mt-auto">
-                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                    <div id="lectureChatInput" class="input-group mb-3 mr-3 ml-2 mt-auto">
+                        <input id="lectureChatInputGroup" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message">
                         <div class="input-group-append">
-                          <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
                         </div>
                     </div>
                     
 
-                
+                </div>
                 </div> 
+            
             </div>
             </div>
         </div>
@@ -146,7 +155,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div id="currentLecturesContainer" class="row ml-1 mr-1">
+                        <div id="currentLecturesContainer" class="row ml-auto mr-auto">
                         
                         </div>
                     </div>
@@ -165,7 +174,7 @@
                 requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
                     requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
                         requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
-                            requirejs(['client/views/js/ScheduleListView','client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                            requirejs(['client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
                                     requirejs(['client/index'], () => {
                                     });    
@@ -183,11 +192,17 @@
                 })
             })
 
-            $(document).ready(() => {
-                $('#closeLectureVideoButton').click(() => {
-                    $('#lectureVideoWindow').hide();
-                })
+            $('#lectureVideo').get(0).disablePictureInPicture = true;
+
+            $(document).on('click', ".closeButton" , function() {
+                $('#lectureVideoWindow').hide();
+                $('#lectureVideo').get(0).pause();
+                var eventManager = new EventManager();
+                eventManager.handleLectureLeft(this.id);
             })
+
+
+
         </script>
     </body>
 </html>

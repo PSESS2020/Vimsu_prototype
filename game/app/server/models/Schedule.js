@@ -1,23 +1,20 @@
-
-
 module.exports = class Schedule {
     
-    #lectureList;
+    #lectureList = [];
     
     
     /**
     * @author Laura
     * 
-    * @param {Lecture[]} lectureList
     */
 
     constructor(lectureList) {
-        this.lectureList = this.lectureList;
+        this.#lectureList = lectureList;
     }
 
     getLecture(lectureId) {
         for(var i = 0; i < this.#lectureList.length; i++) {
-            lecture = this.#lectureList[i];
+            var lecture = this.#lectureList[i];
             if(lecture.getId() === lectureId) {
                 return lecture;
             }
@@ -26,22 +23,26 @@ module.exports = class Schedule {
 
     //returns the lectures that start soon or have started already.
     //TODO: maybe move Timedeltas in global constants file
-    getcurrentLectures() {
+    getCurrentLectures() {
         var currentLectures = [];
+
         for(var i = 0; i < this.#lectureList.length; i++) {
-            lecture = this.#lectureList[i];
-            startingTime = lecture.getStartingTime().getTime();
-            now = new Date().now();
-            startToShow = (now.getTime() + (10 * 60 * 1000)); //10 Minutes in milliseconds
-            startToShowTime = startToShow.getTime();
-            stopToShow = (startingTime.getTime() + (15 * 60 * 1000));
-            stopToShowTime = stopToShow.getTime();
-            var withinMargin = startToShowTime >= now && stopToShowTime <= now;
+            var lecture = this.#lectureList[i];
+            var startingTime = lecture.getStartingTime().getTime();
+            var now = new Date().getTime();
+            var startToShow = (startingTime - (100000000000000 * 60 * 1000)); //TODO: set to 10 minutes
+            var stopToShow = (startingTime + (150000000000000 * 60 * 1000)); //TODO: set to 15 minutes
+            var withinMargin = startToShow <= now && now <= stopToShow;
+
             if (withinMargin) {
-                currentLectures.append(lecture);
+                currentLectures.push(lecture);
             }
         }
         return currentLectures;
+    }
+
+    getAllLectures() {
+        return this.#lectureList;
     }
 
 }

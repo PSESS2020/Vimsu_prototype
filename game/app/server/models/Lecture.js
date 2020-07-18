@@ -8,7 +8,7 @@ module.exports = class Lecture {
     #videoId;
     #remarks;
     #startingTime;
-    #oratorId;
+    #oratorName;
     //#lectureChat; //TODO
     #maxParticipants;
     #activeParticipants;
@@ -24,16 +24,16 @@ module.exports = class Lecture {
      * @param {String} videoId 
      * @param {String} remarks 
      * @param {Date} startingTime 
-     * @param {String} oratorId
+     * @param {String} oratorName
      * @param {int} maxParticipants 
      */
-    constructor(id, title, videoId, remarks, startingTime, oratorId, maxParticipants) {
+    constructor(id, title, videoId, remarks, startingTime, oratorName, maxParticipants) {
         TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(videoId);
         TypeChecker.isString(remarks);
         TypeChecker.isInstanceOf(startingTime, Date);
-        TypeChecker.isString(oratorId);
+        TypeChecker.isString(oratorName);
         TypeChecker.isInt(maxParticipants);
 
         this.#id = id;
@@ -41,7 +41,7 @@ module.exports = class Lecture {
         this.#videoId = videoId;
         this.#remarks = remarks;
         this.#startingTime = startingTime;
-        this.#oratorId = oratorId;
+        this.#oratorName = oratorName;
         this.#maxParticipants = maxParticipants;
         this.#activeParticipants = [];
 
@@ -74,8 +74,12 @@ module.exports = class Lecture {
         return this.#startingTime;
     }
 
-    getOratorId() {
-        return this.#oratorId;
+    getOratorName() {
+        return this.#oratorName;
+    }
+
+    getMaxParticipants() {
+        return this.#maxParticipants
     }
 
     /*
@@ -94,14 +98,15 @@ module.exports = class Lecture {
      *          false, otherwise
      */
     enter(participantId) {
+
         TypeChecker.isString(participantId);
         let currDate = new Date();
 
         //time difference in ms
-        let timeDifference = currDate - this.#startingTime;
+        //let timeDifference = currDate - this.#startingTime;
         //lecture is full or started longer than 5 minutes ago
-        if (this.#activeParticipants.length >= this.#maxParticipants
-            || timeDifference >= 300000) {
+        if (this.#activeParticipants.length >= this.#maxParticipants) { 
+            //|| timeDifference >= 300000) { TODO: add this again, disabled for debugging
             return false;
         } 
         
@@ -109,6 +114,7 @@ module.exports = class Lecture {
         else {
             this.#activeParticipants.push(participantId);
             this.#checkToken(participantId);
+            console.log('check token');
             return true;
         }
     }
@@ -151,24 +157,22 @@ module.exports = class Lecture {
     hasToken(participantId) {
         TypeChecker.isString(participantId);
 
-        this.#tokenList.forEach(element => {
-            //check if there is an element with this ID
-            if (element[0] === participantId) {
-                //check if token counter is >= 0
-                if (element[2] >= 0) {
-                    return true;
+            for(var i = 0; i < this.#tokenList.length; i++) {
+                var element = this.#tokenList[i];
+                if(element[0] === participantId) {
+                    if (element[2] >= 0) {
+                        console.log(true);
+                        return true;
+                    }
                 }
             }
-        });
-        return false;
+            return false;
     }
 
     #checkToken = function(participantId) {
-        this.#tokenList.forEach(element => {
-
-            //check if there is an element with this ID
-            if (element[0] === participantId) {
-
+        for(var i = 0; i < this.#tokenList.length; i++) {
+            var element = this.#tokenList[i];
+            if(element[0] === participantId) {
                 let currDate = new Date();
                 
                 //time difference in ms between Leaving Date and Current Date
@@ -176,14 +180,17 @@ module.exports = class Lecture {
 
                 //Token Counter - timeDifference
                 element[2] -= timeDifference;
-            }
-            return;
+                console.log(this.#tokenList);
+                return;  
 
-        });
+            }
+
+        }
 
         //There is no entry with participantId
         //make new entry with participantID, undefined Leaving Time, Token Counter 300.000ms
         this.#tokenList.push([participantId, undefined, 300000]);
+        console.log(this.#tokenList);
     }
 
 }

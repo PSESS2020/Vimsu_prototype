@@ -101,29 +101,37 @@ padding: 2px;
 }
 
 #allchatMessages {
-background: #000;
+font-size: 15px;
+background:rgba(24, 30, 32, 0.699);
 overflow-y: scroll;
 margin: 0;
 padding: 0;
 z-index: 1;
-max-height: 200px;
+max-height: 150px;
 max-width: 250px;
 }
 
 #allchatMessages div {
-background: #222;
+background: rgba(24, 30, 32, 0.699);
 color: #fff;
 border-radius: 5px;
+
 padding: 5px 10px;
 overflow-wrap: break-word;
 }
 
+#allchatMessages::-webkit-scrollbar {
+  display: none;
+}
+
 .navbarIcons {
   color: antiquewhite;
+  transform: scale(0.8)
 }
 
 .navbarIconsText {
   color: antiquewhite;
+  font-size: 15px;
 }
 
 a:hover {
@@ -138,7 +146,7 @@ vertical-align: middle;
   border-style: solid;
   border-color: antiquewhite;
   border-radius: 10px;
-  background-color: rgba(24, 30, 32, 0.699)
+  background-color: rgba(24, 30, 32, 0.699);
 
 }
 
@@ -147,30 +155,33 @@ vertical-align: middle;
   border-color: antiquewhite;
   border-radius: 10px;
   background-color: rgb(33, 41, 44);
-  overflow: hidden;
-
+  overflow-wrap: break-word;
 }
 
 .currentLecturesWindow {
   background-color:rgba(34, 43, 46, 0.8) !important;
   color: antiquewhite;
   padding: 0px !important;
-  overflow: hidden;
+  overflow: scroll;
   display: none; 
   position: fixed; 
-  top: 20px; 
-  left: 20px; 
+  top: 0px; 
+  left: 0px; 
   border-radius: 10px; 
   z-index: 1050; 
-  width: calc(100% - 40px); 
-  height: calc(100% - 40px)
+  width: 100%; 
+  height: 100%
+}
+
+.currentLecturesWindow::-webkit-scrollbar {
+  display: none;
 }
 
 .lectureVideoWindow {
   background-color:rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
   padding: 0px !important;
-  overflow: hidden;
+  overflow: scroll;
   display: none; 
   position: fixed; 
   top: 0px; 
@@ -181,6 +192,13 @@ vertical-align: middle;
   height: 100%;
 }
 
+.lectureVideoWindow::-webkit-scrollbar {
+  display: none;
+}
+
+body::-webkit-scrollbar {
+  display:none;
+}
 
 .currentLecturesHeader {
   background-color: rgba(24, 30, 32, 0.699);
@@ -198,6 +216,8 @@ vertical-align: middle;
 
 .lectureChatHeader {
   background-color: rgba(24, 30, 32, 1);
+  border-color: transparent !important; 
+  border-radius: 10px 10px 0px 0px;
   color: antiquewhite;
 }
 
@@ -230,7 +250,10 @@ vertical-align: middle;
   color: antiquewhite;
   padding: 0px !important;
   overflow: hidden;
-  border-color: transparent !important; 
+  border-color: antiquewhite;
+  border-style: solid;
+  border-width: medium;
+  border-radius: 10px;
   box-shadow: 0px 0px 0px transparent;
  }
 
@@ -252,4 +275,25 @@ vertical-align: middle;
 
 .table {
   color: antiquewhite;
+}
+
+.table thead tr th{
+  border-top: none;
+  border-bottom: 2pt solid antiquewhite
+}
+
+.table tbody tr th{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr td{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }

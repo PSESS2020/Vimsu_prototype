@@ -83,7 +83,7 @@ module.exports = class SlotService {
 
         return getDB().then(res => {
             return vimsudb.deleteOneFromCollection("lectures.chunks", {videoId: videoId}).then(res => {
-                return vimsudb.deleteAllFromCollection("lectures.files", {_id: new ObjectID(videoId)}).then (res => {
+                return vimsudb.deleteOneFromCollection("lectures.files", {_id: new ObjectId(videoId)}).then (res => {
                     console.log("video with videoId " + videoId + " deleted");
                 }).catch(err => {
                     console.error(err)

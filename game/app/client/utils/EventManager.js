@@ -59,7 +59,12 @@ class EventManager {
 
 
     handleLectureClicked(lectureId) {
+        console.log("hello from eventmanager")
         this.#clientController.handleFromViewEnterLecture(lectureId);
+    }
+
+    handleLectureLeft(lectureId) {
+        this.#clientController.handleFromViewLectureLeft(lectureId);
     }
 
     handleScheduleClicked() {

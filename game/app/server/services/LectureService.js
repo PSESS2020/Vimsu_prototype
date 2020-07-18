@@ -25,18 +25,20 @@ module.exports = class LectureService {
         });
     }
 
+    
     static createAllLectures(conferenceId) {
         return getDB().then(res => {
-            return this.getAllLectures(conferenceId).then(lectures => {
+            return this.getAllLecturesWithOratorData(conferenceId).then(lectures => {
                 var lectureLists = [];
 
                 if(lectures) {
                     for(var i = 0; i < lectures.length; i++) {
+                        var orator = lectures[i].accountsData[0];
                         lectureLists.push(new Lecture(lectures[i].id, lectures[i].title, lectures[i].videoId, 
-                            lectures[i].remarks, lectures[i].startingTime, lectures[i].oratorId, lectures[i].maxParticipants));
+                            lectures[i].remarks, lectures[i].startingTime, orator.title + " " + orator.forename + " " + orator.surname, lectures[i].maxParticipants));
                     }
                 }
-
+                console.log(lectureLists[0]);
                 return lectureLists;
                 
             }).catch(err => {
@@ -45,7 +47,7 @@ module.exports = class LectureService {
         }).catch(err => {
             console.error(err)
         });
-    }
+    } 
 
     static getAllLectures(conferenceId) {
         return getDB().then(res => {

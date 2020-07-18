@@ -3,6 +3,7 @@
 /* ############################################################################### */
 
 const socketio = require('socket.io');
+const path = require('path');
 
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
@@ -17,11 +18,13 @@ const TypeOfRoom = require('../models/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
-const AccountService = require('../../../../website/services/AccountService');
 const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
+const AccountService = require('../../../../website/services/AccountService')
+const Schedule = require('../models/Schedule')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
+const Conference = require('../models/Conference.js');
 
 
 
@@ -30,6 +33,7 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 module.exports = class ServerController {
     
     #io;
+    #conference;
     #listOfConfCont;
     #DEBUGMODE;
 
@@ -63,7 +67,24 @@ module.exports = class ServerController {
         FOYER: this.#rooms[Settings.FOYER_ID - 1];
         FOODCOURT: this.#rooms[Settings.FOODCOURT_ID - 1];
         RECEPTION: this.#rooms[Settings.RECEPTION_ID - 1];
-        /*
+        */
+
+        //initilaize conference with schedule. TODO: create conference in DB and initialize conference
+        //model with id from the DB
+        LectureService.createAllLectures("1").then(lectures => {
+            var schedule = new Schedule(lectures);
+            var conference = new Conference(schedule);
+            this.#conference = conference;
+        }).catch(err => {
+            console.error(err);    
+        })
+    
+        /*var foyerRoom = this.#rooms[0];
+        var foodCourtRoom = this.#rooms[1];
+        var receptionRoom = this.#rooms[2];*/
+
+        //RoomController not needed at this point (P)
+        //const gameRoomController = new RoomController(foyerRoom);
 
         /* This is the program logic handling new connections.
          * This may late be moved into the server or conference-controller?
@@ -464,26 +485,33 @@ module.exports = class ServerController {
 
             });
 
-            // TODO: remove and make it work with the actual model
-            var mockedLectures = [{
-                id: 1,
-                title: 'Grundbegriffe der Informatik',
-                speaker: 'Stüker',
-                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
-                startTime: Date.now() - 600000,
-                endTime: Date.now() + 300000,
-                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
+            var currentLecturesData = [];
+
+            socket.on('enterLecture', (ppantID, lectureId) => {
+                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+
+                if (idx < 0) {
+                    throw new Error(lectureId + " is not in list of current lectures")
+                }
                 
-            }, 
-            {
-                id: 2,
-                title: 'Softwaretechnik 1',
-                speaker: 'Walter F. Tichy',
-                summary: 'Spannende Entwurfsmuster für jung und alt.',
-                startTime: Date.now() - 500000,
-                endTime: Date.now() + 560000,
-                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
-            }]
+                var schedule = this.#conference.getSchedule();
+                var lecture = schedule.getLecture(lectureId);
+                var entered = lecture.enter(ppantID);
+                var token = lecture.hasToken(ppantID);
+
+                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
+                    currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token);
+                })
+            })
+
+            socket.on('leaveLecture', (participantId, lectureId) => {
+                var schedule = this.#conference.getSchedule();
+                var lecture = schedule.getLecture(lectureId);
+                lecture.leave(participantId);
+                console.log('left');
+            })
+
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
                 let lectureDoorPosition = doorService.getLectureDoorPosition();
@@ -497,27 +525,47 @@ module.exports = class ServerController {
                     return;
                 }
 
-                // TODO: return the lectures here from the schedule, mocked for now
-                //something like var lectures = this.conference.getSchedule().getCurrentLectures()
+                var schedule = this.#conference.getSchedule();
+                var currentLectures = schedule.getCurrentLectures();
 
-                socket.emit('currentLectures', mockedLectures);
+                currentLecturesData = [];
+                currentLectures.forEach(lecture => {
+                    currentLecturesData.push( 
+                        {
+                            id: lecture.getId(),
+                            title: lecture.getTitle(),
+                            videoId: lecture.getVideoId(),
+                            remarks: lecture.getRemarks(),
+                            oratorName: lecture.getOratorName(),
+                            startingTime: lecture.getStartingTime(),
+                            maxParticipants: lecture.getMaxParticipants()
+                        }
+                    )
+                })
+
+                socket.emit('currentLectures', currentLecturesData);
             });
 
             socket.on('getSchedule', () => {
-                LectureService.getAllLecturesWithOratorData("1").then(lectures => {
-                    socket.emit('currentSchedule', lectures);
-                }) 
-            });
+                var schedule = this.#conference.getSchedule();
+                var lectures = schedule.getAllLectures();
 
-            socket.on('enterLecture', (ppantID, lectureId) => {
-                console.log('id: ' + lectureId);
-                console.log(mockedLectures.filter(x => x.id === lectureId)[0]);
+                var lecturesData = [];
+                lectures.forEach(lecture => {
+                    lecturesData.push( 
+                        {
+                            id: lecture.getId(),
+                            title: lecture.getTitle(),
+                            remarks: lecture.getRemarks(),
+                            oratorName: lecture.getOratorName(),
+                            startingTime: lecture.getStartingTime(),
+                            maxParticipants: lecture.getMaxParticipants()
+                        }
+                    )
+                })
 
-
-                // TODO: retrieve data from the database here
-                // and also add user to the chat accordingly
-                socket.emit('lectureEntered',  mockedLectures.filter(x => x.id.toString() === lectureId.toString())[0]);
-            })            
+                socket.emit('currentSchedule', lecturesData);
+            });    
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
@@ -540,7 +588,7 @@ module.exports = class ServerController {
 
                 //remove participant from room
                 var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
-                this.#rooms(currentRoomId - 1).exitParticipant(ppantID);
+                this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
                 
                 ppantControllers.delete(socket.id);
                 ppants.delete(ppantID);
