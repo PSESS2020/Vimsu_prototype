@@ -169,6 +169,21 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
             }   
+
+            //sort AnotherAvatarViews in CordX
+            this.#anotherParticipantAvatarViews.sort(function(a, b) {
+                return b.getPosition().getCordX() - a.getPosition().getCordX();
+            });
+            
+            //sort updateList which includes ownAvatarView
+            this.#updateList.sort(function(a, b) {
+                if (a instanceof Array) {
+                    return b.getPosition().getCordX() - a[0].getPosition().getCordX();
+                } else {
+                    return b[0].getPosition().getCordX() - a.getPosition().getCordX();
+                }
+            });
+            
             for (var i = 0; i < this.#updateList.length; i++) {
 
                 if (this.#updateList[i] instanceof Array) {
