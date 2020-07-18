@@ -125,6 +125,7 @@ class ClientController {
 
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
         
+        this.#gameView.initCanvasEvents();
         //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
@@ -146,6 +147,7 @@ class ClientController {
 
         this.#gameView.resetAnotherAvatarViews();
         this.#gameView.updateOwnAvatarRoom(typeOfRoom);
+        this.#gameView.initCanvasEvents();
 
     }
 

@@ -9,6 +9,9 @@ module.exports = */class MapView extends Views {
     #selectedTile;
     #originX;
     #originY;
+    
+    //For calculation the right positions of sprites on the map.
+    #offset;
     selectionOnMap = false;
 
     constructor(foyerMap) {
@@ -24,6 +27,7 @@ module.exports = */class MapView extends Views {
 
         this.#originX = 0;
         this.#originY = 0;
+        this.#offset = {};
 
         if (new.target === MapView) {
             throw new Error("Cannot construct abstract MapView instances directly");
@@ -55,7 +59,7 @@ module.exports = */class MapView extends Views {
 
     //Creates a map of gameobjects to draw on screen.
     buildMap(offset) {
-
+        this.#offset = offset;
         this.tileColumnOffset = offset.tileColumnOffset;
         this.tileRowOffset = offset.tileRowOffset;
 
@@ -87,43 +91,8 @@ module.exports = */class MapView extends Views {
 
         this.draw();
 
-
-        var canvas = document.getElementById('avatarCanvas');
-        var self = this;
         this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
-
-        //Handle mouse movement on canvas
-        $('#avatarCanvas').on('mousemove', function (e) {
-
-            var selectedTileCords = self.translateMouseToTileCord(canvas, e, offset);
-
-            if (self.isCursorOnMap(selectedTileCords.x, selectedTileCords.y))
-                self.selectionOnMap = true;
-            else
-                self.selectionOnMap = false;
-
-            //Calculate new screen Position.
-            var screenX = selectedTileCords.x * offset.tileColumnOffset / 2 + selectedTileCords.y * offset.tileColumnOffset / 2 + self.#originX;
-            var screenY = selectedTileCords.y * offset.tileRowOffset / 2 - selectedTileCords.x * offset.tileRowOffset / 2 + self.#originY;
-
-            var position = new PositionClient(screenX, screenY);
-
-            self.#selectedTile.updatePos(position);
-
-        });
-
-        //Handles mouse click on canvas
-        $('#avatarCanvas').on('click', function (e) {
-
-            var selectedTileCords = self.translateMouseToTileCord(canvas, e, offset);
-
-            if (self.isCursorOnMap(selectedTileCords.x, selectedTileCords.y))
-
-                self.#clickableTiles.forEach(object => {
-                    if (self.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
-                        object.onclick();
-                });
-        });
+        
     }
 
     //adds a tile to the list of clickable tiles of the map.
@@ -132,18 +101,24 @@ module.exports = */class MapView extends Views {
         this.#clickableTiles.push(tile);
     }
 
-    translateMouseToTileCord(canvas, e, offset) {
+    findClickedTile(selectedTileCords)
+    {
+        this.#clickableTiles.forEach(object => {
+            if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
+                object.onclick();
+        });
 
-        //Translates the current mouse position to the mouse position on the map.
-        var newPosition = this.getMousePos(canvas, e);
+    }
+
+    translateMouseToTileCord(newPosition) {
 
         //Adjusts mouse position to the tile position. 
-        var newPosX = newPosition.x - offset.tileColumnOffset / 2 - this.#originX;
-        var newPosY = newPosition.y - offset.tileRowOffset / 2 - this.#originY;
+        var newPosX = newPosition.x - this.#offset.tileColumnOffset / 2 - this.#originX;
+        var newPosY = newPosition.y - this.#offset.tileRowOffset / 2 - this.#originY;
 
         //Calculate the tile at which the current mouse cursor points.
-        var selectedTileX = Math.round(newPosX / offset.tileColumnOffset - newPosY / offset.tileRowOffset);
-        var selectedTileY = Math.round(newPosX / offset.tileColumnOffset + newPosY / offset.tileRowOffset);
+        var selectedTileX = Math.round(newPosX / this.#offset.tileColumnOffset - newPosY / this.#offset.tileRowOffset);
+        var selectedTileY = Math.round(newPosX / this.#offset.tileColumnOffset + newPosY / this.#offset.tileRowOffset);
 
         return {
             x: selectedTileX,
@@ -164,19 +139,17 @@ module.exports = */class MapView extends Views {
 
     }
 
-    getMousePos(canvas, e) {
+    
+    updateSelectedTile(selectedTileCords) {
 
-        //gets the absolute size of canvas and calculates the scaling factor
-        var rect = canvas.getBoundingClientRect();
-        var scaleX = canvas.width / rect.width;
-        var scaleY = canvas.height / rect.height;
+         //Calculate new screen Position of tile indicator.
+         var screenX = selectedTileCords.x * this.#offset.tileColumnOffset / 2 + selectedTileCords.y * this.#offset.tileColumnOffset / 2 + this.#originX;
+         var screenY = selectedTileCords.y * this.#offset.tileRowOffset / 2 - selectedTileCords.x * this.#offset.tileRowOffset / 2 + this.#originY;
+         
+         var position = new PositionClient(screenX, screenY);
 
-        //Apply scaling factor to cursor position
-        return {
-            x: (e.pageX - rect.left) * scaleX,
-            y: (e.pageY - rect.top) * scaleY,
+         this.#selectedTile.updatePos(position);
 
-        }
     }
 
     drawSelectedTile() {

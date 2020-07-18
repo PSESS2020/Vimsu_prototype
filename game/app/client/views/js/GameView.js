@@ -52,6 +52,78 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#gameViewInit = bool;
     }
 
+    initCanvasEvents() {
+
+        if(this.#currentMap === null || this.#currentMap === undefined)
+            return;
+
+        var canvas = document.getElementById('avatarCanvas');
+        
+        var self = this;
+
+        //Handle mouse movement on canvas
+        $('#avatarCanvas').on('mousemove', function (e) {
+            
+            //Translates the current mouse position to the mouse position on the canvas.
+            var newPosition = self.getMousePos(canvas, e);
+
+            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+
+            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+
+                /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
+                
+                if(alpha !== 0)
+                    canvas.style.cursor = "pointer";
+                else
+                    canvas.style.cursor = "default";*/
+
+                self.#currentMap.selectionOnMap = true;
+            } else
+                self.#currentMap.selectionOnMap = false;
+
+            self.#currentMap.updateSelectedTile(selectedTileCords);
+
+        });
+
+        //Handles mouse click on canvas
+        $('#avatarCanvas').on('click', function (e) {
+
+            //Translates the current mouse position to the mouse position on the canvas.
+            var newPosition = self.getMousePos(canvas, e);
+
+            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+
+            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+
+            let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
+
+            if(alpha === 0)
+                self.#currentMap.findClickedTile(selectedTileCords);
+            /*else
+                this.#anotherParticipantAvatarViews.forEach(object => {
+                if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
+                    object.onclick();
+                     });*/
+            };
+        });
+    }
+
+    getMousePos(canvas, e) {
+
+        //gets the absolute size of canvas and calculates the scaling factor
+        var rect = canvas.getBoundingClientRect();
+        var scaleX = canvas.width / rect.width;
+        var scaleY = canvas.height / rect.height;
+
+        //Apply scaling factor to cursor position
+        return {
+            x: (e.pageX - rect.left) * scaleX,
+            y: (e.pageY - rect.top) * scaleY,
+
+        }
+    }
+
     addToUpdateList(viewInstance)
     {
         if(viewInstance instanceof Array) {
@@ -128,7 +200,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new FoyerView(map);
-        
+
         //the execution of below doesn't work because FoyerView is not creating fast enough.
         //the map tile array is therefore empty.
         //this.#foyerView.draw();
@@ -342,7 +414,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         let username = ownParticipant.getBusinessCard().getUsername();
 
         
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username); 
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);
         this.addToUpdateList(this.#ownAvatarView);
         
         

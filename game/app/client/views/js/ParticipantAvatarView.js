@@ -134,4 +134,5 @@ class ParticipantAvatarView extends AvatarView {
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
+    onclick() {}
 }
