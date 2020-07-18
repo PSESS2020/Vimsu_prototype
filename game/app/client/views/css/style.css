@@ -115,7 +115,7 @@ max-width: 250px;
 background: rgba(24, 30, 32, 0.699);
 color: #fff;
 border-radius: 5px;
-
+border: 1px solid antiquewhite;
 padding: 5px 10px;
 overflow-wrap: break-word;
 }

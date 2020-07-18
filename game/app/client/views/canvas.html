@@ -46,26 +46,40 @@
         </div>
     </div>
 </div>
+        <nav class="navbar navbar-expand-md navbar-light" style="position: absolute; top: 0; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+        <ul class="navbar nav ml-auto">
+            <li class="nav-item"> 
+                <div class="profileBox" style="border: 1px solid antiquewhite; border-radius: 5px; width: 120%; height:15%; margin-right: 35px;margin-top:-40px; padding: 0">
+                    <a class="action_button nav-item nav-link" href="" onclick = "(new ProfileView()).onclick()" data-toggle="modal" data-target="#profileModal">
+                        <i class="fa fa-user fa-3x navbarIcons" style="transform: scale(0.5);"></i>
+                        <p class="navbarIconsText" style="display:inline-block; position: absolute; top: -10; "> Profile</p>
+                    </a>
+                </div>
+            </li>
+        </ul>
+        </nav>
+    
         <nav class="navbar navbar-expand-md navbar-light" style="position: absolute; bottom: -5; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"> 
-                        <a class="action_button nav-item nav-link" href="/" >
-                            <i class="fa fa-bars fa-4x navbarIcons" style="margin-right: 25px;"></i>
-                            <p class="navbarIconsText" style="margin-left: 7px;">Menu</p>
-                        </a>
-                    </li>
-                    <li class="nav-item"> 
                         <a class="action_button nav-item nav-link" href="">
-                            <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px;"></i>
+                            <i class="fa fa-globe fa-4x navbarIcons"style="margin-right: 25px"></i>
                             <p class="navbarIconsText">Ranklist</p>
                         </a>
                     </li>
                
                     <li class="nav-item">
                         <a href="" onclick = "(new ScheduleListView()).onclick()" class="action_button nav-item nav-link" data-toggle="modal" data-target="#scheduleModal">
-                        <i class="fa fa-table fa-4x navbarIcons"></i>
+                        <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
                         <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
                     </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="action_button nav-item nav-link" href="">
+                            <i class="fa fa-star fa-4x navbarIcons"></i>
+                            <p class="navbarIconsText" style="margin-left: -14px;">Achievement</p>
+                        </a>
                     </li>
                 </ul>
         </nav>
@@ -75,20 +89,20 @@
             <ul class="navbar nav ml-auto">
                 <li class="nav-item">
                     <a class="action_button nav-item nav-link" href="">
-                        <i class="fa fa-star fa-4x navbarIcons"></i>
-                        <p class="navbarIconsText" style="margin-left: -14px;">Achievement</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="action_button nav-item nav-link" href="">
-                        <i class="fa fa-users fa-4x navbarIcons"></i>
+                        <i class="fa fa-users fa-4x navbarIcons" ></i>
                         <p class="navbarIconsText" style="margin-left: 3px;">Friendlist</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="action_button nav-item nav-link" href="">
-                        <i class="fa fa-comments-o fa-4x navbarIcons"></i>
+                        <i class="fa fa-comments-o fa-4x navbarIcons" ></i>
                         <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
+                    </a>
+                </li>
+                <li class="nav-item"> 
+                    <a class="action_button nav-item nav-link" href="/" onclick="return confirm('Are you sure you want to leave?')">
+                        <i class="fa fa-sign-out fa-4x navbarIcons"></i>
+                        <p class="navbarIconsText" style="margin-left: 7px;">Leave</p>
                     </a>
                 </li>
             </ul>
@@ -174,7 +188,7 @@
                 requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
                     requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
                         requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
-                            requirejs(['client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                            requirejs(['client/views/js/ProfileView', 'client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
                                     requirejs(['client/index'], () => {
                                     });    

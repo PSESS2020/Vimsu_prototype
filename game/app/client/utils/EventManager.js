@@ -75,4 +75,7 @@ class EventManager {
         this.#clientController.handleFromViewShowBusinessCard(participantId);
     }
 
+    handleProfileClicked() {
+        this.#clientController.handleFromViewShowProfile();
+    }
 }

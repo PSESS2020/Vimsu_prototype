@@ -544,7 +544,13 @@ class ClientController {
     }
 
     handleFromViewShowBusinessCard(participantId) {
-        
+        //var businessCard = 
+        //this.#gameView.initBusinessCardView(businessCard, true)
+    }
+
+    handleFromViewShowProfile() {
+        var businessCard = this.#ownParticipant.getBusinessCard();
+        this.#gameView.initProfileView(businessCard);
     }
 
     handleFromViewNewFriendRequest(participantRepicientId) {

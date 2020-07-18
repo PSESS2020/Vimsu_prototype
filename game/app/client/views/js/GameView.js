@@ -14,6 +14,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     //#roomId;
     #updateList = [];
     #foyerView;
+    #profileView;
     #foodCourtView;
     #receptionView;
     #scheduleListView;
@@ -22,6 +23,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
+    #businessCardView;
     #gameViewInit;
 
     constructor(gameWidth, gameHeight) 
@@ -484,6 +486,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#lectureView = new LectureView().draw(lecture, hasToken);
     }
 
+    initProfileView(businessCard) {
+        this.#profileView = new ProfileView().draw(businessCard);
+    }
+
+    initBusinessCardView(businessCard, isFriend) {
+        this.#businessCardView = new BusinessCardView().draw(businessCard, isFriend);
+    }
         
     updateOwnAvatarRoom(typeOfRoom) {
         this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
