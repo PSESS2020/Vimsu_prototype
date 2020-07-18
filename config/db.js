@@ -149,7 +149,7 @@ module.exports = class db {
         });
 
         var readStream = FileSystem.createReadStream(dir + fileName);
-        var uploadStream = bucket.openUploadStream(fileName);
+        var uploadStream = bucket.openUploadStream(new Date().toISOString() + "_" + fileName);
 
         var fileId = uploadStream.id.toString();
     
