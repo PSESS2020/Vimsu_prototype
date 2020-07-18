@@ -101,29 +101,37 @@ padding: 2px;
 }
 
 #allchatMessages {
-background: #000;
+font-size: 15px;
+background:rgba(24, 30, 32, 0.699);
 overflow-y: scroll;
 margin: 0;
 padding: 0;
 z-index: 1;
-max-height: 200px;
+max-height: 150px;
 max-width: 250px;
 }
 
 #allchatMessages div {
-background: #222;
+background: rgba(24, 30, 32, 0.699);
 color: #fff;
 border-radius: 5px;
+border: 1px solid antiquewhite;
 padding: 5px 10px;
 overflow-wrap: break-word;
 }
 
+#allchatMessages::-webkit-scrollbar {
+  display: none;
+}
+
 .navbarIcons {
   color: antiquewhite;
+  transform: scale(0.8)
 }
 
 .navbarIconsText {
   color: antiquewhite;
+  font-size: 15px;
 }
 
 a:hover {
@@ -165,6 +173,10 @@ vertical-align: middle;
   height: 100%
 }
 
+.currentLecturesWindow::-webkit-scrollbar {
+  display: none;
+}
+
 .lectureVideoWindow {
   background-color:rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
@@ -180,6 +192,9 @@ vertical-align: middle;
   height: 100%;
 }
 
+.lectureVideoWindow::-webkit-scrollbar {
+  display: none;
+}
 
 .currentLecturesHeader {
   background-color: rgba(24, 30, 32, 0.699);
