@@ -531,6 +531,11 @@ class ClientController {
         this.socket.emit('getSchedule');
     }
 
+    handleFromViewShowProfile() {
+        var businessCard = this.#ownParticipant.getBusinessCard();
+        this.#gameView.initProfileView(businessCard);
+    }
+
     handleFromViewNewFriendRequest(participantRepicientId) {
         this.socketReady
         var senderId = this.participant.getId;

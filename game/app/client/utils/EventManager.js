@@ -71,4 +71,7 @@ class EventManager {
         this.#clientController.handleFromViewShowSchedule();
     }
 
+    handleProfileClicked() {
+        this.#clientController.handleFromViewShowProfile();
+    }
 }
