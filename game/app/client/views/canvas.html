@@ -187,6 +187,8 @@
                 })
             })
 
+            $('#lectureVideo').get(0).disablePictureInPicture = true;
+
             $(document).on('click', ".closeButton" , function() {
                 $('#lectureVideoWindow').hide();
                 $('#lectureVideo').get(0).pause();
