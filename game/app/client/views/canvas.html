@@ -189,6 +189,7 @@
 
             $(document).on('click', ".closeButton" , function() {
                 $('#lectureVideoWindow').hide();
+                $('#lectureVideo').get(0).pause();
                 var eventManager = new EventManager();
                 eventManager.handleLectureLeft(this.id);
             })
