@@ -1,12 +1,11 @@
 module.exports = class Schedule {
     
-    #lectureList;
+    #lectureList = [];
     
     
     /**
     * @author Laura
     * 
-    * @param {Lecture[]} lectureList
     */
 
     constructor(lectureList) {
@@ -31,8 +30,8 @@ module.exports = class Schedule {
             var lecture = this.#lectureList[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
-            var startToShow = (startingTime - (10 * 60 * 1000)); //10 Minutes in milliseconds
-            var stopToShow = (startingTime + (15 * 60 * 1000));
+            var startToShow = (startingTime - (10 * 60 * 400000)); //10 Minutes in milliseconds
+            var stopToShow = (startingTime + (15 * 60 * 400000));
             var withinMargin = startToShow <= now && now <= stopToShow;
 
             if (withinMargin) {
@@ -40,6 +39,10 @@ module.exports = class Schedule {
             }
         }
         return currentLectures;
+    }
+
+    getAllLectures() {
+        return this.#lectureList;
     }
 
 }

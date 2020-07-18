@@ -6,8 +6,8 @@ module.exports = class Conference {
      
     #schedule;
      
-    constructor(lectureList) {
-        this.#schedule = new Schedule(lectureList);
+    constructor(schedule) {
+        this.#schedule = schedule;
     }
 
     getSchedule() {

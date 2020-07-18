@@ -59,10 +59,14 @@ module.exports = class ServerController {
 
         //initilaize conference with schedule. TODO: create conference in DB and initialize conference
         //model with id from the DB
-        var lectures = LectureService.createAllLectures("1");
-        var conference = new Conference(new Schedule(lectures));
-        this.#conference = conference;
-
+        LectureService.createAllLectures("1").then(lectures => {
+            var schedule = new Schedule(lectures);
+            var conference = new Conference(schedule);
+            this.#conference = conference;
+        }).catch(err => {
+            console.error(err);    
+        })
+    
         var foyerRoom = this.#rooms[0];
         var foodCourtRoom = this.#rooms[1];
         var receptionRoom = this.#rooms[2];
@@ -379,11 +383,6 @@ module.exports = class ServerController {
             var currentLecturesData = [];
 
             socket.on('enterLecture', (ppantID, lectureId) => {
-                console.log('id: ' + lectureId);
-                console.log(currentLecturesData.filter(x => x.id === lectureId)[0])
-                // TODO: retrieve data from the database here
-                // and also add user to the chat accordingly
-
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
 
                 if (idx < 0) {
@@ -391,14 +390,22 @@ module.exports = class ServerController {
                 }
                 
                 var schedule = this.#conference.getSchedule();
-                lecture = schedule.getLecture(lectureId);
-                lecture.enter(ppantID);
-                hasToken = lecture.hasToken(ppantID);
+                var lecture = schedule.getLecture(lectureId);
+                var entered = lecture.enter(ppantID);
+                var token = lecture.hasToken(ppantID);
 
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoUrl => {
                     currentLecturesData[idx].videoUrl = videoUrl;
-                    socket.emit('lectureEntered',  currentLecturesData[idx], hasToken);
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token);
                 })
+            })
+
+            socket.on('leaveLecture', (participantId, lectureId) => {
+                var schedule = this.#conference.getSchedule();
+                console.log(lectureId);
+                var lecture = schedule.getLecture(lectureId);
+                lecture.leave(participantId);
+                console.log('left');
             })
 
             socket.on('getCurrentLectures', () => {
@@ -416,7 +423,7 @@ module.exports = class ServerController {
                                     videoId: lecture.getVideoId(),
                                     remarks: lecture.getRemarks(),
                                     oratorName: lecture.getOratorName(),
-                                    startingTime: new Date.now(),  //lecture.getStartingTime(),
+                                    startingTime: lecture.getStartingTime(),
                                     maxParticipants: lecture.getMaxParticipants()
                                 }
                             )

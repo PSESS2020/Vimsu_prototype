@@ -437,6 +437,11 @@ class ClientController {
         this.socket.emit('enterLecture', this.#participantId, lectureId);
     }
 
+    handleFromViewLectureLeft(lectureId) {
+        this.socketReady;
+        this.socket.emit('leaveLecture', this.#participantId, lectureId);
+    }
+
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
     handleFromViewCreateNewChat(creatorId, participantId) {
