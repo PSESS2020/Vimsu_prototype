@@ -17,6 +17,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #foodCourtView;
     #receptionView;
     #scheduleListView;
+    #currentLecturesView;
+    #lectureView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -360,28 +362,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     updateCurrentLectures(lectures) {
-        $('#currentLecturesContainer').empty();
-        
-        lectures.forEach(lecture => {
-            // this is really messy i know, should move it somewhere else
-            $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
-                    <h5>${lecture.title}</h5>
-                    <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
-                    <div>${lecture.remarks}</div>
-                    <button id=('${lecture.id}') class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked('${lecture.id}')">Show</button>
-                </div>
-            `)
-        });
-
-        $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+        this.#currentLecturesView = new CurrentLecturesView().draw(lectures);
     }
 
     initCurrentSchedule(lectures) {
         this.#scheduleListView = new ScheduleListView().draw(lectures);
     }
 
-    updateCurrentLecture(lecture, hasToken) {
+    /*updateCurrentLecture(lecture, hasToken) {
         $('#currentLectures').hide(); // hide the overview of current lectures
 
         if(hasToken) {
@@ -411,7 +399,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         $('#lectureVideo').attr('src', lecture.videoUrl);
         $('#lectureVideo').load();
 
-        $('#lectureVideoWindow').show();
+        $('#lectureVideoWindow').show();*/
+    
+    updateCurrentLecture(lecture) {
+        this.#lectureView = new LectureView().draw(lecture);
     }
 
         

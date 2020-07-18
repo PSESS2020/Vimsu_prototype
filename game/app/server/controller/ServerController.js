@@ -3,6 +3,7 @@
 /* ############################################################################### */
 
 const socketio = require('socket.io');
+const path = require('path');
 
 const Position = require('../models/Position.js');
 const Direction = require('../models/Direction.js');
@@ -20,6 +21,7 @@ const DoorService = require('../services/DoorService.js');
 const LectureService = require('../services/LectureService')
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
+const FileSystem = require('../../../../config/FileSystem')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
@@ -358,27 +360,6 @@ module.exports = class ServerController {
             
 
             });
-
-            // TODO: remove and make it work with the actual model
-            var mockedLectures = [{
-                id: 1,
-                title: 'Grundbegriffe der Informatik',
-                speaker: 'Stüker',
-                summary: 'Die wundersame Welt von Automaten und Turing Maschinen fasziniert Informatiker aller Generationen.',
-                startTime: Date.now() - 600000,
-                endTime: Date.now() + 300000,
-                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
-                
-            }, 
-            {
-                id: 2,
-                title: 'Softwaretechnik 1',
-                speaker: 'Walter F. Tichy',
-                summary: 'Spannende Entwurfsmuster für jung und alt.',
-                startTime: Date.now() - 500000,
-                endTime: Date.now() + 560000,
-                videoUrl: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'
-            }]
 
             var currentLecturesData = [];
 
