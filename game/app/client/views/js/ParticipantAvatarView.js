@@ -134,5 +134,9 @@ class ParticipantAvatarView extends AvatarView {
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
     }
-    onclick() {}
+
+    onclick() {
+        let eventManager = new EventManager();
+        eventManager.handleAvatarClick(this.#participantId);
+    }
 }

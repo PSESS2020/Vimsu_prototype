@@ -71,4 +71,8 @@ class EventManager {
         this.#clientController.handleFromViewShowSchedule();
     }
 
+    handleAvatarClick(participantId) {
+        this.#clientController.handleFromViewShowBusinessCard(participantId);
+    }
+
 }

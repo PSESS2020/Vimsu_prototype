@@ -98,16 +98,18 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
 
-            let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
-
-            if(alpha === 0)
+                //first check if click is on door or clickable object in room (not existing at this point)
                 self.#currentMap.findClickedTile(selectedTileCords);
-            /*else
-                this.#anotherParticipantAvatarViews.forEach(object => {
-                if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
-                    object.onclick();
-                     });*/
-            };
+
+                //then, check if there is an avatar at this position
+                self.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                    if (ppantView.getPosition().getCordX() === selectedTileCords.x 
+                    && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        ppantView.onclick();
+                    }
+                });
+            
+            }
         });
     }
 

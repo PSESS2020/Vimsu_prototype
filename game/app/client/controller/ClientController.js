@@ -533,6 +533,10 @@ class ClientController {
         this.socket.emit('getSchedule');
     }
 
+    handleFromViewShowBusinessCard(participantId) {
+        
+    }
+
     handleFromViewNewFriendRequest(participantRepicientId) {
         this.socketReady
         var senderId = this.participant.getId;
