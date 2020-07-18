@@ -196,6 +196,10 @@ vertical-align: middle;
   display: none;
 }
 
+body::-webkit-scrollbar {
+  display:none;
+}
+
 .currentLecturesHeader {
   background-color: rgba(24, 30, 32, 0.699);
   color: antiquewhite;
