@@ -23,7 +23,7 @@ module.exports = class Schedule {
 
     //returns the lectures that start soon or have started already.
     //TODO: maybe move Timedeltas in global constants file
-    getcurrentLectures() {
+    getCurrentLectures() {
         var currentLectures = [];
 
         for(var i = 0; i < this.#lectureList.length; i++) {
