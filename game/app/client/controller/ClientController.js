@@ -96,6 +96,10 @@ class ClientController {
         return this.#currentRoom;
     }
 
+    getGameView() {
+        return this.#gameView;
+    }
+
     
     /* #################################################### */    
     /* ###################### SOCKET ###################### */
@@ -124,16 +128,21 @@ class ClientController {
         }
 
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
-        
         this.#gameView.initCanvasEvents();
+        
         //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
         this.#gameView.setGameViewInit(true);
+
     }
 
     switchRoomGameView() {
+        
+        //disables update of gameview
+        this.#gameView.setGameViewInit(false);
+
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         
@@ -148,6 +157,7 @@ class ClientController {
         this.#gameView.resetAnotherAvatarViews();
         this.#gameView.updateOwnAvatarRoom(typeOfRoom);
         this.#gameView.initCanvasEvents();
+        this.#gameView.setGameViewInit(true);
 
     }
 

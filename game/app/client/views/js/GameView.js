@@ -177,11 +177,24 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             
             //sort updateList which includes ownAvatarView
             this.#updateList.sort(function(a, b) {
-                if (a instanceof Array) {
-                    return b.getPosition().getCordX() - a[0].getPosition().getCordX();
-                } else {
-                    return b[0].getPosition().getCordX() - a.getPosition().getCordX();
-                }
+                
+                if (a instanceof Array && b instanceof Array){
+
+                    if (a[0] !== undefined && b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (a instanceof Array) {
+                
+                    if (a[0] !== undefined)
+                        return b.getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (b instanceof Array) {
+                    
+                    if (b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a.getPosition().getCordX();
+              
+                } else 
+                        return b.getPosition().getCordX() - a.getPosition().getCordX();
             });
             
             for (var i = 0; i < this.#updateList.length; i++) {
