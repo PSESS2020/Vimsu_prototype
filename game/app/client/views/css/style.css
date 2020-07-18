@@ -231,7 +231,10 @@ vertical-align: middle;
   color: antiquewhite;
   padding: 0px !important;
   overflow: hidden;
-  border-color: transparent !important; 
+  border-color: antiquewhite;
+  border-style: solid;
+  border-width: medium;
+  border-radius: 10px;
   box-shadow: 0px 0px 0px transparent;
  }
 
@@ -253,4 +256,25 @@ vertical-align: middle;
 
 .table {
   color: antiquewhite;
+}
+
+.table thead tr th{
+  border-top: none;
+  border-bottom: 2pt solid antiquewhite
+}
+
+.table tbody tr th{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr td{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }

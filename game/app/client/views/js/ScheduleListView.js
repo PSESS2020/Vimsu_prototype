@@ -21,10 +21,10 @@ class ScheduleListView extends WindowView {
                 <tr>
                     <th scope="row">${count++}</th>
                     <td>${lecture.title}</td>
-                    <td>${lecture.maxParticipants}</td>
                     <td>${lecture.oratorName}</td>
                     <td>${days[lecture.startingTime.getDay()] + ", " + (lecture.startingTime.getDate()<10?'0':'') + lecture.startingTime.getDate() + "/" + (lecture.startingTime.getMonth()<10?'0':'') + lecture.startingTime.getMonth() + "/" + lecture.startingTime.getFullYear() 
                     + " " + (lecture.startingTime.getHours()<10?'0':'') + lecture.startingTime.getHours() + ":" + (lecture.startingTime.getMinutes()<10?'0':'') + lecture.startingTime.getMinutes()}</td>
+                    <td>${lecture.maxParticipants}</td>
                     <td>${(lecture.remarks == ''?'-':'' + lecture.remarks)}</td>
                 </tr>
             `)
