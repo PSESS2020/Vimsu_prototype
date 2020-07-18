@@ -10,7 +10,7 @@ class CurrentLecturesView extends WindowView {
         lectures.forEach(lecture => {
             // this is really messy i know, should move it somewhere else
             $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer d-flex flex-column align-items-start col-4 m-1 pt-2">
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-5 pt-3">
                     <h5>${lecture.title}</h5>
                     <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
                     <div>${lecture.remarks}</div>

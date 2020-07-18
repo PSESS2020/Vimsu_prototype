@@ -9,6 +9,7 @@ class LectureView extends WindowView {
 
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
+        
         $('#lectureVideo').attr('src', lecture.videoUrl);
         $('#lectureVideo').load();
         
