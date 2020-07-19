@@ -172,10 +172,11 @@ class ParticipantAvatarView extends AvatarView {
         console.log("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
         
         if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
-            alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
+            //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
         
-         let eventManager = new EventManager();
-        eventManager.handleAvatarClick(this.#participantId);
+            $('#businessCardModal').modal('toggle');
+            let eventManager = new EventManager();
+            eventManager.handleAvatarClick(this.#participantId);
         }
     }
 }

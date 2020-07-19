@@ -1,5 +1,4 @@
-//var TypeChecker = require('../../utils/TypeChecker.js');
-//var ParticipantClient = require('./ParticipantClient.js');
+
 
 
 /*module.exports = */class RoomClient {
@@ -116,6 +115,18 @@
                 this.#listOfPPants.splice(index, 1);
             }
         });
+    }
+
+    //Method to get a Participant who is currently in this room
+    getParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+        var result;
+        this.#listOfPPants.forEach(ppant => {
+            if (ppantID === ppant.getId()) {
+                result = ppant;
+            }
+        });
+        return result;
     }
 
     /**

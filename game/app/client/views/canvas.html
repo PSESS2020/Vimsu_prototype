@@ -88,7 +88,7 @@
 
             <ul class="navbar nav ml-auto">
                 <li class="nav-item">
-                    <a class="action_button nav-item nav-link" href="">
+                    <a class="action_button nav-item nav-link" href="" onclick = "(new FriendListView()).onclick()" data-toggle="modal" data-target="#friendListModal">
                         <i class="fa fa-users fa-4x navbarIcons" ></i>
                         <p class="navbarIconsText" style="margin-left: 3px;">Friendlist</p>
                     </a>
@@ -188,7 +188,7 @@
                 requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
                     requirejs(['client/views/js/ImageLoader', 'client/views/js/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet', 'client/utils/SpriteSheetBodyClickMap'], () => {
                         requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
-                            requirejs(['client/views/js/ProfileView', 'client/views/js/BusinessCardView', 'client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
+                            requirejs(['client/views/js/ProfileView', 'client/views/js/FriendListView', 'client/views/js/BusinessCardView', 'client/views/js/ScheduleListView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/FoyerView', 'client/views/js/FoodCourtView', 'client/views/js/ReceptionView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
                                 requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
                                     requirejs(['client/index'], () => {
                                     });    
@@ -209,10 +209,18 @@
             $('#lectureVideo').get(0).disablePictureInPicture = true;
 
             $(document).on('click', ".closeButton" , function() {
-                $('#lectureVideoWindow').hide();
-                $('#lectureVideo').get(0).pause();
-                var eventManager = new EventManager();
-                eventManager.handleLectureLeft(this.id);
+                var video = $('#lectureVideo').get(0);
+                video.pause();
+                if(video.currentTime < video.duration) {
+                    var result = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?');
+                    if(result) {
+                        $('#lectureVideoWindow').hide();
+                        var eventManager = new EventManager();
+                        eventManager.handleLectureLeft(this.id);
+                    }
+                } else {
+                    $('#lectureVideoWindow').hide();
+                }
             })
 
 

@@ -185,11 +185,13 @@ module.exports = class Room {
     //Method to get a Participant who is currently in this room
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
+        var result;
         this.#listOfPPants.forEach(ppant => {
-            if (ppant.getId() === ppantID) {
-                return ppant;
+            if (ppantID === ppant.getId()) {
+                result = ppant;
             }
         });
+        return result;
     }
 
     /**
