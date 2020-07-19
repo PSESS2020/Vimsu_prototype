@@ -9,8 +9,8 @@ class ProfileView extends WindowView {
         this.#businessCard = businessCard;
 
         $('#profileModal .modal-header').append(`
-            <h5 class="modal-title col-12 text-center" id="profileModalTitle">${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title d-inline-block" id="profileModalTitle">${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
+            <button type="button" class="close" style= "position: absolute; right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             </button>
         `)
