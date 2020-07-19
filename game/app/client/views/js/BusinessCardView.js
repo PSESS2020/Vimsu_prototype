@@ -45,7 +45,7 @@ class BusinessCardView extends WindowView {
         }
 
         $('#profileModal').on('hidden.bs.modal', function (e) {
-            $('#profileModal .modal-head').empty()
+            $('#profileModal .modal-header').empty()
             $('#profileModal .modal-body').empty()
         })
     }
