@@ -306,6 +306,7 @@ class ClientController {
                                 initPos, 
                                 initInfo.dir
                                 );
+        this.#currentRoom.enterParticipant(this.#ownParticipant);
         this.initGameView();
 
     }
@@ -322,7 +323,7 @@ class ClientController {
         console.log(this.#participantId);
     }*/
 
-    //Second message from Server, gives you information of starting room
+    //Third message from Server, gives you information of starting room
     handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {
         
         //transform GameObjects to GameObjectClients
@@ -339,7 +340,8 @@ class ClientController {
         //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
-            this.switchRoomGameView();
+            this.#currentRoom.enterParticipant(this.#ownParticipant);
+            this.switchRoomGameView();    
         }
     }
 
@@ -544,8 +546,14 @@ class ClientController {
     }
 
     handleFromViewShowBusinessCard(participantId) {
-        //var businessCard = 
-        //this.#gameView.initBusinessCardView(businessCard, true)
+        
+        let ppant = this.#currentRoom.getParticipant(participantId);
+        if (ppant === undefined) {
+            throw new Error('Ppant with ' + participantId + ' is not in room');
+        }
+
+        let businessCard = ppant.getBusinessCard();
+        new BusinessCardView(businessCard, false).draw();
     }
 
     handleFromViewShowProfile() {
