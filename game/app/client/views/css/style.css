@@ -249,7 +249,7 @@ body::-webkit-scrollbar {
   background-color:rgba(34, 43, 46, 0.8) !important;
   color: antiquewhite;
   padding: 0px !important;
-  overflow: hidden;
+  overflow: scroll;
   border-color: antiquewhite;
   border-style: solid;
   border-width: medium;

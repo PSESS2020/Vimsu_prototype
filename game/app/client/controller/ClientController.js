@@ -514,8 +514,9 @@ class ClientController {
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(creatorId, participantId) {
+    handleFromViewCreateNewChat(participantId) {
         this.socketReady
+        var creatorId = this.#ownParticipant.getId();
         this.socket.emit('createNewChat', {creatorId, participantId})
     }
 
