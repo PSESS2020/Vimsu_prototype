@@ -136,7 +136,7 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     onclick() {
-        $('#profileModal').modal('toggle');
+        $('#businessCardModal').modal('toggle');
         let eventManager = new EventManager();
         eventManager.handleAvatarClick(this.#participantId);
     }
