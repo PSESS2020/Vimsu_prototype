@@ -554,7 +554,7 @@ class ClientController {
         }
 
         let businessCard = ppant.getBusinessCard();
-        new BusinessCardView(businessCard, false).draw();
+        this.#gameView.initBusinessCardView(businessCard, false)
     }
 
     handleFromViewShowProfile() {
