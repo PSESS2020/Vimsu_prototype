@@ -54,13 +54,6 @@ document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
 };
 
-document.getElementById("lectureChatButton").onclick = function(event) {
-    let messageVal = $('#lectureChatInput').val();
-    if(messageVal !== '') {
-      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-      $('#lectureChatInput').val('');
-    }
-};
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being

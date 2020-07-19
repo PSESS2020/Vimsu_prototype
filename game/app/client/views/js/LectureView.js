@@ -4,9 +4,21 @@ class LectureView extends WindowView {
         super();
     }
 
-    draw(lecture, hasToken) {
+    draw(lecture, hasToken, lectureChat) {
         $('#currentLectures').hide(); // hide the overview of current lectures
-        console.log("hastoken" + hasToken);
+        $('#lectureChatMessages').empty();
+        if (lectureChat.length > 0) {
+            for(var i = 0; i < lectureChat.length; i++) {
+                var message = lectureChat[i];
+                var messageHeader = message.senderID + ", " + message.timestamp + ":";
+                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+                $newMessageHeader.text(messageHeader);
+                $newMessageBody.text(message.messageText);
+                $('#lectureChatMessages').append($newMessageHeader);
+                $('#lectureChatMessages').append($newMessageBody);
+            }
+        }       
         if(hasToken) {
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
@@ -15,7 +27,7 @@ class LectureView extends WindowView {
             $('#tokenLabel').empty();
             $('#tokenLabel').append('You obtained a question token!')
         } else {
-            $('#lectureChatInput').empty();
+            $('#lectureChatInputGroup').empty();
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
             <i class="fa fa-times-circle fa-4x"></i>
@@ -37,4 +49,13 @@ class LectureView extends WindowView {
 
         $('#lectureVideoWindow').show();
     }   
+    
 }
+
+document.getElementById("lectureChatButton").onclick = function(event) {
+    let messageVal = $('#lectureChatInput').val();
+    if(messageVal !== '') {
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+      $('#lectureChatInput').val('');
+    }
+};

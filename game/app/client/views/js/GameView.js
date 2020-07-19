@@ -14,6 +14,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     //#roomId;
     #updateList = [];
     #foyerView;
+    #profileView;
     #foodCourtView;
     #receptionView;
     #scheduleListView;
@@ -450,10 +451,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#scheduleListView = new ScheduleListView().draw(lectures);
     }
     
-    updateCurrentLecture(lecture, hasToken) {
-        this.#lectureView = new LectureView().draw(lecture, hasToken);
+    updateCurrentLecture(lecture, hasToken, lectureChat) {
+        this.#lectureView = new LectureView().draw(lecture, hasToken, lectureChat);
     }
 
+    initProfileView(businessCard) {
+        this.#profileView = new ProfileView().draw(businessCard);
+    }
         
     updateOwnAvatarRoom(typeOfRoom) {
         this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
