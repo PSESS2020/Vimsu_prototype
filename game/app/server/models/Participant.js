@@ -102,6 +102,17 @@ module.exports = class Participant {
     }
 
     /**
+     * Method called to add a FriendRequest
+     * @param {BusinessCard} businessCard 
+     */
+    addFriendRequest(businessCard) {
+        TypeChecker.isInstanceOf(BusinessCard, businessCard);
+        if (!this.#friendRequestList.includes(ppantId) && !this.#friendList.includes(ppantId)) {
+            this.#friendRequestList.addBusinessCard(businessCard);
+        }
+    }
+
+    /**
      * Accept FriendRequest from ppantId, if a request exists
      * @param {String} ppantId 
      */
