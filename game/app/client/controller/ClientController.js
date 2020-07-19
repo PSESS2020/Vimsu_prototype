@@ -553,9 +553,10 @@ class ClientController {
     handleFromViewShowFriendList() {
         var businessCards = [];
         businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "aest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "eest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "dest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "sest", "test", "test", "test"))
         this.#gameView.initFriendListView(businessCards)
         //this.socketReady
         //this.socket.emit('getFriendList', this.#ownParticipant.getId());

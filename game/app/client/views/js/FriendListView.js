@@ -30,14 +30,13 @@ class FriendListView extends WindowView {
                         </div>
                         <div class="col-12 col-sm-2 col-md-2">
                             <button id=('${businessCard.getParticipantId()}') class="btn btn-lecture " onclick="onClick()">Chat</button>
-                        </div>
-                                
+                        </div>      
                     </div>
                 </li>
 
                 <script> 
                     function onClick() { 
-                        $('#businessCardModal').modal('hide');
+                        $('#friendListModal').modal('hide');
                         new EventManager().handleChatNowClicked(${businessCard.getParticipantId()});
                     } 
                 </script>

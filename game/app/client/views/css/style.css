@@ -298,11 +298,11 @@ body::-webkit-scrollbar {
   border-bottom: none;
 }
 
-.list-group-item:first-child {
-  border-top: 3pt solid antiquewhite !important;
+.list-group-item:first-of-type {
+  border-top: none;
 }
 
-.list-group-item:last-child {
+.list-group-item:last-of-type {
   border-bottom: none !important;
 }
 
