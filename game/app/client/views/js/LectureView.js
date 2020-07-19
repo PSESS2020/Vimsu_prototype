@@ -56,12 +56,11 @@ class LectureView extends WindowView {
 
 document.getElementById("lectureChatButton").onclick = function(event) {
     let messageVal = $('#lectureChatInput').val();
-    alert("sending")
+    alert(lecture.id);
     if(messageVal !== '') {
       var lectureChatinput = $('#lectureChatInput').val();
-      alert('hello');
       console.log(lectureChatinput);
-      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val(), lecture.id);
       $('#lectureChatInput').val('');
     }
 };
