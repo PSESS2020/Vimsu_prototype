@@ -6,7 +6,7 @@ class LectureView extends WindowView {
 
     draw(lecture, hasToken) {
         $('#currentLectures').hide(); // hide the overview of current lectures
-        console.log("hastoken" + hasToken);
+
         if(hasToken) {
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`

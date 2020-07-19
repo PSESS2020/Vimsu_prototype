@@ -200,6 +200,7 @@ class ClientController {
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
+        this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
@@ -445,8 +446,11 @@ class ClientController {
     }
 
     handleFromServerCurrentSchedule(lectures) {
-        console.log("handleFromServerCurrentSchedule() " + lectures.length);
         this.#gameView.initCurrentSchedule(lectures);
+    }
+
+    handleFromServerFriendList(friendList) {
+        this.#gameView.initFriendListView(friendList);
     }
     
     // Adds a new message to the all-chat
@@ -544,6 +548,17 @@ class ClientController {
     handleFromViewShowSchedule() {
         this.socketReady
         this.socket.emit('getSchedule');
+    }
+
+    handleFromViewShowFriendList() {
+        var businessCards = [];
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
+        this.#gameView.initFriendListView(businessCards)
+        //this.socketReady
+        //this.socket.emit('getFriendList', this.#ownParticipant.getId());
     }
 
     handleFromViewShowBusinessCard(participantId) {

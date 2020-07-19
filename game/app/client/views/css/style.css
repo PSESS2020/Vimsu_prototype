@@ -297,3 +297,16 @@ body::-webkit-scrollbar {
 .table tbody tr:last-child td {
   border-bottom: none;
 }
+
+.list-group-item:first-child {
+  border-top: 3pt solid antiquewhite !important;
+}
+
+.list-group-item:last-child {
+  border-bottom: none !important;
+}
+
+.list-group-item {
+  border-top: 1pt solid antiquewhite !important;
+  border-bottom: 1pt solid antiquewhite !important;
+}
