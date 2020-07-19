@@ -2,8 +2,9 @@ var Position = require('./Position.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
 var TypeChecker = require('../../utils/TypeChecker.js')
 const Settings = require('../../utils/Settings.js');
-const Direction = require('../models/Direction')
-const BusinessCard = require('../models/BusinessCard')
+const Direction = require('../models/Direction.js')
+const BusinessCard = require('../models/BusinessCard.js')
+const FriendList = require('../models/FriendList.js');
 
 module.exports = class Participant {
 
@@ -12,7 +13,7 @@ module.exports = class Participant {
     #accountId;
     #direction;
     #businessCard;
-    #participantController;
+    #friendList;
 
     /**
      * Erstellt Participant Instanz
@@ -35,6 +36,7 @@ module.exports = class Participant {
         this.#businessCard = businessCard;
         //this.#participantController = participantController;
 
+        /* 
         if (!position || !direction)
         {
             this.#position = new Position(Settings.STARTROOM, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
@@ -43,13 +45,17 @@ module.exports = class Participant {
 
         else 
         {
-            TypeChecker.isInstanceOf(position, Position);
-            TypeChecker.isEnumOf(direction, Direction);
+        */
+        TypeChecker.isInstanceOf(position, Position);
+        TypeChecker.isEnumOf(direction, Direction);
 
-            this.#position = position;
-            this.#direction = direction;
-        }
+        this.#position = position;
+        this.#direction = direction;
+
+        //TODO: Get FriendList from FriendListService (P)
+        this.#friendList = new FriendList(this.#id, []);
     }
+    
 
     getId() 
     {
@@ -69,6 +75,10 @@ module.exports = class Participant {
     getBusinessCard()
     {
         return this.#businessCard;
+    }
+
+    getFriendList() {
+        return this.#friendList;
     }
 
     setPosition(position) 
