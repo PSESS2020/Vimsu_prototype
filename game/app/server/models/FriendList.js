@@ -55,7 +55,7 @@ module.exports = class FriendList {
      * Checks if ppant with ppantID is part of the friendList
      * @param {String} ppantID
      */
-    isFriend(ppantID) {
+    includes(ppantID) {
         TypeChecker.isString(ppantID);
         var isFriend = false;
         this.#memberList.forEach(ppant => {
