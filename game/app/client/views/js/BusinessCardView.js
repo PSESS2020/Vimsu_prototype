@@ -35,7 +35,7 @@ class BusinessCardView extends WindowView {
         `)
         } else {
             $('#businessCardModal .modal-body').append(`
-                <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
+                <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 15px; text-align: center">${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
                 </br>
                 <table id="profile" style = "color: antiquewhite; width:100%; margin-left: 0">
                     <tr>
