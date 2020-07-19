@@ -510,14 +510,7 @@ module.exports = class ServerController {
                 var lecture = schedule.getLecture(lectureId);
                 lecture.leave(participantId);
                 console.log('left');
-            })
-
-            socket.on('getFriendList', (ppantID) => {
-                var participant = ppants.get(ppantID);
-                //TODO
-
-                //socket.emit('friendList', friendList);
-            })
+            });
 
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
@@ -573,6 +566,34 @@ module.exports = class ServerController {
 
                 socket.emit('currentSchedule', lecturesData);
             });    
+
+            socket.on('getFriendList', (ppantID) => {
+                var friendList = ppants.get(ppantID).getFriendList();
+
+                //JUST FOR TESTING PURPOSES
+                ppants.get(ppantID).addFriendRequest(new BusinessCard('22', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
+                ppants.get(ppantID).acceptFriendRequest('22');
+
+                var friendListData = [];
+                
+                friendList.getAllBusinessCards().forEach(businessCard => {
+                    friendListData.push(
+                        {   
+                            friendId: businessCard.getParticipantId(),
+                            username: businessCard.getUsername(),
+                            title: businessCard.getTitle(),
+                            surname: businessCard.getSurname(),
+                            forename: businessCard.getForename(),
+                            surname: businessCard.getSurname(),
+                            job: businessCard.getJob(),
+                            company: businessCard.getCompany(),
+                            email: businessCard.getEmail()
+                        }
+                    )
+                });
+
+                socket.emit('friendList', friendListData);
+            }); 
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken

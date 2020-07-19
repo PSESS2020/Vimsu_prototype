@@ -449,7 +449,13 @@ class ClientController {
         this.#gameView.initCurrentSchedule(lectures);
     }
 
-    handleFromServerFriendList(friendList) {
+    handleFromServerFriendList(friendListData) {
+
+        var friendList = [];
+        friendListData.forEach(data => {
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+
         this.#gameView.initFriendListView(friendList);
     }
     
@@ -551,13 +557,8 @@ class ClientController {
     }
 
     handleFromViewShowFriendList() {
-        var businessCards = [];
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "aest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "eest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "dest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "sest", "test", "test", "test"))
-        this.#gameView.initFriendListView(businessCards)
+        this.socketReady
+        this.socket.emit('getFriendList', this.#ownParticipant.getId());
         //this.socketReady
         //this.socket.emit('getFriendList', this.#ownParticipant.getId());
     }

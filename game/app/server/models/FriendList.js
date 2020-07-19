@@ -43,9 +43,9 @@ module.exports = class FriendList {
      */
     removeBusinessCard(ppantID) { 
         TypeChecker.isString(ppantID);
-        this.#memberList.forEach(ppant => {
-            if (ppant.getId() === ppantID) {
-                let index = this.#memberList.indexOf(ppant);
+        this.#memberList.forEach(card => {
+            if (card.getParticipantId() === ppantID) {
+                let index = this.#memberList.indexOf(card);
                 this.#memberList.splice(index, 1);
             }
         });
@@ -58,8 +58,8 @@ module.exports = class FriendList {
     includes(ppantID) {
         TypeChecker.isString(ppantID);
         var isFriend = false;
-        this.#memberList.forEach(ppant => {
-            if (ppant.getId() === ppantID) {
+        this.#memberList.forEach(card => {
+            if (card.getParticipantId() === ppantID) {
                 isFriend = true;
             }
         });
@@ -73,11 +73,15 @@ module.exports = class FriendList {
     getBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
         var ppantCard;
-        this.#memberList.forEach(ppant => {
-            if (ppant.getId() === ppantID) {
-                ppantCard = ppant.getBusinessCard();
+        this.#memberList.forEach(card => {
+            if (card.getParticipantId() === ppantID) {
+                ppantCard = card;
             }
         });
         return ppantCard;
+    }
+
+    getAllBusinessCards() {
+        return this.#memberList;
     }
 }
