@@ -15,7 +15,7 @@ class LectureView extends WindowView {
             $('#tokenLabel').empty();
             $('#tokenLabel').append('You obtained a question token!')
         } else {
-            $('#lectureChatInput').empty();
+            $('#lectureChatInputGroup').empty();
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
             <i class="fa fa-times-circle fa-4x"></i>

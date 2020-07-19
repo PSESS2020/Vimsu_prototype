@@ -48,6 +48,7 @@ document.getElementById("allchat").onkeydown = function(event) {
 
 document.getElementById("lectureChatButton").onclick = function(event) {
     let messageVal = $('#lectureChatInput').val();
+    alert("sending")
     if(messageVal !== '') {
       clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
       $('#lectureChatInput').val('');
