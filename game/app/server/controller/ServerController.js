@@ -515,10 +515,6 @@ module.exports = class ServerController {
 
             socket.on('leaveLecture', (participantId, lectureId) => {
                 var schedule = this.#conference.getSchedule();
-<<<<<<< HEAD
-=======
-
->>>>>>> VideoDBTesting
                 var lecture = schedule.getLecture(lectureId);
                 lecture.leave(participantId);
                 console.log(participantId + " leaves " + lectureId)
