@@ -491,7 +491,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initBusinessCardView(businessCard, isFriend) {
-        this.#businessCardView = new BusinessCardView().draw(businessCard, isFriend);
+        this.#businessCardView = new BusinessCardView(businessCard, isFriend).draw();
     }
         
     updateOwnAvatarRoom(typeOfRoom) {
