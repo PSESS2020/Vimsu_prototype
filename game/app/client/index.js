@@ -14,12 +14,12 @@ this.ctx_avatar.canvas.height = GAME_HEIGHT;
 this.ctx_ui.canvas.width = GAME_WIDTH;
 this.ctx_ui.canvas.height = GAME_HEIGHT;
 
-//let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+//Initialize the sprite sheet body click map.
+SpriteSheetBodyClickMap.initClickMap();
 
 let clientController = new ClientController();
 clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
-//clientController.initGameView();
 
 setInterval( function() {
   //let deltaTime = timestamp - lastTime;

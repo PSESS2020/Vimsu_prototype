@@ -139,6 +139,16 @@ module.exports = */class MapView extends Views {
 
     }
 
+    isCursorOnExtendedMap(cordX, cordY) {
+
+        //Room walls
+        if (cordX >= 0 && cordY >= 0 && cordX < this.#xNumTiles && cordY < this.#yNumTiles )
+            return true;
+        else
+            return false;
+
+    }
+
     
     updateSelectedTile(selectedTileCords) {
 
