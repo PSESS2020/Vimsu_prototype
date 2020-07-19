@@ -20,7 +20,7 @@ module.exports = class LectureChat {
     }
 
     appendMessage(message) {
-        this.#listOfMessages.append(message);
+        this.#listOfMessages.push(message);
     }
 
     //for moderators who can delete messages from the lecture chat

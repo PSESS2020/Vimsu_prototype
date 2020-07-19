@@ -5,22 +5,20 @@ class LectureView extends WindowView {
     }
 
     draw(lecture, hasToken, lectureChat) {
-        console.log(lectureChat);
+        $('#currentLectures').hide(); // hide the overview of current lectures
+        $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
                 var message = lectureChat[i];
-                var messageHeader = message.senderID + ", " + timestamp + ":";
+                var messageHeader = message.senderID + ", " + message.timestamp + ":";
                 var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
                 var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
                 $newMessageHeader.text(messageHeader);
-                $newMessageBody.text(text);
+                $newMessageBody.text(message.messageText);
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
             }
-        }
-        $('#currentLectures').hide(); // hide the overview of current lectures
-        console.log("hastoken" + hasToken);
-        $('#lectureChatMessages').empty();
+        }       
         if(hasToken) {
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
@@ -56,11 +54,8 @@ class LectureView extends WindowView {
 
 document.getElementById("lectureChatButton").onclick = function(event) {
     let messageVal = $('#lectureChatInput').val();
-    alert(lecture.id);
     if(messageVal !== '') {
-      var lectureChatinput = $('#lectureChatInput').val();
-      console.log(lectureChatinput);
-      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val(), lecture.id);
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
       $('#lectureChatInput').val('');
     }
 };

@@ -474,11 +474,14 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, text) => {
-                console.log("Sending message in: " + socket.currentLecture)
+                var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
+                var lecture = this.#conference.getSchedule().getLecture(lectureID);
+                var lectureChat = lecture.getLectureChat();
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
                 var message = {senderID: ppantID, timestamp: currentTime, messageText: text}
+                lectureChat.appendMessage(message);
                 console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
                 // Getting the roomID from the ppant seems to not work?
                 
