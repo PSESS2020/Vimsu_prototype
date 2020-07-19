@@ -1,5 +1,6 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Orator = require('./Orator.js');
+const LectureChat = require('./LectureChat.js');
 
 module.exports = class Lecture {
 
@@ -9,7 +10,7 @@ module.exports = class Lecture {
     #remarks;
     #startingTime;
     #oratorName;
-    //#lectureChat; //TODO
+    #lectureChat; 
     #maxParticipants;
     #activeParticipants;
     #tokenList;                 
@@ -52,6 +53,8 @@ module.exports = class Lecture {
         element[2] is the token counter (Int, init. with 300.000ms (5min))
         */
         this.#tokenList = []; 
+
+        this.#lectureChat = new LectureChat(this.#id);
     }
 
     getId() {
@@ -82,11 +85,11 @@ module.exports = class Lecture {
         return this.#maxParticipants
     }
 
-    /*
+ 
     getLectureChat() {
-        return this.#lectureChat:
+        return this.#lectureChat;
     }
-    */
+
 
     /**
      * Is called when a participant with this ID joins a lecture

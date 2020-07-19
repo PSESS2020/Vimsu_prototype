@@ -4,9 +4,23 @@ class LectureView extends WindowView {
         super();
     }
 
-    draw(lecture, hasToken) {
+    draw(lecture, hasToken, lectureChat) {
+        console.log(lectureChat);
+        if (lectureChat.length > 0) {
+            for(var i = 0; i < lectureChat.length; i++) {
+                var message = lectureChat[i];
+                var messageHeader = message.senderID + ", " + timestamp + ":";
+                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+                $newMessageHeader.text(messageHeader);
+                $newMessageBody.text(text);
+                $('#lectureChatMessages').append($newMessageHeader);
+                $('#lectureChatMessages').append($newMessageBody);
+            }
+        }
         $('#currentLectures').hide(); // hide the overview of current lectures
         console.log("hastoken" + hasToken);
+        $('#lectureChatMessages').empty();
         if(hasToken) {
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
@@ -37,4 +51,17 @@ class LectureView extends WindowView {
 
         $('#lectureVideoWindow').show();
     }   
+    
 }
+
+document.getElementById("lectureChatButton").onclick = function(event) {
+    let messageVal = $('#lectureChatInput').val();
+    alert("sending")
+    if(messageVal !== '') {
+      var lectureChatinput = $('#lectureChatInput').val();
+      alert('hello');
+      console.log(lectureChatinput);
+      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+      $('#lectureChatInput').val('');
+    }
+};

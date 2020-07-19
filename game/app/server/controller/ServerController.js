@@ -478,10 +478,11 @@ module.exports = class ServerController {
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                var message = {senderID: ppantID, timestamp: currentTime, messageText: text}
                 console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
                 // Getting the roomID from the ppant seems to not work?
                 
-                this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', ppantID, currentTime, text);
+                this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
             
 
@@ -504,12 +505,17 @@ module.exports = class ServerController {
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
-                var entered = lecture.enter(ppantID);
+                lecture.enter(ppantID);
+                
                 var token = lecture.hasToken(ppantID);
+                var lectureChat = lecture.getLectureChat();
+                console.log(lectureChat);
+                var messages = lecture.getLectureChat().getMessages();
+                console.log(messages);
 
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
                     currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                    socket.emit('lectureEntered',  currentLecturesData[idx], token);
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
                 })
             })
 

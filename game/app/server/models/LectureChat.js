@@ -12,6 +12,7 @@ module.exports = class LectureChat {
      */
     constructor(lectureId) {
         this.#lectureId = lectureId;
+        this.#listOfMessages = [];
     }
 
     getMessages() {
