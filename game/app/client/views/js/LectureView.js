@@ -14,21 +14,6 @@ class LectureView extends WindowView {
             `)
             $('#tokenLabel').empty();
             $('#tokenLabel').append('You obtained a question token!')
-
-            $(document).on('click', ".closeButton" , function() {
-                var video = $('#lectureVideo').get(0);
-                video.pause();
-                if(video.currentTime < video.duration) {
-                    var result = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?');
-                    if(result) {
-                        $('#lectureVideoWindow').hide();
-                        var eventManager = new EventManager();
-                        eventManager.handleLectureLeft(this.id);
-                    }
-                } else {
-                    $('#lectureVideoWindow').hide();
-                }
-            })
         } else {
             $('#lectureChatInput').empty();
             $('#tokenIcon').empty();
@@ -37,22 +22,6 @@ class LectureView extends WindowView {
             `)
             $('#tokenLabel').empty();
             $('#tokenLabel').append('You left the lecture for too long. Therefore you are not able to ask questions in the lecture chat.')
-
-            $(document).on('click', ".closeButton" , function() {
-                var video = $('#lectureVideo').get(0);
-                video.pause();
-
-                if(video.currentTime < video.duration) {
-                    var result = confirm('Are you sure you want to leave?');
-                    if(result) {
-                        $('#lectureVideoWindow').hide();
-                        var eventManager = new EventManager();
-                        eventManager.handleLectureLeft(this.id);
-                    }
-                } else {
-                    $('#lectureVideoWindow').hide();
-                }
-            })
         }
         $('#closeButton').empty();
 
