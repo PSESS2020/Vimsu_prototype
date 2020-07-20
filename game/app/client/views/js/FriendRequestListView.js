@@ -31,10 +31,10 @@ class FriendRequestListView extends WindowView {
                         <div class="col-12 col-sm-2 col-md-2")>
                             <button id=${"accept" + businessCard.getParticipantId()} class="btn btn-lecture ">Accept</button>
                             <button id=${"reject" + businessCard.getParticipantId()} class="btn btn-reject" style="margin-top: 10px">Reject</button>
-                            <h6 style="margin-top: 9px; display: none;" id="accepted">Accepted</h6>
-                            <button id="reject_disable" class="btn btn-reject" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
-                            <button id="accept_disable" class="btn btn-lecture" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
-                            <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="rejected">Rejected</h6>
+                            <h6 style="margin-top: 9px; display: none;" id=${"accepted" + businessCard.getParticipantId()}>Accepted</h6>
+                            <button id=${"rejectdisable" + businessCard.getParticipantId()} class="btn btn-reject" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
+                            <button id=${"acceptdisable" + businessCard.getParticipantId()} class="btn btn-lecture" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
+                            <h6 style="margin-top: 20px; margin-left: 4px; display:none" id=${"rejected" + businessCard.getParticipantId()}>Rejected</h6>
                         </div>
                     </div>
                 </li>
@@ -65,11 +65,11 @@ class FriendRequestListView extends WindowView {
         $('#reject' + participantId).hide()
 
         if(isAccepted) {
-            $('#accepted').show()
-            $('#reject_disable').show()
+            $('#accepted' + participantId).show()
+            $('#rejectdisable' + participantId).show()
         } else {
-            $('#accept_disable').show()
-            $('#rejected').show()
+            $('#acceptdisable' + participantId).show()
+            $('#rejected' + participantId).show()
         }
     }
 
