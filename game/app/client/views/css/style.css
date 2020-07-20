@@ -240,17 +240,17 @@ body::-webkit-scrollbar {
 }
 
 .btn-reject {
-  background-color: #8b4457;
+  background-color: rgb(231, 218, 200);
   width: 75px;
   border: none;
   border-radius: 3px;
-  color: antiquewhite;
+  color: rgba(34, 43, 46, 1);
   text-decoration: none;
 }
 
 .btn-reject:hover {
-  background-color: #7c3347;
-  color: antiquewhite;
+  background-color: rgb(179, 170, 159);
+  color: rgba(34, 43, 46, 1);
 }
 
 .modal-header {
