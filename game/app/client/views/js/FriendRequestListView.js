@@ -27,8 +27,6 @@ class FriendRequestListView extends WindowView {
                             <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title="5842 Hillcrest Rd"></span>
                             <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
                             <br>
-                            <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                            <span class="small">${businessCard.getEmail()}</span>
                         </div>
                         <div class="col-12 col-sm-2 col-md-2")>
                             <button id=${"accept" + businessCard.getParticipantId()} class="btn btn-lecture ">Accept</button>
