@@ -26,6 +26,8 @@ const Schedule = require('../models/Schedule')
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
+const ChatService = require('../services/ChatService.js');
+
 
 
 
@@ -62,6 +64,16 @@ module.exports = class ServerController {
         //Init all rooms
         var roomService = new RoomService();
         this.#rooms = roomService.getAllRooms();
+
+        ChatService.newOneToOneChat("1", "2");
+        //ChatService.newLectureChat("1", "3");
+        //ChatService.newLectureChat("1", "2");
+
+
+        setTimeout( function() {
+            console.log(ChatService.existsOneToOneChat("1", "2"));
+
+        }, 100);
 
         /*
         FOYER: this.#rooms[Settings.FOYER_ID - 1];
