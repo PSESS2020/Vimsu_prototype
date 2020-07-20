@@ -113,6 +113,33 @@ module.exports = class db {
         })
     }
 
+    insertToArrayInCollection(collectionName, query, queryToPush) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.updateOne(query, {'$push': queryToPush})
+        .then(result => {
+            console.log(queryToPush + " added in " + collectionName + " with " + query);
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+
+    deleteFromArrayInCollection(collectionName, query, queryToPull) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.updateOne(query, {'$pull': queryToPull})
+        .then(result => {
+            console.log(result);
+            console.log(queryToPull + " removed from " + collectionName + " with " + query);
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }
+
     deleteOneFromCollection(collectionName, query) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);

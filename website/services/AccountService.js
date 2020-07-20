@@ -53,8 +53,7 @@ module.exports = class AccountService {
         return getDB().then(res => {
     
             var accountId = new ObjectId().toString();
-            var account = new Account(username, title, surname, forename, job, company, email);
-            account.setAccountID(accountId);
+            var account = new Account(accountId, username, title, surname, forename, job, company, email);
                 
             var acc = {
                 accountId: accountId,
@@ -79,7 +78,27 @@ module.exports = class AccountService {
         });
     }
 
-    static getAccount(username) {
+    static getAccountById(accountId) {
+        TypeChecker.isString(accountId);
+        
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("accounts", {accountId: accountId}, "").then(user => {
+                if (user) {
+                    return user;
+                }
+                else {
+                    console.log("user not found");
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        }).catch(err => {
+            console.error(err);
+        })
+    }
+
+    static getAccountByUsername(username) {
         TypeChecker.isString(username);
         
         return getDB().then(res => {
@@ -333,12 +352,11 @@ module.exports = class AccountService {
         TypeChecker.isString(password);
 
         return getDB().then(res => {
-            return this.getAccount(username).then(user => 
+            return this.getAccountByUsername(username).then(user => 
             {
                 if (user && passwordHash.verify(password, user.passwordHash)){
                     console.log("User and password match")
-                    var account = new Account(user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
-                    account.setAccountID(user.accountId);
+                    var account = new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
                     return account;
                 } else {
                     console.log("Credentials wrong");

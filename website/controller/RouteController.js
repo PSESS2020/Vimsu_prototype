@@ -3,7 +3,6 @@ const expressSession = require('express-session');
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
-const LectureService = require('../../game/app/server/services/LectureService')
 const path = require('path');
 const FileSystem = require('../../config/FileSystem')
 

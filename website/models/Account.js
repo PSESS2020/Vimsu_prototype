@@ -11,7 +11,8 @@ module.exports = class Account {
     #company;
     #email;
 
-    constructor(username, title, surname, forename, job, company, email) {
+    constructor(accountID, username, title, surname, forename, job, company, email) {
+        TypeChecker.isString(accountID);
         TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
@@ -20,6 +21,7 @@ module.exports = class Account {
         TypeChecker.isString(company);
         TypeChecker.isString(email);
         
+        this.#accountID = accountID;
         this.#username = username;
         this.#title = title;
         this.#surname = surname;
@@ -27,11 +29,6 @@ module.exports = class Account {
         this.#job = job;
         this.#company = company;
         this.#email = email;
-    }
-
-    setAccountID(accountID) {
-        TypeChecker.isString(accountID);
-        this.#accountID = accountID;
     }
 
     getAccountID() {

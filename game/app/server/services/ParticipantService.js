@@ -1,8 +1,10 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Position = require('../models/Position.js');
+const BusinessCard = require('../models/BusinessCard')
 const Participant = require('../models/Participant')
 const Settings = require('../../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
+const Account = require('../../../../website/models/Account')
 const dbconf = require('../../../../config/dbconf');
 
 var vimsudb;
@@ -16,9 +18,12 @@ async function getDB() {
 }
 
 module.exports = class ParticipantService {
-    static createParticipant(accountId, conferenceId) {
+    static createParticipant(account, conferenceId) {
+        TypeChecker.isInstanceOf(account, Account);
+        TypeChecker.isString(conferenceId);
+
         return getDB().then(res => {
-            return this.getParticipant(accountId, conferenceId).then(par => {
+            return this.getParticipant(account.getAccountID(), conferenceId).then(par => {
                 var participant;
 
                 if(par) {
@@ -29,7 +34,10 @@ module.exports = class ParticipantService {
                         cordY: par.position.cordY
                     }
                     var direction = par.direction;
-                    participant = new Participant(participantId, new Position(pos.roomId, pos.cordX, pos.cordY), direction);
+                    var friendList = par.friendId;
+                    participant = new Participant(participantId, accountId, new BusinessCard(participantId, account.getUsername(), 
+                    account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, friendList);
                 } 
                 else {
                     var participantId = new ObjectId().toString();
@@ -44,8 +52,8 @@ module.exports = class ParticipantService {
                             cordY: Settings.STARTPOSITION_Y
                         },
                         direction: Settings.STARTDIRECTION,
-                        /*visitedLectureId: [],
                         friendId: [],
+                        /*visitedLectureId: [],
                         friendRequestId: [],
                         chatId: [],*/
                     }
@@ -72,7 +80,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {accountId: accountId}, {participantId: 1, position: 1, direction: 1}).then(par => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {accountId: accountId}, "").then(par => {
                 if (par) {
                     return par;
                 }
