@@ -28,7 +28,6 @@
     "mocha": "^8.0.1",
     "mongodb": "^3.5.9",
     "password-hash": "^1.2.2",
-    "popper": "^1.0.1",
     "popper.js": "^1.16.1",
     "requirejs": "^2.3.6",
     "socket.io": "^2.3.0"
