@@ -244,17 +244,22 @@ body::-webkit-scrollbar {
 }
 
 .btn-reject {
-  background-color: rgb(231, 218, 200);
+  background-color: rgb(231, 218, 200) !important;
   width: 75px;
-  border: none;
-  border-radius: 3px;
-  color: rgba(34, 43, 46, 1);
+  border: none !important;
+  box-shadow: 0px 0px 0px transparent !important;
+  border-radius: 3px !important;
+  color: rgba(34, 43, 46, 1) !important;
   text-decoration: none;
 }
 
 .btn-reject:hover {
-  background-color: rgb(179, 170, 159);
-  color: rgba(34, 43, 46, 1);
+  background-color: rgb(179, 170, 159) !important;
+  color: rgba(34, 43, 46, 1) !important;
+  border: none !important;
+  box-shadow: 0px 0px 0px transparent !important;
+  text-decoration: none !important;
+  border-radius: 3px !important;
 }
 
 .modal-header {

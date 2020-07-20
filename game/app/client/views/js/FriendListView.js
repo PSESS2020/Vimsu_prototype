@@ -29,9 +29,7 @@ class FriendListView extends WindowView {
                             <span class="small">${businessCard.getEmail()}</span>
                         </div>
                         <div class="col-12 col-md-1">
-                            <!--<button id=('${businessCard.getParticipantId()}') class="btn btn-lecture " onclick="onClick()">Chat</button>-->
-                        
-                                <a class="action_button nav-item nav-link" href="" style="position: absolute; margin-top: -20px; margin-left: 15px" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="action_button nav-item nav-link" href="" style="position: absolute; margin-top: -20px; margin-left: 15px" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px; margin-right: 15px; margin-top: -10px" aria-labelledby="dropdownFriendOption">
@@ -50,7 +48,12 @@ class FriendListView extends WindowView {
                     })
 
                     $('#delete' + ${businessCard.getParticipantId()}).on('click', function (event) {
-                        new EventManager().handleRemoveFriend(${businessCard.getParticipantId()});
+                        var result = confirm('Are you sure you want to remove ' + '${businessCard.getUsername()}' + ' from friend list?');
+                        if(result) {
+                            new EventManager().handleRemoveFriend(${businessCard.getParticipantId()});
+                        } else {
+                            event.stopImmediatePropagation();
+                        }
                     })
                 </script>
             `)
