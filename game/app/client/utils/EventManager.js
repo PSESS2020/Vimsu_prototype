@@ -70,7 +70,19 @@ class EventManager {
         this.#clientController.handleFromViewShowSchedule();
     }
 
+    handleAvatarClick(participantId) {
+        this.#clientController.handleFromViewShowBusinessCard(participantId);
+    }
+
     handleProfileClicked() {
         this.#clientController.handleFromViewShowProfile();
+    }
+
+    handleChatNowClicked(participantId) {
+        this.#clientController.handleFromViewCreateNewChat(participantId);
+    }
+
+    handleFriendListClicked() {
+        this.#clientController.handleFromViewShowFriendList();
     }
 }

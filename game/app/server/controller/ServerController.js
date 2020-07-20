@@ -543,6 +543,13 @@ module.exports = class ServerController {
                 socket.currentLecture = undefined;
             })
 
+            socket.on('getFriendList', (ppantID) => {
+                var participant = ppants.get(ppantID);
+                //TODO
+
+                //socket.emit('friendList', friendList);
+            })
+
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
                 let lectureDoorPosition = doorService.getLectureDoorPosition();

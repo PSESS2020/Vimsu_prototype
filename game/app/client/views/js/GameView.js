@@ -20,9 +20,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #scheduleListView;
     #currentLecturesView;
     #lectureView;
+    #friendListView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
+    #businessCardView;
     #gameViewInit;
 
     constructor(gameWidth, gameHeight) 
@@ -99,16 +101,26 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
 
-            let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
-
-            if(alpha === 0)
+                //first check if click is on door or clickable object in room (not existing at this point)
                 self.#currentMap.findClickedTile(selectedTileCords);
-            /*else
-                this.#anotherParticipantAvatarViews.forEach(object => {
-                if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
-                    object.onclick();
-                     });*/
-            };
+            
+            } 
+            
+            if (self.#currentMap.isCursorOnExtendedMap(selectedTileCords.x, selectedTileCords.y)) {
+                //then, check if there is an avatar at this position
+                self.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                    
+                    console.log("avatar screen x: " + ppantView.getScreenX());
+                    console.log("mouse screen x: " + newPosition.x);
+                    console.log("avatar screen width: " + ppantView.getAvatarWidth());
+                    
+                    if ( newPosition.x > ppantView.getScreenX() && newPosition.x < ppantView.getScreenX() + ppantView.getAvatarWidth() 
+                        && newPosition.y > ppantView.getScreenY() && newPosition.y < ppantView.getScreenY() + ppantView.getAvatarHeight()) {
+                        ppantView.onclick(newPosition);
+                    }
+
+                });
+            }
         });
     }
 
@@ -168,6 +180,34 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
             }   
+
+            //sort AnotherAvatarViews in CordX
+            this.#anotherParticipantAvatarViews.sort(function(a, b) {
+                return b.getPosition().getCordX() - a.getPosition().getCordX();
+            });
+            
+            //sort updateList which includes ownAvatarView
+            this.#updateList.sort(function(a, b) {
+                
+                if (a instanceof Array && b instanceof Array){
+
+                    if (a[0] !== undefined && b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (a instanceof Array) {
+                
+                    if (a[0] !== undefined)
+                        return b.getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (b instanceof Array) {
+                    
+                    if (b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a.getPosition().getCordX();
+              
+                } else 
+                        return b.getPosition().getCordX() - a.getPosition().getCordX();
+            });
+            
             for (var i = 0; i < this.#updateList.length; i++) {
 
                 if (this.#updateList[i] instanceof Array) {
@@ -457,6 +497,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initProfileView(businessCard) {
         this.#profileView = new ProfileView().draw(businessCard);
+    }
+
+    initBusinessCardView(businessCard, isFriend) {
+        this.#businessCardView = new BusinessCardView(businessCard, isFriend).draw();
+    }
+
+    initFriendListView(friendList) {
+        this.#friendListView = new FriendListView().draw(friendList);
     }
         
     updateOwnAvatarRoom(typeOfRoom) {

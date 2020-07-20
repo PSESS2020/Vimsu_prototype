@@ -13,5 +13,9 @@ class SpriteSheet {
         this.image.src = path;
 
     }
+
+    getImage() {
+        return this.image;
+    }
 }
 

@@ -69,6 +69,8 @@ module.exports = */class MapView extends Views {
             y: this.#originY
         };
 
+        this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
+
         for (var row = (this.#xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.#yNumTiles; col++) {
 
@@ -91,8 +93,6 @@ module.exports = */class MapView extends Views {
 
         this.draw();
 
-        this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
-        
     }
 
     //adds a tile to the list of clickable tiles of the map.
@@ -139,6 +139,16 @@ module.exports = */class MapView extends Views {
 
     }
 
+    isCursorOnExtendedMap(cordX, cordY) {
+
+        //Room walls
+        if (cordX >= 0 && cordY >= 0 && cordX < this.#xNumTiles && cordY < this.#yNumTiles )
+            return true;
+        else
+            return false;
+
+    }
+
     
     updateSelectedTile(selectedTileCords) {
 
@@ -148,7 +158,8 @@ module.exports = */class MapView extends Views {
          
          var position = new PositionClient(screenX, screenY);
 
-         this.#selectedTile.updatePos(position);
+         if(this.#selectedTile !== undefined)
+            this.#selectedTile.updatePos(position);
 
     }
 
