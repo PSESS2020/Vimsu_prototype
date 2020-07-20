@@ -474,12 +474,18 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, text) => {
+                var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
+                var lecture = this.#conference.getSchedule().getLecture(lectureID);
+                var lectureChat = lecture.getLectureChat();
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                var message = {senderID: ppantID, timestamp: currentTime, messageText: text}
+                lectureChat.appendMessage(message);
                 console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
                 // Getting the roomID from the ppant seems to not work?
-                this.#io.emit('lectureMessageFromServer', ppantID, currentTime, text);
+                
+                this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
             
 
@@ -488,20 +494,31 @@ module.exports = class ServerController {
             var currentLecturesData = [];
 
             socket.on('enterLecture', (ppantID, lectureId) => {
+
+                console.log(ppantID + " joins " + lectureId)
+
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
 
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
+
+                socket.join(lectureId);
+                socket.currentLecture = lectureId;
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
-                var entered = lecture.enter(ppantID);
+                lecture.enter(ppantID);
+                
                 var token = lecture.hasToken(ppantID);
+                var lectureChat = lecture.getLectureChat();
+                console.log(lectureChat);
+                var messages = lecture.getLectureChat().getMessages();
+                console.log(messages);
 
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
                     currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                    socket.emit('lectureEntered',  currentLecturesData[idx], token);
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
                 })
             })
 
@@ -509,7 +526,9 @@ module.exports = class ServerController {
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
                 lecture.leave(participantId);
-                console.log('left');
+                console.log(participantId + " leaves " + lectureId)
+                socket.leave(lectureId);
+                socket.currentLecture = undefined;
             });
 
             socket.on('getFriendRequestList', (ppantID) => {
@@ -517,6 +536,7 @@ module.exports = class ServerController {
                 //TODO
 
                 //socket.emit('friendRequestList', friendRequestList);
+                
             })
 
             socket.on('getCurrentLectures', (ppantID) => {

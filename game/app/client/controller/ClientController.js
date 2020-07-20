@@ -271,11 +271,10 @@ class ClientController {
 
     }
 
-    sendToServerLectureChatMessage(text) {
-
+    sendToServerLectureChatMessage(text, lectureId) {
         this.socketReady;
         if(this.socket.connected)
-            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text);
+            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text, lectureId);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
    
@@ -385,8 +384,8 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
 
-    handleFromServerLectureEntered(lecture, hasToken) {
-        this.#gameView.updateCurrentLecture(lecture, hasToken);
+    handleFromServerLectureEntered(lecture, hasToken, lectureChat) {
+        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
  
     /* TODO
@@ -470,15 +469,16 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewLectureChatMessage(senderID, timestamp, text) {
-        var messageHeader = senderID + ", " + timestamp + ":";
+    handleFromServerNewLectureChatMessage(message) {
+        var messageHeader = message.senderID + ", " + message.timestamp + ":";
         var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
         var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
         $newMessageHeader.text(messageHeader);
-        $newMessageBody.text(text);
+        $newMessageBody.text(message.messageText);
         $('#lectureChatMessages').append($newMessageHeader);
         $('#lectureChatMessages').append($newMessageBody);
     }
+    
     
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
