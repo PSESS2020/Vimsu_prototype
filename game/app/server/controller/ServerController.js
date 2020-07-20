@@ -519,6 +519,13 @@ module.exports = class ServerController {
                 //socket.emit('friendList', friendList);
             })
 
+            socket.on('getFriendRequestList', (ppantID) => {
+                var participant = ppants.get(ppantID);
+                //TODO
+
+                //socket.emit('friendRequestList', friendRequestList);
+            })
+
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
                 let lectureDoorPosition = doorService.getLectureDoorPosition();

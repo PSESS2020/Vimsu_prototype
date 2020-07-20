@@ -86,4 +86,16 @@ class EventManager {
     handleFriendListClicked() {
         this.#clientController.handleFromViewShowFriendList();
     }
+
+    handleFriendRequestListClicked() {
+        this.#clientController.handleFromViewShowFriendRequestList();
+    }
+
+    handleAcceptRequestClicked(participantId) {
+        this.#clientController.handleFromViewAcceptRequest(participantId);
+    }
+
+    handleRejectRequestClicked(participantId) {
+        this.#clientController.handleFromViewRejectRequest(participantId);
+    }
 }

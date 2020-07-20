@@ -7,7 +7,7 @@ class FriendListView extends WindowView {
     }
 
     draw(businessCards) {
-        
+
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.#businessCards = sortedBusinessCards;
 

@@ -59,10 +59,21 @@
             <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                        <a class="action_button nav-item nav-link" href="" style="position: absolute; top: 0.5rem; left: 6.5rem;" onclick = "">
+                    <div class = "dropdown show" id="dropdownFriendRequestList">
+                        <a class="action_button nav-item nav-link" href="" style="position: absolute; top: 0.5rem; right: 2rem;" onclick = "(new FriendRequestListView()).onclick()" role="button" id="dropdownFriendRequestList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-user-plus navbarIcons" style="transform: scale(0.8);"></i>
                         </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" style="margin-top: 65px; margin-left: 10px" aria-labelledby="dropdownFriendRequestList">
+                            <ul class ="list-group bg-transparent">
+
+
+                            </ul>
+                        </div>
+
+                    </div>
                     <button type="button" class="close" style= "position: absolute; right: 1rem;" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

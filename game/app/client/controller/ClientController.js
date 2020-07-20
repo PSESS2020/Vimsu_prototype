@@ -201,6 +201,7 @@ class ClientController {
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
+        this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
@@ -452,6 +453,10 @@ class ClientController {
     handleFromServerFriendList(friendList) {
         this.#gameView.initFriendListView(friendList);
     }
+
+    handleFromServerFriendRequestList(friendRequestList) {
+        this.#gameView.initFriendRequestListView(friendRequestList);
+    }
     
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
@@ -552,14 +557,32 @@ class ClientController {
 
     handleFromViewShowFriendList() {
         var businessCards = [];
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "test", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "aest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "eest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "dest", "test", "test", "test"))
-        businessCards.push(new BusinessCardClient("test", "test","test", "test", "sest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("1", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("2", "test","test", "test", "aest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("3", "test","test", "test", "eest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("4", "test","test", "test", "dest", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("5", "test","test", "test", "sest", "test", "test", "test"))
         this.#gameView.initFriendListView(businessCards)
         //this.socketReady
         //this.socket.emit('getFriendList', this.#ownParticipant.getId());
+    }
+
+    handleFromViewShowFriendRequestList() {
+        var businessCards = [];
+        businessCards.push(new BusinessCardClient("1", "test","test", "test", "test", "test", "test", "test"))
+        this.#gameView.initFriendRequestListView(businessCards)
+        //this.socketReady
+        //this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
+    }
+
+    handleFromViewAcceptRequest(participantId) {
+        this.#gameView.updateFriendRequestListView("1", true);
+        //TODO socket emit
+    }
+
+    handleFromViewRejectRequest(participantId) {
+        this.#gameView.updateFriendRequestListView("1", false);
+        //TODO socket emit
     }
 
     handleFromViewShowBusinessCard(participantId) {

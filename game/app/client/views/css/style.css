@@ -134,6 +134,10 @@ overflow-wrap: break-word;
   font-size: 15px;
 }
 
+.fa-user-plus:hover {
+  opacity: .5 !important;
+}
+
 a:hover {
   text-decoration: none !important;
 }
@@ -235,6 +239,20 @@ body::-webkit-scrollbar {
   color: antiquewhite;
 }
 
+.btn-reject {
+  background-color: #8b4457;
+  width: 75px;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+}
+
+.btn-reject:hover {
+  background-color: #7c3347;
+  color: antiquewhite;
+}
+
 .modal-header {
   text-align: center;
   background-color: rgba(24, 30, 32, 0.699);
@@ -242,8 +260,24 @@ body::-webkit-scrollbar {
   font-size: 30px;
   border-color: transparent !important; 
   box-shadow: 0px 0px 0px transparent;
+  overflow-x: scroll;
+  overflow-y: scroll;
 }
 
+.modal-header .dropdown-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-header, 
+.modal-header .dropdown {
+  position: static !important;
+}
+
+.modal-header .dropdown-menu {
+  width: 464px !important;
+  background-color: rgba(34, 43, 46, 1) !important;
+  color: antiquewhite;
+}
 
 .modal-content {
   background-color:rgba(34, 43, 46, 0.8) !important;

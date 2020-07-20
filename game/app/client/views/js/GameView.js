@@ -21,6 +21,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #currentLecturesView;
     #lectureView;
     #friendListView;
+    #friendRequestListView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -503,8 +504,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#businessCardView = new BusinessCardView(businessCard, isFriend).draw();
     }
 
-    initFriendListView(friendList) {
-        this.#friendListView = new FriendListView().draw(friendList);
+    initFriendListView(businessCards) {
+        this.#friendListView = new FriendListView().draw(businessCards);
+    }
+
+    initFriendRequestListView(businessCards) {
+        this.#friendRequestListView = new FriendRequestListView()
+        this.#friendRequestListView.draw(businessCards);
+    }
+
+    updateFriendRequestListView(participantId, isAccepted) {
+        this.#friendRequestListView.update(participantId, isAccepted);
     }
         
     updateOwnAvatarRoom(typeOfRoom) {
