@@ -451,7 +451,6 @@ class ClientController {
     }
 
     handleFromServerFriendList(friendListData) {
-
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -568,7 +567,7 @@ class ClientController {
 
     handleFromViewShowFriendRequestList() {
         var businessCards = [];
-        businessCards.push(new BusinessCardClient("1", "test","test", "test", "test", "test", "test", "test"))
+        businessCards.push(new BusinessCardClient("1", "@stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"))
         this.#gameView.initFriendRequestListView(businessCards)
         //this.socketReady
         //this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());

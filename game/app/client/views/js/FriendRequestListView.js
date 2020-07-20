@@ -11,6 +11,7 @@ class FriendRequestListView extends WindowView {
         $('#friendListModal .modal-header .modal-title').empty()
 
         $('#friendListModal .modal-header .modal-title').append(`Friend Request List`)
+
         this.#businessCards = businessCards;
         this.#businessCards.forEach(businessCard => {
             $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').append(`
