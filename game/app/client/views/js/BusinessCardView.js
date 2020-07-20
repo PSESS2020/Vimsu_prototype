@@ -24,13 +24,13 @@ class BusinessCardView extends WindowView {
                     </tr>
             </table>
             </br>
-            <button id=('${this.#businessCard.getParticipantId()}') class="btn btn-lecture mx-auto d-block" onclick="onClick()">Chat</button>
+            <button id=${"chatfriend" + this.#businessCard.getParticipantId()} class="btn btn-lecture mx-auto d-block">Chat</button>
             </br>
             <script> 
-                function onClick() { 
+                $('#chatfriend' + ${this.#businessCard.getParticipantId()}).on('click', function (event) {
                     $('#businessCardModal').modal('hide');
-                    new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()});
-                } 
+                    new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()}, true);
+                })
             </script>
         `)
         } else {
@@ -44,13 +44,13 @@ class BusinessCardView extends WindowView {
                     </tr>
                 </table>
                 </br>
-                <button id=('${this.#businessCard.getParticipantId()}') class="btn btn-lecture mx-auto d-block" onclick="onClick()">Chat</button>
+                <button id=${"chatnotfriend" + this.#businessCard.getParticipantId()} class="btn btn-lecture mx-auto d-block">Chat</button>
                 </br>
                 <script> 
-                    function onClick() { 
+                    $('#chatnotfriend' + ${this.#businessCard.getParticipantId()}).on('click', function (event) {
                         $('#businessCardModal').modal('hide');
-                        new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()});
-                    } 
+                        new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()}, false);
+                    })
                 </script>
             `)
         }

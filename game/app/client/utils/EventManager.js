@@ -78,8 +78,8 @@ class EventManager {
         this.#clientController.handleFromViewShowProfile();
     }
 
-    handleChatNowClicked(participantId) {
-        this.#clientController.handleFromViewCreateNewChat(participantId);
+    handleChatNowClicked(participantId, isFriend) {
+        this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
     }
 
     handleFriendListClicked() {

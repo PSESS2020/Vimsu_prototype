@@ -33,7 +33,7 @@ class FriendListView extends WindowView {
                                     <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px; margin-right: 15px; margin-top: -10px" aria-labelledby="dropdownFriendOption">
-                                    <button class="dropdown-item btn btn-lecture" id=${"chat" + businessCard.getParticipantId()} type="button">Chat</button>
+                                    <button class="dropdown-item btn btn-lecture" id=${"chatfriend" + businessCard.getParticipantId()} type="button">Chat</button>
                                     <button class="dropdown-item btn btn-reject" style=" width: auto" id=${"delete" + businessCard.getParticipantId()} type="button">Delete</button>
                                 </div>
                         </div>    
@@ -42,7 +42,7 @@ class FriendListView extends WindowView {
             </ul>
 
                 <script> 
-                    $('#chat' + ${businessCard.getParticipantId()}).on('click', function (event) {
+                    $('#chatfriend' + ${businessCard.getParticipantId()}).on('click', function (event) {
                         $('#friendListModal').modal('hide');
                         new EventManager().handleChatNowClicked(${businessCard.getParticipantId()});
                     })
