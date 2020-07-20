@@ -567,7 +567,7 @@ class ClientController {
 
     handleFromViewShowFriendRequestList() {
         var businessCards = [];
-        businessCards.push(new BusinessCardClient("1", "@stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"))
+        businessCards.push(new BusinessCardClient("1", "stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"))
         this.#gameView.initFriendRequestListView(businessCards)
         //this.socketReady
         //this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
