@@ -268,9 +268,25 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.modal-header::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-body::-webkit-scrollbar {
+  display: none;
+}
+
 .modal-header, 
 .modal-header .dropdown {
   position: static !important;
+}
+
+.modal::-webkit-scrollbar {
+  display:none
 }
 
 .modal-header .dropdown-menu {
@@ -291,6 +307,7 @@ body::-webkit-scrollbar {
   border-radius: 10px;
   box-shadow: 0px 0px 0px transparent;
  }
+
 
  .close {
   background-color: transparent !important; 
