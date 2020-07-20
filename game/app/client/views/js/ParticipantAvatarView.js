@@ -154,8 +154,9 @@ class ParticipantAvatarView extends AvatarView {
         this.#currentAnimation.draw(this.#screenX, this.#screenY); //TODO pass position of avatar
     }
 
-    onclick(mousePos) {
+    onclick(/*mousePos*/) {
         
+        /*
         //Needed for calculating the correct position of 
         //sprite animation in the spritesheet body click map.
         var clickMapOffsetX;
@@ -173,10 +174,11 @@ class ParticipantAvatarView extends AvatarView {
         
         if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
             //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
+            */
         
             $('#businessCardModal').modal('toggle');
             let eventManager = new EventManager();
             eventManager.handleAvatarClick(this.#participantId);
-        }
+        //}
     }
 }

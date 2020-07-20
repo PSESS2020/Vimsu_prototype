@@ -111,13 +111,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 //then, check if there is an avatar at this position
                 self.getAnotherParticipantAvatarViews().forEach(ppantView => {
                     
+                    /*
                     console.log("avatar screen x: " + ppantView.getScreenX());
                     console.log("mouse screen x: " + newPosition.x);
                     console.log("avatar screen width: " + ppantView.getAvatarWidth());
+                    */
                     
-                    if ( newPosition.x > ppantView.getScreenX() && newPosition.x < ppantView.getScreenX() + ppantView.getAvatarWidth() 
-                        && newPosition.y > ppantView.getScreenY() && newPosition.y < ppantView.getScreenY() + ppantView.getAvatarHeight()) {
-                        ppantView.onclick(newPosition);
+                    if (ppantView.getPosition().getCordX() === selectedTileCords.x 
+                     && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        ppantView.onclick();
                     }
 
                 });
