@@ -277,6 +277,7 @@ body::-webkit-scrollbar {
   width: 464px !important;
   background-color: rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
+  min-height: 493px !important;
 }
 
 .modal-content {
@@ -334,10 +335,6 @@ body::-webkit-scrollbar {
 
 .list-group-item:first-of-type {
   border-top: none;
-}
-
-.list-group-item:last-of-type {
-  border-bottom: none !important;
 }
 
 .list-group-item {
