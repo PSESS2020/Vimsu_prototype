@@ -97,4 +97,8 @@ class EventManager {
     handleRejectRequestClicked(participantId) {
         this.#clientController.handleFromViewRejectRequest(participantId);
     }
+
+    handleRemoveFriend(friendId) {
+        this.#clientController.handleFromViewRemoveFriend(friendId);
+    }
 }

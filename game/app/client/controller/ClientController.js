@@ -605,10 +605,9 @@ class ClientController {
         this.socket.emit('newFriendRequest', {senderId, participantRepicientId});
     }
 
-    handleFromViewRespondFriendRequest(senderId) {
-        this.socketReady
-        var responderId = this.participant.getId;
-        this.socket.emit('newFriendRequest', {senderId, responderId});
+    handleFromViewRemoveFriend(friendId) {
+        this.#gameView.removeFriend(friendId);
+        //TODO socket emit
     }
 
    
