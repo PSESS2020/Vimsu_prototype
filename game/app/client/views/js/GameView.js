@@ -521,6 +521,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#friendListView.deleteFriend(participantId)
     }
 
+    addFriend(businessCard) {
+        this.#friendListView.addToFriendList(businessCard);
+    }
+
     initFriendRequestListView(businessCards) {
         this.#friendRequestListView = new FriendRequestListView()
         this.#friendRequestListView.draw(businessCards);

@@ -7,7 +7,7 @@ class FriendListView extends WindowView {
     }
 
     draw(businessCards) {
-
+        $('#friendListModal .modal-body .list-group').empty()
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.#businessCards = sortedBusinessCards;
 
@@ -58,14 +58,15 @@ class FriendListView extends WindowView {
                 </script>
             `)
         })
-
-        $('#friendListModal').on('hidden.bs.modal', function (e) {
-            $('#friendListModal .modal-body .list-group').empty()
-        })
     }
 
     deleteFriend(participantId) {
         $('#friend' + participantId).empty()
+    }
+
+    addToFriendList(businessCard) {
+        this.#businessCards.push(businessCard);
+        this.draw(this.#businessCards);
     }
 
     onclick() {

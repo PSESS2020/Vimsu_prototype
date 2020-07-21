@@ -575,6 +575,7 @@ class ClientController {
 
     handleFromViewAcceptRequest(participantId) {
         this.#gameView.updateFriendRequestListView("1", true);
+        this.#gameView.addFriend(new BusinessCardClient("1", "stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"));
         //TODO socket emit
     }
 

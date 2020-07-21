@@ -300,7 +300,7 @@ body::-webkit-scrollbar {
 
 .modal-header .dropdown-menu {
   width: 464px !important;
-  min-height: 493px !important;
+  min-height: 501px !important;
   background-color: rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
 }

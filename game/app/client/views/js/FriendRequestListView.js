@@ -24,7 +24,7 @@ class FriendRequestListView extends WindowView {
                         <div class="col-12 col-md-8 text-center text-sm-left">
                             <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
                             <br> 
-                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title="5842 Hillcrest Rd"></span>
+                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
                             <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
                             <br>
                         </div>
