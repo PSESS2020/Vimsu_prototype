@@ -190,18 +190,43 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#currentMap.drawSelectedTile();
             }   
 
-            let drawList = this.#anotherParticipantAvatarViews;
-            drawList.push(this.#ownAvatarView);
-
-            //sort AnotherAvatarViews and OwnAvatarView in CordX
-            drawList.sort(function(a, b) {
+            //sort AnotherAvatarViews in CordX
+            this.#anotherParticipantAvatarViews.sort(function(a, b) {
                 return b.getPosition().getCordX() - a.getPosition().getCordX();
             });
             
-            for (var i = 0; i < drawList.length; i++) {
-                drawList[i].draw();
-            }
+            //sort updateList which includes ownAvatarView
+            this.#updateList.sort(function(a, b) {
+                if (a instanceof Array && b instanceof Array){
+
+                    if (a[0] !== undefined && b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (a instanceof Array) {
+                
+                    if (a[0] !== undefined)
+                        return b.getPosition().getCordX() - a[0].getPosition().getCordX();
+                
+                } else if (b instanceof Array) {
+                    
+                    if (b[0] !== undefined)
+                        return b[0].getPosition().getCordX() - a.getPosition().getCordX();
+              
+                } else 
+                        return b.getPosition().getCordX() - a.getPosition().getCordX();
+            });
             
+            for (var i = 0; i < this.#updateList.length; i++) {
+
+                if (this.#updateList[i] instanceof Array) {
+                    for(var j = 0; j < this.#updateList[i].length; j++) {
+                        this.#updateList[i][j].draw();
+                    }
+                }
+                else {
+                    this.#updateList[i].draw();
+                }
+            }
         }
     }
     
