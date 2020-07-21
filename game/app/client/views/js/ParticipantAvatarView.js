@@ -24,6 +24,7 @@ class ParticipantAvatarView extends AvatarView {
     #standingDownRightAnimation;
     #currentAnimation;
     #walking = false;
+    #isVisible = true;
     #typeOfRoom;
     #username;
     #screenX;
@@ -79,6 +80,14 @@ class ParticipantAvatarView extends AvatarView {
     //Is called after room switch
     setTypeOfRoom(typeOfRoom) {
         this.#typeOfRoom = typeOfRoom;
+    }
+
+    getVisibility() {
+        return this.#isVisible;
+    }
+
+    setVisibility(visible) {
+        this.#isVisible = visible;
     }
 
     update() {
@@ -141,6 +150,8 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     draw() {
+        if (this.#isVisible) {
+
 
         ctx_avatar.font = "1em sans-serif";
         ctx_avatar.textBaseline = 'top';
@@ -152,6 +163,11 @@ class ParticipantAvatarView extends AvatarView {
         ctx_avatar.fillText(this.#username, this.#screenX + AVATAR_WIDTH/2, this.#screenY);
 
         this.#currentAnimation.draw(this.#screenX, this.#screenY); //TODO pass position of avatar
+        }
+
+        else {
+            return;
+        }
     }
 
     onclick(/*mousePos*/) {

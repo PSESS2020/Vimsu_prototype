@@ -197,7 +197,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             
             //sort updateList which includes ownAvatarView
             this.#updateList.sort(function(a, b) {
-                
                 if (a instanceof Array && b instanceof Array){
 
                     if (a[0] !== undefined && b[0] !== undefined)
@@ -394,7 +393,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
         this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
         this.#anotherParticipantAvatarViews[index].draw(); 
-         
     }
 
     /**
@@ -541,5 +539,25 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     removeOwnAvatarView()
     {
         this.#ownAvatarView = undefined;
+    }
+
+    //used to hide an avatar without destroying the avatarView instance
+    hideAvatar(participantId) {
+        for(var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.#anotherParticipantAvatarViews[i];
+            console.log(avatar.getId());
+            if (avatar.getId() === participantId) {
+                avatar.setVisibility(false);
+            }
+        }
+    }
+
+    showAvatar(participantId) {
+        for(var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.#anotherParticipantAvatarViews[i];
+            if (avatar.getId() === participantId) {
+                avatar.setVisibility(true);
+            }
+        }
     }
 }

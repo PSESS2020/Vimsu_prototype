@@ -519,6 +519,7 @@ module.exports = class ServerController {
                 LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
                     currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
                     socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
+                    socket.broadcast.emit('hideAvatar', ppantID);
                 })
             })
 
@@ -529,6 +530,7 @@ module.exports = class ServerController {
                 console.log(participantId + " leaves " + lectureId)
                 socket.leave(lectureId);
                 socket.currentLecture = undefined;
+                socket.broadcast.emit('showAvatar', participantId);
             });
 
             socket.on('getFriendRequestList', (ppantID) => {

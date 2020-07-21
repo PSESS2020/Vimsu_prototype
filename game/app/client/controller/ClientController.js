@@ -200,11 +200,14 @@ class ClientController {
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
+        
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
+        this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -439,6 +442,7 @@ class ClientController {
         this.#gameView.removeAnotherAvatarViews(ppantId);
         
     }
+    
 
     // get the current lectures from the server to display in the UI for selection
     handleFromServerCurrentLectures(lectures) {
@@ -489,6 +493,14 @@ class ClientController {
             $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
+    }
+
+    handleFromServerHideAvatar(participantId) {
+        this.#gameView.hideAvatar(participantId);
+    }
+
+    handleFromServerShowAvatar(participantId) {
+        this.#gameView.showAvatar(participantId);
     }
 
     /* #################################################### */    
