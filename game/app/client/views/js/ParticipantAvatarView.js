@@ -164,10 +164,6 @@ class ParticipantAvatarView extends AvatarView {
 
         this.#currentAnimation.draw(this.#screenX, this.#screenY); //TODO pass position of avatar
         }
-
-        else {
-            return;
-        }
     }
 
     onclick(/*mousePos*/) {
@@ -191,10 +187,12 @@ class ParticipantAvatarView extends AvatarView {
         if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
             //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
             */
+            if (this.#isVisible) {
         
-            $('#businessCardModal').modal('toggle');
-            let eventManager = new EventManager();
-            eventManager.handleAvatarClick(this.#participantId);
+                $('#businessCardModal').modal('toggle');
+                let eventManager = new EventManager();
+                eventManager.handleAvatarClick(this.#participantId);
+            }
         //}
     }
 }
