@@ -42,12 +42,12 @@ class FriendRequestListView extends WindowView {
                 <script> 
                     $('#accept' + ${businessCard.getParticipantId()}).on('click', function (event) {
                         event.stopPropagation();
-                        new EventManager().handleAcceptRequestClicked(${businessCard.getParticipantId()});
+                        new EventManager().handleAcceptRequestClicked('${businessCard.getParticipantId()}');
                     })
 
                     $('#reject' + ${businessCard.getParticipantId()}).on('click', function (event) {
                         event.stopPropagation();
-                        new EventManager().handleRejectRequestClicked(${businessCard.getParticipantId()});
+                        new EventManager().handleRejectRequestClicked('${businessCard.getParticipantId()}');
                 })
                 </script>
             `)
