@@ -475,7 +475,7 @@ class ClientController {
 
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
-    
+
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
         var msgText = "[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text;
@@ -594,14 +594,21 @@ class ClientController {
     }
 
     handleFromViewAcceptRequest(participantId) {
-        this.#gameView.updateFriendRequestListView("1", true);
-        this.#gameView.addFriend(new BusinessCardClient("1", "stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"));
-        //TODO socket emit
+        this.socketReady;
+        console.log(participantId);
+        TypeChecker.isString(participantId);
+
+        //Tells server to accept this request
+        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, true);
+        this.#gameView.updateFriendRequestListView(participantId, true);
     }
 
     handleFromViewRejectRequest(participantId) {
-        this.#gameView.updateFriendRequestListView("1", false);
-        //TODO socket emit
+        this.socketReady;
+
+        //Tells server to reject this request
+        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, false);
+        this.#gameView.updateFriendRequestListView(participantId, false);
     }
 
     handleFromViewShowBusinessCard(participantId) {

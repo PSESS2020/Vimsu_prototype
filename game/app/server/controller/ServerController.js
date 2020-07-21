@@ -598,9 +598,6 @@ module.exports = class ServerController {
             socket.on('getFriendRequestList', (ppantID) => {
                 var friendRequestList = ppants.get(ppantID).getFriendRequestList();
 
-                //JUST FOR TESTING PURPOSES
-                ppants.get(ppantID).addFriendRequest(new BusinessCard('28', 'Adder28', 'Mr', 'Meier', 'Moritz', 'developer', 'VIMSU', 'moritz.meier@gmail.com'));
-
                 var friendRequestListData = [];
                 
                 friendRequestList.getAllBusinessCards().forEach(businessCard => {
@@ -621,6 +618,23 @@ module.exports = class ServerController {
 
                 socket.emit('friendRequestList', friendRequestListData);
             }); 
+
+            socket.on('handleFriendRequest', (targetID, requesterID, acceptRequest) => {
+                let target = ppants.get(targetID);
+                let requester = ppants.get(requesterID);
+
+                if (acceptRequest) {
+                    target.acceptFriendRequest(requesterID);
+
+                    //add target in requesterList
+                    //at this moment not sure how this works
+                    //Is there a list for outgoing requests? (P)
+                } else {
+                    target.declineFriendRequest(requesterID);
+                }
+
+                //Not sure if a answer from server is necessary
+            });
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
