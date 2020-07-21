@@ -46,6 +46,7 @@ class ClientController {
     #participantId;
     #ownParticipant;
     #roomClient;
+    #ownBusinessCard;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -200,7 +201,7 @@ class ClientController {
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
-        
+        this.socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
@@ -293,7 +294,7 @@ class ClientController {
     handleFromServerInitOwnParticipant(initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
-        let businessCard = new BusinessCardClient(
+        this.#ownBusinessCard = new BusinessCardClient(
                                 initInfo.businessCard.id,
                                 initInfo.businessCard.username,
                                 initInfo.businessCard.title,
@@ -306,7 +307,7 @@ class ClientController {
 
         this.#ownParticipant = new ParticipantClient(
                                 initInfo.id,
-                                businessCard,
+                                this.#ownBusinessCard.getUsername(),
                                 initPos, 
                                 initInfo.dir
                                 );
@@ -401,20 +402,8 @@ class ClientController {
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
         
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-
-        let businessCard = new BusinessCardClient(
-                            initInfo.businessCard.id,
-                            initInfo.businessCard.username,
-                            initInfo.businessCard.title,
-                            initInfo.businessCard.surname,
-                            initInfo.businessCard.forename,
-                            initInfo.businessCard.job,
-                            initInfo.businessCard.company,
-                            initInfo.businessCard.email
-            );
-
         console.log("init info id" + initInfo.id);
-        var participant = new ParticipantClient(initInfo.id, businessCard, initPos, initInfo.dir);
+        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir);
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
@@ -453,6 +442,21 @@ class ClientController {
         this.#gameView.initCurrentSchedule(lectures);
     }
 
+    //Is called after server send the answer of avatarclick
+    handleFromServerBusinessCard(businessCardObject) {
+        let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username, 
+            businessCardObject.title, businessCardObject.surname, businessCardObject.forename, 
+            businessCardObject.job, businessCardObject.company, businessCardObject.email);
+        
+        //check if ppant is a friend or not
+        if (businessCard.getEmail() === undefined) {
+            this.#gameView.initBusinessCardView(businessCard, false);
+        } else {
+            this.#gameView.initBusinessCardView(businessCard, true);
+        }
+    }
+
+    //Is called after server send the answer of friendlistclick
     handleFromServerFriendList(friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
@@ -597,19 +601,17 @@ class ClientController {
     }
 
     handleFromViewShowBusinessCard(participantId) {
-        
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {
             throw new Error('Ppant with ' + participantId + ' is not in room');
         }
-
-        let businessCard = ppant.getBusinessCard();
-        this.#gameView.initBusinessCardView(businessCard, false)
+        this.socketReady;
+        //Emits to server own ID and target ID
+        this.socket.emit('getBusinessCard', this.#ownParticipant.getId(), participantId);
     }
 
     handleFromViewShowProfile() {
-        var businessCard = this.#ownParticipant.getBusinessCard();
-        this.#gameView.initProfileView(businessCard);
+        this.#gameView.initProfileView(this.#ownBusinessCard);
     }
 
     handleFromViewNewFriendRequest(participantRepicientId) {

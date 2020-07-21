@@ -17,7 +17,11 @@ class BusinessCardClient {
         TypeChecker.isString(forename);
         TypeChecker.isString(job);
         TypeChecker.isString(company);
-        TypeChecker.isString(email);
+
+        //email is only defined when ppant is a friend
+        if (email !== undefined) {
+            TypeChecker.isString(email);
+        }
         
         this.#participantId = participantId;
         this.#username = username;
