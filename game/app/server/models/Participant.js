@@ -85,6 +85,10 @@ module.exports = class Participant {
         return this.#friendList;
     }
 
+    getFriendRequestList() {
+        return this.#friendRequestList;
+    }
+
     setPosition(position) 
     {
         TypeChecker.isInstanceOf(position, Position);

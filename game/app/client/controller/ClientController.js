@@ -466,7 +466,13 @@ class ClientController {
         this.#gameView.initFriendListView(friendList);
     }
 
-    handleFromServerFriendRequestList(friendRequestList) {
+    //Is called after server send the answer of friendrequestlistclick
+    handleFromServerFriendRequestList(friendRequestListData) {
+        var friendRequestList = [];
+        friendRequestListData.forEach(data => {
+            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
     
@@ -577,16 +583,14 @@ class ClientController {
     }
 
     handleFromViewShowFriendList() {
-        this.socketReady
+        this.socketReady;
         this.socket.emit('getFriendList', this.#ownParticipant.getId());
     }
 
     handleFromViewShowFriendRequestList() {
-        var businessCards = [];
-        businessCards.push(new BusinessCardClient("1", "stueker","Dr.", "Stüker", "Sebastian", "Professor", "KIT", "stueker@kit.edu"))
-        this.#gameView.initFriendRequestListView(businessCards)
-        //this.socketReady
-        //this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
+        this.socketReady;
+        this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
+        
     }
 
     handleFromViewAcceptRequest(participantId) {

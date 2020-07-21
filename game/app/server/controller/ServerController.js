@@ -595,6 +595,33 @@ module.exports = class ServerController {
                 socket.emit('friendList', friendListData);
             }); 
 
+            socket.on('getFriendRequestList', (ppantID) => {
+                var friendRequestList = ppants.get(ppantID).getFriendRequestList();
+
+                //JUST FOR TESTING PURPOSES
+                ppants.get(ppantID).addFriendRequest(new BusinessCard('28', 'Adder28', 'Mr', 'Meier', 'Moritz', 'developer', 'VIMSU', 'moritz.meier@gmail.com'));
+
+                var friendRequestListData = [];
+                
+                friendRequestList.getAllBusinessCards().forEach(businessCard => {
+                    friendRequestListData.push(
+                        {   
+                            friendId: businessCard.getParticipantId(),
+                            username: businessCard.getUsername(),
+                            title: businessCard.getTitle(),
+                            surname: businessCard.getSurname(),
+                            forename: businessCard.getForename(),
+                            surname: businessCard.getSurname(),
+                            job: businessCard.getJob(),
+                            company: businessCard.getCompany(),
+                            email: businessCard.getEmail()
+                        }
+                    )
+                });
+
+                socket.emit('friendRequestList', friendRequestListData);
+            }); 
+
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
             socket.on('disconnect', () => {
