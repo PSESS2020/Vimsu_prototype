@@ -65,21 +65,30 @@ module.exports = class ServerController {
         var roomService = new RoomService();
         this.#rooms = roomService.getAllRooms();
 
-        ChatService.newOneToOneChat("1", "2");
-        //ChatService.newLectureChat("1", "3");
-        //ChatService.newLectureChat("1", "2");
-
-
-        setTimeout( function() {
-            console.log(ChatService.existsOneToOneChat("1", "2"));
-
-        }, 100);
-
         /*
         FOYER: this.#rooms[Settings.FOYER_ID - 1];
         FOODCOURT: this.#rooms[Settings.FOODCOURT_ID - 1];
         RECEPTION: this.#rooms[Settings.RECEPTION_ID - 1];
         */
+
+        
+        /*########## ChatService Fiddle for Debuging #######################################*/
+        //ChatService.newGroupChat("1", ["2", "3", "4"]);
+        //ChatService.removeParticipant('5f1723f13b690e1498c4bac4', "1", "3");
+        //ChatService.storeParticipants('5f1723f13b690e1498c4bac4', "1", ["10", "12", "13"]);
+        //ChatService.newGroupChat("1", ["3", "4", "5"]);
+        //ChatService.newGroupChat("1", ["6", "7", "8"]);
+        //ChatService.newLectureChat("3");
+        //ChatService.newOneToOneChat("1", "2");
+
+        //var chats = [];
+        //setTimeout( function() {
+            //chats = ChatService.loadChatList("1");
+            //ChatService.removeParticipant("3");
+            //console.log(ChatService.loadChatList("1"));
+
+        //}, 1000);
+
 
         //initilaize conference with schedule. TODO: create conference in DB and initialize conference
         //model with id from the DB

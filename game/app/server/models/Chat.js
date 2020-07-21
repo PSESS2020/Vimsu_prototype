@@ -1,18 +1,19 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 
+const maxNumMessages = 100;
+
 module.exports = class Chat {
-    #idChat;
-    #idOwner;
+    #chatId;
+    #ownerId;
     #participantList;
     #messageList;
-    #maxNumMessages;
 
-    constructor(idChat, idOwner) {
-        TypeChecker.isString(idChat);
-        TypeChecker.isString(idOwner);
+    constructor(chatId, ownerId) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(ownerId);
 
-        this.#idChat = idChat;
-        this.#idOwner = idOwner;
+        this.#chatId = chatId;
+        this.#ownerId = ownerId;
     }
     /*
     *Multiple constructors are not allowed.
@@ -32,35 +33,51 @@ module.exports = class Chat {
     }
 
     getId() {
-
+        return this.#chatId;
     }
 
     getMessageL() {
-
+        return this.#messageList;
     }
 
     getParticipantL() {
-
+        return this.#participantList;
     }
 
-    notifyMessageAll(idParticipant) {
-
+    notifyMessageAll(participantId) {
+        //TODO
     }
 
-    notifyParticipantAll(idParticipant) {
-
+    notifyParticipantAll(participantId) {
+        //TODO
     }
 
-    removeMessage(idMsg) {
+    removeMessage(msgId) {
+        TypeChecker.isString(msgId);
 
+        this.#messageList.forEach(msg => {
+            if (msg.getId() === msgId) {
+                let index = this.#messageList.indexOf(msg);
+                this.#messageList.splice(index, 1);
+            }
+        });
     }
+    
 
-    removePArticipant(idParticipant) {
+    removeParticipant(participantId) {
+        TypeChecker.isString(participantId);
 
+        this.#participantList.forEach(participant => {
+
+            if (participant.getId() === participantId) {
+                let index = this.#participantList.indexOf(participant);
+                this.#participantList.splice(index, 1);
+            }
+        });
     }
 
     getNumParticipants() {
-
+        return this.#participantList.length;
     }
 
 }
