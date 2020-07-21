@@ -140,11 +140,6 @@ module.exports = class db {
         })
     }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> Demo_17072020_beta
     deleteOneFromCollection(collectionName, query) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
