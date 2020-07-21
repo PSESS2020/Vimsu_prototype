@@ -176,7 +176,7 @@ module.exports = class db {
         });
 
         var readStream = FileSystem.createReadStream(dir + fileName);
-        var uploadStream = bucket.openUploadStream(fileName + "_" + new Date().getTime());
+        var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
 
         var fileId = uploadStream.id.toString();
     
