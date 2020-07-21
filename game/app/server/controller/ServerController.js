@@ -26,6 +26,8 @@ const Schedule = require('../models/Schedule')
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
+const ChatService = require('../services/ChatService.js');
+
 
 
 
@@ -68,6 +70,25 @@ module.exports = class ServerController {
         FOODCOURT: this.#rooms[Settings.FOODCOURT_ID - 1];
         RECEPTION: this.#rooms[Settings.RECEPTION_ID - 1];
         */
+
+        
+        /*########## ChatService Fiddle for Debuging #######################################*/
+        //ChatService.newGroupChat("1", ["2", "3", "4"]);
+        //ChatService.removeParticipant('5f1723f13b690e1498c4bac4', "1", "3");
+        //ChatService.storeParticipants('5f1723f13b690e1498c4bac4', "1", ["10", "12", "13"]);
+        //ChatService.newGroupChat("1", ["3", "4", "5"]);
+        //ChatService.newGroupChat("1", ["6", "7", "8"]);
+        //ChatService.newLectureChat("3");
+        //ChatService.newOneToOneChat("1", "2");
+
+        //var chats = [];
+        //setTimeout( function() {
+            //chats = ChatService.loadChatList("1");
+            //ChatService.removeParticipant("3");
+            //console.log(ChatService.loadChatList("1"));
+
+        //}, 1000);
+
 
         //initilaize conference with schedule. TODO: create conference in DB and initialize conference
         //model with id from the DB
