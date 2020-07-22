@@ -35,9 +35,10 @@ module.exports = class ParticipantService {
                     }
                     var direction = par.direction;
                     var friendList = par.friendId;
+                    var friendRequestList = par.friendRequestId;
                     participant = new Participant(participantId, accountId, new BusinessCard(participantId, account.getUsername(), 
                     account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, friendList);
+                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, friendList, friendRequestList);
                 } 
                 else {
                     var participantId = new ObjectId().toString();
@@ -53,9 +54,8 @@ module.exports = class ParticipantService {
                         },
                         direction: Settings.STARTDIRECTION,
                         friendId: [],
-                        /*visitedLectureId: [],
-                        friendRequestId: [],
-                        chatId: [],*/
+                        friendRequestId: []
+                        /*visitedLectureId: [],*/
                     }
 
                     getDB().then(res => {
@@ -110,5 +110,117 @@ module.exports = class ParticipantService {
             console.error(err)
         });
 
+    }
+
+    static storeFriendRequest(ownerId, participantId, conferenceId) {
+        TypeChecker.isString(ownerId);
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendRequestId: participantId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static removeFriendRequest(ownerId, participantId, conferenceId) {
+        TypeChecker.isString(ownerId);
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendRequestId: participantId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static getFriendRequestList(participantId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {friendRequestId: 1}).then(par => {
+                if (par) {
+                    return par.friendRequestId;
+                }
+                else {
+                    console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        })
+    }
+
+    static getFriendList(participantId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {friendId: 1}).then(par => {
+                if (par) {
+                    return par.friendId;
+                }
+                else {
+                    console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        })
+    }
+
+    static storeFriend(participantId, friendId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(friendId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendId: friendId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static storeFriends(participantId, friendIds, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendId: {$each: friendIds}}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static removeFriend(participantId, friendId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(friendId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendId: friendId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
     }
 } 
