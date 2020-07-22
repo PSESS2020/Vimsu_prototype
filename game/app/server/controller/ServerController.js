@@ -592,8 +592,8 @@ module.exports = class ServerController {
                 var friendList = ppants.get(ppantID).getFriendList();
 
                 //JUST FOR TESTING PURPOSES
-                ppants.get(ppantID).addFriendRequest(new BusinessCard('22', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
-                ppants.get(ppantID).acceptFriendRequest('22');
+                ppants.get(ppantID).addFriendRequest(new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
+                ppants.get(ppantID).acceptFriendRequest('22abc');
 
                 var friendListData = [];
                 
