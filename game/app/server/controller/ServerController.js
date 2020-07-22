@@ -502,14 +502,6 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', participantId);
             });
 
-            socket.on('getFriendRequestList', (ppantID) => {
-                var participant = ppants.get(ppantID);
-                //TODO
-
-                //socket.emit('friendRequestList', friendRequestList);
-                
-            })
-
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
                 let lectureDoorPosition = doorService.getLectureDoorPosition();
@@ -581,7 +573,7 @@ module.exports = class ServerController {
                 //Check if ppant with targetID is a friend
                 //if so, emit the email
                 if (ppants.get(ppantID).getFriendList().includes(targetID)) {
-                    businssCardObject.email = businessCard.getEmail();
+                    businessCardObject.email = businessCard.getEmail();
                 }
 
                 socket.emit('businessCard', businessCardObject);
