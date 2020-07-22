@@ -14,7 +14,8 @@ module.exports = class Participant {
     #direction;
     #businessCard;
     #friendList;
-    #friendRequestList;
+    #receivedRequestList;
+    #sentRequestList
 
     /**
      * Erstellt Participant Instanz
@@ -86,8 +87,12 @@ module.exports = class Participant {
         return this.#friendList;
     }
 
-    getFriendRequestList() {
-        return this.#friendRequestList;
+    getReceivedRequestList() {
+        return this.#receivedRequestList;
+    }
+
+    getSendRequestList() {
+        return this.#sentRequestList;
     }
 
     setPosition(position) 
@@ -113,8 +118,8 @@ module.exports = class Participant {
     addFriendRequest(businessCard) {
         TypeChecker.isInstanceOf(businessCard, BusinessCard);
         let ppantId = businessCard.getParticipantId();
-        if (!this.#friendRequestList.includes(ppantId) && !this.#friendList.includes(ppantId)) {
-            this.#friendRequestList.addBusinessCard(businessCard);
+        if (!this.#receivedRequestList.includes(ppantId) && !this.#friendList.includes(ppantId)) {
+            this.#receivedRequestList.addBusinessCard(businessCard);
         }
     }
 
@@ -124,10 +129,10 @@ module.exports = class Participant {
      */
     acceptFriendRequest(ppantId) {
         TypeChecker.isString(ppantId);
-        if (this.#friendRequestList.includes(ppantId)) {
-            let busCard = this.#friendRequestList.getBusinessCard(ppantId);
+        if (this.#receivedRequestList.includes(ppantId)) {
+            let busCard = this.#receivedRequestList.getBusinessCard(ppantId);
             this.#friendList.addBusinessCard(busCard);
-            this.#friendRequestList.removeBusinessCard(ppantId);
+            this.#receivedRequestList.removeBusinessCard(ppantId);
         }
     }
 
@@ -137,8 +142,8 @@ module.exports = class Participant {
      */
     declineFriendRequest(ppantId) {
         TypeChecker.isString(ppantId);
-        if (this.#friendRequestList.includes(ppantId)) {
-            this.#friendRequestList.removeBusinessCard(ppantId);
+        if (this.#receivedRequestList.includes(ppantId)) {
+            this.#receivedRequestList.removeBusinessCard(ppantId);
         }
     }
 

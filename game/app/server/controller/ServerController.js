@@ -617,7 +617,7 @@ module.exports = class ServerController {
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
-                var friendRequestList = ppants.get(ppantID).getFriendRequestList();
+                var friendRequestList = ppants.get(ppantID).getReceivedRequestList();
 
                 var friendRequestListData = [];
                 
