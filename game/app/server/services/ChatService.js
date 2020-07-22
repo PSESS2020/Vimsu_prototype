@@ -53,7 +53,7 @@ module.exports = class Chatservice {
 
     }
 
-    /*static newAllchatChat(roomId) {
+    static newAllchatChat(roomId) {
         TypeChecker.isString(roomId);
 
         return getDB().then(res => {
@@ -83,7 +83,7 @@ module.exports = class Chatservice {
             console.error(err)
         });
 
-    }*/
+    }
 
     static updateSentRequest(chatId, ownerId, newValue) {
         TypeChecker.isString(chatId);
@@ -166,7 +166,7 @@ module.exports = class Chatservice {
 
     }
 
-    /*static newGlobalChat(confId, participantList) {
+    static newGlobalChat(confId, participantList) {
         TypeChecker.isString(confId);
         
         return getDB().then(res => {
@@ -194,7 +194,7 @@ module.exports = class Chatservice {
             console.error(err)
         });
 
-    }*/
+    }
 
     //tested
     static existsOneToOneChat(ownerId, memberId) {
@@ -348,7 +348,8 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
 
         return getDB().then(res => {
-            return vimsudb.findInCollection("chats_" + participantId, {chatId: chatId}, {participantList: 1}).then(participantList => {
+            return vimsudb.findOneInCollection("chats_" + participantId, {chatId: chatId}, {participantList: 1}).then(chat => {
+                var participantList = chat.participantList;
                 if (participantList && participantList.length >= 0) {
 
                     console.log(participantList);
@@ -371,8 +372,10 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
 
         return getDB().then(res => {
-            return vimsudb.findInCollection("chats_" + participantId, {chatId: chatId}, {messageList: 1}).then(messageList => {
-                if (participantList && participantList.length >= 0) {
+            return vimsudb.findOneInCollection("chats_" + participantId, {chatId: chatId}, {messageList: 1}).then(chat => {
+                var messageList = chat.messageList;
+
+                if (messageList && messageList.length >= 0) {
 
                     console.log(messageList);
                     return messageList;
