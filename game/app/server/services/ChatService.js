@@ -94,8 +94,8 @@ module.exports = class Chatservice {
             
             var chat = {
                 chatId: chatId,
-                name: "",
-                sentRequest: false,
+                //name: "", //TODO: join from account collection
+                sentRequest: 0,
                 member: {ownerId: ownerId, memberId: memberId},
                 messageList: [],
             }
