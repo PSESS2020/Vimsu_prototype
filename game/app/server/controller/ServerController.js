@@ -39,6 +39,7 @@ module.exports = class ServerController {
     #conference;
     #listOfConfCont;
     #DEBUGMODE;
+    ppantControllers;
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
@@ -55,10 +56,9 @@ module.exports = class ServerController {
 
 
     init() {
-        /* First, we create a map that will hold all ppantControllers, indexed by their socket.ids 
-         * - (E) */
         var counter = 0;
-        const ppantControllers = new Map();
+        
+        this.ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
 
         
@@ -123,7 +123,7 @@ module.exports = class ServerController {
                 
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
-                if (ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
+                if (this.ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
                     return;
                 }
 
@@ -196,7 +196,7 @@ module.exports = class ServerController {
                 var ppantCont = new ParticipantController(ppant);
                 console.log("test2");
                 ppants.set(ppantID, ppant);
-                ppantControllers.set(socket.id, ppantCont);
+                this.ppantControllers.set(socket.id, ppantCont);
                 console.log("test3");
 
                 // (iv)
@@ -688,15 +688,15 @@ module.exports = class ServerController {
             // as of now, this is completely broken
             socket.on('disconnect', () => {
                 //Prevents server crash because client sends sometimes disconnect" event on connection to server.
-                if(!ppantControllers.has(socket.id)) {
+                if(!this.ppantControllers.has(socket.id)) {
                     console.log("disconnect");
                     return;
                 }
 
                 /* This still needs error-Handling for when no such ppantCont exists - (E) */
-                var ppantID = ppantControllers.get(socket.id).getParticipant().getId();
+                var ppantID = this.ppantControllers.get(socket.id).getParticipant().getId();
                 
-                // gameRoomController.removeParticipantController(ppantControllers.get(socket.id);
+                // gameRoomController.removeParticipantController(this.ppantControllers.get(socket.id);
                 // The next line can probably be just handled inside the previous one
                 //io.sockets.emit('remove player', ppantID);
                 console.log(ppantID);
@@ -707,7 +707,7 @@ module.exports = class ServerController {
                 var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
                 this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
                 
-                ppantControllers.delete(socket.id);
+                this.ppantControllers.delete(socket.id);
                 ppants.delete(ppantID);
 
                 // Destroy ppant and his controller
@@ -828,9 +828,89 @@ module.exports = class ServerController {
                 // send list of commands to mod
             case Commands.REMOVEPLAYER:
                 // removes player from conference
-                break;
-        }  
 
+                /* This will assume that the first argument after the command
+                 * is the ppantID, and remove that player from the game.
+                 */
+                 
+                /* First, it gets the socket object corresponding to player that
+                 * is supposed to be removed from the game. 
+                 * - (E) */
+                 
+                
+                console.log(commandArgs[1]);
+                var id = this.getSocketId(commandArgs[1]);
+                console.log(id);
+                var socket = this.getSocketObject(id);
+                
+                /*
+                var roomsToRemoveFrom = Object.keys(socketToRemove.rooms));
+                for(var i = 1; i < roomsToRemoveFrom.length; i++) {
+                    socketToRemove.leave(roomsToRemoveFrom[i], () => {
+                        // This still needs proper removal handling
+                    }
+                }*/
+                
+                /* This is, for now, just the disconnect handling copy-pasted.
+                 * Lazy, I know, but it should work for now.
+                 * I will later rework this, so that the client gets removed
+                 * from the socket-rooms/-namespaces as well and maybe add something
+                 * s.t. he can not simply rejoin immediately.
+                 *
+                 * The big issue here being that if a client alters the client-side
+                 * handling of this
+                 * - (E) */
+
+                var ppantID = this.ppantControllers.get(socket.id).getParticipant().getId();
+                console.log(ppantID);
+                socket.broadcast.emit('remove player', ppantID);
+                console.log('Participant with Participant_ID: ' + ppantID + ' was removed from the game . . .');
+
+                //remove participant from room
+                //var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
+                //this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
+                
+                this.ppantControllers.delete(socket.id);
+                //ppants.delete(ppantID);
+                
+                
+                break;
+        } 
     }
+    
+        getSocketId(ppantID) {
+            /* So this is functional using this helping variable, but I will need to redo it in pretty.
+             * The problem is that, since the forEach()-method takes a function as a callbkac-parameter,
+             * when we call "return socketId;" inside of the if-statement, we only return it to the
+             * method calling the function containing the if-statement, which is the forEach()-method.
+             * This means that the return-value doesn't actually reach the commandHandler the way it is
+             * supposed to. Instead, the getSocketId()-method returns an undefined value.
+             * Returning the help-variable instead fixes the issue (for now), but it is not a pretty
+             * solution.
+             * - (E) */
+            var id;
+            this.ppantControllers.forEach( (ppantCont, socketId) => {
+                console.log("ppantId: " + ppantCont.getParticipant().getId() + ", socketId: " + socketId);
+                if (ppantCont.getParticipant().getId() == ppantID) {
+                    console.log("Returning: " + socketId);
+                    id = socketId;
+                }
+            });
+            return id;
+        }
+
+        getSocketObject(socketId) {
+            var mainNamespace = this.#io.of('/');
+            var socketKeys = Object.keys(mainNamespace.connected);
+            console.log(socketKeys);
+            for (var i = 0; i < socketKeys.length; i++) {
+            console.log("Comparing " + socketKeys[i] + " against " + socketId + ", a match would return " + mainNamespace.connected[socketKeys[i]].id);
+                if(socketKeys[i] == socketId) {
+                    
+                    return mainNamespace.connected[socketKeys[i]];
+                }
+            }
+        }
+    
     
 }
