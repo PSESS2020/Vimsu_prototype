@@ -17,8 +17,12 @@ module.exports = class OneToOneChat extends Chat{
         this.#messageList = messageList;
     }
 
+    //Adds a message to the message list.
+    //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
+        if(this.#messageList.length >= super.getMaxNumMessages())
+            this.#messageList.splice(0, super.getMaxNumMessages());
 
         this.#messageList.push(msg);
     }

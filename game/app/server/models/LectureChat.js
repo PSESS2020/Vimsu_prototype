@@ -2,6 +2,7 @@ module.exports = class LectureChat {
 
     #lectureId;
     #listOfMessages;
+    #locked;
 
    
     /**
@@ -13,6 +14,7 @@ module.exports = class LectureChat {
     constructor(lectureId) {
         this.#lectureId = lectureId;
         this.#listOfMessages = [];
+        this.#locked = false;
     }
 
     getMessages() {

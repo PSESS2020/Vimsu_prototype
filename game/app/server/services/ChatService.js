@@ -27,11 +27,9 @@ module.exports = class Chatservice {
 
         return getDB().then(res => {
             
-            var chatId = new ObjectId().toString();
-            //var lectureChat = new LectureChat(chatId, lectureId);
+            //var lectureChat = new LectureChat(lectureId, "", "", "", "");
             
             var chat = {
-                chatId: chatId,
                 lectureId: lectureId,
                 participantList: [],
                 messageList: [],
@@ -131,7 +129,7 @@ module.exports = class Chatservice {
                 name: "",
                 participantList: memberIds,
                 messageList: [],
-                maxParticipants: 255,
+                maxParticipants: Settings.MAXGROUPPARTICIPANTS,
             }
 
             return vimsudb.insertOneToCollection("chats_" + ownerId , chat).then(res => {
@@ -199,13 +197,20 @@ module.exports = class Chatservice {
         })
     }
 
-    /*static loadLectureChat(lectureId) {
+    static loadLectureChat(lectureId) {
         TypeChecker.isString(lectureId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("lecture_chats", {lectureId: lectureId}, "").then(lectureChat => {
-                if (lectureChat) {
-                    return lectureChat;
+            return vimsudb.findOneInCollection("lecture_chats", {lectureId: lectureId}, "").then(chat => {
+                if (chat) {
+                   
+                    /*let lectureChat = new LectureChat(lectureId, 
+                                            chat.participantList, 
+                                            chat.messageList, 
+                                            chat.moderatorList, 
+                                            chat.blackList);
+                                            */
+                    return chats;
                 }
                 else {
                     console.log("lectureChat not found between in collection lecture_chats for lecture" + lectureId);
@@ -215,7 +220,7 @@ module.exports = class Chatservice {
                 console.error(err);
             })
         })
-    }*/
+    }
 
     /*static loadAllChat(roomId) {
         TypeChecker.isString(lectureId);
@@ -249,19 +254,25 @@ module.exports = class Chatservice {
 
                         if(chats[i].hasOwnProperty('member')) 
                         {
-                            chatList.push( new OneToOneChat(chats[i].chatId, 
-                                                            chats[i].name, 
-                                                            chats[i].sentRequest, 
-                                                            chats[i].member.ownerId, 
-                                                            chats[i].member.memberId, 
-                                                            chats[i].messageList));
+                            let chat = new OneToOneChat(chats[i].chatId, 
+                                                        chats[i].name, 
+                                                        chats[i].sentRequest, 
+                                                        chats[i].member.ownerId, 
+                                                        chats[i].member.memberId, 
+                                                        chats[i].messageList);
+                            chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_GROUPCHAT);
+
+                            chatList.push(chat);
                         } else {
-                            chatList.push( new GroupChat(chats[i].chatId, 
-                                                     chats[i].ownerId, 
-                                                     chats[i].name, 
-                                                     chats[i].participantList, 
-                                                     chats[i].messageList, 
-                                                     chats[i].maxParticipants));
+                            let chat =  new GroupChat(chats[i].chatId, 
+                                                      chats[i].ownerId, 
+                                                      chats[i].name, 
+                                                      chats[i].participantList, 
+                                                      chats[i].messageList, 
+                                                      chats[i].maxParticipants)
+                            chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_ONETOONECHAT);
+
+                            chatList.push(chat);;
                         }
 
                     }

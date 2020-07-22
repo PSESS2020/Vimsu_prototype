@@ -39,8 +39,8 @@ module.exports = class GroupChat extends Chat {
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(this.#messageList.length >= maxNumMessages)
-            this.#messageList.splice(0, maxNumMessages);
+        if(this.#messageList.length >= super.getMaxNumMessages())
+            this.#messageList.splice(0, super.getMaxNumMessages());
 
         this.#messageList.push(msg);
     }

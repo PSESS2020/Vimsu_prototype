@@ -1,12 +1,11 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 
-const maxNumMessages = 100;
-
 module.exports = class Chat {
     #chatId;
     #ownerId;
     #participantList;
     #messageList;
+    #maxNumMessages;
 
     constructor(chatId, ownerId) {
         TypeChecker.isString(chatId);
@@ -78,6 +77,14 @@ module.exports = class Chat {
 
     getNumParticipants() {
         return this.#participantList.length;
+    }
+
+    setMaxNumMessages(maxNumMsg) {
+        this.#maxNumMessages = maxNumMsg;
+    }
+
+    getMaxNumMessages() {
+        return this.#maxNumMessages;
     }
 
 }
