@@ -323,7 +323,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                                                             participant.getDirection(),
                                                             participant.getId(),
                                                             typeOfRoom,
-                                                            participant.getBusinessCard().getUsername(),
+                                                            participant.getUsername(),
                                                             ));
                 }
             }
@@ -346,7 +346,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                                                             participants.getDirection(), 
                                                             participants.getId(),
                                                             typeOfRoom,
-                                                            participants.getBusinessCard().getUsername()
+                                                            participants.getUsername()
                                                             ));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -461,7 +461,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
-        let username = ownParticipant.getBusinessCard().getUsername();
+        let username = ownParticipant.getUsername();
 
         
         this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);

@@ -251,31 +251,14 @@ module.exports = class ServerController {
                     
                     if(id != ppantID && ppant.getPosition().getRoomId() === Settings.FOYER_ID) {
 
-                        var businessCard = ppant.getBusinessCard();
-
-                        var tempBusinessCard = {};
-                        tempBusinessCard.id = businessCard.getParticipantId();
-
-                        tempBusinessCard.username = businessCard.getUsername();
-                    
-                        tempBusinessCard.title = businessCard.getTitle();
-                    
-                        tempBusinessCard.surname = businessCard.getSurname();
-                    
-                        tempBusinessCard.forename = businessCard.getForename();
-                    
-                        tempBusinessCard.job = businessCard.getJob();
-                    
-                        tempBusinessCard.company = businessCard.getCompany();
-                    
-                        tempBusinessCard.email = businessCard.getEmail();
+                        var username = ppant.getBusinessCard().getUsername();
 
                         var tempPos = ppant.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = ppant.getDirection();
 
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, businessCard: tempBusinessCard, cordX: tempX, cordY: tempY, dir: tempDir });
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
                         console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }   
                 });
@@ -289,7 +272,7 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                    socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d });
+                    socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
                     console.log("test6");                
                
             });
@@ -427,25 +410,8 @@ module.exports = class ServerController {
                 ppants.get(ppantID).setPosition(newPos);
                 ppants.get(ppantID).setDirection(d);
 
-                //Setting up the business card object
-                let businessCard = ppants.get(ppantID).getBusinessCard();
-                let businessCardObject = {
-                        id: businessCard.getParticipantId(),
-
-                        username: businessCard.getUsername(),
-                    
-                        title: businessCard.getTitle(),
-                    
-                        surname: businessCard.getSurname(),
-                    
-                        forename: businessCard.getForename(),
-                    
-                        job: businessCard.getJob(),
-                    
-                        company: businessCard.getCompany(),
-                    
-                        email: businessCard.getEmail(),
-                }
+                //Get username
+                let username = ppants.get(ppantID).getBusinessCard().getUsername();
                 
                 //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
@@ -454,35 +420,17 @@ module.exports = class ServerController {
                 socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
                 //Emit to all participants in new room, that participant is joining
-                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d });
+                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d });
 
                 //Emit to participant all participant positions, that were in new room before him
                 ppants.forEach((ppant, id, map) => {
                     if(id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
-                        var businessCard = ppant.getBusinessCard();
-
-                        var tempBusinessCard = {};
-                        tempBusinessCard.id = businessCard.getParticipantId();
-
-                        tempBusinessCard.username = businessCard.getUsername();
-                    
-                        tempBusinessCard.title = businessCard.getTitle();
-                    
-                        tempBusinessCard.surname = businessCard.getSurname();
-                    
-                        tempBusinessCard.forename = businessCard.getForename();
-                    
-                        tempBusinessCard.job = businessCard.getJob();
-                    
-                        tempBusinessCard.company = businessCard.getCompany();
-                    
-                        tempBusinessCard.email = businessCard.getEmail();
-
+                        var username = ppant.getBusinessCard().getUsername();
                         var tempPos = ppant.getPosition();
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = ppant.getDirection();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, businessCard: tempBusinessCard, cordX: tempX, cordY: tempY, dir: tempDir });
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
                         console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }   
                 });
@@ -617,6 +565,29 @@ module.exports = class ServerController {
                 socket.emit('currentSchedule', lecturesData);
             });    
 
+            socket.on('getBusinessCard', (ppantID, targetID) => {
+                let businessCard = ppants.get(targetID).getBusinessCard();
+                let businessCardObject = {
+                    id: businessCard.getParticipantId(),
+                    username: businessCard.getUsername(),
+                    title: businessCard.getTitle(),
+                    surname: businessCard.getSurname(),
+                    forename: businessCard.getForename(),
+                    job: businessCard.getJob(),
+                    company: businessCard.getCompany(),
+                    email: undefined
+                }
+
+                //Check if ppant with targetID is a friend
+                //if so, emit the email
+                if (ppants.get(ppantID).getFriendList().includes(targetID)) {
+                    businssCardObject.email = businessCard.getEmail();
+                }
+
+                socket.emit('businessCard', businessCardObject);
+
+            });
+
             socket.on('getFriendList', (ppantID) => {
                 var friendList = ppants.get(ppantID).getFriendList();
 
@@ -644,6 +615,47 @@ module.exports = class ServerController {
 
                 socket.emit('friendList', friendListData);
             }); 
+
+            socket.on('getFriendRequestList', (ppantID) => {
+                var friendRequestList = ppants.get(ppantID).getFriendRequestList();
+
+                var friendRequestListData = [];
+                
+                friendRequestList.getAllBusinessCards().forEach(businessCard => {
+                    friendRequestListData.push(
+                        {   
+                            friendId: businessCard.getParticipantId(),
+                            username: businessCard.getUsername(),
+                            title: businessCard.getTitle(),
+                            surname: businessCard.getSurname(),
+                            forename: businessCard.getForename(),
+                            surname: businessCard.getSurname(),
+                            job: businessCard.getJob(),
+                            company: businessCard.getCompany(),
+                            email: businessCard.getEmail()
+                        }
+                    )
+                });
+
+                socket.emit('friendRequestList', friendRequestListData);
+            }); 
+
+            socket.on('handleFriendRequest', (targetID, requesterID, acceptRequest) => {
+                let target = ppants.get(targetID);
+                let requester = ppants.get(requesterID);
+
+                if (acceptRequest) {
+                    target.acceptFriendRequest(requesterID);
+
+                    //add target in requesterList
+                    //at this moment not sure how this works
+                    //Is there a list for outgoing requests? (P)
+                } else {
+                    target.declineFriendRequest(requesterID);
+                }
+
+                //Not sure if a answer from server is necessary
+            });
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
