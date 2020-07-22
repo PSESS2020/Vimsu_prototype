@@ -56,8 +56,9 @@ module.exports = class Participant {
         //TODO: Get FriendList from FriendListService (P)
         this.#friendList = new FriendList(this.#id, []);
 
-        //TODO: Get FriendRequestList from FriendListService (P)
-        this.#friendRequestList = new FriendList(this.#id, []);
+        //TODO: Get FriendRequestList from FriendRequestListService (P)
+        this.#receivedRequestList = new FriendList(this.#id, []);
+        this.#sentRequestList = new FriendList(this.#id, [])
     }
     
 
