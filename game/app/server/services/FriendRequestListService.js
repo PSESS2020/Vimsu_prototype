@@ -12,9 +12,9 @@ async function getDB() {
 }
 
 module.exports = class FriendRequestListService {
-    static storeSentFriendRequest(participantId, receiverId, conferenceId) {
+    static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
         TypeChecker.isString(receiverId);
-        TypeChecker.isString(participantId);
+        TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
@@ -27,9 +27,9 @@ module.exports = class FriendRequestListService {
         })
     }
 
-    static storeReceivedFriendRequest(participantId, senderId, conferenceId) {
+    static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
         TypeChecker.isString(senderId);
-        TypeChecker.isString(participantId);
+        TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
@@ -42,9 +42,9 @@ module.exports = class FriendRequestListService {
         })
     }
 
-    static removeSentFriendRequest(participantId, receiverId, conferenceId) {
+    static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
         TypeChecker.isString(receiverId);
-        TypeChecker.isString(participantId);
+        TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
@@ -57,13 +57,13 @@ module.exports = class FriendRequestListService {
         })
     }
 
-    static removeReceivedFriendRequest(participantId, senderId, conferenceId) {
+    static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
         TypeChecker.isString(senderId);
-        TypeChecker.isString(participantId);
+        TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': senderId}).then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.received': senderId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
