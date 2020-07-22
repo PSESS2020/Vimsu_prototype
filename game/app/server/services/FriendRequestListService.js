@@ -12,19 +12,14 @@ async function getDB() {
 }
 
 module.exports = class FriendRequestListService {
-    static storeFriendRequest(senderId, receiverId, conferenceId) {
-        TypeChecker.isString(ownerId);
+    static storeSentFriendRequest(participantId, receiverId, conferenceId) {
+        TypeChecker.isString(receiverId);
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: senderId}, {'friendRequestId.sent': receiverId}).then(res => {
-                return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: receiverId}, {'friendRequestId.received': senderId}).then(res => {
-                    return true;
-                }).catch(err => {
-                    console.error(err);
-                    return false;
-                })
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': receiverId}).then(res => {
+                return true;
             }).catch(err => {
                 console.error(err);
                 return false;
@@ -32,19 +27,44 @@ module.exports = class FriendRequestListService {
         })
     }
 
-    static removeFriendRequest(senderId, receiverId, conferenceId) {
-        TypeChecker.isString(ownerId);
+    static storeReceivedFriendRequest(participantId, senderId, conferenceId) {
+        TypeChecker.isString(senderId);
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: senderId}, {'friendRequestId.sent': receiverId}).then(res => {
-                return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: receiverId}, {'friendRequestId.received': senderId}).then(res => {
-                    return true;
-                }).catch(err => {
-                    console.error(err);
-                    return false;
-                })
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.received': senderId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static removeSentFriendRequest(participantId, receiverId, conferenceId) {
+        TypeChecker.isString(receiverId);
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': receiverId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static removeReceivedFriendRequest(participantId, senderId, conferenceId) {
+        TypeChecker.isString(senderId);
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': senderId}).then(res => {
+                return true;
             }).catch(err => {
                 console.error(err);
                 return false;
