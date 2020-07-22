@@ -29,23 +29,23 @@ class FriendRequestListView extends WindowView {
                             <br>
                         </div>
                         <div class="col-12 col-sm-2 col-md-2")>
-                            <button id=${"accept" + businessCard.getParticipantId()} class="btn btn-lecture ">Accept</button>
-                            <button id=${"reject" + businessCard.getParticipantId()} class="btn btn-reject" style="margin-top: 10px">Reject</button>
-                            <h6 style="margin-top: 9px; display: none;" id=${"accepted" + businessCard.getParticipantId()}>Accepted</h6>
-                            <button id=${"rejectdisable" + businessCard.getParticipantId()} class="btn btn-reject" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
-                            <button id=${"acceptdisable" + businessCard.getParticipantId()} class="btn btn-lecture" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
-                            <h6 style="margin-top: 20px; margin-left: 4px; display:none" id=${"rejected" + businessCard.getParticipantId()}>Rejected</h6>
+                            <button id="${"accept" + businessCard.getParticipantId()}" class="btn btn-lecture ">Accept</button>
+                            <button id="${"reject" + businessCard.getParticipantId()}" class="btn btn-reject" style="margin-top: 10px">Reject</button>
+                            <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
+                            <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-reject" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
+                            <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-lecture" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
+                            <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
                         </div>
                     </div>
                 </li>
 
                 <script> 
-                    $('#accept' + ${businessCard.getParticipantId()}).on('click', function (event) {
+                    $('#accept' + '${businessCard.getParticipantId()}').on('click', function (event) {
                         event.stopPropagation();
                         new EventManager().handleAcceptRequestClicked('${businessCard.getParticipantId()}');
                     })
 
-                    $('#reject' + ${businessCard.getParticipantId()}).on('click', function (event) {
+                    $('#reject' + '${businessCard.getParticipantId()}').on('click', function (event) {
                         event.stopPropagation();
                         new EventManager().handleRejectRequestClicked('${businessCard.getParticipantId()}');
                 })

@@ -24,12 +24,12 @@ class BusinessCardView extends WindowView {
                     </tr>
             </table>
             </br>
-            <button id=${"chatfriend" + this.#businessCard.getParticipantId()} class="btn btn-lecture mx-auto d-block">Chat</button>
+            <button id="${"chatfriend" + this.#businessCard.getParticipantId()}" class="btn btn-lecture mx-auto d-block">Chat</button>
             </br>
             <script> 
-                $('#chatfriend' + ${this.#businessCard.getParticipantId()}).on('click', function (event) {
+                $('#chatfriend' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
                     $('#businessCardModal').modal('hide');
-                    new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()}, true);
+                    new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}', true);
                 })
             </script>
         `)
@@ -44,12 +44,12 @@ class BusinessCardView extends WindowView {
                     </tr>
                 </table>
                 </br>
-                <button id=${"chatnotfriend" + this.#businessCard.getParticipantId()} class="btn btn-lecture mx-auto d-block">Chat</button>
+                <button id="${"chatnotfriend" + this.#businessCard.getParticipantId()}" class="btn btn-lecture mx-auto d-block">Chat</button>
                 </br>
                 <script> 
-                    $('#chatnotfriend' + ${this.#businessCard.getParticipantId()}).on('click', function (event) {
+                    $('#chatnotfriend' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
                         $('#businessCardModal').modal('hide');
-                        new EventManager().handleChatNowClicked(${this.#businessCard.getParticipantId()}, false);
+                        new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}', false);
                     })
                 </script>
             `)
