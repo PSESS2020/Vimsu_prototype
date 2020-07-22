@@ -18,6 +18,9 @@ module.exports = Object.freeze
     MAXNUMMESSAGES_ALLCHAT: 100,
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
-    MAXGROUPPARTICIPANTS: 255
+    MAXGROUPPARTICIPANTS: 255,
+
+    /* Moderator-Settings */
+    CMDSTARTCHAR: "\\" // moved the actual commands into a seperate file for easier handling
 
 });

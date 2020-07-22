@@ -16,6 +16,7 @@ const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../models/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
+const Commands = require('../../utils/Commands.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
 const BusinessCard = require('../models/BusinessCard.js');
@@ -278,8 +279,32 @@ module.exports = class ServerController {
             });
 
             socket.on('sendMessage', (ppantID, text) => {
-                
+
                 var participant = ppants.get(ppantID);
+    
+                /* Adding the possibility of chat-based commands for moderators.
+                 * Checks if the participant is a moderator and if the first character
+                 * of their message is the "command-starting character" (atm, this
+                 * is a backslash). Only if these two conditions are met we start
+                 * checking for the actual commands.
+                 *
+                 * You could probably use the '==='-operator here, but I am not a 
+                 * hundred percent sure, so I didn't for now.
+                 *
+                 *  - (E) */
+                if(participant.isModerator() && text.charAt(0) == Settings.CMDSTARTCHAR) {
+                    /* Now, we check if the message contains any command
+                     * known by the server and handle this appropriately.
+                     * We move this to another method for better readability.
+                     *
+                     * We also remove the first character of the string (the
+                     * "command-starting character"), because we do no longer
+                     * need it.
+                     *
+                     * - (E) */
+                    this.commandHandler(participant, text.substr(1));
+                } else { // If the message contains a command, we don't want to be handled like a regular message
+                
                 var roomID = participant.getPosition().getRoomId();
                 var username = participant.getBusinessCard().getUsername();
 
@@ -293,7 +318,9 @@ module.exports = class ServerController {
                 this.#io.in(roomID.toString()).emit('newAllchatMessage', { senderID: ppantID, username: username, timestamp: currentTime, text: text });
                 
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
-            });
+                }
+
+             });
             
             /* Now we handle receiving a movement-input from a participant.
              * NOTE:
@@ -713,5 +740,97 @@ module.exports = class ServerController {
         //    io.sockets.emit('gameStateUpdate', participants);
         //}, 50);
     
-    }    
+    }
+    
+    commandHandler(moderator, input) {
+        /* commands need to be delimited by a space. So we first split
+         * the input at each occurence of a whitespace character.
+         * - (E) */  
+        var commandArgs = input.split(" ");
+
+        /* Now we extract the command from the input.
+         * 
+         * The command can only occur at the very beginning of an input, so
+         * we just take the substring of the input up to (but obviously not
+         * including) the first whitespace-character.
+         *
+         * We also covert the string to lower case, so that we can easily compare
+         * it to our constants. This means that the moderator does not need to
+         * worry about capitalization when inputting a command, which may be
+         * undesirable behaviour.
+         *
+         * - (E) */  
+        var command = commandArgs[0].toLowerCase();
+        console.log(command);        
+        /* Every command is saved in an enum-File similiar to the directions.
+         * So we can use the TypeChecker-class to check if the input includes
+         * a legal command.
+         * - (E) */   
+        /*
+        try {
+            Typechecker.isEnumOf(command, Commands);
+        } catch (TypeError) {
+            // TODO: tell mod this is not a recognized command
+            return;
+        }
+        */
+
+        /* So now we check which command the user actually entered.
+         * I would like to just iterate over every command via a 
+         * "for ... in ..."-loop, but I'm not sure how to do handling
+         * in this case (short of adding the handling as a property of
+         * the command itself). So we just have to use a switch-statement.
+         *
+         * Tbh, I do somewhat detest this solution. 
+         * Of course, using this does also make the previous use of the
+         * TypeChecker coompletely redundant.
+         *
+         * This does also, for now, not including every command.
+         *
+         * A better solution would be to turn the commands into objects
+         * that contain their own handling. Then we could just iterate
+         * over every command and have them call their own handling.
+         * This would also make adding new commands a lot easier I think.
+         *
+         *  - (E) */
+         switch(command) {
+            case Commands.GLOBAL:
+                // Allows to send a global message
+
+                /* We get the message that the moderator wanted to send by just
+                 * looking for the first occurence of a whitespace-character,
+                 * which should occur after the command.
+                 * Everything inputted after the command is treated as the message
+                 * the moderator wanted to send.
+                 *
+                 * if the commandArgs-array has a lengt of one, no text occurs after
+                 * the command, and we do not need any handling.
+                 *
+                 * - (E) */
+                if(commandArgs.length > 1) { 
+                    var message = input.substr(input.indexOf(" "));
+
+                    /* Sending the global message to all the users.
+                     * This might later be altered to include the id of the
+                     * moderator or some fancy window-dressing for the message.
+                     *
+                     * Furthermore, we might alter the handling to not send
+                     * any global messages to any other moderators.
+                     *
+                     * - (E) */
+                    this.#io.emit('New global message', message); // This might be altered to not
+                                                                  // include moderators
+                }
+                break;
+            case Commands.LOGMESSAGES:
+                // Display msgIDs and the senderIDs of the messages to mod
+            case Commands.HELP:
+                // send list of commands to mod
+            case Commands.REMOVEPLAYER:
+                // removes player from conference
+                break;
+        }  
+
+    }
+    
 }
