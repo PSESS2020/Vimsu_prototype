@@ -82,6 +82,23 @@ module.exports = class Chatservice {
 
     }
 
+    static updateSentRequest(chatId, ownerId, newValue) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(ownerId);
+        TypeChecker.isInt(newValue);
+
+        if(newValue >= 0 && newValue <= 2) {
+            return getDB().then(res => {
+                vimsudb.updateOneToCollection("chats_" + ownerId, {chatId: chatId}, {sentRequest: newValue})
+            }).catch(err => {
+                console.error(err)
+            });
+        } else {
+            console.log("sent request value must be an integer between 0 and 2")
+            return false;
+        }
+    }
+
     //tested
     static newOneToOneChat(ownerId, memberId) {
         TypeChecker.isString(ownerId);
