@@ -8,7 +8,7 @@ module.exports = class OneToOneChat extends Chat{
     #memberId;
     #messageList;
 
-    constructor(chatId, chatName, sentStatus, ownerId, memberId, messageList) {
+    constructor(chatId, chatName, sentStatus, memberId, messageList) {
         super(chatId, ownerId);
 
         this.#chatName = chatName;

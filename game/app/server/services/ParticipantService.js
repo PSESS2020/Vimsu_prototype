@@ -6,6 +6,7 @@ const Settings = require('../../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
 const Account = require('../../../../website/models/Account')
 const dbconf = require('../../../../config/dbconf');
+const AccountService = require('../../../../website/services/AccountService')
 
 var vimsudb;
 async function getDB() {
@@ -90,6 +91,28 @@ module.exports = class ParticipantService {
                 }
                 else {
                     console.log("participant with accountId " + accountId + " is not found in collection participants_" + conferenceId);
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        })
+    }
+
+    static getUsername(participantId, conferenceId) {
+        TypeChecker.isString(participantId);
+
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {accountId: 1}).then(par => {
+                if (par) {
+                    return AccountService.getAccountUsername(par.accountId).then(username => {
+                        return username;
+                    }).catch(err => {
+                        console.error(err);
+                    })
+                }
+                else {
+                    console.log("participant with Id " + participantId + " is not found in collection participants_" + conferenceId);
                     return false;
                 }
             }).catch(err => {

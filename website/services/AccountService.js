@@ -168,7 +168,9 @@ module.exports = class AccountService {
             return vimsudb.findOneInCollection("accounts", {accountId: accountId}, {title: 1, surname: 1, forename:1}).then(user => 
             {
                 if (user) {
-                    return user;
+                    var name = user.title + " " + user.forename + " " + user.surname;
+                    console.log(name);
+                    return name;
                 }
                 else {
                     console.log("user not found");
