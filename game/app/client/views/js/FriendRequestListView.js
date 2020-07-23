@@ -1,6 +1,6 @@
 class FriendRequestListView extends WindowView {
 
-    businessCards;
+    #businessCards;
 
     constructor() {
         super()
@@ -12,8 +12,8 @@ class FriendRequestListView extends WindowView {
 
         $('#friendListModal .modal-header .modal-title').append(`Friend Request List`)
     
-        this.businessCards = businessCards;
-        this.businessCards.forEach(businessCard => {
+        this.#businessCards = businessCards;
+        this.#businessCards.forEach(businessCard => {
             $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').append(`
                 
                 <li class="list-group-item bg-transparent">
