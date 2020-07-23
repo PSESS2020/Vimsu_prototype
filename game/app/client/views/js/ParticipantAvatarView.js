@@ -27,8 +27,6 @@ class ParticipantAvatarView extends AvatarView {
     #isVisible = true;
     #typeOfRoom;
     #username;
-    #screenX;
-    #screenY;
 
     constructor(position, direction, participantId, typeOfRoom, username) {
         super(position, direction);
@@ -46,8 +44,6 @@ class ParticipantAvatarView extends AvatarView {
         this.#currentAnimation = this.#standingDownRightAnimation;
         this.#typeOfRoom = typeOfRoom;
         this.#username = username;
-        this.#screenX = 0;
-        this.#screenY = 0;
 
     }
     
@@ -57,21 +53,6 @@ class ParticipantAvatarView extends AvatarView {
         return this.#participantId;
     }
 
-    getScreenX() {
-        return this.#screenX;
-    }
-
-    getScreenY() {
-        return this.#screenY;
-    }
-
-    getAvatarWidth() {
-        return AVATAR_WIDTH;
-    }
-
-    getAvatarHeight() {
-        return AVATAR_HEIGHT;
-    }
     //Is called after server sends participantId
     setId(participantId) {
         this.#participantId = participantId;
@@ -92,24 +73,6 @@ class ParticipantAvatarView extends AvatarView {
 
     update() {
         this.#currentAnimation.update();
-        
-        let cordX = super.getPosition().getCordX();
-        let cordY = super.getPosition().getCordY();
-        this.updateCurrentAnimation();
-
-        //should be done somewhere else, 150 and 419 are room dependent
-        if (this.#typeOfRoom === 'FOYER') {
-            this.#screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-            this.#screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
-        else if (this.#typeOfRoom === 'FOODCOURT') {
-            this.#screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            this.#screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
-        else if (this.#typeOfRoom === 'RECEPTION') {
-            this.#screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            this.#screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
     }
 
     updateCurrentAnimation() {
@@ -152,17 +115,35 @@ class ParticipantAvatarView extends AvatarView {
     draw() {
         if (this.#isVisible) {
 
+        let cordX = super.getPosition().getCordX();
+        let cordY = super.getPosition().getCordY();
+        this.updateCurrentAnimation();
+    
+        //should be done somewhere else, 150 and 419 are room dependent
+        if (this.#typeOfRoom === 'FOYER') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'FOODCOURT') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'RECEPTION') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        
 
         ctx_avatar.font = "1em sans-serif";
         ctx_avatar.textBaseline = 'top';
         ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
         ctx_avatar.textAlign = "center";
-        ctx_avatar.fillRect(this.#screenX - AVATAR_WIDTH / 4, this.#screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+        ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
         ctx_avatar.fillStyle = "black";
-        ctx_avatar.fillText(this.#username, this.#screenX + AVATAR_WIDTH/2, this.#screenY);
+        ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH/2, screenY);
 
-        this.#currentAnimation.draw(this.#screenX, this.#screenY); //TODO pass position of avatar
+        this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }
     }
 

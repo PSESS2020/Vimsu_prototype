@@ -106,10 +106,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 //first check if click is on door or clickable object in room (not existing at this point)
                 self.#currentMap.findClickedTile(selectedTileCords);
-            
-            } 
-            
-            if (self.#currentMap.isCursorOnExtendedMap(selectedTileCords.x, selectedTileCords.y)) {
+
                 //then, check if there is an avatar at this position
                 self.getAnotherParticipantAvatarViews().forEach(ppantView => {
                     
@@ -129,8 +126,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                      && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
                         ppantView.onclick();
                     }
-
                 });
+            
             }
         });
     }

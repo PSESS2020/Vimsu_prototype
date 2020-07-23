@@ -271,6 +271,23 @@ module.exports = class RouteController {
             request.session.destroy();
             response.redirect('/');
         });
+
+        this.#app.get('/account', (request, response) => {
+            if (request.session.loggedin = true) {
+            username = request.session.username;
+            email = request.session.email;
+            title = request.session.title;
+            forename = request.session.forename;
+            surname = request.session.surname;
+            job = request.session.job;
+            company = request.session.company;
+            response.render('account', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company});
+            }
+
+            else {
+                response.render('/');
+            }
+        })
     }
 
 }

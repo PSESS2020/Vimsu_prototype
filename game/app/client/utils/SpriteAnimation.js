@@ -1,8 +1,4 @@
 class SpriteAnimation {
-
-    #row;
-    #col;
-
     constructor(spritesheetBody, spritesheetTopCloth, spriteSheetBottomClothing, spriteSheetShoes, frameRate, firstFrame, lastFrame) {
         this.currentFrame = 0;
         this.counter = 0;
@@ -30,47 +26,40 @@ class SpriteAnimation {
             this.currentFrame = (this.currentFrame + 1) % this.animationSequence.length;
         }
         this.counter = (this.counter + 1) % this.frameRate;
-
-        this.#row = Math.floor(this.animationSequence[this.currentFrame] / this.spritesheetBody.framesPerRow);
-        this.#col = Math.floor(this.animationSequence[this.currentFrame] % this.spritesheetBody.framesPerRow);
     }
 
 
-    getRow() {
-        return this.#row;
-    }
 
-    getCol() {
-        return this.#col;
-    }
 
     draw(x, y) {
-        
+        var row = Math.floor(this.animationSequence[this.currentFrame] / this.spritesheetBody.framesPerRow);
+        var col = Math.floor(this.animationSequence[this.currentFrame] % this.spritesheetBody.framesPerRow);
+        console.log();
         if (!this.spritesheetBody.framesPerRow) {
             console.log("can not draw because spritesheetBody is not loaded")
             return;
         }
 
         ctx_avatar.drawImage(
-            this.spritesheetBody.image, this.#col * this.spritesheetBody.frameWidth, this.#row * this.spritesheetBody.frameHeight,
+            this.spritesheetBody.image, col * this.spritesheetBody.frameWidth, row * this.spritesheetBody.frameHeight,
             this.spritesheetBody.frameWidth, this.spritesheetBody.frameHeight,
             x, y,
             this.spritesheetBody.frameWidth, this.spritesheetBody.frameHeight);
 
         ctx_avatar.drawImage(
-            this.spritesheetTopCloth.image, this.#col * this.spritesheetTopCloth.frameWidth, this.#row * this.spritesheetTopCloth.frameHeight,
+            this.spritesheetTopCloth.image, col * this.spritesheetTopCloth.frameWidth, row * this.spritesheetTopCloth.frameHeight,
             this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight,
             x, y,
             this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight);
 
         ctx_avatar.drawImage(
-            this.spriteSheetBottomClothing.image, this.#col * this.spriteSheetBottomClothing.frameWidth, this.#row * this.spriteSheetBottomClothing.frameHeight,
+            this.spriteSheetBottomClothing.image, col * this.spriteSheetBottomClothing.frameWidth, row * this.spriteSheetBottomClothing.frameHeight,
             this.spriteSheetBottomClothing.frameWidth, this.spriteSheetBottomClothing.frameHeight,
             x, y,
             this.spriteSheetBottomClothing.frameWidth, this.spriteSheetBottomClothing.frameHeight);
 
         ctx_avatar.drawImage(
-            this.spriteSheetShoes.image, this.#col * this.spriteSheetShoes.frameWidth, this.#row * this.spriteSheetShoes.frameHeight,
+            this.spriteSheetShoes.image, col * this.spriteSheetShoes.frameWidth, row * this.spriteSheetShoes.frameHeight,
             this.spriteSheetShoes.frameWidth, this.spriteSheetShoes.frameHeight,
             x, y,
             this.spriteSheetShoes.frameWidth, this.spriteSheetShoes.frameHeight);
