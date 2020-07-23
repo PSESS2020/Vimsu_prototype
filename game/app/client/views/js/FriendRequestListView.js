@@ -66,4 +66,8 @@ class FriendRequestListView extends WindowView {
             $('#rejected' + participantId).show()
         }
     }
+
+    onclick() {
+        return new EventManager().handleFriendRequestListClicked();
+    }
 }
