@@ -286,7 +286,7 @@ module.exports = class AccountService {
 
         return getDB().then(res => {
             vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany});
-            return new Account(accountId, username, title, newSurname, newForename, newJob, newCompany, email);
+            return new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email);
         }).catch(err => {
             console.error(err)
         });

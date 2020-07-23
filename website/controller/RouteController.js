@@ -325,6 +325,7 @@ module.exports = class RouteController {
                 request.session.job = res.getJob();
                 request.session.company = res.getCompany();
                 request.session.email = res.getEmail();
+                response.redirect('/account');
             }).catch(err => {
                 response.send('Registration failed. <a href="/register">Try again</a>');
                 console.error(err);
