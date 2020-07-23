@@ -624,8 +624,10 @@ class ClientController {
 
     //called when this participants removes another from his friendlist
     handleFromViewRemoveFriend(friendId) {
+        this.socketReady;
+        this.socket.emit('removeFriend', this.#ownParticipant.getId(), friendId);
         this.#gameView.removeFriend(friendId);
-        //TODO socket emit
+        
     }
 
     handleFromViewShowBusinessCard(participantId) {
