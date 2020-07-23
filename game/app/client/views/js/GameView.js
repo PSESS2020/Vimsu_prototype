@@ -20,6 +20,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #scheduleListView;
     #currentLecturesView;
     #lectureView;
+    #statusBar;
     #friendListView;
     #friendRequestListView;
     #currentMap;
@@ -34,6 +35,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
+        this.#statusBar = new StatusBar();
         //this.#roomId = 1;
         //this.initOwnAvatarView(" ");
 
@@ -104,10 +106,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
                 //first check if click is on door or clickable object in room (not existing at this point)
                 self.#currentMap.findClickedTile(selectedTileCords);
-            
-            } 
-            
-            if (self.#currentMap.isCursorOnExtendedMap(selectedTileCords.x, selectedTileCords.y)) {
+
                 //then, check if there is an avatar at this position
                 self.getAnotherParticipantAvatarViews().forEach(ppantView => {
                     
@@ -127,8 +126,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                      && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
                         ppantView.onclick();
                     }
-
                 });
+            
             }
         });
     }
@@ -190,6 +189,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#currentMap.drawSelectedTile();
             }   
 
+            this.drawClock();
+
             //sort AnotherAvatarViews in CordX
             this.#anotherParticipantAvatarViews.sort(function(a, b) {
                 return b.getPosition().getCordX() - a.getPosition().getCordX();
@@ -244,6 +245,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 this.#updateList[i].update();
             }
         }
+    }
+
+    drawClock() {
+        this.#statusBar.drawClock();
     }
 
     //Is called when participant enters Foyer
@@ -462,7 +467,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
         let username = ownParticipant.getUsername();
-
+        this.#statusBar.updateLocation(typeOfRoom);
         
         this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);
         this.addToUpdateList(this.#ownAvatarView);
@@ -534,6 +539,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         
     updateOwnAvatarRoom(typeOfRoom) {
         this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
+        this.#statusBar.updateLocation(typeOfRoom);
     }
 
     removeOwnAvatarView()
