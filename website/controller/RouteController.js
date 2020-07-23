@@ -158,7 +158,7 @@ module.exports = class RouteController {
                     response.redirect('/');
                 }
                 else {
-                    response.send('Incorrect Username and/or Password. <a href="/login">Try again</a>');
+                    response.render('login', {wrongLoginData: true});
                 }
                 response.end();
             }).catch(err => {
