@@ -112,6 +112,42 @@ module.exports = class Participant {
     }
 
     /**
+     * Method called, when this ppant sends a friend request to ppant with this businessCard
+     * @param {BusinessCard} businessCard 
+     */
+    addSentFriendRequest(businessCard) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
+        let ppandId = businessCard.getParticipantId();
+        if (!this.#sentRequestList.includes(ppantId) && !this.#friendList.includes(ppantId)) {
+            this.#sentRequestList.addBusinessCard(businessCard);
+        }
+    }
+
+    /**
+     * Called when outgoing friend request to ppant with ppantId was accepted
+     * @param {String} ppantId 
+     */
+    sentFriendRequestAccepted(ppantId) {
+        TypeChecker.isString(ppantId);
+        if (this.#sentRequestList.includes(ppantId)) {
+            let busCard = this.#sentRequestList.getBusinessCard(ppantId);
+            this.#friendList.addBusinessCard(busCard);
+            this.#sentRequestList.removeBusinessCard(ppantId);
+        }
+    }
+
+    /**
+     * Called when outgoing friend request to ppant with ppantId was accepted
+     * @param {String} ppantId 
+     */
+    sentFriendRequestDeclined(ppantId) {
+        TypeChecker.isString(ppantId);
+        if (this.#sentRequestList.includes(ppantId)) {
+            this.#sentRequestList.removeBusinessCard(ppantId);
+        }
+    }
+
+    /**
      * Method called to add a FriendRequest
      * @param {BusinessCard} businessCard 
      */
@@ -158,5 +194,3 @@ module.exports = class Participant {
         }
     }
 }
-
-
