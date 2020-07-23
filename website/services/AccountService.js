@@ -272,19 +272,21 @@ module.exports = class AccountService {
         })
     }
 
-    static updateAccountData(accountId, newTitle, newSurname, newForename, newJob, newCompany, newPassword) {
+    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email) {
         TypeChecker.isString(accountId);
+        TypeChecker.isString(username);
         TypeChecker.isString(newTitle);
         TypeChecker.isString(newSurname);
         TypeChecker.isString(newForename);
         TypeChecker.isString(newJob);
         TypeChecker.isString(newCompany);
-        TypeChecker.isString(newPassword);
+        //TypeChecker.isString(newPassword);
 
-        var newPasswordHash = passwordHash.generate(newPassword)
+        //var newPasswordHash = passwordHash.generate(newPassword)
 
         return getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany, passwordHash: newPasswordHash});
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany});
+            return new Account(accountId, username, title, newSurname, newForename, newJob, newCompany, email);
         }).catch(err => {
             console.error(err)
         });
@@ -340,6 +342,7 @@ module.exports = class AccountService {
 
         return getDB().then(res => {
             return vimsudb.deleteOneFromCollection("accounts", {accountId: accountId});
+
         }).catch(err => {
             console.error(err)
         });

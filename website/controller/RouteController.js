@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
-const FileSystem = require('../../config/FileSystem')
+const FileSystem = require('../../config/FileSystem');
+const { response } = require('express');
 
 module.exports = class RouteController {
 
@@ -287,6 +288,47 @@ module.exports = class RouteController {
             else {
                 response.render('/');
             }
+        })
+
+        this.#app.get('/editAccount', (request, response) => {
+            title = request.session.title;
+            forename = request.session.forename;
+            surname = request.session.surname;
+            job = request.session.job;
+            company = request.session.company;
+            if (request.session.loggedin = true)  {
+
+                response.render('editAccount', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company})
+            }
+
+            else {
+                response.render('/');
+            }
+        })
+
+        this.#app.post('/saveAccountChanges', (request, response) => {
+            title = request.body.title;
+            surname = request.body.surname;
+            forename = request.body.forename;
+            job = request.body.job;
+            company = request.body.company;
+            var accountId = request.session.accountId;
+            var username = request.session.username;
+            var email = request.session.email;
+
+            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email).then(res => {
+                request.session.accountId = res.getAccountID();
+                request.session.title = res.getTitle();
+                request.session.surname = res.getSurname();
+                request.session.forename = res.getForename();
+                request.session.username = res.getUsername();
+                request.session.job = res.getJob();
+                request.session.company = res.getCompany();
+                request.session.email = res.getEmail();
+            }).catch(err => {
+                response.send('Registration failed. <a href="/register">Try again</a>');
+                console.error(err);
+            })
         })
     }
 
