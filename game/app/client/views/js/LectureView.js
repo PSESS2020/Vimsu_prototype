@@ -5,7 +5,10 @@ class LectureView extends WindowView {
     }
 
     draw(lecture, hasToken, lectureChat) {
-        $('#currentLectures').hide(); // hide the overview of current lectures
+        // hide the overview of current lectures
+        $('#currentLectures').hide(); 
+
+        //chat box is emptied
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
@@ -20,6 +23,14 @@ class LectureView extends WindowView {
             }
         }       
         if(hasToken) {
+            if ($('#lectureChatInputGroup').is(':empty')) {   
+            $('#lectureChatInputGroup').append(`
+            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+            <div class="input-group-append">
+                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+            </div>
+            `)
+            }
             $('#tokenIcon').empty();
             $('#tokenIcon').append(`
             <i class="fa fa-question-circle fa-4x"></i>
@@ -33,7 +44,7 @@ class LectureView extends WindowView {
             <i class="fa fa-times-circle fa-4x"></i>
             `)
             $('#tokenLabel').empty();
-            $('#tokenLabel').append('You left the lecture for too long. Therefore you are not able to ask questions in the lecture chat.')
+            $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
         }
         $('#closeButton').empty();
 
@@ -52,10 +63,12 @@ class LectureView extends WindowView {
     
 }
 
-document.getElementById("lectureChatButton").onclick = function(event) {
-    let messageVal = $('#lectureChatInput').val();
-    if(messageVal !== '') {
-      clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-      $('#lectureChatInput').val('');
-    }
-};
+$(document).ready(() => {
+    document.getElementById("lectureChatButton").onclick = function(event) {
+        let messageVal = $('#lectureChatInput').val();
+        if(messageVal !== '') {
+          clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+          $('#lectureChatInput').val('');
+        }
+    };
+});
