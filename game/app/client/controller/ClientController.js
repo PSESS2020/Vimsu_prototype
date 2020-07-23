@@ -583,17 +583,26 @@ class ClientController {
         this.socket.emit('getSchedule');
     }
 
+    //called after click on friendlist button
     handleFromViewShowFriendList() {
         this.socketReady;
         this.socket.emit('getFriendList', this.#ownParticipant.getId());
     }
 
+    //called after click on friendrequestlist button
     handleFromViewShowFriendRequestList() {
         this.socketReady;
         this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
         
     }
 
+    //called after 'Add Friend' Button
+    handleFromViewNewFriendRequest(participantRepicientId) {
+        this.socketReady;
+        this.socket.emit('newFriendRequest', this.#ownParticipant.getId(), participantRepicientId);
+    }
+
+    //called when a friend request is accepted
     handleFromViewAcceptRequest(participantId) {
         this.socketReady;
         console.log(participantId);
@@ -604,12 +613,19 @@ class ClientController {
         this.#gameView.updateFriendRequestListView(participantId, true);
     }
 
+    //called when a friend request is declined
     handleFromViewRejectRequest(participantId) {
         this.socketReady;
 
         //Tells server to reject this request
         this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, false);
         this.#gameView.updateFriendRequestListView(participantId, false);
+    }
+
+    //called when this participants removes another from his friendlist
+    handleFromViewRemoveFriend(friendId) {
+        this.#gameView.removeFriend(friendId);
+        //TODO socket emit
     }
 
     handleFromViewShowBusinessCard(participantId) {
@@ -625,18 +641,6 @@ class ClientController {
     handleFromViewShowProfile() {
         this.#gameView.initProfileView(this.#ownBusinessCard);
     }
-
-    handleFromViewNewFriendRequest(participantRepicientId) {
-        this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newFriendRequest', {senderId, participantRepicientId});
-    }
-
-    handleFromViewRemoveFriend(friendId) {
-        this.#gameView.removeFriend(friendId);
-        //TODO socket emit
-    }
-
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
