@@ -272,45 +272,36 @@ module.exports = class AccountService {
         })
     }
 
+    static updateAccountData(accountId, newTitle, newSurname, newForename, newJob, newCompany, newPassword) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(newTitle);
+        TypeChecker.isString(newSurname);
+        TypeChecker.isString(newForename);
+        TypeChecker.isString(newJob);
+        TypeChecker.isString(newCompany);
+        TypeChecker.isString(newPassword);
+
+        var newPasswordHash = passwordHash.generate(newPassword)
+
+        return getDB().then(res => {
+            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany, passwordHash: newPasswordHash});
+        }).catch(err => {
+            console.error(err)
+        });
+
+    }
+
     static updateUsername(accountId, newUsername) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newUsername);
 
         return getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {username: newUsername});
-        }).catch(err => {
-            console.error(err)
-        });
-    }
-
-    static updateTitle(accountId, newTitle) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(newTitle);
-
-        return getDB().then(res => {
-            return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle});
-        }).catch(err => {
-            console.error(err)
-        });
-    }
-
-    static updateSurname(accountId, newSurname) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(newSurname);
-
-        return getDB().then(res => {
-            return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {surname: newSurname});
-        }).catch(err => {
-            console.error(err)
-        });
-    }
-
-    static updateForename(accountId, newForename) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(newForename);
-
-        return getDB().then(res => {
-            return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {forename: newForename});
+            return this.isUsernameValid(newUsername).then(res => {
+                if(res)
+                    return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {username: newUsername});
+                else
+                    return false;
+            })
         }).catch(err => {
             console.error(err)
         });
@@ -321,7 +312,12 @@ module.exports = class AccountService {
         TypeChecker.isString(newEmail);
 
         return getDB().then(res => {
-            return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {email: newEmail});
+            return this.isEmailValid(newEmail).then(res => {
+                if(res)
+                    return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {email: newEmail});
+                else
+                    return false;
+            })
         }).catch(err => {
             console.error(err)
         });

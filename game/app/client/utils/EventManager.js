@@ -90,8 +90,19 @@ class EventManager {
         this.#clientController.handleFromViewShowFriendRequestList();
     }
 
-    handleAcceptRequestClicked(participantId) {
-        this.#clientController.handleFromViewAcceptRequest(participantId);
+    handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
+        var businessCard = {
+            participantId: participantId,
+            username: username,
+            title: title,
+            surname: surname,
+            forename: forename,
+            job: job,
+            company: company, 
+            email: email
+        }
+        
+        this.#clientController.handleFromViewAcceptRequest(businessCard);
     }
 
     handleRejectRequestClicked(participantId) {
