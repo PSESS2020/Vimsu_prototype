@@ -1,6 +1,6 @@
 class FriendRequestListView extends WindowView {
 
-    #businessCards;
+    businessCards;
 
     constructor() {
         super()
@@ -11,11 +11,11 @@ class FriendRequestListView extends WindowView {
         $('#friendListModal .modal-header .modal-title').empty()
 
         $('#friendListModal .modal-header .modal-title').append(`Friend Request List`)
-
-        this.#businessCards = businessCards;
-        this.#businessCards.forEach(businessCard => {
+    
+        this.businessCards = businessCards;
+        this.businessCards.forEach(businessCard => {
             $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').append(`
-            
+                
                 <li class="list-group-item bg-transparent">
                     <div class="row w-100">
                         <div class="col-12 col-sm-2 px-0">
@@ -38,13 +38,13 @@ class FriendRequestListView extends WindowView {
                         </div>
                     </div>
                 </li>
-
+    
                 <script> 
                     $('#accept' + '${businessCard.getParticipantId()}').on('click', function (event) {
                         event.stopPropagation();
                         new EventManager().handleAcceptRequestClicked('${businessCard.getParticipantId()}');
                     })
-
+    
                     $('#reject' + '${businessCard.getParticipantId()}').on('click', function (event) {
                         event.stopPropagation();
                         new EventManager().handleRejectRequestClicked('${businessCard.getParticipantId()}');
@@ -52,12 +52,6 @@ class FriendRequestListView extends WindowView {
                 </script>
             `)
         })
-        $('#dropdownFriendRequestList').on('hidden.bs.dropdown', function () {
-            $('#friendListModal .modal-header .modal-title').empty()
-            $('#friendListModal .modal-header .modal-title').append(`Friend List`)
-        })
-
-        
     }
 
     update(participantId, isAccepted) {
@@ -71,9 +65,5 @@ class FriendRequestListView extends WindowView {
             $('#acceptdisable' + participantId).show()
             $('#rejected' + participantId).show()
         }
-    }
-
-    onclick() {
-        return new EventManager().handleFriendRequestListClicked();
     }
 }

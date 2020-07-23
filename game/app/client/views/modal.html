@@ -64,10 +64,21 @@
                 <div class="modal-header">
                     
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                    <div class = "dropdown show" id="dropdownFriendRequestList">
-                        <a class="action_button nav-item nav-link" href="" style="position: absolute; top: 0.5rem; right: 2rem;" onclick = "(new FriendRequestListView()).onclick()" role="button" id="dropdownFriendRequestList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class = "dropdown" id="dropdownFriendRequestList">
+                        <a class="action_button nav-item nav-link" href="" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="dropdownFriendRequestList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-user-plus navbarIcons" style="transform: scale(0.8);"></i>
                         </a>
+
+                        <script>
+                            $('#dropdownFriendRequestList').on('show.bs.dropdown', function (event) {
+                                new FriendRequestListView().onclick();
+                            })
+
+                            $('#dropdownFriendRequestList').on('hide.bs.dropdown', function () {
+                                $('#friendListModal .modal-header .modal-title').empty()
+                                $('#friendListModal .modal-header .modal-title').append(`Friend List`)
+                            })
+                        </script>
 
                         <div class="dropdown-menu dropdown-menu-right" style="margin-top: 57px; margin-left: 10px;" aria-labelledby="dropdownFriendRequestList">
                             <ul class ="list-group bg-transparent" style="margin-top: 8px">
