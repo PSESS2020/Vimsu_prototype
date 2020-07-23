@@ -102,6 +102,12 @@ margin: 0;
   display: block;
   max-width: 100%;
 }
+
+.wrongDataIcon {
+  color: red;
+  padding-right: 10px;
+}
+
 .octicons {
   font: normal normal 20px octicons;
   text-align: left;
