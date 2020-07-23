@@ -1,9 +1,10 @@
-class LoadingView {
+class LoadingView extends Views {
     #overlay;
     #bar;
     #status;
 
     constructor() {
+        super();
         this.#overlay = $("#overlay");
         this.#bar = $("#progressbar");
         this.#status = $("#progressstatus");
