@@ -59,7 +59,12 @@ module.exports = class Participant {
 
         //TODO: Get FriendRequestList from FriendRequestListService (P)
         this.#receivedRequestList = new FriendList(this.#id, []);
-        this.#sentRequestList = new FriendList(this.#id, [])
+        this.#sentRequestList = new FriendList(this.#id, []);
+
+        
+        //JUST FOR TESTING PURPOSES
+        this.#friendList.addBusinessCard(new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
+        this.#receivedRequestList.addBusinessCard(new BusinessCard('22abcd', 'MaxMusterFriendRequester', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'));
     }
     
 

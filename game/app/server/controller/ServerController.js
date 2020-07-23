@@ -60,6 +60,11 @@ module.exports = class ServerController {
         const ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
 
+
+        //JUST FOR TESTING PURPOSES
+        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
+        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxMusterFriendRequester', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
+
         
         //Init all rooms
         var roomService = new RoomService();
@@ -583,10 +588,6 @@ module.exports = class ServerController {
             socket.on('getFriendList', (ppantID) => {
                 var friendList = ppants.get(ppantID).getFriendList();
 
-                //JUST FOR TESTING PURPOSES
-                ppants.get(ppantID).addFriendRequest(new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
-                ppants.get(ppantID).acceptFriendRequest('22abc');
-
                 var friendListData = [];
                 
                 friendList.getAllBusinessCards().forEach(businessCard => {
@@ -658,6 +659,15 @@ module.exports = class ServerController {
                 }
 
                 //Not sure if a answer from server is necessary
+            });
+
+            //handles removing a friend in both friend lists
+            socket.on('removeFriend', (removerID, removedFriendID) => {
+                let remover = ppants.get(removerID);
+                let removedFriend = ppants.get(removedFriendID);
+
+                remover.removeFriend(removedFriendID);
+                removedFriend.removeFriend(removerID);
             });
 
             // This will need a complete rewrite once the server-side models are properly implemented
