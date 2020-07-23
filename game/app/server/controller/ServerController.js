@@ -632,9 +632,22 @@ module.exports = class ServerController {
                 socket.emit('friendRequestList', friendRequestListData);
             }); 
 
+            //adds a new Friend Request to the system
+            socket.on('newFriendRequest', (requesterID, targetID) => {
+                let target = ppants.get(targetID);
+                let requester = ppants.get(requesterID);
+                let targetBusCard = target.getBusinessCard();
+                let requesterBusCard = requester.getBusinessCard();
+
+                target.addFriendRequest(requesterBusCard);
+                requester.addSentFriendRequest(targetBusCard);
+            });
+
+            //handles a friendrequest, either accepted or declined
             socket.on('handleFriendRequest', (targetID, requesterID, acceptRequest) => {
                 let target = ppants.get(targetID);
                 let requester = ppants.get(requesterID);
+
 
                 if (acceptRequest) {
                     target.acceptFriendRequest(requesterID);
