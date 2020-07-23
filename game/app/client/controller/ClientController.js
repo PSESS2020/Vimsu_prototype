@@ -278,7 +278,7 @@ class ClientController {
     sendToServerLectureChatMessage(text, lectureId) {
         this.socketReady;
         if(this.socket.connected)
-            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), text, lectureId);
+            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), this.#ownParticipant.getUsername(), text, lectureId);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
    
@@ -484,7 +484,7 @@ class ClientController {
     }
 
     handleFromServerNewLectureChatMessage(message) {
-        var messageHeader = message.senderID + ", " + message.timestamp + ":";
+        var messageHeader = message.username + ", " + message.timestamp + ":";
         var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
         var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
         $newMessageHeader.text(messageHeader);
