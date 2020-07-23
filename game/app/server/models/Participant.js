@@ -137,7 +137,7 @@ module.exports = class Participant {
     }
 
     /**
-     * Called when outgoing friend request to ppant with ppantId was accepted
+     * Called when outgoing friend request to ppant with ppantId was declined
      * @param {String} ppantId 
      */
     sentFriendRequestDeclined(ppantId) {

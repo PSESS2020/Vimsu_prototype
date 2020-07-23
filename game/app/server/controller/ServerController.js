@@ -638,12 +638,10 @@ module.exports = class ServerController {
 
                 if (acceptRequest) {
                     target.acceptFriendRequest(requesterID);
-
-                    //add target in requesterList
-                    //at this moment not sure how this works
-                    //Is there a list for outgoing requests? (P)
+                    requester.sentFriendRequestAccepted(targetID);
                 } else {
                     target.declineFriendRequest(requesterID);
+                    requester.sentFriendRequestDeclined(targetID);
                 }
 
                 //Not sure if a answer from server is necessary
