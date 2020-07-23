@@ -193,9 +193,10 @@ margin: 0;
 }
 
 .accountHeader {
-  font-size: larger;
+  font-size: x-large;
   font-weight: bold;
   text-align: center;
+  padding-left: 40px;
 }
 
 .accountLabel {
@@ -215,4 +216,9 @@ margin: 0;
   vertical-align: top;
   margin-top: 3px;
   margin-left: auto;
+}
+
+.editAccountOcticon {
+  color: #028090;
+  height: 30px;
 }

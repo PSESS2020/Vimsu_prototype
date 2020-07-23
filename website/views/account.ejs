@@ -9,7 +9,11 @@
         <div class="row justify-content-center">
             <div class="col-10">
         <div class="card accountCard">
-            <div class="card-header accountHeader">Account</div>
+            <div class="card-header accountHeader d-flex flex-row">Account Information
+                <div class="ml-auto">
+                    <a href="/editAccount"><div class="octicons octicon octicon-gear editAccountOcticon"></div></a>
+                </div>
+            </div>
             <div class="card-body pt-0 pb-0">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><p class="accountLabel">Username:</p> <p class="accountData"><%=username%></p></li>
