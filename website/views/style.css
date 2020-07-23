@@ -191,3 +191,28 @@ margin: 0;
     -o-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.accountHeader {
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+}
+
+.accountLabel {
+  display: inline-block;
+  vertical-align: top;
+  font-size: large;
+  font-weight: bold;
+  color: #028090;
+}
+
+.accountCard {
+  margin-top: 20px;
+}
+
+.accountData {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 3px;
+  margin-left: auto;
+}
