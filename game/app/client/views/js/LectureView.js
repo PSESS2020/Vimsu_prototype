@@ -8,8 +8,10 @@ class LectureView extends WindowView {
         // hide the overview of current lectures
         $('#currentLectures').hide(); 
 
-        //chat box is emptied
+        //chat box is emptied to prevent messages from showing in the wrong lecture chat
         $('#lectureChatMessages').empty();
+
+        //chat box is filled with the lecture chat
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
                 var message = lectureChat[i];
@@ -21,7 +23,9 @@ class LectureView extends WindowView {
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
             }
-        }       
+        } 
+        
+        //the input field is added if the user has a valif token
         if(hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
             $('#lectureChatInputGroup').append(`
@@ -37,6 +41,8 @@ class LectureView extends WindowView {
             `)
             $('#tokenLabel').empty();
             $('#tokenLabel').append('You obtained a question token!')
+
+        // the input field is emptied if the user does not have a valid token
         } else {
             $('#lectureChatInputGroup').empty();
             $('#tokenIcon').empty();
@@ -64,11 +70,11 @@ class LectureView extends WindowView {
 }
 
 $(document).ready(() => {
-    document.getElementById("lectureChatButton").onclick = function(event) {
+    $(document).on('click', '#lectureChatButton', function(){ 
         let messageVal = $('#lectureChatInput').val();
         if(messageVal !== '') {
           clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
           $('#lectureChatInput').val('');
         }
-    };
+    });
 });
