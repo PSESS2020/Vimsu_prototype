@@ -705,6 +705,7 @@ module.exports = class ServerController {
                     lecture.leave(ppantID);
                     console.log(ppantID + " leaves " + lectureId)
                     socket.leave(lectureId);
+                    socket.currentLecture = undefined;
                 }
 
                 // Destroy ppant and his controller
