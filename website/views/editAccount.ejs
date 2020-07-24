@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include('partials/head') %>
+</head>
+<script>
+function select() {
+    var title = "<%=title%>";
+    document.getElementById("title").value = title;
+}
+
+$(document).ready(() => {
+    select();
+})
+
+</script>
+<body>
+    <%- include('partials/header') %>
+    <div class="container">
+        <h1 style="margin-top: 20px; font-size:xx-large; text-align: center;">Edit Account Information</h1>
+        <form action="saveAccountChanges" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:20px">
+            <hr/>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="title">Title</label>
+            <select class="form-control" id="title" name="title" required>
+                <option selected>Title</option>
+                <option>Mr.</option>
+                <option>Mrs.</option>
+                <option>Ms.</option>
+                <option>Miss</option>
+                <option>Dr.</option>
+                <option>Prof.</option>
+                <option>Rev.</option>
+            </select>
+        
+        </div>
+        <div class="form-group col-md-5">
+            <label for="inputSurname">Surname</label>
+            <input type="text" class="form-control" id="inputSurname" name="surname" value="<%=surname%>" required>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="inputForename">Forename</label>
+          <input type="text" class="form-control" id="inputForename" name="forename" value="<%=forename%>" required>
+        </div>
+    </div>
+    
+    <div class="form-row" style="margin-bottom: -15px; ">
+        <div class="form-group col-md-6">
+            <label for="inputJob">Job/Profession</label>
+            <input type="text" class="form-control" id="inputJob" name="job" value="<%=job%>" required>
+          </div>
+        <div class="form-group col-md-6">
+            <label for="inputCompany">Company/University</label>
+          <input type="text" class="form-control" id="inputCompany" name="company" value="<%=company%>" required>
+        </div>
+    </div>
+    <hr/>
+    <input class="btn btn-block btn-submit" type="submit" value="Save changes" style="margin-bottom: 30px; "></button>
+</form>
+</div>
+</div>
+</div>    
+</body>
+</html>
