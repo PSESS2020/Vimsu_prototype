@@ -292,6 +292,12 @@ module.exports = class RouteController {
 
         this.#app.get('/editAccount', (request, response) => {
             title = request.session.title;
+            if(title === "Title") {
+                title = "";
+            }
+            else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
+                return response.send('Invalid title. <a href="/editAccount">Try again</a>')
+            }
             forename = request.session.forename;
             surname = request.session.surname;
             job = request.session.job;
