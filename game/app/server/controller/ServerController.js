@@ -482,19 +482,21 @@ module.exports = class ServerController {
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
-                lecture.enter(ppantID);
-                
-                var token = lecture.hasToken(ppantID);
-                var lectureChat = lecture.getLectureChat();
-                console.log(lectureChat);
-                var messages = lecture.getLectureChat().getMessages();
-                console.log(messages);
+                if(lecture.enter(ppantID)) {
+                    var token = lecture.hasToken(ppantID);
+                    var lectureChat = lecture.getLectureChat();
+                    console.log(lectureChat);
+                    var messages = lecture.getLectureChat().getMessages();
+                    console.log(messages);
 
-                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
-                    currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                    socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
-                    socket.broadcast.emit('hideAvatar', ppantID);
-                })
+                    LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
+                        currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
+                        socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
+                        socket.broadcast.emit('hideAvatar', ppantID);
+                    })
+                } else {
+                    socket.emit('lectureFull', currentLecturesData[idx].id);
+                }
             })
 
             socket.on('leaveLecture', (participantId, lectureId) => {

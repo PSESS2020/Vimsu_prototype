@@ -201,6 +201,7 @@ class ClientController {
         this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
         this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
         this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
+        this.socket.on('lectureFull', this.handleFromServerLectureFull.bind(this));
         this.socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
@@ -391,6 +392,10 @@ class ClientController {
     handleFromServerLectureEntered(lecture, hasToken, lectureChat) {
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
+
+    handleFromServerLectureFull(lectureId) {
+        this.#gameView.updateCurrentLectures(lectureId);
+    }
  
     /* TODO
      * Change argument from object into list (nicer to read)
@@ -435,7 +440,7 @@ class ClientController {
 
     // get the current lectures from the server to display in the UI for selection
     handleFromServerCurrentLectures(lectures) {
-        this.#gameView.updateCurrentLectures(lectures);
+        this.#gameView.initCurrentLectures(lectures);
     }
 
     handleFromServerCurrentSchedule(lectures) {

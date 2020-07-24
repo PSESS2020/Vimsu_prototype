@@ -495,8 +495,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView.updateCurrentAnimation();
     }
 
-    updateCurrentLectures(lectures) {
-        this.#currentLecturesView = new CurrentLecturesView().draw(lectures);
+    initCurrentLectures(lectures) {
+        this.#currentLecturesView = new CurrentLecturesView()
+        this.#currentLecturesView.draw(lectures);
+    }
+
+    updateCurrentLectures(lectureId) {
+        this.#currentLecturesView.drawLectureFull(lectureId);
     }
 
     initCurrentSchedule(lectures) {
