@@ -369,8 +369,8 @@ module.exports = class ServerController {
                 //check if participant is in right position to enter room
                 //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
                 if (ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
-                    ppants.get(ppantID).getPosition().getCordX() !== door.getStartPosition().getCordX() ||
-                    ppants.get(ppantID).getPosition().getCordY() !== door.getStartPosition().getCordY()) {
+                    !door.getStartPosition().getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
+                    !door.getStartPosition().getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
                     console.log('wrong position');
                     return;
                 }
@@ -514,8 +514,8 @@ module.exports = class ServerController {
                 //check if participant is in right position to enter room
                 //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
                 if (ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
-                    ppants.get(ppantID).getPosition().getCordX() !== lectureDoorPosition.getCordX() ||
-                    ppants.get(ppantID).getPosition().getCordY() !== lectureDoorPosition.getCordY()) {
+                    !lectureDoorPosition.getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
+                    !lectureDoorPosition.getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
                     console.log('wrong position');
                     return;
                 }
