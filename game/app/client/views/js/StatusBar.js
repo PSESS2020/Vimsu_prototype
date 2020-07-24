@@ -23,7 +23,7 @@ class StatusBar extends Views{
     updateLocation(location) {
         TypeChecker.isString(location);
         $('#location').empty();
-        $('#location').append(`${location}`);
+        $('#location').append(`${"Location: " + location}`);
     }
 
 }
