@@ -191,42 +191,18 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             this.drawClock();
 
-            //sort AnotherAvatarViews in CordX
-            this.#anotherParticipantAvatarViews.sort(function(a, b) {
+            //put all AvatarViews in one list
+            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews);
+            
+
+            //sort all Avatars in CordX
+            allAvatars.sort(function(a, b) {
                 return b.getPosition().getCordX() - a.getPosition().getCordX();
             });
             
-            //sort updateList which includes ownAvatarView
-            this.#updateList.sort(function(a, b) {
-                if (a instanceof Array && b instanceof Array){
-
-                    if (a[0] !== undefined && b[0] !== undefined)
-                        return b[0].getPosition().getCordX() - a[0].getPosition().getCordX();
-                
-                } else if (a instanceof Array) {
-                
-                    if (a[0] !== undefined)
-                        return b.getPosition().getCordX() - a[0].getPosition().getCordX();
-                
-                } else if (b instanceof Array) {
-                    
-                    if (b[0] !== undefined)
-                        return b[0].getPosition().getCordX() - a.getPosition().getCordX();
-              
-                } else 
-                        return b.getPosition().getCordX() - a.getPosition().getCordX();
-            });
-            
-            for (var i = 0; i < this.#updateList.length; i++) {
-
-                if (this.#updateList[i] instanceof Array) {
-                    for(var j = 0; j < this.#updateList[i].length; j++) {
-                        this.#updateList[i][j].draw();
-                    }
-                }
-                else {
-                    this.#updateList[i].draw();
-                }
+            //draw all avatars
+            for (var i = 0; i < allAvatars.length; i++) {
+                allAvatars[i].draw();
             }
         }
     }
@@ -256,46 +232,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new FoyerView(map);
-
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
     }
 
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new ReceptionView(map);
-        
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
-
     }
 
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new FoodCourtView(map);
-        
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
-
     }
-
-    /*
-    //Is called when participant enters FoodCourt
-    initFoodCourtView(map) {
-        this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
-
-    }
-
-    //Is called when participant enters Reception
-    initReceptionView(map) {
-        this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
-    }
-    */
 
     /**
      * 
