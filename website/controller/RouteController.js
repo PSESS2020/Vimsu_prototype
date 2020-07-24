@@ -333,7 +333,7 @@ module.exports = class RouteController {
                 request.session.email = res.getEmail();
                 response.redirect('/account');
             }).catch(err => {
-                response.send('Registration failed. <a href="/register">Try again</a>');
+                response.send('Failed updating data. <a href="/account">Try again</a>');
                 console.error(err);
             })
         })
