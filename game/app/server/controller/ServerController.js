@@ -469,20 +469,20 @@ module.exports = class ServerController {
 
             socket.on('enterLecture', (ppantID, lectureId) => {
 
-                console.log(ppantID + " joins " + lectureId)
-
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
 
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
-
-                socket.join(lectureId);
-                socket.currentLecture = lectureId;
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+
                 if(lecture.enter(ppantID)) {
+                    console.log(ppantID + " joins " + lectureId);
+                    socket.join(lectureId);
+                    socket.currentLecture = lectureId;
+                    
                     var token = lecture.hasToken(ppantID);
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
@@ -697,6 +697,15 @@ module.exports = class ServerController {
                 
                 ppantControllers.delete(socket.id);
                 ppants.delete(ppantID);
+
+                if(socket.currentLecture) {
+                    var schedule = this.#conference.getSchedule();
+                    var lectureId = socket.currentLecture;
+                    var lecture = schedule.getLecture(lectureId);
+                    lecture.leave(ppantID);
+                    console.log(ppantID + " leaves " + lectureId)
+                    socket.leave(lectureId);
+                }
 
                 // Destroy ppant and his controller
             });
