@@ -14,7 +14,7 @@ class CurrentLecturesView extends WindowView {
                     <h5 style="display:inline">${lecture.title} </h5>
                     <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
                     <div>${lecture.remarks}</div>
-                    <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture full!</span>
+                    <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full!</span>
                     <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto" onclick="(new EventManager()).handleLectureClicked('${lecture.id}')">Show</button>
                 </div>
             `)
