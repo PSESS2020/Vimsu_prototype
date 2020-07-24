@@ -273,20 +273,17 @@ module.exports = class AccountService {
     }
 
     static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(username);
-        TypeChecker.isString(newTitle);
-        TypeChecker.isString(newSurname);
-        TypeChecker.isString(newForename);
-        TypeChecker.isString(newJob);
-        TypeChecker.isString(newCompany);
+        var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
         //TypeChecker.isString(newPassword);
 
         //var newPasswordHash = passwordHash.generate(newPassword)
 
         return getDB().then(res => {
-            vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany});
-            return new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email);
+            return vimsudb.updateOneToCollection("accounts", {accountId: accountId}, {title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany}).then(res => {
+                return account;
+            }).catch(err => {
+                console.error(err)
+            });
         }).catch(err => {
             console.error(err)
         });
