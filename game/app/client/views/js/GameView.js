@@ -200,6 +200,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 return b.getPosition().getCordX() - a.getPosition().getCordX();
             });
             
+            //draw all avatars
             for (var i = 0; i < allAvatars.length; i++) {
                 allAvatars[i].draw();
             }
@@ -231,46 +232,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new FoyerView(map);
-
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
     }
 
     initReceptionView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new ReceptionView(map);
-        
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
-
     }
 
     initFoodCourtView(map) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
         this.#currentMap = new FoodCourtView(map);
-        
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
-
     }
-
-    /*
-    //Is called when participant enters FoodCourt
-    initFoodCourtView(map) {
-        this.#foodCourtView = new FoodCourtView(map);   //TODO: implement FoodCourtView
-
-    }
-
-    //Is called when participant enters Reception
-    initReceptionView(map) {
-        this.#receptionView = new ReceptionView(map);   //TODO: implement ReceptionView
-    }
-    */
 
     /**
      * 
