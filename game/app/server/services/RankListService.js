@@ -39,20 +39,18 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(num);
 
-        return getDB().then(res => {
-            return this.getRankList(conferenceId).then(rankList => {
-                rankList.slice(0, num);
-                rankList.forEach(ppant => {
-                    return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
-                        ppant.username = username;
-                    }).catch(err => {
-                        console.error(err);
-                    })
+        return this.getRankList(conferenceId).then(rankList => {
+            rankList.slice(0, num);
+            rankList.forEach(ppant => {
+                return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
+                    ppant.username = username;
+                }).catch(err => {
+                    console.error(err);
                 })
-                return rankList;
-            }).catch(err => {
-                console.error(err);
             })
+            return rankList;
+        }).catch(err => {
+            console.error(err);
         })
     }
 
