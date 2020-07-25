@@ -35,12 +35,21 @@ module.exports = class RankListService {
         })
     }
 
-    static getRankListWithUsername(conferenceId, num) {
+    static getRankListWithUsername(conferenceId, lastRank) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(num);
 
         return this.getRankList(conferenceId).then(rankList => {
-            rankList.slice(0, num);
+            var rankListLength = 1;
+
+            for(var i = rankList.length - 1; i >= 0; i--){
+                if(rankList[i].rank === lastRank) {
+                    rankListLength = rankListLength + i;
+                    break;
+                }
+            }    
+
+            rankList.slice(0, rankListLength);
             rankList.forEach(ppant => {
                 return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
                     ppant.username = username;
