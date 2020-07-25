@@ -588,6 +588,12 @@ class ClientController {
         this.socket.emit('getSchedule');
     }
 
+    // called after clicking on achievement list
+    handleFromViewShowAchievements() {
+        this.socketReady
+        this.socket.emit('getAchievements', this.#ownParticipant.getId());
+    }
+
     //called after click on friendlist button
     handleFromViewShowFriendList() {
         this.socketReady;
