@@ -60,6 +60,7 @@ class EventManager {
 
     handleLectureClicked(lectureId) {
         this.#clientController.handleFromViewEnterLecture(lectureId);
+        this.handleAchievementEvent('lecturesVisited');
     }
 
     handleLectureLeft(lectureId) {
@@ -90,6 +91,10 @@ class EventManager {
         this.#clientController.handleFromViewShowFriendRequestList();
     }
 
+    handleAchievementsClicked() {
+        this.#clientController.handleFromViewShowAchievements();
+    }
+    
     handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
         var businessCard = {
             participantId: participantId,

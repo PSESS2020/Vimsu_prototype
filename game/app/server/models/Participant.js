@@ -15,12 +15,13 @@ module.exports = class Participant {
     #businessCard;
     #friendList;
     #receivedRequestList;
-    #sentRequestList
+    #sentRequestList;
+    #achievements;
 
     /**
      * Erstellt Participant Instanz
      * 
-     * @author Klaudia
+     * @author Klaudia, Laura
      * 
      * @param {String} id 
      * @param {Position} position 
@@ -61,7 +62,45 @@ module.exports = class Participant {
         this.#receivedRequestList = new FriendList(this.#id, []);
         this.#sentRequestList = new FriendList(this.#id, []);
 
-        
+
+        // TODO: could create js classes for everything
+        this.#achievements = {
+            'lecturesVisited': {
+                count: 0,
+                icon: 'headphones',
+                title: 'Good Listener',
+                description: 'Join lectures to gain this achievement.',
+                levels: [
+                    { count: 1, color: '#AD8A56' },
+                    { count: 5, color: '#D7D7D7' },
+                    { count: 10, color: '#C9B037' }
+                ]
+            },
+            'participantsClicked': {
+                count: 0,
+                title: 'Network Guru',
+                icon: 'users',
+                description: 'Interact with other participants to gain this achievement.',
+                levels: [
+                    { count: 1, color: '#AD8A56' },
+                    { count: 5, color: '#D7D7D7' },
+                    { count: 10, color: '#C9B037' }
+                ]
+            },
+            'messagesSent': {
+                count: 0,
+                title: 'Walky Talky',
+                icon: 'comment',
+                description: 'Send more chat messages to gain this achievement.',
+                levels: [
+                    { count: 1, color: '#AD8A56' },
+                    { count: 5, color: '#D7D7D7' },
+                    { count: 10, color: '#C9B037' }
+                ]
+            }
+            // TODO: can easily add more achievements here
+        }
+
         //JUST FOR TESTING PURPOSES
         this.#friendList.addBusinessCard(new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
         this.#receivedRequestList.addBusinessCard(new BusinessCard('22abcd', 'MaxMusterFriendRequester', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'));
@@ -198,4 +237,14 @@ module.exports = class Participant {
             this.#friendList.removeBusinessCard(ppantId);
         }
     }
+
+    getAchievements() {
+        return this.#achievements;
+    }
+
+    increaseAchievementCount(identifier) {
+        this.#achievements[identifier].count = this.#achievements[identifier].count + 1;
+    }
+
+    update
 }

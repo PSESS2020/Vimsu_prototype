@@ -210,6 +210,7 @@ class ClientController {
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
+        this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -592,6 +593,7 @@ class ClientController {
     handleFromViewShowAchievements() {
         this.socketReady
         this.socket.emit('getAchievements', this.#ownParticipant.getId());
+        
     }
 
     //called after click on friendlist button
@@ -657,6 +659,10 @@ class ClientController {
 
     handleFromViewShowProfile() {
         this.#gameView.initProfileView(this.#ownBusinessCard);
+    }
+
+    handleFromServerAchievements(achievements) {
+        this.#gameView.initCurrentAchievementsView(achievements);
     }
    
     // Can we maybe merge these four functions into one?

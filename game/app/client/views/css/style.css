@@ -370,6 +370,13 @@ body::-webkit-scrollbar {
 
 .achievement-icon {
   font-size: 120px;
+  opacity: 1;                /* Opacity (Transparency) */
+  -webkit-filter: blur(0px);    /* Blur */
+  -moz-filter: blur(0px);
+  filter: blur(0px);
+}
+
+.achievement-blur {
   color: darkslategray;
   opacity: 0.75;                /* Opacity (Transparency) */
   -webkit-filter: blur(8px);    /* Blur */

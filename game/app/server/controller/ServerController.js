@@ -288,6 +288,8 @@ module.exports = class ServerController {
                 var roomID = participant.getPosition().getRoomId();
                 var username = participant.getBusinessCard().getUsername();
 
+                ppants.get(ppantID).increaseAchievementCount('messagesSent')
+
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
@@ -448,6 +450,8 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
+                ppants.get(ppantId).increaseAchievementCount('messagesSent')
+
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
@@ -494,6 +498,8 @@ module.exports = class ServerController {
                         socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
                         socket.broadcast.emit('hideAvatar', ppantID);
                     })
+
+                    ppants.get(ppantID).increaseAchievementCount('lecturesVisited')
                 } else {
                     socket.emit('lectureFull', currentLecturesData[idx].id);
                 }
@@ -585,6 +591,12 @@ module.exports = class ServerController {
 
                 socket.emit('businessCard', businessCardObject);
 
+            });
+
+            socket.on('getAchievements', (ppantID) => {
+                var achievements = ppants.get(ppantID).getAchievements();
+
+                socket.emit('achievements', achievements);
             });
 
             socket.on('getFriendList', (ppantID) => {

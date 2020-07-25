@@ -28,6 +28,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #anotherParticipantAvatarViews = [];
     #businessCardView;
     #gameViewInit;
+    #achievementView;
 
     constructor(gameWidth, gameHeight) 
     {
@@ -472,6 +473,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initFriendListView(businessCards) {
         this.#friendListView = new FriendListView();
         this.#friendListView.draw(businessCards)
+    }
+
+    initCurrentAchievementsView(achievements) {
+        this.achievementView = new AchievementView().draw(achievements);
     }
 
     removeFriend(participantId) {
