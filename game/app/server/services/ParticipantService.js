@@ -35,12 +35,13 @@ module.exports = class ParticipantService {
                         cordY: par.position.cordY
                     }
                     var direction = par.direction;
+                    var points = par.points;
                     var friendList = par.friendId;
                     var sentRequestList = par.friendRequestId.sent;
                     var receivedRequestList = par.friendRequestId.received;
                     participant = new Participant(participantId, accountId, new BusinessCard(participantId, account.getUsername(), 
                     account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, friendList, sentRequestList, receivedRequestList);
+                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, points, friendList, sentRequestList, receivedRequestList);
                 } 
                 else {
                     var participantId = new ObjectId().toString();
@@ -55,6 +56,7 @@ module.exports = class ParticipantService {
                             cordY: Settings.STARTPOSITION_Y
                         },
                         direction: Settings.STARTDIRECTION,
+                        points: 0,
                         friendId: [],
                         friendRequestId: {
                             sent: [],
