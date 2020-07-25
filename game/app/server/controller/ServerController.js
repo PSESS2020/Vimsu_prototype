@@ -829,27 +829,28 @@ module.exports = class ServerController {
                  * This can be used to identify the senderIDs of messages send into the allchat,
                  * so that the moderator can remove the right user from a conference.
                  * - (E) */
-                 var messageHeader = "List of messages posted in " + moderator.getCurrentRoom().getTypeOfRoom();
+                 var room = this.#rooms[moderator.getPosition().getRoomId() - 1];
+                 var messageHeader = "List of messages posted in " + room.getTypeOfRoom();
                  var messageBody = [];
-                 var msg = moderator.getCurrentRoom().getMessages();
+                 var msg = room.getMessages();
                  for(var i = 0; i < msg.length; i++) {
-                     messageBody.push("[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
+                     messageBody.splice(0 , 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
                       ") has messageId: " + msg[i].messageID);
                  }
                  this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                  break;
             case Commands.HELP:
                 var messageHeader = "List of Commands."
-                var messageBody = ["\global <message>  --  Post a message into the global chat. " +
+                var messageBody = ["\\global <message>  --  Post a message into the global chat. " +
                                         "It will display in every participants game-view as a pop-up.",
-                                   "\help  --  This command. Displays a list of all commands and how to use them.", 
-                                   "\log --  Will show a log of all messages send into the allchat of the room you're " +
+                                   "\\help  --  This command. Displays a list of all commands and how to use them.", 
+                                   "\\log --  Will show a log of all messages send into the allchat of the room you're " +
                                    "currently in, including the messageID and senderID of each message.", 
-                                   "\rmuser <list of participantIDs>  -- Takes a list of participantIDs, each one " +
+                                   "\\rmuser <list of participantIDs>  -- Takes a list of participantIDs, each one " +
                                    "seperated from the next by a whitespace-character, and removes all of them from " +
                                    "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                                    "not yet possible to unban a banned user!",
-                                   "\rmmsg <list of msgIDs  -- Takes a list of messageIDs and removes the corresponding messages - " +
+                                   "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs and removes the corresponding messages - " +
                                    "if they exist - from the allchat of the room you're currently in."];
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                 break;
@@ -857,19 +858,22 @@ module.exports = class ServerController {
                 // removes player(s) from conference
                 // Maybe instead of being able to remove several players be able
                 // to remove just one and give them a ban message instead?
+                
+                //TODO have this take something else instead of participant-IDs
 
                 /* This will assume that each argument supplied with the \rmuser-command
-                 * is a valid username, each one separated from the next by a whitespace.
+                 * is a valid participantID, each one separated from the next by a whitespace.
                  * It will perform the removal.
                  */
                  for(var i = 1; i < commandArgs.length; i++) {
-                    var username = commandArgs[i];
                      
-                    var ppantID = this.getIdOf(username);
+                    var ppantID = commandArgs[i];
+                     
+                    
                     /* First, it gets the socket object corresponding to player that
                      * is supposed to be removed from the game. 
                      * - (E) */
-                    var id = this.getSocketId(username); // get the Id of the socket belonging to the 
+                    var id = this.getSocketId(ppantID); // get the Id of the socket belonging to the 
                                                         // participant that is to be removed 
                                                                
                     var socket = this.getSocketObject(id); // get the actual socket object
@@ -906,20 +910,25 @@ module.exports = class ServerController {
                     //ppants.delete(ppantID); 
                 }
                 break;
-            case Command.REMOVEMESSAGE:
+            case Commands.REMOVEMESSAGE:
                 var messagesToDelete = commandArgs.slice(1);
-                var msg = var msg = moderator.getCurrentRoom().getMessages();
+                var roomID = moderator.getPosition().getRoomId();
+                var msg = this.#rooms[roomID - 1].getMessages();
+                console.log(messagesToDelete);
+                console.log(msg);
                 for(var i = 0; i < msg.length; i++) {
-                     if(messagesToDelete.includes(msg[i].messageID) {
+                     console.log(msg[i].messageID);
+                     if(messagesToDelete.includes(msg[i].messageID.toString())) {
                          msg.splice(i, 1);
                      }
                 }
-                
+                console.log(msg);
+                this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\help' to receive an overview of all commands and how to use them."
-                his.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText); 
+                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText); 
                 break;
         } 
     }

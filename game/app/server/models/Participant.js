@@ -93,6 +93,10 @@ module.exports = class Participant {
     getFriendRequestList() {
         return this.#friendRequestList;
     }
+    
+    getCurrentRoom() {
+        return this.getPosition().getRoomId();
+    };
 
     isModerator() {
         return this.#isMod;
