@@ -874,7 +874,11 @@ module.exports = class ServerController {
                      * is supposed to be removed from the game. 
                      * - (E) */
                     var id = this.getSocketId(ppantID); // get the Id of the socket belonging to the 
-                                                        // participant that is to be removed 
+                                                        // participant that is to be removed
+                    
+                    if(id == undefined) {
+                        return;
+                    }
                                                                
                     var socket = this.getSocketObject(id); // get the actual socket object
                     

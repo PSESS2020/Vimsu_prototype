@@ -183,21 +183,22 @@
         <div class="viewBlockerWindow" id="viewBlocker">
             <div class="container-fluid">
 
-                <div class="row">
-                    <div class="col-12 p-0">
+                <div class="row" style="height:100%;">
+                    <div class="col-12 p-0" style="position:absolute; height: 10%;">
                         <div class="removelHeader p-3 mb-3 d-flex" id="removalHeader">
-                            <h5>Ban.</h5>
                         </div>
                     </div>
                     <div class="col-12">
                         <div id="removalMessage" class="row ml-auto mr-auto">
-                            <div style="font-size: large;">
+                            <div style="font-size: large; position: absolute; top: 30%; width: 100%; text-align:center;">
                                 <h5>You have been removed from this conference.</h5>
                             </div>
-                            <a class="action_button nav-item nav-link" href="/">
-                            <i class="fa fa-sign-out fa-4x navbarIcons"></i>
-                            <p class="navbarIconsText" style="margin-left: 7px;">Return to Homepage.</p>
-                            </a>
+                            <div style="position: absolute; width:100%; top: 60%;">
+                                <a class="action_button nav-item nav-link" href="/">
+                                <!--<i class="fa fa-sign-out fa-4x navbarIcons" style="position:absolute; left: 40%;"></i>-->
+                                <p class="navbarIconsText" style="margin-left: 7px; width: 100%; text-align: center;">Return to Homepage.</p>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
@@ -215,7 +216,7 @@
 						</div>
 					</div>
 					<div class="col-12">
-						<div id="globalChatMessage" style="overflow-y: auto;" class="mr-2 ml-2">                    
+						<div id="globalChatMessage" class="mr-2 ml-2">                    
 						</div>
                     </div>
                 </div>
