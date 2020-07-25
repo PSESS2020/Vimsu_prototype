@@ -914,15 +914,11 @@ module.exports = class ServerController {
                 var messagesToDelete = commandArgs.slice(1);
                 var roomID = moderator.getPosition().getRoomId();
                 var msg = this.#rooms[roomID - 1].getMessages();
-                console.log(messagesToDelete);
-                console.log(msg);
                 for(var i = 0; i < msg.length; i++) {
-                     console.log(msg[i].messageID);
                      if(messagesToDelete.includes(msg[i].messageID.toString())) {
                          msg.splice(i, 1);
                      }
                 }
-                console.log(msg);
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
             default:

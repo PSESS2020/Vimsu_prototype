@@ -246,6 +246,7 @@ body::-webkit-scrollbar {
 
 .globalChatWindowHeader {
   background-color: rgba(24, 30, 32, 1);
+  position: sticky;
   color: antiquewhite;
   font-size: 30px;
 }
