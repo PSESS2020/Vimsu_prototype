@@ -275,14 +275,14 @@ module.exports = class RouteController {
 
         this.#app.get('/account', (request, response) => {
             if (request.session.loggedin = true) {
-            username = request.session.username;
-            email = request.session.email;
-            title = request.session.title;
-            forename = request.session.forename;
-            surname = request.session.surname;
-            job = request.session.job;
-            company = request.session.company;
-            response.render('account', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company});
+                username = request.session.username;
+                email = request.session.email;
+                title = request.session.title;
+                forename = request.session.forename;
+                surname = request.session.surname;
+                job = request.session.job;
+                company = request.session.company;
+                response.render('account', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company});
             }
 
             else {
@@ -293,14 +293,6 @@ module.exports = class RouteController {
         this.#app.get('/editAccount', (request, response) => {
             if (request.session.loggedin = true)  {
                 title = request.session.title;
-
-                if(title === "Title") {
-                    title = "";
-                }
-                else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
-                    return response.send('Invalid title. <a href="/editAccount">Try again</a>')
-                }
-
                 forename = request.session.forename;
                 surname = request.session.surname;
                 job = request.session.job;
@@ -314,13 +306,21 @@ module.exports = class RouteController {
 
         this.#app.post('/saveAccountChanges', (request, response) => {
             title = request.body.title;
+
+            if(title === "Title") {
+                title = "";
+            }
+            else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
+                return response.send('Invalid title. <a href="/editAccount">Try again</a>')
+            }
+
             surname = request.body.surname;
             forename = request.body.forename;
             job = request.body.job;
             company = request.body.company;
             var accountId = request.session.accountId;
-            var username = request.session.username;
-            var email = request.session.email;
+            username = request.session.username;
+            email = request.session.email;
 
             return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email).then(res => {
                 request.session.accountId = res.getAccountID();
