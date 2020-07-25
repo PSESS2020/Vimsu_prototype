@@ -1,0 +1,32 @@
+class RankListView extends WindowView {
+
+    #rankList;
+    constructor() {
+        super()
+    }
+
+    draw(rankList) {
+
+        $('#rankListModal .modal-body .card-columns').empty();
+        this.#rankList = rankList;
+
+        this.#rankList.forEach(ppant => {
+            $('#rankListModal .modal-body .card-columns').append(`
+                <div class="card currentLecturesContainer">
+                    <div class="card-body">
+                        <div class="row card-text">
+                            <div class="col-lg">${ppant.rank}</div>
+                            <div class="col-lg-6">${ppant.username}</div>
+                            <div class="col-lg">${ppant.points + "P"}</div>
+                        </div>
+                    </div>
+                </div>
+            `)
+        })
+    }
+
+
+    onclick() {
+        new EventManager().handleRankListClicked();
+    }
+}

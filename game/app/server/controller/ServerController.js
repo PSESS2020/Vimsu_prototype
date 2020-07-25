@@ -22,6 +22,7 @@ const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
+const RankListService = require('../services/RankListService')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
@@ -598,6 +599,13 @@ module.exports = class ServerController {
 
                 socket.emit('achievements', achievements);
             });
+
+            socket.on('getRankList', () => {
+                //DB is not initialized yet. TODO: make local RankList 
+                /*RankListService.getRankListWithUsername("1", 30).then(rankList => {
+                    socket.emit('rankList', rankList);
+                })*/
+            })
 
             socket.on('getFriendList', (ppantID) => {
                 var friendList = ppants.get(ppantID).getFriendList();

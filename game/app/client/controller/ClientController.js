@@ -205,6 +205,7 @@ class ClientController {
         this.socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
+        this.socket.on('rankList', this.handleFromServerRankList(rankList).bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
@@ -482,6 +483,10 @@ class ClientController {
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
 
+    handleFromServerRankList(rankList) {
+        this.#gameView.initRankListView(rankList);
+    }
+
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
         var msgText = "[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text;
@@ -663,6 +668,10 @@ class ClientController {
 
     handleFromServerAchievements(achievements) {
         this.#gameView.initCurrentAchievementsView(achievements);
+    }
+
+    handleFromViewShowRankList() {
+        this.socket.emit('getRankList');
     }
    
     // Can we maybe merge these four functions into one?

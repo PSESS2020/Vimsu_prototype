@@ -20,6 +20,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #scheduleListView;
     #currentLecturesView;
     #lectureView;
+    #rankListView;
     #statusBar;
     #friendListView;
     #friendRequestListView;
@@ -477,6 +478,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initCurrentAchievementsView(achievements) {
         this.achievementView = new AchievementView().draw(achievements);
+    }
+
+    initRankListView(rankList) {
+        this.#rankListView = new RankListView().draw(rankList);
     }
 
     removeFriend(participantId) {

@@ -94,6 +94,10 @@ class EventManager {
     handleAchievementsClicked() {
         this.#clientController.handleFromViewShowAchievements();
     }
+
+    handleRankListClicked() {
+        this.#clientController.handleFromViewShowRankList();
+    }
     
     handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
         var businessCard = {
