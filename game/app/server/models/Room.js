@@ -9,6 +9,8 @@ const Position = require('./Position.js');
 const Direction = require('./Direction.js');
 const Settings = require('../../utils/Settings.js');
 const Door = require('./Door.js');
+const NPCService = require('../services/NPCService.js');
+const NPC = require('./NPC.js');
 
 module.exports = class Room {
 
@@ -21,6 +23,7 @@ module.exports = class Room {
     #occupationMap;
     //listOfNPCs
     #listOfGameObjects;
+    #listOfNPCs;
     //listOfDoors;
     #startPosition; // The position in which new participants are initialized - (E)
     #startDirection; // The direction in which new particpants are looking on initialization - (E)
@@ -45,7 +48,7 @@ module.exports = class Room {
         this.#listOfMessages = [];
 
         //andere Fälle später
-        if (typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom == "FOYER") {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
@@ -54,7 +57,7 @@ module.exports = class Room {
                                                               // a settings file somewhere - (E)
             this.#startDirection = Direction.DOWNRIGHT; // See above
 
-        } else if (typeOfRoom === "FOODCOURT") {
+        } else if (this.#typeOfRoom === "FOODCOURT") {
 
             this.#length = RoomDimensions.FOODCOURT_LENGTH;
             this.#width = RoomDimensions.FOODCOURT_WIDTH;
@@ -64,7 +67,7 @@ module.exports = class Room {
             this.#startPosition = new Position(this.#roomId, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
             this.#startDirection = Direction.DOWNRIGHT;
         
-        } else if (typeOfRoom === "RECEPTION") {
+        } else if (this.#typeOfRoom === "RECEPTION") {
 
             this.#length = RoomDimensions.RECEPTION_LENGTH;
             this.#width = RoomDimensions.RECEPTION_WIDTH;
@@ -81,9 +84,13 @@ module.exports = class Room {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
         }
         
-        //Alle GameObjekte die in diesen Raum gehören von Service holem
+        //Alle GameObjekte die in diesen Raum gehören von Service holen
         let objService = new GameObjectService();
-        this.#listOfGameObjects = objService.getObjects(this.#roomId, typeOfRoom);
+        this.#listOfGameObjects = objService.getObjects(this.#roomId, this.#typeOfRoom);
+
+        //Alle NPCs die in diesen Raum gehören vom Service holen
+        let npcService = new NPCService();
+        this.#listOfNPCs = npcService.getNPCs(this.#roomId, this.#typeOfRoom);
 
         this.#buildOccMap();
     }
@@ -135,6 +142,10 @@ module.exports = class Room {
 
     getListOfGameObjects() {
         return this.#listOfGameObjects;
+    }
+
+    getListOfNPCs() {
+        return this.#listOfNPCs;
     }
 
     /**
@@ -251,6 +262,14 @@ module.exports = class Room {
                     }
                 }
             } 
+        }
+
+        //collision with NPCs
+        for (var i = 0; i < this.#listOfNPCs.length; i++) {
+            let npcPosition = this.#listOfNPCs[i].getPosition();
+            let cordX = npcPosition.getCordX();
+            let cordY = npcPosition.getCordY();
+            this.#occupationMap[cordX][cordY] = 1;
         }
     }
 }
