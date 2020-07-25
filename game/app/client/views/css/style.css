@@ -367,3 +367,17 @@ body::-webkit-scrollbar {
   border-top: 1pt solid antiquewhite !important;
   border-bottom: 1pt solid antiquewhite !important;
 }
+
+.achievement-icon {
+  font-size: 120px;
+  color: darkslategray;
+  opacity: 0.75;                /* Opacity (Transparency) */
+  -webkit-filter: blur(8px);    /* Blur */
+  -moz-filter: blur(8px);
+  filter: blur(8px);
+}
+
+.progress {
+  width: 100%;
+  height: 5px;
+}
