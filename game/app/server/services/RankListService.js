@@ -40,17 +40,7 @@ module.exports = class RankListService {
         TypeChecker.isInt(num);
 
         return getDB().then(res => {
-            return vimsudb.findInCollection("participants_" + conferenceId, "", {participantId: 1, points: 1}).then(ppants => {
-                var rankList = ppants.sort((a,b) => b.points - a.points);
-
-                var rank = 1;
-                for (var i = 0; i < rankList.length; i++) {
-                    // increase rank only if current points less than previous
-                    if (i > 0 && rankList[i].points < rankList[i - 1].points) {
-                        rank++;
-                    }
-                    rankList[i].rank = rank;
-                }
+            return this.getRankList(conferenceId).then(rankList => {
                 rankList.slice(0, num);
                 rankList.forEach(ppant => {
                     return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
