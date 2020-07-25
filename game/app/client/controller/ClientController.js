@@ -205,7 +205,7 @@ class ClientController {
         this.socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
         this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
         this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
-        this.socket.on('rankList', this.handleFromServerRankList(rankList).bind(this));
+        this.socket.on('rankList', this.handleFromServerRankList.bind(this));
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
