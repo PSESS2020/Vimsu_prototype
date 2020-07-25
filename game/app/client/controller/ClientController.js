@@ -208,6 +208,7 @@ class ClientController {
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
@@ -517,6 +518,10 @@ class ClientController {
     handleFromServerShowAvatar(participantId) {
         this.#gameView.showAvatar(participantId);
     }
+    
+    handleFromServerRemoved() {
+        $('#viewBlocker').show();
+    };
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
