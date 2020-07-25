@@ -20,6 +20,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #scheduleListView;
     #currentLecturesView;
     #lectureView;
+    #globalChatView;
     #friendListView;
     #friendRequestListView;
     #currentMap;
@@ -501,6 +502,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     updateCurrentLecture(lecture, hasToken, lectureChat) {
         this.#lectureView = new LectureView().draw(lecture, hasToken, lectureChat);
     }
+    
+    initGlobalChatView(messageHeader, messageText) {
+        this.#globalChatView = new GlobalChatView().draw(messageHeader, messageText);
+    };
 
     initProfileView(businessCard) {
         this.#profileView = new ProfileView().draw(businessCard);

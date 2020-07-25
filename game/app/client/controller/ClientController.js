@@ -506,9 +506,8 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewGlobalMessage(message) {
-        //TODO: do this via a view-class
-        window.alert(message);
+    handleFromServerNewGlobalMessage(messageHeader, messageText) {
+        this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
     handleFromServerHideAvatar(participantId) {

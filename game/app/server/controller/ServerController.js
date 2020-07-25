@@ -807,8 +807,11 @@ module.exports = class ServerController {
                  * the command, and we do not need any handling.
                  *
                  * - (E) */
-                if(commandArgs.length > 1) { 
-                    var message = input.substr(input.indexOf(" "));
+                if(commandArgs.length > 1) {
+                    var currentDate = new Date();
+                    var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                    var messageHeader =  "On " + currentTime + " moderator " + moderator.getId() + " announces:";
+                    var messageText = input.substr(input.indexOf(" "));
 
                     /* Sending the global message to all the users.
                      * This might later be altered to include the id of the
@@ -818,7 +821,7 @@ module.exports = class ServerController {
                      * any global messages to any other moderators.
                      *
                      * - (E) */
-                    this.#io.emit('New global message', message); // This might be altered to not
+                    this.#io.emit('New global message', messageHeader, messageText); // This might be altered to not
                                                                   // include moderators
                 }
                 break;

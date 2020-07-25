@@ -229,6 +229,27 @@ body::-webkit-scrollbar {
   color: antiquewhite;
 }
 
+.globalChatWindow {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow-y: auto;
+  display: none; 
+  position: fixed; 
+  top: 30%; 
+  left: 40%; 
+  border-radius: 10px; 
+  z-index: 1050;
+  width: 20%; 
+  height: 20%;
+}
+
+.globalChatWindowHeader {
+  background-color: rgba(24, 30, 32, 1);
+  color: antiquewhite;
+  font-size: 30px;
+}
+
 .btn-lecture {
   background-color: #028090;
   border: none;
