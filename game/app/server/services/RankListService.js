@@ -22,7 +22,7 @@ module.exports = class RankListService {
 
                 var rank = 1;
                 for (var i = 0; i < rankList.length; i++) {
-                    // increase rank only if current score less than previous
+                    // increase rank only if current points less than previous
                     if (i > 0 && rankList[i].points < rankList[i - 1].points) {
                         rank++;
                     }
@@ -45,7 +45,7 @@ module.exports = class RankListService {
 
                 var rank = 1;
                 for (var i = 0; i < rankList.length; i++) {
-                    // increase rank only if current score less than previous
+                    // increase rank only if current points less than previous
                     if (i > 0 && rankList[i].points < rankList[i - 1].points) {
                         rank++;
                     }
