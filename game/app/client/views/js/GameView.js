@@ -126,9 +126,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                     
                     if (ppantView.getPosition().getCordX() === selectedTileCords.x 
                      && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
-                        ppantView.onclick();
+                        ppantView.onClick();
                     }
                 });
+
+                //then, check if there is an NPC at this position
+                self.#npcAvatarViews.forEach(npcView => {
+                    if (npcView.getPosition().getCordX() === selectedTileCords.x 
+                     && npcView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        npcView.onClick();
+                    }
+                })
             
             }
         });

@@ -72,6 +72,6 @@ module.exports = */class NPCAvatarView extends AvatarView {
     }
 
     onClick() {
-        //TODO
+        alert('You clicked me');
     }
 }
