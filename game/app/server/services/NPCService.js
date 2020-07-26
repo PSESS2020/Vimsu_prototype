@@ -68,7 +68,7 @@ module.exports = class NPCService {
                                     'Be in time at the lecture door in the Foyer to visit some of them!', 
                                     "That's it for now! Have fun and enjoy your stay!"];
 
-            this.#npcs.push(new NPC(1, 'CLICK_ME', new Position(roomId, 9, 8), Direction.DOWNLEFT, receptionStory));
+            this.#npcs.push(new NPC(1, 'CLICK_ME', new Position(roomId, 11, 6), Direction.DOWNLEFT, receptionStory));
         }
 
         else if (typeOfRoom === 'FOODCOURT') {
