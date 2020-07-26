@@ -65,8 +65,8 @@ module.exports = class ServerController {
 
 
         //JUST FOR TESTING PURPOSES
-        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxMusterFriendRequester', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
+        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
+        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
 
         this.#banList = [];
         
@@ -630,7 +630,33 @@ module.exports = class ServerController {
             });
 
             socket.on('getRankList', () => {
-                //DB is not initialized yet. TODO: make local RankList 
+                var rankList = [
+                    {
+                        participantId: "22abcd",
+                        username: "MaxFriend",
+                        points: 40,
+                        rank: 1,
+                        self: false
+                    },
+                    {
+                        participantId: "22abc",
+                        username: "MaxFReq",
+                        points: 30,
+                        rank: 2,
+                        self: false
+                    },
+                    {
+                        participantId: "30abc",
+                        username: "Myself",
+                        points: 30,
+                        rank: 2,
+                        self: true
+                    },
+                ]
+
+                socket.emit('rankList', rankList);
+
+                //if DB is initialized
                 /*RankListService.getRankListWithUsername("1", 30).then(rankList => {
                     socket.emit('rankList', rankList);
                 })*/
