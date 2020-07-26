@@ -1,6 +1,4 @@
 
-
-
 /*module.exports = */class RoomClient {
 
     #roomId;
@@ -10,7 +8,7 @@
     #width;
     #listOfPPants;
     #occupationMap;
-    //listOfNPCs
+    #listOfNPCs;
     #listOfGameObjects;
     //listOfDoors
     #map;
@@ -23,9 +21,17 @@
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
      */
-    constructor(roomId, typeOfRoom, listOfGameObjects) {
+    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isInstanceOf(listOfGameObjects, Array);
+        listOfGameObjects.forEach(gameObject => {
+            TypeChecker.isInstanceOf(gameObject, GameObjectClient);
+        });
+        TypeChecker.isInstanceOf(listOfNPCs, Array);
+        listOfNPCs.forEach(npcPosition => {
+            TypeChecker.isInstanceOf(npcPosition, NPCClient);
+        });
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
         if (!!RoomClient.instance) {
@@ -37,6 +43,7 @@
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         this.#listOfGameObjects = listOfGameObjects;
+        this.#listOfNPCs = listOfNPCs;
         this.#listOfPPants = [];
 
         if (this.#typeOfRoom === "FOYER") {
@@ -84,6 +91,10 @@
 
     getListOfGameObjects() {
         return this.#listOfGameObjects;
+    }
+
+    getListOfNPCs() {
+        return this.#listOfNPCs;
     }
 
     /**
@@ -169,14 +180,23 @@
      * @param {Array of ParticipantClient} listOfPPants 
      * @param {Array of Array of int} occupationMap 
      */
-    swapRoom(roomId, typeOfRoom, listOfGameObjects) {
+    swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isInstanceOf(listOfGameObjects, Array);
+        listOfGameObjects.forEach(gameObject => {
+            TypeChecker.isInstanceOf(gameObject, GameObjectClient);
+        });
+        TypeChecker.isInstanceOf(listOfNPCs, Array);
+        listOfNPCs.forEach(npcPosition => {
+            TypeChecker.isInstanceOf(npcPosition, NPCClient);
+        });
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         //reset list of game objects, participants, occMap
         this.#listOfGameObjects = listOfGameObjects;
+        this.#listOfNPCs = listOfNPCs;
         this.#listOfPPants = [];
 
         if (this.#typeOfRoom === "FOYER") {
@@ -275,6 +295,15 @@
                     }
                 }
             } 
+        }
+
+        //NPC collision
+        for (var i = 0; i < this.#listOfNPCs.length; i++) {
+            let cordX = this.#listOfNPCs[i].getPosition().getCordX();
+            let cordY = this.#listOfNPCs[i].getPosition().getCordY();
+
+            this.#occupationMap[cordX][cordY] = 1;
+
         }
     }
 }
