@@ -73,6 +73,7 @@ module.exports = */class NPCAvatarView extends AvatarView {
 
     onClick() {
         console.log('You clicked me');
+        $('#npcStoryModal').modal('toggle');
         let eventmanager = new EventManager();
         eventmanager.handleNPCClick(this.#npcId);
     }
