@@ -70,17 +70,17 @@ module.exports = class RouteController {
 
         this.#app.post('/upload', (request, response) => {
             if (!request.files || Object.keys(request.files).length === 0) {
-                return response.send('No files were uploaded. <a href="/upload">Back to page</a>');
+                return response.render('upload', {noFilesUploaded: true});
             }
 
             var maxParticipants = parseInt(request.body.maxParticipants);
             if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                return response.send('Max participants must be integer. <a href="/upload">Try again</a>')
+                return response.render('upload', {notInt: true});
             }
 
             var startingTime = new Date(request.body.startingTime);
             if (startingTime == "Invalid Date") {
-                return response.send('Starting time must be a valid date. <a href="/upload">Try again</a>')
+                return response.render('upload', {notDate: true});
             }
             
             var title = request.body.title;
@@ -93,8 +93,9 @@ module.exports = class RouteController {
             var videoSize = video.size;
 
             if(videoName.includes(".mp4")) {
-                if(videoSize > 524288000)
-                    return response.send('File size exceeded 500 MB. <a href="/upload">Back to page</a>')
+                if(videoSize > 524288000) {
+                    return response.render('upload', {fileSizeExceeded: true});
+                }
                 else {
                     return SlotService.storeVideo(video).then(videoId => {
                         return SlotService.createSlot(videoId, "1", title, remarks, startingTime, oratorId, maxParticipants).then(res => {
@@ -102,13 +103,15 @@ module.exports = class RouteController {
                             response.end();
                         }).catch(err => {
                             console.error(err);
+                            return response.render('upload', {createSlotFailed: true});
                         })
                     }).catch(err => {
                         console.error(err);
+                        return response.render('upload', {uploadFailed: true});
                     })
                 }
             } else {
-                response.send('File type is not supported. <a href="/upload">Back to page</a>');
+                return response.render('upload', {unsupportedFileType: true});
             }
         });
 
@@ -159,11 +162,12 @@ module.exports = class RouteController {
                     response.redirect('/');
                 }
                 else {
-                    response.render('login', {wrongLoginData: true});
+                    return response.render('login', {wrongLoginData: true});
                 }
                 response.end();
             }).catch(err => {
                 console.error(err);
+                return response.render('login', {verifyDataFailed: true});
             })
         });
 
@@ -184,7 +188,7 @@ module.exports = class RouteController {
         this.#app.post('/register', (request, response) => {
 
             if (request.body.username.length > 10) {
-                return response.send('Max. username length is 10 characters. <a href="/register">Try again</a>');
+                return response.render('register', {invalidUsername: true});
             }
 
             username = request.body.username;
@@ -194,7 +198,7 @@ module.exports = class RouteController {
             if (emailRegex.test(String(email).toLowerCase())) {
 
             } else {
-                return response.send('Invalid Email Address. <a href="/register">Try again</a>')
+                return response.render('register', {invalidEmail: true});
             }
 
             return AccountService.isUsernameValid(username).then(res => {
@@ -207,19 +211,20 @@ module.exports = class RouteController {
                             response.redirect('/register');
                         }
                         else {
-                            response.send('Email is already registered. <a href="/register">Try again</a>');
+                            return response.render('register', {emailTaken: true})
                         }
                         response.end();
                     }).catch(err => {
                         console.error(err);
+                        return response.render('register', {verifyDataFailed: true})
                     })
                 }
                 else {
-                    response.send('Username is already taken. <a href="/register">Try again</a>');
+                    return response.render('register', {usernameTaken: true});
                 }
-                response.end();
             }).catch(err => {
                 console.error(err);
+                return response.render('register', {verifyDataFailed: true})
             })
         });
 
@@ -231,7 +236,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
-                return response.send('Invalid title. <a href="/register">Try again</a>')
+                return response.render('registerValid', {invalidTitle: true});
             }
 
             surname = request.body.surname;
@@ -257,8 +262,8 @@ module.exports = class RouteController {
                 response.redirect('/');
                 response.end();
             }).catch(err => {
-                response.send('Registration failed. <a href="/register">Try again</a>');
                 console.error(err);
+                return response.render('registerValid', {registerFailed: true});
             })
         })
 
@@ -311,7 +316,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
-                return response.send('Invalid title. <a href="/editAccount">Try again</a>')
+                return response.render('editAccount', {invalidTitle: true});
             }
 
             surname = request.body.surname;
@@ -333,8 +338,8 @@ module.exports = class RouteController {
                 request.session.email = res.getEmail();
                 response.redirect('/account');
             }).catch(err => {
-                response.send('Failed updating data. <a href="/editAccount">Try again</a>');
                 console.error(err);
+                return response.render('editAccount', {editAccountFailed: true});
             })
         })
     }

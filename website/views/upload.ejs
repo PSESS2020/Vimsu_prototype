@@ -30,6 +30,24 @@
                           </div>
                           <label style="margin-top: 0px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 500 MB</label>
                         <hr/>
+                        <div class="row justify-content-left m-0 p-0">
+                            <% if(locals.noFilesUploaded === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>No files were uploaded. Please upload a video.</p>
+                            <% } else if (locals.fileSizeExceeded === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>File size exceeded 500 MB. Please try again.</p>
+                            <% } else if (locals.unsupportedFileType === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Unsupported file type. Please upload only .mp4 file.</p>
+                            <% } else if (locals.notInt === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Max participants must be an integer. Please try again.</p>
+                            <% } else if (locals.notDate === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Starting time must be a valid date. Please try again.</p>
+                            <% } else if (locals.uploadFailed === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while uploading the video. Please try again.</p>
+                            <% } else if (locals.createSlotFailed === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while creating the slot. Please try again.</p>
+                            <% } else { %>
+                            <% } %>
+                        </div>
                         <input class="btn btn-block btn-submit" type="submit" value="Create lecture and upload video" style="margin-bottom: 30px; "></button>
                         
                     </form>

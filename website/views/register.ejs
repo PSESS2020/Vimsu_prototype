@@ -64,6 +64,14 @@
                             </div>
                         </div>
                         <hr/>
+                        <div class="row justify-content-left m-0 p-0">
+                            <% if(locals.invalidTitle === true) { %>
+                                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Invalid title. Please choose a title from the options we provided.</p>
+                            <% } else if (locals.registerFailed === true) { %>
+                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while registering your account. Please try again.</p>
+                            <% } else { %>
+                            <% } %>
+                        </div>
                         <input class="btn btn-block btn-submit" type="submit" value="Register now" style="margin-bottom: 30px; "></button>
                     </form>
                 </div>
@@ -86,6 +94,20 @@
                                 <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email" required>
                             </div>
                             <hr/>
+                            <div class="row justify-content-left m-0 p-0">
+                                <% if(locals.emailTaken === true) { %>
+                                     <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you entered is already registered. Please use another email to register.</p>
+                                <% } else if (locals.usernameTaken === true) { %>
+                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username you entered is already taken. Please use another username to register.</p>
+                                <% } else if (locals.verifyDataFailed === true) { %>
+                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while verifying the input data. Please try again.</p>
+                                <% } else if (locals.invalidUsername === true) { %>
+                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username you entered is too long. Please try again.</p>
+                                <% } else if (locals.invalidEmail === true) { %>
+                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you entered is invalid. Please try again.</p>
+                                <% } else { %>
+                                <% } %>
+                            </div>
                             <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; "></button>
                             
                         </form>
