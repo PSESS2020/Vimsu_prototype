@@ -27,6 +27,7 @@ module.exports = class RankListService {
                         rank++;
                     }
                     rankList[i].rank = rank;
+                    rankList[i].self = false;
                 }
                 return rankList;
             }).catch(err => {
