@@ -229,22 +229,40 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     //Is called when participant enters Foyer
-    initFoyerView(map) {
+    initFoyerView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
-        this.#currentMap = new FoyerView(map);
+
+        let npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
+        });
+
+        this.#currentMap = new FoyerView(map, npcAvatarViews);
     }
 
-    initReceptionView(map) {
+    initReceptionView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
-        this.#currentMap = new ReceptionView(map);
+
+        let npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+        });
+
+        this.#currentMap = new ReceptionView(map, npcAvatarViews);
     }
 
-    initFoodCourtView(map) {
+    initFoodCourtView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
-        this.#currentMap = new FoodCourtView(map);
+
+        let npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
+        });
+
+        this.#currentMap = new FoodCourtView(map, npcAvatarViews);
     }
 
     /**
@@ -476,7 +494,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initCurrentAchievementsView(achievements) {
-        this.achievementView = new AchievementView().draw(achievements);
+        this.#achievementView = new AchievementView().draw(achievements);
     }
 
     removeFriend(participantId) {

@@ -119,13 +119,14 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map);
+            this.#gameView.initFoyerView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map);
+            this.#gameView.initFoodCourtView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map);
+            this.#gameView.initReceptionView(map, listOfNPCs);
         }
 
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
@@ -146,13 +147,14 @@ class ClientController {
 
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map);
+            this.#gameView.initFoyerView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map);
+            this.#gameView.initFoodCourtView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map);
+            this.#gameView.initReceptionView(map, listOfNPCs);
         }
 
         this.#gameView.resetAnotherAvatarViews();
@@ -331,7 +333,7 @@ class ClientController {
     }*/
 
     //Third message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData, npcData) {
         
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
@@ -340,13 +342,18 @@ class ClientController {
                 new PositionClient(element.cordX, element.cordY), element.isSolid));
         });
 
+        var listOfNPCs = [];
+        npcData.forEach(npc => {
+            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
+        });
+
         //First room? 
         if(!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs);
             
         //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
             this.switchRoomGameView();    
         }
