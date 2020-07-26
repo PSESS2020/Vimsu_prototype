@@ -11,25 +11,33 @@ module.exports = */class NPCAvatarView extends AvatarView {
     #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #shoes = new SpriteSheet('client/assets/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #frame;
+    #standingUpLeftAnimation;
+    #standingUpRightAnimation;
+    #standingDownLeftAnimation;
+    #standingDownRightAnimation;
+    #currentAnimation;
 
     constructor(npcId, name, position, direction, typeOfRoom) {
         super(position, direction);
         TypeChecker.isInt(npcId);
         TypeChecker.isString(name);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
+        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10); 
+        this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
+        this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#npcId = npcId;
         this.#name = name;
         this.#typeOfRoom = typeOfRoom;
 
-        if (direction === DirectionClient.DOWNLEFT) {
-            this.#frame = 5;
-        } else if (direction === DirectionClient.UPLEFT) {
-            this.#frame = 15;
-        } else if (direction === DirectionClient.DOWNRIGHT) {
-            this.#frame = 0;
-        } else if (direction === DirectionClient.UPRIGHT) {
-            this.#frame = 10;
+        if (direction === 'UPLEFT') {
+            this.#currentAnimation = this.#standingUpLeftAnimation;
+        } else if (direction === 'UPRIGHT') {
+            this.#currentAnimation = this.#standingUpRightAnimation;
+        } else if (direction === 'DOWNLEFT') {
+            this.#currentAnimation = this.#standingDownLeftAnimation;
+        } else if (direction === 'DOWNRIGHT') {
+            this.#currentAnimation = this.#standingDownRightAnimation;
         }
     }
 
@@ -60,32 +68,7 @@ module.exports = */class NPCAvatarView extends AvatarView {
         ctx_map.fillStyle = "black";
         ctx_map.fillText(this.#name, screenX + AVATAR_WIDTH/2, screenY);
 
-        var row = Math.floor(this.#frame / this.#spriteSheet.framesPerRow);
-        var col = Math.floor(this.#frame % this.#spriteSheet.framesPerRow);
-
-        ctx_map.drawImage(
-            this.#spriteSheet.image, col * this.#spriteSheet.frameWidth, row * this.#spriteSheet.frameHeight,
-            this.#spriteSheet.frameWidth, this.#spriteSheet.frameHeight,
-            screenX, screenY,
-            this.#spriteSheet.frameWidth, this.#spriteSheet.frameHeight);
-
-        ctx_map.drawImage(
-            this.#topClothing.image, col * this.#topClothing.frameWidth, row * this.#topClothing.frameHeight,
-            this.#topClothing.frameWidth, this.#topClothing.frameHeight,
-            screenX, screenY,
-            this.#topClothing.frameWidth, this.#topClothing.frameHeight);
-
-        ctx_map.drawImage(
-            this.#bottomClothing.image, col * this.#bottomClothing.frameWidth, row * this.#bottomClothing.frameHeight,
-            this.#bottomClothing.frameWidth, this.#bottomClothing.frameHeight,
-            screenX, screenY,
-            this.#bottomClothing.frameWidth, this.#bottomClothing.frameHeight);
-
-        ctx_map.drawImage(
-            this.#shoes.image, col * this.#shoes.frameWidth, row * this.#shoes.frameHeight,
-            this.#shoes.frameWidth, this.#shoes.frameHeight,
-            screenX, screenY,
-            this.#shoes.frameWidth, this.#shoes.frameHeight);
+        this.#currentAnimation.draw(screenX, screenY); 
     }
 
     onClick() {

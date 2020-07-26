@@ -2,14 +2,12 @@ class ReceptionView extends MapView {
     
     #loader;
     #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png","client/assets/door_foyer.png", "client/assets/table.png"];
-    #npcAvatarViews;
 
-    constructor(receptionMap, npcAvatarViews) {
+    constructor(receptionMap) {
         super(receptionMap);
         
         this.#loader = new LoadingView();
         this.loadImages();
-        this.#npcAvatarViews = npcAvatarViews;
     }
 
     
@@ -68,11 +66,6 @@ class ReceptionView extends MapView {
         if (tiles.length != 0) {
             tiles.forEach( object => object.draw());
         }
-
-        if (this.#npcAvatarViews.length != 0) {
-            this.#npcAvatarViews.forEach(npc => npc.draw());
-        }
-
     }
 
 

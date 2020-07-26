@@ -29,6 +29,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #businessCardView;
     #gameViewInit;
     #achievementView;
+    #npcAvatarViews = [];
 
     constructor(gameWidth, gameHeight) 
     {
@@ -193,7 +194,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             this.drawClock();
 
             //put all AvatarViews in one list
-            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews);
+            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
             
 
             //sort all Avatars in CordX
@@ -233,36 +234,36 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
-        let npcAvatarViews = [];
+        this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
         });
 
-        this.#currentMap = new FoyerView(map, npcAvatarViews);
+        this.#currentMap = new FoyerView(map);
     }
 
     initReceptionView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
-        let npcAvatarViews = [];
+        this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
         });
 
-        this.#currentMap = new ReceptionView(map, npcAvatarViews);
+        this.#currentMap = new ReceptionView(map);
     }
 
     initFoodCourtView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
-        let npcAvatarViews = [];
+        this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
         });
 
-        this.#currentMap = new FoodCourtView(map, npcAvatarViews);
+        this.#currentMap = new FoodCourtView(map);
     }
 
     /**
