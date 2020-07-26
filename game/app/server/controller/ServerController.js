@@ -42,6 +42,13 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     ppantControllers;
+    
+    const warning = {
+        header: "Warning",
+        body: "One of your messages was removed by a moderator. Please follow the " + 
+              "general chat etiquette. Additional infractions may result in a permanent " +
+              "ban."
+    }
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
@@ -480,23 +487,47 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                ppants.get(ppantId).increaseAchievementCount('messagesSent')
-
+                
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
-                // timestamping the message - (E)
-                var currentDate = new Date();
-                var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
-                var message = {senderID: ppantID, username: username, timestamp: currentTime, messageText: text}
-                lectureChat.appendMessage(message);
-                console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
-                // Getting the roomID from the ppant seems to not work?
+                var participant = ppants.get(ppantId);
                 
-                this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
-                //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
-            
+                /* We want to check if the ppant "owns" the lecture here.
+                 * As the orator-class seems not be actually used yet, we just use
+                 * the orator-name from the lecture class and compare it to the username
+                 * of the aprticipant. And since I#m not sure if that will work, we just allow
+                 * everyone to use commands in the lecture-chat (for testing purposes).
+                 * 
+                 * - (E) */
+                if(/* participant.getBusinessCard().getUsername() == lecture.getOratorName() && */
+                 textxt.charAt(0) == Settings.CMDSTARTCHAR) {
+                    /* Now, we check if the message contains any command
+                     * known by the server and handle this appropriately.
+                     * We move this to another method for better readability.
+                     *
+                     * We also remove the first character of the string (the
+                     * "command-starting character"), because we do no longer
+                     * need it.
+                     *
+                     * - (E) */
+                    this.commandHandlerLecture(participant, lectureChat, text.substr(1));
+                } else {
+                
+                    participant.increaseAchievementCount('messagesSent')
 
+                    // timestamping the message - (E)
+                    var currentDate = new Date();
+                    var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                    var message = {senderID: ppantID, username: username, timestamp: currentTime, messageText: text}
+                    lectureChat.appendMessage(message);
+                    console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
+                    // Getting the roomID from the ppant seems to not work?
+                    
+                    this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
+                    //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+            
+                }
             });
 
             var currentLecturesData = [];
@@ -848,7 +879,7 @@ module.exports = class ServerController {
          *
          * - (E) */  
         var command = commandArgs[0].toLowerCase();
-        console.log(command);        
+       
         /* Every command is saved in an enum-File similiar to the directions.
          * So we can use the TypeChecker-class to check if the input includes
          * a legal command.
@@ -925,6 +956,7 @@ module.exports = class ServerController {
                  this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                  break;
             case Commands.HELP:
+                // TODO: maybe move all these strings into a util-file?
                 var messageHeader = "List of Commands."
                 var messageBody = ["\\global <message>  --  Post a message into the global chat. " +
                                         "It will display in every participants game-view as a pop-up.",
@@ -936,7 +968,12 @@ module.exports = class ServerController {
                                    "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                                    "not yet possible to unban a banned user!",
                                    "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs and removes the corresponding messages - " +
-                                   "if they exist - from the allchat of the room you're currently in."];
+                                   "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
+                                   "the senders of the messages, reminding them to follow chat etiquette.",
+                                   "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and removes all messages posted " +
+                                   "by them into the allchat of the room you're currently in. Will also send a warning " +
+                                   "to these participants, reminding them to follow chat-etiquette."];
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.REMOVEPLAYER:
@@ -961,42 +998,40 @@ module.exports = class ServerController {
                     var id = this.getSocketId(ppantID); // get the Id of the socket belonging to the 
                                                         // participant that is to be removed
                     
-                    if(id == undefined) {
-                        return;
+                    if(id != undefined) {
+                        var socket = this.getSocketObject(id); // get the actual socket object
+                    
+                        /* Tells the clientController to remove itself from the game
+                         * (meaning to return to the homepage). Since the handling of
+                         * this can be altered client-side, we also need to remove the socket
+                         * from all the rooms (see below).
+                         * - (E) */
+                        this.#io.to(id).emit('remove yourself');
+                        this.#banList.push(socket.request.session.accountId);
+                        
+                        /* Get all the socketIO-rooms the socket belonging to the participant that
+                         * is to be removed is currently in and remove the socket from all those rooms
+                         * - (E) */
+                        var roomsToRemoveFrom = Object.keys(socket.rooms);
+                        console.log(roomsToRemoveFrom);
+                        for(var i = 0; i < roomsToRemoveFrom.length; i++) {
+                            var room = roomsToRemoveFrom[i];
+                            socket.leave(room);
+                            console.log(room);
+                            this.#io.in(room).emit("remove player", ppantID);  
+                        }
+                        
+                        console.log('Participant with Participant_ID: ' + ppantID + ' was removed from the game . . .');
+                        
+                        /* We do for now not delete the socket from the ppantControllers-list,
+                         * as I want to see if this will keep the user from reentering the game.
+                         * UPDATE: IT DOES NOT.
+                         * Also, we can not remove the participant from the ppant-List, as the
+                         * ppant-List is not known at this part of the program.
+                         * - (E) */
+                        //this.ppantControllers.delete(socket.id);
+                        //ppants.delete(ppantID);
                     }
-                                                               
-                    var socket = this.getSocketObject(id); // get the actual socket object
-                    
-                    /* Tells the clientController to remove itself from the game
-                     * (meaning to return to the homepage). Since the handling of
-                     * this can be altered client-side, we also need to remove the socket
-                     * from all the rooms (see below).
-                     * - (E) */
-                    this.#io.to(id).emit('remove yourself');
-                    this.#banList.push(socket.request.session.accountId);
-                    
-                    /* Get all the socketIO-rooms the socket belonging to the participant that
-                     * is to be removed is currently in and remove the socket from all those rooms
-                     * - (E) */
-                    var roomsToRemoveFrom = Object.keys(socket.rooms);
-                    console.log(roomsToRemoveFrom);
-                    for(var i = 0; i < roomsToRemoveFrom.length; i++) {
-                        var room = roomsToRemoveFrom[i];
-                        socket.leave(room);
-                        console.log(room);
-                        this.#io.in(room).emit("remove player", ppantID);  
-                    }
-                    
-                    console.log('Participant with Participant_ID: ' + ppantID + ' was removed from the game . . .');
-                    
-                    /* We do for now not delete the socket from the ppantControllers-list,
-                     * as I want to see if this will keep the user from reentering the game.
-                     * UPDATE: IT DOES NOT.
-                     * Also, we can not remove the participant from the ppant-List, as the
-                     * ppant-List is not known at this part of the program.
-                     * - (E) */
-                    //this.ppantControllers.delete(socket.id);
-                    //ppants.delete(ppantID); 
                 }
                 break;
             case Commands.REMOVEMESSAGE:
@@ -1006,6 +1041,18 @@ module.exports = class ServerController {
                 for(var i = 0; i < msg.length; i++) {
                      if(messagesToDelete.includes(msg[i].messageID.toString())) {
                          msg.splice(i, 1);
+                         this.sendWarning(this.getSocketId(msg[i].senderID));
+                     }
+                }
+                this.#io.in(roomID.toString()).emit('initAllchat', msg);
+                break;
+            case Commands.REMOVEMESSAGEYBYUSER:
+                var roomID = moderator.getPosition().getRoomId();
+                var msg = this.#rooms[roomID - 1].getMessages();
+                for(var i = 0; i < msg.length; i++) {
+                     if(commandArgs.includes(msg[i].senderID.toString())) {
+                         msg.splice(i, 1);
+                         this.sendWarning(this.getSocketId(msg[i].senderID));
                      }
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
@@ -1016,7 +1063,58 @@ module.exports = class ServerController {
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText); 
                 break;
         } 
-    }
+    };
+    
+    commandHandlerLecture(orator, lectureChat, input) {
+        // TODO
+        // TO IMPLEMENT
+        // - help
+        // - remove messages by id
+        // - remove messages by user
+        // - remove user (permanently)
+        // - revoke user token
+        // - grant user token
+        
+        /* commands need to be delimited by a space. So we first split
+         * the input at each occurence of a whitespace character.
+         * - (E) */  
+        var commandArgs = input.split(" ");
+
+        /* Now we extract the command from the input.
+         * 
+         * The command can only occur at the very beginning of an input, so
+         * we just take the substring of the input up to (but obviously not
+         * including) the first whitespace-character.
+         *
+         * We also covert the string to lower case, so that we can easily compare
+         * it to our constants. This means that the moderator does not need to
+         * worry about capitalization when inputting a command, which may be
+         * undesirable behaviour.
+         *
+         * - (E) */  
+        var command = commandArgs[0].toLowerCase();
+        
+        switch(command) {
+            case Commands.REMOVEMESSAGE:
+                break;
+            case Commands.REMOVEMESSAGESBYUSER:
+                break;
+            case Commands.REMOVEPLAYER:
+                break;
+            case Commands.REVOKETOKEN:
+                break;
+            case Commands.GRANTTOKEN:
+                break;
+            case Commands.HELP:
+                break;
+            default:
+                var messageHeader = "Unrecognized command."
+                var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+                this.#io.to(this.getSocketId(orator.getId())).emit('New global message', messageHeader, messageText); 
+                break;
+        }
+        
+    };
     
         getSocketId(ppantID) {
             /* So this is functional using this helping variable, but I will need to redo it in pretty.
@@ -1035,7 +1133,9 @@ module.exports = class ServerController {
                 }
             });
             return id;
-        }
+        };
+
+        // The following methods should probably be private
 
         getSocketObject(socketId) {
             var mainNamespace = this.#io.of('/');
@@ -1045,7 +1145,7 @@ module.exports = class ServerController {
                     return mainNamespace.connected[socketKeys[i]];
                 }
             }
-        }
+        };
         
         getIdOf(username) {
             /* Gets the participantId belonging to a username.
@@ -1059,6 +1159,15 @@ module.exports = class ServerController {
                 }
             });
             return id;
+        };
+        
+        /* Sends a warning to the user who is connected to the socket with the passed Id.
+         * If the id is undefined, this will do nothing.
+         * - (E) */
+        sendWarning(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", this.warning.header, this.warning.body);
+            }
         };
         
         isBanned(accountId) {

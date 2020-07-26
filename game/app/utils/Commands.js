@@ -6,6 +6,9 @@ module.exports = Object.freeze({
     LOGMESSAGES: "log",
     REMOVEPLAYER: "rmuser",
     REMOVEMESSAGE: "rmmsg",
+    REMOVEMESSAGESBYPLAYER: "rmallby",
+    REVOKETOKEN: "revoke",
+    GRANTTOKEN: "grant",
     UNBANPLAYER: "unban",
     HELP: "help"
 });
