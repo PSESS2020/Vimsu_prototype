@@ -22,33 +22,21 @@ module.exports = class ParticipantService {
     static createParticipant(account, conferenceId) {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
+        var accountId = account.getAccountID();
 
         return getDB().then(res => {
-            return this.getParticipant(account.getAccountID(), conferenceId).then(par => {
+            return this.getParticipant(accountId, conferenceId).then(par => {
                 var participant;
 
                 if(par) {
-                    var participantId = par.participantId;
-                    var pos = {
-                        roomId: par.position.roomId,
-                        cordX: par.position.cordX,
-                        cordY: par.position.cordY
-                    }
-                    var direction = par.direction;
-                    var points = par.points;
-                    var friendList = par.friendId;
-                    var sentRequestList = par.friendRequestId.sent;
-                    var receivedRequestList = par.friendRequestId.received;
-                    participant = new Participant(participantId, accountId, new BusinessCard(participantId, account.getUsername(), 
-                    account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                    account.getEmail()), new Position(pos.roomId, pos.cordX, pos.cordY), direction, points, friendList, sentRequestList, receivedRequestList);
+                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                        par.points, par.friendId, par.friendRequestId.sent, par.friendRequestId.received, par.achievements, par.isModerator);
                 } 
                 else {
-                    var participantId = new ObjectId().toString();
-                    participant = new Participant(participantId, "", "");
-                        
                     var par = {
-                        participantId: participantId,
+                        participantId: new ObjectId().toString(),
                         accountId: accountId,
                         position: {
                             roomId: Settings.STARTROOM,
@@ -62,8 +50,15 @@ module.exports = class ParticipantService {
                             sent: [],
                             received: []
                         },
+                        achievements: [],
+                        isModerator: false,
                         /*visitedLectureId: [],*/
                     }
+
+                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                        par.points, par.friendId, par.friendRequestId.sent, par.friendRequestId.received, par.achievements, par.isModerator);
 
                     getDB().then(res => {
                         vimsudb.insertOneToCollection("participants_" + conferenceId, par);
