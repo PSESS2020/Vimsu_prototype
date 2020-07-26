@@ -17,6 +17,7 @@ module.exports = class Participant {
     #receivedRequestList;
     #sentRequestList;
     #achievements;
+    #isMod
 
     /**
      * Erstellt Participant Instanz
@@ -37,6 +38,7 @@ module.exports = class Participant {
         this.#id = id;
         this.#accountId = accountId;
         this.#businessCard = businessCard;
+        this.#isMod = true;  // For testing purposes, everbody gets to be a mod
         //this.#participantController = participantController;
 
         /* 
@@ -137,6 +139,14 @@ module.exports = class Participant {
 
     getSendRequestList() {
         return this.#sentRequestList;
+    }
+    
+    getCurrentRoom() {
+        return this.getPosition().getRoomId();
+    };
+
+    isModerator() {
+        return this.#isMod;
     }
 
     setPosition(position) 

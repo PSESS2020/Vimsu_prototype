@@ -23,7 +23,6 @@ const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
-const RankListService = require('../services/RankListService')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
@@ -40,7 +39,6 @@ module.exports = class ServerController {
     #conference;
     #listOfConfCont;
     #DEBUGMODE;
-    #banList;
     ppantControllers;
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
@@ -63,12 +61,6 @@ module.exports = class ServerController {
         this.ppantControllers = new Map();
         const ppants = new Map();  // Array to hold all participants
 
-
-        //JUST FOR TESTING PURPOSES
-        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxMusterFriendRequester', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
-
-        this.#banList = [];
         
         //Init all rooms
         var roomService = new RoomService();
@@ -134,11 +126,6 @@ module.exports = class ServerController {
                 if (this.ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
                     return;
                 }
-                
-                if (this.isBanned(socket.request.session.accountId)) {
-                    this.#io.to(socket.id).emit('remove yourself');
-                    return;
-                }
 
                 console.log('Participant ' + socket.id + ' has conected to the game . . . ');
                 
@@ -164,6 +151,7 @@ module.exports = class ServerController {
 
                 // (i) to (iii)
                 var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
+                console.log("test1");
                 
                 //TODO: Needs to be adjusted when multiple rooms exist (P)
                 //currently every participant spawns in foyer at the start position
@@ -206,8 +194,10 @@ module.exports = class ServerController {
                 this.#rooms[Settings.FOYER_ID - 1].enterParticipant(ppant);
         
                 var ppantCont = new ParticipantController(ppant);
+                console.log("test2");
                 ppants.set(ppantID, ppant);
                 this.ppantControllers.set(socket.id, ppantCont);
+                console.log("test3");
 
                 // (iv)
                 // The position of the participant-Instance is also set here
@@ -223,7 +213,7 @@ module.exports = class ServerController {
                  * - (E) */ 
                 // Sends the newly generated ppantID back to the client so the game-states are consistent
                 //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
-                
+                console.log("test4");
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
 
@@ -256,6 +246,7 @@ module.exports = class ServerController {
                                                                         dir: d});
                 // Initialize Allchat
                 this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.FOYER_ID - 1].getMessages());
+                console.log("test5");
                 
                 ppants.forEach((ppant, id, map) => {
                     
@@ -283,6 +274,7 @@ module.exports = class ServerController {
                 // later on
                 // - (E)
                     socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
+                    console.log("test6");                
                
             });
 
@@ -315,8 +307,6 @@ module.exports = class ServerController {
                 
                 var roomID = participant.getPosition().getRoomId();
                 var username = participant.getBusinessCard().getUsername();
-
-                ppants.get(ppantID).increaseAchievementCount('messagesSent')
 
                 // timestamping the message - (E)
                 var currentDate = new Date();
@@ -401,8 +391,8 @@ module.exports = class ServerController {
                 //check if participant is in right position to enter room
                 //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
                 if (ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
-                    !door.getStartPosition().getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
-                    !door.getStartPosition().getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
+                    ppants.get(ppantID).getPosition().getCordX() !== door.getStartPosition().getCordX() ||
+                    ppants.get(ppantID).getPosition().getCordY() !== door.getStartPosition().getCordY()) {
                     console.log('wrong position');
                     return;
                 }
@@ -479,16 +469,14 @@ module.exports = class ServerController {
 
             });
 
-            socket.on('lectureMessage', (ppantID, username, text) => {
-                ppants.get(ppantId).increaseAchievementCount('messagesSent')
-
+            socket.on('lectureMessage', (ppantID, text) => {
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
-                var message = {senderID: ppantID, username: username, timestamp: currentTime, messageText: text}
+                var message = {senderID: ppantID, timestamp: currentTime, messageText: text}
                 lectureChat.appendMessage(message);
                 console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
                 // Getting the roomID from the ppant seems to not work?
@@ -503,36 +491,32 @@ module.exports = class ServerController {
 
             socket.on('enterLecture', (ppantID, lectureId) => {
 
+                console.log(ppantID + " joins " + lectureId)
+
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
 
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
                 }
+
+                socket.join(lectureId);
+                socket.currentLecture = lectureId;
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+                lecture.enter(ppantID);
+                
+                var token = lecture.hasToken(ppantID);
+                var lectureChat = lecture.getLectureChat();
+                console.log(lectureChat);
+                var messages = lecture.getLectureChat().getMessages();
+                console.log(messages);
 
-                if(lecture.enter(ppantID)) {
-                    console.log(ppantID + " joins " + lectureId);
-                    socket.join(lectureId);
-                    socket.currentLecture = lectureId;
-                    
-                    var token = lecture.hasToken(ppantID);
-                    var lectureChat = lecture.getLectureChat();
-                    console.log(lectureChat);
-                    var messages = lecture.getLectureChat().getMessages();
-                    console.log(messages);
-
-                    LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
-                        currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                        socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
-                        socket.broadcast.emit('hideAvatar', ppantID);
-                    })
-
-                    ppants.get(ppantID).increaseAchievementCount('lecturesVisited')
-                } else {
-                    socket.emit('lectureFull', currentLecturesData[idx].id);
-                }
+                LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
+                    currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
+                    socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
+                    socket.broadcast.emit('hideAvatar', ppantID);
+                })
             })
 
             socket.on('leaveLecture', (participantId, lectureId) => {
@@ -545,6 +529,14 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', participantId);
             });
 
+            socket.on('getFriendRequestList', (ppantID) => {
+                var participant = ppants.get(ppantID);
+                //TODO
+
+                //socket.emit('friendRequestList', friendRequestList);
+                
+            })
+
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
                 let lectureDoorPosition = doorService.getLectureDoorPosition();
@@ -552,8 +544,8 @@ module.exports = class ServerController {
                 //check if participant is in right position to enter room
                 //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
                 if (ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
-                    !lectureDoorPosition.getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
-                    !lectureDoorPosition.getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
+                    ppants.get(ppantID).getPosition().getCordX() !== lectureDoorPosition.getCordX() ||
+                    ppants.get(ppantID).getPosition().getCordY() !== lectureDoorPosition.getCordY()) {
                     console.log('wrong position');
                     return;
                 }
@@ -616,28 +608,19 @@ module.exports = class ServerController {
                 //Check if ppant with targetID is a friend
                 //if so, emit the email
                 if (ppants.get(ppantID).getFriendList().includes(targetID)) {
-                    businessCardObject.email = businessCard.getEmail();
+                    businssCardObject.email = businessCard.getEmail();
                 }
 
                 socket.emit('businessCard', businessCardObject);
 
             });
 
-            socket.on('getAchievements', (ppantID) => {
-                var achievements = ppants.get(ppantID).getAchievements();
-
-                socket.emit('achievements', achievements);
-            });
-
-            socket.on('getRankList', () => {
-                //DB is not initialized yet. TODO: make local RankList 
-                /*RankListService.getRankListWithUsername("1", 30).then(rankList => {
-                    socket.emit('rankList', rankList);
-                })*/
-            })
-
             socket.on('getFriendList', (ppantID) => {
                 var friendList = ppants.get(ppantID).getFriendList();
+
+                //JUST FOR TESTING PURPOSES
+                ppants.get(ppantID).addFriendRequest(new BusinessCard('22abc', 'MaxMusterFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
+                ppants.get(ppantID).acceptFriendRequest('22abc');
 
                 var friendListData = [];
                 
@@ -661,7 +644,7 @@ module.exports = class ServerController {
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
-                var friendRequestList = ppants.get(ppantID).getReceivedRequestList();
+                var friendRequestList = ppants.get(ppantID).getFriendRequestList();
 
                 var friendRequestListData = [];
                 
@@ -684,41 +667,21 @@ module.exports = class ServerController {
                 socket.emit('friendRequestList', friendRequestListData);
             }); 
 
-            //adds a new Friend Request to the system
-            socket.on('newFriendRequest', (requesterID, targetID) => {
-                let target = ppants.get(targetID);
-                let requester = ppants.get(requesterID);
-                let targetBusCard = target.getBusinessCard();
-                let requesterBusCard = requester.getBusinessCard();
-
-                target.addFriendRequest(requesterBusCard);
-                requester.addSentFriendRequest(targetBusCard);
-            });
-
-            //handles a friendrequest, either accepted or declined
             socket.on('handleFriendRequest', (targetID, requesterID, acceptRequest) => {
                 let target = ppants.get(targetID);
                 let requester = ppants.get(requesterID);
 
-
                 if (acceptRequest) {
                     target.acceptFriendRequest(requesterID);
-                    requester.sentFriendRequestAccepted(targetID);
+
+                    //add target in requesterList
+                    //at this moment not sure how this works
+                    //Is there a list for outgoing requests? (P)
                 } else {
                     target.declineFriendRequest(requesterID);
-                    requester.sentFriendRequestDeclined(targetID);
                 }
 
                 //Not sure if a answer from server is necessary
-            });
-
-            //handles removing a friend in both friend lists
-            socket.on('removeFriend', (removerID, removedFriendID) => {
-                let remover = ppants.get(removerID);
-                let removedFriend = ppants.get(removedFriendID);
-
-                remover.removeFriend(removedFriendID);
-                removedFriend.removeFriend(removerID);
             });
 
             // This will need a complete rewrite once the server-side models are properly implemented
@@ -746,16 +709,6 @@ module.exports = class ServerController {
                 
                 this.ppantControllers.delete(socket.id);
                 ppants.delete(ppantID);
-
-                if(socket.currentLecture) {
-                    var schedule = this.#conference.getSchedule();
-                    var lectureId = socket.currentLecture;
-                    var lecture = schedule.getLecture(lectureId);
-                    lecture.leave(ppantID);
-                    console.log(ppantID + " leaves " + lectureId)
-                    socket.leave(lectureId);
-                    socket.currentLecture = undefined;
-                }
 
                 // Destroy ppant and his controller
             });
@@ -854,126 +807,73 @@ module.exports = class ServerController {
                  * the command, and we do not need any handling.
                  *
                  * - (E) */
-                if(commandArgs.length > 1) {
-                    var currentDate = new Date();
-                    var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
-                    var messageHeader =  "On " + currentTime + " moderator " + moderator.getId() + " announced:"; //TODO: replace id with username
-                    var messageText = input.substr(input.indexOf(" "));
+                if(commandArgs.length > 1) { 
+                    var message = input.substr(input.indexOf(" "));
 
                     /* Sending the global message to all the users.
+                     * This might later be altered to include the id of the
+                     * moderator or some fancy window-dressing for the message.
+                     *
                      * Furthermore, we might alter the handling to not send
                      * any global messages to any other moderators.
                      *
                      * - (E) */
-                    this.#io.emit('New global message', messageHeader, messageText); // This might be altered to not
+                    this.#io.emit('New global message', message); // This might be altered to not
                                                                   // include moderators
                 }
                 break;
             case Commands.LOGMESSAGES:
-                /* Display msgIDs and the senderIDs of the messages to mod.
-                 * This can be used to identify the senderIDs of messages send into the allchat,
-                 * so that the moderator can remove the right user from a conference.
-                 * - (E) */
-                 var room = this.#rooms[moderator.getPosition().getRoomId() - 1];
-                 var messageHeader = "List of messages posted in " + room.getTypeOfRoom();
-                 var messageBody = [];
-                 var msg = room.getMessages();
-                 for(var i = 0; i < msg.length; i++) {
-                     messageBody.splice(0 , 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
-                      ") has messageId: " + msg[i].messageID);
-                 }
-                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
-                 break;
+                // Display msgIDs and the senderIDs of the messages to mod
             case Commands.HELP:
-                var messageHeader = "List of Commands."
-                var messageBody = ["\\global <message>  --  Post a message into the global chat. " +
-                                        "It will display in every participants game-view as a pop-up.",
-                                   "\\help  --  This command. Displays a list of all commands and how to use them.", 
-                                   "\\log --  Will show a log of all messages send into the allchat of the room you're " +
-                                   "currently in, including the messageID and senderID of each message.", 
-                                   "\\rmuser <list of participantIDs>  -- Takes a list of participantIDs, each one " +
-                                   "seperated from the next by a whitespace-character, and removes all of them from " +
-                                   "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
-                                   "not yet possible to unban a banned user!",
-                                   "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs and removes the corresponding messages - " +
-                                   "if they exist - from the allchat of the room you're currently in."];
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
-                break;
+                // send list of commands to mod
             case Commands.REMOVEPLAYER:
-                // removes player(s) from conference
-                // Maybe instead of being able to remove several players be able
-                // to remove just one and give them a ban message instead?
-                
-                //TODO have this take something else instead of participant-IDs
+                // removes player from conference
 
-                /* This will assume that each argument supplied with the \rmuser-command
-                 * is a valid participantID, each one separated from the next by a whitespace.
-                 * It will perform the removal.
+                /* This will assume that the first argument after the command
+                 * is the ppantID, and remove that player from the game.
                  */
-                 for(var i = 1; i < commandArgs.length; i++) {
-                     
-                    var ppantID = commandArgs[i];
-                     
-                    
-                    /* First, it gets the socket object corresponding to player that
-                     * is supposed to be removed from the game. 
-                     * - (E) */
-                    var id = this.getSocketId(ppantID); // get the Id of the socket belonging to the 
-                                                        // participant that is to be removed
-                    
-                    if(id == undefined) {
-                        return;
+                 
+                /* First, it gets the socket object corresponding to player that
+                 * is supposed to be removed from the game. 
+                 * - (E) */
+                 
+                
+                console.log(commandArgs[1]);
+                var id = this.getSocketId(commandArgs[1]);
+                console.log(id);
+                var socket = this.getSocketObject(id);
+                
+                /*
+                var roomsToRemoveFrom = Object.keys(socketToRemove.rooms));
+                for(var i = 1; i < roomsToRemoveFrom.length; i++) {
+                    socketToRemove.leave(roomsToRemoveFrom[i], () => {
+                        // This still needs proper removal handling
                     }
-                                                               
-                    var socket = this.getSocketObject(id); // get the actual socket object
-                    
-                    /* Tells the clientController to remove itself from the game
-                     * (meaning to return to the homepage). Since the handling of
-                     * this can be altered client-side, we also need to remove the socket
-                     * from all the rooms (see below).
-                     * - (E) */
-                    this.#io.to(id).emit('remove yourself');
-                    this.#banList.push(socket.request.session.accountId);
-                    
-                    /* Get all the socketIO-rooms the socket belonging to the participant that
-                     * is to be removed is currently in and remove the socket from all those rooms
-                     * - (E) */
-                    var roomsToRemoveFrom = Object.keys(socket.rooms);
-                    console.log(roomsToRemoveFrom);
-                    for(var i = 0; i < roomsToRemoveFrom.length; i++) {
-                        var room = roomsToRemoveFrom[i];
-                        socket.leave(room);
-                        console.log(room);
-                        this.#io.in(room).emit("remove player", ppantID);  
-                    }
-                    
-                    console.log('Participant with Participant_ID: ' + ppantID + ' was removed from the game . . .');
-                    
-                    /* We do for now not delete the socket from the ppantControllers-list,
-                     * as I want to see if this will keep the user from reentering the game.
-                     * UPDATE: IT DOES NOT.
-                     * Also, we can not remove the participant from the ppant-List, as the
-                     * ppant-List is not known at this part of the program.
-                     * - (E) */
-                    //this.ppantControllers.delete(socket.id);
-                    //ppants.delete(ppantID); 
-                }
-                break;
-            case Commands.REMOVEMESSAGE:
-                var messagesToDelete = commandArgs.slice(1);
-                var roomID = moderator.getPosition().getRoomId();
-                var msg = this.#rooms[roomID - 1].getMessages();
-                for(var i = 0; i < msg.length; i++) {
-                     if(messagesToDelete.includes(msg[i].messageID.toString())) {
-                         msg.splice(i, 1);
-                     }
-                }
-                this.#io.in(roomID.toString()).emit('initAllchat', msg);
-                break;
-            default:
-                var messageHeader = "Unrecognized command."
-                var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText); 
+                }*/
+                
+                /* This is, for now, just the disconnect handling copy-pasted.
+                 * Lazy, I know, but it should work for now.
+                 * I will later rework this, so that the client gets removed
+                 * from the socket-rooms/-namespaces as well and maybe add something
+                 * s.t. he can not simply rejoin immediately.
+                 *
+                 * The big issue here being that if a client alters the client-side
+                 * handling of this
+                 * - (E) */
+
+                var ppantID = this.ppantControllers.get(socket.id).getParticipant().getId();
+                console.log(ppantID);
+                socket.broadcast.emit('remove player', ppantID);
+                console.log('Participant with Participant_ID: ' + ppantID + ' was removed from the game . . .');
+
+                //remove participant from room
+                //var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
+                this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
+                
+                this.ppantControllers.delete(socket.id);
+                //ppants.delete(ppantID);
+                
+                
                 break;
         } 
     }
@@ -990,7 +890,9 @@ module.exports = class ServerController {
              * - (E) */
             var id;
             this.ppantControllers.forEach( (ppantCont, socketId) => {
+                console.log("ppantId: " + ppantCont.getParticipant().getId() + ", socketId: " + socketId);
                 if (ppantCont.getParticipant().getId() == ppantID) {
+                    console.log("Returning: " + socketId);
                     id = socketId;
                 }
             });
@@ -1000,39 +902,15 @@ module.exports = class ServerController {
         getSocketObject(socketId) {
             var mainNamespace = this.#io.of('/');
             var socketKeys = Object.keys(mainNamespace.connected);
+            console.log(socketKeys);
             for (var i = 0; i < socketKeys.length; i++) {
+            console.log("Comparing " + socketKeys[i] + " against " + socketId + ", a match would return " + mainNamespace.connected[socketKeys[i]].id);
                 if(socketKeys[i] == socketId) {
+                    
                     return mainNamespace.connected[socketKeys[i]];
                 }
             }
         }
-        
-        getIdOf(username) {
-            /* Gets the participantId belonging to a username.
-             * Since double-log-ins are still possible atm, this will only return
-             * the id of last logged-in participant of a user.
-             * - (E) */
-            var id;
-            this.ppantControllers.forEach( (ppantCont, socketId) => {
-                if (ppantCont.getParticipant().getBusinessCard().getUsername() == username) {
-                    id = ppantCont.getParticipant().getId();
-                }
-            });
-            return id;
-        };
-        
-        isBanned(accountId) {
-            if (this.#banList.includes(accountId)) {
-                return true;
-            };
-            return false;
-        };
-        
-        unban(accountId) {
-            if (this.#banList.includes(accountId)) {
-                this.#banList.splice(this.#banList.indexOf(accountId), 1);
-            };
-        };
     
     
 }

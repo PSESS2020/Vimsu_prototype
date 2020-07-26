@@ -209,6 +209,8 @@ class ClientController {
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
@@ -516,6 +518,10 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
+    handleFromServerNewGlobalMessage(messageHeader, messageText) {
+        this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
+
     handleFromServerHideAvatar(participantId) {
         this.#gameView.hideAvatar(participantId);
     }
@@ -523,6 +529,10 @@ class ClientController {
     handleFromServerShowAvatar(participantId) {
         this.#gameView.showAvatar(participantId);
     }
+    
+    handleFromServerRemoved() {
+        $('#viewBlocker').show();
+    };
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */

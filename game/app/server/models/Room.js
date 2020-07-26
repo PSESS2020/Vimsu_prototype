@@ -239,7 +239,8 @@ module.exports = class Room {
     }
 
     addMessage(ppantID, username, date, text) {
-        var message = { senderID: ppantID, username: username, timestamp: date, text: text };
+        
+        var message = { senderID: ppantID, messageID: this.#listOfMessages.length, username: username, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
 
