@@ -61,11 +61,11 @@ module.exports = */class NPCAvatarView extends AvatarView {
 
         ctx_map.font = "1em sans-serif";
         ctx_map.textBaseline = 'top';
-        ctx_map.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx_map.fillStyle = "red";
         ctx_map.textAlign = "center";
         ctx_map.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_map.font, 10));
 
-        ctx_map.fillStyle = "black";
+        ctx_map.fillStyle = "white";
         ctx_map.fillText(this.#name, screenX + AVATAR_WIDTH/2, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); 

@@ -29,8 +29,8 @@
             TypeChecker.isInstanceOf(gameObject, GameObjectClient);
         });
         TypeChecker.isInstanceOf(listOfNPCs, Array);
-        listOfNPCs.forEach(npcPosition => {
-            TypeChecker.isInstanceOf(npcPosition, NPCClient);
+        listOfNPCs.forEach(npc => {
+            TypeChecker.isInstanceOf(npc, NPCClient);
         });
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet

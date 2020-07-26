@@ -245,7 +245,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
         });
 
         this.#currentMap = new FoyerView(map);
@@ -269,7 +269,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
         });
 
         this.#currentMap = new FoodCourtView(map);
