@@ -72,6 +72,8 @@ module.exports = */class NPCAvatarView extends AvatarView {
     }
 
     onClick() {
-        alert('You clicked me');
+        console.log('You clicked me');
+        let eventmanager = new EventManager();
+        eventmanager.handleNPCClick(this.#npcId);
     }
 }

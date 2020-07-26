@@ -30,6 +30,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #gameViewInit;
     #achievementView;
     #npcAvatarViews = [];
+    #npcStoryView;
 
     constructor(gameWidth, gameHeight) 
     {
@@ -504,6 +505,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initCurrentAchievementsView(achievements) {
         this.#achievementView = new AchievementView().draw(achievements);
+    }
+
+    initNPCStoryView(story) {
+        this.#npcStoryView = new NPCStoryView().draw(story);
     }
 
     removeFriend(participantId) {

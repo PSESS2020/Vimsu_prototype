@@ -27,6 +27,7 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
+const NPCService = require('../services/NPCService.js');
 
 
 
@@ -706,6 +707,14 @@ module.exports = class ServerController {
                 remover.removeFriend(removedFriendID);
                 removedFriend.removeFriend(removerID);
             });
+
+            socket.on('getNPCStory', (npcID) => {
+                let npcService = new NPCService();
+                let npc = npcService.getNPC(npcID);
+                let story = npc.getStory();
+
+                socket.emit('showNPCStory', story);
+            })
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken

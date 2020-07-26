@@ -213,6 +213,7 @@ class ClientController {
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
+        this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -526,6 +527,10 @@ class ClientController {
         this.#gameView.showAvatar(participantId);
     }
 
+    handleFromServerShowNPCStory(story) {
+        this.#gameView.initNPCStoryView(story);
+    }
+
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
@@ -666,6 +671,11 @@ class ClientController {
 
     handleFromViewShowProfile() {
         this.#gameView.initProfileView(this.#ownBusinessCard);
+    }
+
+    handleFromViewGetNPCStory(npcId) {
+        this.socketReady;
+        this.socket.emit('getNPCStory', npcId);
     }
 
     handleFromServerAchievements(achievements) {
