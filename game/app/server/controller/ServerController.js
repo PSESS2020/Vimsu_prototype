@@ -652,6 +652,20 @@ module.exports = class ServerController {
                         rank: 2,
                         self: true
                     },
+                    {
+                        participantId: "40abc",
+                        username: "MusFriend",
+                        points: 25,
+                        rank: 3,
+                        self: false
+                    },
+                    {
+                        participantId: "40abc",
+                        username: "MusFReq",
+                        points: 20,
+                        rank: 4,
+                        self: false
+                    },
                 ]
 
                 socket.emit('rankList', rankList);
