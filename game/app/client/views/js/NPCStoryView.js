@@ -8,7 +8,7 @@ class NPCStoryView extends WindowView {
     draw(story) {
         story.forEach(line => {
         $('#npcStoryModal .modal-body').append(`
-        <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">${line}</h5>
+        <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left">${line}</h5>
         </br
         `);
         });
