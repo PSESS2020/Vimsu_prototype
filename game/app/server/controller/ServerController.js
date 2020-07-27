@@ -29,6 +29,7 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
+const NPCService = require('../services/NPCService.js');
 
 
 
@@ -241,11 +242,23 @@ module.exports = class ServerController {
                       cordY: gameObject.getPosition().getCordY(),
                       isSolid: gameObject.getSolid()
                     });
-                })
+                });
+
+                let npcs = this.#rooms[Settings.FOYER_ID - 1].getListOfNPCs();
+                let npcData = [];
+
+                //needed to init all NPCs in clients game view
+                npcs.forEach(npc => {
+                    npcData.push({id: npc.getId(), name: npc.getName(), 
+                                  cordX: npc.getPosition().getCordX(), 
+                                  cordY: npc.getPosition().getCordY(),
+                                  direction: npc.getDirection()});
+                });
+
                 
                 //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.FOYER_ID, TypeOfRoom.FOYER, 
-                                            gameObjectData);
+                                            gameObjectData, npcData);
 
                 // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
                 this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d});
@@ -439,9 +452,20 @@ module.exports = class ServerController {
                     isSolid: gameObject.getSolid()
                     });
                 });
+
+                let npcs = this.#rooms[targetRoomId - 1].getListOfNPCs();
+                let npcData = [];
+
+                //needed to init all NPCs in clients game view
+                npcs.forEach(npc => {
+                    npcData.push({id: npc.getId(), name: npc.getName(), 
+                                  cordX: npc.getPosition().getCordX(), 
+                                  cordY: npc.getPosition().getCordY(),
+                                  direction: npc.getDirection()});
+                });
                     
                 //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData);
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData);
 
                 //set new position in server model
                 ppants.get(ppantID).setPosition(newPos);
@@ -760,6 +784,14 @@ module.exports = class ServerController {
                 remover.removeFriend(removedFriendID);
                 removedFriend.removeFriend(removerID);
             });
+
+            socket.on('getNPCStory', (npcID) => {
+                let npcService = new NPCService();
+                let npc = npcService.getNPC(npcID);
+                let story = npc.getStory();
+
+                socket.emit('showNPCStory', story);
+            })
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken

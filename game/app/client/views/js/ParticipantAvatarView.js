@@ -147,7 +147,7 @@ class ParticipantAvatarView extends AvatarView {
         }
     }
 
-    onclick(/*mousePos*/) {
+    onClick(/*mousePos*/) {
         
         /*
         //Needed for calculating the correct position of 

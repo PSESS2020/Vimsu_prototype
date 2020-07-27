@@ -31,6 +31,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #businessCardView;
     #gameViewInit;
     #achievementView;
+    #npcAvatarViews = [];
+    #npcStoryView;
 
     constructor(gameWidth, gameHeight) 
     {
@@ -127,9 +129,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                     
                     if (ppantView.getPosition().getCordX() === selectedTileCords.x 
                      && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
-                        ppantView.onclick();
+                        ppantView.onClick();
                     }
                 });
+
+                //then, check if there is an NPC at this position
+                self.#npcAvatarViews.forEach(npcView => {
+                    if (npcView.getPosition().getCordX() === selectedTileCords.x 
+                     && npcView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        npcView.onClick();
+                    }
+                })
             
             }
         });
@@ -195,7 +205,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             this.drawClock();
 
             //put all AvatarViews in one list
-            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews);
+            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
             
 
             //sort all Avatars in CordX
@@ -231,21 +241,39 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     //Is called when participant enters Foyer
-    initFoyerView(map) {
+    initFoyerView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
+        });
+
         this.#currentMap = new FoyerView(map);
     }
 
-    initReceptionView(map) {
+    initReceptionView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+        });
+
         this.#currentMap = new ReceptionView(map);
     }
 
-    initFoodCourtView(map) {
+    initFoodCourtView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
+        });
+
         this.#currentMap = new FoodCourtView(map);
     }
 
@@ -482,7 +510,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     initCurrentAchievementsView(achievements) {
-        this.achievementView = new AchievementView().draw(achievements);
+        this.#achievementView = new AchievementView().draw(achievements);
+    }
+
+    initNPCStoryView(story) {
+        this.#npcStoryView = new NPCStoryView().draw(story);
     }
 
     initRankListView(rankList) {
