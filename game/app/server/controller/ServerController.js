@@ -24,12 +24,14 @@ const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
+const Account = require('../../../../website/models/Account.js');
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
 const NPCService = require('../services/NPCService.js');
+const ParticipantService = require('../services/ParticipantService.js');
 
 
 
@@ -66,8 +68,8 @@ module.exports = class ServerController {
 
 
         //JUST FOR TESTING PURPOSES
-        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
+        //ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
+        //ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
 
         this.#banList = [];
         
@@ -164,13 +166,13 @@ module.exports = class ServerController {
                  * - (E) */ 
 
                 // (i) to (iii)
-                var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
+                //var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
                 
                 //TODO: Needs to be adjusted when multiple rooms exist (P)
                 //currently every participant spawns in foyer at the start position
                 //Future Goal: Spawn returning participants at position, where he disconnected
                 //Spawn new participants at reception start position
-
+                /*
                 var x = Settings.STARTPOSITION_X;
                 var y = Settings.STARTPOSITION_Y;
                 var d = Settings.STARTDIRECTION;
@@ -200,8 +202,21 @@ module.exports = class ServerController {
                             company: company, 
                             email: email 
                         };
-                
-                var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d); 
+                */
+                //variables for creating account instance
+                let accountId = socket.request.session.accountId;
+                let username = socket.request.session.username;
+                let title = socket.request.session.title;
+                let surname = socket.request.session.surname;
+                let forename = socket.request.session.forename;
+                let job = socket.request.session.job;
+                let company = socket.request.session.company;
+                let email = socket.request.session.email;
+
+                let account = new Account(accountId, username, title, surname, forename, job, company, email);
+                let ppant = ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
+                    return ppant;
+                }); 
 
                 //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                 this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
@@ -1113,6 +1128,4 @@ module.exports = class ServerController {
                 this.#banList.splice(this.#banList.indexOf(accountId), 1);
             };
         };
-    
-    
 }

@@ -38,8 +38,9 @@ module.exports = class Participant {
      * @param {boolean} isMod 
      * @param {int} points 
      * @param {Array of Chat} chatList 
+     * @param {Array of int} visitedLectureIDs
      */
-    constructor(id, accountId, businessCard, position, direction/*, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList*/)
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList, visitedLectureIDs)
     {
         //Typechecking
 
@@ -50,7 +51,7 @@ module.exports = class Participant {
         TypeChecker.isEnumOf(direction, Direction);
 
         //Currently disable because not included yet
-        /*
+        
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
@@ -64,7 +65,11 @@ module.exports = class Participant {
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
         });
-        */
+        TypeChecker.isInstanceOf(visitedLectureIDs, Array);
+        visitedLectureIDs.forEach(lectureID => {
+            TypeChecker.isInt(lectureID);
+        })
+        
 
 
         this.#id = id;
@@ -72,11 +77,12 @@ module.exports = class Participant {
         this.#businessCard = businessCard;
         this.#position = position;
         this.#direction = direction;
-        /*this.#friendList = friendList;*/ this.#friendList = new FriendList(this.#id, []);  //TESTING
-        /*this.#receivedRequestList = receivedRequestList;*/ this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
-        /*this.#sentRequestList = sentRequestList;*/ this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
+        this.#friendList = friendList; //this.#friendList = new FriendList(this.#id, []);  //TESTING
+        this.#receivedRequestList = receivedRequestList; //this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
+        this.#sentRequestList = sentRequestList; //this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
         
-        //this.#achievements = achievements; 
+        this.#achievements = achievements; 
+        /*
         this.#achievements = {
             'lecturesVisited': {
                 count: 0,
@@ -113,10 +119,11 @@ module.exports = class Participant {
             }
             // TODO: can easily add more achievements here
         }
+        */
 
-        /*this.#isMod = isMod;*/ this.#isMod = true;  //TESTING
-        /*this.#points = points;*/ this.#points = 0;
-        /*this.#chatList = chatList;*/ this.#chatList = [];
+        this.#isMod = isMod; //this.#isMod = true;  //TESTING
+        this.#points = points; //this.#points = 0;
+        this.#chatList = chatList; //this.#chatList = [];
     }
 
     getId() 

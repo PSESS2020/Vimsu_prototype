@@ -21,6 +21,7 @@ module.exports = Object.freeze
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
+    CONFERENCE_ID: '1',
 
     /* Moderator-Settings */
     CMDSTARTCHAR: "\\" // moved the actual commands into a seperate file for easier handling

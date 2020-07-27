@@ -6,10 +6,12 @@ const Settings = require('../../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
 const Account = require('../../../../website/models/Account')
 const dbconf = require('../../../../config/dbconf');
-const AccountService = require('../../../../website/services/AccountService')
+const AccountService = require('../../../../website/services/AccountService');
+const Achievement = require('../models/Achievement.js');
+const Chatservice = require('./ChatService.js');
 
 var vimsudb;
-async function getDB() {
+function getDB() {
     return dbconf.setDB().then(res => {
         vimsudb = dbconf.getDB()
         console.log("get DB success")
@@ -19,7 +21,7 @@ async function getDB() {
 }
 
 module.exports = class ParticipantService {
-    static createParticipant(account, conferenceId) {
+    static async createParticipant(account, conferenceId) {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
         var accountId = account.getAccountID();
@@ -27,24 +29,53 @@ module.exports = class ParticipantService {
         return getDB().then(res => {
             return this.getParticipant(accountId, conferenceId).then(par => {
                 var participant;
+                
 
                 if(par) {
+
+                    //get BusinessCards from Friends and FriendRequests
+                    let friendList = [];
+                    let receivedFriendRequestList = [];
+                    let sentFriendRequestList = [];
+
+                    par.friendId.forEach(parID => {
+                        this.getBusinessCard(parID, conferenceId).then(busCard => {
+                            friendList.push(busCard);
+                        });
+                    });
+
+                    par.friendRequestId.received.forEach(parID => {
+                        this.getBusinessCard(parID, conferenceId).then(busCard => {
+                            receivedFriendRequestList.push(busCard);
+                        });
+                    });
+
+                    par.friendRequestId.sent.forEach(parID => {
+                        this.getBusinessCard(parID, conferenceId).then(busCard => {
+                            sentFriendRequestList.push(busCard);
+                        });
+                    });
+
+                    //Get Chats
+                    let chatList = ChatService.loadChatList(par.id, conferenceId).then(chats => {
+                        return chats;
+                    });
+
                     participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                         account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                         account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                        par.points, par.friendId, par.friendRequestId.sent, par.friendRequestId.received, par.achievements, par.isModerator);
+                        friendList, receivedfriendRequestList, sentFriendRequestList, par.achievements, par.isModerator, par.points, chatList, par.visitedLectureId);
                 } 
                 else {
                     var par = {
                         participantId: new ObjectId().toString(),
                         accountId: accountId,
                         position: {
-                            roomId: Settings.STARTROOM,
+                            roomId: Settings.STARTROOM_ID,
                             cordX: Settings.STARTPOSITION_X,
                             cordY: Settings.STARTPOSITION_Y
                         },
                         direction: Settings.STARTDIRECTION,
-                        points: 0,
                         friendId: [],
                         friendRequestId: {
                             sent: [],
@@ -52,13 +83,14 @@ module.exports = class ParticipantService {
                         },
                         achievements: [],
                         isModerator: false,
-                        /*visitedLectureId: [],*/
+                        points: 0,
+                        visitedLectureId: []
                     }
 
                     participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                         account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                         account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                        par.points, par.friendId, par.friendRequestId.sent, par.friendRequestId.received, par.achievements, par.isModerator);
+                        [], [], [], par.achievements, par.isModerator, par.points, [], par.visitedLectureId);
 
                     getDB().then(res => {
                         vimsudb.insertOneToCollection("participants_" + conferenceId, par);
@@ -110,6 +142,27 @@ module.exports = class ParticipantService {
                 }
                 else {
                     console.log("participant with Id " + participantId + " is not found in collection participants_" + conferenceId);
+                    return false;
+                }
+            }).catch(err => {
+                console.error(err);
+            })
+        })
+    }
+
+    static getBusinessCard(participantId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, "").then(par => {
+                if (par) {
+                    return AccountService.getAccount(par.accountId).then(account => {
+                        return new BusinessCard(par.id, account.username, account.title, account.surname, account.forename, account.job, account.company, account.email);
+                    });
+                }
+                else {
+                    console.log("participant with participanntId " + participantId + " is not found in collection participants_" + conferenceId);
                     return false;
                 }
             }).catch(err => {
