@@ -30,7 +30,12 @@ const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
 
-
+const warning = {
+        header: "Warning",
+        body: "One of your messages was removed by a moderator. Please follow the " + 
+              "general chat etiquette. Additional infractions may result in a permanent " +
+              "ban."
+}
 
 
 /* This should later on be turned into a singleton */
@@ -43,12 +48,6 @@ module.exports = class ServerController {
     #banList;
     ppantControllers;
     
-    const warning = {
-        header: "Warning",
-        body: "One of your messages was removed by a moderator. Please follow the " + 
-              "general chat etiquette. Additional infractions may result in a permanent " +
-              "ban."
-    }
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
@@ -1041,8 +1040,10 @@ module.exports = class ServerController {
                 var msg = this.#rooms[roomID - 1].getMessages();
                 for(var i = 0; i < msg.length; i++) {
                      if(messagesToDelete.includes(msg[i].messageID.toString())) {
-                         msg.splice(i, 1);
                          this.sendWarning(this.getSocketId(msg[i].senderID));
+                         msg.splice(i, 1);
+                         i--; // This is important, as without it, we could not remove
+                              // two subsequent messages
                      }
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
@@ -1050,10 +1051,13 @@ module.exports = class ServerController {
             case Commands.REMOVEMESSAGEYBYUSER:
                 var roomID = moderator.getPosition().getRoomId();
                 var msg = this.#rooms[roomID - 1].getMessages();
+                var newMsg = msg;
                 for(var i = 0; i < msg.length; i++) {
                      if(commandArgs.includes(msg[i].senderID.toString())) {
-                         msg.splice(i, 1);
                          this.sendWarning(this.getSocketId(msg[i].senderID));
+                         msg.splice(i, 1);
+                         i--; // This is important, as without it, we could not remove
+                              // two subsequent messages
                      }
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
@@ -1100,8 +1104,10 @@ module.exports = class ServerController {
             case Commands.REMOVEMESSAGE:
                 for(var i = 0; i < msg.length; i++) {
                      if(commandArgs.includes(lectureChat[i].messageID.toString())) {
-                         lectureChat.splice(i, 1);
                          this.sendWarning(this.getSocketId(lectureChat[i].senderID));
+                         lectureChat.splice(i, 1);
+                         i--; // This is important, as without it, we could not remove
+                              // two subsequent messages
                      }
                 }
                 this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
@@ -1109,15 +1115,22 @@ module.exports = class ServerController {
             case Commands.REMOVEMESSAGESBYUSER:
                 for(var i = 0; i < lectureChat.length; i++) {
                      if(commandArgs.includes(lectureChat[i].senderID.toString())) {
-                         lectureChat.splice(i, 1);
                          this.sendWarning(this.getSocketId(lectureChat[i].senderID));
+                         lectureChat.splice(i, 1);
+                         i--; // This is important, as without it, we could not remove
+                              // two subsequent messages
                      }
                 }
                 this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
                 break;
             case Commands.REMOVEPLAYER:
+                // remove player socket from lecture
+                // send player a command to force his client to close the lecture window
+                // and display a global message informing them about it.
+                // also add player to "persona non-grata"-list in lecture class
                 break;
             case Commands.REVOKETOKEN:
+                
                 break;
             case Commands.GRANTTOKEN:
                 break;
@@ -1210,7 +1223,7 @@ module.exports = class ServerController {
          * - (E) */
         sendWarning(socketid) {
             if(socketid != undefined) {
-                this.#io.to(socketid).emit("New global message", this.warning.header, this.warning.body);
+                this.#io.to(socketid).emit("New global message", warning.header, warning.body);
             }
         };
         

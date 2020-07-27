@@ -195,5 +195,22 @@ module.exports = class Lecture {
         this.#tokenList.push([participantId, undefined, 300000]);
         console.log(this.#tokenList);
     }
-
+    
+    /* Traverses through the tokenList of the lecture and removes every entry with a
+     * participantID matching the passed argument. This might result in more than 
+     * one entry being removed (but shouldn't).
+     * - (E) */
+    revokeToken(participantID) {
+        for(var i = 0; i < this.#tokenList.length; i++) {
+            var element = this.#tokenList[i];
+            if(element[0] === participantId) {
+                this.#tokenList.splice(i, 1);
+                i--;
+            }
+        }
+    };
+    
+    grantToken(participantID) {
+        
+    };
 }
