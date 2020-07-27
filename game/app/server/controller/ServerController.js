@@ -613,14 +613,21 @@ module.exports = class ServerController {
                     email: undefined
                 }
 
+                let targetRank = undefined;
+
                 //Check if ppant with targetID is a friend
-                //if so, emit the email
+                //if so, emit the email. if not, emit the rank
                 if (ppants.get(ppantID).getFriendList().includes(targetID)) {
                     businessCardObject.email = businessCard.getEmail();
+                    socket.emit('businessCard', businessCardObject, targetRank);
+                } else {
+                    //RankListService.getRank(targetID, "").then(rank => {
+                        //targetRank = rank;
+                        //because DB is not initialized yet every subjects get to have first rank
+                        targetRank = 1;
+                        socket.emit('businessCard', businessCardObject, targetRank);
+                    //})
                 }
-
-                socket.emit('businessCard', businessCardObject);
-
             });
 
             socket.on('getAchievements', (ppantID) => {

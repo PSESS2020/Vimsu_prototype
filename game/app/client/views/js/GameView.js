@@ -25,6 +25,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #globalChatView;
     #friendListView;
     #friendRequestListView;
+    #successesBar;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -468,12 +469,12 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#globalChatView = new GlobalChatView().draw(messageHeader, messageText);
     };
 
-    initProfileView(businessCard) {
-        this.#profileView = new ProfileView().draw(businessCard);
+    initProfileView(businessCard, rank) {
+        this.#profileView = new ProfileView().draw(businessCard, rank);
     }
 
-    initBusinessCardView(businessCard, isFriend) {
-        this.#businessCardView = new BusinessCardView(businessCard, isFriend).draw();
+    initBusinessCardView(businessCard, isFriend, rank) {
+        this.#businessCardView = new BusinessCardView(businessCard, isFriend, rank).draw();
     }
 
     initFriendListView(businessCards) {
@@ -487,6 +488,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initRankListView(rankList) {
         this.#rankListView = new RankListView().draw(rankList);
+    }
+
+    updateSuccessesBar(points, rank) {
+        this.#successesBar = new SuccessesBar().update(points, rank);
     }
 
     removeFriend(participantId) {

@@ -1,5 +1,6 @@
 class ProfileView extends WindowView {
     #businessCard;
+    #rank;
 
     constructor() {
         super()
@@ -7,6 +8,7 @@ class ProfileView extends WindowView {
 
     draw(businessCard) {
         this.#businessCard = businessCard;
+        this.#rank = rank;
 
         $('#profileModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="profileModalTitle">${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>

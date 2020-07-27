@@ -1,7 +1,4 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
-
-
-
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -214,6 +211,7 @@ class ClientController {
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
+        this.socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -452,16 +450,16 @@ class ClientController {
     }
 
     //Is called after server send the answer of avatarclick
-    handleFromServerBusinessCard(businessCardObject) {
+    handleFromServerBusinessCard(businessCardObject, rank) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username, 
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename, 
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
         
         //check if ppant is a friend or not
         if (businessCard.getEmail() === undefined) {
-            this.#gameView.initBusinessCardView(businessCard, false);
+            this.#gameView.initBusinessCardView(businessCard, false, rank);
         } else {
-            this.#gameView.initBusinessCardView(businessCard, true);
+            this.#gameView.initBusinessCardView(businessCard, true, rank);
         }
     }
 
@@ -511,6 +509,17 @@ class ClientController {
         $('#lectureChatMessages').append($newMessageBody);
     }
     
+    handleFromServerUpdateSuccessesBar(points, rank) {
+        if(points) {
+            TypeChecker.isInt(points);
+        }
+
+        if(rank) {
+            TypeChecker.isInt(rank);
+        }
+
+        this.#gameView.updateSuccessesBar(points, rank);
+    }
     
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
