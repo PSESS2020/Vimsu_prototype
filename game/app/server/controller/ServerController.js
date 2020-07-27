@@ -490,7 +490,7 @@ module.exports = class ServerController {
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
-                var participant = ppants.get(ppantId);
+                var participant = ppants.get(ppantID);
                 
                 /* We want to check if the ppant "owns" the lecture here.
                  * As the orator-class seems not be actually used yet, we just use
@@ -1059,7 +1059,7 @@ module.exports = class ServerController {
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
-            case Commands.REMOVEMESSAGEYBYPLAYER:
+            case Commands.REMOVEMESSAGESBYPLAYER:
                 var roomID = moderator.getPosition().getRoomId();
                 var msg = this.#rooms[roomID - 1].getMessages();
                 var newMsg = msg;
@@ -1141,7 +1141,7 @@ module.exports = class ServerController {
                 }
                 this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
                 break;
-            case Commands.REMOVEMESSAGESBYUSER:
+            case Commands.REMOVEMESSAGESBYPLAYER:
                 for(var i = 0; i < lectureChat.length; i++) {
                      if(commandArgs.includes(lectureChat[i].senderID.toString())) {
                          this.sendWarning(this.getSocketId(lectureChat[i].senderID));
@@ -1220,7 +1220,7 @@ module.exports = class ServerController {
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-                this.#io.to(this.getSocketId(orator.getId())).emit('New global message', messageHeader, messageText); 
+                this.#io.to(socket.id).emit('New global message', messageHeader, messageText); 
                 break;
         }
         

@@ -191,7 +191,7 @@ module.exports = class Lecture {
      * and the token has not already run out, it revokes it by setting 
      * the counter to zero. 
      * - (E) */
-    revokeToken(participantID) {
+    revokeToken(participantId) {
         for(var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if(element[0] === participantId && this.hasToken(participantId)) {
