@@ -13,6 +13,7 @@ module.exports = class Lecture {
     #lectureChat; 
     #maxParticipants;
     #activeParticipants;
+    #removedPartcipants;
     #tokenList;                 
     //#lectureController //Probably not needed 
 
@@ -45,6 +46,7 @@ module.exports = class Lecture {
         this.#oratorName = oratorName;
         this.#maxParticipants = maxParticipants;
         this.#activeParticipants = [];
+        this.#removedParticipants = [];
 
         /*This will be an array of arrays with with size 3
         that means every element is an array, 
@@ -147,6 +149,18 @@ module.exports = class Lecture {
             }
         });
     }
+    
+    hasPPant(participantId) {
+        return this.#activeParticipants.includes(participantId);
+    };
+    
+    ban(accountId) {
+        this.#removedParticipants.push(accountId);
+    };
+    
+    isBanned(accountId) {
+        return this.#removedParticipants.includes(accoundId);
+    };
 
     /**
      * Is called to check, if participant with this ID has an token for this lecture
@@ -171,6 +185,28 @@ module.exports = class Lecture {
             }
             return false;
     }
+    
+    /* Traverses through the tokenList of the lecture and checks for an entry
+     * that belongs to the passed participant. If it finds such a token,
+     * and the token has not already run out, it revokes it by setting 
+     * the counter to zero. 
+     * - (E) */
+    revokeToken(participantID) {
+        for(var i = 0; i < this.#tokenList.length; i++) {
+            var element = this.#tokenList[i];
+            if(element[0] === participantId && this.hasToken(participantId)) {
+                this.#tokenList.element[2] = 0;
+            }
+        }
+    };
+    
+    grantToken(participantID) {
+        // If the participant already has a token, we don't need to do anything
+        // We can not grant a token to a participant not yet in the lecture
+        if(!this.hasToken(participantID) && this.#activeParticipants.includes(participantID)) {
+            this.#tokenList.push([participantId, undefined, 300000]);
+        }
+    };
 
     #checkToken = function(participantId) {
         for(var i = 0; i < this.#tokenList.length; i++) {
@@ -196,21 +232,7 @@ module.exports = class Lecture {
         console.log(this.#tokenList);
     }
     
-    /* Traverses through the tokenList of the lecture and removes every entry with a
-     * participantID matching the passed argument. This might result in more than 
-     * one entry being removed (but shouldn't).
-     * - (E) */
-    revokeToken(participantID) {
-        for(var i = 0; i < this.#tokenList.length; i++) {
-            var element = this.#tokenList[i];
-            if(element[0] === participantId) {
-                this.#tokenList.splice(i, 1);
-                i--;
-            }
-        }
-    };
     
-    grantToken(participantID) {
-        
-    };
+    
+    
 }

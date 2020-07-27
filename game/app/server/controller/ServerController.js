@@ -31,10 +31,16 @@ const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 
 const warning = {
-        header: "Warning",
-        body: "One of your messages was removed by a moderator. Please follow the " + 
-              "general chat etiquette. Additional infractions may result in a permanent " +
-              "ban."
+    header: "Warning",
+    body: "One of your messages was removed by a moderator. Please follow the " + 
+          "general chat etiquette. Additional infractions may result in a permanent " +
+          "ban."
+}
+
+const removal = {
+    header: "Removal",
+    body: "You have been removed from this lecture by a moderator. Please follow the " +
+          "general chat etiquette."
 }
 
 
@@ -495,12 +501,12 @@ module.exports = class ServerController {
                 /* We want to check if the ppant "owns" the lecture here.
                  * As the orator-class seems not be actually used yet, we just use
                  * the orator-name from the lecture class and compare it to the username
-                 * of the aprticipant. And since I#m not sure if that will work, we just allow
-                 * everyone to use commands in the lecture-chat (for testing purposes).
+                 * of the aprticipant. And since I'm not sure if that will work, we just allow
+                 * every moderator to use commands in the lecture-chat (for testing purposes).
                  * 
                  * - (E) */
-                if(/* participant.getBusinessCard().getUsername() == lecture.getOratorName() && */
-                 textxt.charAt(0) == Settings.CMDSTARTCHAR) {
+                if(/* (participant.getBusinessCard().getUsername() == lecture.getOratorName() || */
+                 participant.isModerator() /*)*/ && text.charAt(0) == Settings.CMDSTARTCHAR) {
                     /* Now, we check if the message contains any command
                      * known by the server and handle this appropriately.
                      * We move this to another method for better readability.
@@ -541,6 +547,11 @@ module.exports = class ServerController {
                 
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+                
+                if(lecture.isBanned(socket.request.session.accountId)) {
+                    this.sendRemoval(socket.id);
+                    return;
+                }
 
                 if(lecture.enter(ppantID)) {
                     console.log(ppantID + " joins " + lectureId);
@@ -1073,8 +1084,6 @@ module.exports = class ServerController {
     commandHandlerLecture(socket, lecture, input) {
         // TODO
         // TO IMPLEMENT
-        // - help
-        // - remove user (permanently)
         // - revoke user token
         // - grant user token
         
@@ -1102,7 +1111,7 @@ module.exports = class ServerController {
         
         switch(command) {
             case Commands.REMOVEMESSAGE:
-                for(var i = 0; i < msg.length; i++) {
+                for(var i = 0; i < lectureChat.length; i++) {
                      if(commandArgs.includes(lectureChat[i].messageID.toString())) {
                          this.sendWarning(this.getSocketId(lectureChat[i].senderID));
                          lectureChat.splice(i, 1);
@@ -1124,15 +1133,31 @@ module.exports = class ServerController {
                 this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
                 break;
             case Commands.REMOVEPLAYER:
-                // remove player socket from lecture
-                // send player a command to force his client to close the lecture window
-                // and display a global message informing them about it.
-                // also add player to "persona non-grata"-list in lecture class
+                for(var i = 1; i < commandArgs.length; i++) {
+                    var ppantId = commandArgs[i];
+                    if(lecture.hasPPant(ppantId)) {
+                        var socket = this.getSocketObject(this.getSocketId(ppantId));
+                        lecture.leave(ppantId);
+                        lecture.revokeToken(ppantId);
+                        lecture.ban(socket.request.session.accountId);
+                        socket.leave(lectureId);
+                        socket.currentLecture = undefined;
+                        socket.broadcast.emit('showAvatar', participantId);
+                        this.sendRemoval(socket.id);
+                    }
+                }
                 break;
             case Commands.REVOKETOKEN:
-                
+                for(var i = 1; i < commandArgs.length; i++) {
+                    lecture.revokeToken(commandArgs[i]);
+                    // TODO: switch token display in users client
+                }
                 break;
             case Commands.GRANTTOKEN:
+                for(var i = 1; i < commandArgs.length; i++) {
+                    lecture.grantToken(commandArgs[i]);
+                    // TODO: switch token display in users client
+                }
                 break;
             case Commands.HELP:
                 var messageHeader = "List of Commands."
@@ -1151,8 +1176,13 @@ module.exports = class ServerController {
                                    "seperated from the next by a whitespace-character, and removes all messages posted " +
                                    "by them into the lecture chat. Will also send a warning " +
                                    "to these participants, reminding them to follow chat-etiquette.",
-                                   "\\revoke <list of participantIDs> --  ",
-                                   "\\grant <list of participantIDs> --  "];
+                                   "\\revoke <list of participantIDs> --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and revokes their lecture tokens " +
+                                   "(if they own one). They will no longer be able to post messages into the lecture chat.",
+                                   "\\grant <list of participantIDs> --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and grants them lecture tokens " +
+                                   "(if they are currently listening to the lecture and do not own one). They will " +
+                                   "be able to post messages into the lecture chat."];
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.LOGMESSAGES:
@@ -1224,6 +1254,12 @@ module.exports = class ServerController {
         sendWarning(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", warning.header, warning.body);
+            }
+        };
+        
+        sendRemoval(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", removal.header, removal.body);
             }
         };
         
