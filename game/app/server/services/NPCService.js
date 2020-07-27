@@ -53,7 +53,7 @@ module.exports = class NPCService {
     {    
         if (typeOfRoom === 'FOYER') {
             let lectureStory = [    'Hey! Welcome to our Foyer!',
-                                    'The door to my left leads to the lectures. Take a look and have fun! If you are in time and stay till the end, you can ask questions to the orator through the lecture chat.',
+                                    'The door to my left leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
                                     'Enjoy your stay!'];
 
             this.#npcs.push(new NPC(2, 'FoyerHelper', new Position(roomId, 0, 0), Direction.DOWNRIGHT, lectureStory));
@@ -64,12 +64,13 @@ module.exports = class NPCService {
         else if (typeOfRoom === 'RECEPTION') {
             let receptionStory = [  'Hello and welcome to this conference hosted by VIMSU!',
                                     'I would like to give you a short introduction with some basic tips.',
+                                    'You can move around using WASD or arrow keys.',
                                     'You can enter a room by clicking the door tile. You need to be in range to enter a door.',
                                     'The door in this room leads you to the Foyer. From there, you can go anywhere and visit lectures!',
                                     'Keep in mind: you can interact with other participants by clicking the tile they are standing on.',
                                     'Earn points by visiting lectures, interacting with others or by reaching achievements!',
                                     'You can see the current points standings by clicking the Ranklist Button.',
-                                    'There are other NPCs at this conference who like to help you. You can recognize them by the red bar above them.', 
+                                    'There are other NPCs at this conference who would like to help you. You can recognize them by the red bar above them.', 
                                     "That's it for now! Have fun and enjoy your stay!"];
 
             this.#npcs.push(new NPC(1, 'BasicTutorial', new Position(roomId, 11, 6), Direction.DOWNLEFT, receptionStory));
