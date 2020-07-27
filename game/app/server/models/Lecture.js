@@ -195,7 +195,7 @@ module.exports = class Lecture {
         for(var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if(element[0] === participantId && this.hasToken(participantId)) {
-                this.#tokenList.element[2] = 0;
+                element[2] = 0;
             }
         }
     };
