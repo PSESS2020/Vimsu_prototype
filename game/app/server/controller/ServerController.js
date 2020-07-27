@@ -511,7 +511,7 @@ module.exports = class ServerController {
                      * need it.
                      *
                      * - (E) */
-                    this.commandHandlerLecture(participant, lectureChat, text.substr(1));
+                    this.commandHandlerLecture(socket, lecture, text.substr(1));
                 } else {
                 
                     participant.increaseAchievementCount('messagesSent')
@@ -519,7 +519,7 @@ module.exports = class ServerController {
                     // timestamping the message - (E)
                     var currentDate = new Date();
                     var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
-                    var message = {senderID: ppantID, username: username, timestamp: currentTime, messageText: text}
+                    var message = {senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentTime, messageText: text}
                     lectureChat.appendMessage(message);
                     console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
                     // Getting the roomID from the ppant seems to not work?
@@ -967,7 +967,8 @@ module.exports = class ServerController {
                                    "seperated from the next by a whitespace-character, and removes all of them from " +
                                    "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                                    "not yet possible to unban a banned user!",
-                                   "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs and removes the corresponding messages - " +
+                                   "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs, each one separated from the next " +
+                                   "one by a whitespace character, and removes the corresponding messages - " +
                                    "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
                                    "the senders of the messages, reminding them to follow chat etiquette.",
                                    "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
@@ -1065,12 +1066,10 @@ module.exports = class ServerController {
         } 
     };
     
-    commandHandlerLecture(orator, lectureChat, input) {
+    commandHandlerLecture(socket, lecture, input) {
         // TODO
         // TO IMPLEMENT
         // - help
-        // - remove messages by id
-        // - remove messages by user
         // - remove user (permanently)
         // - revoke user token
         // - grant user token
@@ -1079,6 +1078,9 @@ module.exports = class ServerController {
          * the input at each occurence of a whitespace character.
          * - (E) */  
         var commandArgs = input.split(" ");
+        
+        /* Get the chat of the lecture we're currently in for message operations */
+        var lectureChat = lecture.getLectureChat().getMessages();
 
         /* Now we extract the command from the input.
          * 
@@ -1096,8 +1098,22 @@ module.exports = class ServerController {
         
         switch(command) {
             case Commands.REMOVEMESSAGE:
+                for(var i = 0; i < msg.length; i++) {
+                     if(commandArgs.includes(lectureChat[i].messageID.toString())) {
+                         lectureChat.splice(i, 1);
+                         this.sendWarning(this.getSocketId(lectureChat[i].senderID));
+                     }
+                }
+                this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
                 break;
             case Commands.REMOVEMESSAGESBYUSER:
+                for(var i = 0; i < lectureChat.length; i++) {
+                     if(commandArgs.includes(lectureChat[i].senderID.toString())) {
+                         lectureChat.splice(i, 1);
+                         this.sendWarning(this.getSocketId(lectureChat[i].senderID));
+                     }
+                }
+                this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
                 break;
             case Commands.REMOVEPLAYER:
                 break;
@@ -1106,7 +1122,35 @@ module.exports = class ServerController {
             case Commands.GRANTTOKEN:
                 break;
             case Commands.HELP:
+                var messageHeader = "List of Commands."
+                var messageBody = ["\\help  --  This command. Displays a list of all commands and how to use them.", 
+                                   "\\log --  Will show a log of all messages send into the lecture chat" +
+                                   ", including the messageID and senderID of each message.", 
+                                   "\\rmuser <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and removes all of them from " +
+                                   "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
+                                   "not yet possible to revert this!",
+                                   "\\rmmsg <list of msgIDs  --  Takes a list of messageIDs, each one seperated from the " +
+                                   "next one by a whitespace character, and removes the corresponding messages - " +
+                                   "if they exist - from the lecture chat. Will also send a warning to " +
+                                   "the senders of the messages, reminding them to follow chat etiquette.",
+                                   "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and removes all messages posted " +
+                                   "by them into the lecture chat. Will also send a warning " +
+                                   "to these participants, reminding them to follow chat-etiquette.",
+                                   "\\revoke <list of participantIDs> --  ",
+                                   "\\grant <list of participantIDs> --  "];
+                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
+            case Commands.LOGMESSAGES:
+                 var messageHeader = "List of messages posted in " + lecture.getTitle();
+                 var messageBody = [];
+                 for(var i = 0; i < lectureChat.length; i++) {
+                     messageBody.splice(0 , 0, "[" + lectureChat[i].timestamp + "] (senderId: " + lectureChat[i].senderID +
+                      ") has messageId: " + lectureChat[i].messageID);
+                 }
+                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
+                 break;
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
@@ -1177,6 +1221,9 @@ module.exports = class ServerController {
             return false;
         };
         
+        /* Can't actually be used yet, as it requires accountIds as arguments,
+         * but nothing (no user or method) knows enough to properly use this.
+         * - (E) */
         unban(accountId) {
             if (this.#banList.includes(accountId)) {
                 this.#banList.splice(this.#banList.indexOf(accountId), 1);

@@ -209,6 +209,7 @@ class ClientController {
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('updateLectureChat', this.handleFromServerUpdateLectureChat.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
@@ -510,6 +511,18 @@ class ClientController {
         $('#lectureChatMessages').append($newMessageHeader);
         $('#lectureChatMessages').append($newMessageBody);
     }
+    
+    handleFromServerUpdateLectureChat(messages) {
+        for(var i = 0; i < messages.length; i++) {
+            var messageHeader = messages[i].username + ", " + messages[i].timestamp + ":";
+            var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+            var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+            $newMessageHeader.text(messageHeader);
+            $newMessageBody.text(messages[i].messageText);
+            $('#lectureChatMessages').append($newMessageHeader);
+            $('#lectureChatMessages').append($newMessageBody);
+        }
+    };
     
     
     // Called when a new room is entered.
