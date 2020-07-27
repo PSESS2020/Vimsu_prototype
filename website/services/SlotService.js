@@ -49,7 +49,8 @@ module.exports = class SlotService {
                 remarks: remarks,
                 startingTime: startingTime,
                 oratorId: oratorId,
-                maxParticipants: maxParticipants
+                maxParticipants: maxParticipants,
+                isAccepted: false
             }
 
             return vimsudb.insertOneToCollection("lectures", lecture).then(res => {
