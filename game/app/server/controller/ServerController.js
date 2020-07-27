@@ -128,7 +128,7 @@ module.exports = class ServerController {
             socket.on('new participant', () => {
 
                 //First Channel (P)
-                socket.join(Settings.FOYER_ID.toString());
+                socket.join(Settings.STARTROOM_ID.toString());
                 
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
@@ -171,10 +171,10 @@ module.exports = class ServerController {
                 //Future Goal: Spawn returning participants at position, where he disconnected
                 //Spawn new participants at reception start position
 
-                var startPosition = this.#rooms[Settings.FOYER_ID - 1].getStartPosition();
-                var x = startPosition.getCordX();
-                var y = startPosition.getCordY();
-                var d = this.#rooms[Settings.FOYER_ID - 1].getStartDirection();
+                var x = Settings.STARTPOSITION_X;
+                var y = Settings.STARTPOSITION_Y;
+                var d = Settings.STARTDIRECTION;
+                var startPosition = new Position(Settings.STARTROOM_ID, x, y);
                 console.log("accId: " + socket.request.session.accountId);
 
                 //variables for creating BusinessCard and Paricipant instance
@@ -204,7 +204,7 @@ module.exports = class ServerController {
                 var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d); 
 
                 //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-                this.#rooms[Settings.FOYER_ID - 1].enterParticipant(ppant);
+                this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
         
                 var ppantCont = new ParticipantController(ppant);
                 ppants.set(ppantID, ppant);
@@ -228,7 +228,7 @@ module.exports = class ServerController {
                 //Send room information of start room (P)
                 //TODO: When multiple rooms exist, get right room (P)
 
-                let gameObjects = this.#rooms[Settings.FOYER_ID - 1].getListOfGameObjects();
+                let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
                 let gameObjectData = [];
 
                 //needed to send all gameObjects of starting room to client
@@ -244,7 +244,7 @@ module.exports = class ServerController {
                     });
                 });
 
-                let npcs = this.#rooms[Settings.FOYER_ID - 1].getListOfNPCs();
+                let npcs = this.#rooms[Settings.STARTROOM_ID - 1].getListOfNPCs();
                 let npcData = [];
 
                 //needed to init all NPCs in clients game view
@@ -257,7 +257,7 @@ module.exports = class ServerController {
 
                 
                 //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.FOYER_ID, TypeOfRoom.FOYER, 
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.STARTROOM_ID, Settings.TYPE_OF_STARTROOM, 
                                             gameObjectData, npcData);
 
                 // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -268,11 +268,11 @@ module.exports = class ServerController {
                                                                         cordY: y, 
                                                                         dir: d});
                 // Initialize Allchat
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.FOYER_ID - 1].getMessages());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
                 
                 ppants.forEach((ppant, id, map) => {
                     
-                    if(id != ppantID && ppant.getPosition().getRoomId() === Settings.FOYER_ID) {
+                    if(id != ppantID && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
 
                         var username = ppant.getBusinessCard().getUsername();
 
@@ -295,7 +295,7 @@ module.exports = class ServerController {
                 // It might be nicer to move this into the ppantController-Class
                 // later on
                 // - (E)
-                    socket.to(Settings.FOYER_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
+                    socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
                
             });
 
