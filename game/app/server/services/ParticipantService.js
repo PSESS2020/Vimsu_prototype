@@ -136,7 +136,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateParticipantAwardPoints(participantId, conferenceId, awardPoints) {
+    static updateParticipantAwardPointsTasksAndAchievements(participantId, conferenceId, awardPoints, taskCountMapping, achievements) {
         // TODO
-    } 
+    }
 } 
