@@ -66,7 +66,6 @@ class ReceptionView extends MapView {
         if (tiles.length != 0) {
             tiles.forEach( object => object.draw());
         }
-
     }
 
 

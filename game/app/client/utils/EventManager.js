@@ -121,4 +121,8 @@ class EventManager {
     handleRemoveFriend(friendId) {
         this.#clientController.handleFromViewRemoveFriend(friendId);
     }
+
+    handleNPCClick(npcId) {
+        this.#clientController.handleFromViewGetNPCStory(npcId);
+    }
 }
