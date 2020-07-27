@@ -218,6 +218,8 @@ class ClientController {
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
+        this.socket.on('awardPoints', this.handleFromServerAwardPoints.bind(this));
+        this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
     }
 
     /* #################################################### */    
@@ -558,6 +560,14 @@ class ClientController {
 
     handleFromServerShowNPCStory(name, story) {
         this.#gameView.initNPCStoryView(name, story);
+    }
+
+    handleFromServerAwardPoints(points) {
+        this.#gameView.updateAwardPoints(points);
+    }
+
+    handleFromServerNewAchievement(achievement) {
+        this.#gameView.handleNewAchievement(achievement);
     }
 
     /* #################################################### */    

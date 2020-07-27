@@ -5,6 +5,8 @@ const Settings = require('../../utils/Settings.js');
 const Direction = require('../models/Direction.js')
 const BusinessCard = require('./BusinessCard.js')
 const FriendList = require('./FriendList.js');
+const Task = require('./Task.js');
+const Achievement = require('./Achievement.js');
 
 module.exports = class Participant {
 
@@ -16,8 +18,10 @@ module.exports = class Participant {
     #friendList;
     #receivedRequestList;
     #sentRequestList;
+    #isMod;
+    #taskTypeMapping;
     #achievements;
-    #isMod
+    #awardPoints;
 
     /**
      * Erstellt Participant Instanz
@@ -28,7 +32,7 @@ module.exports = class Participant {
      * @param {Position} position 
      * @param {Direction} direction 
      */
-    constructor(id, accountId, businessCard, position, direction)
+    constructor(id, accountId, businessCard, position, direction, tasks)
     {
         TypeChecker.isString(id);
         //TypeChecker.isString(accountId);
@@ -65,43 +69,12 @@ module.exports = class Participant {
         this.#sentRequestList = new FriendList(this.#id, []);
 
 
-        // TODO: could create js classes for everything
-        this.#achievements = {
-            'lecturesVisited': {
-                count: 0,
-                icon: 'headphones',
-                title: 'Good Listener',
-                description: 'Join lectures to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            },
-            'participantsClicked': {
-                count: 0,
-                title: 'Network Guru',
-                icon: 'users',
-                description: 'Interact with other participants to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            },
-            'messagesSent': {
-                count: 0,
-                title: 'Walky Talky',
-                icon: 'comment',
-                description: 'Send more chat messages to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            }
-            // TODO: can easily add more achievements here
-        }
+        this.#taskTypeMapping = {};
+        tasks.forEach((x) => {
+            this.#taskTypeMapping[x.getTaskType()] = 0;
+        });
+
+        this.#awardPoints = 0;
 
         //JUST FOR TESTING PURPOSES
         this.#friendList.addBusinessCard(new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
@@ -248,13 +221,28 @@ module.exports = class Participant {
         }
     }
 
+    getTaskTypeMappingCounts() {
+        return this.#taskTypeMapping;
+    }
+
+
+    addTask(task) {
+        TypeChecker.isInstanceOf(task, Task);
+
+        // increase the task counter and assign award points accordingly
+        this.#taskTypeMapping[task.getTaskType()] = this.#taskTypeMapping[task.getTaskType()] + 1;
+        this.#awardPoints += task.getAwardPoints();
+    }
+
+    setAchievements(achievements) {
+        this.#achievements = achievements;
+    }
+
     getAchievements() {
         return this.#achievements;
     }
 
-    increaseAchievementCount(identifier) {
-        this.#achievements[identifier].count = this.#achievements[identifier].count + 1;
+    getAwardPoints() {
+        return this.#awardPoints;
     }
-
-    update
 }

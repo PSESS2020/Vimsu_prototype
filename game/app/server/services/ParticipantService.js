@@ -135,4 +135,8 @@ module.exports = class ParticipantService {
         });
 
     }
+
+    static updateParticipantAwardPoints(participantId, conferenceId, awardPoints) {
+        // TODO
+    } 
 } 

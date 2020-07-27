@@ -32,6 +32,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #businessCardView;
     #gameViewInit;
     #achievementView;
+    #newAchievementView;
     #npcAvatarViews = [];
     #npcStoryView;
 
@@ -514,6 +515,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#achievementView = new AchievementView().draw(achievements);
     }
 
+    handleNewAchievement(achievement) {
+        this.#newAchievementView = new NewAchievementView().draw(achievement);
+    }
+
     initNPCStoryView(name, story) {
         this.#npcStoryView = new NPCStoryView().draw(name, story);
     }
@@ -571,5 +576,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 avatar.setVisibility(true);
             }
         }
+    }
+
+    updateAwardPoints(points) {
+        $('#pointBox').text(points);
     }
 }

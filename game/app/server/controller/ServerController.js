@@ -24,12 +24,16 @@ const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
+const TypeOfTask = require('../../utils/TypeOfTask.js')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
 const NPCService = require('../services/NPCService.js');
+const AchievementService = require('../services/AchievementService.js');
+const TaskService = require('../services/TaskService.js');
+
 
 
 
@@ -57,17 +61,18 @@ module.exports = class ServerController {
     //foodCourtChannel: Settings.FOODCOURT_ID.toString()
     //receptionChannel: Settings.RECEPTION_ID.toString()
 
+    ppants = new Map();  // Array to hold all participants
 
     init() {
         var counter = 0;
         
         this.ppantControllers = new Map();
-        const ppants = new Map();  // Array to hold all participants
+        
 
 
         //JUST FOR TESTING PURPOSES
-        ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
+        this.ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT, new TaskService().getAllTasks()));  
+        this.ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT, new TaskService().getAllTasks())) 
 
         this.#banList = [];
         
@@ -201,13 +206,14 @@ module.exports = class ServerController {
                             email: email 
                         };
                 
-                var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d); 
+                var ppant = new Participant(ppantID, accountId, businessCard, startPosition, d, new TaskService().getAllTasks()); 
+                new AchievementService().computeAchievements(ppant); // add empty achievements
 
                 //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                 this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
         
                 var ppantCont = new ParticipantController(ppant);
-                ppants.set(ppantID, ppant);
+                this.ppants.set(ppantID, ppant);
                 this.ppantControllers.set(socket.id, ppantCont);
 
                 // (iv)
@@ -270,7 +276,7 @@ module.exports = class ServerController {
                 // Initialize Allchat
                 this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
                 
-                ppants.forEach((ppant, id, map) => {
+                this.ppants.forEach((ppant, id, map) => {
                     
                     if(id != ppantID && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
 
@@ -301,7 +307,7 @@ module.exports = class ServerController {
 
             socket.on('sendMessage', (ppantID, text) => {
 
-                var participant = ppants.get(ppantID);
+                var participant = this.ppants.get(ppantID);
     
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -329,8 +335,6 @@ module.exports = class ServerController {
                 var roomID = participant.getPosition().getRoomId();
                 var username = participant.getBusinessCard().getUsername();
 
-                ppants.get(ppantID).increaseAchievementCount('messagesSent')
-
                 // timestamping the message - (E)
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
@@ -354,10 +358,10 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('requestMovementStart', (ppantID, direction, newCordX, newCordY) => {
                 
-                let roomId = ppants.get(ppantID).getPosition().getRoomId();
+                let roomId = this.ppants.get(ppantID).getPosition().getRoomId();
                 
-                let oldDir = ppants.get(ppantID).getDirection();
-                let oldPos = ppants.get(ppantID).getPosition();
+                let oldDir = this.ppants.get(ppantID).getDirection();
+                let oldPos = this.ppants.get(ppantID).getPosition();
                 let newPos = new Position(roomId, newCordX, newCordY);
 
                 //check if new position is legit. Prevents manipulation from Client
@@ -374,9 +378,9 @@ module.exports = class ServerController {
                 //CollisionCheck
                 //No Collision, so every other participant gets the new position (P)
                 if (!this.#rooms[roomId - 1].checkForCollision(newPos)) {
-                    ppants.get(ppantID).setPosition(newPos);
-                    ppants.get(ppantID).setDirection(direction);
-                    socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+                    this.ppants.get(ppantID).setPosition(newPos);
+                    this.ppants.get(ppantID).setDirection(direction);
+                    socket.to(roomId.toString()).emit('movementOfAnotherthis.ppantstart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
@@ -385,9 +389,9 @@ module.exports = class ServerController {
             
             //Handle movement stop
             socket.on('requestMovementStop', (ppantID) => {
-                var roomId = ppants.get(ppantID).getPosition().getRoomId();
+                var roomId = this.ppants.get(ppantID).getPosition().getRoomId();
 
-                socket.to(roomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
+                socket.to(roomId.toString()).emit('movementOfAnotherthis.ppantstop', ppantID);
             });
 
             //Event to handle click on food court door tile
@@ -403,7 +407,7 @@ module.exports = class ServerController {
                     targetRoomId = Settings.RECEPTION_ID;
                 }
 
-                var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
+                var currentRoomId = this.ppants.get(ppantID).getPosition().getRoomId();
 
                 //Singleton
                 let doorService = new DoorService();
@@ -412,10 +416,10 @@ module.exports = class ServerController {
                 let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
 
                 //check if participant is in right position to enter room
-                //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
-                    !door.getStartPosition().getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
-                    !door.getStartPosition().getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
+                //this.ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
+                if (this.ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
+                    !door.getStartPosition().getCordX().includes(this.ppants.get(ppantID).getPosition().getCordX()) ||
+                    !door.getStartPosition().getCordY().includes(this.ppants.get(ppantID).getPosition().getCordY())) {
                     console.log('wrong position');
                     return;
                 }
@@ -433,7 +437,7 @@ module.exports = class ServerController {
                 /Reception has ID 3 and is this.#rooms[2]
                 */
 
-                this.#rooms[targetRoomId - 1].enterParticipant(ppants.get(ppantID));
+                this.#rooms[targetRoomId - 1].enterParticipant(this.ppants.get(ppantID));
                 this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
 
                 //get all GameObjects from target room
@@ -468,11 +472,11 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData);
 
                 //set new position in server model
-                ppants.get(ppantID).setPosition(newPos);
-                ppants.get(ppantID).setDirection(d);
+                this.ppants.get(ppantID).setPosition(newPos);
+                this.ppants.get(ppantID).setDirection(d);
 
                 //Get username
-                let username = ppants.get(ppantID).getBusinessCard().getUsername();
+                let username = this.ppants.get(ppantID).getBusinessCard().getUsername();
                 
                 //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d});
@@ -484,7 +488,7 @@ module.exports = class ServerController {
                 socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d });
 
                 //Emit to participant all participant positions, that were in new room before him
-                ppants.forEach((ppant, id, map) => {
+                this.ppants.forEach((ppant, id, map) => {
                     if(id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
                         var username = ppant.getBusinessCard().getUsername();
                         var tempPos = ppant.getPosition();
@@ -504,7 +508,8 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                ppants.get(ppantID).increaseAchievementCount('messagesSent')
+                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket);
+                
 
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
@@ -552,8 +557,6 @@ module.exports = class ServerController {
                         socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
                         socket.broadcast.emit('hideAvatar', ppantID);
                     })
-
-                    ppants.get(ppantID).increaseAchievementCount('lecturesVisited')
                 } else {
                     socket.emit('lectureFull', currentLecturesData[idx].id);
                 }
@@ -574,10 +577,10 @@ module.exports = class ServerController {
                 let lectureDoorPosition = doorService.getLectureDoorPosition();
 
                 //check if participant is in right position to enter room
-                //ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
-                    !lectureDoorPosition.getCordX().includes(ppants.get(ppantID).getPosition().getCordX()) ||
-                    !lectureDoorPosition.getCordY().includes(ppants.get(ppantID).getPosition().getCordY())) {
+                //this.ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
+                if (this.ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
+                    !lectureDoorPosition.getCordX().includes(this.ppants.get(ppantID).getPosition().getCordX()) ||
+                    !lectureDoorPosition.getCordY().includes(this.ppants.get(ppantID).getPosition().getCordY())) {
                     console.log('wrong position');
                     return;
                 }
@@ -625,7 +628,7 @@ module.exports = class ServerController {
             });    
 
             socket.on('getBusinessCard', (ppantID, targetID) => {
-                let businessCard = ppants.get(targetID).getBusinessCard();
+                let businessCard = this.ppants.get(targetID).getBusinessCard();
                 let businessCardObject = {
                     id: businessCard.getParticipantId(),
                     username: businessCard.getUsername(),
@@ -641,7 +644,7 @@ module.exports = class ServerController {
 
                 //Check if ppant with targetID is a friend
                 //if so, emit the email. if not, emit the rank
-                if (ppants.get(ppantID).getFriendList().includes(targetID)) {
+                if (this.ppants.get(ppantID).getFriendList().includes(targetID)) {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank);
                 } else {
@@ -655,9 +658,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getAchievements', (ppantID) => {
-                var achievements = ppants.get(ppantID).getAchievements();
-
-                socket.emit('achievements', achievements);
+                socket.emit('achievements', this.ppants.get(ppantID).getAchievements());
             });
 
             socket.on('getRankList', () => {
@@ -708,7 +709,7 @@ module.exports = class ServerController {
             })
 
             socket.on('getFriendList', (ppantID) => {
-                var friendList = ppants.get(ppantID).getFriendList();
+                var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
                 
@@ -732,7 +733,7 @@ module.exports = class ServerController {
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
-                var friendRequestList = ppants.get(ppantID).getReceivedRequestList();
+                var friendRequestList = this.ppants.get(ppantID).getReceivedRequestList();
 
                 var friendRequestListData = [];
                 
@@ -757,8 +758,8 @@ module.exports = class ServerController {
 
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
-                let target = ppants.get(targetID);
-                let requester = ppants.get(requesterID);
+                let target = this.ppants.get(targetID);
+                let requester = this.ppants.get(requesterID);
                 let targetBusCard = target.getBusinessCard();
                 let requesterBusCard = requester.getBusinessCard();
 
@@ -768,8 +769,8 @@ module.exports = class ServerController {
 
             //handles a friendrequest, either accepted or declined
             socket.on('handleFriendRequest', (targetID, requesterID, acceptRequest) => {
-                let target = ppants.get(targetID);
-                let requester = ppants.get(requesterID);
+                let target = this.ppants.get(targetID);
+                let requester = this.ppants.get(requesterID);
 
 
                 if (acceptRequest) {
@@ -785,8 +786,8 @@ module.exports = class ServerController {
 
             //handles removing a friend in both friend lists
             socket.on('removeFriend', (removerID, removedFriendID) => {
-                let remover = ppants.get(removerID);
-                let removedFriend = ppants.get(removedFriendID);
+                let remover = this.ppants.get(removerID);
+                let removedFriend = this.ppants.get(removedFriendID);
 
                 remover.removeFriend(removedFriendID);
                 removedFriend.removeFriend(removerID);
@@ -821,11 +822,11 @@ module.exports = class ServerController {
                 console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
 
                 //remove participant from room
-                var currentRoomId = ppants.get(ppantID).getPosition().getRoomId();
+                var currentRoomId = this.ppants.get(ppantID).getPosition().getRoomId();
                 this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
                 
                 this.ppantControllers.delete(socket.id);
-                ppants.delete(ppantID);
+                this.ppants.delete(ppantID);
 
                 if(socket.currentLecture) {
                     var schedule = this.#conference.getSchedule();
@@ -1036,7 +1037,7 @@ module.exports = class ServerController {
                      * ppant-List is not known at this part of the program.
                      * - (E) */
                     //this.ppantControllers.delete(socket.id);
-                    //ppants.delete(ppantID); 
+                    //this.ppants.delete(ppantID); 
                 }
                 break;
             case Commands.REMOVEMESSAGE:
@@ -1114,5 +1115,20 @@ module.exports = class ServerController {
             };
         };
     
-    
+    // require to handle the entire logic of applying achievements and points as well as sending updates to the client
+    applyTaskAndAchievement(participantId, taskType, socket) {
+        var participant = this.ppants.get(participantId);
+        participant.addTask(new TaskService().getTaskByType(taskType));
+
+        socket.emit('awardPoints', participant.getAwardPoints()); 
+
+        // computes achievements, updates participants, and returns newly unlocked achievements
+        var newAchievements = new AchievementService().computeAchievements(participant);
+
+        newAchievements.forEach((x) => {
+            socket.emit('newAchievement', x); 
+        });
+
+        
+    }
 }

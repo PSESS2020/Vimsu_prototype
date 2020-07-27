@@ -1,51 +1,38 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
-var TypeOfTask = require('../../utils/TypeOfTask')
+
+
 
 module.exports = class Achievement {
 
-    #id;
-    #task;
-    #title;
-    #icon;
-    #description;
-    #levels;
+    // all fields are public as this object is transferred to the client for direct use
+    title;
+    icon;
+    description;
+    currentLevel;
+    maxLevel;
+    color;
 
-    constructor(id, task, title, icon, description, levels) {
-        TypeChecker.isString(id);
-        TypeChecker.isEnumOf(task, TypeOfTask);
-        TypeChecker.isString(title);
-        TypeChecker.isString(icon);
-        TypeChecker.isString(description);
+    #taskType;
 
-        this.#id = id;
-        this.#task = task;
-        this.#title = title;
-        this.#icon = icon;
-        this.#description = description;
-        this.#levels = levels;
+    constructor(title, icon, description, currentLevel, color, maxLevel, taskType) {
+        this.title = title;
+        this.icon = icon;
+        this.description = description;
+        this.currentLevel = currentLevel;
+        this.color = color;
+        this.maxLevel = maxLevel;
+
+        this.#taskType = taskType;
     }
 
-    getId() {
-        return this.#id;
+    getTaskType() {
+        return this.#taskType;
     }
 
-    getTask() {
-        return this.#task;
+    getCurrentLevel() {
+        return this.currentLevel;
     }
 
-    getTitle() {
-        return this.#title;
-    }
-
-    getIcon() {
-        return this.#icon;
-    }
-
-    getDescription() {
-        return this.#description;
-    }
-
-    getLevels() {
-        return this.#levels;
+    equals(achievement) {
+        return this.#taskType === achievement.getTaskType() && this.currentLevel === achievement.getCurrentLevel();
     }
 }
