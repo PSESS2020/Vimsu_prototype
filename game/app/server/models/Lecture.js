@@ -13,7 +13,7 @@ module.exports = class Lecture {
     #lectureChat; 
     #maxParticipants;
     #activeParticipants;
-    #removedPartcipants;
+    #removedParticipants;
     #tokenList;                 
     //#lectureController //Probably not needed 
 
@@ -159,7 +159,7 @@ module.exports = class Lecture {
     };
     
     isBanned(accountId) {
-        return this.#removedParticipants.includes(accoundId);
+        return this.#removedParticipants.includes(accountId);
     };
 
     /**

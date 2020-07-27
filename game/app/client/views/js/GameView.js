@@ -537,13 +537,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
     
     updateLectureChat(messages) {
-        if(this.#lectureChat != undefined) {
+        if(this.#lectureView != undefined) {
             this.#lectureView.updateChat(messages);
         }
     };
     
     updateLectureToken(hasToken) {
-        if(this.#lectureChat != undefined) {
+        if(this.#lectureView != undefined) {
             this.#lectureView.updateToken(messages);
         }
     };

@@ -26,7 +26,7 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
-const TypeChecker = require('../../utils/Messages.js');
+const Messages = require('../../utils/Messages.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
@@ -69,6 +69,7 @@ module.exports = class ServerController {
         ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
 
         this.#banList = [];
+        this.#muteList = [];
         
         //Init all rooms
         var roomService = new RoomService();
@@ -977,7 +978,13 @@ module.exports = class ServerController {
                                    "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
                                    "seperated from the next by a whitespace-character, and removes all messages posted " +
                                    "by them into the allchat of the room you're currently in. Will also send a warning " +
-                                   "to these participants, reminding them to follow chat-etiquette."];
+                                   "to these participants, reminding them to follow chat-etiquette.",
+                                   "\\mute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and mutes them, meaning they " +
+                                   "will no longer be able to post messages into the allchat.",
+                                   "\\unmute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                                   "seperated from the next by a whitespace-character, and unmutes them, meaning they " +
+                                   "will be able to post messages into the allchat again if they were previously muted."];
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.REMOVEPLAYER:
@@ -1052,7 +1059,7 @@ module.exports = class ServerController {
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
-            case Commands.REMOVEMESSAGEYBYUSER:
+            case Commands.REMOVEMESSAGEYBYPLAYER:
                 var roomID = moderator.getPosition().getRoomId();
                 var msg = this.#rooms[roomID - 1].getMessages();
                 var newMsg = msg;
