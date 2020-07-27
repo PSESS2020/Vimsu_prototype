@@ -1,3 +1,7 @@
+var loop = false;
+var token;
+var lectureId;
+
 class LectureView extends WindowView {
 
     constructor(){
@@ -5,6 +9,8 @@ class LectureView extends WindowView {
     }
 
     draw(lecture, hasToken, lectureChat) {
+        token = hasToken;
+        lectureId = lecture.id;
         // hide the overview of current lectures
         $('#currentLectures').hide(); 
 
@@ -26,7 +32,7 @@ class LectureView extends WindowView {
         } 
         
         //the input field is added if the user has a valif token
-        if(hasToken) {
+        if(token) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
             $('#lectureChatInputGroup').append(`
             <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
@@ -60,13 +66,38 @@ class LectureView extends WindowView {
 
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
-        
-        $('#lectureVideo').attr('src', lecture.videoUrl);
-        $('#lectureVideo').load();
 
+        $('#lectureVideo').empty();
+        $('#lectureVideo').append(`
+            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls controlsList="nodownload" src=""></video>
+        `)
+
+        var video = $('#lectureVideo' + lecture.id);
+        
+        video.attr('src', lecture.videoUrl);
+        video.load();
+        video.get(0).disablePictureInPicture = true;
+        video.get(0).play();
+
+        video.on('pause', function(e) {
+            if(video.get(0).currentTime < video.get(0).duration && !loop) {
+                video.get(0).play();
+            }
+        })
+
+        video.get(0).onended = (event) => {
+            const downloadable = video.get(0).controlsList.remove('nodownload');
+            video.on('play', function(e) {
+                loop = true;
+                if(loop) {
+                    video.get(0).pause();
+                    downloadable;
+                }
+            })
+        };
+        
         $('#lectureVideoWindow').show();
     }   
-    
 }
 
 $(document).ready(() => {
@@ -77,4 +108,30 @@ $(document).ready(() => {
           $('#lectureChatInput').val('');
         }
     });
+    $(document).on('click', ".closeButton" , function() {
+        var video = $('#lectureVideo' + lectureId).get(0);
+        video.pause();
+        var result;
+        if(video.currentTime < video.duration && !loop) {
+            if(token) {
+                result = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
+            } else {
+                result = confirm('Are you sure you want to leave?')
+            }
+            
+            if(result) {
+                $('#lectureVideoWindow').hide();
+                var eventManager = new EventManager();
+                eventManager.handleLectureLeft(this.id);
+            }
+        } else {
+            if(loop) {
+                loop = false;
+            }
+            lectureId = undefined;
+            token = undefined;
+            $('#lectureVideoWindow').hide();
+        }
+    })
+
 });
