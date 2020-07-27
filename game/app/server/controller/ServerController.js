@@ -26,23 +26,10 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 
 const TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../utils/Messages.js');
 const Conference = require('../models/Conference.js');
 
 const ChatService = require('../services/ChatService.js');
-
-const warning = {
-    header: "Warning",
-    body: "One of your messages was removed by a moderator. Please follow the " + 
-          "general chat etiquette. Additional infractions may result in a permanent " +
-          "ban."
-}
-
-const removal = {
-    header: "Removal",
-    body: "You have been removed from this lecture by a moderator. Please follow the " +
-          "general chat etiquette."
-}
-
 
 /* This should later on be turned into a singleton */
 module.exports = class ServerController {
@@ -1073,6 +1060,10 @@ module.exports = class ServerController {
                 }
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
+            case Commands.MUTE:
+                break;
+            case Commands.UNMUTE:
+                break;
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
@@ -1150,6 +1141,7 @@ module.exports = class ServerController {
             case Commands.REVOKETOKEN:
                 for(var i = 1; i < commandArgs.length; i++) {
                     lecture.revokeToken(commandArgs[i]);
+                    this.sendRevoke(this.getSocketId(commandArgs[i]));
                     // TODO: switch token display in users client
                 }
                 break;
@@ -1253,13 +1245,25 @@ module.exports = class ServerController {
          * - (E) */
         sendWarning(socketid) {
             if(socketid != undefined) {
-                this.#io.to(socketid).emit("New global message", warning.header, warning.body);
+                this.#io.to(socketid).emit("New global message", Messages.WARNING.header, Messages.WARNING.body);
             }
         };
         
         sendRemoval(socketid) {
             if(socketid != undefined) {
-                this.#io.to(socketid).emit("New global message", removal.header, removal.body);
+                this.#io.to(socketid).emit("New global message", Messages.REMOVAL.header, Messages.REMOVAL.body);
+            }
+        };
+        
+        sendRevoke(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body);
+            }
+        };
+        
+        sendMute(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.MUTE.header, Messages.MUTE.body);
             }
         };
         

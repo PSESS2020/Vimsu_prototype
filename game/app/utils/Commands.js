@@ -7,6 +7,8 @@ module.exports = Object.freeze({
     REMOVEPLAYER: "rmuser",
     REMOVEMESSAGE: "rmmsg",
     REMOVEMESSAGESBYPLAYER: "rmallby",
+    MUTE: "mute",
+    UNMUTE: "unmute",
     REVOKETOKEN: "revoke",
     GRANTTOKEN: "grant",
     UNBANPLAYER: "unban",
