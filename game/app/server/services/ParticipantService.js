@@ -9,6 +9,7 @@ const dbconf = require('../../../../config/dbconf');
 const AccountService = require('../../../../website/services/AccountService');
 const Achievement = require('../models/Achievement.js');
 const Chatservice = require('./ChatService.js');
+const FriendList = require('../models/FriendList.js');
 
 var vimsudb;
 function getDB() {
@@ -25,6 +26,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
         var accountId = account.getAccountID();
+        console.log('test');
 
         return getDB().then(res => {
             return this.getParticipant(accountId, conferenceId).then(par => {
@@ -68,7 +70,6 @@ module.exports = class ParticipantService {
                 } 
                 else {
                     var par = {
-                        participantId: new ObjectId().toString(),
                         accountId: accountId,
                         position: {
                             roomId: Settings.STARTROOM_ID,
@@ -87,17 +88,24 @@ module.exports = class ParticipantService {
                         visitedLectureId: []
                     }
 
-                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                        [], [], [], par.achievements, par.isModerator, par.points, [], par.visitedLectureId);
-
                     getDB().then(res => {
                         vimsudb.insertOneToCollection("participants_" + conferenceId, par);
+                    }).then(function() {
+
+                        let participantId = ParticipantService.getParticipant(accountId, conferenceId)._id;
+
+                        participant = new Participant(participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                            new FriendList(par.id, []), new FriendList(par.id, []), new FriendList(par.id, []), par.isModerator, par.points, [], par.visitedLectureId);
                     }).catch(err => {
                         console.error(err)
                     });
                 }
+
+                    
+                
+            
 
                 return participant;
                 

@@ -214,105 +214,109 @@ module.exports = class ServerController {
                 let email = socket.request.session.email;
 
                 let account = new Account(accountId, username, title, surname, forename, job, company, email);
-                let ppant = ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-                    return ppant;
-                }); 
-
-                //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-                this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
+                
+                ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(par => {
+                    var ppant = par;
+                }).then(function() {
+                    //At this point kind of useless, maybe usefull when multiple rooms exist (P)
+                    this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
         
-                var ppantCont = new ParticipantController(ppant);
-                ppants.set(ppantID, ppant);
-                this.ppantControllers.set(socket.id, ppantCont);
+                    var ppantCont = new ParticipantController(ppant);
+                    ppants.set(ppantID, ppant);
+                    this.ppantControllers.set(socket.id, ppantCont);
 
-                // (iv)
-                // The position of the participant-Instance is also set here
-                // gameRoomController.addParticipantController(ppantCont);
+                    // (iv)
+                    // The position of the participant-Instance is also set here
+                    // gameRoomController.addParticipantController(ppantCont);
                 
                 
-                // (v)
-                /* Some notes on the following few lines of code:
-                 * This is supposed to make sure the client-side game state is initialized properly
-                 * This should probably later on be moved into the ParticipantController class
-                 * Not just one message since the first function should only be called once
-                 * Where as the second one will probably be called more often
-                 * - (E) */ 
-                // Sends the newly generated ppantID back to the client so the game-states are consistent
-                //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
+                    // (v)
+                    /* Some notes on the following few lines of code:
+                    * This is supposed to make sure the client-side game state is initialized properly
+                    * This should probably later on be moved into the ParticipantController class
+                    * Not just one message since the first function should only be called once
+                    * Where as the second one will probably be called more often
+                    * - (E) */ 
+                    // Sends the newly generated ppantID back to the client so the game-states are consistent
+                    //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
                 
-                //Send room information of start room (P)
-                //TODO: When multiple rooms exist, get right room (P)
+                    //Send room information of start room (P)
+                    //TODO: When multiple rooms exist, get right room (P)
 
-                let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
-                let gameObjectData = [];
+                    let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
+                    let gameObjectData = [];
 
-                //needed to send all gameObjects of starting room to client
-                //would be nicer and easier if they both share GameObject.js
-                gameObjects.forEach(gameObject => {
-                    gameObjectData.push({ id: gameObject.getId(),
-                      name: gameObject.getName(),
-                      width: gameObject.getWidth(),
-                      length: gameObject.getLength(),
-                      cordX: gameObject.getPosition().getCordX(),
-                      cordY: gameObject.getPosition().getCordY(),
-                      isSolid: gameObject.getSolid()
+                    //needed to send all gameObjects of starting room to client
+                    //would be nicer and easier if they both share GameObject.js
+                    gameObjects.forEach(gameObject => {
+                        gameObjectData.push({ id: gameObject.getId(),
+                        name: gameObject.getName(),
+                        width: gameObject.getWidth(),
+                        length: gameObject.getLength(),
+                        cordX: gameObject.getPosition().getCordX(),
+                        cordY: gameObject.getPosition().getCordY(),
+                        isSolid: gameObject.getSolid()
+                        });
                     });
-                });
 
-                let npcs = this.#rooms[Settings.STARTROOM_ID - 1].getListOfNPCs();
-                let npcData = [];
+                    let npcs = this.#rooms[Settings.STARTROOM_ID - 1].getListOfNPCs();
+                    let npcData = [];
 
-                //needed to init all NPCs in clients game view
-                npcs.forEach(npc => {
-                    npcData.push({id: npc.getId(), name: npc.getName(), 
-                                  cordX: npc.getPosition().getCordX(), 
-                                  cordY: npc.getPosition().getCordY(),
-                                  direction: npc.getDirection()});
-                });
+                    //needed to init all NPCs in clients game view
+                    npcs.forEach(npc => {
+                        npcData.push({id: npc.getId(), name: npc.getName(), 
+                                    cordX: npc.getPosition().getCordX(), 
+                                    cordY: npc.getPosition().getCordY(),
+                                    direction: npc.getDirection()});
+                    });
 
                 
-                //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.STARTROOM_ID, Settings.TYPE_OF_STARTROOM, 
-                                            gameObjectData, npcData);
+                    //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
+                    this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.STARTROOM_ID, Settings.TYPE_OF_STARTROOM, 
+                                                gameObjectData, npcData);
 
-                // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d});
+                    // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d});
                 
-                // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
+                    // Sends the start-position back to the client so the avatar can be displayed in the right cell
+                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
                                                                         cordY: y, 
                                                                         dir: d});
-                // Initialize Allchat
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
+                    // Initialize Allchat
+                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
                 
-                ppants.forEach((ppant, id, map) => {
+                    ppants.forEach((ppant, id, map) => {
                     
-                    if(id != ppantID && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
+                        if(id != ppantID && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
 
-                        var username = ppant.getBusinessCard().getUsername();
+                            var username = ppant.getBusinessCard().getUsername();
 
-                        var tempPos = ppant.getPosition();
-                        var tempX = tempPos.getCordX();
-                        var tempY = tempPos.getCordY();
-                        var tempDir = ppant.getDirection();
+                            var tempPos = ppant.getPosition();
+                            var tempX = tempPos.getCordX();
+                            var tempY = tempPos.getCordY();
+                            var tempDir = ppant.getDirection();
 
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
-                        console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
-                    }   
-                });
-                // (vi)
-                /* Emits the ppantID of the new participant to all other participants
-                 * connected to the server so that they may create a new client-side
-                 * participant-instance corresponding to it.
-                 * - (E) */
-                // This should send to all other connected sockets but not to the one
-                // that just connected
-                // It might be nicer to move this into the ppantController-Class
-                // later on
-                // - (E)
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
+                            console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
+                        }   
+                    });
+                
+                    // (vi)
+                    /* Emits the ppantID of the new participant to all other participants
+                     * connected to the server so that they may create a new client-side
+                    * participant-instance corresponding to it.
+                    * - (E) */
+                    // This should send to all other connected sockets but not to the one
+                    // that just connected
+                    // It might be nicer to move this into the ppantController-Class
+                    // later on
+                    // - (E)
                     socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
-               
+                }).catch(err => {
+                    console.error(err)
+                });
             });
+            
 
             socket.on('sendMessage', (ppantID, text) => {
 
