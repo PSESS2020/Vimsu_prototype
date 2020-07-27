@@ -39,11 +39,7 @@ class NPCStoryView extends WindowView {
                         if(!${i === story.length - 2}) {
                             $('#forwardStory' + '${i+1}').show();
                         }
-                    })    
-                    $("#endStory" + '${i}').on('click', function(event) {
-                        $('#npcStoryModal').modal('hide');
-                    })    
-                    
+                    }) 
                 </script>
             `);
 
