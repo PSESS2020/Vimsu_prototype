@@ -7,7 +7,7 @@ class NPCStoryView extends WindowView {
     
     draw(story) {
         for (var i = 0; i < story.length; i++) {
-            var count = i.toString();
+
             $('#npcStoryModal .modal-body').append(`
                 <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + i.toString()}'>${story[i]}</h5>
                 <button style="float:left; display: none" class="btn" id='${"backwardStory" + i.toString()}'>
