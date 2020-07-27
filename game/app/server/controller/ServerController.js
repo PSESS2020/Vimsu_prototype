@@ -1163,14 +1163,16 @@ module.exports = class ServerController {
             case Commands.REVOKETOKEN:
                 for(var i = 1; i < commandArgs.length; i++) {
                     lecture.revokeToken(commandArgs[i]);
-                    this.sendRevoke(this.getSocketId(commandArgs[i]));
-                    // TODO: switch token display in users client
+                    var socketid = this.getSocketId(commandArgs[i]);
+                    this.sendRevoke(socketid);
+                    this.#io.to(socketid).emit('update token', false);
                 }
                 break;
             case Commands.GRANTTOKEN:
                 for(var i = 1; i < commandArgs.length; i++) {
                     lecture.grantToken(commandArgs[i]);
-                    // TODO: switch token display in users client
+                    var socketid = this.getSocketId(commandArgs[i]);
+                    this.#io.to(socketid).emit('update token', true);
                 }
                 break;
             case Commands.HELP:

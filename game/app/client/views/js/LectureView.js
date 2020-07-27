@@ -1,3 +1,4 @@
+// TODO: need refactoring
 class LectureView extends WindowView {
 
     constructor(){
@@ -65,7 +66,53 @@ class LectureView extends WindowView {
         $('#lectureVideo').load();
 
         $('#lectureVideoWindow').show();
-    }   
+    }
+    
+    updateChat(lectureChat) {
+        if (lectureChat.length > 0) {
+            for(var i = 0; i < lectureChat.length; i++) {
+                var message = lectureChat[i];
+                var messageHeader = message.username + ", " + message.timestamp + ":";
+                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+                $newMessageHeader.text(messageHeader);
+                $newMessageBody.text(message.messageText);
+                $('#lectureChatMessages').append($newMessageHeader);
+                $('#lectureChatMessages').append($newMessageBody);
+            }
+        } else {
+            $('#lectureChatMessages').empty();
+        }
+    };
+    
+    updateToken(hasToken) {
+        if(hasToken) {
+            if ($('#lectureChatInputGroup').is(':empty')) {   
+            $('#lectureChatInputGroup').append(`
+            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+            <div class="input-group-append">
+                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+            </div>
+            `)
+            }
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+            <i class="fa fa-question-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append('You obtained a question token!')
+
+        // the input field is emptied if the user does not have a valid token
+        } else {
+            $('#lectureChatInputGroup').empty();
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+            <i class="fa fa-times-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append('Your question token has been revoked. Therefore, you are not able to ask questions in the lecture chat.')
+        }
+    };   
     
 }
 
