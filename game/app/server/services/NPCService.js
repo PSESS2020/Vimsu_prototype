@@ -53,10 +53,10 @@ module.exports = class NPCService {
     {    
         if (typeOfRoom === 'FOYER') {
             let lectureStory = [    'Hey! Welcome to our Foyer!',
-                                    'The door to my right leads to the lectures. Take a look and have fun! If you are in time and stay till the end, you can ask questions to the orator through the lecture chat.',
+                                    'The door to my left leads to the lectures. Take a look and have fun! If you are in time and stay till the end, you can ask questions to the orator through the lecture chat.',
                                     'Enjoy your stay!'];
 
-            this.#npcs.push(new NPC(2, 'FoyerHelper', new Position(roomId, 3, 0), Direction.DOWNRIGHT, lectureStory));
+            this.#npcs.push(new NPC(2, 'FoyerHelper', new Position(roomId, 0, 0), Direction.DOWNRIGHT, lectureStory));
 
             
         }
