@@ -39,6 +39,7 @@ module.exports = class ServerController {
     #listOfConfCont;
     #DEBUGMODE;
     #banList;
+    #muteList;
     ppantControllers;
     
 
@@ -311,6 +312,11 @@ module.exports = class ServerController {
                      * - (E) */
                     this.commandHandler(participant, text.substr(1));
                 } else { // If the message contains a command, we don't want to be handled like a regular message
+                
+                if(this.#muteList.includes(socket.request.session.accountId)) {
+                    this.sendMute(socket.id);
+                    return; // muted ppants can't post messages into any allchat
+                }
                 
                 var roomID = participant.getPosition().getRoomId();
                 var username = participant.getBusinessCard().getUsername();
@@ -1061,8 +1067,24 @@ module.exports = class ServerController {
                 this.#io.in(roomID.toString()).emit('initAllchat', msg);
                 break;
             case Commands.MUTE:
+                for(var i = 1; i < commandArgs.length; i++) {
+                    var socket = this.getSocketObject(this.getSocketId(commandArgs[i]));
+                    if(socket != undefined  && !this.#muteList.includes(accountId)) {
+                        this.#muteList.push(socket.request.session.accountId);
+                        this.sendMute(socket.id);
+                    }
+                }
+                var socket = this.get
                 break;
             case Commands.UNMUTE:
+                for(var i = 1; i < commandArgs.length; i++) {
+                    var socket = this.getSocketObject(this.getSocketId(commandArgs[i]));
+                    var accountId = socket.request.session.accountId;
+                    if(socket != undefined && this.#muteList.includes(accountId)) {
+                        this.#muteList.splice(this.#muteList.indexOf(accountId), 1);
+                        this.sendUnmute(socket.id);
+                    }
+                }
                 break;
             default:
                 var messageHeader = "Unrecognized command."
@@ -1264,6 +1286,12 @@ module.exports = class ServerController {
         sendMute(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", Messages.MUTE.header, Messages.MUTE.body);
+            }
+        };
+        
+        sendUnmute(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.UNMUTE.header, Messages.UNMUTE.body);
             }
         };
         
