@@ -795,9 +795,10 @@ module.exports = class ServerController {
             socket.on('getNPCStory', (npcID) => {
                 let npcService = new NPCService();
                 let npc = npcService.getNPC(npcID);
+                let name = npc.getName();
                 let story = npc.getStory();
 
-                socket.emit('showNPCStory', story);
+                socket.emit('showNPCStory', name, story);
             })
 
             // This will need a complete rewrite once the server-side models are properly implemented

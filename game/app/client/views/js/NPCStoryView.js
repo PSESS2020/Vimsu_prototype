@@ -5,9 +5,15 @@ class NPCStoryView extends WindowView {
         super();
     }
     
-    draw(story) {
+    draw(name, story) {
+        $('#npcStoryModal .modal-header').append(`
+            <h5 class="modal-title d-inline-block" id="npcStoryTitle">${name + " says..."}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `)
+        
         for (var i = 0; i < story.length; i++) {
-
             $('#npcStoryModal .modal-body').append(`
                 <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + i.toString()}'>${story[i]}</h5>
                 <button style="float:left; display: none" class="btn" id='${"backwardStory" + i.toString()}'>
@@ -51,6 +57,7 @@ class NPCStoryView extends WindowView {
         
 
         $('#npcStoryModal').on('hidden.bs.modal', function (e) {
+            $('#npcStoryModal .modal-header').empty()
             $('#npcStoryModal .modal-body').empty();
         });
     }

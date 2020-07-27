@@ -514,8 +514,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#achievementView = new AchievementView().draw(achievements);
     }
 
-    initNPCStoryView(story) {
-        this.#npcStoryView = new NPCStoryView().draw(story);
+    initNPCStoryView(name, story) {
+        this.#npcStoryView = new NPCStoryView().draw(name, story);
     }
 
     initRankListView(rankList) {

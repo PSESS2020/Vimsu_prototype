@@ -556,8 +556,8 @@ class ClientController {
         $('#viewBlocker').show();
     };
 
-    handleFromServerShowNPCStory(story) {
-        this.#gameView.initNPCStoryView(story);
+    handleFromServerShowNPCStory(name, story) {
+        this.#gameView.initNPCStoryView(name, story);
     }
 
     /* #################################################### */    
