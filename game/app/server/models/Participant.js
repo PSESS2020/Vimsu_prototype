@@ -5,67 +5,78 @@ const Settings = require('../../utils/Settings.js');
 const Direction = require('../models/Direction.js')
 const BusinessCard = require('./BusinessCard.js')
 const FriendList = require('./FriendList.js');
+const Achievement = require('./Achievement.js');
+const Chat = require('./Chat.js');
 
 module.exports = class Participant {
 
     #id;
-    #position;
     #accountId;
-    #direction;
     #businessCard;
+    #position;
+    #direction;
     #friendList;
     #receivedRequestList;
     #sentRequestList;
     #achievements;
-    #isMod
+    #isMod;
+    #points;
+    #chatList;
+    
 
     /**
-     * Erstellt Participant Instanz
-     * 
-     * @author Klaudia, Laura
      * 
      * @param {String} id 
+     * @param {String} accountId 
+     * @param {BusinessCard} businessCard 
      * @param {Position} position 
      * @param {Direction} direction 
+     * @param {FriendList} friendList 
+     * @param {FriendList} receivedRequestList 
+     * @param {FriendList} sentRequestList 
+     * @param {Array of Achievement} achievements 
+     * @param {boolean} isMod 
+     * @param {int} points 
+     * @param {Array of Chat} chatList 
      */
-    constructor(id, accountId, businessCard, position, direction)
+    constructor(id, accountId, businessCard, position, direction/*, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList*/)
     {
+        //Typechecking
+
         TypeChecker.isString(id);
-        //TypeChecker.isString(accountId);
-        //TypeChecker.isInstanceOf(businessCard, BusinessCard);
-        //TypeChecker.isInstanceOf(participantController, ParticipantController);
+        TypeChecker.isString(accountId);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
+        TypeChecker.isInstanceOf(position, Position);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        //Currently disable because not included yet
+        /*
+        TypeChecker.isInstanceOf(friendList, FriendList);
+        TypeChecker.isInstanceOf(receivedRequestList, FriendList);
+        TypeChecker.isInstanceOf(sentRequestList, FriendList);
+        TypeChecker.isInstanceOf(achievements, Array);
+        achievements.forEach(achievement => {
+            TypeChecker.isInstanceOf(achievements, Achievement);
+        });
+        TypeChecker.isBoolean(isMod);
+        TypeChecker.isInt(points);
+        TypeChecker.isInstanceOf(chatList, Array);
+        chatList.forEach(chat => {
+            TypeChecker.isInstanceOf(chat, Chat);
+        });
+        */
+
 
         this.#id = id;
         this.#accountId = accountId;
         this.#businessCard = businessCard;
-        this.#isMod = true;  // For testing purposes, everbody gets to be a mod
-        //this.#participantController = participantController;
-
-        /* 
-        if (!position || !direction)
-        {
-            this.#position = new Position(Settings.STARTROOM, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y);
-            this.#direction = Settings.STARTDIRECTION;
-        }
-
-        else 
-        {
-        */
-        TypeChecker.isInstanceOf(position, Position);
-        TypeChecker.isEnumOf(direction, Direction);
-
         this.#position = position;
         this.#direction = direction;
-
-        //TODO: Get FriendList from FriendListService (P)
-        this.#friendList = new FriendList(this.#id, []);
-
-        //TODO: Get FriendRequestList from FriendRequestListService (P)
-        this.#receivedRequestList = new FriendList(this.#id, []);
-        this.#sentRequestList = new FriendList(this.#id, []);
-
-
-        // TODO: could create js classes for everything
+        /*this.#friendList = friendList;*/ this.#friendList = new FriendList(this.#id, []);  //TESTING
+        /*this.#receivedRequestList = receivedRequestList;*/ this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
+        /*this.#sentRequestList = sentRequestList;*/ this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
+        
+        //this.#achievements = achievements; 
         this.#achievements = {
             'lecturesVisited': {
                 count: 0,
@@ -103,11 +114,10 @@ module.exports = class Participant {
             // TODO: can easily add more achievements here
         }
 
-        //JUST FOR TESTING PURPOSES
-        this.#friendList.addBusinessCard(new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'));
-        this.#receivedRequestList.addBusinessCard(new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'));
+        /*this.#isMod = isMod;*/ this.#isMod = true;  //TESTING
+        /*this.#points = points;*/ this.#points = 0;
+        /*this.#chatList = chatList;*/ this.#chatList = [];
     }
-    
 
     getId() 
     {
@@ -117,6 +127,10 @@ module.exports = class Participant {
     getPosition() 
     {
         return this.#position;
+    }
+
+    getDirection() {
+        return this.#direction;
     }
 
     getAccountId()
@@ -137,26 +151,34 @@ module.exports = class Participant {
         return this.#receivedRequestList;
     }
 
-    getSendRequestList() {
+    getSentRequestList() {
         return this.#sentRequestList;
     }
-    
-    getCurrentRoom() {
-        return this.getPosition().getRoomId();
-    };
+
+    getAchievements() {
+        return this.#achievements;
+    }
 
     isModerator() {
         return this.#isMod;
+    }
+
+    getPoints() {
+        return this.#points;
+    }
+
+    getAchievements() {
+        return this.#achievements;
+    }
+
+    getChatList() {
+        return this.#chatList
     }
 
     setPosition(position) 
     {
         TypeChecker.isInstanceOf(position, Position);
         this.#position = position;
-    }
-
-    getDirection() {
-        return this.#direction;
     }
 
     setDirection(direction) 
@@ -256,5 +278,8 @@ module.exports = class Participant {
         this.#achievements[identifier].count = this.#achievements[identifier].count + 1;
     }
 
-    update
+    addPoints(num) {
+        TypeChecker.isInt(num);
+        this.#points += num;
+    }
 }
