@@ -164,7 +164,6 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
                     if (currentRoomId === Settings.FOYER_ID) {
@@ -265,10 +264,21 @@ module.exports = class ServerController {
                     // later on
                     // - (E)
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
-
+                    
+                    if(typeOfCurrentRoom === TypeOfRoom.FOYER) {
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT, socket);
+                    } else if (typeOfCurrentRoom === TypeOfRoom.FOODCOURT) {
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT, socket);
+                    } else if (typeOfCurrentRoom === TypeOfRoom.RECEPTION) {
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT, socket);
+                    }
+                    
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID).then(rank => { 
                         socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank); 
-                    });  
+                    }).catch(err => {
+                        console.error(err);
+                    })
+
                 }).catch(err => {
                 console.error(err)
                 });
