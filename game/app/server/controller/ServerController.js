@@ -127,11 +127,7 @@ module.exports = class ServerController {
              * the right position (whatever that is) and the emit that to all the other players,
              * unless we're just doing regular game-state updates.
              * - (E) */
-            socket.on('new participant', () => {
-
-                //First Channel (P)
-                socket.join(Settings.STARTROOM_ID.toString());
-                
+            socket.on('new participant', () => {       
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
                 if (this.ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
@@ -160,16 +156,29 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
+
+                    let currentRoomId = ppant.getPosition().getRoomId();
+                    let typeOfCurrentRoom;
+                    if (currentRoomId === Settings.FOYER_ID) {
+                        typeOfCurrentRoom = TypeOfRoom.FOYER;
+                    } else if (currentRoomId === Settings.RECEPTION_ID) {
+                        typeOfCurrentRoom = TypeOfRoom.RECEPTION;
+                    } else if (currentRoomId === Settings.FOODCOURT_ID) {
+                        typeOfCurrentRoom === TypeOfRoom.FOODCOURT;
+                    }
+
+                    //First Channel (P)
+                    socket.join(currentRoomId.toString());
                     
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-                    this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
+                    this.#rooms[currentRoomId - 1].enterParticipant(ppant);
         
                     var ppantCont = new ParticipantController(ppant);
                     ppants.set(ppant.getId(), ppant);
                     this.ppantControllers.set(socket.id, ppantCont);
 
                     //Get GameObjects of starting room
-                    let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
+                    let gameObjects = this.#rooms[currentRoomId - 1].getListOfGameObjects();
                     let gameObjectData = [];
 
                     //needed to send all gameObjects of starting room to client
@@ -186,7 +195,7 @@ module.exports = class ServerController {
                     });
 
                     //Get all NPCs from starting room
-                    let npcs = this.#rooms[Settings.STARTROOM_ID - 1].getListOfNPCs();
+                    let npcs = this.#rooms[currentRoomId - 1].getListOfNPCs();
                     let npcData = [];
 
                     //needed to init all NPCs in clients game view
@@ -211,7 +220,7 @@ module.exports = class ServerController {
 
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
-                    this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.STARTROOM_ID, Settings.TYPE_OF_STARTROOM, 
+                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom, 
                                                 gameObjectData, npcData);
 
                                                 
@@ -219,11 +228,11 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                 
                     // Initialize Allchat
-                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
+                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
                 
                     ppants.forEach((ppant, id, map) => {
                     
-                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
+                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === currentRoomId) {
 
                             var username = ppant.getBusinessCard().getUsername();
 
@@ -247,7 +256,7 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                
             }).catch(err => {
                 console.error(err)
