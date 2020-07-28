@@ -18,7 +18,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': receiverId}).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.sent': receiverId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -33,7 +33,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': senderId}).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.received': senderId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
