@@ -706,7 +706,7 @@ module.exports = class ServerController {
                 let target = this.ppants.get(targetID);
                 let requester = this.ppants.get(requesterID);
 
-                //check if target is online
+                //check if target and requester are online
                 if (target !== undefined && requester !== undefined) {
                     let targetBusCard = target.getBusinessCard();
                     let requesterBusCard = requester.getBusinessCard();
@@ -723,7 +723,7 @@ module.exports = class ServerController {
                         console.error(err);
                     });
 
-                //request goes instantly offline after he sent friend request
+                //requester goes instantly offline after he sent friend request
                 //extremly unlikely to happen but safer
                 } else if (target !== undefined && requester === undefined) {
                     //get BusCard from DB and add it to sent friend Request
@@ -749,7 +749,7 @@ module.exports = class ServerController {
                     if (target !== undefined) {
                         target.acceptFriendRequest(requesterID);
                     }
-                    //check if request is online
+                    //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestAccepted(targetID);
                     }
@@ -764,7 +764,7 @@ module.exports = class ServerController {
                     if (target !== undefined) {
                         target.declineFriendRequest(requesterID);
                     }
-                    //check if request is online
+                    //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestDeclined(targetID);
                     }
