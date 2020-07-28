@@ -705,12 +705,35 @@ module.exports = class ServerController {
             socket.on('newFriendRequest', (requesterID, targetID) => {
                 let target = this.ppants.get(targetID);
                 let requester = this.ppants.get(requesterID);
-                let targetBusCard = target.getBusinessCard();
-                let requesterBusCard = requester.getBusinessCard();
 
-                target.addFriendRequest(requesterBusCard);
-                requester.addSentFriendRequest(targetBusCard);
+                //check if target is online
+                if (target !== undefined && requester !== undefined) {
+                    let targetBusCard = target.getBusinessCard();
+                    let requesterBusCard = requester.getBusinessCard();
 
+                    target.addFriendRequest(requesterBusCard);
+                    requester.addSentFriendRequest(targetBusCard);
+
+                //target is offline
+                } else if (target === undefined && requester !== undefined) {
+                    //get BusCard from DB and add it to sent friend Request
+                    ParticipantService.getBusinessCard(targetID, Settings.CONFERENCE_ID).then(targetBusCard => {
+                        requester.addSentFriendRequest(targetBusCard);
+                    }).catch(err => {
+                        console.error(err);
+                    });
+
+                //request goes instantly offline after he sent friend request
+                //extremly unlikely to happen but safer
+                } else if (target !== undefined && requester === undefined) {
+                    //get BusCard from DB and add it to sent friend Request
+                    ParticipantService.getBusinessCard(requesterID, Settings.CONFERENCE_ID).then(requesterBusCard => {
+                        target.addFriendRequest(requesterBusCard);
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                }
+                
                 //update DB
                 FriendRequestListService.storeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID);
                 FriendRequestListService.storeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID);
@@ -722,8 +745,14 @@ module.exports = class ServerController {
                 let requester = this.ppants.get(requesterID);
 
                 if (acceptRequest) {
-                    target.acceptFriendRequest(requesterID);
-                    requester.sentFriendRequestAccepted(targetID);
+                    //check if target is online
+                    if (target !== undefined) {
+                        target.acceptFriendRequest(requesterID);
+                    }
+                    //check if request is online
+                    if (requester !== undefined) {
+                        requester.sentFriendRequestAccepted(targetID);
+                    }
                     this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, socket);
                     this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket);
 
@@ -731,8 +760,14 @@ module.exports = class ServerController {
                     FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID);
                     FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID);
                 } else {
-                    target.declineFriendRequest(requesterID);
-                    requester.sentFriendRequestDeclined(targetID);
+                    //check if target is online
+                    if (target !== undefined) {
+                        target.declineFriendRequest(requesterID);
+                    }
+                    //check if request is online
+                    if (requester !== undefined) {
+                        requester.sentFriendRequestDeclined(targetID);
+                    }
                 }
 
                 //update DB
@@ -746,9 +781,16 @@ module.exports = class ServerController {
             socket.on('removeFriend', (removerID, removedFriendID) => {
                 let remover = this.ppants.get(removerID);
                 let removedFriend = this.ppants.get(removedFriendID);
+ 
+                //if remover is still online, remove friend from ppant instance
+                if (remover !== undefined) {
+                    remover.removeFriend(removedFriendID);
+                }
 
-                remover.removeFriend(removedFriendID);
-                removedFriend.removeFriend(removerID);
+                //if removed friend is online, remove friend from ppant instance
+                if(removedFriend !== undefined) {
+                    removedFriend.removeFriend(removerID);
+                }
 
                 //update DB
                 FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID);
