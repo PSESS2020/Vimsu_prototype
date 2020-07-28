@@ -124,6 +124,8 @@ $(document).ready(() => {
             }
             
             if(result) {
+                video.get(0).removeAttribute('src'); // empty source
+                video.get(0).load();
                 $('#lectureVideo').empty();
                 $('#lectureVideoWindow').hide();
                 var eventManager = new EventManager();
