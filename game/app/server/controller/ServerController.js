@@ -172,8 +172,6 @@ module.exports = class ServerController {
                         typeOfCurrentRoom === TypeOfRoom.FOODCOURT;
                     }
 
-                    new AchievementService().computeAchievements(ppant); // add empty achievements
-
                     //First Channel (P)
                     socket.join(currentRoomId.toString());
                     
@@ -264,6 +262,10 @@ module.exports = class ServerController {
                     // later on
                     // - (E)
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
+
+                    RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID).then(rank => { 
+                        socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank); 
+                    });  
                 }).catch(err => {
                 console.error(err)
                 });
@@ -1102,17 +1104,23 @@ module.exports = class ServerController {
         var participant = this.ppants.get(participantId);
         participant.addTask(new TaskService().getTaskByType(taskType));
 
-        socket.emit('updateSuccessesBar', participant.getAwardPoints(), ""); 
-
         // computes achievements, updates participants, and returns newly unlocked achievements
         var newAchievements = new AchievementService().computeAchievements(participant);
-        
-        /*RankListService.getRank(participantId, "1").then(rank => {*/
-            newAchievements.forEach((x) => {
-                socket.emit('newAchievement', x); 
-                socket.emit('updateSuccessesBar', participant.getAwardPoints(), /*rank*/""); 
-            });  
-        //});
 
+        newAchievements.forEach(ach => {
+            socket.emit('newAchievement', ach); 
+            
+            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, ach.awardPoints).then(res => {
+                console.log('level of ' + ach.id + ' updated') 
+            }).catch(err => {
+                console.error(err);
+            })
+        });
+ 
+        ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints()).then(res => {
+            RankListService.getRank(participantId, Settings.CONFERENCE_ID).then(rank => { 
+                socket.emit('updateSuccessesBar', participant.getAwardPoints(), rank); 
+            });  
+        });
     }
 }

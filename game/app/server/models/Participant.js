@@ -57,7 +57,7 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
         TypeChecker.isInstanceOf(achievements, Array);
         achievements.forEach(achievement => {
-            TypeChecker.isInstanceOf(achievements, Achievement);
+            TypeChecker.isInstanceOf(achievement, Achievement);
         });
         TypeChecker.isBoolean(isMod);
         TypeChecker.isInt(awardPoints);

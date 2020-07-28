@@ -50,7 +50,7 @@ module.exports = class AchievementService {
     initAllAchievements() {
         var id = 0;
 
-        this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(id, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "'Ask questions in lectures to gain this achievement.'", [
+        this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(id++, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "'Ask questions in lectures to gain this achievement.'", [
             { count: 5, color: '#D7D7D7', points: 15},
             { count: 10, color: '#C9B037', points: 15}
         ]);

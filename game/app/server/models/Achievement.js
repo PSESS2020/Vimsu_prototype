@@ -4,6 +4,7 @@
 module.exports = class Achievement {
 
     // all fields are public as this object is transferred to the client for direct use
+    id
     title;
     icon;
     description;
@@ -14,7 +15,8 @@ module.exports = class Achievement {
 
     #taskType;
 
-    constructor(title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType) {
+    constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType) {
+        this.id = id;
         this.title = title;
         this.icon = icon;
         this.description = description;

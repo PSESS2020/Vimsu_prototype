@@ -8,6 +8,7 @@ const ObjectId = require('mongodb').ObjectID;
 const Account = require('../../../../website/models/Account')
 const dbconf = require('../../../../config/dbconf');
 const AccountService = require('../../../../website/services/AccountService');
+const AchievementService = require('./AchievementService')
 const Achievement = require('../models/Achievement.js');
 const ChatService = require('./ChatService.js');
 const FriendList = require('../models/FriendList.js');
@@ -66,11 +67,19 @@ module.exports = class ParticipantService {
                             });
                         });
 
+                        var achievements = [];
+
+                        par.achievements.forEach(ach => {
+                            achievements.push(new Achievement(ach.id, ach.title, ach.icon,
+                                ach.description, ach.currentLevel, ach.color,
+                                ach.awardPoints, ach.maxLevel, ach.taskType))
+                        })
+
                         return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
                             new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
-                            par.achievements, new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
+                            achievements, new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
                     });
                 }
             
@@ -101,13 +110,38 @@ module.exports = class ParticipantService {
                         console.error(err)
                     });
 
-                    return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                            new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], 
-                            new TaskService().getAllTasks(), par.isModerator, par.points, []);
-                } 
+                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                        new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], 
+                        new TaskService().getAllTasks(), par.isModerator, par.points, []);
+                    
+                    new AchievementService().computeAchievements(participant);
 
+                    var achievementsData = [];
+                    participant.getAchievements().forEach(ach => {
+                        achievementsData.push(
+                            {
+                                id: ach.id,
+                                title: ach.title,
+                                icon: ach.icon,
+                                description: ach.description,
+                                currentLevel: ach.currentLevel,
+                                color: ach.color,
+                                awardPoints: ach.awardPoints,
+                                maxLevel: ach.maxLevel,
+                                taskType: ach.getTaskType()
+                            },
+                        )
+                    })
+
+                    return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData).then(res => {
+                        console.log('all achievements stored');
+                        return participant;
+                    }).catch(err => {
+                        console.error(err);
+                    })
+                } 
             }).catch(err => {
                 console.error(err)
             })
@@ -233,15 +267,29 @@ module.exports = class ParticipantService {
         });
     }
 
-    static storeAchievements(participantId, conferenceId, achievementIds) {
+    static storeAchievements(participantId, conferenceId, achievementsData) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        achievementIds.forEach(id => {
-            TypeChecker.isInt(id)
-        })
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: {$each: achievementIds}}).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: { $each: achievementsData } } ).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color, awardPoints) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInt(achievementId);
+        TypeChecker.isInt(level);
+
+        return getDB().then(res => {
+            return vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId, 'achievements.id': achievementId}, 
+            {'achievements.$.currentLevel': level, 'achievements.$.color': color, 'achievements.$.awardPoints': awardPoints}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);

@@ -17,7 +17,7 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findInCollection("participants_" + conferenceId, "", {participantId: 1, points: 1}).then(ppants => {
+            return vimsudb.findInCollection("participants_" + conferenceId, {}, {participantId: 1, points: 1}).then(ppants => {
                 var rankList = ppants.sort((a,b) => b.points - a.points);
 
                 var rank = 1;
@@ -68,12 +68,14 @@ module.exports = class RankListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return this.getRankList(conferenceId, "").then(rankList => {
+        return this.getRankList(conferenceId).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
             if (idx < 0) {
                 throw new Error(participantId + " is not in ranklist")
             }
             return rankList[idx].rank;
+        }).catch(err => {
+            console.error(err);
         })
     }
 } 
