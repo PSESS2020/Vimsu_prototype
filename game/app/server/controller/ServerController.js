@@ -381,7 +381,7 @@ module.exports = class ServerController {
                 if (!this.#rooms[roomId - 1].checkForCollision(newPos)) {
                     this.ppants.get(ppantID).setPosition(newPos);
                     this.ppants.get(ppantID).setDirection(direction);
-                    socket.to(roomId.toString()).emit('movementOfAnotherthis.ppantstart', ppantID, direction, newCordX, newCordY);
+                    socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
                 } else {
                     //Server resets client position to old Position (P)
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
@@ -392,7 +392,7 @@ module.exports = class ServerController {
             socket.on('requestMovementStop', (ppantID) => {
                 var roomId = this.ppants.get(ppantID).getPosition().getRoomId();
 
-                socket.to(roomId.toString()).emit('movementOfAnotherthis.ppantstop', ppantID);
+                socket.to(roomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
 
             //Event to handle click on food court door tile
