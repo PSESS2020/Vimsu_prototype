@@ -198,8 +198,8 @@ module.exports = class ParticipantService {
         return getDB().then(res => {
             return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, "").then(par => {
                 if (par) {
-                    return AccountService.getAccount(par.accountId).then(account => {
-                        return new BusinessCard(par.id, account.username, account.title, account.surname, account.forename, account.job, account.company, account.email);
+                    return AccountService.getAccountById(par.accountId).then(account => {
+                        return new BusinessCard(par.participantId, account.username, account.title, account.surname, account.forename, account.job, account.company, account.email);
                     });
                 }
                 else {
