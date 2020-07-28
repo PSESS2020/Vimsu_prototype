@@ -18,7 +18,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': receiverId}).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': receiverId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -33,7 +33,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.received': senderId}).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': senderId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -48,7 +48,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': receiverId}).then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': receiverId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -63,7 +63,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.received': senderId}).then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': senderId}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -77,7 +77,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.received': 1}).then(par => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': 1}).then(par => {
                 if (par) {
                     return par.friendRequestId.received;
                 }
@@ -96,7 +96,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestId.sent': 1}).then(par => {
+            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': 1}).then(par => {
                 if (par) {
                     return par.friendRequestId.sent;
                 }
