@@ -656,7 +656,7 @@ module.exports = class ServerController {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank);
                 } else {
-                    //RankListService.getRank(targetID, "").then(rank => {
+                    //RankListService.getRank(targetID, "1").then(rank => {
                         //targetRank = rank;
                         //because DB is not initialized yet every subjects get to have first rank
                         targetRank = 1;
@@ -1139,10 +1139,13 @@ module.exports = class ServerController {
 
         // computes achievements, updates participants, and returns newly unlocked achievements
         var newAchievements = new AchievementService().computeAchievements(participant);
+        
+        /*RankListService.getRank(participantId, "1").then(rank => {*/
+            newAchievements.forEach((x) => {
+                socket.emit('newAchievement', x); 
+                socket.emit('updateSuccessesBar', participant.getAwardPoints(), /*rank*/""); 
+            });  
+        //});
 
-        newAchievements.forEach((x) => {
-            socket.emit('newAchievement', x); 
-            socket.emit('updateSuccessesBar', participant.getAwardPoints(), ""); 
-        });  
     }
 }
