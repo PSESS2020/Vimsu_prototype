@@ -322,7 +322,7 @@ module.exports = class ServerController {
                 this.#rooms[roomID - 1].addMessage(ppantID, username, currentTime, text);
                 
                 // Getting the roomID from the ppant seems to not work?
-                this.#io.in(roomID.toString()).emit('newAllchatMessage', { senderID: ppantID, username: username, timestamp: currentTime, text: text });
+                this.#io.in(roomID.toString()).emit('newAllchatMessage', { username: username, timestamp: currentTime, text: text });
                 
                 //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
                 }
@@ -361,10 +361,6 @@ module.exports = class ServerController {
                     this.ppants.get(ppantID).setPosition(newPos);
                     this.ppants.get(ppantID).setDirection(direction);
                     socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
-
-                    //write new position and direction in DB
-                    ParticipantService.updateParticipantPosition(ppantID, Settings.CONFERENCE_ID, newPos);
-                    ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction);
 
                 } else {
                     //Server resets client position to old Position (P)
@@ -791,6 +787,12 @@ module.exports = class ServerController {
                 console.log(ppantID);
                 socket.broadcast.emit('remove player', ppantID);
                 console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
+
+                //write position and direction from disconnecting participant in DB
+                let pos = this.ppants.get(ppantID).getPosition();
+                let direction = this.ppants.get(ppantID).getDirection();
+                ParticipantService.updateParticipantPosition(ppantID, Settings.CONFERENCE_ID, pos);
+                ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction);
 
                 //remove participant from room
                 var currentRoomId = this.ppants.get(ppantID).getPosition().getRoomId();

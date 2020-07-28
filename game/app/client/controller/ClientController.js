@@ -503,7 +503,7 @@ class ClientController {
 
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
-        var msgText = "[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text;
+        var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
         $('#allchatMessages').prepend($('<div>').text(msgText));
         $('#allchatMessages').scrollTop(0);
     }
