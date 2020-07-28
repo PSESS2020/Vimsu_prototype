@@ -78,12 +78,28 @@ class EventManager {
         this.#clientController.handleFromViewShowProfile();
     }
 
-    handleChatNowClicked(participantId, isFriend) {
-        this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
-    }
+
 
     handleFriendListClicked() {
         this.#clientController.handleFromViewShowFriendList();
+    }
+    
+    /* One function to display the list of all chats.
+     * - (E) */
+    handleChatListClicked() {
+        
+    };
+    
+    /* One function to display the messages in a chat.
+     * - (E) */
+     handleChatThreadClicked() {
+         
+     };
+     
+    /* One function to create a new chat.
+     * - (E) */
+    handleChatNewClicked(participantId, isFriend) {
+        this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
     }
 
     handleFriendRequestListClicked() {

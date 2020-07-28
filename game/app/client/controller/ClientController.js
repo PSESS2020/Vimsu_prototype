@@ -219,6 +219,7 @@ class ClientController {
                 console.log(data);
         });
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
+        this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
     }
 
     /* #################################################### */    
@@ -564,6 +565,10 @@ class ClientController {
     handleFromServerNewAchievement(achievement) {
         this.#gameView.handleNewAchievement(achievement);
     }
+    
+    handleFromServerShowChatList(chats) {
+        this.#gameView.initChatListView(chats);
+    };
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
@@ -719,6 +724,25 @@ class ClientController {
     handleFromViewShowRankList() {
         this.socket.emit('getRankList');
     }
+    
+    /* Gets the list of chats the user is in - one-on-one and group - from the
+     * server. The actual displaying is done in the method dealing with the 
+     * response from the server.
+     * - (E) */
+    handleFromViewShowChatList() {
+        this.socket.emit('getChatList', this.#participantId);
+    };
+    
+    handleFromViewShowChatThread(chatID) {
+        this.socket.emit('getChatThread', chatID);
+    };
+    
+    /* We really need two functions here.
+     * One to display the interface that allows a user to create a new chat.
+     * One to actually request the server to create the new chat.
+     * 
+     * The functions further upwards will later be deleted.
+     * - (E) */
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {

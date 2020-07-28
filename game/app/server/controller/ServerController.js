@@ -699,7 +699,31 @@ module.exports = class ServerController {
                 });
 
                 socket.emit('friendRequestList', friendRequestListData);
-            }); 
+            });
+            
+            /* Technically speaking, the client should not send the id to the
+             * server, as this allows for spoofing. I think.
+             * - (E) */
+            socket.on('getChatList', (ppantID) => {
+                var chatList = this.ppants.get(ppantID).getChatList();
+                var chatListData = [];
+                chatList.forEach(chat => {
+                    chatData.push({
+                        // Get some superficial chat data
+                        // Title
+                        // ID
+                        // Timestamp, sender and preview of last message
+                    });
+                });
+                this.#io.to(socket.id).emit('chatList', chatListData);
+            });
+            
+            socket.on()('getChat', (chatID) => {
+                // Check the participant is actually a member of the chats
+                // get the chat and send the data to the client
+                this.#io.to(socket.id).emit('chatData', chatData);
+            });
+             
 
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {

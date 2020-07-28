@@ -21,6 +21,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #currentLecturesView;
     #lectureView;
     #rankListView;
+    #chatListView;
     #statusBar;
     #globalChatView;
     #friendListView;
@@ -526,6 +527,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initRankListView(rankList) {
         this.#rankListView = new RankListView().draw(rankList);
     }
+    
+    initChatListView(chats) {
+        this.#chatListView = new ChatListView().draw(chats);
+    };
 
     updateSuccessesBar(points, rank) {
         this.#successesBar = new SuccessesBar().update(points, rank);
