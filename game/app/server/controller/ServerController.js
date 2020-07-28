@@ -258,10 +258,10 @@ module.exports = class ServerController {
                     // - (E)
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                
-            }).catch(err => {
+                }).catch(err => {
                 console.error(err)
+                });
             });
-        });
             
 
             socket.on('sendMessage', (ppantID, text) => {
