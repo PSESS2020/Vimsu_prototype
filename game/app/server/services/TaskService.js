@@ -55,5 +55,6 @@ module.exports = class TaskService {
         this.#tasks.push(new Task(id++, TypeOfTask.INITPERSONALCHAT, 5));
         this.#tasks.push(new Task(id++, TypeOfTask.LECTUREVISIT, 30));
         this.#tasks.push(new Task(id++, TypeOfTask.RECEPTIONVISIT, 0));
+        this.#tasks.push(new Task(id++, TypeOfTask.NPCCLICK, 0));
     }
 } 

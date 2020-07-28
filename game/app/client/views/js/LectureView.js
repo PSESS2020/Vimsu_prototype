@@ -129,7 +129,7 @@ $(document).ready(() => {
                 $('#lectureVideo').empty();
                 $('#lectureVideoWindow').hide();
                 var eventManager = new EventManager();
-                eventManager.handleLectureLeft(this.id);
+                eventManager.handleLectureLeft(this.id, false);
             }
         } else {
             if(loop) {
@@ -137,6 +137,8 @@ $(document).ready(() => {
             }
             token = undefined;
             $('#lectureVideoWindow').hide();
+            var eventManager = new EventManager();
+            eventManager.handleLectureLeft(this.id, true);
         }
     })
 

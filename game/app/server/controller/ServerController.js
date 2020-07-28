@@ -302,6 +302,7 @@ module.exports = class ServerController {
                 // later on
                 // - (E)
                     socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT, socket);
                
             });
 
@@ -565,7 +566,7 @@ module.exports = class ServerController {
                 }
             })
 
-            socket.on('leaveLecture', (participantId, lectureId) => {
+            socket.on('leaveLecture', (participantId, lectureId, lectureEnded) => {
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
                 lecture.leave(participantId);
@@ -573,6 +574,10 @@ module.exports = class ServerController {
                 socket.leave(lectureId);
                 socket.currentLecture = undefined;
                 socket.broadcast.emit('showAvatar', participantId);
+                console.log(lectureEnded);
+                if(lectureEnded) {
+                    this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT, socket);
+                }
             });
 
             socket.on('getCurrentLectures', (ppantID) => {
@@ -803,7 +808,12 @@ module.exports = class ServerController {
                 let npc = npcService.getNPC(npcID);
                 let name = npc.getName();
                 let story = npc.getStory();
-                this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket);
+                if(name === "BasicTutorial") {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket);
+                } else {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.NPCCLICK, socket);
+                }
+                
                 socket.emit('showNPCStory', name, story);
             })
 
@@ -1133,8 +1143,6 @@ module.exports = class ServerController {
         newAchievements.forEach((x) => {
             socket.emit('newAchievement', x); 
             socket.emit('updateSuccessesBar', participant.getAwardPoints(), ""); 
-        });
-
-        
+        });  
     }
 }

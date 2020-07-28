@@ -20,7 +20,7 @@ class AchievementView extends WindowView {
                     <i style="color: ${color} !important; text-shadow: 4px 4px 25px ${color};" class="fa fa-${achievement.icon} achievement-icon ${blur} mb-5 mt-4"></i>
                     
                     <b>${achievement.title} [${level} / ${maxLevel}]</b>
-                    <small>${achievement.description}.</small>
+                    <small>${achievement.description}</small>
                 </div>
             `)
         })
