@@ -709,7 +709,7 @@ class ClientController {
 
     handleFromViewGetNPCStory(npcId) {
         this.socketReady;
-        this.socket.emit('getNPCStory', npcId);
+        this.socket.emit('getNPCStory', this.#ownParticipant.getId(), npcId);
     }
 
     handleFromServerAchievements(achievements) {

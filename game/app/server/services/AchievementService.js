@@ -107,6 +107,7 @@ module.exports = class AchievementService {
         for (var i = 0; i < achievements.length; i++) {
             if (!this.containsAchievement(achievements[i], participant.getAchievements())) {
                 newAchievements.push(achievements[i]);
+                participant.addAwardPoints(achievements[i].getAwardPoints());
             }
         }
 

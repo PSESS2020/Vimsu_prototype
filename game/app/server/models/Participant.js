@@ -231,7 +231,11 @@ module.exports = class Participant {
 
         // increase the task counter and assign award points accordingly
         this.#taskTypeMapping[task.getTaskType()] = this.#taskTypeMapping[task.getTaskType()] + 1;
-        this.#awardPoints += task.getAwardPoints();
+        this.addAwardPoints(task.getAwardPoints());
+    }
+
+    addAwardPoints(awardPoints) {
+        this.#awardPoints += awardPoints;
     }
 
     setAchievements(achievements) {
