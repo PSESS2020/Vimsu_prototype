@@ -51,12 +51,12 @@ module.exports = class LectureService {
 
     static getAllLectures(conferenceId) {
         return getDB().then(res => {
-            return vimsudb.findInCollection("lectures", {conferenceId: conferenceId}, {}).then(lectures => {
+            return vimsudb.findInCollection("lectures", {conferenceId: conferenceId, isAccepted: true}, {}).then(lectures => {
                 if (lectures.length > 0) {
                     return lectures;
                 }
                 else {
-                    console.log("no lecture found with conferenceId " + conferenceId);
+                    console.log("no accepted lecture found with conferenceId " + conferenceId);
                     return false;
                 }
             }).catch(err => {
@@ -73,7 +73,7 @@ module.exports = class LectureService {
                     var lectures = [];
 
                     for (var i = 0; i < allLectures.length; i++) {
-                        if(allLectures[i].conferenceId == conferenceId) {
+                        if(allLectures[i].conferenceId == conferenceId && allLectures[i].isAccepted == true) {
                             lectures.push(allLectures[i]);
                         }
                     }
@@ -98,7 +98,7 @@ module.exports = class LectureService {
 
     static getOratorLectureIds(oratorId, conferenceId) {
         return getDB().then(res => {
-            return vimsudb.findInCollection("lectures", {oratorId: oratorId, conferenceId: conferenceId}, {id: 1}).then(lectures => {
+            return vimsudb.findInCollection("lectures", {oratorId: oratorId, conferenceId: conferenceId, isAccepted: true}, {id: 1}).then(lectures => {
                 if (lectures.length > 0) {
                     return lectures;
                 }

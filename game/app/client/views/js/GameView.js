@@ -32,6 +32,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #businessCardView;
     #gameViewInit;
     #achievementView;
+    #newAchievementView;
     #npcAvatarViews = [];
     #npcStoryView;
 
@@ -512,6 +513,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     initCurrentAchievementsView(achievements) {
         this.#achievementView = new AchievementView().draw(achievements);
+    }
+
+    handleNewAchievement(achievement) {
+        this.#newAchievementView = new NewAchievementView().draw(achievement);
     }
 
     initNPCStoryView(name, story) {

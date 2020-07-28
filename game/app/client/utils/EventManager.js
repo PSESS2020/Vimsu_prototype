@@ -60,11 +60,10 @@ class EventManager {
 
     handleLectureClicked(lectureId) {
         this.#clientController.handleFromViewEnterLecture(lectureId);
-        this.handleAchievementEvent('lecturesVisited');
     }
 
-    handleLectureLeft(lectureId) {
-        this.#clientController.handleFromViewLectureLeft(lectureId);
+    handleLectureLeft(lectureId, lectureEnded) {
+        this.#clientController.handleFromViewLectureLeft(lectureId, lectureEnded);
     }
 
     handleScheduleClicked() {

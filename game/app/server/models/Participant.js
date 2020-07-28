@@ -7,6 +7,7 @@ const BusinessCard = require('./BusinessCard.js')
 const FriendList = require('./FriendList.js');
 const Achievement = require('./Achievement.js');
 const Chat = require('./Chat.js');
+const Task = require('./Task.js');
 
 module.exports = class Participant {
 
@@ -18,11 +19,11 @@ module.exports = class Participant {
     #friendList;
     #receivedRequestList;
     #sentRequestList;
-    #achievements;
     #isMod;
-    #points;
+    #taskTypeMapping;
+    #achievements;
+    #awardPoints;
     #chatList;
-    
 
     /**
      * 
@@ -36,10 +37,10 @@ module.exports = class Participant {
      * @param {FriendList} sentRequestList 
      * @param {Array of Achievement} achievements 
      * @param {boolean} isMod 
-     * @param {int} points 
+     * @param {int} awardPoints
      * @param {Array of Chat} chatList 
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList)
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList)
     {
         //Typechecking
 
@@ -59,7 +60,7 @@ module.exports = class Participant {
             TypeChecker.isInstanceOf(achievements, Achievement);
         });
         TypeChecker.isBoolean(isMod);
-        TypeChecker.isInt(points);
+        TypeChecker.isInt(awardPoints);
         TypeChecker.isInstanceOf(chatList, Array);
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
@@ -75,10 +76,14 @@ module.exports = class Participant {
         this.#friendList = friendList; //this.#friendList = new FriendList(this.#id, []);  //TESTING
         this.#receivedRequestList = receivedRequestList; //this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
         this.#sentRequestList = sentRequestList; //this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
-        
+        this.#taskTypeMapping = {};
+        tasks.forEach((x) => {
+            this.#taskTypeMapping[x.getTaskType()] = 0;
+        });
+
         this.#achievements = achievements; 
         this.#isMod = isMod; //this.#isMod = true;  //TESTING
-        this.#points = points; //this.#points = 0;
+        this.#awardPoints = awardPoints; //this.#points = 0;
         this.#chatList = chatList; //this.#chatList = [];
     }
 
@@ -124,10 +129,6 @@ module.exports = class Participant {
 
     isModerator() {
         return this.#isMod;
-    }
-
-    getPoints() {
-        return this.#points;
     }
 
     getAchievements() {
@@ -233,16 +234,32 @@ module.exports = class Participant {
         }
     }
 
+    getTaskTypeMappingCounts() {
+        return this.#taskTypeMapping;
+    }
+
+
+    addTask(task) {
+        TypeChecker.isInstanceOf(task, Task);
+
+        // increase the task counter and assign award points accordingly
+        this.#taskTypeMapping[task.getTaskType()] = this.#taskTypeMapping[task.getTaskType()] + 1;
+        this.addAwardPoints(task.getAwardPoints());
+    }
+
+    addAwardPoints(awardPoints) {
+        this.#awardPoints += awardPoints;
+    }
+
+    setAchievements(achievements) {
+        this.#achievements = achievements;
+    }
+
     getAchievements() {
         return this.#achievements;
     }
 
-    increaseAchievementCount(identifier) {
-        this.#achievements[identifier].count = this.#achievements[identifier].count + 1;
-    }
-
-    addPoints(num) {
-        TypeChecker.isInt(num);
-        this.#points += num;
+    getAwardPoints() {
+        return this.#awardPoints;
     }
 }

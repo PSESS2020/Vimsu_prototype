@@ -7,12 +7,12 @@ class SuccessesBar extends Views{
     update(points, rank) {
         if(points) {
             $('#pointBox').empty()
-            $('#pointBox').append(`${points}`)
+            $('#pointBox').text(points);
         }
 
         if(rank) {
             $('#rankBox').empty()
-            $('#rankBox').append(`${rank}`)
+            $('#rankBox').text(rank);
         }
     }
 }

@@ -218,6 +218,7 @@ class ClientController {
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
+        this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
     }
 
     /* #################################################### */    
@@ -560,6 +561,10 @@ class ClientController {
         this.#gameView.initNPCStoryView(name, story);
     }
 
+    handleFromServerNewAchievement(achievement) {
+        this.#gameView.handleNewAchievement(achievement);
+    }
+
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
@@ -590,9 +595,9 @@ class ClientController {
         this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
     }
 
-    handleFromViewLectureLeft(lectureId) {
+    handleFromViewLectureLeft(lectureId, lectureEnded) {
         this.socketReady;
-        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId);
+        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId, lectureEnded);
     }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
@@ -704,7 +709,7 @@ class ClientController {
 
     handleFromViewGetNPCStory(npcId) {
         this.socketReady;
-        this.socket.emit('getNPCStory', npcId);
+        this.socket.emit('getNPCStory', this.#ownParticipant.getId(), npcId);
     }
 
     handleFromServerAchievements(achievements) {

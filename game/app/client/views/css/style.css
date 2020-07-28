@@ -60,6 +60,10 @@ pointer-events: none;
 z-index: 0;
 }
 
+video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton {
+  display: none;
+}
+
 #avatarCanvas {
 position: absolute;
 width: 1280px;

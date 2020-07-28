@@ -32,6 +32,19 @@ module.exports = class TaskService {
         return this.#tasks[index];
     }
 
+    getTaskByType(taskType) {
+        // TODO: type check
+
+        let index = this.#tasks.findIndex(task => task.getTaskType() === taskType);
+
+        if (index < 0) 
+        {
+            throw new Error(taskType + " is not in list of tasks")
+        }
+
+        return this.#tasks[index];
+    }
+
     initAllTasks() {
         var id = 1;
         this.#tasks.push(new Task(id++, TypeOfTask.ASKQUESTIONINLECTURE, 2));
@@ -42,5 +55,6 @@ module.exports = class TaskService {
         this.#tasks.push(new Task(id++, TypeOfTask.INITPERSONALCHAT, 5));
         this.#tasks.push(new Task(id++, TypeOfTask.LECTUREVISIT, 30));
         this.#tasks.push(new Task(id++, TypeOfTask.RECEPTIONVISIT, 0));
+        this.#tasks.push(new Task(id++, TypeOfTask.NPCCLICK, 0));
     }
 } 
