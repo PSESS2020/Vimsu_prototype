@@ -144,65 +144,7 @@ module.exports = class ServerController {
                 }
 
                 console.log('Participant ' + socket.id + ' has conected to the game . . . ');
-                
-                /* What happens here:
-                 *    (i) We generate a new ppantID
-                 *   (ii) We create a new ppantCont for that ID - inside the constructor of
-                 *        the ppantCont, it also creates a new ppant with that id
-                 *        (I think this should be changed - the ppant-Constructor expects
-                 *         a ppantCont-Instance, but also information the ppantCont does 
-                 *         not know at this time. Maybe the roomController should create
-                 *         a new ppantCont when one is added, but that also causes difficulty
-                 *         with how to make sure the ppantCont knows the socket it should send
-                 *         on.)
-                 *  (iii) We add that ppantCont to the list of all ppantConts, indexed by socket
-                 *        (This list is a bit redundant here - as more functionality is moved into
-                 *        the ppantCont-Classe, it can probably be removed)
-                 *   (iv) We also add it to the list of ppantConts in the roomCont
-                 *    (v) We set up the ppant to have the right id and position and
-                 *        send this back to the client, so he may draw the initial gameState
-                 *        properly
-                 *   (vi) We emit the necessary information to the other clients
-                 * - (E) */ 
-
-                // (i) to (iii)
-                //var ppantID = (counter++).toString(); // let's hope I am a smart boy and this works - (E)
-                
-                //TODO: Needs to be adjusted when multiple rooms exist (P)
-                //currently every participant spawns in foyer at the start position
-                //Future Goal: Spawn returning participants at position, where he disconnected
-                //Spawn new participants at reception start position
-                /*
-                var x = Settings.STARTPOSITION_X;
-                var y = Settings.STARTPOSITION_Y;
-                var d = Settings.STARTDIRECTION;
-                var startPosition = new Position(Settings.STARTROOM_ID, x, y);
-                console.log("accId: " + socket.request.session.accountId);
-
-                //variables for creating BusinessCard and Paricipant instance
-                let accountId = socket.request.session.accountId;
-                let username = socket.request.session.username;
-                let title = socket.request.session.title;
-                let surname = socket.request.session.surname;
-                let forename = socket.request.session.forename;
-                let job = socket.request.session.job;
-                let company = socket.request.session.company;
-                let email = socket.request.session.email;
-
-                var businessCard = new BusinessCard(ppantID, username, title, surname, forename, job, company, email);
-
-                //Needed for emiting this business card to other participants in room
-                var businessCardObject = { 
-                            id: ppantID, 
-                            username: username, 
-                            title: title, 
-                            surname: surname, 
-                            forename: forename, 
-                            job: job, 
-                            company: company, 
-                            email: email 
-                        };
-                */
+               
                 //variables for creating account instance
                 let accountId = socket.request.session.accountId;
                 let username = socket.request.session.username;
@@ -215,8 +157,10 @@ module.exports = class ServerController {
 
                 let account = new Account(accountId, username, title, surname, forename, job, company, email);
                 
+                //create Participant
+                //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-                    console.log(ppant);
+                    
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                     this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
         
@@ -224,21 +168,7 @@ module.exports = class ServerController {
                     ppants.set(ppant.getId(), ppant);
                     this.ppantControllers.set(socket.id, ppantCont);
 
-                    // (iv)
-                    // The position of the participant-Instance is also set here
-                    // gameRoomController.addParticipantController(ppantCont);
-                
-                
-                    // (v)
-                    /* Some notes on the following few lines of code:
-                    * This is supposed to make sure the client-side game state is initialized properly
-                    * This should probably later on be moved into the ParticipantController class
-                    * Not just one message since the first function should only be called once
-                    * Where as the second one will probably be called more often
-                    * - (E) */ 
-                    // Sends the newly generated ppantID back to the client so the game-states are consistent
-                    //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
-
+                    //Get GameObjects of starting room
                     let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
                     let gameObjectData = [];
 
@@ -255,6 +185,7 @@ module.exports = class ServerController {
                         });
                     });
 
+                    //Get all NPCs from starting room
                     let npcs = this.#rooms[Settings.STARTROOM_ID - 1].getListOfNPCs();
                     let npcData = [];
 
@@ -287,11 +218,6 @@ module.exports = class ServerController {
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                 
-                    // Sends the start-position back to the client so the avatar can be displayed in the right cell 
-                    //Why is the position emitted 2 times? (P)
-                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: ppant.getPosition().getCordX(), 
-                                                                        cordY: ppant.getPosition().getCordY(), 
-                                                                        dir: ppant.getDirection()});
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
                 
