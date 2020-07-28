@@ -38,9 +38,9 @@ module.exports = class RankListService {
 
     static getRankListWithUsername(conferenceId, lastRank) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInt(num);
+        TypeChecker.isInt(lastRank);
 
-        return this.getRankList(conferenceId).then(rankList => {
+        return this.getRankList(conferenceId).then(async rankList => {
             var rankListLength = 1;
 
             for(var i = rankList.length - 1; i >= 0; i--){
@@ -51,13 +51,10 @@ module.exports = class RankListService {
             }    
 
             rankList.slice(0, rankListLength);
-            rankList.forEach(ppant => {
-                return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
-                    ppant.username = username;
-                }).catch(err => {
-                    console.error(err);
-                })
-            })
+            await Promise.all(rankList.map(async ppant => {
+                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId)
+                ppant.username = username;
+            }));
             return rankList;
         }).catch(err => {
             console.error(err);

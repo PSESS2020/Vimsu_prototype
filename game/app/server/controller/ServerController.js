@@ -627,12 +627,10 @@ module.exports = class ServerController {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank);
                 } else {
-                    //RankListService.getRank(targetID, "1").then(rank => {
-                        //targetRank = rank;
-                        //because DB is not initialized yet every subjects get to have first rank
-                        targetRank = 1;
+                    RankListService.getRank(targetID, Settings.CONFERENCE_ID).then(rank => {
+                        targetRank = rank;
                         socket.emit('businessCard', businessCardObject, targetRank);
-                    //})
+                    })
                 }
             });
 
@@ -641,7 +639,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getRankList', () => {
-                var rankList = [
+                /*var rankList = [
                     {
                         participantId: "22abcd",
                         username: "MaxFriend",
@@ -681,10 +679,10 @@ module.exports = class ServerController {
 
                 socket.emit('rankList', rankList);
 
-                //if DB is initialized
-                /*RankListService.getRankListWithUsername("1", 30).then(rankList => {
+                //if DB is initialized*/
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30).then(rankList => {
                     socket.emit('rankList', rankList);
-                })*/
+                })
             })
 
             socket.on('getFriendList', (ppantID) => {
