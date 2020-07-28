@@ -35,6 +35,9 @@ const NPCService = require('../services/NPCService.js');
 const ParticipantService = require('../services/ParticipantService.js');
 const AchievementService = require('../services/AchievementService.js');
 const TaskService = require('../services/TaskService.js');
+const FriendListService = require('../services/FriendListService.js');
+const FriendList = require('../models/FriendList.js');
+const FriendRequestListService = require('../services/FriendRequestListService.js');
 
 
 
@@ -742,6 +745,10 @@ module.exports = class ServerController {
 
                 target.addFriendRequest(requesterBusCard);
                 requester.addSentFriendRequest(targetBusCard);
+
+                //update DB
+                FriendRequestListService.storeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID);
+                FriendRequestListService.storeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID);
             });
 
             //handles a friendrequest, either accepted or declined
@@ -749,16 +756,23 @@ module.exports = class ServerController {
                 let target = this.ppants.get(targetID);
                 let requester = this.ppants.get(requesterID);
 
-
                 if (acceptRequest) {
                     target.acceptFriendRequest(requesterID);
                     requester.sentFriendRequestAccepted(targetID);
                     this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, socket);
                     this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket);
+
+                    //update DB
+                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID);
+                    FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID);
                 } else {
                     target.declineFriendRequest(requesterID);
                     requester.sentFriendRequestDeclined(targetID);
                 }
+
+                //update DB
+                FriendRequestListService.removeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID);
+                FriendRequestListService.removeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID);
 
                 //Not sure if a answer from server is necessary
             });
@@ -770,6 +784,10 @@ module.exports = class ServerController {
 
                 remover.removeFriend(removedFriendID);
                 removedFriend.removeFriend(removerID);
+
+                //update DB
+                FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID);
+                FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
             });
 
             socket.on('getNPCStory', (ppantID, npcID) => {
