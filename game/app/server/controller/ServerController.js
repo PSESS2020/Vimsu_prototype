@@ -748,14 +748,14 @@ module.exports = class ServerController {
                     //check if target is online
                     if (target !== undefined) {
                         target.acceptFriendRequest(requesterID);
+                        this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket);
                     }
                     //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestAccepted(targetID);
+                        this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, socket);
                     }
-                    this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, socket);
-                    this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket);
-
+                    
                     //update DB
                     FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID);
                     FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID);
