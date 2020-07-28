@@ -642,47 +642,6 @@ module.exports = class ServerController {
             });
 
             socket.on('getRankList', () => {
-                /*var rankList = [
-                    {
-                        participantId: "22abcd",
-                        username: "MaxFriend",
-                        points: 40,
-                        rank: 1,
-                        self: false
-                    },
-                    {
-                        participantId: "22abc",
-                        username: "MaxFReq",
-                        points: 30,
-                        rank: 2,
-                        self: false
-                    },
-                    {
-                        participantId: "30abc",
-                        username: "Myself",
-                        points: 30,
-                        rank: 2,
-                        self: true
-                    },
-                    {
-                        participantId: "40abc",
-                        username: "MusFriend",
-                        points: 25,
-                        rank: 3,
-                        self: false
-                    },
-                    {
-                        participantId: "40abc",
-                        username: "MusFReq",
-                        points: 20,
-                        rank: 4,
-                        self: false
-                    },
-                ]
-
-                socket.emit('rankList', rankList);
-
-                //if DB is initialized*/
                 RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30).then(rankList => {
                     socket.emit('rankList', rankList);
                 })
