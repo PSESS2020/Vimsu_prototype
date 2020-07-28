@@ -82,6 +82,7 @@ module.exports = class Participant {
         });
 
         this.#achievements = achievements; 
+
         this.#isMod = isMod; //this.#isMod = true;  //TESTING
         this.#awardPoints = awardPoints; //this.#points = 0;
         this.#chatList = chatList; //this.#chatList = [];
@@ -129,10 +130,6 @@ module.exports = class Participant {
 
     isModerator() {
         return this.#isMod;
-    }
-
-    getAchievements() {
-        return this.#achievements;
     }
 
     getChatList() {
@@ -253,10 +250,6 @@ module.exports = class Participant {
 
     setAchievements(achievements) {
         this.#achievements = achievements;
-    }
-
-    getAchievements() {
-        return this.#achievements;
     }
 
     getAwardPoints() {

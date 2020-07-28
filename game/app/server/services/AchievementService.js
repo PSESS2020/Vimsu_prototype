@@ -60,7 +60,7 @@ module.exports = class AchievementService {
             { count: 10, color: '#C9B037' , points: 100}
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(id++, TypeOfTask.FOODCOURTVISIT, "Bread & Butter", "cutlery", "Visit food court room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(id++, TypeOfTask.FOODCOURTVISIT, "Coffee Time", "coffee", "Visit food court room to gain this achievement.", [
             { count: 1, color: '#C9B037' , points: 10},
         ]);
 
@@ -82,9 +82,12 @@ module.exports = class AchievementService {
             { count: 1, color: '#C9B037', points: 15},
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.NPCCLICK] = new AchievementDefinition(id++, TypeOfTask.NPCCLICK, "Good Reader", "book", "Click on the NPC in the other room to gain this achievement.", [
-            { count: 1, color: '#D7D7D7', points: 15},
-            { count: 2, color: '#C9B037', points: 15},
+        this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(id++, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
+            { count: 1, color: '#C9B037', points: 15},
+        ]);
+
+        this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(id++, TypeOfTask.CHEFCLICK, "Cooking Guru", "cutlery", "Click on the NPC in the food court room to gain this achievement.", [
+            { count: 1, color: '#C9B037', points: 15},
         ]);
         
         this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(id++, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
@@ -95,7 +98,6 @@ module.exports = class AchievementService {
     computeAchievements(participant) {
         var taskTypeCountMapping = participant.getTaskTypeMappingCounts();
         var achievements = [];
-        
 
         Object.keys(taskTypeCountMapping).forEach((taskType) => {
             var achievementDefinition = this.#achievementDefinitions[taskType];
@@ -118,7 +120,24 @@ module.exports = class AchievementService {
 
         console.log("Achivements: " + newAchievements.length);
 
-        participant.setAchievements(achievements);
+        if(participant.getAchievements().length < 1) {
+            participant.setAchievements(achievements);
+        } else {
+            if(newAchievements.length > 0) {
+                newAchievements.forEach(achievement => {
+                    let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
+
+                    if(index < 0) {
+                        throw new Error(achievement.id + " is not found in list of achievements!")
+                    }
+
+                    participant.getAchievements()[index].setCurrentLevel(achievement.currentLevel);
+                    participant.getAchievements()[index].setAwardPoints(achievement.awardPoints);
+                    participant.getAchievements()[index].setColor(achievement.color);
+                })
+                
+            }
+        }
 
         return newAchievements;
     }
