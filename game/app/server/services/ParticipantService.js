@@ -134,12 +134,12 @@ module.exports = class ParticipantService {
                             },
                         )
                     })
-
-                    return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData).then(res => {
-                        console.log('all achievements stored');
+                    
+                    return Promise.all(achievementsData.map(async ach => {
+                        const res = await this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, ach);
+                    })).then(res => {
+                        console.log("fertig");
                         return participant;
-                    }).catch(err => {
-                        console.error(err);
                     })
                 } 
             }).catch(err => {
@@ -272,7 +272,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: { $each: achievementsData } } ).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: achievementsData } ).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
