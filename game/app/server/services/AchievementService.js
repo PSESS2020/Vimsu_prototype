@@ -93,14 +93,14 @@ module.exports = class AchievementService {
         
 
         Object.keys(taskTypeCountMapping).forEach((taskType) => {
-            var achievementDefintion = this.#achievementDefinitions[taskType];
+            var achievementDefinition = this.#achievementDefinitions[taskType];
             var count = taskTypeCountMapping[taskType];
 
-            var currentLevel = this.getLevelFromDefinition(count, achievementDefintion.getLevels())
+            var currentLevel = this.getLevelFromDefinition(count, achievementDefinition.getLevels())
 
             // could move the computation logic to achievementDefinition
 
-            achievements.push(achievementDefintion.computeAchievement(currentLevel))
+            achievements.push(achievementDefinition.computeAchievement(currentLevel))
         });
 
         var newAchievements = [];

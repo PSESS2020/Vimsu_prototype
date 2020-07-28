@@ -10,7 +10,6 @@ module.exports = class AchievementDefinition {
     #icon;
     #description;
     #levels;
-    #currentLevel;
 
     constructor(id, taskType, title, icon, description, levels) {
         TypeChecker.isInt(id);

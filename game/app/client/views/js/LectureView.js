@@ -31,7 +31,7 @@ class LectureView extends WindowView {
             }
         } 
         
-        //the input field is added if the user has a valif token
+        //the input field is added if the user has a valid token
         if(token) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
             $('#lectureChatInputGroup').append(`
@@ -69,33 +69,37 @@ class LectureView extends WindowView {
 
         $('#lectureVideo').empty();
         $('#lectureVideo').append(`
-            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls controlsList="nodownload" src=""></video>
+            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src=""></video>
+
+            <script> 
+                var video = $('#lectureVideo' + '${lecture.id}')
+            
+                video.get(0).src = '${lecture.videoUrl}';
+                video.get(0).disablePictureInPicture = true;
+                
+                video.get(0).play();
+                
+                //restrict pausing video if lecture is not ended
+                video.on('pause', function(e) {
+                    if(video.get(0).currentTime < video.get(0).duration && !loop) {
+                        video.get(0).play();
+                    }
+                })
+
+                video.get(0).onended = (event) => {
+                    const downloadable = video.get(0).controlsList.remove('nodownload');
+                    video.on('play', function(e) {
+                        loop = true;
+                        if(loop) {
+                            video.get(0).pause();
+                            downloadable;
+                        }
+                    })
+                };
+                
+            </script>
         `)
 
-        var video = $('#lectureVideo' + lecture.id);
-        
-        video.attr('src', lecture.videoUrl);
-        video.load();
-        video.get(0).disablePictureInPicture = true;
-        video.get(0).play();
-
-        video.on('pause', function(e) {
-            if(video.get(0).currentTime < video.get(0).duration && !loop) {
-                video.get(0).play();
-            }
-        })
-
-        video.get(0).onended = (event) => {
-            const downloadable = video.get(0).controlsList.remove('nodownload');
-            video.on('play', function(e) {
-                loop = true;
-                if(loop) {
-                    video.get(0).pause();
-                    downloadable;
-                }
-            })
-        };
-        
         $('#lectureVideoWindow').show();
     }   
 }
@@ -109,10 +113,10 @@ $(document).ready(() => {
         }
     });
     $(document).on('click', ".closeButton" , function() {
-        var video = $('#lectureVideo' + lectureId).get(0);
-        video.pause();
+        var video = $('#lectureVideo' + lectureId);
+        video.get(0).pause();
         var result;
-        if(video.currentTime < video.duration && !loop) {
+        if(video.get(0).currentTime < video.get(0).duration && !loop) {
             if(token) {
                 result = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
             } else {
@@ -120,6 +124,7 @@ $(document).ready(() => {
             }
             
             if(result) {
+                $('#lectureVideo').empty();
                 $('#lectureVideoWindow').hide();
                 var eventManager = new EventManager();
                 eventManager.handleLectureLeft(this.id);
@@ -128,7 +133,6 @@ $(document).ready(() => {
             if(loop) {
                 loop = false;
             }
-            lectureId = undefined;
             token = undefined;
             $('#lectureVideoWindow').hide();
         }

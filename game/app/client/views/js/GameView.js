@@ -577,8 +577,4 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             }
         }
     }
-
-    updateAwardPoints(points) {
-        $('#pointBox').text(points);
-    }
 }

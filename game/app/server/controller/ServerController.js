@@ -1120,7 +1120,7 @@ module.exports = class ServerController {
         var participant = this.ppants.get(participantId);
         participant.addTask(new TaskService().getTaskByType(taskType));
 
-        socket.emit('awardPoints', participant.getAwardPoints()); 
+        socket.emit('updateSuccessesBar', participant.getAwardPoints(), ""); 
 
         // computes achievements, updates participants, and returns newly unlocked achievements
         var newAchievements = new AchievementService().computeAchievements(participant);
