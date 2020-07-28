@@ -8,7 +8,7 @@ const Account = require('../../../../website/models/Account')
 const dbconf = require('../../../../config/dbconf');
 const AccountService = require('../../../../website/services/AccountService');
 const Achievement = require('../models/Achievement.js');
-const Chatservice = require('./ChatService.js');
+const ChatService = require('./ChatService.js');
 const FriendList = require('../models/FriendList.js');
 
 var vimsudb;
@@ -43,30 +43,37 @@ module.exports = class ParticipantService {
                     par.friendId.forEach(parID => {
                         this.getBusinessCard(parID, conferenceId).then(busCard => {
                             friendList.push(busCard);
+                        }).catch(err => {
+                            console.error(err)
                         });
                     });
 
                     par.friendRequestId.received.forEach(parID => {
                         this.getBusinessCard(parID, conferenceId).then(busCard => {
                             receivedFriendRequestList.push(busCard);
+                        }).catch(err => {
+                            console.error(err)
                         });
-                    });
+                    })
 
                     par.friendRequestId.sent.forEach(parID => {
                         this.getBusinessCard(parID, conferenceId).then(busCard => {
                             sentFriendRequestList.push(busCard);
+                        }).catch(err => {
+                            console.error(err)
                         });
-                    });
+                    })
 
                     //Get Chats
-                    let chatList = ChatService.loadChatList(par.id, conferenceId).then(chats => {
-                        return chats;
+                    return ChatService.loadChatList(par.id, conferenceId).then(chatList => {
+                        
+                        return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                            friendList, receivedfriendRequestList, sentFriendRequestList, par.achievements, par.isModerator, par.points, chatList, par.visitedLectureId);
+                    }).catch(err => {
+                        console.error(err)
                     });
-
-                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                        friendList, receivedfriendRequestList, sentFriendRequestList, par.achievements, par.isModerator, par.points, chatList, par.visitedLectureId);
                 } 
                 else {
                     var par = {
@@ -88,26 +95,23 @@ module.exports = class ParticipantService {
                         visitedLectureId: []
                     }
 
-                    getDB().then(res => {
+                    return getDB().then(res => {
                         vimsudb.insertOneToCollection("participants_" + conferenceId, par);
-                    }).then(function() {
-
-                        let participantId = ParticipantService.getParticipant(accountId, conferenceId)._id;
-
-                        participant = new Participant(participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                            new FriendList(par.id, []), new FriendList(par.id, []), new FriendList(par.id, []), par.isModerator, par.points, [], par.visitedLectureId);
                     }).catch(err => {
                         console.error(err)
+                    }).then(res => {
+
+                        return this.getParticipant(accountId, conferenceId).then(ppant => {
+                            return participant = new Participant(ppant._id.toString(), accountId, new BusinessCard(ppant._id.toString(), account.getUsername(), 
+                                account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                                account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                                new FriendList(ppant._id.toString(), []), new FriendList(ppant._id.toString(), []), new FriendList(ppant._id.toString(), []), [], par.isModerator, par.points, [], []);
+
+                        }).catch(err => {
+                            console.error(err)
+                        });   
                     });
                 }
-
-                    
-                
-            
-
-                return participant;
                 
             }).catch(err => {
                 console.error(err)

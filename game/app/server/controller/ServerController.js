@@ -215,14 +215,13 @@ module.exports = class ServerController {
 
                 let account = new Account(accountId, username, title, surname, forename, job, company, email);
                 
-                ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(par => {
-                    var ppant = par;
-                }).then(function() {
+                ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
+                    console.log(ppant);
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                     this.#rooms[Settings.STARTROOM_ID - 1].enterParticipant(ppant);
         
                     var ppantCont = new ParticipantController(ppant);
-                    ppants.set(ppantID, ppant);
+                    ppants.set(ppant.getId(), ppant);
                     this.ppantControllers.set(socket.id, ppantCont);
 
                     // (iv)
@@ -239,9 +238,6 @@ module.exports = class ServerController {
                     * - (E) */ 
                     // Sends the newly generated ppantID back to the client so the game-states are consistent
                     //this.#io.to(socket.id).emit('currentGameStateYourID', ppantID);
-                
-                    //Send room information of start room (P)
-                    //TODO: When multiple rooms exist, get right room (P)
 
                     let gameObjects = this.#rooms[Settings.STARTROOM_ID - 1].getListOfGameObjects();
                     let gameObjectData = [];
@@ -270,24 +266,38 @@ module.exports = class ServerController {
                                     direction: npc.getDirection()});
                     });
 
-                
+                    //Needed for emiting this business card to other participants in room
+                    var businessCardObject = { 
+                        id: ppant.getId(), 
+                        username: username, 
+                        title: title, 
+                        surname: surname, 
+                        forename: forename, 
+                        job: job, 
+                        company: company, 
+                        email: email 
+                    };
+
+
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', Settings.STARTROOM_ID, Settings.TYPE_OF_STARTROOM, 
                                                 gameObjectData, npcData);
 
+                                                
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppantID, businessCard: businessCardObject, cordX: x, cordY: y, dir: d});
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                 
-                    // Sends the start-position back to the client so the avatar can be displayed in the right cell
-                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, 
-                                                                        cordY: y, 
-                                                                        dir: d});
+                    // Sends the start-position back to the client so the avatar can be displayed in the right cell 
+                    //Why is the position emitted 2 times? (P)
+                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: ppant.getPosition().getCordX(), 
+                                                                        cordY: ppant.getPosition().getCordY(), 
+                                                                        dir: ppant.getDirection()});
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[Settings.STARTROOM_ID - 1].getMessages());
                 
                     ppants.forEach((ppant, id, map) => {
                     
-                        if(id != ppantID && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
+                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === Settings.STARTROOM_ID) {
 
                             var username = ppant.getBusinessCard().getUsername();
 
@@ -311,11 +321,12 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: businessCardObject.username, cordX: x, cordY: y, dir: d });
-                }).catch(err => {
-                    console.error(err)
-                });
+                    socket.to(Settings.STARTROOM_ID.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
+               
+            }).catch(err => {
+                console.error(err)
             });
+        });
             
 
             socket.on('sendMessage', (ppantID, text) => {
