@@ -40,6 +40,18 @@ module.exports = class Achievement {
         return this.awardPoints;
     }
 
+    setCurrentLevel(currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
+    setColor(color) {
+        this.color = color;
+    }
+
+    setAwardPoints(awardPoints) {
+        this.awardPoints = awardPoints;
+    }
+
     equals(achievement) {
         return this.#taskType === achievement.getTaskType() && this.currentLevel === achievement.getCurrentLevel();
     }

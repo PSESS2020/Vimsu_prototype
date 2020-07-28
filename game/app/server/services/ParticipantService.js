@@ -75,11 +75,13 @@ module.exports = class ParticipantService {
                                 ach.awardPoints, ach.maxLevel, ach.taskType))
                         })
 
-                        return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                        participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
                             new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
                             achievements, new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
+
+                        return participant;
                     });
                 }
             

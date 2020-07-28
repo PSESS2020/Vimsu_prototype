@@ -164,6 +164,7 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
+
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
                     if (currentRoomId === Settings.FOYER_ID) {
@@ -179,7 +180,6 @@ module.exports = class ServerController {
                     
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                     this.#rooms[currentRoomId - 1].enterParticipant(ppant);
-        
                     var ppantCont = new ParticipantController(ppant);
                     this.ppants.set(ppant.getId(), ppant);
                     this.ppantControllers.set(socket.id, ppantCont);
@@ -236,7 +236,7 @@ module.exports = class ServerController {
                 
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
-                
+
                     this.ppants.forEach((ppant, id, map) => {
                     
                         if(id != ppant.getId() && ppant.getPosition().getRoomId() === currentRoomId) {
@@ -762,8 +762,10 @@ module.exports = class ServerController {
                 let story = npc.getStory();
                 if(name === "BasicTutorial") {
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket);
-                } else {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.NPCCLICK, socket);
+                } else if (name === "Chef") {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK, socket);
+                } else if (name === "FoyerHelper") {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK, socket);
                 }
                 
                 socket.emit('showNPCStory', name, story);
