@@ -333,6 +333,9 @@ module.exports = class ServerController {
                     ppants.get(ppantID).setPosition(newPos);
                     ppants.get(ppantID).setDirection(direction);
                     socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
+
+                    //write new position in DB
+                    ParticipantService.updateParticipantPosition(ppantID, Settings.CONFERENCE_ID, newPos);
                 } else {
                     //Server resets client position to old Position (P)
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir});
