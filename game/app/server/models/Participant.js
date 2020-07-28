@@ -255,4 +255,18 @@ module.exports = class Participant {
     getAwardPoints() {
         return this.#awardPoints;
     }
+
+    addAchievement(achievement) {
+        this.#achievements.push(achievement);
+    }
+
+    removeAchievement(achievementId) {
+        let index = this.#achievements.findIndex(ach => ach.id === achievementId);
+        
+        if(index < 0) {
+            throw new Error(achievementId + " not found in list of achievements")
+        }
+
+        this.#achievements.splice(index, 1);
+    }
 }

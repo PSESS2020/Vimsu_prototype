@@ -81,7 +81,42 @@ module.exports = class ParticipantService {
                             new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
                             achievements, new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
 
-                        return participant;
+                        let achievementService = new AchievementService();
+
+                        var ppantAchievements = achievementService.getAllAchievements(participant);
+
+                        return Promise.all(ppantAchievements.map(async achievement => {
+                            let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
+
+                            if(index < 0) {
+                                participant.addAchievement(achievement);
+                                var achievementData = 
+                                [{
+                                    id: achievement.id,
+                                    title: achievement.title,
+                                    icon: achievement.icon,
+                                    description: achievement.description,
+                                    currentLevel: achievement.currentLevel,
+                                    color: achievement.color,
+                                    awardPoints: achievement.awardPoints,
+                                    maxLevel: achievement.maxLevel,
+                                    taskType: achievement.getTaskType()
+                                }] 
+                                const res = await this.storeAchievements(participant.getId(), Settings.CONFERENCE_ID, achievementData);
+                            }
+                        })).then(res => {
+                            return Promise.all(participant.getAchievements().map(async achievement => {
+                                let index = ppantAchievements.findIndex(ach => ach.id === achievement.id);
+
+                                if(index < 0) {
+                                    participant.removeAchievement(achievement.id);
+                                    const res = await this.deleteAchievement(participant.getId(), Settings.CONFERENCE_ID, achievement.id);
+                                }
+                            })).then(res => {
+                                console.log("fertig");
+                                return participant;
+                            })
+                        })
                     });
                 }
             
@@ -275,6 +310,20 @@ module.exports = class ParticipantService {
 
         return getDB().then(res => {
             return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: { $each: achievementsData } } ).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static deleteAchievement(participantId, conferenceId, achievementId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: {id: achievementId}}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
