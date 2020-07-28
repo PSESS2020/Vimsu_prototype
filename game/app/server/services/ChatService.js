@@ -294,7 +294,7 @@ module.exports = class Chatservice {
 
                 } else {
                     console.log("chat list could not been found for participant with id: " + participantId);
-                    return false;
+                    return [];
                 }
             }).catch(err => {
                 console.error(err);

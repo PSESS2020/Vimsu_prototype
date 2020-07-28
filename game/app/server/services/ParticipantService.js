@@ -34,49 +34,47 @@ module.exports = class ParticipantService {
                 
 
                 if(par) {
-
-                    //get BusinessCards from Friends and FriendRequests
-                    let friendList = [];
-                    let receivedFriendRequestList = [];
-                    let sentFriendRequestList = [];
-
-                    par.friendId.forEach(parID => {
-                        this.getBusinessCard(parID, conferenceId).then(busCard => {
-                            friendList.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
-                    });
-
-                    par.friendRequestId.received.forEach(parID => {
-                        this.getBusinessCard(parID, conferenceId).then(busCard => {
-                            receivedFriendRequestList.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
-                    })
-
-                    par.friendRequestId.sent.forEach(parID => {
-                        this.getBusinessCard(parID, conferenceId).then(busCard => {
-                            sentFriendRequestList.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
-                    })
-
                     //Get Chats
-                    return ChatService.loadChatList(par.id, conferenceId).then(chatList => {
-                        
+                    return ChatService.loadChatList(par.participantId, conferenceId).then(async chatList => {
+                        let friendList = [];
+                        let friendRequestListReceived = [];
+                        let friendRequestListSent = [];
+
+                        await par.friendIds.forEach(friendId => {
+                            this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                                friendList.push(busCard);
+                            }).catch(err => {
+                                console.error(err)
+                            });
+                        });
+
+                        await par.friendRequestIds.received.forEach(friendId => {
+                            this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                                friendRequestListReceived.push(busCard);
+                            }).catch(err => {
+                                console.error(err)
+                            });
+                        });
+
+                        await par.friendRequestIds.sent.forEach(friendId => {
+                            this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                                friendRequestListSent.push(busCard);
+                            }).catch(err => {
+                                console.error(err)
+                            });
+                        });
+
                         return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                            friendList, receivedfriendRequestList, sentFriendRequestList, par.achievements, par.isModerator, par.points, chatList, par.visitedLectureId);
-                    }).catch(err => {
-                        console.error(err)
+                            new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
+                            par.achievements, par.isModerator, par.points, chatList, par.visitedLectureIds);
                     });
-                } 
+                }
+            
                 else {
                     var par = {
+                        participantId: new ObjectId().toString(),
                         accountId: accountId,
                         position: {
                             roomId: Settings.STARTROOM_ID,
@@ -84,35 +82,30 @@ module.exports = class ParticipantService {
                             cordY: Settings.STARTPOSITION_Y
                         },
                         direction: Settings.STARTDIRECTION,
-                        friendId: [],
-                        friendRequestId: {
+                        friendIds: [],
+                        friendRequestIds: {
                             sent: [],
                             received: []
                         },
                         achievements: [],
                         isModerator: false,
                         points: 0,
-                        visitedLectureId: []
+                        visitedLectureIds: []
                     }
 
-                    return getDB().then(res => {
+                    //Write new ppant in DB
+                    getDB().then(res => {
                         vimsudb.insertOneToCollection("participants_" + conferenceId, par);
                     }).catch(err => {
                         console.error(err)
-                    }).then(res => {
-
-                        return this.getParticipant(accountId, conferenceId).then(ppant => {
-                            return participant = new Participant(ppant._id.toString(), accountId, new BusinessCard(ppant._id.toString(), account.getUsername(), 
-                                account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                                account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                                new FriendList(ppant._id.toString(), []), new FriendList(ppant._id.toString(), []), new FriendList(ppant._id.toString(), []), [], par.isModerator, par.points, [], []);
-
-                        }).catch(err => {
-                            console.error(err)
-                        });   
                     });
-                }
-                
+
+                    return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                            new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], par.isModerator, par.points, [], []);
+                } 
+
             }).catch(err => {
                 console.error(err)
             })
