@@ -38,9 +38,8 @@ module.exports = class Participant {
      * @param {boolean} isMod 
      * @param {int} points 
      * @param {Array of Chat} chatList 
-     * @param {Array of int} visitedLectureIDs
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList, visitedLectureIDs)
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, isMod, points, chatList)
     {
         //Typechecking
 
@@ -65,10 +64,6 @@ module.exports = class Participant {
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
         });
-        TypeChecker.isInstanceOf(visitedLectureIDs, Array);
-        visitedLectureIDs.forEach(lectureID => {
-            TypeChecker.isInt(lectureID);
-        })
         
 
 
@@ -82,45 +77,6 @@ module.exports = class Participant {
         this.#sentRequestList = sentRequestList; //this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
         
         this.#achievements = achievements; 
-        /*
-        this.#achievements = {
-            'lecturesVisited': {
-                count: 0,
-                icon: 'headphones',
-                title: 'Good Listener',
-                description: 'Join lectures to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            },
-            'participantsClicked': {
-                count: 0,
-                title: 'Network Guru',
-                icon: 'users',
-                description: 'Interact with other participants to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            },
-            'messagesSent': {
-                count: 0,
-                title: 'Walky Talky',
-                icon: 'comment',
-                description: 'Send more chat messages to gain this achievement.',
-                levels: [
-                    { count: 1, color: '#AD8A56' },
-                    { count: 5, color: '#D7D7D7' },
-                    { count: 10, color: '#C9B037' }
-                ]
-            }
-            // TODO: can easily add more achievements here
-        }
-        */
-
         this.#isMod = isMod; //this.#isMod = true;  //TESTING
         this.#points = points; //this.#points = 0;
         this.#chatList = chatList; //this.#chatList = [];

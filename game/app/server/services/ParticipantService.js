@@ -1,5 +1,6 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const Position = require('../models/Position.js');
+const Direction = require('../../utils/Direction')
 const BusinessCard = require('../models/BusinessCard')
 const Participant = require('../models/Participant')
 const Settings = require('../../utils/Settings.js');
@@ -68,7 +69,7 @@ module.exports = class ParticipantService {
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
                             new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
-                            par.achievements, par.isModerator, par.points, chatList, par.visitedLectureIds);
+                            par.achievements, par.isModerator, par.points, chatList);
                     });
                 }
             
@@ -90,7 +91,6 @@ module.exports = class ParticipantService {
                         achievements: [],
                         isModerator: false,
                         points: 0,
-                        visitedLectureIds: []
                     }
 
                     //Write new ppant in DB
@@ -103,7 +103,7 @@ module.exports = class ParticipantService {
                     return participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                            new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], par.isModerator, par.points, [], []);
+                            new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], par.isModerator, par.points, []);
                 } 
 
             }).catch(err => {
@@ -178,6 +178,7 @@ module.exports = class ParticipantService {
 
     static updateParticipantPosition(participantId, conferenceId, position) {
         TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(position, Position);
 
         var pos = {
@@ -192,5 +193,58 @@ module.exports = class ParticipantService {
             console.error(err)
         });
 
+    }
+
+    static updateParticipantDirection(participantId, conferenceId, direction) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        return getDB().then(res => {
+            vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId}, {direction: direction});
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    static updateIsModerator(participantId, conferenceId, isModerator) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isBoolean(isModerator);
+
+        return getDB().then(res => {
+            vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId}, {isModerator: isModerator});
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    static updatePoints(participantId, conferenceId, points) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInt(points)
+
+        return getDB().then(res => {
+            vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId}, {points: points});
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    static storeAchievements(participantId, conferenceId, achievementIds) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        achievementIds.forEach(id => {
+            TypeChecker.isInt(id)
+        })
+
+        return getDB().then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: {$each: achievementIds}}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
     }
 } 
