@@ -104,43 +104,43 @@ module.exports = class ParticipantService {
                     }
 
                     //Write new ppant in DB
-                    getDB().then(res => {
-                        vimsudb.insertOneToCollection("participants_" + conferenceId, par);
+                    return getDB().then(res => {
+                        return vimsudb.insertOneToCollection("participants_" + conferenceId, par).then(res => {
+                            participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
+                                account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
+                                account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
+                                new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], 
+                                new TaskService().getAllTasks(), par.isModerator, par.points, []);
+                        
+                            new AchievementService().computeAchievements(participant);
+
+                            var achievementsData = [];
+                            participant.getAchievements().forEach(ach => {
+                                achievementsData.push(
+                                    {
+                                        id: ach.id,
+                                        title: ach.title,
+                                        icon: ach.icon,
+                                        description: ach.description,
+                                        currentLevel: ach.currentLevel,
+                                        color: ach.color,
+                                        awardPoints: ach.awardPoints,
+                                        maxLevel: ach.maxLevel,
+                                        taskType: ach.getTaskType()
+                                    },
+                                )
+                            })
+                            
+                            return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData).then(res => {
+                                console.log('all achievements stored');
+                                return participant;
+                            }).catch(err => {
+                                console.error(err);
+                            })
+                        })
                     }).catch(err => {
                         console.error(err)
                     });
-
-                    participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                        account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                        account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                        new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], 
-                        new TaskService().getAllTasks(), par.isModerator, par.points, []);
-                    
-                    new AchievementService().computeAchievements(participant);
-
-                    var achievementsData = [];
-                    participant.getAchievements().forEach(ach => {
-                        achievementsData.push(
-                            {
-                                id: ach.id,
-                                title: ach.title,
-                                icon: ach.icon,
-                                description: ach.description,
-                                currentLevel: ach.currentLevel,
-                                color: ach.color,
-                                awardPoints: ach.awardPoints,
-                                maxLevel: ach.maxLevel,
-                                taskType: ach.getTaskType()
-                            },
-                        )
-                    })
-                    
-                    return Promise.all(achievementsData.map(async ach => {
-                        const res = await this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, ach);
-                    })).then(res => {
-                        console.log("fertig");
-                        return participant;
-                    })
                 } 
             }).catch(err => {
                 console.error(err)
@@ -272,7 +272,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: achievementsData } ).then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: { $each: achievementsData } } ).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);
