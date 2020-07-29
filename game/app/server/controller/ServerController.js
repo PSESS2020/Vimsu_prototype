@@ -746,9 +746,9 @@ module.exports = class ServerController {
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
                     chat.forEach( (message) => {
-                        username: message.getUsername(),
-                        timestamp: message.getTimestamp(),
-                        text: message.getText(),
+                        username: message.getUsername();
+                        timestamp: message.getTimestamp();
+                        text: message.getText();
                     });
                     var chatData = {
                         chatId: chat.getId(),

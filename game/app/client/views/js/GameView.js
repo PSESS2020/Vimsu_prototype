@@ -22,6 +22,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #lectureView;
     #rankListView;
     #chatListView;
+    #chatThreadView;
     #statusBar;
     #globalChatView;
     #friendListView;
