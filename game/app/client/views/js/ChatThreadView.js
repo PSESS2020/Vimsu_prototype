@@ -19,7 +19,7 @@ class ChatThreadView extends WindowView {
         $('#chatListModal .modal-body .list-group').empty()
         
         /* Get all the messages and draw them */
-        this.#chatId = chat.id;
+        this.#chatId = chat.chatId;
         this.#messages = chat.messages;
         $('#chatThreadModalHeader').empty();
         $('#chatThreadModalHeader').text(chat.title);
