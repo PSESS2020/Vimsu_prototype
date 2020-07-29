@@ -8,6 +8,7 @@ const FriendList = require('./FriendList.js');
 const Achievement = require('./Achievement.js');
 const Chat = require('./Chat.js');
 const Task = require('./Task.js');
+const OneToOneChat = require('./OneToOneChat.js');
 
 module.exports = class Participant {
 
@@ -294,5 +295,22 @@ module.exports = class Participant {
         }
 
         this.#achievements.splice(index, 1);
+    }
+
+    //method to check if this ppant has a 1:1 chat with chatPartnerID
+    hasChatWith(chatPartnerID) {
+        TypeChecker.isString(chatPartnerID);
+        //check each chat
+        var hasChat = false;
+        this.#chatList.forEach(chat => {
+            //check if chat is 1:1
+            if (chat instanceof OneToOneChat) {
+                //check if chatPartner is inclucded
+                if (chat.getParticipantL()[0] === chatPartnerID || chat.getParticipantL()[1] === chatPartnerID) {
+                    hasChat = true;
+                }
+            }
+        });
+        return hasChat;
     }
 }

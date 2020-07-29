@@ -59,9 +59,6 @@ $('#groupName').submit(function(event) {
       clientController.handleFromViewShowFriendList(true);
       $('#groupNameInput').val('');
   }
-
-  
-  
 });
 
 document.getElementById("allchat").onkeydown = function(event) {

@@ -710,39 +710,47 @@ module.exports = class ServerController {
 
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
-                //creates new chat and writes it in DB
-                ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
-                    let creator = this.ppants.get(creatorID);
-                    let chatPartner = this.ppants.get(chatPartnerID);
+                let creator = this.ppants.get(creatorID);
+                let chatPartner = this.ppants.get(chatPartnerID);
+                
+                console.log(!creator.hasChatWith(chatPartnerID));
+                //check if chat already exists, only create one if not
+                if (!creator.hasChatWith(chatPartnerID)) {
+
+                    //creates new chat and writes it in DB
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
                     
-                    //check if creator is online
-                    //extremely unlikely that he is offline but safer
-                    if (creator !== undefined) {
+                        //add chat to creator
                         creator.addChat(chat);
-                    }
-
-                    //check if chatPartner is online
-                    if (chatPartner !== undefined) {
-                        chatPartner.addChat(chat);
-
-                        //chat partner joins chat channel
-                        let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                        socketPartner.join(chat.getId());
-                    }
                     
-                    //Creater join chat channel
-                    socket.join(chat.getId());
 
-                    //write ID in Participant Collection in DB
-                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
-                    ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+                        //check if chatPartner is online
+                        if (chatPartner !== undefined) {
+                            chatPartner.addChat(chat);
 
-                    /* Tell the creator's client to create a new chat. The true tells
-                     * the client to immediately open the chatThreadView of the new chat 
-                     * so that the creator can start sending messages.
-                     * - (E) */
-                    this.#io.to(socket.id).emit('newChat', /* chatData */ true);
-                });
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.getId());
+                        }
+                    
+                        //Creater join chat channel
+                        socket.join(chat.getId());
+
+                        //write ID in Participant Collection in DB
+                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+
+                        /* Tell the creator's client to create a new chat. The true tells
+                        * the client to immediately open the chatThreadView of the new chat 
+                        * so that the creator can start sending messages.
+                        * - (E) */
+                        this.#io.to(socket.id).emit('newChat', /* chatData */ true);
+                    }); 
+                }
+            });
+
+            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList) => {
+                //TODO
             });
             
             
