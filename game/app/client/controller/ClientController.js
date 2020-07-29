@@ -220,6 +220,8 @@ class ClientController {
         });
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
+        this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
+        this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
     }
 
     /* #################################################### */    
@@ -568,6 +570,10 @@ class ClientController {
     
     handleFromServerShowChatList(chats) {
         this.#gameView.initChatListView(chats);
+    };
+    
+    handleFromServerNewChatMessage(chatId, message) {
+        
     };
 
     /* #################################################### */    

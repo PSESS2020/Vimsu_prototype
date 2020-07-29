@@ -87,18 +87,18 @@ class EventManager {
     /* One function to display the list of all chats.
      * - (E) */
     handleChatListClicked() {
-        
+        this.#clientController.handleFromViewShowChatList();
     };
     
     /* One function to display the messages in a chat.
      * - (E) */
-     handleChatThreadClicked() {
-         
+     handleChatThreadClicked(chatId) {
+         this.#clientController.handleFromViewShowChatThread(chatId);
      };
      
     /* One function to create a new chat.
      * - (E) */
-    handleChatNewClicked(participantId, isFriend) {
+    handleChatNowClicked(participantId, isFriend) {
         this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
     }
 
