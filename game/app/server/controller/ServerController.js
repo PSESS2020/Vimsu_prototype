@@ -745,10 +745,11 @@ module.exports = class ServerController {
                     var chat = participant.getChat(chatId);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
-                    chat.forEach( (message) => {
+                    chat.getMessageL().forEach( (message) => {
+                        messageInfoData.push({
                         username: message.getUsername(),
                         timestamp: message.getTimestamp(),
-                        text: message.getText(),
+                        text: message.getText()});
                     });
                     var chatData = {
                         chatId: chat.getId(),
@@ -770,6 +771,7 @@ module.exports = class ServerController {
                                         particpant.getBusinessCard().getUsername(), currentTime, message));
                     // TODO:
                     // Emit to all members in chat. Best way to do this would be a socket-room
+                }
             });
             
             // TODO

@@ -638,10 +638,10 @@ class ClientController {
         this.socket.emit('createNewGroupChat', creatorId, participantIdList);
     }
 
-    handleFromViewNewMessage(sendDateTime, chatId, messageText) {
+    handleFromViewNewMessage(chatId, messageText) {
         this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newMessage', sendDateTime, senderId, chatId, messageText);
+        var senderId = this.participant.getId();
+        this.socket.emit('newMessage', senderId, chatId, messageText);
     }
 
     handleFromViewLectureDownload(lectureId) {
