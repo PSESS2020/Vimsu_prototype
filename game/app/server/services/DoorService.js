@@ -5,7 +5,7 @@ var TypeChecker = require('../../utils/TypeChecker.js');
 var Door = require('../models/Door.js');
 var Settings = require('../../utils/Settings.js');
 var Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');
+const Direction = require('../../utils/Direction.js');
 
 
 module.exports = class DoorService {
