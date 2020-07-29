@@ -104,14 +104,18 @@ class LectureView extends WindowView {
     }   
 }
 
+
 $(document).ready(() => {
     $(document).on('click', '#lectureChatButton', function(){ 
         let messageVal = $('#lectureChatInput').val();
         if(messageVal !== '') {
           clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
           $('#lectureChatInput').val('');
+          $('#lectureChatInput').focus();
         }
     });
+
+
     $(document).on('click', ".closeButton" , function() {
         var video = $('#lectureVideo' + lectureId);
         video.get(0).pause();
