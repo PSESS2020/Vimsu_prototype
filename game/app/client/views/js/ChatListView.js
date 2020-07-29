@@ -36,26 +36,28 @@ class ChatListView extends WindowView {
         this.#chats.forEach(chat => {
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
-            <ul id="${"chat" + chat.chatId}">
-                <li class="list-group-item bg-transparent" >
-                    <div class="row w-100">
-                        <div class="col-12 col-sm-2 px-0">
-                            <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+            <a class="action_button nav-item nav-link" style="color: antiquewhite" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                <ul>
+                    <li class="list-group-item bg-transparent" >
+                        <div class="row w-100">
+                            <div class="col-12 col-sm-2 px-0">
+                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                            </div>
+                            <div class="col-12 col-md-9 text-center text-sm-left">
+                                <label class="name lead">${chat.title}</label>
+                                <br> 
+                                <span >${"[" + chat.timestamp + "]" + chat.previewUsername + ": "}</span>
+                                <br>
+                                <span class="small">${chat.previewMessage}</span>
+                            </div>  
                         </div>
-                        <div class="col-12 col-md-9 text-center text-sm-left">
-                            <label class="name lead">${chat.title}</label>
-                            <br> 
-                            <span >${"[" + chat.timestamp + "]" + chat.previewUsername + ": "}</span>
-                            <br>
-                            <span class="small">${chat.previewMessage}</span>
-                        </div>  
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </a>
+            
 
                 <script> 
                     $('#chat' + '${chat.chatId}').on('click', function (event) {
-                        $('#chatListModal').modal('hide');
                         new EventManager().handleChatThreadClicked("${chat.chatId}");
                     })
                 </script>
