@@ -133,7 +133,14 @@ module.exports = class Participant {
     }
 
     getChatList() {
-        return this.#chatList
+        return this.#chatList;
+    }
+
+    addChat(chat) {
+        TypeChecker.isInstanceOf(chat, Chat);
+        if (!this.#chatList.includes(chat)) {
+            this.#chatList.push(chat);
+        }
     }
 
     setPosition(position) 

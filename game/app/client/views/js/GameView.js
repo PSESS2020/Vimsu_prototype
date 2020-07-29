@@ -36,6 +36,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #newAchievementView;
     #npcAvatarViews = [];
     #npcStoryView;
+    #chatThreadView;
 
     constructor(gameWidth, gameHeight) 
     {
