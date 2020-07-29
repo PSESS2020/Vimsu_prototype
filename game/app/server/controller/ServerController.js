@@ -733,6 +733,10 @@ module.exports = class ServerController {
                     //Creater join chat channel
                     socket.join(chat.getId());
 
+                    //write ID in Participant Collection in DB
+                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+                    ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+
                     /* Tell the creator's client to create a new chat. The true tells
                      * the client to immediately open the chatThreadView of the new chat 
                      * so that the creator can start sending messages.
