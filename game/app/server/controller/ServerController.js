@@ -745,10 +745,11 @@ module.exports = class ServerController {
                     var chat = participant.getChat(chatId);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
-                    chat.forEach( (message) => {
-                        username: message.getUsername();
-                        timestamp: message.getTimestamp();
-                        text: message.getText();
+                    chat.getMessageL().forEach( (message) => {
+                        messageInfoData.push({
+                        username: message.getUsername(),
+                        timestamp: message.getTimestamp(),
+                        text: message.getText()});
                     });
                     var chatData = {
                         chatId: chat.getId(),
@@ -900,7 +901,33 @@ module.exports = class ServerController {
                 }
                 
                 socket.emit('showNPCStory', name, story);
-            })
+            });
+
+            //Called whenever a ppant creates a new 1:1 chat (P)
+            socket.on('createNewChat', (creatorID, chatPartnerID) => {
+                //creates new chat and writes it in DB
+                ChatService.newOneToOneChat(creatorID, chatPartnerID).then(chat => {
+                    let creator = this.ppants.get(creatorID);
+                    let chatPartner = this.ppants.get(chatPartnerID);
+                    
+                    //check if creator is online
+                    if (creator !== undefined) {
+                        creator.addChat(chat);
+                    }
+
+                    //check if chatPartner is online
+                    if (chatPartner !== undefined) {
+                        chatPartner.addChat(chat);
+                    }
+
+                });
+            });
+
+            socket.on('newMessage', (sendDateTime, senderID, chatID, messageText) => {
+                
+
+            });
+
 
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken

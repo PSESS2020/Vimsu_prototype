@@ -735,18 +735,19 @@ class ClientController {
         this.socket.emit('getChatThread', chatID);
     };
 
-   /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
+    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId, isFriend) {
-        //if isFriend is undefined, checking isFriend is necessary
+    handleFromViewCreateNewChat(participantId) {
+        //if isFriend is undefined, checking isFriend is necessary  
+        //isFriend not necessary, because server knows all friendLists
         this.socketReady
         var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', {creatorId, participantId, isFriend})
+        this.socket.emit('createNewChat', creatorId, participantId);
     }
 
     handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
         this.socketReady
-        this.socket.emit('createNewGroupChat', {creatorId, participantIdList})
+        this.socket.emit('createNewGroupChat', creatorId, participantIdList);
     }
 
     handleFromViewNewMessage(chatId, messageText) {
