@@ -69,15 +69,14 @@ class LectureView extends WindowView {
 
         $('#lectureVideo').empty();
         $('#lectureVideo').append(`
-            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src=""></video>
+            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
 
             <script> 
                 var video = $('#lectureVideo' + '${lecture.id}')
             
-                video.get(0).src = '${lecture.videoUrl}';
-                video.get(0).disablePictureInPicture = true;
                 
-                video.get(0).play();
+                
+                //video.get(0).play();
                 
                 //restrict pausing video if lecture is not ended
                 video.on('pause', function(e) {
@@ -101,6 +100,20 @@ class LectureView extends WindowView {
         `)
 
         $('#lectureVideoWindow').show();
+        
+        
+        var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+        
+        // set default controls
+        video.disablePictureInPicture = true;
+        
+        
+        video.addEventListener('loadeddata', function() {
+            video.currentTime = "10"; // chrome requires setting the current time as string
+        });
+
+        video.play();
+        
     }   
 }
 
@@ -128,6 +141,7 @@ $(document).ready(() => {
 
     $(document).on('click', ".closeButton" , function() {
         var video = $('#lectureVideo' + lectureId);
+        
         video.get(0).pause();
         var result;
         if(video.get(0).currentTime < video.get(0).duration && !loop) {
