@@ -39,7 +39,7 @@ module.exports = class Chatservice {
             return vimsudb.insertOneToCollection("chats_" + conferenceId , chat).then(res => {
 
                 console.log("oneToOne chat saved");
-                return new OneToOneChat(chat.chatId, chat.memberId, chat.messageList);
+                return new OneToOneChat(chat.chatId, chat.memberId[0], chat.memberId[1], chat.messageList, Settings.MAXNUMMESSAGES_ONETOONECHAT);
             
             }).catch(err => {
                 console.error(err);
