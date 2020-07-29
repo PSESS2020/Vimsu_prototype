@@ -24,6 +24,23 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModalHeader').empty();
         $('#chatThreadModalHeader').text(chat.title);
         
+        var script = `
+            <script>
+                $('#chatInput').submit( function(event) {
+                    event.preventDefault();
+                    let messageVal = $('#chatMessageInput').val();
+    
+                    if(messageVal !== '') {
+                        
+                        new EventManager.handleChatMessageInput("${chat.chatId}", messageVal);
+      
+                    $('#allchatMessageInput').val('');
+                    return false;
+                    }
+                });
+            </script>
+        `;
+        
         // TODO: draw the messages
         this.#messages.forEach( (message) => {
             

@@ -32,7 +32,7 @@ setInterval( function() {
   //gameView.draw();  
 }, GameConfig.TIME_DELTA);
 
-$('form').submit(function(event) {
+$('#allchat').submit(function(event) {
     
     event.preventDefault();
     let messageVal = $('#allchatMessageInput').val();

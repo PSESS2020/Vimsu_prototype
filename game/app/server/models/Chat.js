@@ -33,11 +33,11 @@ module.exports = class Chat {
     }*/
 
     addMessage(msg) {
-        
+        // Intentionally left blank - to implement in child classes
     }
 
     addParticipant(ppantId) {
-        this.#participantList.push(ppantId);
+        // Intentionally left blank - to implement in child classes
     }
 
     getId() {

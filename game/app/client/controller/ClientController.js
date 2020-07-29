@@ -623,26 +623,6 @@ class ClientController {
         this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId, lectureEnded);
     }
 
-    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
-    the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId, isFriend) {
-        //if isFriend is undefined, checking isFriend is necessary
-        this.socketReady
-        var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', {creatorId, participantId, isFriend})
-    }
-
-    handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
-        this.socketReady
-        this.socket.emit('createNewGroupChat', {creatorId, participantIdList})
-    }
-
-    handleFromViewNewMessage(sendDateTime, chatId, messageText) {
-        this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newMessage', {sendDateTime, senderId, chatId, messageText});
-    }
-
     handleFromViewLectureDownload(lectureId) {
         this.socketReady
         this.socket.emit('lectureVideoDownload', lectureId);
@@ -754,6 +734,25 @@ class ClientController {
     handleFromViewShowChatThread(chatID) {
         this.socket.emit('getChatThread', chatID);
     };
+
+   /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
+    the id of the other chat participant to the server.*/
+    handleFromViewCreateNewChat(participantId, isFriend) {
+        //if isFriend is undefined, checking isFriend is necessary
+        this.socketReady
+        var creatorId = this.#ownParticipant.getId();
+        this.socket.emit('createNewChat', {creatorId, participantId, isFriend})
+    }
+
+    handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
+        this.socketReady
+        this.socket.emit('createNewGroupChat', {creatorId, participantIdList})
+    }
+
+    handleFromViewNewMessage(chatId, messageText) {
+        this.socketReady
+        this.socket.emit('newChatMessage', chatId, messageText);
+    }
     
     /* We really need two functions here.
      * One to display the interface that allows a user to create a new chat.

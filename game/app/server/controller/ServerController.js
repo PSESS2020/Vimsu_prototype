@@ -759,6 +759,9 @@ module.exports = class ServerController {
                 };
             });
             
+            /* Takes a new message in a chat and sends it to every member in that chat.
+             * This can probably still be heavily optimized.
+             * - (E) */
             socket.on('newChatMessage', (chatID, message) => {
                 var participant = this.ppants.get(socket.ppantId);
                 if(participant.isMemberOfChat(chatId)){
@@ -766,10 +769,21 @@ module.exports = class ServerController {
                     var currentDate = new Date();
                     var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + 
                                         ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
-                    chat.addMessage(new Message(chat.generateNewMsgId, participant.getId(), 
-                                        particpant.getBusinessCard().getUsername(), currentTime, message));
-                    // TODO:
-                    // Emit to all members in chat. Best way to do this would be a socket-room
+                    var msg = new Message(chat.generateNewMsgId, participant.getId(), 
+                                                participant.getBusinessCard().getUsername(), currentTime, message);
+                    chat.addMessage(msg);
+                    var msgToEmit = {
+                        username: msg.getUsername(),
+                        timestamp: msg.getTimestamp(),
+                        text: msg.getText()
+                    };
+                    
+                    /* Emits to all members in chat. Uses a socket-room that needs to be created in the
+                     * createChat-method. Note that this does not emit the whole message object but
+                     * a smaller version of it.
+                     * - (E) */
+                    this.#io.in(chat.getId()).emit('newChatMessage', chatID, msgToEmit);
+                }
             });
             
             // TODO

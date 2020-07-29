@@ -107,6 +107,9 @@ class EventManager {
      
     /* One function to send a new message in a chat.
      * - (E) */
+     handleChatMessageInput(chatId, message) {
+         this.#clientController.handleFromViewSendNewMessage(chatId, message);
+     };
 
     handleFriendRequestListClicked() {
         this.#clientController.handleFromViewShowFriendRequestList();
