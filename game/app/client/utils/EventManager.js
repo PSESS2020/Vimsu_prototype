@@ -80,8 +80,8 @@ class EventManager {
 
 
 
-    handleFriendListClicked() {
-        this.#clientController.handleFromViewShowFriendList();
+    handleFriendListClicked(isInviteFriends) {
+        this.#clientController.handleFromViewShowFriendList(isInviteFriends);
     }
     
     /* One function to display the list of all chats.
@@ -104,6 +104,9 @@ class EventManager {
     
     /* One function to create a new group chat
      * - (E) */
+    handleCreateGroupChat(participantIdList) {
+        this.#clientController.handleFromViewCreateNewGroupChat(participantIdList)
+    }
      
     /* One function to send a new message in a chat.
      * - (E) */

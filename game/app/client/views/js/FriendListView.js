@@ -70,6 +70,6 @@ class FriendListView extends WindowView {
     }
 
     onclick() {
-        return new EventManager().handleFriendListClicked();
+        return new EventManager().handleFriendListClicked(false);
     }
 }
