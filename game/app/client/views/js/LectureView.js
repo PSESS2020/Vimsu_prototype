@@ -106,15 +106,22 @@ class LectureView extends WindowView {
 
 
 $(document).ready(() => {
-    $(document).on('click', '#lectureChatButton', function(){ 
+    function sendMessage() {
         let messageVal = $('#lectureChatInput').val();
         if(messageVal !== '') {
           clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
           $('#lectureChatInput').val('');
           $('#lectureChatInput').focus();
-          $('#lectureChatInput').keydown(function (e){
-            alert(e.keyCode);
-        })
+        }
+    }
+
+    $(document).on('click', '#lectureChatButton', () => { 
+        sendMessage();
+    });
+
+    $('#lectureChatInput').keydown((e) => {
+        if (e.keyCode === 13) {
+            sendMessage();
         }
     });
 
