@@ -50,10 +50,23 @@ $('#allchat').submit(function(event) {
 
 });
 
+$('#groupName').submit(function(event) {
+    
+  event.preventDefault();
+  let groupName = $('#groupNameInput').val();
+
+  //TODO send to controller
+
+  $('#groupNameInput').val('');
+});
+
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
 };
 
+document.getElementById("groupName").onkeydown = function(event) {
+  event.stopPropagation();
+};
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being

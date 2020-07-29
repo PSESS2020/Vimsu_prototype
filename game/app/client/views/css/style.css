@@ -86,7 +86,6 @@ z-index: 2;
 form {
 border-radius: 5px;
 top: 0;
-background: #000;
 z-index: 3;
 } 
 
@@ -143,6 +142,10 @@ overflow-wrap: break-word;
 }
 
 .fa-sort-desc:hover {
+  opacity: .5 !important;
+}
+
+.fa-users:hover {
   opacity: .5 !important;
 }
 
