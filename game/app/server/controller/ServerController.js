@@ -237,16 +237,16 @@ module.exports = class ServerController {
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
 
-                    this.ppants.forEach((ppant, id, map) => {
+                    this.ppants.forEach((participant, id, map) => {
                     
-                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === currentRoomId) {
+                        if(id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
 
-                            var username = ppant.getBusinessCard().getUsername();
+                            var username = participant.getBusinessCard().getUsername();
 
-                            var tempPos = ppant.getPosition();
+                            var tempPos = participant.getPosition();
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
-                            var tempDir = ppant.getDirection();
+                            var tempDir = participant.getDirection();
 
                             this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
