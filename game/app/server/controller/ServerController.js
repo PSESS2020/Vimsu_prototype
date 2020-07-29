@@ -744,6 +744,10 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('newChat', /* chatData */ true);
                 });
             });
+
+            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList) => {
+                //TODO
+            });
             
             
             /* Technically speaking, the client should not send the id to the
