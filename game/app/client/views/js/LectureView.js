@@ -112,6 +112,9 @@ $(document).ready(() => {
           clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
           $('#lectureChatInput').val('');
           $('#lectureChatInput').focus();
+          $('#lectureChatInput').keydown(function (e){
+            alert(e.keyCode);
+        })
         }
     });
 
