@@ -264,9 +264,12 @@ module.exports = class Chatservice {
 
     //tested
     //loads all chats of the specified participant
+    
     static loadChatList(participantId, conferenceId) {
         TypeChecker.isString(participantId);
+        return [];
 
+        /*
         return getDB().then(res => {
             return vimsudb.findAllInCollection("chats_" + participantId).then(chats => {
                 if(chats && chats.length > 0) {
@@ -337,11 +340,13 @@ module.exports = class Chatservice {
                 }
             }).catch(err => {
                 console.error(err);
-            })*/
+            })
         }).catch(err => {
             console.error(err);
         })
     }
+    */
+    
 
     static loadChatParticipants(participantId, chatId) {
         TypeChecker.isString(chatId);
