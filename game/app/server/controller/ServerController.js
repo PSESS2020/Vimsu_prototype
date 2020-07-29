@@ -177,8 +177,13 @@ module.exports = class ServerController {
                     
                     socket.ppantId = ppant.getId();
 
-                    //First Channel (P)
+                    //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
+
+                    //Join all Chat Channels
+                    ppant.getChatList().forEach(chat => {
+                        socket.join(chat.getId());
+                    });
                     
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                     this.#rooms[currentRoomId - 1].enterParticipant(ppant);
@@ -711,6 +716,7 @@ module.exports = class ServerController {
                     let chatPartner = this.ppants.get(chatPartnerID);
                     
                     //check if creator is online
+                    //extremely unlikely that he is offline but safer
                     if (creator !== undefined) {
                         creator.addChat(chat);
                     }
@@ -718,8 +724,15 @@ module.exports = class ServerController {
                     //check if chatPartner is online
                     if (chatPartner !== undefined) {
                         chatPartner.addChat(chat);
+
+                        //chat partner joins chat channel
+                        let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                        socketPartner.join(chat.getId());
                     }
                     
+                    //Creater join chat channel
+                    socket.join(chat.getId());
+
                     /* Tell the creator's client to create a new chat. The true tells
                      * the client to immediately open the chatThreadView of the new chat 
                      * so that the creator can start sending messages.
