@@ -531,6 +531,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initChatListView(chats) {
         this.#chatListView = new ChatListView().draw(chats);
     };
+    
+    initChatThreadView(chat) {
+        this.#chatThreadView = new ChatThreadView().draw(chat);
+    };
+    
+    addNewChatMessage(chatId, message) {
+        this.#chatListView.addNewMessage(chatId, message);
+        this.#chatThreadView.addNewMessage(chatId, message);
+    };
 
     updateSuccessesBar(points, rank) {
         this.#successesBar = new SuccessesBar().update(points, rank);

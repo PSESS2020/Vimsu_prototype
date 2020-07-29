@@ -572,8 +572,18 @@ class ClientController {
         this.#gameView.initChatListView(chats);
     };
     
-    handleFromServerNewChatMessage(chatId, message) {
+    handleFromServerShowChatThread(chat) {
+        this.#gameView.initChatThreadView(chat);
+    };
+    
+    // This still needs some consideration on how to implement this
+    // when a new chat is created
+    handleFromServerNewChat() {
         
+    };
+    
+    handleFromServerNewChatMessage(chatId, message) {
+        this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /* #################################################### */    

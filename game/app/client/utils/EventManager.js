@@ -101,6 +101,12 @@ class EventManager {
     handleChatNowClicked(participantId, isFriend) {
         this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
     }
+    
+    /* One function to create a new group chat
+     * - (E) */
+     
+    /* One function to send a new message in a chat.
+     * - (E) */
 
     handleFriendRequestListClicked() {
         this.#clientController.handleFromViewShowFriendRequestList();

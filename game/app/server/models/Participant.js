@@ -255,4 +255,13 @@ module.exports = class Participant {
     getAwardPoints() {
         return this.#awardPoints;
     }
+    
+    isMemberOf(chatId) {
+        for(var i = 0; i < this.#chatList.length; i++) {
+            if(this.#chatList[i].getId() == chatId) {
+                return true;
+            }
+        }
+        return false;
+    };
 }

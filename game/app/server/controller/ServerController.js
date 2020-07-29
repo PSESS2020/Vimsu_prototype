@@ -174,6 +174,8 @@ module.exports = class ServerController {
                     } else if (currentRoomId === Settings.FOODCOURT_ID) {
                         typeOfCurrentRoom === TypeOfRoom.FOODCOURT;
                     }
+                    
+                    socket.ppantId = ppant.getId();
 
                     //First Channel (P)
                     socket.join(currentRoomId.toString());
@@ -708,20 +710,35 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
+                    var lastMessage = chat.getMessageL()[--chat.getMessageL().length];
+                    var previewText = lastMessage.getMessageText();
+                    if(previewText.length > 60) {
+                        previewText = previewText.slice(0, 50) + ". . . ";
+                    } 
                     chatData.push({
                         // Get some superficial chat data
-                        // Title
-                        // ID
-                        // Timestamp, sender and preview of last message
+                        title: chat.getTitle(),
+                        chatId: chat.getId(),
+                        timestamp: lastMessage.getTimestamp(),
+                        previewUsername: lastMessage.getUsername(),
+                        previewMessage: previewText
                     });
                 });
                 this.#io.to(socket.id).emit('chatList', chatListData);
             });
             
-            socket.on()('getChat', (chatID) => {
-                // Check the participant is actually a member of the chats
-                // get the chat and send the data to the client
-                this.#io.to(socket.id).emit('chatData', chatData);
+            socket.on('getChatThread', (chatID) => {
+                var participant = this.ppants.get(socket.ppantId);
+                if(participant.isMemberOfChat(chatId){
+                    // Load chat-data into chatData field
+                    var chat = /* get chat*/
+                    this.#io.to(socket.id).emit('chatThread', chatData);
+                };
+            });
+            
+            socket.on('newChatMessage', (chatID, message) => {
+                // if the participant is a member of the chat, then we
+                // add a new message object to the message list of the chat
             });
              
 
