@@ -55,10 +55,12 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
-        TypeChecker.isInstanceOf(achievements, Array);
-        achievements.forEach(achievement => {
-            TypeChecker.isInstanceOf(achievement, Achievement);
-        });
+        if(achievements) {
+            TypeChecker.isInstanceOf(achievements, Array);
+            achievements.forEach(achievement => {
+                TypeChecker.isInstanceOf(achievement, Achievement);
+            });
+        }
         TypeChecker.isBoolean(isMod);
         TypeChecker.isInt(awardPoints);
         TypeChecker.isInstanceOf(chatList, Array);
@@ -262,7 +264,7 @@ module.exports = class Participant {
 
     removeAchievement(achievementId) {
         let index = this.#achievements.findIndex(ach => ach.id === achievementId);
-        
+
         if(index < 0) {
             throw new Error(achievementId + " not found in list of achievements")
         }

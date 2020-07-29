@@ -1143,7 +1143,7 @@ module.exports = class ServerController {
         newAchievements.forEach(ach => {
             socket.emit('newAchievement', ach); 
             
-            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, ach.awardPoints).then(res => {
+            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color).then(res => {
                 console.log('level of ' + ach.id + ' updated') 
             }).catch(err => {
                 console.error(err);
