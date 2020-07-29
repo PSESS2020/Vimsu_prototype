@@ -51,13 +51,14 @@ $('#allchat').submit(function(event) {
 });
 
 $('#groupName').submit(function(event) {
-    
   event.preventDefault();
   let groupName = $('#groupNameInput').val();
-
-  //TODO send to controller
-
-  $('#groupNameInput').val('');
+  if(groupName !== '') {
+      $('#inputGroupNameModal').modal('hide');
+      $('#inviteFriendsModal').modal('toggle');
+      clientController.handleFromViewShowFriendList(true);
+      $('#groupNameInput').val('');
+  }
 });
 
 document.getElementById("allchat").onkeydown = function(event) {

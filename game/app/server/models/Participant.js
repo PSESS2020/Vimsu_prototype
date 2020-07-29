@@ -274,7 +274,7 @@ module.exports = class Participant {
         }
     };
     
-    isMemberOf(chatId) {
+    isMemberOfChat(chatId) {
         for(var i = 0; i < this.#chatList.length; i++) {
             if(this.#chatList[i].getId() == chatId) {
                 return true;

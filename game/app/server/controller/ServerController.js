@@ -660,7 +660,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID) => {
+            socket.on('getFriendList', (ppantID, isInviteFriends) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -681,7 +681,7 @@ module.exports = class ServerController {
                     )
                 });
 
-                socket.emit('friendList', friendListData);
+                socket.emit('friendList', friendListData, isInviteFriends);
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
@@ -748,6 +748,10 @@ module.exports = class ServerController {
                     }); 
                 }
             });
+
+            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList) => {
+                //TODO
+            });
             
             
             /* Technically speaking, the client should not send the id to the
@@ -762,6 +766,7 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
+                    console.log('ssss' + chat.getMessageL().length);
                     if (chat.getMessageL().length > 0) {
                         var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
                         var previewText = lastMessage.getMessageText();
@@ -798,9 +803,9 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (chatID) => {
                 var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatId)){
+                if(participant.isMemberOfChat(chatID)){
                     // Load chat-data into chatData field
-                    var chat = participant.getChat(chatId);
+                    var chat = participant.getChat(chatID);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageL().forEach( (message) => {

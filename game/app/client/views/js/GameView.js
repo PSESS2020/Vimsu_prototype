@@ -26,6 +26,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #statusBar;
     #globalChatView;
     #friendListView;
+    #inviteFriendsView;
     #friendRequestListView;
     #successesBar;
     #currentMap;
@@ -511,6 +512,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     initFriendListView(businessCards) {
         this.#friendListView = new FriendListView();
         this.#friendListView.draw(businessCards)
+    }
+
+    initInviteFriendsView(businessCards) {
+        this.#inviteFriendsView = new InviteFriendsView();
+        this.#inviteFriendsView.draw(businessCards);
     }
 
     initCurrentAchievementsView(achievements) {
