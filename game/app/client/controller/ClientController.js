@@ -476,13 +476,13 @@ class ClientController {
     }
 
     //Is called after server send the answer of friendlistclick
-    handleFromServerFriendList(friendListData, isInviteFriends) {
+    handleFromServerFriendList(friendListData, isInviteFriends, groupName) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
         if(isInviteFriends) {
-            this.#gameView.initInviteFriendsView(friendList);
+            this.#gameView.initInviteFriendsView(friendList, groupName);
         } else {
             this.#gameView.initFriendListView(friendList);
         }
@@ -649,9 +649,9 @@ class ClientController {
     }
 
     //called after click on friendlist button
-    handleFromViewShowFriendList(isInviteFriends) {
+    handleFromViewShowFriendList(isInviteFriends, groupName) {
         this.socketReady;
-        this.socket.emit('getFriendList', this.#ownParticipant.getId(), isInviteFriends);
+        this.socket.emit('getFriendList', this.#ownParticipant.getId(), isInviteFriends, groupName);
     }
 
     //called after click on friendrequestlist button

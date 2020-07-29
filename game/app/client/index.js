@@ -56,7 +56,7 @@ $('#groupName').submit(function(event) {
   if(groupName !== '') {
       $('#inputGroupNameModal').modal('hide');
       $('#inviteFriendsModal').modal('toggle');
-      clientController.handleFromViewShowFriendList(true);
+      clientController.handleFromViewShowFriendList(true, groupName);
       $('#groupNameInput').val('');
   }
 });

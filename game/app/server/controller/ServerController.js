@@ -660,7 +660,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID, isInviteFriends) => {
+            socket.on('getFriendList', (ppantID, isInviteFriends, groupName) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -681,7 +681,7 @@ module.exports = class ServerController {
                     )
                 });
 
-                socket.emit('friendList', friendListData, isInviteFriends);
+                socket.emit('friendList', friendListData, isInviteFriends, groupName);
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
@@ -749,6 +749,7 @@ module.exports = class ServerController {
                 }
             });
 
+<<<<<<< HEAD
             //Called whenever a participant creates a new group chat (N)
             socket.on('createNewGroupChat', (creatorID, chatName, chatPartnerIDList) => {
 
@@ -789,6 +790,10 @@ module.exports = class ServerController {
 
                 })
 
+=======
+            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList, groupName) => {
+                //TODO
+>>>>>>> 62d03b888e2dd8c99a810792c9fec03712cfe124
             });
             
             
