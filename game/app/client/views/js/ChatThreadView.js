@@ -38,6 +38,11 @@ class ChatThreadView extends WindowView {
                     return false;
                     }
                 });
+                
+                $('#sendFriendRequest).on('click', function(event) {
+                    new EventManager.handleSendFriendRequest();
+                
+                });
             </script>
         `;
         

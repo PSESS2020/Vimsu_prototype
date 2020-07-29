@@ -239,16 +239,16 @@ module.exports = class ServerController {
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
 
-                    this.ppants.forEach((ppant, id, map) => {
+                    this.ppants.forEach((participant, id, map) => {
                     
-                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === currentRoomId) {
+                        if(id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
 
-                            var username = ppant.getBusinessCard().getUsername();
+                            var username = participant.getBusinessCard().getUsername();
 
-                            var tempPos = ppant.getPosition();
+                            var tempPos = participant.getPosition();
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
-                            var tempDir = ppant.getDirection();
+                            var tempDir = participant.getDirection();
 
                             this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
@@ -920,11 +920,17 @@ module.exports = class ServerController {
                         chatPartner.addChat(chat);
                     }
                     
+                    var chatData = {
+                        title: chat.getTitle(),
+                        chatId: chat.getId(),
+                        messages: []
+                    }
+                    
                     /* Tell the creator's client to create a new chat. The true tells
                      * the client to immediately open the chatThreadView of the new chat 
                      * so that the creator can start sending messages.
                      * - (E) */
-                    this.#io.to(socket.id).emit('newChat', /* chatData */, true);
+                    this.#io.to(socket.id).emit('newChat', chatData, true);
                 });
             });
             
