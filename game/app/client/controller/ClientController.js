@@ -728,7 +728,8 @@ class ClientController {
      * response from the server.
      * - (E) */
     handleFromViewShowChatList() {
-        this.socket.emit('getChatList', this.#participantId);
+        let participantID = this.#ownParticipant.getId();
+        this.socket.emit('getChatList', participantID);
     };
     
     handleFromViewShowChatThread(chatID) {

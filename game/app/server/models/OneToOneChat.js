@@ -3,41 +3,41 @@ var Chat = require('./Chat.js');
 
 module.exports = class OneToOneChat extends Chat{
     
-    #chatName;
-    #sentStatus;
-    #memberId;
-    #messageList;
+    //#chatName;
+    //#sentStatus;
+    //#memberIds;
+    //#messageList;
 
-    constructor(chatId, chatName, sentStatus, memberId, messageList) {
-        super(chatId, ownerId);
-
-        this.#chatName = chatName;
-        this.#sentStatus = sentStatus;
-        this.#memberId = memberId;
-        this.#messageList = messageList;
+    constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages) {
+        super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
+        
     }
 
     //Adds a message to the message list.
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(this.#messageList.length >= super.getMaxNumMessages())
-            this.#messageList.splice(0, super.getMaxNumMessages());
+        if(super.getMessageL().length >= super.getMaxNumMessages())
+            super.getMessageL().splice(0, super.getMaxNumMessages());
 
-        this.#messageList.push(msg);
+        super.getMessageL().push(msg);
     }
 
+    /*
     isSent() {
         return this.#sentStatus;
     }
+    
 
     getChatName() {
         return this.#chatName;
     }
+    
 
     getReceiverName() {
         return this.#memberId;
     }
+    
 
     sendRequest(senderId) {
         //TODO
@@ -57,5 +57,6 @@ module.exports = class OneToOneChat extends Chat{
         TypeChecker.isString(memberId);
         this.#memberId = memberId;
     }
+    */
 
 }
