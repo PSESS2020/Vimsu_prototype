@@ -703,8 +703,14 @@ module.exports = class ServerController {
                 socket.emit('friendRequestList', friendRequestListData);
             });
             
+            
             /* Technically speaking, the client should not send the id to the
              * server, as this allows for spoofing. I think.
+             * - (E) */
+             
+            /* Gets the necessary information for the chatListView and sends it to the client.
+             * Gets the chatList from the participant and then for every chat gets the title,
+             * the timestamp, sender-username and a preview of the last message for display purposes. 
              * - (E) */
             socket.on('getChatList', (ppantID) => {
                 var chatList = this.ppants.get(ppantID).getChatList();
@@ -727,19 +733,47 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('chatList', chatListData);
             });
             
+            /* Gets the necessary information to display a chat and sends it to the client.
+             * First checks if the participant is actually a member of the chat he wants to see.
+             * If he is, gets the chat-object, gets it's message list and "copy-pastes" the 
+             * relevant information into a new field, which is then send to the client.
+             * - (E) */
             socket.on('getChatThread', (chatID) => {
                 var participant = this.ppants.get(socket.ppantId);
                 if(participant.isMemberOfChat(chatId)){
                     // Load chat-data into chatData field
-                    var chat = /* get chat*/
+                    var chat = participant.getChat(chatId);
+                    var messageInfoData = [];
+                    // Maybe only the info of like the first 16 messages or so?
+                    chat.forEach( (message) => {
+                        username: message.getUsername(),
+                        timestamp: message.getTimestamp(),
+                        text: message.getText(),
+                    });
+                    var chatData = {
+                        chatId: chat.getId(),
+                        title: chat.getTitle(),
+                        messages: messageInfoData
+                    }
                     this.#io.to(socket.id).emit('chatThread', chatData);
                 };
             });
             
             socket.on('newChatMessage', (chatID, message) => {
-                // if the participant is a member of the chat, then we
-                // add a new message object to the message list of the chat
+                var participant = this.ppants.get(socket.ppantId);
+                if(participant.isMemberOfChat(chatId)){
+                    var chat = participant.getChat(chatId);
+                    var currentDate = new Date();
+                    var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + 
+                                        ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                    chat.addMessage(new Message(chat.generateNewMsgId, participant.getId(), 
+                                        particpant.getBusinessCard().getUsername(), currentTime, message));
+                    // TODO:
+                    // Emit to all members in chat. Best way to do this would be a socket-room
             });
+            
+            // TODO
+            // Handling for creating a new chat.
              
 
             //adds a new Friend Request to the system

@@ -263,6 +263,14 @@ module.exports = class Participant {
         return this.#awardPoints;
     }
     
+    getChat(chatId) {
+        for(var i = 0; i < this.#chatList.length; i++) {
+            if(this.#chatList[i].getId() == chatId) {
+                return this.#chatList[i];
+            }
+        }
+    };
+    
     isMemberOf(chatId) {
         for(var i = 0; i < this.#chatList.length; i++) {
             if(this.#chatList[i].getId() == chatId) {

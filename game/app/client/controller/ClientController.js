@@ -576,10 +576,12 @@ class ClientController {
         this.#gameView.initChatThreadView(chat);
     };
     
-    // This still needs some consideration on how to implement this
-    // when a new chat is created
+    /* This function is called when another user creates a new chat
+     * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
+     * INTO THAT CHAT (or if a friend request has been send).
+     * - (E) */
     handleFromServerNewChat() {
-        
+        this.#gameView.addNewChat(/* TODO necessary info */);
     };
     
     handleFromServerNewChatMessage(chatId, message) {

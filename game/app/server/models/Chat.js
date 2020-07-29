@@ -13,6 +13,15 @@ module.exports = class Chat {
 
         this.#chatId = chatId;
         this.#ownerId = ownerId;
+        
+        this.#messageList = []; // creating an empty message list
+        this.#participantList = []; // creating an empty participant list
+        this.#participantList.push(ownerId);
+        
+        /* instead of several constructors, we could write a wrapper method
+         * in the service-class or somewhere that creates a new chat and then
+         * "fills it up" with the data supplied from the database.
+         * - (E) */
     }
     /*
     *Multiple constructors are not allowed.
@@ -23,12 +32,12 @@ module.exports = class Chat {
         this.#messageList = messageList;
     }*/
 
-    addMessage() {
-
+    addMessage(msg) {
+        
     }
 
-    addParticipant() {
-
+    addParticipant(ppantId) {
+        this.#participantList.push(ppantId);
     }
 
     getId() {
@@ -86,5 +95,9 @@ module.exports = class Chat {
     getMaxNumMessages() {
         return this.#maxNumMessages;
     }
+    
+    generateNewMsgId(senderId) {
+        return this.#chatId + "." + senderId + "." + this.#messageList.length;
+    };
 
 }
