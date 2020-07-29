@@ -1,7 +1,7 @@
 /* Import Models */
 const Room = require('../models/Room.js');
 const Conference = require('../models/Conference.js');
-const TypeOfRoom = require('../models/TypeOfRoom.js');
+const TypeOfRoom = require('../../utils/TypeOfRoom');
 
 /* Import Controller */
 const RoomController = ('./RoomController.js');

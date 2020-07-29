@@ -2,7 +2,7 @@ var Position = require('./Position.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
 var TypeChecker = require('../../utils/TypeChecker.js')
 const Settings = require('../../utils/Settings.js');
-const Direction = require('../models/Direction.js')
+const Direction = require('../../utils/Direction.js')
 const BusinessCard = require('./BusinessCard.js')
 const FriendList = require('./FriendList.js');
 const Achievement = require('./Achievement.js');
@@ -55,10 +55,12 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
-        TypeChecker.isInstanceOf(achievements, Array);
-        achievements.forEach(achievement => {
-            TypeChecker.isInstanceOf(achievement, Achievement);
-        });
+        if(achievements) {
+            TypeChecker.isInstanceOf(achievements, Array);
+            achievements.forEach(achievement => {
+                TypeChecker.isInstanceOf(achievement, Achievement);
+            });
+        }
         TypeChecker.isBoolean(isMod);
         TypeChecker.isInt(awardPoints);
         TypeChecker.isInstanceOf(chatList, Array);
@@ -279,4 +281,18 @@ module.exports = class Participant {
         }
         return false;
     };
+
+    addAchievement(achievement) {
+        this.#achievements.push(achievement);
+    }
+
+    removeAchievement(achievementId) {
+        let index = this.#achievements.findIndex(ach => ach.id === achievementId);
+
+        if(index < 0) {
+            throw new Error(achievementId + " not found in list of achievements")
+        }
+
+        this.#achievements.splice(index, 1);
+    }
 }

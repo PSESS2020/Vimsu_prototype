@@ -84,7 +84,7 @@ class ChatListView extends WindowView {
             var chat = this.#getChat(chatID);
             if(chat != undefined) {
                 chat.timestamp = message.timestamp;
-                chat.previewUsername = message.sender: // might be wrong
+                chat.previewUsername = message.sender; // might be wrong
                 chat.previewMessage = message.text; // need to be shortened
                 this.draw(this.#chats);
             } else {

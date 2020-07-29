@@ -1,6 +1,6 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('./Position.js');
-const Direction = require('./Direction.js');
+const Direction = require('../../utils/Direction.js');
 
 module.exports = class Door {
 

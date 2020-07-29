@@ -1,8 +1,6 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 const Lecture = require('../models/Lecture')
-const Orator = require('../models/Orator')
-const AccountService = require('../../../../website/services/AccountService')
 
 var vimsudb;
 async function getDB() {

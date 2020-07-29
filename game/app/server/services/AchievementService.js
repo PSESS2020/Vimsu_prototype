@@ -1,7 +1,6 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var AchievementDefinition = require('../models/AchievementDefinition.js');
 var TypeOfTask = require('../../utils/TypeOfTask');
-const Achievement = require('../models/Achievement.js');
 
 module.exports = class AchievementService {
     #achievementDefinitions;
@@ -50,52 +49,53 @@ module.exports = class AchievementService {
     initAllAchievements() {
         var id = 0;
 
-        this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(id++, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 15},
             { count: 10, color: '#C9B037', points: 15}
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(id++, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend other participants to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(2, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend other participants to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 100},
             { count: 10, color: '#C9B037' , points: 100}
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(id++, TypeOfTask.FOODCOURTVISIT, "Coffee Time", "coffee", "Visit food court room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(3, TypeOfTask.FOODCOURTVISIT, "Coffee Time", "coffee", "Visit food court room to gain this achievement.", [
             { count: 1, color: '#C9B037' , points: 10},
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.FOYERVISIT] = new AchievementDefinition(id++, TypeOfTask.FOYERVISIT, "New World", "globe", "Visit foyer room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.FOYERVISIT] = new AchievementDefinition(4, TypeOfTask.FOYERVISIT, "New World", "globe", "Visit foyer room to gain this achievement.", [
             { count: 1, color: '#C9B037' , points: 10},
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(id++, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Interact with other participants to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(5, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Interact with other participants to gain this achievement.", [
             { count: 5, color: '#D7D7D7' , points: 50},
             { count: 10, color: '#C9B037', points: 50}
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.LECTUREVISIT] = new AchievementDefinition(id++, TypeOfTask.LECTUREVISIT, "Good Listener", "headphones", "Stay till the end of lectures to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.LECTUREVISIT] = new AchievementDefinition(6, TypeOfTask.LECTUREVISIT, "Good Listener", "headphones", "Stay till the end of lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7' , points: 200},
             { count: 10, color: '#C9B037', points: 200}
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.BASICTUTORIALCLICK] = new AchievementDefinition(id++, TypeOfTask.BASICTUTORIALCLICK, "First Greeting", "info", "Click on the NPC in the reception room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.BASICTUTORIALCLICK] = new AchievementDefinition(7, TypeOfTask.BASICTUTORIALCLICK, "First Greeting", "info", "Click on the NPC in the reception room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15},
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(id++, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
+            { count: 1, color: '#C9B037', points: 10},
+        ]);
+
+        this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "cutlery", "Click on the NPC in the food court room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15},
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(id++, TypeOfTask.CHEFCLICK, "Cooking Guru", "cutlery", "Click on the NPC in the food court room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(10, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15},
         ]);
         
-        this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(id++, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
-            { count: 1, color: '#C9B037', points: 10},
-        ]);
     }
 
-    computeAchievements(participant) {
+    getAllAchievements(participant) {
         var taskTypeCountMapping = participant.getTaskTypeMappingCounts();
         var achievements = [];
 
@@ -109,6 +109,12 @@ module.exports = class AchievementService {
 
             achievements.push(achievementDefinition.computeAchievement(currentLevel))
         });
+
+        return achievements;
+    }
+
+    computeAchievements(participant) {
+        var achievements = this.getAllAchievements(participant);
 
         var newAchievements = [];
         for (var i = 0; i < achievements.length; i++) {

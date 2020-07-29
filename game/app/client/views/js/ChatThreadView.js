@@ -60,7 +60,7 @@ class ChatThreadView extends WindowView {
     };
     
     #update = function(messages) {
-        this.#messages.forEach( (message) => {
+        messages.forEach( (message) => {
             /* Clear view to make sure we don't draw anything twice */
             $('#chatListModal .modal-body .list-group').empty()
             
