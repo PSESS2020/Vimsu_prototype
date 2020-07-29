@@ -655,7 +655,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID) => {
+            socket.on('getFriendList', (ppantID, isInviteFriends) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -676,7 +676,7 @@ module.exports = class ServerController {
                     )
                 });
 
-                socket.emit('friendList', friendListData);
+                socket.emit('friendList', friendListData, isInviteFriends);
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {

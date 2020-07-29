@@ -476,13 +476,16 @@ class ClientController {
     }
 
     //Is called after server send the answer of friendlistclick
-    handleFromServerFriendList(friendListData) {
+    handleFromServerFriendList(friendListData, isInviteFriends) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
-
-        this.#gameView.initFriendListView(friendList);
+        if(isInviteFriends) {
+            this.#gameView.initInviteFriendsView(friendList);
+        } else {
+            this.#gameView.initFriendListView(friendList);
+        }
     }
 
     //Is called after server send the answer of friendrequestlistclick
@@ -646,9 +649,9 @@ class ClientController {
     }
 
     //called after click on friendlist button
-    handleFromViewShowFriendList() {
+    handleFromViewShowFriendList(isInviteFriends) {
         this.socketReady;
-        this.socket.emit('getFriendList', this.#ownParticipant.getId());
+        this.socket.emit('getFriendList', this.#ownParticipant.getId(), isInviteFriends);
     }
 
     //called after click on friendrequestlist button
@@ -746,8 +749,9 @@ class ClientController {
         this.socket.emit('createNewChat', creatorId, participantId);
     }
 
-    handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
+    handleFromViewCreateNewGroupChat(participantIdList) {
         this.socketReady
+        var creatorId = this.#ownParticipant.getId();
         this.socket.emit('createNewGroupChat', creatorId, participantIdList);
     }
 
