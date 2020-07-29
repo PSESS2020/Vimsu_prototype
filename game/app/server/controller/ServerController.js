@@ -6,7 +6,7 @@ const socketio = require('socket.io');
 const path = require('path');
 
 const Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');
+const Direction = require('../../utils/Direction.js');
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -14,7 +14,7 @@ const ParticipantController = require('./ParticipantController.js');
 const Room  = require('../models/Room.js');
 const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
-const TypeOfRoom = require('../models/TypeOfRoom.js');
+const TypeOfRoom = require('../../utils/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 const Commands = require('../../utils/Commands.js');
 const Door = require('../models/Door.js');
@@ -239,16 +239,16 @@ module.exports = class ServerController {
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
 
-                    this.ppants.forEach((ppant, id, map) => {
+                    this.ppants.forEach((participant, id, map) => {
                     
-                        if(id != ppant.getId() && ppant.getPosition().getRoomId() === currentRoomId) {
+                        if(id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
 
-                            var username = ppant.getBusinessCard().getUsername();
+                            var username = participant.getBusinessCard().getUsername();
 
-                            var tempPos = ppant.getPosition();
+                            var tempPos = participant.getPosition();
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
-                            var tempDir = ppant.getDirection();
+                            var tempDir = participant.getDirection();
 
                             this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
@@ -1266,7 +1266,7 @@ module.exports = class ServerController {
         newAchievements.forEach(ach => {
             socket.emit('newAchievement', ach); 
             
-            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, ach.awardPoints).then(res => {
+            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color).then(res => {
                 console.log('level of ' + ach.id + ' updated') 
             }).catch(err => {
                 console.error(err);

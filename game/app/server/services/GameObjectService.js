@@ -1,8 +1,7 @@
 var GameObject = require('../models/GameObject.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
-var TypeOfRoom = require('../models/TypeOfRoom.js');
-var RoomDimensions = require('../models/RoomDimensions.js');
+var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 
 module.exports = class GameObjectService {
 

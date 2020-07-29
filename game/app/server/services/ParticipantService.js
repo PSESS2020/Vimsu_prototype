@@ -69,19 +69,50 @@ module.exports = class ParticipantService {
 
                         var achievements = [];
 
-                        par.achievements.forEach(ach => {
+                        /*par.achievements.forEach(ach => {
                             achievements.push(new Achievement(ach.id, ach.title, ach.icon,
                                 ach.description, ach.currentLevel, ach.color,
                                 ach.awardPoints, ach.maxLevel, ach.taskType))
-                        })
+                        })*/
 
                         participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
                             account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
                             account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
                             new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
-                            achievements, new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
+                            [], new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
 
-                        return participant;
+                        let achievementService = new AchievementService();
+
+                        var ppantAchievements = achievementService.getAllAchievements(participant);
+
+                        par.achievements.forEach(achievement => {
+                            let idx = ppantAchievements.findIndex(ach => ach.id === achievement.id);
+
+                            if(idx > -1) {
+                                achievements.push(new Achievement(achievement.id, ppantAchievements[idx].title, ppantAchievements[idx].icon,
+                                    ppantAchievements[idx].description, achievement.currentLevel, achievement.color, ppantAchievements[idx].awardPoints,
+                                    ppantAchievements[idx].maxLevel, ppantAchievements[idx].getTaskType()));
+                            }
+                        })
+
+                        participant.setAchievements(achievements);
+
+                        return Promise.all(ppantAchievements.map(async achievement => {
+                            let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
+
+                            if(index < 0) {
+                                participant.addAchievement(achievement);
+                                var achievementData = 
+                                [{
+                                    id: achievement.id,
+                                    currentLevel: achievement.currentLevel,
+                                    color: achievement.color,
+                                }] 
+                                const res = await this.storeAchievements(participant.getId(), Settings.CONFERENCE_ID, achievementData);
+                            }
+                        })).then(res => {
+                            return participant;
+                        })
                     });
                 }
             
@@ -121,14 +152,8 @@ module.exports = class ParticipantService {
                                 achievementsData.push(
                                     {
                                         id: ach.id,
-                                        title: ach.title,
-                                        icon: ach.icon,
-                                        description: ach.description,
                                         currentLevel: ach.currentLevel,
                                         color: ach.color,
-                                        awardPoints: ach.awardPoints,
-                                        maxLevel: ach.maxLevel,
-                                        taskType: ach.getTaskType()
                                     },
                                 )
                             })
@@ -283,7 +308,21 @@ module.exports = class ParticipantService {
         })
     }
 
-    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color, awardPoints) {
+    static deleteAchievement(participantId, conferenceId, achievementId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {achievements: {id: achievementId}}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            })
+        })
+    }
+
+    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
@@ -291,7 +330,7 @@ module.exports = class ParticipantService {
 
         return getDB().then(res => {
             return vimsudb.updateOneToCollection("participants_" + conferenceId, {participantId: participantId, 'achievements.id': achievementId}, 
-            {'achievements.$.currentLevel': level, 'achievements.$.color': color, 'achievements.$.awardPoints': awardPoints}).then(res => {
+            {'achievements.$.currentLevel': level, 'achievements.$.color': color}).then(res => {
                 return true;
             }).catch(err => {
                 console.error(err);

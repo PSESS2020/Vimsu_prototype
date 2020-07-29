@@ -1,4 +1,4 @@
-const Direction = require('../server/models/Direction')
+const Direction = require('./Direction')
 
 module.exports = Object.freeze
 ({

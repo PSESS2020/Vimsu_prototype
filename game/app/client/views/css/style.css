@@ -248,6 +248,10 @@ body::-webkit-scrollbar {
   height: 30%;
 }
 
+.globalChatWindow::-webkit-scrollbar {
+  display:none
+}
+
 .globalChatWindowHeader {
   background-color: rgba(24, 30, 32, 1);
   position: sticky;

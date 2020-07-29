@@ -1,6 +1,6 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('./Position.js');
-var Direction = require('./Direction.js');
+var Direction = require('../../utils/Direction.js');
 var Participant = require('./Participant.js');
 
 module.exports = class Orator extends Participant {

@@ -1,8 +1,8 @@
 const NPC = require('../models/NPC.js');
 const Position = require('../models/Position.js');
-const Direction = require('../models/Direction.js');
+const Direction = require('../../utils/Direction.js');
 const TypeChecker = require('../../utils/TypeChecker.js');
-const TypeOfRoom = require('../models/TypeOfRoom.js');
+const TypeOfRoom = require('../../utils/TypeOfRoom.js');
 
 module.exports = class NPCService {
     
