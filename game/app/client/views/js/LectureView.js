@@ -4,6 +4,7 @@ class LectureView extends WindowView {
     #lectureStatus;
     #hasToken;
     #lectureId;
+    #timeLeft;
 
     constructor() {
         super();
@@ -100,6 +101,12 @@ class LectureView extends WindowView {
 
         $('#lectureVideo').empty();
         $('#lectureVideo').append(`
+            <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                <div id="countdown"></div>
+                <div>seconds left till the</div>
+                <div>presentation starts</div>
+            </div>
+            <div id="lectureFinished" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1052; padding: 15%;">The Presentation is Over</div>
             <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
 
@@ -116,22 +123,36 @@ class LectureView extends WindowView {
             video.pause();
 
             var lectureStartingTime = Date.now() + 20000; // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
+
+
             var lectureDuration = video.duration * 1000; //duration of the lecture in milliseconds
 
             this.#timerIntervalId = setInterval(() => {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
+                    $('#lectureFinished').hide();
+                    $('#lecturePending').show();
                     this.#lectureStatus = LectureStatus.PENDING;
-                    console.log("Waiting for the lecture to start.")
+
+                    var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
+                    if (this.#timeLeft !== newTimeLeft) {
+                        this.#timeLeft = newTimeLeft;
+                        $('#countdown').empty()
+                        $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
+                    }
+                    
+
                     video.pause();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
+                    $('#lecturePending').hide();
+                    $('#lectureFinished').hide();
                     this.#lectureStatus = LectureStatus.RUNNING;
-                    console.log("Lecture is running.")
                     video.play();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
+                    $('#lecturePending').hide();
+                    $('#lectureFinished').show();
                     this.#lectureStatus = LectureStatus.OVER;
-                    console.log("Lecture is finished.")
                 }
             }, 100); // check lecture status every 100ms
         });
