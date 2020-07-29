@@ -26,6 +26,7 @@ module.exports = class Chatservice {
     //tested
     static newOneToOneChat(ownerId, chatPartnerId, conferenceId) {
         TypeChecker.isString(ownerId);
+        TypeChecker.isString(conferenceId);
         TypeChecker.isString(chatPartnerId);
 
         return getDB().then(res => {
@@ -36,10 +37,14 @@ module.exports = class Chatservice {
                 messageList: [],
             }
 
-            return vimsudb.insertOneToCollection("chats_" + conferenceId , chat).then(res => {
+            return vimsudb.insertOneToCollection("chats_" + conferenceId, chat).then(res => {
 
                 console.log("oneToOne chat saved");
-                return new OneToOneChat(chat.chatId, chat.memberId[0], chat.memberId[1], chat.messageList, Settings.MAXNUMMESSAGES_ONETOONECHAT);
+                return new OneToOneChat(chat.chatId, 
+                                        chat.memberId[0], 
+                                        chat.memberId[1], 
+                                        chat.messageList, 
+                                        Settings.MAXNUMMESSAGES_ONETOONECHAT);
             
             }).catch(err => {
                 console.error(err);
@@ -50,15 +55,13 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static newGroupChat(ownerId, memberIds, groupName) {
+    static newGroupChat(ownerId, memberIds, groupName, conferenceId) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(groupName);
         TypeChecker.isInstanceOf(memberIds, Array);
+        TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            
-            var chatId = new ObjectId().toString();
-            //var groupChat = new GroupChat(chatId, ownerId, memberIds);
             
             var chat = {
                 chatId: new ObjectId().toString(),
@@ -68,10 +71,16 @@ module.exports = class Chatservice {
                 messageList: [],
             }
 
-            return vimsudb.insertOneToCollection("chats_" + ownerId , chat).then(res => {
+            return vimsudb.insertOneToCollection("chats_" + conferenceId, chat).then(res => {
 
                 console.log("group chat saved");
-                //return groupChat;
+                return new GroupChat(chat.chatId, 
+                                    chat.ownerId, 
+                                    chat.name, 
+                                    chat.participantList, 
+                                    chat.messageList, 
+                                    Settings.MAXGROUPPARTICIPANTS,
+                                    Settings.MAXNUMMESSAGES_GROUPCHAT);
 
             }).catch(err => {
                 console.error(err)
@@ -83,12 +92,13 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static existsOneToOneChat(ownerId, memberId) {
+    static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
         TypeChecker.isString(ownerId);
-        TypeChecker.isString(memberId);
+        TypeChecker.isString(chatPartnerId);
+        TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("chats_" + ownerId , {memberId: memberId}, "").then(chat => {
+            return vimsudb.findOneInCollection("chats_" + conferenceId , {memberId: chatPartnerId}, "").then(chat => {
                 if (chat) {
                     return chat;
                 }
@@ -118,9 +128,19 @@ module.exports = class Chatservice {
             chatIDList.forEach(chatId => {
                 vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(chat => {
                     if (chat.hasOwnProperty('ownerId')) {
-                        chats.push(new GroupChat(chat.chatId, chat.ownerId, chat.chatName, chat.participantList, chat.messageList, Settings.MAXGROUPPARTICIPANTS, Settings.MAXNUMMESSAGES_GROUPCHAT));
+                        chats.push(new GroupChat(chat.chatId, 
+                                                chat.ownerId, 
+                                                chat.chatName, 
+                                                chat.participantList, 
+                                                chat.messageList, 
+                                                Settings.MAXGROUPPARTICIPANTS, 
+                                                Settings.MAXNUMMESSAGES_GROUPCHAT));
                     } else {
-                        chats.push(new OneToOneChat(chat.chatId, chat.memberId[0], chat.memberId[1], chat.messageList, Settings.MAXNUMMESSAGES_ONETOONECHAT));
+                        chats.push(new OneToOneChat(chat.chatId, 
+                                                    chat.memberId[0], 
+                                                    chat.memberId[1], 
+                                                    chat.messageList, 
+                                                    Settings.MAXNUMMESSAGES_ONETOONECHAT));
                     }
             
                 }).catch(err => {
