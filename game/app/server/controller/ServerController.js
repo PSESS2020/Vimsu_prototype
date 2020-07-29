@@ -660,7 +660,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID, isInviteFriends) => {
+            socket.on('getFriendList', (ppantID, isInviteFriends, groupName) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -681,7 +681,7 @@ module.exports = class ServerController {
                     )
                 });
 
-                socket.emit('friendList', friendListData, isInviteFriends);
+                socket.emit('friendList', friendListData, isInviteFriends, groupName);
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
@@ -749,7 +749,7 @@ module.exports = class ServerController {
                 }
             });
 
-            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList) => {
+            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList, groupName) => {
                 //TODO
             });
             

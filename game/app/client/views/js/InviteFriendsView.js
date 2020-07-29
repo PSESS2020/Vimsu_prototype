@@ -6,7 +6,7 @@ class InviteFriendsView extends WindowView {
         super()
     }
 
-    draw(businessCards) {
+    draw(businessCards, groupName) {
         $('#inviteFriendsModal .modal-body .list-group').empty()
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.#businessCards = sortedBusinessCards;
@@ -49,8 +49,10 @@ class InviteFriendsView extends WindowView {
                         $('#selected' + '${businessCard.getParticipantId()}').show();
                     })
                     $('#createGroupChat').on('click', function (event) {
-                        $('#inviteFriendsModal').modal('hide');
-                        new EventManager().handleCreateGroupChat(invitedFriends);
+                        if(invitedFriends.length > 0) {
+                            $('#inviteFriendsModal').modal('hide');
+                            new EventManager().handleCreateGroupChat(invitedFriends, '${groupName}');
+                        }
                     })
                 </script>
             `)
