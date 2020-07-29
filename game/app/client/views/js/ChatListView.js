@@ -32,10 +32,8 @@ class ChatListView extends WindowView {
                         <div class="col-12 col-md-9 text-center text-sm-left">
                             <label class="name lead">${chat.title}</label>
                             <br> 
-                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
                             <span >${"[" + chat.timestamp + "]" + chat.previewUsername + ": "}</span>
                             <br>
-                            <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
                             <span class="small">${chat.previewMessage}</span>
                         </div>  
                     </div>
