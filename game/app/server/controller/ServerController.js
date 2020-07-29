@@ -924,7 +924,7 @@ module.exports = class ServerController {
                      * the client to immediately open the chatThreadView of the new chat 
                      * so that the creator can start sending messages.
                      * - (E) */
-                    this.#io.to(socket.id).emit('newChat', /* chatData */, true);
+                    this.#io.to(socket.id).emit('newChat', /* chatData */ true);
                 });
             });
             
