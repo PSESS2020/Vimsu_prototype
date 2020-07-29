@@ -741,6 +741,7 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
+                    console.log('ssss' + chat.getMessageL().length);
                     if (chat.getMessageL().length > 0) {
                         var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
                         var previewText = lastMessage.getMessageText();
@@ -777,9 +778,9 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (chatID) => {
                 var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatId)){
+                if(participant.isMemberOfChat(chatID)){
                     // Load chat-data into chatData field
-                    var chat = participant.getChat(chatId);
+                    var chat = participant.getChat(chatID);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageL().forEach( (message) => {
