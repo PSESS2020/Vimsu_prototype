@@ -1,22 +1,33 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
+const Participant = require('./Participant.js');
 
 module.exports = class Chat {
     #chatId;
-    #ownerId;
+    //#ownerId;
     #participantList;
     #messageList;
     #maxNumMessages;
 
-    constructor(chatId, ownerId) {
+    constructor(chatId, participantList, messageList, maxNumMessages) {
         TypeChecker.isString(chatId);
-        TypeChecker.isString(ownerId);
+        TypeChecker.isInstanceOf(participantList, Array);
+        participantList.forEach(participantID => {
+            TypeChecker.isString(participantID);
+        })
+        TypeChecker.isInstanceOf(messageList, Array);
+        messageList.forEach(message => {
+            TypeChecker.isString(message, String);
+        });
+        TypeChecker.isInt(maxNumMessages);
 
         this.#chatId = chatId;
-        this.#ownerId = ownerId;
-        
+        this.#participantList = participantList;
+        this.#maxNumMessages = maxNumMessages;
+        /*
         this.#messageList = []; // creating an empty message list
         this.#participantList = []; // creating an empty participant list
         this.#participantList.push(ownerId);
+        */
         
         /* instead of several constructors, we could write a wrapper method
          * in the service-class or somewhere that creates a new chat and then

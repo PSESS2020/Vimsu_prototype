@@ -3,18 +3,14 @@ var Chat = require('./Chat.js');
 
 module.exports = class OneToOneChat extends Chat{
     
-    #chatName;
-    #sentStatus;
-    #memberId;
+    //#chatName;
+    //#sentStatus;
+    //#memberIds;
     #messageList;
 
-    constructor(chatId, chatName, sentStatus, memberId, messageList) {
-        super(chatId, ownerId);
-
-        this.#chatName = chatName;
-        this.#sentStatus = sentStatus;
-        this.#memberId = memberId;
-        this.#messageList = messageList;
+    constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages) {
+        super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
+        
     }
 
     //Adds a message to the message list.
@@ -27,17 +23,21 @@ module.exports = class OneToOneChat extends Chat{
         this.#messageList.push(msg);
     }
 
+    /*
     isSent() {
         return this.#sentStatus;
     }
+    
 
     getChatName() {
         return this.#chatName;
     }
+    
 
     getReceiverName() {
         return this.#memberId;
     }
+    
 
     sendRequest(senderId) {
         //TODO
@@ -57,5 +57,6 @@ module.exports = class OneToOneChat extends Chat{
         TypeChecker.isString(memberId);
         this.#memberId = memberId;
     }
+    */
 
 }

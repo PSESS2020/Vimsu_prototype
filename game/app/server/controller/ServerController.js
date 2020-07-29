@@ -702,6 +702,31 @@ module.exports = class ServerController {
 
                 socket.emit('friendRequestList', friendRequestListData);
             });
+
+            //Called whenever a ppant creates a new 1:1 chat (P)
+            socket.on('createNewChat', (creatorID, chatPartnerID) => {
+                //creates new chat and writes it in DB
+                ChatService.newOneToOneChat(creatorID, chatPartnerID).then(chat => {
+                    let creator = this.ppants.get(creatorID);
+                    let chatPartner = this.ppants.get(chatPartnerID);
+                    
+                    //check if creator is online
+                    if (creator !== undefined) {
+                        creator.addChat(chat);
+                    }
+
+                    //check if chatPartner is online
+                    if (chatPartner !== undefined) {
+                        chatPartner.addChat(chat);
+                    }
+                    
+                    /* Tell the creator's client to create a new chat. The true tells
+                     * the client to immediately open the chatThreadView of the new chat 
+                     * so that the creator can start sending messages.
+                     * - (E) */
+                    this.#io.to(socket.id).emit('newChat', /* chatData */ true);
+                });
+            });
             
             
             /* Technically speaking, the client should not send the id to the
@@ -786,11 +811,7 @@ module.exports = class ServerController {
                     this.#io.in(chat.getId()).emit('newChatMessage', chatID, msgToEmit);
                 }
             });
-            
-            // TODO
-            // Handling for creating a new chat.
-             
-
+        
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
                 let target = this.ppants.get(targetID);
@@ -902,40 +923,7 @@ module.exports = class ServerController {
                 
                 socket.emit('showNPCStory', name, story);
             });
-
-            //Called whenever a ppant creates a new 1:1 chat (P)
-            socket.on('createNewChat', (creatorID, chatPartnerID) => {
-                //creates new chat and writes it in DB
-                ChatService.newOneToOneChat(creatorID, chatPartnerID).then(chat => {
-                    let creator = this.ppants.get(creatorID);
-                    let chatPartner = this.ppants.get(chatPartnerID);
-                    
-                    //check if creator is online
-                    if (creator !== undefined) {
-                        creator.addChat(chat);
-                    }
-
-                    //check if chatPartner is online
-                    if (chatPartner !== undefined) {
-                        chatPartner.addChat(chat);
-                    }
-                    
-                    /* Tell the creator's client to create a new chat. The true tells
-                     * the client to immediately open the chatThreadView of the new chat 
-                     * so that the creator can start sending messages.
-                     * - (E) */
-                    this.#io.to(socket.id).emit('newChat', /* chatData */ true);
-                });
-            });
             
-            /* Should no longer be needed as it has been implemented elsewhere.
-             * - (E) */
-            socket.on('newMessage', (sendDateTime, senderID, chatID, messageText) => {
-                
-
-            });
-
-
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
             socket.on('disconnect', () => {

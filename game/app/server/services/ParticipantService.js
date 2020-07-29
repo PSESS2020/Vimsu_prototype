@@ -34,11 +34,11 @@ module.exports = class ParticipantService {
         return getDB().then(res => {
             return this.getParticipant(accountId, conferenceId).then(par => {
                 var participant;
-                
 
                 if(par) {
                     //Get Chats
-                    return ChatService.loadChatList(par.participantId, conferenceId).then(async chatList => {
+                    return ChatService.loadChatList(par.chatIDList, conferenceId).then(async chatList => {
+                        console.log(chatList[0]);
                         let friendList = [];
                         let friendRequestListReceived = [];
                         let friendRequestListSent = [];
@@ -134,6 +134,7 @@ module.exports = class ParticipantService {
                         achievements: [],
                         isModerator: false,
                         points: 0,
+                        chatIDList: []
                     }
 
                     //Write new ppant in DB
@@ -337,5 +338,13 @@ module.exports = class ParticipantService {
                 return false;
             })
         })
+    }
+
+    static addChatID(participantId, chatId, conferenceId) {
+
+    }
+
+    static removeChatID(participantId, chatId, conferenceId) {
+
     }
 } 
