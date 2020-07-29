@@ -741,19 +741,31 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    var lastMessage = chat.getMessageL()[--chat.getMessageL().length];
-                    var previewText = lastMessage.getMessageText();
-                    if(previewText.length > 60) {
-                        previewText = previewText.slice(0, 50) + ". . . ";
-                    } 
-                    chatData.push({
-                        // Get some superficial chat data
-                        title: chat.getTitle(),
-                        chatId: chat.getId(),
-                        timestamp: lastMessage.getTimestamp(),
-                        previewUsername: lastMessage.getUsername(),
-                        previewMessage: previewText
-                    });
+                    if (chat.getMessageL().length > 0) {
+                        var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
+                        var previewText = lastMessage.getMessageText();
+                        if(previewText.length > 60) {
+                            previewText = previewText.slice(0, 50) + ". . . ";
+                        } 
+                        chatListData.push({
+                            // Get some superficial chat data
+                            title: chat.getTitle(),
+                            chatId: chat.getId(),
+                            timestamp: lastMessage.getTimestamp(),
+                            previewUsername: lastMessage.getUsername(),
+                            previewMessage: previewText
+                        });
+                    } else {
+                        chatListData.push({
+                            // Get some superficial chat data
+                            title: '',
+                            chatId: '',
+                            timestamp: '',
+                            previewUsername: '',
+                            previewMessage: ''
+                        });
+                    }
+  
                 });
                 this.#io.to(socket.id).emit('chatList', chatListData);
             });

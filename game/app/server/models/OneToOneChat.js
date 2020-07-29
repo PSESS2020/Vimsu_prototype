@@ -6,7 +6,7 @@ module.exports = class OneToOneChat extends Chat{
     //#chatName;
     //#sentStatus;
     //#memberIds;
-    #messageList;
+    //#messageList;
 
     constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages) {
         super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
@@ -17,10 +17,10 @@ module.exports = class OneToOneChat extends Chat{
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(this.#messageList.length >= super.getMaxNumMessages())
-            this.#messageList.splice(0, super.getMaxNumMessages());
+        if(super.getMessageL().length >= super.getMaxNumMessages())
+            super.getMessageL().splice(0, super.getMaxNumMessages());
 
-        this.#messageList.push(msg);
+        super.getMessageL().push(msg);
     }
 
     /*

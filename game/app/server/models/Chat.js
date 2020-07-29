@@ -23,6 +23,7 @@ module.exports = class Chat {
         this.#chatId = chatId;
         this.#participantList = participantList;
         this.#maxNumMessages = maxNumMessages;
+        this.#messageList = messageList;
         /*
         this.#messageList = []; // creating an empty message list
         this.#participantList = []; // creating an empty participant list
