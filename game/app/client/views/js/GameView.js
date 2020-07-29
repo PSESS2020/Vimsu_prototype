@@ -538,6 +538,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#chatThreadView = new ChatThreadView().draw(chat);
     };
     
+    addNewChat(chat, openNow) {
+        this.initChatThreadView(chat);
+        if(openNow) {
+            $('#chatThreadModal').modal('show');
+        }
+    };
+    
     addNewChatMessage(chatId, message) {
         this.#chatListView.addNewMessage(chatId, message);
         this.#chatThreadView.addNewMessage(chatId, message);

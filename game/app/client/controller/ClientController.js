@@ -580,8 +580,8 @@ class ClientController {
      * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
-    handleFromServerNewChat() {
-        this.#gameView.addNewChat(/* TODO necessary info */);
+    handleFromServerNewChat(chat, openNow) {
+        this.#gameView.addNewChat(chat, openNow);
     };
     
     handleFromServerNewChatMessage(chatId, message) {
@@ -755,12 +755,6 @@ class ClientController {
         this.socket.emit('newChatMessage', chatId, messageText);
     }
     
-    /* We really need two functions here.
-     * One to display the interface that allows a user to create a new chat.
-     * One to actually request the server to create the new chat.
-     * 
-     * The functions further upwards will later be deleted.
-     * - (E) */
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {

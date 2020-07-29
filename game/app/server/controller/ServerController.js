@@ -919,10 +919,17 @@ module.exports = class ServerController {
                     if (chatPartner !== undefined) {
                         chatPartner.addChat(chat);
                     }
-
+                    
+                    /* Tell the creator's client to create a new chat. The true tells
+                     * the client to immediately open the chatThreadView of the new chat 
+                     * so that the creator can start sending messages.
+                     * - (E) */
+                    this.#io.to(socket.id).emit('newChat', /* chatData */, true);
                 });
             });
-
+            
+            /* Should no longer be needed as it has been implemented elsewhere.
+             * - (E) */
             socket.on('newMessage', (sendDateTime, senderID, chatID, messageText) => {
                 
 

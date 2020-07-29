@@ -15,14 +15,14 @@ class ChatThreadView extends WindowView {
     }
     
     draw(chat) {
-        /* Clear view to make sure we don't draw anything twice */
-        $('#chatListModal .modal-body .list-group').empty()
-        
         /* Get all the messages and draw them */
         this.#chatId = chat.chatId;
         this.#messages = chat.messages;
         $('#chatThreadModalHeader').empty();
         $('#chatThreadModalHeader').text(chat.title);
+        
+        //draw the messages
+        this.#update(this.#messages);
         
         var script = `
             <script>
@@ -41,8 +41,23 @@ class ChatThreadView extends WindowView {
             </script>
         `;
         
-        // TODO: draw the messages
+        // Actually display the chat thread
+        $('#chatListModal').model('show');  
+        
+    };
+    
+    addNewMessage(chatId, message) {
+        if(chatId != this.#chatId) {
+            return;
+        }
+        this.#messages.push(message);
+        this.#update(this.#messages);
+    };
+    
+    #update = function(messages) {
         this.#messages.forEach( (message) => {
+            /* Clear view to make sure we don't draw anything twice */
+            $('#chatListModal .modal-body .list-group').empty()
             
             // TODO
             // Draw the message slightly different if the client did send them
@@ -69,16 +84,7 @@ class ChatThreadView extends WindowView {
             
             $('#chatListModal .modal-body .list-group').prepend(messageDiv);
             
-        });  
-        
-    };
-    
-    addNewMessage(chatId, message) {
-        if(chatId != this.#chatId) {
-            return;
-        }
-        this.#messages.push(message);
-        this.draw(this.#messages);
-    };
+        });
+    }
     
 }
