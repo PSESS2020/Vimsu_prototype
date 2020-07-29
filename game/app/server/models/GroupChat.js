@@ -7,6 +7,7 @@ module.exports = class GroupChat extends Chat {
     #participantList;
     #messageList;
     #maxParticipants;
+    #ownerId;
 
     constructor(chatId, ownerId, chatName, participantList, messageList, maxParticipants, maxNumMessages) {
         super(chatId, participantList, messageList, maxNumMessages);
@@ -17,8 +18,7 @@ module.exports = class GroupChat extends Chat {
         TypeChecker.isInt(maxParticipants);
 
         this.#chatName = chatName;
-        //this.#participantList = participantList;
-        //this.#messageList = messageList;
+        this.#ownerId = ownerId;
         this.#maxParticipants = maxParticipants;
     }
 
@@ -28,6 +28,10 @@ module.exports = class GroupChat extends Chat {
 
     getChatName() {
         return this.#chatName;
+    }
+    
+    getOwnerId() {
+        return this.#ownerId;
     }
 
     setName(chatName) {

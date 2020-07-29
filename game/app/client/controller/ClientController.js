@@ -749,10 +749,10 @@ class ClientController {
         this.socket.emit('createNewChat', creatorId, participantId);
     }
 
-    handleFromViewCreateNewGroupChat(participantIdList) {
+    handleFromViewCreateNewGroupChat(chatName, participantIdList) {
         this.socketReady
         var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewGroupChat', creatorId, participantIdList);
+        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
     }
 
     handleFromViewNewMessage(chatId, messageText) {

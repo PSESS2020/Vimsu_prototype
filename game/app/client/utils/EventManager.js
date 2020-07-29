@@ -104,8 +104,8 @@ class EventManager {
     
     /* One function to create a new group chat
      * - (E) */
-    handleCreateGroupChat(participantIdList) {
-        this.#clientController.handleFromViewCreateNewGroupChat(participantIdList)
+    handleCreateGroupChat(chatName, participantIdList) {
+        this.#clientController.handleFromViewCreateNewGroupChat(chatName, participantIdList)
     }
      
     /* One function to send a new message in a chat.
