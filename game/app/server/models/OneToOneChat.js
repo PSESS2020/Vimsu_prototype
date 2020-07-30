@@ -40,6 +40,18 @@ module.exports = class OneToOneChat extends Chat{
         }
     }
 
+    getOtherUserId(ownUsername) {
+        if (ownUsername !== this.#creatorUsername && ownUsername !== this.#chatPartnerUsername) {
+            return new Error(ownUsername + ' is not in ppantList of this chat!');
+        }
+
+        if (ownUsername === this.#creatorUsername) {
+            return super.getParticipantList()[1];
+        } else {
+            return super.getParticipantList()[0];
+        }
+    }
+
     /*
     isSent() {
         return this.#sentStatus;

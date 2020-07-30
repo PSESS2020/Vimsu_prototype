@@ -715,6 +715,8 @@ module.exports = class ServerController {
             socket.on('createNewChat', (creatorID, chatPartnerID, chatPartnerUsername) => {
                 let creator = this.ppants.get(creatorID);
                 let chatPartner = this.ppants.get(chatPartnerID);
+
+                let areFriends = creator.hasFriend(chatPartnerID);
                 
                 console.log(!creator.hasChatWith(chatPartnerID));
                 //check if chat already exists, only create one if not
@@ -750,7 +752,10 @@ module.exports = class ServerController {
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
                             previewMessage: '',
-                            messages: []
+                            areFriends: areFriends,
+                            partnerId: chatPartnerID,
+                            messages: [],
+                            
                         };
 
                         /* Tell the creator's client to create a new chat. The true tells
@@ -764,7 +769,9 @@ module.exports = class ServerController {
                         let chatData = {
                             title: chatPartnerUsername,
                             chatId: chat.chatId,
-                            messages: chat.messageList
+                            areFriends: areFriends,
+                            partnerId: chatPartnerID,
+                            messages: chat.messageList,
                         }
 
                         if (chatPartner !== undefined) {
@@ -927,6 +934,8 @@ module.exports = class ServerController {
                         var chatData = {
                             chatId: chat.getId(),
                             title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                            areFriends: participant.hasFriend(chat.getOtherUserId(participant.getBusinessCard().getUsername())),
+                            partnerId: chat.getOtherUserId(participant.getBusinessCard().getUsername()),
                             messages: messageInfoData
                         }
                     } else {
@@ -985,6 +994,8 @@ module.exports = class ServerController {
         
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
+                console.log(`Received friend request from ${requesterID} for ${targetID}.`);
+
                 let target = this.ppants.get(targetID);
                 let requester = this.ppants.get(requesterID);
 

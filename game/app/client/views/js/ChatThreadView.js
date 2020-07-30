@@ -23,6 +23,17 @@ class ChatThreadView extends WindowView {
                 this.sendMessage();
             }
         });
+
+        $('#chatFriendRequestButton').click((event) => {
+            event.preventDefault();
+
+            if (!this.#chat.partnerId) {
+                return;
+            }
+
+            new EventManager().handleSendFriendRequest(this.#chat.partnerId);
+        });
+
     }
 
     sendMessage() {
@@ -35,7 +46,8 @@ class ChatThreadView extends WindowView {
         }
     }
     
-    draw(chat) {
+    draw(chat) { 
+        console.log(JSON.stringify(chat));
         this.#chat = chat;
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();
@@ -46,6 +58,12 @@ class ChatThreadView extends WindowView {
         this.#messages.forEach((message) => {
             this.#appendMessage(message);
         })
+
+        if (!chat.areFriends) {
+            $('#chatFriendRequestButton').show();
+        } else {
+            $('#chatFriendRequestButton').hide();
+        }
     };
     
     addNewMessage(chatId, message) {

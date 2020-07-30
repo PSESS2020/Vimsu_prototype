@@ -156,4 +156,8 @@ class EventManager {
     handleNPCClick(npcId) {
         this.#clientController.handleFromViewGetNPCStory(npcId);
     }
+
+    handleSendFriendRequest(participantRecipientId) {
+        this.#clientController.handleFromViewNewFriendRequest(participantRecipientId);
+    }
 }

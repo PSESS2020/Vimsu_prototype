@@ -700,7 +700,6 @@ class ClientController {
         this.socketReady;
         this.socket.emit('removeFriend', this.#ownParticipant.getId(), friendId);
         this.#gameView.removeFriend(friendId);
-        
     }
 
     handleFromViewLeaveChat(chatId) {

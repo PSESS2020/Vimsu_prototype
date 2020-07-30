@@ -164,7 +164,7 @@ module.exports = class Participant {
      */
     addSentFriendRequest(businessCard) {
         TypeChecker.isInstanceOf(businessCard, BusinessCard);
-        let ppandId = businessCard.getParticipantId();
+        let ppantId = businessCard.getParticipantId();
         if (!this.#sentRequestList.includes(ppantId) && !this.#friendList.includes(ppantId)) {
             this.#sentRequestList.addBusinessCard(businessCard);
         }
@@ -239,6 +239,12 @@ module.exports = class Participant {
         if (this.#friendList.includes(ppantId)) {
             this.#friendList.removeBusinessCard(ppantId);
         }
+    }
+
+    hasFriend(ppantId) {
+        TypeChecker.isString(ppantId);
+        
+        return this.#friendList.includes(ppantId);
     }
 
     removeChat(chatId) {
