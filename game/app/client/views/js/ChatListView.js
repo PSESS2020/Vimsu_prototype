@@ -41,7 +41,8 @@ class ChatListView extends WindowView {
         this.#chats.forEach(chat => {
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
-            <a class="action_button nav-item nav-link" style="color: antiquewhite" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+            
+            <a class="" style="color: antiquewhite" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
                 <ul>
                     <li class="list-group-item bg-transparent" >
                         <div class="row w-100">
@@ -59,6 +60,7 @@ class ChatListView extends WindowView {
                     </li>
                 </ul>
             </a>
+            
             
 
                 <script> 
