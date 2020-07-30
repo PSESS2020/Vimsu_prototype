@@ -920,13 +920,22 @@ module.exports = class ServerController {
                         timestamp: message.getTimestamp(),
                         text: message.getText()});
                     });
-                    var chatData = {
-                        chatId: chat.getId(),
-                        title: chat.getTitle(),
-                        messages: messageInfoData
+
+                    if (chat instanceof OneToOneChat) {
+                        var chatData = {
+                            chatId: chat.getId(),
+                            title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                            messages: messageInfoData
+                        }
+                    } else {
+                        var chatData = {
+                            chatId: chat.getId(),
+                            title: chat.getChatName(),
+                            messages: messageInfoData
+                        }
                     }
                     this.#io.to(socket.id).emit('chatThread', chatData);
-                };
+                }
             });
             
             /* Takes a new message in a chat and sends it to every member in that chat.
