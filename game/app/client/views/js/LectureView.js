@@ -107,15 +107,14 @@ class LectureView extends WindowView {
                 <div>presentation starts</div>
             </div>
             <div id="lectureFinished" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1052; padding: 15%;" class="text-center">The Presentation is Over</div>
-            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src=""></video>
+            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
 
         $('#lectureVideoWindow').show();
         
         
         var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
-        
-        video.src = lecture.videoUrl;
+    
         // set default controls
         video.disablePictureInPicture = true;
         
@@ -178,11 +177,11 @@ class LectureView extends WindowView {
         clearInterval(this.#timerIntervalId);
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
-        var video = $(`#lectureVideo${this.#lectureId}`)[0]
-        video.removeAttribute('src'); // empty source
-        video.load();
         var eventManager = new EventManager();
         eventManager.handleLectureLeft(this.#lectureId, false);
+        /*var video = $(`#lectureVideo${this.#lectureId}`)[0];
+        video.removeAttribute('src'); // empty source
+        video.load();*/
     }
 }
 
