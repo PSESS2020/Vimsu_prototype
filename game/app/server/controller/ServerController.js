@@ -24,7 +24,6 @@ const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
-const Message = require('../models/Message')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../../utils/TypeOfTask.js')
@@ -1117,11 +1116,13 @@ module.exports = class ServerController {
 
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
+                
+                let creator = this.ppants.get(creatorID);
+                let chatPartner = this.ppants.get(chatPartnerID);
                 //creates new chat and writes it in DB
                 // last argument is a placeholder
-                ChatService.newOneToOneChat(creatorID, chatPartnerID, "testconference").then(chat => {
-                    let creator = this.ppants.get(creatorID);
-                    let chatPartner = this.ppants.get(chatPartnerID);
+                ChatService.newOneToOneChat(creatorID, chatPartnerID, creator.getBusinessCard().getUsername(),
+                                                chatPartner.getBusinessCard().getUsername(), "testconference").then(chat => {
                     console.log(chat.getTitle());
                     
                     //check if creator is online
