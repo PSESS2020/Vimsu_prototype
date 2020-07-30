@@ -129,13 +129,13 @@ module.exports = class Chatservice {
 
         let chats = [];
 
-        return getDB().then(res => {
-            chatIDList.forEach(chatId => {
-                vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(chat => {
+        return getDB().then(async res => {
+            await chatIDList.forEach(chatId => {
+                vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(async chat => {
                     //create Message instances
                     var messages = [];
-                    chat.messageList.forEach(message => {
-                        messages.push(new Message(message.msgId, message.senderId, message.timestamp, message.msgText));
+                    await chat.messageList.forEach(message => {
+                        messages.push(new Message(message.msgId, message.senderId, message.senderUsername, message.timestamp, message.msgText));
                     });
                     if (chat.hasOwnProperty('ownerId')) {
                         chats.push(new GroupChat(chat.chatId, 
@@ -225,7 +225,7 @@ module.exports = class Chatservice {
 
     }
    
-    static createChatMessage(chatId, senderId, msgText, conferenceId) {
+    static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(msgText);
 
@@ -234,6 +234,7 @@ module.exports = class Chatservice {
             let message = {
                 msgId: new ObjectId().toString(),
                 senderId: senderId,
+                senderUsername: senderUsername,
                 timestamp: new Date(),
                 msgText: msgText,
             }
@@ -243,6 +244,7 @@ module.exports = class Chatservice {
                 console.log("chat message saved");
                 return new Message(message.magId,
                                    message.senderId,
+                                   message.senderUsername,
                                    message.timestamp,
                                    message.msgText);
 

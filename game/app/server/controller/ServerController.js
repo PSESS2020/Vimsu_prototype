@@ -843,7 +843,7 @@ module.exports = class ServerController {
                 var chatListData = [];
                 chatList.forEach(chat => {
                     if (chat.getMessageList().length > 0) {
-                        var lastMessage = chat.getMessageList()[--(chat.getMessageList()).length];
+                        var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
@@ -918,7 +918,7 @@ module.exports = class ServerController {
                         messageInfoData.push({
                         username: message.getUsername(),
                         timestamp: message.getTimestamp(),
-                        text: message.getText()});
+                        text: message.getMessageText()});
                     });
 
                     if (chat instanceof OneToOneChat) {
@@ -941,16 +941,8 @@ module.exports = class ServerController {
             /* Takes a new message in a chat and sends it to every member in that chat.
              * This can probably still be heavily optimized.
              * - (E) */
-/*
-            socket.on('newChatMessage', (chatID, message) => {
-                console.log("new message in chat " + chatID + " - " + socket.ppantId + " says " + message);
-                var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatID)){
-                    console.log("ppant is in chat");
-                    var chat = participant.getChat(chatID);
-                    var currentDate = new Date();
-*/
-            socket.on('newChatMessage', (senderId, chatId, msgText) => {
+
+            socket.on('newChatMessage', (senderId, senderUsername, chatId, msgText) => {
 
                 let sender = this.ppants.get(senderId);
                 console.log('from server 1 ' + msgText);
@@ -960,7 +952,7 @@ module.exports = class ServerController {
                     let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
 
                     //creates a new chat message and stores it into DB.
-                    ChatService.createChatMessage(chatId, senderId, msgText, Settings.CONFERENCE_ID).then(msg => {
+                    ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
 
                         //seems not optimal. Don't know if it work if only one chat gets updated.
                         chatPartnerIDList.forEach(chatPartnerID => {
