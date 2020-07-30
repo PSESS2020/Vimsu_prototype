@@ -842,6 +842,7 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
+                    //console.log("chat from server: " + chat.getId())
                     if (chat.getMessageList().length > 0) {
                         var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
@@ -944,11 +945,12 @@ module.exports = class ServerController {
             socket.on('newChatMessage', (senderId, senderUsername, chatId, msgText) => {
 
                 let sender = this.ppants.get(senderId);
-                console.log('from server 1 ' + msgText);
+                //console.log('from server 1 ' + msgText);
                 if(sender.isMemberOfChat(chatId)){
-                    console.log('from server 2 ' + msgText);
+                    //console.log('from server 2 ' + msgText);
                     //gets list of chat participants to which send the message to
                     let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
+                    console.log('from server 1 ' + chatPartnerIDList);
 
                     //creates a new chat message and stores it into DB.
                     ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
@@ -977,7 +979,7 @@ module.exports = class ServerController {
                      * createChat-method. Note that this does not emit the whole message object but
                      * a smaller version of it.
                      * - (E) */
-                    this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                    //socket.to(chatId).emit('newChatMessage', chatId, msgToEmit);
                         });
                     }
                 }

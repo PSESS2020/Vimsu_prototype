@@ -276,20 +276,6 @@ class ClientController {
     
         }
 
-    sendToServerChatMessage(text) {
-
-            this.socketReady;
-            if(this.socket.connected) {
-
-            let chatId = this.#gameView.getChatThreadView();
-            console.log(chatId);
-            this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, text);
-
-            } else
-                $('#chatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-        
-        }
-
     sendToServerEvalInput(input) {
 
         this.socketReady;
@@ -783,9 +769,9 @@ class ClientController {
 
     handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
+        
         this.socket.emit('newChatMessage', this.#ownParticipant.getId(), this.#ownBusinessCard.getUsername(), chatId, messageText);
     }
-    
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
