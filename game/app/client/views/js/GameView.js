@@ -548,6 +548,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 $('#chatThreadModal').modal('show');
         }
     };
+
+    getChatThreadView() {
+        return this.#chatThreadView;
+    }
     
     addNewChat(chat, openNow) {
         if($('#chatListModal').is(':visible') && this.#chatListView) {

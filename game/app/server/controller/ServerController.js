@@ -842,8 +842,8 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    if (chat.getMessageL().length > 0) {
-                        var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
+                    if (chat.getMessageList().length > 0) {
+                        var lastMessage = chat.getMessageList()[--(chat.getMessageList()).length];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
@@ -863,7 +863,7 @@ module.exports = class ServerController {
                         else {
                             chatListData.push({
                                 // Get some superficial chat data
-                                title: chat.getTitle(),
+                                title: chat.getChatName(),
                                 chatId: chat.getId(),
                                 timestamp: lastMessage.getTimestamp(),
                                 previewUsername: lastMessage.getUsername(),
@@ -907,12 +907,14 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (chatID) => {
                 var participant = this.ppants.get(socket.ppantId);
+                console.log(participant);
                 if(participant.isMemberOfChat(chatID)){
+                console.log('hi from server get thread 2');
                     // Load chat-data into chatData field
                     var chat = participant.getChat(chatID);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
-                    chat.getMessageL().forEach( (message) => {
+                    chat.getMessageList().forEach( (message) => {
                         messageInfoData.push({
                         username: message.getUsername(),
                         timestamp: message.getTimestamp(),
@@ -939,19 +941,36 @@ module.exports = class ServerController {
             /* Takes a new message in a chat and sends it to every member in that chat.
              * This can probably still be heavily optimized.
              * - (E) */
-            socket.on('newChatMessage', (chatId, message) => {
-                var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatId)){
-                    var chat = participant.getChat(chatId);
-                    var currentDate = new Date();
+            socket.on('newChatMessage', (senderId, chatId, msgText) => {
+
+                let sender = this.ppants.get(senderId);
+                console.log('from server 1 ' + msgText);
+                if(sender.isMemberOfChat(chatId)){
+                    console.log('from server 2 ' + msgText);
+                    //gets list of chat participants to which send the message to
+                    let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
+
+                    //creates a new chat message and stores it into DB.
+                    ChatService.createChatMessage(chatId, senderId, msgText, Settings.CONFERENCE_ID).then(msg => {
+
+                        //seems not optimal. Don't know if it work if only one chat gets updated.
+                        chatPartnerIDList.forEach(chatPartnerID => {
+
+                            let chatPartner = this.ppants.get(chatPartnerID);
+    
+                            //Checks if receiver of message is online
+                            if (chatPartner !== undefined) {
+                                let chatPartnerChat = chatPartner.getChat(chatId)
+                                chatPartnerChat.addMessage(msg);
+                            }  
+                        } 
+                    );
                     
-                    var msg = new Message(chat.generateNewMsgId, participant.getId(), 
-                                                participant.getBusinessCard().getUsername(), currentDate, message);
-                    chat.addMessage(msg);
                     var msgToEmit = {
-                        username: msg.getUsername(),
+                        msgId: msg.getMessageId(),
+                        senderId: msg.getSenderId(),
                         timestamp: msg.getTimestamp(),
-                        text: msg.getMessageText()
+                        msgText: msg.getMessageText()
                     };
                     
                     /* Emits to all members in chat. Uses a socket-room that needs to be created in the
@@ -959,8 +978,10 @@ module.exports = class ServerController {
                      * a smaller version of it.
                      * - (E) */
                     this.#io.in(chat.getId()).emit('newChatMessage', chatId, msgToEmit);
+                        });
+                    }
                 }
-            });
+            );
         
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {

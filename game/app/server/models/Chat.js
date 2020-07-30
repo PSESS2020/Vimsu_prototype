@@ -59,11 +59,11 @@ module.exports = class Chat {
         return this.#chatId;
     }
 
-    getMessageL() {
+    getMessageList() {
         return this.#messageList;
     }
 
-    getParticipantL() {
+    getParticipantList() {
         return this.#participantList;
     }
 

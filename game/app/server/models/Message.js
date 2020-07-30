@@ -2,14 +2,14 @@ module.exports = class Message {
     
     #messageId
     #senderId
-    #senderUsername
+    //#senderUsername
     #timestamp
     #messageText
     
-    constructor(messageId, senderId, senderUsername, timestamp, messageText) {
+    constructor(messageId, senderId, timestamp, messageText) {
         this.#messageId = messageId;
         this.#senderId = senderId;
-        this.#senderUsername = senderUsername;
+        //this.#senderUsername = senderUsername;
         this.#timestamp = timestamp;
         this.#messageText =  messageText;
     }
@@ -22,9 +22,9 @@ module.exports = class Message {
         return this.#senderId
     };
     
-    getUsername() {
+    /*getUsername() {
         return this.#senderUsername;
-    };
+    };*/
     
     getTimestamp() {
         return this.#timestamp;
