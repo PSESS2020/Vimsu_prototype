@@ -75,6 +75,7 @@ class ChatListView extends WindowView {
     
     addNewMessage(chatID, message) {
         
+        return; // TODO fix;
         // Check if this view is visible and either change the display of that chat
         // or add a "new message" icon
         if($('#chatListModal').hidden) /* No idea if this works */ {
