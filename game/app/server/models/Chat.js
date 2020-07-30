@@ -13,7 +13,9 @@ module.exports = class Chat {
         TypeChecker.isString(chatId);
         TypeChecker.isInstanceOf(participantList, Array);
         participantList.forEach(participantID => {
-            TypeChecker.isString(participantID);
+            if(participantID) {
+                TypeChecker.isString(participantID);
+            }
         });
 
         

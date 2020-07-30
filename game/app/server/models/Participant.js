@@ -242,9 +242,11 @@ module.exports = class Participant {
     }
 
     hasFriend(ppantId) {
-        TypeChecker.isString(ppantId);
+        if(ppantId) {
+            TypeChecker.isString(ppantId);
         
-        return this.#friendList.includes(ppantId) || this.#sentRequestList.includes(ppantId); // TODO: method does more than the name says it does
+            return this.#friendList.includes(ppantId) || this.#sentRequestList.includes(ppantId); // TODO: method does more than the name says it does
+        }
     }
 
     removeChat(chatId) {
