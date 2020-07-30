@@ -24,6 +24,20 @@ class ChatThreadView extends WindowView {
             }
         });
 
+        $('#chatLeaveButton').click((event) => {
+            event.preventDefault();
+
+            var result = confirm(`Are you sure you want to leave from ${this.#chat.title}?`)
+
+            if (result) {
+                $('#chatThreadModal').modal('hide');
+                new EventManager().handleLeaveChat(this.#chat.partnerId);
+            }
+            
+            event.stopImmediatePropagation();
+        });
+
+
         $('#chatFriendRequestButton').click((event) => {
             event.preventDefault();
 
@@ -31,6 +45,7 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
+            $('#chatFriendRequestButton').hide();
             new EventManager().handleSendFriendRequest(this.#chat.partnerId);
         });
 
