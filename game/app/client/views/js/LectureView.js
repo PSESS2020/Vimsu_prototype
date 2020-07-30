@@ -106,7 +106,6 @@ class LectureView extends WindowView {
                 <div>seconds left till the</div>
                 <div>presentation starts</div>
             </div>
-            <div id="lectureFinished" style="top: 0; left: 13px; position: absolute; width: 97%; height: 90%; background: black; z-index: 1052; padding: 15%;" class="text-center">The Presentation is Over</div>
             <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
 
@@ -132,7 +131,6 @@ class LectureView extends WindowView {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
-                    $('#lectureFinished').hide();
                     $('#lecturePending').show();
                     this.#lectureStatus = LectureStatus.PENDING;
 
@@ -146,12 +144,11 @@ class LectureView extends WindowView {
                     video.pause();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
                     $('#lecturePending').hide();
-                    $('#lectureFinished').hide();
                     this.#lectureStatus = LectureStatus.RUNNING;
+                    video.currentTime = Math.round(currentTimeDifference / 1000);
                     video.play();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
                     $('#lecturePending').hide();
-                    $('#lectureFinished').show();
                     this.#lectureStatus = LectureStatus.OVER;
                     video.controlsList.remove('nodownload');
                     video.pause();
