@@ -46,7 +46,7 @@ class BusinessCardView extends WindowView {
             <script> 
                 $('#chatnow' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
                     $('#businessCardModal').modal('hide');
-                    new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}');
+                    new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}', '${this.#businessCard.getUsername()}');
                 })
             </script>
 

@@ -63,8 +63,8 @@ class ChatListView extends WindowView {
         
     }
     
-    deleteChat(chat) {
-        //TODO
+    deleteChat(chatId) {
+        $('#chat' + chatId).empty()
     };
     
     addNewChat(chat) {

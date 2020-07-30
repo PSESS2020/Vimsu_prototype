@@ -132,7 +132,6 @@ module.exports = class db {
 
         return collection.updateOne(query, {'$pull': queryToPull})
         .then(result => {
-            console.log(result);
             console.log(queryToPull + " removed from " + collectionName + " with " + query);
         })
         .catch(err => {

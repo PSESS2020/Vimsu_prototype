@@ -404,23 +404,4 @@ module.exports = class ParticipantService {
             console.error(err);
         });
     }
-
-    //Method to remove a chatID from DB
-    static removeChatID(participantId, chatId, conferenceId) {
-        TypeChecker.isString(participantId);
-        TypeChecker.isString(chatId);
-        TypeChecker.isString(conferenceId);
-
-        return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {chatIDList: chatId}).then(res => {
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            });
-        }).catch(err => {
-            console.error(err);
-        });
-
-    }
 } 

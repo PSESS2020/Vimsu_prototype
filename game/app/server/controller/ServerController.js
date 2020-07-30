@@ -19,6 +19,7 @@ const Settings = require('../../utils/Settings.js');
 const Commands = require('../../utils/Commands.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
+const Message = require('../models/Message.js');
 const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
@@ -39,6 +40,7 @@ const TaskService = require('../services/TaskService.js');
 const FriendListService = require('../services/FriendListService.js');
 const FriendList = require('../models/FriendList.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
+const OneToOneChat = require('../models/OneToOneChat.js');
 
 
 
@@ -165,7 +167,7 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-
+                    
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
                     if (currentRoomId === Settings.FOYER_ID) {
@@ -710,7 +712,7 @@ module.exports = class ServerController {
             });
 
             //Called whenever a ppant creates a new 1:1 chat (P)
-            socket.on('createNewChat', (creatorID, chatPartnerID) => {
+            socket.on('createNewChat', (creatorID, chatPartnerID, chatPartnerUsername) => {
                 let creator = this.ppants.get(creatorID);
                 let chatPartner = this.ppants.get(chatPartnerID);
                 
@@ -718,8 +720,9 @@ module.exports = class ServerController {
                 //check if chat already exists, only create one if not
                 if (!creator.hasChatWith(chatPartnerID)) {
 
+                    let creatorUsername = creator.getBusinessCard().getUsername();
                     //creates new chat and writes it in DB
-                    ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
                     
                         //add chat to creator
                         creator.addChat(chat);
@@ -742,7 +745,7 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
 
                         let chatData = {
-                            title: chat.getParticipantL()[1], //todo: username
+                            title: chatPartnerUsername,
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
@@ -759,7 +762,7 @@ module.exports = class ServerController {
                 } else {
                     ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
                         let chatData = {
-                            title: chat.memberId[1], //todo: username
+                            title: chatPartnerUsername,
                             chatId: chat.chatId,
                             messages: chat.messageList
                         }
@@ -781,14 +784,14 @@ module.exports = class ServerController {
 
                 let creator = this.ppants.get(creatorID);
 
+                //still store creatorID in memberID, so that chat removal is easy
+                chatPartnerIDList.push(creatorID);
+
                 //creates new group chat and writes it in DB
                 ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
 
                     //add chat to chat creator
                     creator.addChat(chat);
-
-                    //write chatID to Participant Collection in DB
-                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
 
                     chatPartnerIDList.forEach(chatPartnerID => {
 
@@ -836,34 +839,62 @@ module.exports = class ServerController {
              * Gets the chatList from the participant and then for every chat gets the title,
              * the timestamp, sender-username and a preview of the last message for display purposes. 
              * - (E) */
-            socket.on('getChatList', (ppantID) => {
+            socket.on('getChatList', (ppantID, ppantUsername) => {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    console.log('ssss' + chat.getMessageL().length);
-                    if (chat.getMessageL().length > 0) {
-                        var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
-                        var previewText = lastMessage.getText();
+                    if (chat.getMessageList().length > 0) {
+                        var lastMessage = chat.getMessageList()[--(chat.getMessageList()).length];
+                        var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
                         } 
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: chat.getTitle(),
-                            chatId: chat.getId(),
-                            timestamp: lastMessage.getTimestamp(),
-                            previewUsername: lastMessage.getUsername(),
-                            previewMessage: previewText
-                        });
+                        //check if chat is 1:1 with non empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        //check if chat is non empty group chat
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getChatName(),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        
                     } else {
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: '',
-                            chatId: '',
-                            timestamp: '', //please dont change the timestamp here
-                            previewUsername: '',
-                            previewMessage: ''
-                        });
+                        //check if chat is 1:1 with empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: '', //please dont change the timestamp here
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
+                        //check if chat is groupChat with empty msg list
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getChatName(),
+                                chatId: chat.getId(),
+                                timestamp: '',
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
                     }
   
                 });
@@ -878,30 +909,40 @@ module.exports = class ServerController {
             socket.on('getChatThread', (chatID) => {
                 console.log("getting " + chatID + " for " + socket.ppantId);
                 var participant = this.ppants.get(socket.ppantId);
+                console.log(participant);
                 if(participant.isMemberOfChat(chatID)){
-                    console.log("is member");
                     // Load chat-data into chatData field
                     var chat = participant.getChat(chatID);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
-                    chat.getMessageL().forEach( (message) => {
+                    chat.getMessageList().forEach( (message) => {
                         messageInfoData.push({
                         username: message.getUsername(),
                         timestamp: message.getTimestamp(),
                         text: message.getText()});
                     });
-                    var chatData = {
-                        chatId: chat.getId(),
-                        title: chat.getTitle(),
-                        messages: messageInfoData
+
+                    if (chat instanceof OneToOneChat) {
+                        var chatData = {
+                            chatId: chat.getId(),
+                            title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                            messages: messageInfoData
+                        }
+                    } else {
+                        var chatData = {
+                            chatId: chat.getId(),
+                            title: chat.getChatName(),
+                            messages: messageInfoData
+                        }
                     }
                     this.#io.to(socket.id).emit('chatThread', chatData);
-                };
+                }
             });
             
             /* Takes a new message in a chat and sends it to every member in that chat.
              * This can probably still be heavily optimized.
              * - (E) */
+/*
             socket.on('newChatMessage', (chatID, message) => {
                 console.log("new message in chat " + chatID + " - " + socket.ppantId + " says " + message);
                 var participant = this.ppants.get(socket.ppantId);
@@ -909,23 +950,48 @@ module.exports = class ServerController {
                     console.log("ppant is in chat");
                     var chat = participant.getChat(chatID);
                     var currentDate = new Date();
+*/
+            socket.on('newChatMessage', (senderId, chatId, msgText) => {
+
+                let sender = this.ppants.get(senderId);
+                console.log('from server 1 ' + msgText);
+                if(sender.isMemberOfChat(chatId)){
+                    console.log('from server 2 ' + msgText);
+                    //gets list of chat participants to which send the message to
+                    let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
+
+                    //creates a new chat message and stores it into DB.
+                    ChatService.createChatMessage(chatId, senderId, msgText, Settings.CONFERENCE_ID).then(msg => {
+
+                        //seems not optimal. Don't know if it work if only one chat gets updated.
+                        chatPartnerIDList.forEach(chatPartnerID => {
+
+                            let chatPartner = this.ppants.get(chatPartnerID);
+    
+                            //Checks if receiver of message is online
+                            if (chatPartner !== undefined) {
+                                let chatPartnerChat = chatPartner.getChat(chatId)
+                                chatPartnerChat.addMessage(msg);
+                            }  
+                        } 
+                    );
                     
-                    var msg = new Message(chat.generateNewMsgId, participant.getId(), 
-                                                participant.getBusinessCard().getUsername(), currentDate, message);
-                    chat.addMessage(msg);
                     var msgToEmit = {
-                        username: msg.getUsername(),
+                        msgId: msg.getMessageId(),
+                        senderId: msg.getSenderId(),
                         timestamp: msg.getTimestamp(),
-                        text: msg.getText()
+                        msgText: msg.getMessageText()
                     };
                     
                     /* Emits to all members in chat. Uses a socket-room that needs to be created in the
                      * createChat-method. Note that this does not emit the whole message object but
                      * a smaller version of it.
                      * - (E) */
-                    this.#io.in(chat.getId()).emit('newChatMessage', chatID, msgToEmit);
+                    this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                        });
+                    }
                 }
-            });
+            );
         
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
@@ -1022,6 +1088,16 @@ module.exports = class ServerController {
                 FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID);
                 FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
             });
+
+            socket.on('removeChat', (removerId, chatId) => {
+                let remover = this.ppants.get(removerId);
+
+                if(remover !== undefined) {
+                    remover.removeChat(chatId);
+                }
+
+                ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID);
+            })
 
             socket.on('getNPCStory', (ppantID, npcID) => {
                 let npcService = new NPCService();

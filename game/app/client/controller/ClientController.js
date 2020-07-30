@@ -277,6 +277,20 @@ class ClientController {
     
         }
 
+    sendToServerChatMessage(text) {
+
+            this.socketReady;
+            if(this.socket.connected) {
+
+            let chatId = this.#gameView.getChatThreadView();
+            console.log(chatId);
+            this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, text);
+
+            } else
+                $('#chatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+        
+        }
+
     sendToServerEvalInput(input) {
 
         this.socketReady;
@@ -589,8 +603,13 @@ class ClientController {
         this.#gameView.addNewChat(chat, openNow);
     };
     
+
+    //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
     handleFromServerNewChatMessage(chatId, message) {
-        this.#gameView.addNewChatMessage(chatId, message);
+        var msgText = "[" + message.timestamp + "] " + message.senderId + ": " + message.msgText;
+        $('#chatMessages').prepend($('<div>').text(msgText));
+        $('#chatMessages').scrollTop(0);
+        //this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /* #################################################### */    
@@ -701,6 +720,12 @@ class ClientController {
         
     }
 
+    handleFromViewLeaveChat(chatId) {
+        this.socketReady;
+        this.socket.emit('removeChat', this.#ownParticipant.getId(), chatId);
+        this.#gameView.removeChat(chatId);
+    }
+
     handleFromViewShowBusinessCard(participantId) {
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {
@@ -734,7 +759,7 @@ class ClientController {
      * - (E) */
     handleFromViewShowChatList() {
         let participantID = this.#ownParticipant.getId();
-        this.socket.emit('getChatList', participantID);
+        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
     };
     
     handleFromViewShowChatThread(chatID) {
@@ -743,12 +768,12 @@ class ClientController {
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId) {
+    handleFromViewCreateNewChat(participantId, username) {
         //if isFriend is undefined, checking isFriend is necessary  
         //isFriend not necessary, because server knows all friendLists
         this.socketReady
         var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', creatorId, participantId);
+        this.socket.emit('createNewChat', creatorId, participantId, username);
     }
 
     handleFromViewCreateNewGroupChat(chatName, participantIdList) {
@@ -759,7 +784,7 @@ class ClientController {
 
     handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
-        this.socket.emit('newChatMessage', chatId, messageText);
+        this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, messageText);
     }
     
    

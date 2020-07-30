@@ -541,12 +541,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     initChatThreadView(chat, openNow) {
-        this.#chatThreadView = new ChatThreadView().draw(chat);
+        this.#chatThreadView = new ChatThreadView();
+        this.#chatThreadView.draw(chat);
         if(openNow) {
             if(!$('#chatThreadModal').is(':visible'))
                 $('#chatThreadModal').modal('show');
         }
     };
+
+    getChatThreadView() {
+        return this.#chatThreadView;
+    }
     
     addNewChat(chat, openNow) {
         if($('#chatListModal').is(':visible') && this.#chatListView) {
@@ -556,14 +561,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     addNewChatMessage(chatId, message) {
-        if(this.#chatListView != undefined) {
-            this.#chatListView.addNewMessage(chatId, message);
+
+        if (this.#chatListView) {
+            this.#chatListView.addNewMessage(chatId, message); // TODO
         }
-        console.log("list undefined");
-        if(this.#chatThreadView != undefined) {
+
+        if (this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
-        console.log("thread undefined");
+        
     };
 
     updateSuccessesBar(points, rank) {
@@ -572,6 +578,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     removeFriend(participantId) {
         this.#friendListView.deleteFriend(participantId)
+    }
+
+    removeChat(chatId) {
+        this.#chatListView.deleteChat(chatId);
     }
 
     addFriend(businessCard) {

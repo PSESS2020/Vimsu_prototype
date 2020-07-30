@@ -234,25 +234,19 @@
             <div class="modal-content">
                 <!--Hier muss noch ein "send friend request" button eingefügt werden-->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="chatThreadModalTitle">Title</h5>
-                    <a class="action_button nav-item nav-link" href="" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="sendFriendRequest" data-toggle="modal" data-target="" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user-plus navbarIcons" style="transform: scale(0.8);"></i>
-                    </a>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
-                <div class="modal-body" style="overflow: auto; height: 500px">
-                    <ul class="list-group bg-transparent">
-                        
-                    </ul>
+                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
+                    <div class="list-group mb-3" style="width: 100%; height: 100%; overflow: hidden;">
                     
-                    
-                    <form id="chatInput" action="" style="position: absolute; height: 30px; top: 460px; width:100%;">
-                        <input id="chatMessageInput" autocomplete="off" style="position:absolute; background-color: #1b1e24; color: antiquewhite; width:90%" placeholder ="Enter message"/>
-                        <button>>></button>
-                    </form>
-                    
+
+                    <div class="d-flex">
+                        <div id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
+                            <input id="chatMessageInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                            <div class="input-group-append">
+                                <button id="chatMessageButton" class="btn btn-lecture" type="button">Send</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             </div>        
