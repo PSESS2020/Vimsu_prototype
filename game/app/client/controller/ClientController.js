@@ -585,16 +585,15 @@ class ClientController {
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
     handleFromServerNewChat(chat, openNow) {
+        
         this.#gameView.addNewChat(chat, openNow);
     };
     
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
     handleFromServerNewChatMessage(chatId, message) {
-        var msgText = "[" + message.timestamp + "] " + message.senderId + ": " + message.msgText;
-        $('#chatMessages').prepend($('<div>').text(msgText));
-        $('#chatMessages').scrollTop(0);
-        //this.#gameView.addNewChatMessage(chatId, message);
+        alert(JSON.stringify(message));
+        this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /* #################################################### */    

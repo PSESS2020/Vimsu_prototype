@@ -935,6 +935,9 @@ module.exports = class ServerController {
                             messages: messageInfoData
                         }
                     }
+
+                    socket.join(chatID);
+
                     this.#io.to(socket.id).emit('chatThread', chatData);
                 }
             });
@@ -946,18 +949,16 @@ module.exports = class ServerController {
 
                 let sender = this.ppants.get(senderId);
                 //console.log('from server 1 ' + msgText);
-                if(sender.isMemberOfChat(chatId)){
+                if (sender.isMemberOfChat(chatId)){
                     //console.log('from server 2 ' + msgText);
                     //gets list of chat participants to which send the message to
                     let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
-                    console.log('from server 1 ' + chatPartnerIDList);
 
                     //creates a new chat message and stores it into DB.
                     ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
 
                         //seems not optimal. Don't know if it work if only one chat gets updated.
                         chatPartnerIDList.forEach(chatPartnerID => {
-
                             let chatPartner = this.ppants.get(chatPartnerID);
     
                             //Checks if receiver of message is online
@@ -965,25 +966,21 @@ module.exports = class ServerController {
                                 let chatPartnerChat = chatPartner.getChat(chatId)
                                 chatPartnerChat.addMessage(msg);
                             }  
-                        } 
-                    );
-                    
-                    var msgToEmit = {
-                        msgId: msg.getMessageId(),
-                        senderId: msg.getSenderId(),
-                        timestamp: msg.getTimestamp(),
-                        msgText: msg.getMessageText()
-                    };
-                    
-                    /* Emits to all members in chat. Uses a socket-room that needs to be created in the
-                     * createChat-method. Note that this does not emit the whole message object but
-                     * a smaller version of it.
-                     * - (E) */
-                    //socket.to(chatId).emit('newChatMessage', chatId, msgToEmit);
                         });
-                    }
+                    
+                        var msgToEmit = {
+                            senderUsername: msg.getUsername(),
+                            msgId: msg.getMessageId(),
+                            senderId: msg.getSenderId(),
+                            timestamp: msg.getTimestamp(),
+                            msgText: msg.getMessageText()
+                        };
+                    
+                        // readded this line because it is required to distribute chat messages after joining the 1to1 chat 
+                        this.#io.to(chatId).emit('newChatMessage', chatId, msgToEmit);
+                    });
                 }
-            );
+            });
         
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
