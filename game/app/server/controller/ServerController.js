@@ -177,8 +177,13 @@ module.exports = class ServerController {
                     
                     socket.ppantId = ppant.getId();
 
-                    //First Channel (P)
+                    //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
+
+                    //Join all Chat Channels
+                    ppant.getChatList().forEach(chat => {
+                        socket.join(chat.getId());
+                    });
                     
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
                     this.#rooms[currentRoomId - 1].enterParticipant(ppant);
@@ -655,7 +660,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID) => {
+            socket.on('getFriendList', (ppantID, isInviteFriends, groupName) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -676,7 +681,7 @@ module.exports = class ServerController {
                     )
                 });
 
-                socket.emit('friendList', friendListData);
+                socket.emit('friendList', friendListData, isInviteFriends, groupName);
             }); 
 
             socket.on('getFriendRequestList', (ppantID) => {
@@ -702,6 +707,124 @@ module.exports = class ServerController {
 
                 socket.emit('friendRequestList', friendRequestListData);
             });
+
+            //Called whenever a ppant creates a new 1:1 chat (P)
+            socket.on('createNewChat', (creatorID, chatPartnerID) => {
+                let creator = this.ppants.get(creatorID);
+                let chatPartner = this.ppants.get(chatPartnerID);
+                
+                console.log(!creator.hasChatWith(chatPartnerID));
+                //check if chat already exists, only create one if not
+                if (!creator.hasChatWith(chatPartnerID)) {
+
+                    //creates new chat and writes it in DB
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                    
+                        //add chat to creator
+                        creator.addChat(chat);
+                    
+
+                        //check if chatPartner is online
+                        if (chatPartner !== undefined) {
+                            chatPartner.addChat(chat);
+
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.getId());
+                        }
+                    
+                        //Creator joins chat channel
+                        socket.join(chat.getId());
+
+                        //write ID in Participant Collection in DB
+                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+
+                        let chatData = {
+                            title: chat.getParticipantL()[1], //todo: username
+                            chatId: chat.getId(),
+                            timestamp: '', //please dont change the timestamp here
+                            previewUsername: '',
+                            previewMessage: '',
+                            messages: []
+                        };
+
+                        /* Tell the creator's client to create a new chat. The true tells
+                        * the client to immediately open the chatThreadView of the new chat 
+                        * so that the creator can start sending messages.
+                        * - (E) */
+                        this.#io.to(socket.id).emit('newChat', chatData, true);
+                    }); 
+                } else {
+                    ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                        let chatData = {
+                            title: chat.memberId[1], //todo: username
+                            chatId: chat.chatId,
+                            messages: chat.messageList
+                        }
+
+                        if (chatPartner !== undefined) {
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.chatId);
+                        }
+
+                        socket.join(chat.chatId);
+                        this.#io.to(socket.id).emit('chatThread', chatData);
+                    })
+                }
+            });
+
+            //Called whenever a participant creates a new group chat (N)
+            socket.on('createNewGroupChat', (creatorID, chatName, chatPartnerIDList) => {
+
+                let creator = this.ppants.get(creatorID);
+
+                //creates new group chat and writes it in DB
+                ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
+
+                    //add chat to chat creator
+                    creator.addChat(chat);
+
+                    //write chatID to Participant Collection in DB
+                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+
+                    chatPartnerIDList.forEach(chatPartnerID => {
+
+                        let chatPartner = this.ppants.get(chatPartnerID);
+
+                        if (chatPartner !== undefined) {
+                            chatPartner.addChat(chat);
+
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.getId());
+                        }
+
+                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+                    });
+                    
+                    //Creator joins chat channel
+                    socket.join(chat.getId());
+
+                    let chatData = {
+                        title: chat.getChatName(),
+                        chatId: chat.getId(),
+                        timestamp: '', //please dont change the timestamp here
+                        previewUsername: '',
+                        previewMessage: '',
+                        messages: []
+                    };
+
+                    /* Tell the creator's client to create a new chat. The true tells
+                        * the client to immediately open the chatThreadView of the new chat 
+                        * so that the creator can start sending messages.
+                        * - (E) */
+                    this.#io.to(socket.id).emit('newChat', chatData, true);
+
+                })
+
+            });
             
             
             /* Technically speaking, the client should not send the id to the
@@ -716,19 +839,32 @@ module.exports = class ServerController {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    var lastMessage = chat.getMessageL()[--chat.getMessageL().length];
-                    var previewText = lastMessage.getMessageText();
-                    if(previewText.length > 60) {
-                        previewText = previewText.slice(0, 50) + ". . . ";
-                    } 
-                    chatData.push({
-                        // Get some superficial chat data
-                        title: chat.getTitle(),
-                        chatId: chat.getId(),
-                        timestamp: lastMessage.getTimestamp(),
-                        previewUsername: lastMessage.getUsername(),
-                        previewMessage: previewText
-                    });
+                    console.log('ssss' + chat.getMessageL().length);
+                    if (chat.getMessageL().length > 0) {
+                        var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
+                        var previewText = lastMessage.getMessageText();
+                        if(previewText.length > 60) {
+                            previewText = previewText.slice(0, 50) + ". . . ";
+                        } 
+                        chatListData.push({
+                            // Get some superficial chat data
+                            title: chat.getTitle(),
+                            chatId: chat.getId(),
+                            timestamp: lastMessage.getTimestamp(),
+                            previewUsername: lastMessage.getUsername(),
+                            previewMessage: previewText
+                        });
+                    } else {
+                        chatListData.push({
+                            // Get some superficial chat data
+                            title: '',
+                            chatId: '',
+                            timestamp: '', //please dont change the timestamp here
+                            previewUsername: '',
+                            previewMessage: ''
+                        });
+                    }
+  
                 });
                 this.#io.to(socket.id).emit('chatList', chatListData);
             });
@@ -740,9 +876,9 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (chatID) => {
                 var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatId)){
+                if(participant.isMemberOfChat(chatID)){
                     // Load chat-data into chatData field
-                    var chat = participant.getChat(chatId);
+                    var chat = participant.getChat(chatID);
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageL().forEach( (message) => {
@@ -768,10 +904,9 @@ module.exports = class ServerController {
                 if(participant.isMemberOfChat(chatId)){
                     var chat = participant.getChat(chatId);
                     var currentDate = new Date();
-                    var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + 
-                                        ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                    
                     var msg = new Message(chat.generateNewMsgId, participant.getId(), 
-                                                participant.getBusinessCard().getUsername(), currentTime, message);
+                                                participant.getBusinessCard().getUsername(), currentDate, message);
                     chat.addMessage(msg);
                     var msgToEmit = {
                         username: msg.getUsername(),
@@ -786,11 +921,7 @@ module.exports = class ServerController {
                     this.#io.in(chat.getId()).emit('newChatMessage', chatID, msgToEmit);
                 }
             });
-            
-            // TODO
-            // Handling for creating a new chat.
-             
-
+        
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID) => {
                 let target = this.ppants.get(targetID);
@@ -902,6 +1033,7 @@ module.exports = class ServerController {
                 
                 socket.emit('showNPCStory', name, story);
             });
+<<<<<<< HEAD
 
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
@@ -933,15 +1065,9 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('newChat', chatData, true);
                 });
             });
+=======
+>>>>>>> 5ea8b3ff2c8b2d8d9d6c9e2664631b1146410ea2
             
-            /* Should no longer be needed as it has been implemented elsewhere.
-             * - (E) */
-            socket.on('newMessage', (sendDateTime, senderID, chatID, messageText) => {
-                
-
-            });
-
-
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
             socket.on('disconnect', () => {

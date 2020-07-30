@@ -18,8 +18,8 @@ class ChatThreadView extends WindowView {
         /* Get all the messages and draw them */
         this.#chatId = chat.chatId;
         this.#messages = chat.messages;
-        $('#chatThreadModalHeader').empty();
-        $('#chatThreadModalHeader').text(chat.title);
+        $('#chatThreadModalTitle').empty();
+        $('#chatThreadModalTitle').text(chat.title);
         
         //draw the messages
         this.#update(this.#messages);
@@ -35,7 +35,7 @@ class ChatThreadView extends WindowView {
                         
                         new EventManager.handleChatMessageInput("${chat.chatId}", messageVal);
       
-                    $('#allchatMessageInput').val('');
+                    $('#chatMessageInput').val('');
                     return false;
                     }
                 });
@@ -45,10 +45,6 @@ class ChatThreadView extends WindowView {
                 });
             </script>
         `;
-        
-        // Actually display the chat thread
-        $('#chatListModal').model('show');  
-        
     };
     
     addNewMessage(chatId, message) {
@@ -60,36 +56,37 @@ class ChatThreadView extends WindowView {
     };
     
     #update = function(messages) {
-        messages.forEach( (message) => {
-            /* Clear view to make sure we don't draw anything twice */
-            $('#chatListModal .modal-body .list-group').empty()
-            
-            // TODO
-            // Draw the message slightly different if the client did send them
-            // Different color, profile picture on the right?
-            
-            var messageDiv = `
-            <ul id="${"chat" + chat.chatId}">
-                <li class="list-group-item bg-transparent" >
-                    <div class="row w-100">
-                        <div class="col-12 col-sm-2 px-0">
-                            <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+        if(messages) {
+            messages.forEach( (message) => {
+                /* Clear view to make sure we don't draw anything twice */
+                $('#chatThreadModal .modal-body .list-group').empty()
+                
+                // TODO
+                // Draw the message slightly different if the client did send them
+                // Different color, profile picture on the right?
+                
+                var messageDiv = `
+                <ul id="${"chat" + chat.chatId}">
+                    <li class="list-group-item bg-transparent" >
+                        <div class="row w-100">
+                            <div class="col-12 col-sm-2 px-0">
+                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                            </div>
+                            <div class="col-12 col-md-9 text-center text-sm-left">
+                                <label class="name lead">${chat.title}</label>
+                                <br> 
+                                <span >${"[" + message.timestamp + "]" + message.username + ": "}</span>
+                                <br>
+                                <span class="small">${message.text}</span>
+                            </div>  
                         </div>
-                        <div class="col-12 col-md-9 text-center text-sm-left">
-                            <label class="name lead">${chat.title}</label>
-                            <br> 
-                            <span >${"[" + message.timestamp + "]" + message.username + ": "}</span>
-                            <br>
-                            <span class="small">${message.text}</span>
-                        </div>  
-                    </div>
-                </li>
-            </ul>
-            `;
-            
-            $('#chatListModal .modal-body .list-group').prepend(messageDiv);
-            
-        });
+                    </li>
+                </ul>
+                `;
+                
+                $('#chatThreadModal .modal-body .list-group').prepend(messageDiv);
+            });
+        }
     }
     
 }

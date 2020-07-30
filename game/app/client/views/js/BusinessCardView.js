@@ -41,10 +41,10 @@ class BusinessCardView extends WindowView {
         $('#businessCardModal .modal-body').append(`
             </table>
             </br>
-            <button id="${"chat" + this.#businessCard.getParticipantId()}" class="btn btn-lecture mx-auto d-block">Chat</button>
+            <button id="${"chatnow" + this.#businessCard.getParticipantId()}" class="btn btn-lecture mx-auto d-block">Chat</button>
             </br>
             <script> 
-                $('#chat' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
+                $('#chatnow' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
                     $('#businessCardModal').modal('hide');
                     new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}');
                 })

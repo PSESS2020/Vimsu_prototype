@@ -60,7 +60,8 @@ pointer-events: none;
 z-index: 0;
 }
 
-video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton {
+video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton, 
+video::-webkit-media-controls-timeline {
   display: none;
 }
 
@@ -86,7 +87,6 @@ z-index: 2;
 form {
 border-radius: 5px;
 top: 0;
-background: #000;
 z-index: 3;
 } 
 
@@ -143,6 +143,10 @@ overflow-wrap: break-word;
 }
 
 .fa-sort-desc:hover {
+  opacity: .5 !important;
+}
+
+.fa-users:hover {
   opacity: .5 !important;
 }
 

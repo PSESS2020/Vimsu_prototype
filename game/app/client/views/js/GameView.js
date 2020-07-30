@@ -26,6 +26,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #statusBar;
     #globalChatView;
     #friendListView;
+    #inviteFriendsView;
     #friendRequestListView;
     #successesBar;
     #currentMap;
@@ -513,6 +514,11 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#friendListView.draw(businessCards)
     }
 
+    initInviteFriendsView(businessCards, groupName) {
+        this.#inviteFriendsView = new InviteFriendsView();
+        this.#inviteFriendsView.draw(businessCards, groupName);
+    }
+
     initCurrentAchievementsView(achievements) {
         this.#achievementView = new AchievementView().draw(achievements);
     }
@@ -530,18 +536,23 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
     
     initChatListView(chats) {
-        this.#chatListView = new ChatListView().draw(chats);
+        this.#chatListView = new ChatListView();
+        this.#chatListView.draw(chats);
     };
     
-    initChatThreadView(chat) {
+    initChatThreadView(chat, openNow) {
         this.#chatThreadView = new ChatThreadView().draw(chat);
+        if(openNow) {
+            if(!$('#chatThreadModal').is(':visible'))
+                $('#chatThreadModal').modal('show');
+        }
     };
     
     addNewChat(chat, openNow) {
-        this.initChatThreadView(chat);
-        if(openNow) {
-            $('#chatThreadModal').modal('show');
+        if($('#chatListModal').is(':visible') && this.#chatListView) {
+            this.#chatListView.addNewChat(chat);
         }
+        this.initChatThreadView(chat, openNow);
     };
     
     addNewChatMessage(chatId, message) {

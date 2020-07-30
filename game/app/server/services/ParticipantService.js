@@ -34,11 +34,11 @@ module.exports = class ParticipantService {
         return getDB().then(res => {
             return this.getParticipant(accountId, conferenceId).then(par => {
                 var participant;
-                
 
                 if(par) {
                     //Get Chats
-                    return ChatService.loadChatList(par.participantId, conferenceId).then(async chatList => {
+                    return ChatService.loadChatList(par.chatIDList, conferenceId).then(async chatList => {
+                        console.log(chatList[0]);
                         let friendList = [];
                         let friendRequestListReceived = [];
                         let friendRequestListSent = [];
@@ -75,11 +75,28 @@ module.exports = class ParticipantService {
                                 ach.awardPoints, ach.maxLevel, ach.taskType))
                         })*/
 
-                        participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                            account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                            account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                            new FriendList(par.participantId, friendList), new FriendList(par.participantId, friendRequestListReceived), new FriendList(par.participantId, friendRequestListSent), 
-                            [], new TaskService().getAllTasks(), par.isModerator, par.points, chatList);
+                        participant = new Participant(par.participantId, 
+                                                      accountId, 
+                                                      new BusinessCard(par.participantId, 
+                                                                       account.getUsername(), 
+                                                                       account.getTitle(), 
+                                                                       account.getSurname(), 
+                                                                       account.getForename(), 
+                                                                       account.getJob(), 
+                                                                       account.getCompany(), 
+                                                                       account.getEmail()), 
+                                                      new Position(par.position.roomId, 
+                                                                   par.position.cordX, 
+                                                                   par.position.cordY), 
+                                                                   par.direction, 
+                                                      new FriendList(par.participantId, friendList), 
+                                                      new FriendList(par.participantId, friendRequestListReceived), 
+                                                      new FriendList(par.participantId, friendRequestListSent), 
+                                                      [], 
+                                                      new TaskService().getAllTasks(), 
+                                                      par.isModerator, 
+                                                      par.points, 
+                                                      chatList);
 
                         let achievementService = new AchievementService();
 
@@ -89,9 +106,15 @@ module.exports = class ParticipantService {
                             let idx = ppantAchievements.findIndex(ach => ach.id === achievement.id);
 
                             if(idx > -1) {
-                                achievements.push(new Achievement(achievement.id, ppantAchievements[idx].title, ppantAchievements[idx].icon,
-                                    ppantAchievements[idx].description, achievement.currentLevel, achievement.color, ppantAchievements[idx].awardPoints,
-                                    ppantAchievements[idx].maxLevel, ppantAchievements[idx].getTaskType()));
+                                achievements.push(new Achievement(achievement.id, 
+                                                                  ppantAchievements[idx].title, 
+                                                                  ppantAchievements[idx].icon,
+                                                                  ppantAchievements[idx].description, 
+                                                                  achievement.currentLevel, 
+                                                                  achievement.color, 
+                                                                  ppantAchievements[idx].awardPoints,
+                                                                  ppantAchievements[idx].maxLevel, 
+                                                                  ppantAchievements[idx].getTaskType()));
                             }
                         })
 
@@ -134,16 +157,34 @@ module.exports = class ParticipantService {
                         achievements: [],
                         isModerator: false,
                         points: 0,
+                        chatIDList: []
                     }
 
                     //Write new ppant in DB
                     return getDB().then(res => {
                         return vimsudb.insertOneToCollection("participants_" + conferenceId, par).then(res => {
-                            participant = new Participant(par.participantId, accountId, new BusinessCard(par.participantId, account.getUsername(), 
-                                account.getTitle(), account.getSurname(), account.getForename(), account.getJob(), account.getCompany(), 
-                                account.getEmail()), new Position(par.position.roomId, par.position.cordX, par.position.cordY), par.direction, 
-                                new FriendList(par.participantId, []), new FriendList(par.participantId, []), new FriendList(par.participantId, []), [], 
-                                new TaskService().getAllTasks(), par.isModerator, par.points, []);
+                            participant = new Participant(par.participantId, 
+                                                          accountId, 
+                                                          new BusinessCard(par.participantId, 
+                                                                           account.getUsername(), 
+                                                                           account.getTitle(), 
+                                                                           account.getSurname(), 
+                                                                           account.getForename(), 
+                                                                           account.getJob(), 
+                                                                           account.getCompany(), 
+                                                                           account.getEmail()), 
+                                                          new Position(par.position.roomId, 
+                                                                       par.position.cordX, 
+                                                                       par.position.cordY), 
+                                                                       par.direction, 
+                                                          new FriendList(par.participantId, []), 
+                                                          new FriendList(par.participantId, []), 
+                                                          new FriendList(par.participantId, []), 
+                                                          [], 
+                                                          new TaskService().getAllTasks(), 
+                                                          par.isModerator, 
+                                                          par.points, 
+                                                          []);
                         
                             new AchievementService().computeAchievements(participant);
 
@@ -226,7 +267,14 @@ module.exports = class ParticipantService {
             return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, "").then(par => {
                 if (par) {
                     return AccountService.getAccountById(par.accountId).then(account => {
-                        return new BusinessCard(par.participantId, account.username, account.title, account.surname, account.forename, account.job, account.company, account.email);
+                        return new BusinessCard(par.participantId, 
+                                                account.username, 
+                                                account.title, 
+                                                account.surname, 
+                                                account.forename, 
+                                                account.job, 
+                                                account.company, 
+                                                account.email);
                     });
                 }
                 else {
@@ -337,5 +385,42 @@ module.exports = class ParticipantService {
                 return false;
             })
         })
+    }
+
+    //Method to add a chatID in DB
+    static addChatID(participantId, chatId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {chatIDList: chatId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            });
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
+    //Method to remove a chatID from DB
+    static removeChatID(participantId, chatId, conferenceId) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+
+        return getDB().then(res => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {chatIDList: chatId}).then(res => {
+                return true;
+            }).catch(err => {
+                console.error(err);
+                return false;
+            });
+        }).catch(err => {
+            console.error(err);
+        });
+
     }
 } 
