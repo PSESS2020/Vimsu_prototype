@@ -709,7 +709,7 @@ module.exports = class ServerController {
             });
 
             //Called whenever a ppant creates a new 1:1 chat (P)
-            socket.on('createNewChat', (creatorID, chatPartnerID) => {
+            socket.on('createNewChat', (creatorID, chatPartnerID, chatPartnerUsername) => {
                 let creator = this.ppants.get(creatorID);
                 let chatPartner = this.ppants.get(chatPartnerID);
                 
@@ -741,7 +741,7 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
 
                         let chatData = {
-                            title: chat.getOtherUsername(this.ppants.get(creatorID).getBusinessCard().getUsername()), 
+                            title: chatPartnerUsername,
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
@@ -758,7 +758,7 @@ module.exports = class ServerController {
                 } else {
                     ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
                         let chatData = {
-                            title: chat.memberId[1], //todo: username
+                            title: chatPartnerUsername,
                             chatId: chat.chatId,
                             messages: chat.messageList
                         }
