@@ -246,9 +246,10 @@ module.exports = class Participant {
 
         this.#chatList.forEach(chat => {
             if (chat.getId() === chatId) {
+                chat.removeParticipant(this.#id);
                 let index = this.#chatList.indexOf(chat);
                 this.#chatList.splice(index, 1);
-                chat.removeParticipant(this.#id);
+                console.log("berhasil remove chat " + index);
             }
         });
     }

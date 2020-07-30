@@ -782,14 +782,14 @@ module.exports = class ServerController {
 
                 let creator = this.ppants.get(creatorID);
 
+                //still store creatorID in memberID, so that chat removal is easy
+                chatPartnerIDList.push(creatorID);
+
                 //creates new group chat and writes it in DB
                 ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
 
                     //add chat to chat creator
                     creator.addChat(chat);
-
-                    //write chatID to Participant Collection in DB
-                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
 
                     chatPartnerIDList.forEach(chatPartnerID => {
 
@@ -886,7 +886,7 @@ module.exports = class ServerController {
                         else {
                             chatListData.push({
                                 // Get some superficial chat data
-                                title: chat.getTitle(),
+                                title: chat.getChatName(),
                                 chatId: chat.getId(),
                                 timestamp: '',
                                 previewUsername: '',

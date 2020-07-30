@@ -66,7 +66,6 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            memberIds.push(ownerId);
             
             var chat = {
                 chatId: new ObjectId().toString(),
