@@ -31,14 +31,20 @@ class ChatListView extends WindowView {
          * This should probably be fixed.
          * 
          * - (E) */
-        chats.forEach(chat => {
-            if(chat.timestamp)
-                chat.timestamp = new Date(chat.timestamp);
-        });
         
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
+        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
         this.#chats.forEach(chat => {
+            if(chat.timestamp) {
+                chat.timestamp = days[chat.timestamp.getDay()] + ", " +(chat.timestamp.getDate()<10?'0':'') + chat.timestamp.getDate() + "/" 
+                                + (chat.timestamp.getMonth()<10?'0':'') + chat.timestamp.getMonth() + "/" + chat.timestamp.getFullYear() 
+                                + " " + (chat.timestamp.getHours()<10?'0':'') + chat.timestamp.getHours() + 
+                                ":" + (chat.timestamp.getMinutes()<10?'0':'') + chat.timestamp.getMinutes();
+            } else {
+                chat.timestamp = 'no messages'
+            }
+
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
             

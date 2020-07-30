@@ -868,10 +868,9 @@ module.exports = class ServerController {
                 if(participant.isMemberOfChat(chatId)){
                     var chat = participant.getChat(chatId);
                     var currentDate = new Date();
-                    var currentTime = (currentDate.getHours()<10?'0':'') + currentDate.getHours().toString() + 
-                                        ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
+                    
                     var msg = new Message(chat.generateNewMsgId, participant.getId(), 
-                                                participant.getBusinessCard().getUsername(), currentTime, message);
+                                                participant.getBusinessCard().getUsername(), currentDate, message);
                     chat.addMessage(msg);
                     var msgToEmit = {
                         username: msg.getUsername(),
