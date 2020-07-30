@@ -801,11 +801,11 @@ module.exports = class ServerController {
                             socketPartner.join(chat.getId());
                         }
 
-                        //Creator joins chat channel
-                        socket.join(chat.getId());
-
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
                     });
+                    
+                    //Creator joins chat channel
+                    socket.join(chat.getId());
 
                     let chatData = {
                         title: chat.getChatName(),
