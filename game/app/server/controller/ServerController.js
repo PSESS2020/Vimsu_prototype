@@ -843,7 +843,7 @@ module.exports = class ServerController {
                 var chatListData = [];
                 chatList.forEach(chat => {
                     if (chat.getMessageList().length > 0) {
-                        var lastMessage = chat.getMessageList()[--(chat.getMessageList()).length];
+                        var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
@@ -855,7 +855,7 @@ module.exports = class ServerController {
                                 title: chat.getOtherUsername(ppantUsername),
                                 chatId: chat.getId(),
                                 timestamp: lastMessage.getTimestamp(),
-                                previewUsername: lastMessage.getUsername(),
+                                previewUsername: this.ppants.get(lastMessage.getSenderId()).getBusinessCard().getUsername(),
                                 previewMessage: previewText
                             });
                         }
@@ -916,9 +916,9 @@ module.exports = class ServerController {
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageList().forEach( (message) => {
                         messageInfoData.push({
-                        username: message.getUsername(),
+                        username: this.ppants.get(message.getSenderId()).getBusinessCard().getUsername(),
                         timestamp: message.getTimestamp(),
-                        text: message.getText()});
+                        text: message.getMessageText()});
                     });
 
                     if (chat instanceof OneToOneChat) {

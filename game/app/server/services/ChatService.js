@@ -129,12 +129,12 @@ module.exports = class Chatservice {
 
         let chats = [];
 
-        return getDB().then(res => {
-            chatIDList.forEach(chatId => {
-                vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(chat => {
+        return getDB().then(async res => {
+            await chatIDList.forEach(chatId => {
+                vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(async chat => {
                     //create Message instances
                     var messages = [];
-                    chat.messageList.forEach(message => {
+                    await chat.messageList.forEach(message => {
                         messages.push(new Message(message.msgId, message.senderId, message.timestamp, message.msgText));
                     });
                     if (chat.hasOwnProperty('ownerId')) {
