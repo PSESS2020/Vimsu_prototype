@@ -4,6 +4,7 @@ const Participant = require('./Participant.js');
 module.exports = class Chat {
     #chatId;
     //#ownerId;
+    #title
     #participantList;
     #messageList;
     #maxNumMessages;
@@ -24,6 +25,7 @@ module.exports = class Chat {
         this.#participantList = participantList;
         this.#maxNumMessages = maxNumMessages;
         this.#messageList = messageList;
+        this.#title = "test";
         /*
         this.#messageList = []; // creating an empty message list
         this.#participantList = []; // creating an empty participant list
@@ -63,6 +65,10 @@ module.exports = class Chat {
     getParticipantL() {
         return this.#participantList;
     }
+    
+    getTitle() {
+        return this.#title;
+    };
 
     notifyMessageAll(participantId) {
         //TODO

@@ -21,45 +21,56 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModalTitle').empty();
         $('#chatThreadModalTitle').text(chat.title);
         
+        console.log("drawing the chatview");
         //draw the messages
         this.#update(this.#messages);
+        console.log("finished drawing messages");
         
         /* Add the necessary javaScript to the view */
+        
+        console.log(chat.chatId);
         var script = `
             <script>
-                $('#chatInput').submit( function(event) {
+                $('#chatInput').submit(function(event) {
                     event.preventDefault();
                     let messageVal = $('#chatMessageInput').val();
-    
+                    
                     if(messageVal !== '') {
-                        
-                        new EventManager.handleChatMessageInput("${chat.chatId}", messageVal);
-      
+                                        
+                        new EventManager().handleChatMessageInput("${chat.chatId}", messageVal);
+                      
                         $('#chatMessageInput').val('');
                         return false;
                     }
                 });
                 
-                $('#sendFriendRequest).on('click', function(event) {
-                    new EventManager.handleSendFriendRequest("${chat.chatId}");
+                $('#sendFriendRequest').on('click', function(event) {
+                    new EventManager().handleSendFriendRequest("${chat.chatId}");
                 });
             </script>
         `;
+        
+        $('#chatThreadModal').prepend(script);
+        console.log("added the script");
+        
     };
     
     addNewMessage(chatId, message) {
         if(chatId != this.#chatId) {
+            console.log("return");
             return;
         }
+        console.log("updating chat");
         this.#messages.push(message);
         this.#update(this.#messages);
     };
     
     #update = function(messages) {
         if(messages) {
+            /* Clear view to make sure we don't draw anything twice */
+            $('#chatThreadModal .modal-body .list-group').empty()
             messages.forEach( (message) => {
-                /* Clear view to make sure we don't draw anything twice */
-                $('#chatThreadModal .modal-body .list-group').empty()
+                
                 
                 // TODO
                 // Draw the message slightly different if the client did send them

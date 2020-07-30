@@ -556,8 +556,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     addNewChatMessage(chatId, message) {
-        this.#chatListView.addNewMessage(chatId, message);
-        this.#chatThreadView.addNewMessage(chatId, message);
+        if(this.#chatListView != undefined) {
+            this.#chatListView.addNewMessage(chatId, message);
+        }
+        console.log("list undefined");
+        if(this.#chatThreadView != undefined) {
+            this.#chatThreadView.addNewMessage(chatId, message);
+        }
+        console.log("thread undefined");
     };
 
     updateSuccessesBar(points, rank) {

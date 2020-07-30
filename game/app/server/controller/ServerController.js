@@ -23,6 +23,7 @@ const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
 const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
+const Message = require('../models/Message')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../../utils/TypeOfTask.js')
@@ -842,7 +843,7 @@ module.exports = class ServerController {
                     console.log('ssss' + chat.getMessageL().length);
                     if (chat.getMessageL().length > 0) {
                         var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
-                        var previewText = lastMessage.getMessageText();
+                        var previewText = lastMessage.getText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
                         } 
@@ -875,8 +876,10 @@ module.exports = class ServerController {
              * relevant information into a new field, which is then send to the client.
              * - (E) */
             socket.on('getChatThread', (chatID) => {
+                console.log("getting " + chatID + " for " + socket.ppantId);
                 var participant = this.ppants.get(socket.ppantId);
                 if(participant.isMemberOfChat(chatID)){
+                    console.log("is member");
                     // Load chat-data into chatData field
                     var chat = participant.getChat(chatID);
                     var messageInfoData = [];
@@ -900,9 +903,11 @@ module.exports = class ServerController {
              * This can probably still be heavily optimized.
              * - (E) */
             socket.on('newChatMessage', (chatID, message) => {
+                console.log("new message in chat " + chatID + " - " + socket.ppantId + " says " + message);
                 var participant = this.ppants.get(socket.ppantId);
-                if(participant.isMemberOfChat(chatId)){
-                    var chat = participant.getChat(chatId);
+                if(participant.isMemberOfChat(chatID)){
+                    console.log("ppant is in chat");
+                    var chat = participant.getChat(chatID);
                     var currentDate = new Date();
                     
                     var msg = new Message(chat.generateNewMsgId, participant.getId(), 
@@ -1037,9 +1042,11 @@ module.exports = class ServerController {
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
                 //creates new chat and writes it in DB
-                ChatService.newOneToOneChat(creatorID, chatPartnerID).then(chat => {
+                // last argument is a placeholder
+                ChatService.newOneToOneChat(creatorID, chatPartnerID, "testconference").then(chat => {
                     let creator = this.ppants.get(creatorID);
                     let chatPartner = this.ppants.get(chatPartnerID);
+                    console.log(chat.getTitle());
                     
                     //check if creator is online
                     if (creator !== undefined) {

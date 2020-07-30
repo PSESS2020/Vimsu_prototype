@@ -50,6 +50,8 @@ $('#allchat').submit(function(event) {
 
 });
 
+
+
 $('#groupName').submit(function(event) {
   event.preventDefault();
   let groupName = $('#groupNameInput').val();
@@ -61,12 +63,19 @@ $('#groupName').submit(function(event) {
   }
 });
 
+
+                
+
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
 };
 
 document.getElementById("groupName").onkeydown = function(event) {
   event.stopPropagation();
+};
+
+document.getElementById("chatInput").onkeydown = function(event) {
+    event.stopPropagation();
 };
 
 document.body.onkeydown = function(event) {
