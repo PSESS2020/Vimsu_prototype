@@ -717,8 +717,9 @@ module.exports = class ServerController {
                 //check if chat already exists, only create one if not
                 if (!creator.hasChatWith(chatPartnerID)) {
 
+                    let creatorUsername = creator.getBusinessCard().getUsername();
                     //creates new chat and writes it in DB
-                    ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
                     
                         //add chat to creator
                         creator.addChat(chat);
