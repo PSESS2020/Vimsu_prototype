@@ -174,14 +174,14 @@ class LectureView extends WindowView {
     }
 
     close() {
+        var video = $(`#lectureVideo${this.#lectureId}`)[0];
+        video.removeAttribute('src'); // empty source
+        video.load();
         clearInterval(this.#timerIntervalId);
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
         var eventManager = new EventManager();
         eventManager.handleLectureLeft(this.#lectureId, false);
-        /*var video = $(`#lectureVideo${this.#lectureId}`)[0];
-        video.removeAttribute('src'); // empty source
-        video.load();*/
     }
 }
 
