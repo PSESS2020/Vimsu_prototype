@@ -855,7 +855,7 @@ module.exports = class ServerController {
                                 title: chat.getOtherUsername(ppantUsername),
                                 chatId: chat.getId(),
                                 timestamp: lastMessage.getTimestamp(),
-                                previewUsername: chat.getOtherUsername(ppantUsername),
+                                previewUsername: lastMessage.getUsername(),
                                 previewMessage: previewText
                             });
                         }
