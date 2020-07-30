@@ -763,6 +763,13 @@ module.exports = class ServerController {
                             messages: chat.messageList
                         }
 
+                        if (chatPartner !== undefined) {
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.chatId);
+                        }
+
+                        socket.join(chat.chatId);
                         this.#io.to(socket.id).emit('chatThread', chatData);
                     })
                 }
