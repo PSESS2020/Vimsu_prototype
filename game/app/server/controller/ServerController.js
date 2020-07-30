@@ -823,7 +823,7 @@ module.exports = class ServerController {
                             // Get some superficial chat data
                             title: '',
                             chatId: '',
-                            timestamp: '',
+                            timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
                             previewMessage: ''
                         });
