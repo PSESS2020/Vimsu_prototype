@@ -540,18 +540,19 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#chatListView.draw(chats);
     };
     
-    initChatThreadView(chat) {
+    initChatThreadView(chat, openNow) {
         this.#chatThreadView = new ChatThreadView().draw(chat);
+        if(openNow) {
+            if(!$('#chatThreadModal').is(':visible'))
+                $('#chatThreadModal').modal('show');
+        }
     };
     
     addNewChat(chat, openNow) {
         if($('#chatListModal').is(':visible') && this.#chatListView) {
             this.#chatListView.addNewChat(chat);
         }
-        this.initChatThreadView(chat);
-        if(openNow) {
-            $('#chatThreadModal').modal('show');
-        }
+        this.initChatThreadView(chat, openNow);
     };
     
     addNewChatMessage(chatId, message) {

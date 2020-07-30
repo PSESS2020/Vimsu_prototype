@@ -577,7 +577,7 @@ class ClientController {
     };
     
     handleFromServerShowChatThread(chat) {
-        this.#gameView.initChatThreadView(chat);
+        this.#gameView.initChatThreadView(chat, true);
     };
     
     /* This function is called when another user creates a new chat

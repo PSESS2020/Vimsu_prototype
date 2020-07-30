@@ -755,6 +755,23 @@ module.exports = class ServerController {
                         * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
                     }); 
+                } else {
+                    ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                        let chatData = {
+                            title: chat.memberId[1], //todo: username
+                            chatId: chat.chatId,
+                            messages: chat.messageList
+                        }
+
+                        if (chatPartner !== undefined) {
+                            //chat partner joins chat channel
+                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                            socketPartner.join(chat.chatId);
+                        }
+
+                        socket.join(chat.chatId);
+                        this.#io.to(socket.id).emit('chatThread', chatData);
+                    })
                 }
             });
 
@@ -784,11 +801,11 @@ module.exports = class ServerController {
                             socketPartner.join(chat.getId());
                         }
 
-                        //Creator joins chat channel
-                        socket.join(chat.getId());
-
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
                     });
+                    
+                    //Creator joins chat channel
+                    socket.join(chat.getId());
 
                     let chatData = {
                         title: chat.getChatName(),
