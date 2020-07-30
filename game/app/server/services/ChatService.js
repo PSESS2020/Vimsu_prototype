@@ -130,7 +130,7 @@ module.exports = class Chatservice {
                     if (chat.hasOwnProperty('ownerId')) {
                         chats.push(new GroupChat(chat.chatId, 
                                                 chat.ownerId, 
-                                                chat.chatName, 
+                                                chat.name, 
                                                 chat.participantList, 
                                                 chat.messageList, 
                                                 Settings.MAXGROUPPARTICIPANTS, 

@@ -31,7 +31,12 @@ class ChatListView extends WindowView {
          * This should probably be fixed.
          * 
          * - (E) */
-        this.#chats = chats.sort((chatA, chatB) => -1 * chatA.timestamp.localeCompare(chatB.timestamp));
+        chats.forEach(chat => {
+            if(chat.timestamp)
+                chat.timestamp = new Date(chat.timestamp);
+        });
+        
+        this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
 
         this.#chats.forEach(chat => {
             // Now we want to append each chat as a clickable element

@@ -218,6 +218,7 @@ class ClientController {
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
+        this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
         this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
@@ -584,6 +585,7 @@ class ClientController {
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
     handleFromServerNewChat(chat, openNow) {
+        console.log("hi" + openNow)
         this.#gameView.addNewChat(chat, openNow);
     };
     

@@ -536,7 +536,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
     
     initChatListView(chats) {
-        this.#chatListView = new ChatListView().draw(chats);
+        this.#chatListView = new ChatListView();
+        this.#chatListView.draw(chats);
     };
     
     initChatThreadView(chat) {
@@ -544,9 +545,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     addNewChat(chat, openNow) {
+        console.log("hi2" + openNow)
+        if($('#chatListModal').is(':visible') && this.#chatListView) {
+            this.#chatListView.addNewChat(chat);
+        }
+
         this.initChatThreadView(chat);
         if(openNow) {
-            $('#chatThreadModal').modal('show');
+            console.log("hi3")
+            $('#chatThreadModal').modal('toggle');
         }
     };
     
