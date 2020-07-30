@@ -98,7 +98,9 @@ class ChatThreadView extends WindowView {
         </div>
         `;
         
-        $('#chatThreadModal .modal-body .list-group').append(messageDiv);
+        $('#chatThreadModalList').append(messageDiv);
+
+        $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     }
     
 }
