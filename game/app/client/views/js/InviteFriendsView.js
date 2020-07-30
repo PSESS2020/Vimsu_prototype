@@ -32,7 +32,7 @@ class InviteFriendsView extends WindowView {
                             <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px" class="btn">
                                 <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
                             </button>
-                            <div id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-left: 18px">
+                            <div id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-left: 20px">
                                 <i class="fa fa-check-circle fa-2x navbarIcons"></i>
                             </div>
                         </div>    

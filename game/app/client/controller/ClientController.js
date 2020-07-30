@@ -585,7 +585,6 @@ class ClientController {
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
     handleFromServerNewChat(chat, openNow) {
-        console.log("hi" + openNow)
         this.#gameView.addNewChat(chat, openNow);
     };
     
