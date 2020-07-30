@@ -749,14 +749,13 @@ module.exports = class ServerController {
                 }
             });
 
-<<<<<<< HEAD
             //Called whenever a participant creates a new group chat (N)
             socket.on('createNewGroupChat', (creatorID, chatName, chatPartnerIDList) => {
 
                 let creator = this.ppants.get(creatorID);
 
                 //creates new group chat and writes it in DB
-                ChatService.newGroupChat(creatorID, chatName, chatPartnerIDList, Settings.CONFERENCE_ID).then(chat => {
+                ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
 
                     //add chat to chat creator
                     creator.addChat(chat);
@@ -790,10 +789,6 @@ module.exports = class ServerController {
 
                 })
 
-=======
-            socket.on('createNewGroupChat', (creatorID, chatPartnerIDList, groupName) => {
-                //TODO
->>>>>>> 62d03b888e2dd8c99a810792c9fec03712cfe124
             });
             
             
