@@ -740,11 +740,20 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
 
+                        let chatData = {
+                            title: chatPartner.getId(), //todo: username
+                            chatId: chat.getId(),
+                            timestamp: '', //please dont change the timestamp here
+                            previewUsername: '',
+                            previewMessage: '',
+                            messages: []
+                        };
+
                         /* Tell the creator's client to create a new chat. The true tells
                         * the client to immediately open the chatThreadView of the new chat 
                         * so that the creator can start sending messages.
                         * - (E) */
-                        this.#io.to(socket.id).emit('newChat', /*chatData*/ "", true);
+                        this.#io.to(socket.id).emit('newChat', chatData, true);
                     }); 
                 }
             });
@@ -780,11 +789,20 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
                     });
 
+                    let chatData = {
+                        title: chat.getChatName(),
+                        chatId: chat.getId(),
+                        timestamp: '', //please dont change the timestamp here
+                        previewUsername: '',
+                        previewMessage: '',
+                        messages: []
+                    };
+
                     /* Tell the creator's client to create a new chat. The true tells
                         * the client to immediately open the chatThreadView of the new chat 
                         * so that the creator can start sending messages.
                         * - (E) */
-                    this.#io.to(socket.id).emit('newChat', /*chatData*/ "", true);
+                    this.#io.to(socket.id).emit('newChat', chatData, true);
 
                 })
 
