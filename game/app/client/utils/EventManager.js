@@ -123,6 +123,10 @@ class EventManager {
         this.#clientController.handleFromViewShowRankList();
     }
     
+    handleSendFriendRequest(chatId) {
+        this.#clientController.handleSendFriendRequest();
+    };
+    
     handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
         var businessCard = {
             participantId: participantId,

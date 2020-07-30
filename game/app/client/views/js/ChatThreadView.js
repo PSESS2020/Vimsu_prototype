@@ -2,8 +2,8 @@
 
 // Needs a button to return to chat overview
 // Needs a button to send friend request
-// Needs an input field
-// We can probably make this look like the lecture chat
+// Needs to know the id of the other participant for reusing the friend request method
+// Also the friendRequest-button should only be drawn if the members aren't already friends
 
 class ChatThreadView extends WindowView {
     
@@ -24,6 +24,7 @@ class ChatThreadView extends WindowView {
         //draw the messages
         this.#update(this.#messages);
         
+        /* Add the necessary javaScript to the view */
         var script = `
             <script>
                 $('#chatInput').submit( function(event) {
@@ -40,8 +41,7 @@ class ChatThreadView extends WindowView {
                 });
                 
                 $('#sendFriendRequest).on('click', function(event) {
-                    new EventManager.handleSendFriendRequest();
-                
+                    new EventManager.handleSendFriendRequest("${chat.chatId}");
                 });
             </script>
         `;
