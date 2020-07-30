@@ -863,7 +863,7 @@ module.exports = class ServerController {
                         else {
                             chatListData.push({
                                 // Get some superficial chat data
-                                title: chat.getTitle(),
+                                title: chat.getChatName(),
                                 chatId: chat.getId(),
                                 timestamp: lastMessage.getTimestamp(),
                                 previewUsername: lastMessage.getUsername(),
