@@ -182,13 +182,30 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static removeParticipant(chatId, participantId, conferenceId) {
+    static removeChat(chatId, participantId, conferenceId) {
         TypeChecker.isString(chatId);
 
         return getDB().then(res => {
             return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, {chatId: chatId}, {memberId: participantId}).then(res => {
                 return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {chatIDList: chatId}).then(res => {
-                    return true;
+                    return vimsudb.findOneInCollection("chats_" + conferenceId, {chatId: chatId}, {memberId: 1}).then(chat => {
+                        if(chat) {
+                            if(chat.memberId.length < 1) {
+                                return vimsudb.deleteOneFromCollection("chats_" + conferenceId, {chatId: chatId}).then(res => {
+                                    return true;
+                                }).catch(err => {
+                                    console.error(err);
+                                    return false;
+                                })
+                            }
+                        } else {
+                            console.log("no chat found with " + chatId);
+                            return false;
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        return false;
+                    })
                 }).catch(err => {
                     console.error(err);
                     return false;

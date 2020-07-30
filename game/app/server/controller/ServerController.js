@@ -1077,7 +1077,7 @@ module.exports = class ServerController {
                     remover.removeChat(chatId);
                 }
 
-                ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID);
+                ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID);
             })
 
             socket.on('getNPCStory', (ppantID, npcID) => {
