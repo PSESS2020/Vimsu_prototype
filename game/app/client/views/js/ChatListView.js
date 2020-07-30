@@ -54,6 +54,7 @@ class ChatListView extends WindowView {
 
                 <script> 
                     $('#chat' + '${chat.chatId}').on('click', function (event) {
+                        $("#chatListModal").modal("hide");
                         new EventManager().handleChatThreadClicked("${chat.chatId}");
                     })
                 </script>
