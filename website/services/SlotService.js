@@ -20,9 +20,9 @@ module.exports = class SlotService {
         
         return FileSystem.moveFile(video, dir).then(res => {
             return getDB().then(res => {
-                return vimsudb.uploadFile("lectures", video.name, dir).then(res => {
+                return vimsudb.uploadFile("lectures", video.name, dir).then(videoData => {
                     FileSystem.deleteDirectory(dir);
-                    return res;
+                    return videoData;
                 }).catch(err => {
                     console.error(err)
                 })
@@ -34,7 +34,7 @@ module.exports = class SlotService {
         });
     }
 
-    static createSlot(videoId, conferenceId, title, remarks, startingTime, oratorId, maxParticipants) {
+    static createSlot(videoId, duration, conferenceId, title, remarks, startingTime, oratorId, maxParticipants) {
         return getDB().then(res => {
     
             var id = new ObjectId().toString();
@@ -44,6 +44,7 @@ module.exports = class SlotService {
             var lecture = {
                 id: id,
                 videoId: videoId,
+                duration: duration,
                 conferenceId: conferenceId,
                 title: title,
                 remarks: remarks,
