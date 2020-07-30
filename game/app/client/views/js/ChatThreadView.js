@@ -31,7 +31,7 @@ class ChatThreadView extends WindowView {
 
             if (result) {
                 $('#chatThreadModal').modal('hide');
-                new EventManager().handleLeaveChat(this.#chat.partnerId);
+                new EventManager().handleLeaveChat(this.#chat.chatId);
             }
             
             event.stopImmediatePropagation();
