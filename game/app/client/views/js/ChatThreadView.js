@@ -16,6 +16,7 @@ class ChatThreadView extends WindowView {
     
     draw(chat) {
         /* Get all the messages and draw them */
+        /*
         this.#chatId = chat.chatId;
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();
@@ -40,6 +41,7 @@ class ChatThreadView extends WindowView {
                 });
             </script>
         `;
+        */
     };
     
     addNewMessage(chatId, message) {
@@ -50,6 +52,10 @@ class ChatThreadView extends WindowView {
         this.#update(this.#messages);
     };
     
+    getChatId() {
+        return this.#chatId;
+    }
+
     #update = function(messages) {
         if(messages) {
             messages.forEach( (message) => {

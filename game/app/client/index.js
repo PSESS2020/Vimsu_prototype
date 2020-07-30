@@ -61,11 +61,33 @@ $('#groupName').submit(function(event) {
   }
 });
 
+$('#chatInput').submit(function(event) {
+    
+  event.preventDefault();
+  let messageVal = $('#chatMessageInput').val();
+  
+  if(messageVal !== '') {
+    
+    if(messageVal[0] === '/') {
+        clientController.sendToServerEvalInput(messageVal.slice(1));
+      } else
+        clientController.sendToServerChatMessage(messageVal);
+    
+    $('#chatMessageInput').val('');
+    return false;
+  }
+
+});
+
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
 };
 
 document.getElementById("groupName").onkeydown = function(event) {
+  event.stopPropagation();
+};
+
+document.getElementById("chatInput").onkeydown = function(event) {
   event.stopPropagation();
 };
 

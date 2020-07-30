@@ -1,5 +1,6 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
+const Message = require('../models/Message');
 const Chat = require('../models/Chat');
 const OneToOneChat = require('../models/OneToOneChat');
 const LectureChat = require('../models/LectureChat');
@@ -91,8 +92,8 @@ module.exports = class Chatservice {
         });
     }
 
-    //tested
-    static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
+    
+    /*static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(conferenceId);
@@ -103,7 +104,7 @@ module.exports = class Chatservice {
                     return chat;
                 }
                 else {
-                    console.log("oneToOneChat not found between " + ownerId + " and " + memberId + " in collection chats_" + ownerId);
+                    console.log("oneToOneChat not found between " + ownerId + " and " + chatPartnerId + " in collection chats_" + conferenceId);
                     return false;
                 }
             }).catch(err => {
@@ -112,7 +113,7 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err);
         })
-    }
+    }*/
 
     //tested
     //loads all chats of the specified participant
@@ -153,86 +154,7 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err)
         });
-        
-            
 
-            
-
-        /*
-        return getDB().then(res => {
-            return vimsudb.findAllInCollection("chats_" + conferenceId).then(chats => {
-                if(chats && chats.length > 0) {
-                    var chatList = [];
-
-                    chats.forEach(chat => {
-                        if(chat.hasOwnProperty('memberId')) {
-                            return ParticipantService.getUsername(chat.memberId, conferenceId).then(username => {
-                                let chat = new OneToOneChat(chat.chatId, username, chat.sentRequest, chat.memberId, chat.messageList);
-                                chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_ONETOONECHAT);
-                                chatList.push(chat);
-                            }).catch(err => {
-                                console.error(err);
-                            })
-                        } else {
-                            let chat = new GroupChat(chat.chatId, chat.ownerId, chat.name, chat.participantList, chat.messageList, Settings.MAXGROUPPARTICIPANTS);
-                            chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_GROUPCHAT);
-                            chatList.push(chat);
-                        }
-                    })
-
-                    console.log(chatList);
-                    return chatList;
-
-                } else {
-                    console.log("chat list could not been found for participant with id: " + participantId);
-                    return [];
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-
-            /*return vimsudb.findAllInCollection("chats_" + participantId).then(chats => {
-                var chatList = [];
-
-                if (chats && chats.length > 0) {
-                    for(var i = 0, n = chats.length; i < n; i++) {
-
-                        if(chats[i].hasOwnProperty('member')) 
-                        {
-                            let chat = new OneToOneChat(chats[i].chatId, 
-                                                        chats[i].name, 
-                                                        chats[i].sentRequest, 
-                                                        chats[i].member.memberId, 
-                                                        chats[i].messageList);
-                            chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_ONETOONECHAT);
-
-                            chatList.push(chat);
-                        } else {
-                            let chat =  new GroupChat(chats[i].chatId, 
-                                                      chats[i].ownerId, 
-                                                      chats[i].name, 
-                                                      chats[i].participantList, 
-                                                      chats[i].messageList, 
-                                                      chats[i].maxParticipants)
-                            chat.setMaxNumMessages(Settings.MAXNUMMESSAGES_GROUPCHAT);
-
-                            chatList.push(chat);;
-                        }
-
-                    }
-                    console.log(chatList);
-                    return chatList;
-                }
-                else {
-                    console.log("chat list could not been found for participant with id: " + participantId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-        }).catch(err => {
-            console.error(err);
-        })*/
     }
 
     //tested
@@ -272,6 +194,37 @@ module.exports = class Chatservice {
 
     }
    
+    static createChatMessage(chatId, senderId, msgText, conferenceId) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(messageTxt);
+
+        return getDB().then(res => {
+
+            let message = {
+                msgId: new ObjectId.toString(),
+                senderId: senderId,
+                timestamp: new Date(),
+                msgText: msgText,
+            }
+
+            return vimsudb.insertToArrayInCollection("chats_" + conferenceId, {chatId: chatId}, {messageList: message}).then(res => {
+
+                console.log("chat message saved");
+                return new Message(message.magId,
+                                   message.senderId,
+                                   message.timestamp,
+                                   message.msgText);
+
+            }).catch(err => {
+                console.error(err)
+            });
+
+        }).catch(err => {
+            console.error(err)
+        });
+
+
+    }
     /*
     static newLectureChat(lectureId) {
         TypeChecker.isString(lectureId);
@@ -532,12 +485,7 @@ module.exports = class Chatservice {
 
     }
 
-    static storeChatmessage(chatId, msg) {
-        TypeChecker.isString(chatId);
-
-
-
-    }
+    
 
     static storeParticipantMStatus(msgId, participantId, status) {
         TypeChecker.isString(msgId);

@@ -17,10 +17,10 @@ module.exports = class OneToOneChat extends Chat{
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(super.getMessageL().length >= super.getMaxNumMessages())
-            super.getMessageL().splice(0, super.getMaxNumMessages());
+        if(super.getMessageList().length >= super.getMaxNumMessages())
+            super.getMessageList().splice(0, super.getMaxNumMessages());
 
-        super.getMessageL().push(msg);
+        super.getMessageList().push(msg);
     }
 
     /*

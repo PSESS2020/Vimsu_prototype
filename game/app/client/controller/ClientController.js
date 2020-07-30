@@ -276,6 +276,20 @@ class ClientController {
     
         }
 
+    sendToServerChatMessage(text) {
+
+            this.socketReady;
+            if(this.socket.connected) {
+
+            let chatId = this.#gameView.getChatThreadView();
+            console.log(chatId);
+            this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, text);
+
+            } else
+                $('#chatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+        
+        }
+
     sendToServerEvalInput(input) {
 
         this.socketReady;
@@ -588,8 +602,13 @@ class ClientController {
         this.#gameView.addNewChat(chat, openNow);
     };
     
+
+    //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
     handleFromServerNewChatMessage(chatId, message) {
-        this.#gameView.addNewChatMessage(chatId, message);
+        var msgText = "[" + message.timestamp + "] " + message.senderId + ": " + message.msgText;
+        $('#chatMessages').prepend($('<div>').text(msgText));
+        $('#chatMessages').scrollTop(0);
+        //this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /* #################################################### */    
