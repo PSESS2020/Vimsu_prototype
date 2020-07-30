@@ -762,7 +762,7 @@ class ClientController {
         this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
     }
 
-    handleFromViewNewMessage(chatId, messageText) {
+    handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
         this.socket.emit('newChatMessage', chatId, messageText);
     }

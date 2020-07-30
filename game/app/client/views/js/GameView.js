@@ -541,7 +541,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     initChatThreadView(chat, openNow) {
-        this.#chatThreadView = new ChatThreadView().draw(chat);
+        this.#chatThreadView = new ChatThreadView();
+        this.#chatThreadView.draw(chat);
         if(openNow) {
             if(!$('#chatThreadModal').is(':visible'))
                 $('#chatThreadModal').modal('show');
@@ -556,8 +557,15 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     };
     
     addNewChatMessage(chatId, message) {
-        this.#chatListView.addNewMessage(chatId, message);
-        this.#chatThreadView.addNewMessage(chatId, message);
+        if (this.#chatListView) {
+            this.#chatListView.addNewMessage(chatId, message); // TODO
+        }
+
+        if (this.#chatThreadView) {
+            this.#chatThreadView.addNewMessage(chatId, message);
+        }
+        
+        
     };
 
     updateSuccessesBar(points, rank) {
