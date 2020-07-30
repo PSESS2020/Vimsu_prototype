@@ -97,7 +97,7 @@ module.exports = class Chatservice {
     }
 
     
-    /*static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
+    static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(conferenceId);
@@ -117,7 +117,7 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err);
         })
-    }*/
+    }
 
     //tested
     //loads all chats of the specified participant
