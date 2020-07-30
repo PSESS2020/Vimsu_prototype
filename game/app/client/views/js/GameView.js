@@ -548,10 +548,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         if($('#chatListModal').is(':visible') && this.#chatListView) {
             this.#chatListView.addNewChat(chat);
         }
-
         this.initChatThreadView(chat);
         if(openNow) {
-            $('#chatThreadModal').modal('toggle');
+            $('#chatThreadModal').modal('show');
         }
     };
     

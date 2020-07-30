@@ -48,14 +48,23 @@ class InviteFriendsView extends WindowView {
                         $('#invite' + '${businessCard.getParticipantId()}').hide();
                         $('#selected' + '${businessCard.getParticipantId()}').show();
                     })
-                    $('#createGroupChat').on('click', function (event) {
-                        if(invitedFriends.length > 0) {
-                            $('#inviteFriendsModal').modal('hide');
-                            new EventManager().handleCreateGroupChat('${groupName}', invitedFriends);
-                        }
-                    })
                 </script>
             `)
-        })
+        });
+
+        $('#inviteFriendsModal .modal-body .list-group').append(`
+        
+            <script>
+            $('#createGroupChat').off();
+                $('#createGroupChat').on('click', function (event) {
+
+                if(invitedFriends.length > 0) {
+                    $('#inviteFriendsModal').modal('hide');
+                    new EventManager().handleCreateGroupChat('${groupName}', invitedFriends);
+                }
+
+            })
+            </script>
+        `)
     }
 }
