@@ -783,7 +783,7 @@ class ClientController {
 
     handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
-        this.socket.emit('newChatMessage', chatId, messageText);
+        this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, messageText);
     }
     
    
