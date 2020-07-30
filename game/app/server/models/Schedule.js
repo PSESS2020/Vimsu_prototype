@@ -1,3 +1,5 @@
+const Settings = require('../../utils/Settings')
+
 module.exports = class Schedule {
     
     #lectureList = [];
@@ -30,8 +32,8 @@ module.exports = class Schedule {
             var lecture = this.#lectureList[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
-            var startToShow = (startingTime - (100000000000000 * 60 * 1000)); //TODO: set to 10 minutes
-            var stopToShow = (startingTime + (150000000000000 * 60 * 1000)); //TODO: set to 15 minutes
+            var startToShow = (startingTime - Settings.SHOWLECTURE);
+            var stopToShow = (startingTime + lecture.getDuration()*1000);
             var withinMargin = startToShow <= now && now <= stopToShow;
 
             if (withinMargin) {

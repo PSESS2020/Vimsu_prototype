@@ -114,7 +114,7 @@ module.exports = class ServerController {
 
         //initilaize conference with schedule. TODO: create conference in DB and initialize conference
         //model with id from the DB
-        LectureService.createAllLectures("1").then(lectures => {
+        LectureService.createAllLectures(Settings.CONFERENCE_ID).then(lectures => {
             var schedule = new Schedule(lectures);
             var conference = new Conference(schedule);
             this.#conference = conference;
@@ -592,6 +592,7 @@ module.exports = class ServerController {
                             id: lecture.getId(),
                             title: lecture.getTitle(),
                             videoId: lecture.getVideoId(),
+                            duration: lecture.getDuration(),
                             remarks: lecture.getRemarks(),
                             oratorName: lecture.getOratorName(),
                             startingTime: lecture.getStartingTime(),

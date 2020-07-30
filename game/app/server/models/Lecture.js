@@ -1,12 +1,14 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Orator = require('./Orator.js');
 const LectureChat = require('./LectureChat.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class Lecture {
 
     #id;
     #title;
     #videoId;
+    #duration;
     #remarks;
     #startingTime;
     #oratorName;
@@ -28,7 +30,7 @@ module.exports = class Lecture {
      * @param {String} oratorName
      * @param {int} maxParticipants 
      */
-    constructor(id, title, videoId, remarks, startingTime, oratorName, maxParticipants) {
+    constructor(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants) {
         TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(videoId);
@@ -40,6 +42,7 @@ module.exports = class Lecture {
         this.#id = id;
         this.#title = title;
         this.#videoId = videoId;
+        this.#duration = duration;
         this.#remarks = remarks;
         this.#startingTime = startingTime;
         this.#oratorName = oratorName;
@@ -67,6 +70,10 @@ module.exports = class Lecture {
 
     getVideoId() {
         return this.#videoId;
+    }
+
+    getDuration() {
+        return this.#duration;
     }
 
     getRemarks() {
@@ -173,10 +180,11 @@ module.exports = class Lecture {
     }
 
     #checkToken = function(participantId) {
+        let currDate = new Date();
+
         for(var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if(element[0] === participantId) {
-                let currDate = new Date();
                 
                 //time difference in ms between Leaving Date and Current Date
                 let timeDifference = currDate - element[1];
@@ -190,9 +198,16 @@ module.exports = class Lecture {
 
         }
 
+        let timeLeftUntilStart = this.#startingTime.getTime() - currDate.getTime();
+        let tokenCounter = Settings.TOKENCOUNTERSTART;
+
+        if(timeLeftUntilStart > 0) {
+            tokenCounter = tokenCounter + timeLeftUntilStart;
+        }
+
         //There is no entry with participantId
         //make new entry with participantID, undefined Leaving Time, Token Counter 300.000ms
-        this.#tokenList.push([participantId, undefined, 300000]);
+        this.#tokenList.push([participantId, undefined, tokenCounter]);
         console.log(this.#tokenList);
     }
 
