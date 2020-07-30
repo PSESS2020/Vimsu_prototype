@@ -18,8 +18,31 @@ class ChatThreadView extends WindowView {
         /* Get all the messages and draw them */
         this.#chatId = chat.chatId;
         this.#messages = chat.messages;
-        $('#chatThreadModalTitle').empty();
-        $('#chatThreadModalTitle').text(chat.title);
+        $('#chatThreadModal .modal-header').empty();
+
+        $('#chatThreadModal .modal-header').append(`
+            <h5 class="modal-title" id="chatThreadModalTitle">${chat.title}</h5>
+            <button style="position: absolute; top: 13px; right: 3rem; background-color: transparent !important; border-color: transparent !important; color: white; box-shadow: 0px 0px 0px transparent;" type="button" id="${"leaveChat" + this.#chatId}">
+                <i class="fa fa-sign-out leavingChat navbarIcons" style="transform: scale(0.8);"></i>
+            </button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+            <script>
+                $('#leaveChat' + '${this.#chatId}').on('click', function (event) {
+                    var result = confirm('Are you sure you want to leave from ' + '${chat.title}' + '?');
+                    if(result) {
+                        event.stopImmediatePropagation();
+                        $('#chatThreadModal').modal('hide');
+                        new EventManager().handleLeaveChat("${chat.chatId}");
+                    } else {
+                        event.stopImmediatePropagation();
+                    }
+                })
+            </script>
+        `)
+        
         
         //draw the messages
         this.#update(this.#messages);

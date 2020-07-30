@@ -1018,6 +1018,16 @@ module.exports = class ServerController {
                 FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
             });
 
+            socket.on('removeChat', (removerId, chatId) => {
+                let remover = this.ppants.get(removerId);
+
+                if(remover !== undefined) {
+                    remover.removeChat(chatId);
+                }
+
+                ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID);
+            })
+
             socket.on('getNPCStory', (ppantID, npcID) => {
                 let npcService = new NPCService();
                 let npc = npcService.getNPC(npcID);

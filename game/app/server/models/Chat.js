@@ -89,7 +89,7 @@ module.exports = class Chat {
 
         this.#participantList.forEach(participant => {
 
-            if (participant.getId() === participantId) {
+            if (participant === participantId) {
                 let index = this.#participantList.indexOf(participant);
                 this.#participantList.splice(index, 1);
             }

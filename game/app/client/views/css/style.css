@@ -142,6 +142,10 @@ overflow-wrap: break-word;
   opacity: .5 !important;
 }
 
+.leavingChat:hover {
+  opacity: .5 !important;
+}
+
 .fa-sort-desc:hover {
   opacity: .5 !important;
 }

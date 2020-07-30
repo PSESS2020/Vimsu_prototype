@@ -241,6 +241,18 @@ module.exports = class Participant {
         }
     }
 
+    removeChat(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.#chatList.forEach(chat => {
+            if (chat.getId() === chatId) {
+                let index = this.#chatList.indexOf(chat);
+                this.#chatList.splice(index, 1);
+                chat.removeParticipant(this.#id);
+            }
+        });
+    }
+
     getTaskTypeMappingCounts() {
         return this.#taskTypeMapping;
     }

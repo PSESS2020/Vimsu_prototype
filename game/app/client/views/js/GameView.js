@@ -568,6 +568,10 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#friendListView.deleteFriend(participantId)
     }
 
+    removeChat(chatId) {
+        this.#chatListView.deleteChat(chatId);
+    }
+
     addFriend(businessCard) {
         this.#friendListView.addToFriendList(businessCard);
     }

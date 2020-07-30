@@ -700,6 +700,12 @@ class ClientController {
         
     }
 
+    handleFromViewLeaveChat(chatId) {
+        this.socketReady;
+        this.socket.emit('removeChat', this.#ownParticipant.getId(), chatId);
+        this.#gameView.removeChat(chatId);
+    }
+
     handleFromViewShowBusinessCard(participantId) {
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {

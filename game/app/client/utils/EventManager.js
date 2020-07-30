@@ -149,6 +149,10 @@ class EventManager {
         this.#clientController.handleFromViewRemoveFriend(friendId);
     }
 
+    handleLeaveChat(chatId) {
+        this.#clientController.handleFromViewLeaveChat(chatId);
+    }
+
     handleNPCClick(npcId) {
         this.#clientController.handleFromViewGetNPCStory(npcId);
     }
