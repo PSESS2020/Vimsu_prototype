@@ -164,7 +164,7 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-
+                    
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
                     if (currentRoomId === Settings.FOYER_ID) {
@@ -741,7 +741,7 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
 
                         let chatData = {
-                            title: chatPartner.getId(), //todo: username
+                            title: chat.getOtherUsername(this.ppants.get(creatorID).getBusinessCard().getUsername()), 
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
