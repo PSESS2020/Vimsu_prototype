@@ -318,7 +318,7 @@ module.exports = class Participant {
             let chat = this.#chatList[i];
             if (chat instanceof OneToOneChat) {
                 //check if chatPartner is inclucded
-                if (chat.getParticipantL()[0] === chatPartnerID || chat.getParticipantL()[1] === chatPartnerID) {
+                if (chat.getParticipantList()[0] === chatPartnerID || chat.getParticipantList()[1] === chatPartnerID) {
                     return true;
                 }
             }
