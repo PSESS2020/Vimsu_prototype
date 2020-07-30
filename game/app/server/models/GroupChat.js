@@ -4,8 +4,6 @@ var Chat = require('./Chat.js');
 module.exports = class GroupChat extends Chat {
 
     #chatName;
-    #participantList;
-    #messageList;
     #maxParticipants;
     #ownerId;
 
@@ -43,10 +41,10 @@ module.exports = class GroupChat extends Chat {
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(this.#messageList.length >= super.getMaxNumMessages())
-            this.#messageList.splice(0, super.getMaxNumMessages());
+        if(super.getMessageList().length >= super.getMaxNumMessages())
+            super.getMessageList().splice(0, super.getMaxNumMessages());
 
-        this.#messageList.push(msg);
+        super.addMessage(msg);
     }
 
     //Addds a participant to the participant list
@@ -54,10 +52,10 @@ module.exports = class GroupChat extends Chat {
     addParticipant(participantId) {
         TypeChecker.isString(participantId);
 
-        if(this.#participantList.length >= this.#maxParticipants) {
+        if(super.getParticipantList().length >= this.#maxParticipants) {
             return false;
         } else {
-            this.participantList.push(participantId);
+            super.addParticipant(participantId);
             return true;
         }
     }
