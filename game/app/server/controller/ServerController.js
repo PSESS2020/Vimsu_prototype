@@ -977,7 +977,7 @@ module.exports = class ServerController {
                      * createChat-method. Note that this does not emit the whole message object but
                      * a smaller version of it.
                      * - (E) */
-                    this.#io.in(chat.getId()).emit('newChatMessage', chatId, msgToEmit);
+                    this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
                         });
                     }
                 }

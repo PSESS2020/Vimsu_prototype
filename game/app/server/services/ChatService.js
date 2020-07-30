@@ -222,12 +222,12 @@ module.exports = class Chatservice {
    
     static createChatMessage(chatId, senderId, msgText, conferenceId) {
         TypeChecker.isString(chatId);
-        TypeChecker.isString(messageTxt);
+        TypeChecker.isString(msgText);
 
         return getDB().then(res => {
 
             let message = {
-                msgId: new ObjectId.toString(),
+                msgId: new ObjectId().toString(),
                 senderId: senderId,
                 timestamp: new Date(),
                 msgText: msgText,
