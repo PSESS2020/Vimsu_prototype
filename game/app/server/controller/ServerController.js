@@ -760,6 +760,9 @@ module.exports = class ServerController {
                     //add chat to chat creator
                     creator.addChat(chat);
 
+                    //write chatID to Participant Collection in DB
+                    ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+
                     chatPartnerIDList.forEach(chatPartnerID => {
 
                         let chatPartner = this.ppants.get(chatPartnerID);
@@ -775,8 +778,6 @@ module.exports = class ServerController {
                         //Creator joins chat channel
                         socket.join(chat.getId());
 
-                        //write chatID to Participant Collection in DB
-                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
                     });
 
