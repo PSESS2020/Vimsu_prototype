@@ -592,7 +592,6 @@ class ClientController {
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
     handleFromServerNewChatMessage(chatId, message) {
-        alert(JSON.stringify(message));
         this.#gameView.addNewChatMessage(chatId, message);
     };
 
