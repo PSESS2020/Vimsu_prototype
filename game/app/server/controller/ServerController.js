@@ -39,6 +39,7 @@ const TaskService = require('../services/TaskService.js');
 const FriendListService = require('../services/FriendListService.js');
 const FriendList = require('../models/FriendList.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
+const OneToOneChat = require('../models/OneToOneChat.js');
 
 
 
@@ -165,7 +166,7 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
-
+                    
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
                     if (currentRoomId === Settings.FOYER_ID) {
@@ -718,8 +719,9 @@ module.exports = class ServerController {
                 //check if chat already exists, only create one if not
                 if (!creator.hasChatWith(chatPartnerID)) {
 
+                    let creatorUsername = creator.getBusinessCard().getUsername();
                     //creates new chat and writes it in DB
-                    ChatService.newOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
                     
                         //add chat to creator
                         creator.addChat(chat);
@@ -836,34 +838,62 @@ module.exports = class ServerController {
              * Gets the chatList from the participant and then for every chat gets the title,
              * the timestamp, sender-username and a preview of the last message for display purposes. 
              * - (E) */
-            socket.on('getChatList', (ppantID) => {
+            socket.on('getChatList', (ppantID, ppantUsername) => {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    console.log('ssss' + chat.getMessageL().length);
                     if (chat.getMessageL().length > 0) {
                         var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
                         } 
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: chat.getTitle(),
-                            chatId: chat.getId(),
-                            timestamp: lastMessage.getTimestamp(),
-                            previewUsername: lastMessage.getUsername(),
-                            previewMessage: previewText
-                        });
+                        //check if chat is 1:1 with non empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        //check if chat is non empty group chat
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getTitle(),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        
                     } else {
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: '',
-                            chatId: '',
-                            timestamp: '', //please dont change the timestamp here
-                            previewUsername: '',
-                            previewMessage: ''
-                        });
+                        //check if chat is 1:1 with empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: '', //please dont change the timestamp here
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
+                        //check if chat is groupChat with empty msg list
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getTitle(),
+                                chatId: chat.getId(),
+                                timestamp: '',
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
                     }
   
                 });
@@ -1018,6 +1048,16 @@ module.exports = class ServerController {
                 FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID);
                 FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
             });
+
+            socket.on('removeChat', (removerId, chatId) => {
+                let remover = this.ppants.get(removerId);
+
+                if(remover !== undefined) {
+                    remover.removeChat(chatId);
+                }
+
+                ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID);
+            })
 
             socket.on('getNPCStory', (ppantID, npcID) => {
                 let npcService = new NPCService();

@@ -3,13 +3,17 @@ var Chat = require('./Chat.js');
 
 module.exports = class OneToOneChat extends Chat{
     
-    //#chatName;
-    //#sentStatus;
-    //#memberIds;
-    //#messageList;
+    #creatorUsername;
+    #chatPartnerUsername;
 
-    constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages) {
+    constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages, creatorUsername, chatPartnerUsername) {
         super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
+
+        //Needed as a title for the ChatView (P)
+        TypeChecker.isString(creatorUsername);
+        TypeChecker.isString(chatPartnerUsername);
+        this.#creatorUsername = creatorUsername;
+        this.#chatPartnerUsername = chatPartnerUsername;
         
     }
 
@@ -21,6 +25,19 @@ module.exports = class OneToOneChat extends Chat{
             super.getMessageL().splice(0, super.getMaxNumMessages());
 
         super.getMessageL().push(msg);
+    }
+
+    //method to get the other user ID in this 1:1 chat (P)
+    getOtherUsername(ownUsername) {
+        if (ownUsername !== this.#creatorUsername && ownUsername !== this.#chatPartnerUsername) {
+            return new Error(ownUsername + ' is not in ppantList of this chat!');
+        }
+
+        if (ownUsername === this.#creatorUsername) {
+            return this.#chatPartnerUsername;
+        } else {
+            return this.#creatorUsername;
+        }
     }
 
     /*

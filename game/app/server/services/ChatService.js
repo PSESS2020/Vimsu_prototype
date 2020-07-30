@@ -24,7 +24,7 @@ async function getDB() {
 module.exports = class Chatservice {
 
     //tested
-    static newOneToOneChat(ownerId, chatPartnerId, conferenceId) {
+    static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(chatPartnerId);
@@ -35,6 +35,8 @@ module.exports = class Chatservice {
                 chatId: new ObjectId().toString(),
                 memberId: [ownerId, chatPartnerId],
                 messageList: [],
+                username1: ownerUsername,
+                username2: chatPartnerUsername
             }
 
             return vimsudb.insertOneToCollection("chats_" + conferenceId, chat).then(res => {
@@ -44,7 +46,9 @@ module.exports = class Chatservice {
                                         chat.memberId[0], 
                                         chat.memberId[1], 
                                         chat.messageList, 
-                                        Settings.MAXNUMMESSAGES_ONETOONECHAT);
+                                        Settings.MAXNUMMESSAGES_ONETOONECHAT,
+                                        chat.username1,
+                                        chat.username2);
             
             }).catch(err => {
                 console.error(err);
@@ -62,12 +66,13 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
+            memberIds.push(ownerId);
             
             var chat = {
                 chatId: new ObjectId().toString(),
                 ownerId: ownerId,
                 name: groupName,
-                participantList: memberIds,
+                memberId: memberIds,
                 messageList: [],
             }
 
@@ -77,7 +82,7 @@ module.exports = class Chatservice {
                 return new GroupChat(chat.chatId, 
                                     chat.ownerId, 
                                     chat.name, 
-                                    chat.participantList, 
+                                    chat.memberId, 
                                     chat.messageList, 
                                     Settings.MAXGROUPPARTICIPANTS,
                                     Settings.MAXNUMMESSAGES_GROUPCHAT);
@@ -131,7 +136,7 @@ module.exports = class Chatservice {
                         chats.push(new GroupChat(chat.chatId, 
                                                 chat.ownerId, 
                                                 chat.name, 
-                                                chat.participantList, 
+                                                chat.memberId, 
                                                 chat.messageList, 
                                                 Settings.MAXGROUPPARTICIPANTS, 
                                                 Settings.MAXNUMMESSAGES_GROUPCHAT));
@@ -140,7 +145,9 @@ module.exports = class Chatservice {
                                                     chat.memberId[0], 
                                                     chat.memberId[1], 
                                                     chat.messageList, 
-                                                    Settings.MAXNUMMESSAGES_ONETOONECHAT));
+                                                    Settings.MAXNUMMESSAGES_ONETOONECHAT,
+                                                    chat.username1,
+                                                    chat.username2));
                     }
             
                 }).catch(err => {
@@ -240,7 +247,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
 
         return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("chats_" + ownerId, {chatId: chatId}, {participantList: participantId}).then(res => {
+            return vimsudb.insertToArrayInCollection("chats_" + ownerId, {chatId: chatId}, {memberId: participantId}).then(res => {
                 
                 return true;
 
@@ -254,14 +261,17 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static removeParticipant(chatId, ownerId, participantId) {
+    static removeParticipant(chatId, participantId, conferenceId) {
         TypeChecker.isString(chatId);
 
         return getDB().then(res => {
-            return vimsudb.deleteFromArrayInCollection("chats_" + ownerId, {chatId: chatId}, {participantList: participantId}).then(res => {
-                
-                return true;
-            
+            return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, {chatId: chatId}, {memberId: participantId}).then(res => {
+                return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {chatIDList: chatId}).then(res => {
+                    return true;
+                }).catch(err => {
+                    console.error(err);
+                    return false;
+                })
             }).catch(err => {
                 console.error(err);
                 return false;
