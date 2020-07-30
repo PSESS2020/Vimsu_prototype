@@ -35,8 +35,8 @@ class ChatThreadView extends WindowView {
                         
                         new EventManager.handleChatMessageInput("${chat.chatId}", messageVal);
       
-                    $('#chatMessageInput').val('');
-                    return false;
+                        $('#chatMessageInput').val('');
+                        return false;
                     }
                 });
                 

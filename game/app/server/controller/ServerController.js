@@ -1033,7 +1033,6 @@ module.exports = class ServerController {
                 
                 socket.emit('showNPCStory', name, story);
             });
-<<<<<<< HEAD
 
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
@@ -1065,8 +1064,6 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('newChat', chatData, true);
                 });
             });
-=======
->>>>>>> 5ea8b3ff2c8b2d8d9d6c9e2664631b1146410ea2
             
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
