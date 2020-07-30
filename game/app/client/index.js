@@ -61,7 +61,7 @@ $('#groupName').submit(function(event) {
   }
 });
 
-$('#chatInput').submit(function(event) {
+/*$('#chatInput').submit(function(event) {
     
   event.preventDefault();
   let messageVal = $('#chatMessageInput').val();
@@ -77,7 +77,7 @@ $('#chatInput').submit(function(event) {
     return false;
   }
 
-});
+});*/
 
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
@@ -87,9 +87,9 @@ document.getElementById("groupName").onkeydown = function(event) {
   event.stopPropagation();
 };
 
-document.getElementById("chatInput").onkeydown = function(event) {
+/*document.getElementById("chatInput").onkeydown = function(event) {
   event.stopPropagation();
-};
+};*/
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
