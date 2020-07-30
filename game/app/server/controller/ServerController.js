@@ -855,7 +855,7 @@ module.exports = class ServerController {
                                 title: chat.getOtherUsername(ppantUsername),
                                 chatId: chat.getId(),
                                 timestamp: lastMessage.getTimestamp(),
-                                previewUsername: this.ppants.get(lastMessage.getSenderId()).getBusinessCard().getUsername(),
+                                previewUsername: chat.getOtherUsername(ppantUsername),
                                 previewMessage: previewText
                             });
                         }
@@ -916,7 +916,7 @@ module.exports = class ServerController {
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageList().forEach( (message) => {
                         messageInfoData.push({
-                        username: this.ppants.get(message.getSenderId()).getBusinessCard().getUsername(),
+                        username: message.getUsername(),
                         timestamp: message.getTimestamp(),
                         text: message.getMessageText()});
                     });
@@ -941,7 +941,7 @@ module.exports = class ServerController {
             /* Takes a new message in a chat and sends it to every member in that chat.
              * This can probably still be heavily optimized.
              * - (E) */
-            socket.on('newChatMessage', (senderId, chatId, msgText) => {
+            socket.on('newChatMessage', (senderId, senderUsername, chatId, msgText) => {
 
                 let sender = this.ppants.get(senderId);
                 console.log('from server 1 ' + msgText);
@@ -951,7 +951,7 @@ module.exports = class ServerController {
                     let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
 
                     //creates a new chat message and stores it into DB.
-                    ChatService.createChatMessage(chatId, senderId, msgText, Settings.CONFERENCE_ID).then(msg => {
+                    ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
 
                         //seems not optimal. Don't know if it work if only one chat gets updated.
                         chatPartnerIDList.forEach(chatPartnerID => {
