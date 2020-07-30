@@ -102,7 +102,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("chats_" + conferenceId , {memberId: chatPartnerId}, "").then(chat => {
+            return vimsudb.findOneInCollection("chats_" + conferenceId , {memberId: ownerId, memberId: chatPartnerId}, "").then(chat => {
                 if (chat) {
                     return chat;
                 }

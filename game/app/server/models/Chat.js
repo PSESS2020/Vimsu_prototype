@@ -95,7 +95,6 @@ module.exports = class Chat {
             if (participant === participantId) {
                 let index = this.#participantList.indexOf(participant);
                 this.#participantList.splice(index, 1);
-                console.log("berhasil remove participant " + index)
             }
         });
     }

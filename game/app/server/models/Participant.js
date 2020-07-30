@@ -249,7 +249,6 @@ module.exports = class Participant {
                 chat.removeParticipant(this.#id);
                 let index = this.#chatList.indexOf(chat);
                 this.#chatList.splice(index, 1);
-                console.log("berhasil remove chat " + index);
             }
         });
     }
