@@ -38,6 +38,7 @@ const TaskService = require('../services/TaskService.js');
 const FriendListService = require('../services/FriendListService.js');
 const FriendList = require('../models/FriendList.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
+const OneToOneChat = require('../models/OneToOneChat.js');
 
 
 
@@ -836,34 +837,62 @@ module.exports = class ServerController {
              * Gets the chatList from the participant and then for every chat gets the title,
              * the timestamp, sender-username and a preview of the last message for display purposes. 
              * - (E) */
-            socket.on('getChatList', (ppantID) => {
+            socket.on('getChatList', (ppantID, ppantUsername) => {
                 var chatList = this.ppants.get(ppantID).getChatList();
                 var chatListData = [];
                 chatList.forEach(chat => {
-                    console.log('ssss' + chat.getMessageL().length);
                     if (chat.getMessageL().length > 0) {
                         var lastMessage = chat.getMessageL()[--(chat.getMessageL()).length];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 60) {
                             previewText = previewText.slice(0, 50) + ". . . ";
                         } 
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: chat.getTitle(),
-                            chatId: chat.getId(),
-                            timestamp: lastMessage.getTimestamp(),
-                            previewUsername: lastMessage.getUsername(),
-                            previewMessage: previewText
-                        });
+                        //check if chat is 1:1 with non empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        //check if chat is non empty group chat
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getTitle(),
+                                chatId: chat.getId(),
+                                timestamp: lastMessage.getTimestamp(),
+                                previewUsername: lastMessage.getUsername(),
+                                previewMessage: previewText
+                            });
+                        }
+                        
                     } else {
-                        chatListData.push({
-                            // Get some superficial chat data
-                            title: '',
-                            chatId: '',
-                            timestamp: '', //please dont change the timestamp here
-                            previewUsername: '',
-                            previewMessage: ''
-                        });
+                        //check if chat is 1:1 with empty msg list
+                        if (chat instanceof OneToOneChat) {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getOtherUsername(ppantUsername),
+                                chatId: chat.getId(),
+                                timestamp: '', //please dont change the timestamp here
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
+                        //check if chat is groupChat with empty msg list
+                        else {
+                            chatListData.push({
+                                // Get some superficial chat data
+                                title: chat.getTitle(),
+                                chatId: chat.getId(),
+                                timestamp: '',
+                                previewUsername: '',
+                                previewMessage: ''
+                            });
+                        }
                     }
   
                 });

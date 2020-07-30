@@ -733,7 +733,7 @@ class ClientController {
      * - (E) */
     handleFromViewShowChatList() {
         let participantID = this.#ownParticipant.getId();
-        this.socket.emit('getChatList', participantID);
+        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
     };
     
     handleFromViewShowChatThread(chatID) {

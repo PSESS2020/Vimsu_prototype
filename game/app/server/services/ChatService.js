@@ -144,9 +144,9 @@ module.exports = class Chatservice {
                                                     chat.memberId[0], 
                                                     chat.memberId[1], 
                                                     chat.messageList, 
-                                                    Settings.MAXNUMMESSAGES_ONETOONECHAT),
+                                                    Settings.MAXNUMMESSAGES_ONETOONECHAT,
                                                     chat.username1,
-                                                    chat.username2);
+                                                    chat.username2));
                     }
             
                 }).catch(err => {
