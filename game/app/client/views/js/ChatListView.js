@@ -18,6 +18,7 @@ class ChatListView extends WindowView {
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         this.#chats.forEach(chat => {
+            console.log("chatId client: " + chat.chatId)
             if(chat.timestamp && chat.timestamp instanceof Date) {
                 chat.timestamp = days[chat.timestamp.getDay()] + ", " +(chat.timestamp.getDate()<10?'0':'') + chat.timestamp.getDate() + "/" 
                                 + (chat.timestamp.getMonth()<10?'0':'') + chat.timestamp.getMonth() + "/" + chat.timestamp.getFullYear() 
@@ -53,6 +54,7 @@ class ChatListView extends WindowView {
 
                 <script> 
                     $('#chat' + '${chat.chatId}').on('click', function (event) {
+                        $("#chatListModal").modal("hide");
                         new EventManager().handleChatThreadClicked("${chat.chatId}");
                     })
                 </script>
@@ -73,6 +75,7 @@ class ChatListView extends WindowView {
     
     addNewMessage(chatID, message) {
         
+        return; // TODO fix;
         // Check if this view is visible and either change the display of that chat
         // or add a "new message" icon
         if($('#chatListModal').hidden) /* No idea if this works */ {

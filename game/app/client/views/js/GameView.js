@@ -565,6 +565,8 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             this.#chatListView.addNewMessage(chatId, message); // TODO
         }
 
+       
+
         if (this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }

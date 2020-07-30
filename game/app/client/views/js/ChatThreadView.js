@@ -36,14 +36,13 @@ class ChatThreadView extends WindowView {
     }
     
     draw(chat) {
-        /* Get all the messages and draw them */
         this.#chat = chat;
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();
         $('#chatThreadModalTitle').text(chat.title);
 
         $('#chatThreadModal .modal-body .list-group').empty()
-        
+
         this.#messages.forEach((message) => {
             this.#appendMessage(message);
         })
@@ -61,8 +60,8 @@ class ChatThreadView extends WindowView {
     #appendMessage = (message) => {
         var messageDiv = `
         <div>
-            <small><b>${message.username} (${message.timestamp.toString()})</b>:</small>
-            <small>${message.text}</small>
+            <small><b>${message.senderUsername}</b> (${message.timestamp.toString()}):</small>
+            <small>${message.msgText}</small>
         </div>
         `;
         
