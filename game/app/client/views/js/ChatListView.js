@@ -15,23 +15,6 @@ class ChatListView extends WindowView {
         /* Clear view to make sure we don't draw anything twice */
         $('#chatListModal .modal-body .list-group').empty()
         
-        /* Now, we sort the chats by the timestamp of the last message,
-         * which is also used as a preview.
-         * This works using the localeCompare function. The localeCompare function
-         * returns a negative value when the calling string (in this case chatA.timestamp)
-         * is lexiographically smaller than the passed string (in this case chatB.timestamp).
-         * The sort function sorts a before b when the function passed as callback returns a 
-         * negative value, and b before a if it returns a positive value.
-         * Since we want the last message (whose timestamp is lexiographically largest)
-         * to come first, we inverse the result by multiplying with negative one.
-         * 
-         * Note that this DOES NOT CONSIDER COMPLETE DATES. The timestamp is just a string
-         * representing the time in 24-hour-format. Thus, a chat where the last message has been
-         * send on 5.6.2019 18:00 would be displayed before one send in 10.8.2020 8:00.
-         * This should probably be fixed.
-         * 
-         * - (E) */
-        
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
