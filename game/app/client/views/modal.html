@@ -234,21 +234,28 @@
             <div class="modal-content">
                 <!--Hier muss noch ein "send friend request" button eingefügt werden-->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="chatThreadModalTitle">Title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto; height: 500px">
-                    <ul class="list-group bg-transparent">
-                        
-                    </ul>
                     
+                </div>
+                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
+                    <div class="list-group mb-3" style="width: 100%; height: 100%; overflow: hidden;">
+                    
+<<<<<<< HEAD
                     <div class="row">
                         <form id="chatInput" action="">
                             <input id="chatMessageInput" autocomplete="off" style="background-color: #1b1e24; color: antiquewhite" placeholder ="Enter message"/><button>>></button>
                         </form>
                         <div id="chatMessages"></div>
+=======
+                    </div>
+
+                    <div class="d-flex">
+                        <div id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
+                            <input id="chatMessageInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                            <div class="input-group-append">
+                                <button id="chatMessageButton" class="btn btn-lecture" type="button">Send</button>
+                            </div>
+                        </div>
+>>>>>>> 6e8c17cde42df5369e45ee5fbef633ebdf5417e4
                     </div>
                 </div>
             </div>

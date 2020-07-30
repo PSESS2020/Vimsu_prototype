@@ -98,8 +98,8 @@ class EventManager {
      
     /* One function to create a new chat.
      * - (E) */
-    handleChatNowClicked(participantId) {
-        this.#clientController.handleFromViewCreateNewChat(participantId);
+    handleChatNowClicked(participantId, username) {
+        this.#clientController.handleFromViewCreateNewChat(participantId, username);
     }
     
     /* One function to create a new group chat
@@ -147,6 +147,10 @@ class EventManager {
 
     handleRemoveFriend(friendId) {
         this.#clientController.handleFromViewRemoveFriend(friendId);
+    }
+
+    handleLeaveChat(chatId) {
+        this.#clientController.handleFromViewLeaveChat(chatId);
     }
 
     handleNPCClick(npcId) {

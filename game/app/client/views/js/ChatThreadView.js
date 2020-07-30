@@ -7,21 +7,49 @@
 
 class ChatThreadView extends WindowView {
     
-    #chatId
+    #chat
     #messages
-    
+
     constructor() {
         super();
+
+        $('#chatMessageButton').on('click', (event) => {
+            event.preventDefault();
+            this.sendMessage();
+        });
+
+        $('#chatMessageInput').on('keydown', (event) => {
+            if (event.keyCode === 13) {
+                this.sendMessage();
+            }
+        });
+    }
+
+    sendMessage() {
+        let messageVal = $('#chatMessageInput').val();
+
+        if(messageVal !== '') {
+            new EventManager().handleChatMessageInput(this.#chat.chatId, messageVal);
+            $('#chatMessageInput').val('');
+            $('#chatMessageInput').focus();
+        }
     }
     
     draw(chat) {
         /* Get all the messages and draw them */
+<<<<<<< HEAD
         /*
         this.#chatId = chat.chatId;
+=======
+        this.#chat = chat;
+>>>>>>> 6e8c17cde42df5369e45ee5fbef633ebdf5417e4
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();
         $('#chatThreadModalTitle').text(chat.title);
+
+        $('#chatThreadModal .modal-body .list-group').empty()
         
+<<<<<<< HEAD
         //draw the messages
         this.#update(this.#messages);
         
@@ -42,16 +70,23 @@ class ChatThreadView extends WindowView {
             </script>
         `;
         */
+=======
+        this.#messages.forEach((message) => {
+            this.#appendMessage(message);
+        })
+>>>>>>> 6e8c17cde42df5369e45ee5fbef633ebdf5417e4
     };
     
     addNewMessage(chatId, message) {
-        if(chatId != this.#chatId) {
+        if(this.#chat.chatId != chatId) {
             return;
         }
+
         this.#messages.push(message);
-        this.#update(this.#messages);
+        this.#appendMessage(message);
     };
     
+<<<<<<< HEAD
     getChatId() {
         return this.#chatId;
     }
@@ -88,6 +123,17 @@ class ChatThreadView extends WindowView {
                 $('#chatThreadModal .modal-body .list-group').prepend(messageDiv);
             });
         }
+=======
+    #appendMessage = (message) => {
+        var messageDiv = `
+        <div>
+            <small><b>${message.username} (${message.timestamp.toString()})</b>:</small>
+            <small>${message.text}</small>
+        </div>
+        `;
+        
+        $('#chatThreadModal .modal-body .list-group').append(messageDiv);
+>>>>>>> 6e8c17cde42df5369e45ee5fbef633ebdf5417e4
     }
     
 }

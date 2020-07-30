@@ -17,9 +17,8 @@ class ChatListView extends WindowView {
         
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
         var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
         this.#chats.forEach(chat => {
-            if(chat.timestamp) {
+            if(chat.timestamp && chat.timestamp instanceof Date) {
                 chat.timestamp = days[chat.timestamp.getDay()] + ", " +(chat.timestamp.getDate()<10?'0':'') + chat.timestamp.getDate() + "/" 
                                 + (chat.timestamp.getMonth()<10?'0':'') + chat.timestamp.getMonth() + "/" + chat.timestamp.getFullYear() 
                                 + " " + (chat.timestamp.getHours()<10?'0':'') + chat.timestamp.getHours() + 
@@ -63,8 +62,8 @@ class ChatListView extends WindowView {
         
     }
     
-    deleteChat(chat) {
-        //TODO
+    deleteChat(chatId) {
+        $('#chat' + chatId).empty()
     };
     
     addNewChat(chat) {

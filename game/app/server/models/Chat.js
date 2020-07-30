@@ -13,11 +13,13 @@ module.exports = class Chat {
         TypeChecker.isInstanceOf(participantList, Array);
         participantList.forEach(participantID => {
             TypeChecker.isString(participantID);
-        })
+        });
+
         TypeChecker.isInstanceOf(messageList, Array);
         messageList.forEach(message => {
             TypeChecker.isString(message, String);
         });
+
         TypeChecker.isInt(maxNumMessages);
 
         this.#chatId = chatId;
@@ -35,6 +37,7 @@ module.exports = class Chat {
          * "fills it up" with the data supplied from the database.
          * - (E) */
     }
+    
     /*
     *Multiple constructors are not allowed.
     constructor(idChat, idOwner, participantList, messageList) {
@@ -89,7 +92,7 @@ module.exports = class Chat {
 
         this.#participantList.forEach(participant => {
 
-            if (participant.getId() === participantId) {
+            if (participant === participantId) {
                 let index = this.#participantList.indexOf(participant);
                 this.#participantList.splice(index, 1);
             }

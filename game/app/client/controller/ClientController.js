@@ -591,7 +591,7 @@ class ClientController {
     };
     
     handleFromServerShowChatThread(chat) {
-        this.#gameView.initChatThreadView(chat);
+        this.#gameView.initChatThreadView(chat, true);
     };
     
     /* This function is called when another user creates a new chat
@@ -719,6 +719,12 @@ class ClientController {
         
     }
 
+    handleFromViewLeaveChat(chatId) {
+        this.socketReady;
+        this.socket.emit('removeChat', this.#ownParticipant.getId(), chatId);
+        this.#gameView.removeChat(chatId);
+    }
+
     handleFromViewShowBusinessCard(participantId) {
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {
@@ -752,7 +758,7 @@ class ClientController {
      * - (E) */
     handleFromViewShowChatList() {
         let participantID = this.#ownParticipant.getId();
-        this.socket.emit('getChatList', participantID);
+        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
     };
     
     handleFromViewShowChatThread(chatID) {
@@ -761,12 +767,12 @@ class ClientController {
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId) {
+    handleFromViewCreateNewChat(participantId, username) {
         //if isFriend is undefined, checking isFriend is necessary  
         //isFriend not necessary, because server knows all friendLists
         this.socketReady
         var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', creatorId, participantId);
+        this.socket.emit('createNewChat', creatorId, participantId, username);
     }
 
     handleFromViewCreateNewGroupChat(chatName, participantIdList) {
@@ -775,7 +781,7 @@ class ClientController {
         this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
     }
 
-    handleFromViewNewMessage(chatId, messageText) {
+    handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
         this.socket.emit('newChatMessage', chatId, messageText);
     }

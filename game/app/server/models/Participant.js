@@ -241,6 +241,18 @@ module.exports = class Participant {
         }
     }
 
+    removeChat(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.#chatList.forEach(chat => {
+            if (chat.getId() === chatId) {
+                chat.removeParticipant(this.#id);
+                let index = this.#chatList.indexOf(chat);
+                this.#chatList.splice(index, 1);
+            }
+        });
+    }
+
     getTaskTypeMappingCounts() {
         return this.#taskTypeMapping;
     }
@@ -301,16 +313,16 @@ module.exports = class Participant {
     hasChatWith(chatPartnerID) {
         TypeChecker.isString(chatPartnerID);
         //check each chat
-        var hasChat = false;
-        this.#chatList.forEach(chat => {
+        for(var i = 0; i < this.#chatList.length; i++) {
             //check if chat is 1:1
+            let chat = this.#chatList[i];
             if (chat instanceof OneToOneChat) {
                 //check if chatPartner is inclucded
                 if (chat.getParticipantL()[0] === chatPartnerID || chat.getParticipantL()[1] === chatPartnerID) {
-                    hasChat = true;
+                    return true;
                 }
             }
-        });
-        return hasChat;
+        }
+        return false;
     }
 }
