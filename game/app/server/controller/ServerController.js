@@ -917,9 +917,9 @@ module.exports = class ServerController {
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageList().forEach( (message) => {
                         messageInfoData.push({
-                        username: message.getUsername(),
+                        senderUsername: message.getUsername(),
                         timestamp: message.getTimestamp(),
-                        text: message.getMessageText()});
+                        msgText: message.getMessageText()});
                     });
 
                     if (chat instanceof OneToOneChat) {
