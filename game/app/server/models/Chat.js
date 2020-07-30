@@ -1,5 +1,6 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 const Participant = require('./Participant.js');
+const Message = require('./Message.js');
 
 module.exports = class Chat {
     #chatId;
@@ -15,10 +16,12 @@ module.exports = class Chat {
             TypeChecker.isString(participantID);
         });
 
+        
         TypeChecker.isInstanceOf(messageList, Array);
         messageList.forEach(message => {
-            TypeChecker.isString(message, String);
+            TypeChecker.isInstanceOf(message, Message);
         });
+        
 
         TypeChecker.isInt(maxNumMessages);
 

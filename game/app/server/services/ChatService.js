@@ -132,19 +132,24 @@ module.exports = class Chatservice {
         return getDB().then(res => {
             chatIDList.forEach(chatId => {
                 vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(chat => {
+                    //create Message instances
+                    var messages = [];
+                    chat.messageList.forEach(message => {
+                        messages.push(new Message(message.msgId, message.senderId, message.timestamp, message.msgText));
+                    });
                     if (chat.hasOwnProperty('ownerId')) {
                         chats.push(new GroupChat(chat.chatId, 
                                                 chat.ownerId, 
                                                 chat.name, 
                                                 chat.memberId, 
-                                                chat.messageList, 
+                                                messages, 
                                                 Settings.MAXGROUPPARTICIPANTS, 
                                                 Settings.MAXNUMMESSAGES_GROUPCHAT));
                     } else {
                         chats.push(new OneToOneChat(chat.chatId, 
                                                     chat.memberId[0], 
                                                     chat.memberId[1], 
-                                                    chat.messageList, 
+                                                    messages, 
                                                     Settings.MAXNUMMESSAGES_ONETOONECHAT,
                                                     chat.username1,
                                                     chat.username2));
