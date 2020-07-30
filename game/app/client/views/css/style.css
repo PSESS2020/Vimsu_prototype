@@ -138,7 +138,7 @@ overflow-wrap: break-word;
   font-size: 15px;
 }
 
-.fa-user-plus:hover {
+.friendRequestListButton:hover {
   opacity: .5 !important;
 }
 

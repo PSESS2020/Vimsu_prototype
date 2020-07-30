@@ -6,7 +6,7 @@ const SlotService = require('../services/SlotService')
 const path = require('path');
 const FileSystem = require('../../config/FileSystem');
 const fs = require('fs');
-const { response } = require('express');
+const Settings = require('../../game/app/utils/Settings')
 
 module.exports = class RouteController {
 
@@ -98,8 +98,8 @@ module.exports = class RouteController {
                     return response.render('upload', {fileSizeExceeded: true});
                 }
                 else {
-                    return SlotService.storeVideo(video).then(videoId => {
-                        return SlotService.createSlot(videoId, "1", title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+                    return SlotService.storeVideo(video).then(videoData => {
+                        return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
                             response.redirect('/');
                             response.end();
                         }).catch(err => {

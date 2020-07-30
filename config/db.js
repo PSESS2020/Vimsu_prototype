@@ -2,6 +2,7 @@ const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/utils/TypeChecker');
 const FileSystem = require('./FileSystem');
+const { getVideoDurationInSeconds } = require('get-video-duration')
 
 module.exports = class db {
     #vimsudb;
@@ -175,21 +176,24 @@ module.exports = class db {
         });
 
         var readStream = FileSystem.createReadStream(dir + fileName);
-        var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
 
-        var fileId = uploadStream.id.toString();
-    
-        return new Promise((resolve, reject) => {
-            readStream.pipe(uploadStream)
-            .on('finish', function() {
-                console.log(fileName + ' with id ' + fileId + ' uploaded');
-                resolve(fileId);
-            })
-            .on('error', function(error) {
-                console.error(error);
-                reject();
+        return getVideoDurationInSeconds(readStream).then(duration => {
+            var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
+
+            var fileId = uploadStream.id.toString();
+        
+            return new Promise((resolve, reject) => {
+                readStream.pipe(uploadStream)
+                .on('finish', function() {
+                    console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
+                    resolve({fileId, duration});
+                })
+                .on('error', function(error) {
+                    console.error(error);
+                    reject();
+                });
             });
-        });
+        })
     }
 
     downloadFile(collectionName, fileId) {
