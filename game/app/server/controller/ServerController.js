@@ -741,7 +741,7 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
 
                         let chatData = {
-                            title: chatPartner.getId(), //todo: username
+                            title: chat.getParticipantL()[1], //todo: username
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
@@ -755,6 +755,16 @@ module.exports = class ServerController {
                         * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
                     }); 
+                } else {
+                    ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                        let chatData = {
+                            title: chat.memberId[1], //todo: username
+                            chatId: chat.chatId,
+                            messages: chat.messageList
+                        }
+
+                        this.#io.to(socket.id).emit('chatThread', chatData);
+                    })
                 }
             });
 
