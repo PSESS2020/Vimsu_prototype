@@ -13,20 +13,23 @@ class ChatListView extends WindowView {
     
     draw(chats) {
         /* Clear view to make sure we don't draw anything twice */
-        $('#chatListModal .modal-body .list-group').empty()
-        
+        $('#chatListModal .modal-body .list-group').empty();
+
+        chats.forEach(chat => {
+            chat.timestamp = new Date(chat.timestamp);
+        });
+
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
-        //var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
         this.#chats.forEach(chat => {
-            console.log("chatId client: " + chat.chatId)
-            /*if(chat.timestamp && chat.timestamp instanceof Date) {
-                chat.timestamp = days[chat.timestamp.getDay()] + ", " +(chat.timestamp.getDate()<10?'0':'') + chat.timestamp.getDate() + "/" 
-                                + (chat.timestamp.getMonth()<10?'0':'') + chat.timestamp.getMonth() + "/" + chat.timestamp.getFullYear() 
-                                + " " + (chat.timestamp.getHours()<10?'0':'') + chat.timestamp.getHours() + 
-                                ":" + (chat.timestamp.getMinutes()<10?'0':'') + chat.timestamp.getMinutes();
+            console.log("chatId client: " + chat.chatId);
+            var timestamp;
+
+            if(chat.timestamp && chat.timestamp instanceof Date) {
+                timestamp = new DateParser(chat.timestamp).parse();
             } else {
-                chat.timestamp = 'no messages'
-            }*/
+                timestamp = 'no messages'
+            }
 
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
@@ -38,12 +41,12 @@ class ChatListView extends WindowView {
                             <div class="col-12 col-sm-2 px-0">
                                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                             </div>
-                            <div class="col-12 col-md-9 text-center text-sm-left">
+                            <div class="col-12 col-md-10 text-center text-sm-left">
                                 <label class="name lead">${chat.title}</label>
-                                <br> 
-                                <span >${/*"[" + chat.timestamp + "]" + */chat.previewUsername + ": "}</span>
                                 <br>
-                                <span class="small">${chat.previewMessage}</span>
+                                <span class="small p-0" style="opacity: 0.5">${"on "+ timestamp + " " + chat.previewUsername + " wrote"}</span>
+                                <br>
+                                <span style="opacity: 0.8">${chat.previewMessage}</span>                                
                             </div>  
                         </div>
                     </li>

@@ -29,7 +29,7 @@ class ChatThreadView extends WindowView {
         $('#chatLeaveButton').click((event) => {
             event.preventDefault();
 
-            var result = confirm(`Are you sure you want to leave from ${this.#chat.title}?`)
+            var result = confirm(`Are you sure you want to leave from the chat with ${this.#chat.title}?`)
 
             if (result) {
                 $('#chatThreadModal').modal('hide');
@@ -92,10 +92,12 @@ class ChatThreadView extends WindowView {
         this.#appendMessage(message);
     };
     
-    #appendMessage = (message) => {
+    #appendMessage = (message) => {        
+        var timestamp = new DateParser(new Date(message.timestamp)).parse();
+
         var messageDiv = `
         <div>
-            <small><b>${message.senderUsername}</b> (${message.timestamp.toString()}):</small>
+            <small><b>${message.senderUsername}</b> (${timestamp}):</small>
             <small>${message.msgText}</small>
         </div>
         `;
