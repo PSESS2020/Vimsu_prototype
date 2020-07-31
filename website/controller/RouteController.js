@@ -59,6 +59,7 @@ module.exports = class RouteController {
             } else {
             response.render('index');
             }
+
         });
 
         this.#app.get('/upload', (request, response) => {
@@ -371,5 +372,4 @@ module.exports = class RouteController {
             })
         })
     }
-
 }
