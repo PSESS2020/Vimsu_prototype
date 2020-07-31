@@ -52,6 +52,11 @@ module.exports = class OneToOneChat extends Chat{
         }
     }
 
+    removeParticipant(participantId) {
+        TypeChecker.isString(participantId);
+
+        super.removeParticipant(participantId);
+    }
     /*
     isSent() {
         return this.#sentStatus;

@@ -60,4 +60,10 @@ module.exports = class GroupChat extends Chat {
         }
     }
 
+    removeParticipant(participantId) {
+        TypeChecker.isString(participantId);
+
+        super.removeParticipant(participantId);
+    }
+
 }
