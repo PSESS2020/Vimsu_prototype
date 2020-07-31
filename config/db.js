@@ -6,6 +6,7 @@ const { getVideoDurationInSeconds } = require('get-video-duration')
 
 module.exports = class db {
     #vimsudb;
+    #client;
 
     connectDB() {
         return mongodb.MongoClient.connect(connectionString, { 
@@ -13,12 +14,18 @@ module.exports = class db {
         })
         .then(client => {
             console.log('Connected to Database')
+            this.#client = client;
             this.#vimsudb = client.db('vimsudb');
             console.log("connectDB() "  + this.#vimsudb)
         })
         .catch(error => 
             console.error(error)
         )
+    }
+
+    closeDB() {
+        this.#client.close();
+        console.log("db closed");
     }
 
     insertOneToCollection(collectionName, object) {

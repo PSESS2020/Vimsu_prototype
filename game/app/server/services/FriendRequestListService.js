@@ -1,15 +1,9 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 
-var vimsudb;
-async function getDB() {
-    return dbconf.setDB().then(res => {
-        vimsudb = dbconf.getDB()
-        console.log("get DB success")
-    }).catch(err => {
-        console.error(err)
-    });
-}
+var vimsudb = dbconf.getDB();
+
+
 
 module.exports = class FriendRequestListService {
     static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
@@ -17,14 +11,14 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
             return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.sent': receiverId}).then(res => {
+
                 return true;
             }).catch(err => {
                 console.error(err);
                 return false;
             })
-        })
+
     }
 
     static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
@@ -32,14 +26,15 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
+
             return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.received': senderId}).then(res => {
+
                 return true;
             }).catch(err => {
                 console.error(err);
                 return false;
             })
-        })
+
     }
 
     static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
@@ -47,14 +42,15 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
+
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.sent': receiverId}).then(res => {
+
                 return true;
             }).catch(err => {
                 console.error(err);
                 return false;
             })
-        })
+
     }
 
     static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
@@ -62,22 +58,24 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
+
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.received': senderId}).then(res => {
+
                 return true;
             }).catch(err => {
                 console.error(err);
                 return false;
             })
-        })
+
     }
 
     static getReceivedRequestList(participantId, conferenceId) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
+
             return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': 1}).then(par => {
+
                 if (par) {
                     return par.friendRequestId.received;
                 }
@@ -88,15 +86,16 @@ module.exports = class FriendRequestListService {
             }).catch(err => {
                 console.error(err);
             })
-        })
+
     }
 
     static getSentRequestList(participantId, conferenceId) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return getDB().then(res => {
+
             return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': 1}).then(par => {
+
                 if (par) {
                     return par.friendRequestId.sent;
                 }
@@ -107,6 +106,6 @@ module.exports = class FriendRequestListService {
             }).catch(err => {
                 console.error(err);
             })
-        })
+
     }
 } 

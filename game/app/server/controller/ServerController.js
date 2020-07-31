@@ -4,6 +4,7 @@
 
 const socketio = require('socket.io');
 const path = require('path');
+const dbconf = require('../../../../config/dbconf')
 
 const Position = require('../models/Position.js');
 const Direction = require('../../utils/Direction.js');
@@ -1158,6 +1159,8 @@ module.exports = class ServerController {
                     socket.leave(lectureId);
                     socket.currentLecture = undefined;
                 }
+
+                dbconf.closeDB();
 
                 // Destroy ppant and his controller
             });

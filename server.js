@@ -18,8 +18,7 @@ const socketio = require('socket.io');
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
 
-const ServerController = require('./game/app/server/controller/ServerController.js');
-const RouteController = require('./website/controller/RouteController')
+
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */
@@ -69,11 +68,14 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 
 /* HAS BEEN MOVED INTO ServerController.js */
 
-const serverController = new ServerController(io);
-serverController.init();
+const dbconf = require('./config/dbconf')
 
-const routeController = new RouteController(app, io);
-routeController.init();
+dbconf.setDB().then(res => {
+    const ServerController = require('./game/app/server/controller/ServerController.js');
+    const RouteController = require('./website/controller/RouteController')
+    new ServerController(io).init();
+    new RouteController(app, io).init();
+})
 
 
 
