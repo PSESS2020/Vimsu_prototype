@@ -16,17 +16,17 @@ class ChatListView extends WindowView {
         $('#chatListModal .modal-body .list-group').empty()
         
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
-        var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        //var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         this.#chats.forEach(chat => {
             console.log("chatId client: " + chat.chatId)
-            if(chat.timestamp && chat.timestamp instanceof Date) {
+            /*if(chat.timestamp && chat.timestamp instanceof Date) {
                 chat.timestamp = days[chat.timestamp.getDay()] + ", " +(chat.timestamp.getDate()<10?'0':'') + chat.timestamp.getDate() + "/" 
                                 + (chat.timestamp.getMonth()<10?'0':'') + chat.timestamp.getMonth() + "/" + chat.timestamp.getFullYear() 
                                 + " " + (chat.timestamp.getHours()<10?'0':'') + chat.timestamp.getHours() + 
                                 ":" + (chat.timestamp.getMinutes()<10?'0':'') + chat.timestamp.getMinutes();
             } else {
                 chat.timestamp = 'no messages'
-            }
+            }*/
 
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
@@ -41,7 +41,7 @@ class ChatListView extends WindowView {
                             <div class="col-12 col-md-9 text-center text-sm-left">
                                 <label class="name lead">${chat.title}</label>
                                 <br> 
-                                <span >${"[" + chat.timestamp + "]" + chat.previewUsername + ": "}</span>
+                                <span >${/*"[" + chat.timestamp + "]" + */chat.previewUsername + ": "}</span>
                                 <br>
                                 <span class="small">${chat.previewMessage}</span>
                             </div>  
