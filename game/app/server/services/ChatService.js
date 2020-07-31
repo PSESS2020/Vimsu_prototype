@@ -103,7 +103,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findOneInCollection("chats_" + conferenceId , {memberId: ownerId, memberId: chatPartnerId}, "").then(chat => {
+            return vimsudb.findOneInCollection("chats_" + conferenceId , {memberId: {$all: [ownerId, chatPartnerId]}}, "").then(chat => {
                 if (chat) {
                     return chat;
                 }
@@ -134,9 +134,11 @@ module.exports = class Chatservice {
                 vimsudb.findOneInCollection("chats_" + conferenceId,  {chatId: chatId}).then(async chat => {
                     //create Message instances
                     var messages = [];
-                    await chat.messageList.forEach(message => {
-                        messages.push(new Message(message.msgId, message.senderId, message.senderUsername, message.timestamp, message.msgText));
-                    });
+                    if (chat.messageList.length >0) {
+                        await chat.messageList.forEach(message => {
+                            messages.push(new Message(message.msgId, message.senderId, message.senderUsername, message.timestamp, message.msgText));
+                        });
+                    }
                     if (chat.hasOwnProperty('ownerId')) {
                         chats.push(new GroupChat(chat.chatId, 
                                                 chat.ownerId, 
