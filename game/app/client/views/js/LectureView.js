@@ -31,10 +31,8 @@ class LectureView extends WindowView {
                 }
             });
             
-            $('#closeLecture').click((event) => {
-                event.preventDefault();
+            $(document).on('click', ".closeButton" , () => {
                 this.leaveLecture();
-                event.stopImmediatePropagation();
             })
         
         });
@@ -94,7 +92,7 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-        <button id="closeLecture" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+        <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
         $('#lectureTitleLabel').text(lecture.title);
