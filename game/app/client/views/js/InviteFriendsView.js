@@ -35,9 +35,9 @@ class InviteFriendsView extends WindowView {
                             <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px" class="btn">
                                 <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
                             </button>
-                            <div id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-left: 20px">
+                            <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -7px; margin-left: 5px" class="btn">
                                 <i class="fa fa-check-circle fa-2x navbarIcons"></i>
-                            </div>
+                            </button>
                         </div>    
                     </div>
                 </li>
@@ -50,6 +50,13 @@ class InviteFriendsView extends WindowView {
                         invitedFriends.push('${businessCard.getParticipantId()}');
                         $('#invite' + '${businessCard.getParticipantId()}').hide();
                         $('#selected' + '${businessCard.getParticipantId()}').show();
+                    })
+
+                    $('#selected' + '${businessCard.getParticipantId()}').on('click', function (event) {
+                        let index = invitedFriends.indexOf('${businessCard.getParticipantId()}');
+                        invitedFriends.splice(index, 1);
+                        $('#selected' + '${businessCard.getParticipantId()}').hide();
+                        $('#invite' + '${businessCard.getParticipantId()}').show();
                     })
                 </script>
             `)
