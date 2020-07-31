@@ -182,15 +182,13 @@ module.exports = class db {
             bucketName: collectionName,
         });
 
-        var readStream = FileSystem.createReadStream(dir + fileName);
-
-        return getVideoDurationInSeconds(readStream).then(duration => {
+        return getVideoDurationInSeconds(FileSystem.createReadStream(dir + fileName)).then(duration => {
             var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
 
             var fileId = uploadStream.id.toString();
         
             return new Promise((resolve, reject) => {
-                readStream.pipe(uploadStream)
+                FileSystem.createReadStream(dir + fileName).pipe(uploadStream)
                 .on('finish', function() {
                     console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
                     resolve({fileId, duration});
