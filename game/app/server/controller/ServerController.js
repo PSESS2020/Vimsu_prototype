@@ -663,7 +663,7 @@ module.exports = class ServerController {
                 })
             })
 
-            socket.on('getFriendList', (ppantID, isInviteFriends, groupName) => {
+            socket.on('getFriendList', (ppantID) => {
                 var friendList = this.ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
@@ -686,6 +686,30 @@ module.exports = class ServerController {
 
                 socket.emit('friendList', friendListData, isInviteFriends, groupName);
             }); 
+
+            socket.on('getInviteFriends', (ppantID, groupName) => {
+                var friendList = this.ppants.get(ppantID).getFriendList();
+
+                var friendListData = [];
+                
+                friendList.getAllBusinessCards().forEach(businessCard => {
+                    friendListData.push(
+                        {   
+                            friendId: businessCard.getParticipantId(),
+                            username: businessCard.getUsername(),
+                            title: businessCard.getTitle(),
+                            surname: businessCard.getSurname(),
+                            forename: businessCard.getForename(),
+                            surname: businessCard.getSurname(),
+                            job: businessCard.getJob(),
+                            company: businessCard.getCompany(),
+                            email: businessCard.getEmail()
+                        }
+                    )
+                });
+
+                socket.emit('inviteFriends', friendListData, groupName, Settings.MAXGROUPPARTICIPANTS);
+            });
 
             socket.on('getFriendRequestList', (ppantID) => {
                 var friendRequestList = this.ppants.get(ppantID).getReceivedRequestList();
@@ -789,52 +813,55 @@ module.exports = class ServerController {
             //Called whenever a participant creates a new group chat (N)
             socket.on('createNewGroupChat', (creatorID, chatName, chatPartnerIDList) => {
 
-                let creator = this.ppants.get(creatorID);
+                if(chatPartnerIDList.length > Settings.MAXGROUPPARTICIPANTS || chatPartnerIDList.length < 1) {
+                    return false;
+                } else {
 
-                //still store creatorID in memberID, so that chat removal is easy
-                chatPartnerIDList.push(creatorID);
+                    let creator = this.ppants.get(creatorID);
 
-                //creates new group chat and writes it in DB
-                ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
+                    //still store creatorID in memberID, so that chat removal is easy
+                    chatPartnerIDList.push(creatorID);
 
-                    //add chat to chat creator
-                    creator.addChat(chat);
+                    //creates new group chat and writes it in DB
+                    ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
 
-                    chatPartnerIDList.forEach(chatPartnerID => {
+                        //add chat to chat creator
+                        creator.addChat(chat);
 
-                        let chatPartner = this.ppants.get(chatPartnerID);
+                        chatPartnerIDList.forEach(chatPartnerID => {
 
-                        if (chatPartner !== undefined) {
-                            chatPartner.addChat(chat);
+                            let chatPartner = this.ppants.get(chatPartnerID);
 
-                            //chat partner joins chat channel
-                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                            socketPartner.join(chat.getId());
-                        }
+                            if (chatPartner !== undefined) {
+                                chatPartner.addChat(chat);
 
-                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
-                    });
-                    
-                    //Creator joins chat channel
-                    socket.join(chat.getId());
+                                //chat partner joins chat channel
+                                let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                                socketPartner.join(chat.getId());
+                            }
 
-                    let chatData = {
-                        title: chat.getChatName(),
-                        chatId: chat.getId(),
-                        timestamp: '', //please dont change the timestamp here
-                        previewUsername: '',
-                        previewMessage: '',
-                        messages: []
-                    };
+                            ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+                        });
+                        
+                        //Creator joins chat channel
+                        socket.join(chat.getId());
 
-                    /* Tell the creator's client to create a new chat. The true tells
-                        * the client to immediately open the chatThreadView of the new chat 
-                        * so that the creator can start sending messages.
-                        * - (E) */
-                    this.#io.to(socket.id).emit('newChat', chatData, true);
+                        let chatData = {
+                            title: chat.getChatName(),
+                            chatId: chat.getId(),
+                            timestamp: '', //please dont change the timestamp here
+                            previewUsername: '',
+                            previewMessage: '',
+                            messages: []
+                        };
 
-                })
-
+                        /* Tell the creator's client to create a new chat. The true tells
+                            * the client to immediately open the chatThreadView of the new chat 
+                            * so that the creator can start sending messages.
+                            * - (E) */
+                        this.#io.to(socket.id).emit('newChat', chatData, true);
+                    })
+                }
             });
             
             

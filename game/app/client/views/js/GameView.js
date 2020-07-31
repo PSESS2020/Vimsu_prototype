@@ -514,9 +514,9 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#friendListView.draw(businessCards)
     }
 
-    initInviteFriendsView(businessCards, groupName) {
+    initInviteFriendsView(businessCards, groupName, limit) {
         this.#inviteFriendsView = new InviteFriendsView();
-        this.#inviteFriendsView.draw(businessCards, groupName);
+        this.#inviteFriendsView.draw(businessCards, groupName, limit);
     }
 
     initCurrentAchievementsView(achievements) {

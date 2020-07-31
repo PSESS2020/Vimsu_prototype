@@ -6,10 +6,13 @@ class InviteFriendsView extends WindowView {
         super()
     }
 
-    draw(businessCards, groupName) {
+    draw(businessCards, groupName, limit) {
         $('#inviteFriendsModal .modal-body .list-group').empty()
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.#businessCards = sortedBusinessCards;
+
+        $('#toomanyinvitedfriends').empty();
+        $('#toomanyinvitedfriends').text("Max. number group participant of " + limit + " is reached!");
 
         this.#businessCards.forEach(businessCard => {
             $('#inviteFriendsModal .modal-body .list-group').append(`
@@ -58,9 +61,13 @@ class InviteFriendsView extends WindowView {
             $('#createGroupChat').off();
                 $('#createGroupChat').on('click', function (event) {
 
-                if(invitedFriends.length > 0) {
+                if(invitedFriends.length > 0 && invitedFriends.length < ${limit} + 1) {
                     $('#inviteFriendsModal').modal('hide');
                     new EventManager().handleCreateGroupChat('${groupName}', invitedFriends);
+                } else if (invitedFriends.length < 1) {
+                    $('#noinvitedfriends').show();
+                } else {
+                    $('#toomanyinvitedfriends').show()
                 }
 
             })

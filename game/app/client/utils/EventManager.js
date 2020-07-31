@@ -80,8 +80,8 @@ class EventManager {
 
 
 
-    handleFriendListClicked(isInviteFriends) {
-        this.#clientController.handleFromViewShowFriendList(isInviteFriends, "");
+    handleFriendListClicked() {
+        this.#clientController.handleFromViewShowFriendList();
     }
     
     /* One function to display the list of all chats.

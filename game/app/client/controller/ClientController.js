@@ -223,6 +223,7 @@ class ClientController {
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
         this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
         this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
+        this.socket.on('inviteFriends', this.handleFromServerInviteFriends.bind(this));
     }
 
     /* #################################################### */    
@@ -476,17 +477,21 @@ class ClientController {
         }
     }
 
-    //Is called after server send the answer of friendlistclick
-    handleFromServerFriendList(friendListData, isInviteFriends, groupName) {
+    handleFromServerInviteFriends(friendListData, groupName, limit) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
-        if(isInviteFriends) {
-            this.#gameView.initInviteFriendsView(friendList, groupName);
-        } else {
-            this.#gameView.initFriendListView(friendList);
-        }
+        this.#gameView.initInviteFriendsView(friendList, groupName, limit);
+    }
+
+    //Is called after server send the answer of friendlistclick
+    handleFromServerFriendList(friendListData) {
+        var friendList = [];
+        friendListData.forEach(data => {
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+        this.#gameView.initFriendListView(friendList);
     }
 
     //Is called after server send the answer of friendrequestlistclick
@@ -654,9 +659,14 @@ class ClientController {
     }
 
     //called after click on friendlist button
-    handleFromViewShowFriendList(isInviteFriends, groupName) {
+    handleFromViewShowFriendList() {
         this.socketReady;
-        this.socket.emit('getFriendList', this.#ownParticipant.getId(), isInviteFriends, groupName);
+        this.socket.emit('getFriendList', this.#ownParticipant.getId());
+    }
+
+    handleFromViewShowInviteFriends(groupName) {
+        this.socketReady;
+        this.socket.emit('getInviteFriends', this.#ownParticipant.getId(), groupName);
     }
 
     //called after click on friendrequestlist button
