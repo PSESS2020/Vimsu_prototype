@@ -13,10 +13,10 @@ class ScheduleListView extends WindowView {
 
         const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime)
         this.#lectures = sortedLectures;
-        var startingTime = new DateParser(lecture.startingTime).parse();
         var count = 1;
 
         this.#lectures.forEach(lecture => {
+            var startingTime = new DateParser(lecture.startingTime).parse();
             $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
                 <tr>
                     <th scope="row">${count++}</th>
