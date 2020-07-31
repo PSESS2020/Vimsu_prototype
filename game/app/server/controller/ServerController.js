@@ -1099,6 +1099,23 @@ module.exports = class ServerController {
                     remover.removeChat(chatId);
                 }
 
+                if (remover.isMemberOfChat(chatId)){
+                    //console.log('from server 2 ' + msgText);
+                    //gets list of chat participants to which send the message to
+                    let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
+
+                        chatPartnerIDList.forEach(chatPartnerID => {
+                            let chatPartner = this.ppants.get(chatPartnerID);
+                            
+                            //Checks if receiver of message is online
+                            if (chatPartner !== undefined) {
+                               
+                                let chatPartnerChat = chatPartner.getChat(chatId)
+                                chatPartnerChat.removeParticipant(chatPartnerID);
+                            }  
+                        });
+                    
+                }
                 ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID);
             })
 
