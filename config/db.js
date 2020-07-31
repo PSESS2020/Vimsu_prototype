@@ -183,21 +183,25 @@ module.exports = class db {
         });
 
         return getVideoDurationInSeconds(FileSystem.createReadStream(dir + fileName)).then(duration => {
-            var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
+            if(duration < 1) {
+                return false;
+            } else {
+                var uploadStream = bucket.openUploadStream(fileName.slice(0,-4) + "_" + new Date().getTime() + ".mp4");
 
-            var fileId = uploadStream.id.toString();
-        
-            return new Promise((resolve, reject) => {
-                FileSystem.createReadStream(dir + fileName).pipe(uploadStream)
-                .on('finish', function() {
-                    console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
-                    resolve({fileId, duration});
-                })
-                .on('error', function(error) {
-                    console.error(error);
-                    reject();
+                var fileId = uploadStream.id.toString();
+            
+                return new Promise((resolve, reject) => {
+                    FileSystem.createReadStream(dir + fileName).pipe(uploadStream)
+                    .on('finish', function() {
+                        console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
+                        resolve({fileId, duration});
+                    })
+                    .on('error', function(error) {
+                        console.error(error);
+                        reject();
+                    });
                 });
-            });
+            }
         })
     }
 
