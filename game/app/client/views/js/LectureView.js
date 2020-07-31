@@ -30,10 +30,11 @@ class LectureView extends WindowView {
                     sendMessage();
                 }
             });
-        
-        
-            $(document).on('click', ".closeButton" , () => {
+            
+            $('#closeLecture').click((event) => {
+                event.preventDefault();
                 this.leaveLecture();
+                event.stopImmediatePropagation();
             })
         
         });
@@ -93,7 +94,7 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-        <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+        <button id="closeLecture" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
         $('#lectureTitleLabel').text(lecture.title);
@@ -153,7 +154,19 @@ class LectureView extends WindowView {
                     video.controlsList.remove('nodownload');
                     video.pause();
                 }
-            }, 100); // check lecture status every 100ms
+            }, 1000); // check lecture status every 1s
+
+            video.addEventListener('pause', () => {
+                if(this.#lectureStatus === LectureStatus.RUNNING) {
+                    video.play();
+                }
+            })
+
+            video.addEventListener('play', () => {
+                if(this.#lectureStatus === LectureStatus.OVER) {
+                    video.pause();
+                }
+            })
         });
     }   
 
