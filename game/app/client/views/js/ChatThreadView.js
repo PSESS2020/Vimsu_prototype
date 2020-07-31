@@ -13,11 +13,13 @@ class ChatThreadView extends WindowView {
     constructor() {
         super();
 
+        $('#chatMessageButton').off();
         $('#chatMessageButton').on('click', (event) => {
             event.preventDefault();
             this.sendMessage();
         });
 
+        $('#chatMessageInput').off();
         $('#chatMessageInput').on('keydown', (event) => {
             if (event.keyCode === 13) {
                 this.sendMessage();
@@ -62,7 +64,7 @@ class ChatThreadView extends WindowView {
     }
     
     draw(chat) { 
-        console.log(JSON.stringify(chat));
+        //console.log(JSON.stringify(chat));
         this.#chat = chat;
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();

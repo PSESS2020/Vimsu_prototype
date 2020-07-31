@@ -577,6 +577,7 @@ class ClientController {
     };
     
     handleFromServerShowChatThread(chat) {
+        //console.log(JSON.stringify(chat));
         this.#gameView.initChatThreadView(chat, true);
     };
     

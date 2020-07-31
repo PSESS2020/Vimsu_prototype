@@ -947,7 +947,7 @@ module.exports = class ServerController {
                     }
 
                     socket.join(chatID);
-
+                    //console.log(JSON.stringify(chatData));
                     this.#io.to(socket.id).emit('chatThread', chatData);
                 }
             });
@@ -987,7 +987,7 @@ module.exports = class ServerController {
                         };
                     
                         // readded this line because it is required to distribute chat messages after joining the 1to1 chat 
-                        this.#io.to(chatId).emit('newChatMessage', chatId, msgToEmit);
+                        this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
                     });
                 }
             });
