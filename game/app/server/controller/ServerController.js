@@ -970,9 +970,10 @@ module.exports = class ServerController {
                         //seems not optimal. Don't know if it work if only one chat gets updated.
                         chatPartnerIDList.forEach(chatPartnerID => {
                             let chatPartner = this.ppants.get(chatPartnerID);
-    
+                            
                             //Checks if receiver of message is online
                             if (chatPartner !== undefined) {
+                               
                                 let chatPartnerChat = chatPartner.getChat(chatId)
                                 chatPartnerChat.addMessage(msg);
                             }  

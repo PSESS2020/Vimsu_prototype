@@ -44,7 +44,7 @@ module.exports = class GroupChat extends Chat {
         if(super.getMessageList().length >= super.getMaxNumMessages())
             super.getMessageList().splice(0, super.getMaxNumMessages());
 
-        super.addMessage(msg);
+            super.getMessageList().push(msg);
     }
 
     //Addds a participant to the participant list
