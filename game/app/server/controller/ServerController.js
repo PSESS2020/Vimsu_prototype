@@ -40,6 +40,7 @@ const FriendListService = require('../services/FriendListService.js');
 const FriendList = require('../models/FriendList.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
 const OneToOneChat = require('../models/OneToOneChat.js');
+const SlotService = require('../../../../website/services/SlotService')
 
 
 
