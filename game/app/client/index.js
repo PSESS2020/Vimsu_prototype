@@ -87,9 +87,9 @@ document.getElementById("groupName").onkeydown = function(event) {
   event.stopPropagation();
 };
 
-/*document.getElementById("chatInput").onkeydown = function(event) {
+document.getElementById("chatMessageInput").onkeydown = function(event) {
   event.stopPropagation();
-};*/
+};
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
