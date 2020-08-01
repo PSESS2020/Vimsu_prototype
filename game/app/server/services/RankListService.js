@@ -1,8 +1,6 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
-const dbconf = require('../../../../config/dbconf');
 const ParticipantService = require('./ParticipantService');
 
-//var vimsudb = dbconf.getDB();
 
 module.exports = class RankListService {
     static getRankList(conferenceId, vimsudb) {

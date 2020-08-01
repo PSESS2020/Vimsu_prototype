@@ -1,10 +1,7 @@
-const dbconf = require('../../config/dbconf');
 const FileSystem = require('../../config/FileSystem');
 const ObjectId = require('mongodb').ObjectID;
 const TypeChecker = require('../../game/app/utils/TypeChecker');
 const Slot = require('../models/Slot')
-
-//var vimsudb = dbconf.getDB();
 
 module.exports = class SlotService {
     static storeVideo(video, vimsudb) {

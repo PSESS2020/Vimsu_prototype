@@ -6,15 +6,12 @@ const Participant = require('../models/Participant')
 const Settings = require('../../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
 const Account = require('../../../../website/models/Account')
-const dbconf = require('../../../../config/dbconf');
 const AccountService = require('../../../../website/services/AccountService');
 const AchievementService = require('./AchievementService')
 const Achievement = require('../models/Achievement.js');
 const ChatService = require('./ChatService.js');
 const FriendList = require('../models/FriendList.js');
 const TaskService = require('./TaskService')
-
-//var vimsudb = dbconf.getDB();
 
 module.exports = class ParticipantService {
     static async createParticipant(account, conferenceId, vimsudb) {

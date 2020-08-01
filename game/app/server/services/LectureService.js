@@ -1,8 +1,5 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
-const dbconf = require('../../../../config/dbconf');
 const Lecture = require('../models/Lecture')
-
-//var vimsudb = dbconf.getDB();
 
 module.exports = class LectureService {
     static getVideo(videoId, vimsudb) {

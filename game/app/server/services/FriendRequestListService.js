@@ -1,8 +1,4 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
-const dbconf = require('../../../../config/dbconf');
-
-//var vimsudb = dbconf.getDB();
-
 
 
 module.exports = class FriendRequestListService {

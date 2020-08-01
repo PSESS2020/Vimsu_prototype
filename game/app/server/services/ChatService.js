@@ -1,5 +1,4 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
-const dbconf = require('../../../../config/dbconf');
 const Message = require('../models/Message');
 const Chat = require('../models/Chat');
 const OneToOneChat = require('../models/OneToOneChat');
@@ -10,8 +9,6 @@ const GroupChat = require('../models/GroupChat');
 const ObjectId = require('mongodb').ObjectID;
 const ParticipantService = require('../services/ParticipantService');
 const Settings = require('../../utils/Settings.js');
-
-//var vimsudb = dbconf.getDB();
 
 module.exports = class Chatservice {
 

@@ -1,10 +1,7 @@
 const TypeChecker = require('../../game/app/utils/TypeChecker')
 const Account = require('../models/Account')
-const dbconf = require('../../config/dbconf');
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
-
-//var vimsudb = dbconf.getDB();
 
 
 module.exports = class AccountService {
