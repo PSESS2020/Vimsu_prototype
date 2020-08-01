@@ -715,7 +715,7 @@ class ClientController {
 
     handleFromViewLeaveChat(chatId) {
         this.socketReady;
-        this.socket.emit('removeChat', this.#ownParticipant.getId(), chatId);
+        this.socket.emit('removeParticipantFromChat', this.#ownParticipant.getId(), chatId);
         this.#gameView.removeChat(chatId);
     }
 
@@ -756,7 +756,7 @@ class ClientController {
     };
     
     handleFromViewShowChatThread(chatID) {
-        this.socket.emit('getChatThread', chatID);
+        this.socket.emit('getChatThread', this.#ownParticipant.getId(), chatID);
     };
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
