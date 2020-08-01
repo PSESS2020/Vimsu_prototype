@@ -115,7 +115,7 @@ module.exports = class ServerController {
          * This may late be moved into the server or conference-controller?
          * - (E) */
         this.#io.on('connection', (socket) => {
-            console.log(this.#db)
+
             LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
                 var schedule = new Schedule(lectures);
                 var conference = new Conference(schedule);
@@ -877,7 +877,7 @@ module.exports = class ServerController {
                         chatPartnerIDList.forEach(chatPartnerID => {
                             ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
 
-                                let chatPartner = this.ppants.get(chatPartnerID);
+                                let chatPartner = this.#ppants.get(chatPartnerID);
                             
                                 if (chatPartnerID !== creatorID && chatPartner !== undefined) {
                                     chatPartner.addChat(loadedChat);
@@ -978,7 +978,7 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (requesterId, chatID) => {
                 
-                var participant = this.ppants.get(requesterId);
+                var participant = this.#ppants.get(requesterId);
                 //var participant = this.ppants.get(socket.ppantId);
                 console.log(participant);
                 if(participant.isMemberOfChat(chatID)){
@@ -1157,7 +1157,7 @@ module.exports = class ServerController {
             });
 
             socket.on('removeParticipantFromChat', (removerId, chatId) => {
-                let remover = this.ppants.get(removerId);
+                let remover = this.#ppants.get(removerId);
 
                 if(remover !== undefined) {
                     remover.removeChat(chatId);

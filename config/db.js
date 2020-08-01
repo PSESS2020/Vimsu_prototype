@@ -18,7 +18,8 @@ module.exports = class db {
 
     connectDB() {
         return mongodb.MongoClient.connect(connectionString, { 
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            poolSize: 1
         })
         .then(client => {
             console.log('Connected to Database')
