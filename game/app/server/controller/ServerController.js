@@ -793,6 +793,8 @@ module.exports = class ServerController {
                             
                         };
 
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket);
+
                         /* Tell the creator's client to create a new chat. The true tells
                         * the client to immediately open the chatThreadView of the new chat 
                         * so that the creator can start sending messages.
@@ -872,6 +874,8 @@ module.exports = class ServerController {
                             friendRequestSent: true,
                             messages: []
                         };
+
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket);
 
                         /* Tell the creator's client to create a new chat. The true tells
                             * the client to immediately open the chatThreadView of the new chat 
