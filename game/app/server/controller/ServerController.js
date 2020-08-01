@@ -178,13 +178,7 @@ module.exports = class ServerController {
 
                     //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
-
                     
-                    /**
-                     * This doesnt do anything because chatlist is empty.
-                     * Probably because ppant is not loaded fast enough.                     
-                     * 
-                    */
                     //Join all Chat Channels
                     console.log("server ppant chatlist: " + ppant.getChatList());
                     ppant.getChatList().forEach(chat => {
@@ -1037,11 +1031,6 @@ module.exports = class ServerController {
 
                         console.log("chatParticipantList: " + chatPartnerIDList);
                         
-                        //Works if only one chat gets updated!!!
-                        //Somehow chat room handles the distribution of chat instance
-                        //Sender chat and updates it for everyone.
-                        //var chat = sender.getChat(chatId);
-
                         chatPartnerIDList.forEach(chatPartnerID => {
                             let chatPartner = this.#ppants.get(chatPartnerID);
                             
@@ -1053,8 +1042,6 @@ module.exports = class ServerController {
                             }  
                         });
 
-                        //chat.addMessage(msg);
-                    
                         var msgToEmit = {
                             senderUsername: msg.getUsername(),
                             msgId: msg.getMessageId(),
