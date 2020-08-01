@@ -142,7 +142,7 @@ module.exports = class Chatservice {
         })
     }
 
-    static loadChat(chatId, conferenceId) {
+    static loadChat(chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
 

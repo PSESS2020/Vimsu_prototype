@@ -798,7 +798,7 @@ module.exports = class ServerController {
 
                         let chatId = chat.getId();
                         
-                        ChatService.loadChat(chatId, Settings.CONFERENCE_ID).then(loadedChat => {
+                        ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
 
                             //check if chatPartner is online
                             if (chatPartner !== undefined) {
@@ -849,7 +849,7 @@ module.exports = class ServerController {
                         creator.addChat(chat);
                         
                         //write ID in Participant Collection of chat owner in DB
-                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
 
                         //Creator joins chat channel
                         socket.join(chat.getId());
@@ -875,7 +875,7 @@ module.exports = class ServerController {
                         let chatId = chat.getId();
 
                         chatPartnerIDList.forEach(chatPartnerID => {
-                            ChatService.loadChat(chatId, Settings.CONFERENCE_ID).then(loadedChat => {
+                            ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
 
                                 let chatPartner = this.ppants.get(chatPartnerID);
                             
@@ -889,7 +889,7 @@ module.exports = class ServerController {
                                     socketPartner.join(loadedChat.getId());
                                 }
 
-                                ParticipantService.addChatID(chatPartnerID, loadedChat.getId(), Settings.CONFERENCE_ID);
+                                ParticipantService.addChatID(chatPartnerID, loadedChat.getId(), Settings.CONFERENCE_ID, this.#db);
 
                             });
                             
