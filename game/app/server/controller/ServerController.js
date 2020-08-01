@@ -920,7 +920,7 @@ module.exports = class ServerController {
                         var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
                         if(previewText.length > 40) {
-                            previewText = previewText.slice(0, 40) + "... ";
+                            previewText = previewText.slice(0, 40) + "...";
                         } 
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {
