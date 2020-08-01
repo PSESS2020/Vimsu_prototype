@@ -26,6 +26,7 @@ class ChatThreadView extends WindowView {
             }
         });
 
+        $('#chatLeaveButton').off();
         $('#chatLeaveButton').click((event) => {
             event.preventDefault();
 
@@ -39,7 +40,7 @@ class ChatThreadView extends WindowView {
             event.stopImmediatePropagation();
         });
 
-
+        $('#chatFriendRequestButton').off();
         $('#chatFriendRequestButton').click((event) => {
             event.preventDefault();
 

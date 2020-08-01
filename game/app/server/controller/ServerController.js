@@ -67,7 +67,7 @@ module.exports = class ServerController {
         this.#db = db;
         this.#DEBUGMODE = true;
 
-        //Should be initialized here, otherwise the controlle is reset every time a user joins.
+        //Should be initialized here, otherwise the controllers are reset every time a user joins.
         this.#ppantControllers = new Map();
 
         //Init all rooms
@@ -76,6 +76,7 @@ module.exports = class ServerController {
 
         this.#banList = [];
 
+     // Array to hold all participants
         this.#ppants = new Map();
 
     }
@@ -84,9 +85,6 @@ module.exports = class ServerController {
     //foyerChannel: Settings.FOYER_ID.toString()
     //foodCourtChannel: Settings.FOODCOURT_ID.toString()
     //receptionChannel: Settings.RECEPTION_ID.toString()
-
-     // Array to hold all participants
-
 
     init() {
         
@@ -1027,7 +1025,7 @@ module.exports = class ServerController {
                 
                 var participant = this.#ppants.get(requesterId);
                 //var participant = this.ppants.get(socket.ppantId);
-                console.log(participant);
+                console.log("CHAT THREAD PARTICIPANT: " + participant.getId());
                 if(participant.isMemberOfChat(chatID)){
                 console.log('hi from server get thread 2');
                     // Load chat-data into chatData field
