@@ -245,7 +245,15 @@ module.exports = class Participant {
         if(ppantId) {
             TypeChecker.isString(ppantId);
         
-            return this.#friendList.includes(ppantId) || this.#sentRequestList.includes(ppantId); // TODO: method does more than the name says it does
+            return this.#friendList.includes(ppantId) // TODO: method does more than the name says it does
+        }
+    }
+
+    hasSentFriendRequest(ppantId) {
+        if(ppantId) {
+            TypeChecker.isString(ppantId);
+
+            return this.#sentRequestList.includes(ppantId);
         }
     }
 

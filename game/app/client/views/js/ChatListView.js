@@ -16,7 +16,9 @@ class ChatListView extends WindowView {
         $('#chatListModal .modal-body .list-group').empty();
 
         chats.forEach(chat => {
-            chat.timestamp = new Date(chat.timestamp);
+            if(chat.timestamp) {
+                chat.timestamp = new Date(chat.timestamp);
+            }
         });
 
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
@@ -25,8 +27,10 @@ class ChatListView extends WindowView {
             console.log("chatId client: " + chat.chatId);
             var timestamp;
 
+            console.log(chat)
+
             if(chat.timestamp && chat.timestamp instanceof Date) {
-                timestamp = new DateParser(chat.timestamp).parse();
+                timestamp = "on " + new DateParser(chat.timestamp).parse() + " " + chat.previewUsername + " wrote"
             } else {
                 timestamp = 'no messages'
             }
@@ -44,9 +48,9 @@ class ChatListView extends WindowView {
                             <div class="col-12 col-md-10 text-center text-sm-left">
                                 <label class="name lead">${chat.title}</label>
                                 <br>
-                                <span class="small p-0" style="opacity: 0.5">${"on "+ timestamp + " " + chat.previewUsername + " wrote"}</span>
+                                <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
                                 <br>
-                                <span class ="p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
+                                <span class ="small p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
                             </div>  
                         </div>
                     </li>

@@ -743,6 +743,7 @@ module.exports = class ServerController {
                 let chatPartner = this.#ppants.get(chatPartnerID);
 
                 let areFriends = creator.hasFriend(chatPartnerID);
+                let friendRequestSent = creator.hasSentFriendRequest(chatPartnerID);
                 
                 console.log(!creator.hasChatWith(chatPartnerID));
                 //check if chat already exists, only create one if not
@@ -781,6 +782,7 @@ module.exports = class ServerController {
                             previewUsername: '',
                             previewMessage: '',
                             areFriends: areFriends,
+                            friendRequestSent: friendRequestSent,
                             partnerId: chatPartnerID,
                             messages: [],
                             
@@ -818,6 +820,7 @@ module.exports = class ServerController {
                             title: chatPartnerUsername,
                             chatId: chat.chatId,
                             areFriends: areFriends,
+                            friendRequestSent: friendRequestSent,
                             partnerId: chatPartnerID,
                             messages: chat.messageList,
                         }
@@ -916,8 +919,8 @@ module.exports = class ServerController {
                     if (chat.getMessageList().length > 0) {
                         var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
-                        if(previewText.length > 30) {
-                            previewText = previewText.slice(0, 30) + "... ";
+                        if(previewText.length > 40) {
+                            previewText = previewText.slice(0, 40) + "... ";
                         } 
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {
@@ -995,12 +998,15 @@ module.exports = class ServerController {
                         msgText: message.getMessageText()});
                     });
 
+                    let partnerId = chat.getOtherUserId(participant.getBusinessCard().getUsername())
+
                     if (chat instanceof OneToOneChat) {
                         var chatData = {
                             chatId: chat.getId(),
                             title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
-                            areFriends: participant.hasFriend(chat.getOtherUserId(participant.getBusinessCard().getUsername())),
-                            partnerId: chat.getOtherUserId(participant.getBusinessCard().getUsername()),
+                            areFriends: participant.hasFriend(partnerId),
+                            friendRequestSent: participant.hasSentFriendRequest(partnerId),
+                            partnerId: partnerId,
                             messages: messageInfoData
                         }
                     } else {

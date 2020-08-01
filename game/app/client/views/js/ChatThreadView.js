@@ -48,6 +48,7 @@ class ChatThreadView extends WindowView {
             }
 
             $('#chatFriendRequestButton').hide();
+            $('#friendRequestSent').show();
             new EventManager().handleSendFriendRequest(this.#chat.partnerId);
         });
 
@@ -76,10 +77,15 @@ class ChatThreadView extends WindowView {
             this.#appendMessage(message);
         })
 
-        if (!chat.areFriends) {
-            $('#chatFriendRequestButton').show();
-        } else {
+        if (chat.areFriends) {
             $('#chatFriendRequestButton').hide();
+            $('#friendRequestSent').hide();
+        } else if (chat.friendRequestSent) {
+            $('#chatFriendRequestButton').hide();
+            $('#friendRequestSent').show();
+        } else {
+            $('#friendRequestSent').hide();
+            $('#chatFriendRequestButton').show();
         }
     };
     
