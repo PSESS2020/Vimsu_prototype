@@ -168,8 +168,6 @@ module.exports = class ServerController {
                     
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
-                    let currentRoomWidth;
-                    let currentRoomLength;
                     if (currentRoomId === Settings.FOYER_ID) {
                         typeOfCurrentRoom = TypeOfRoom.FOYER;
                     } else if (currentRoomId === Settings.RECEPTION_ID) {
