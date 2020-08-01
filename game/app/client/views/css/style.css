@@ -147,6 +147,10 @@ overflow-wrap: break-word;
   transform: scale(0.8);
 }
 
+.friendRequestListButton:hover {
+  opacity: .5 !important;
+}
+
 .leavingChat:hover {
   opacity: .5 !important;
 }

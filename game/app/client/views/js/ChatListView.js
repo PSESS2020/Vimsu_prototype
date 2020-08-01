@@ -12,6 +12,10 @@ class ChatListView extends WindowView {
     }
     
     draw(chats) {
+        if(chats.length < 1) {
+            $('#chatListModal .modal-body').text("No chats found. Let's connect with others!")
+        }
+        
         /* Clear view to make sure we don't draw anything twice */
         $('#chatListModal .modal-body .list-group').empty();
 

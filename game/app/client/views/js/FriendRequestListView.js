@@ -7,6 +7,10 @@ class FriendRequestListView extends WindowView {
     }
 
     draw(businessCards) {
+        if(businessCards.length < 1) {
+            $('#friendListModal .modal-header .dropdown .dropdown-menu').text("No friend request received.")
+        }
+
         $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').empty()
         $('#friendListModal .modal-header .modal-title').empty()
 

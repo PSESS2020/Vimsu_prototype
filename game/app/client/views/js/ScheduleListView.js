@@ -7,6 +7,10 @@ class ScheduleListView extends WindowView {
     }
 
     draw(lectures) {
+        if(lectures.length < 1) {
+            $('#scheduleModal .modal-body #schedule').text("Sorry, no lecture is found.")
+        }
+
         lectures.forEach(lecture => {
             lecture.startingTime = new Date(lecture.startingTime);
         });
