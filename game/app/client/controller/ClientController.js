@@ -118,14 +118,10 @@ class ClientController {
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
-        if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map, listOfNPCs);
-        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map, listOfNPCs);
-        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map, listOfNPCs);
+        if (map !== null) {
+            this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
         }
-
+        
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
         this.#gameView.initCanvasEvents();
         
@@ -146,12 +142,8 @@ class ClientController {
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
-        if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map, listOfNPCs);
-        } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map, listOfNPCs);
-        } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map, listOfNPCs);
+        if (map !== null) {
+            this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
         }
 
         this.#gameView.resetAnotherAvatarViews();
