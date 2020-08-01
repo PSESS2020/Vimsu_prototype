@@ -46,7 +46,7 @@ class ChatListView extends WindowView {
                                 <br>
                                 <span class="small p-0" style="opacity: 0.5">${"on "+ timestamp + " " + chat.previewUsername + " wrote"}</span>
                                 <br>
-                                <span style="opacity: 0.8">${chat.previewMessage}</span>                                
+                                <span class ="p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
                             </div>  
                         </div>
                     </li>
