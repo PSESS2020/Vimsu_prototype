@@ -59,11 +59,25 @@ module.exports = class ServerController {
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
+    #ppants;
+    #roomService;
     
     constructor(socket, db) {
         this.#io = socket;
         this.#db = db;
         this.#DEBUGMODE = true;
+
+        //Should be initialized here, otherwise the controlle is reset every time a user joins.
+        this.#ppantControllers = new Map();
+
+        //Init all rooms
+        this.#roomService = new RoomService();
+        this.#rooms = this.#roomService.getAllRooms();
+
+        this.#banList = [];
+
+        this.#ppants = new Map();
+
     }
     
     //There are currently 3 differenct socketIo Channels
@@ -71,7 +85,8 @@ module.exports = class ServerController {
     //foodCourtChannel: Settings.FOODCOURT_ID.toString()
     //receptionChannel: Settings.RECEPTION_ID.toString()
 
-    #ppants = new Map();  // Array to hold all participants
+     // Array to hold all participants
+
 
     init() {
         
@@ -124,13 +139,6 @@ module.exports = class ServerController {
                 console.error(err);    
             })
 
-            this.#ppantControllers = new Map();
-            this.#banList = [];
-
-            //Init all rooms
-            var roomService = new RoomService();
-            this.#rooms = roomService.getAllRooms();
-
 
             /* When a new player connects, we create a participant instance, initialize it to
              * the right position (whatever that is) and the emit that to all the other players,
@@ -182,7 +190,7 @@ module.exports = class ServerController {
                     socket.join(currentRoomId.toString());
                     
                     //Join all Chat Channels
-                    console.log("server ppant chatlist: " + ppant.getChatList());
+                    //console.log("server ppant chatlist: " + ppant.getChatList());
                     ppant.getChatList().forEach(chat => {
                         socket.join(chat.getId());
                     });
@@ -191,7 +199,11 @@ module.exports = class ServerController {
                     this.#rooms[currentRoomId - 1].enterParticipant(ppant);
                     var ppantCont = new ParticipantController(ppant);
                     this.#ppants.set(ppant.getId(), ppant);
+
+                    //console.log("add participant to ppantcontroller: " + socket.id + " " + ppantCont.getParticipant().getId());
                     this.#ppantControllers.set(socket.id, ppantCont);
+
+                    
 
                     //Get GameObjects of starting room
                     let gameObjects = this.#rooms[currentRoomId - 1].getListOfGameObjects();
@@ -262,6 +274,8 @@ module.exports = class ServerController {
                         }   
                     });
                 
+
+                    
                     // (vi)
                     /* Emits the ppantID of the new participant to all other participants
                      * connected to the server so that they may create a new client-side
@@ -812,7 +826,7 @@ module.exports = class ServerController {
                                 chatPartner.addChat(loadedChat);
        
                                 //chat partner joins chat channel
-                                let socketPartner = this.getSocketObject(this.getSocketId(chatPartnerID));
+                                let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
                                 socketPartner.join(loadedChat.getId());
                             }
     
@@ -879,31 +893,49 @@ module.exports = class ServerController {
                             * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
 
-                        return chat;
 
-                    }).then(chat => {
-                        let chatId = chat.getId();
+                        /*chatPartnerIDList.forEach(chatPartnerID => {
+                            this.#ppantControllers.forEach( (ppantCont, socketId) => {
+                                console.log("ppantController socket ids: " + socketId + " " + ppantCont.getParticipant().getId());
+                            });
+
+                            let chatPartner = this.#ppants.get(chatPartnerID);
+                            console.log("server partner id group: " + chatPartner.getId() + " " + chatPartnerID)
+                            let socketid = this.getSocketId(chatPartner.getId());
+
+                            console.log("server socket id group: " + socketid)
+    
+                        })*/
+                        
+                        return chat.getId();
+
+                    }).then(chatId => {
 
                         chatPartnerIDList.forEach(chatPartnerID => {
-                            ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
+                            if (chatPartnerID !== creatorID) {
+                                
+                                ParticipantService.addChatID(chatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
 
                                 let chatPartner = this.#ppants.get(chatPartnerID);
-                            
-                                if (chatPartnerID !== creatorID && chatPartner !== undefined) {
+                                //console.log("server socket id group: " + socketPartner)
+
+                                if (chatPartner !== undefined) {
+
+                                    ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
+                                    
                                     chatPartner.addChat(loadedChat);
-
-
+    
+                                    //console.log("server socket partner before: " + chatPartner.getId())
+    
                                     //chat partner joins chat channel
+                                    //console.log("server socket partner after: " + socketPartner.id)
                                     let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                                
+
                                     socketPartner.join(loadedChat.getId());
-
-                                ParticipantService.addChatID(chatPartnerID, loadedChat.getId(), Settings.CONFERENCE_ID, this.#db);
-
-                                }
-
-                            });
-                            
+    
+                                });
+                            }
+                            }
                         });
 
                     })
@@ -1244,7 +1276,8 @@ module.exports = class ServerController {
                 //remove participant from room
                 var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
                 this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
-                
+
+                console.log("delete participant from ppantController: " + socket.id);
                 this.#ppantControllers.delete(socket.id);
                 this.#ppants.delete(ppantID);
 
@@ -1493,6 +1526,7 @@ module.exports = class ServerController {
             this.#ppantControllers.forEach( (ppantCont, socketId) => {
                 if (ppantCont.getParticipant().getId() == ppantID) {
                     id = socketId;
+                    console.log("server socket id: " + id);
                 }
             });
             return id;
@@ -1503,6 +1537,7 @@ module.exports = class ServerController {
             var socketKeys = Object.keys(mainNamespace.connected);
             for (var i = 0; i < socketKeys.length; i++) {
                 if(socketKeys[i] == socketId) {
+                    console.log("server socket object: " + mainNamespace.connected[socketKeys[i]]);
                     return mainNamespace.connected[socketKeys[i]];
                 }
             }
