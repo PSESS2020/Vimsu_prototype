@@ -14,10 +14,10 @@ module.exports = */class MapView extends Views {
     #offset;
     selectionOnMap = false;
 
-    constructor(foyerMap) {
+    constructor(map) {
         super();
 
-        this.#map = foyerMap;
+        this.#map = map;
 
         //map components that are drawn on screen
         this.#tiles = new Array();

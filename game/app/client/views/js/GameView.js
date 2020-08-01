@@ -1,22 +1,11 @@
-/*var Views = require('./Views.js')
-/var FoyerView = require('./FoyerView.js')
-var AvatarView = require('./AvatarView.js')
-var TypeChecker = require('../../../utils/TypeChecker.js')
-const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
-
-
-
-/*module.exports =*/ class GameView {
+class GameView {
 
     #gameWidth;
     #gameHeight;
     //#roomId;
     #updateList = [];
-    #foyerView;
     #profileView;
-    #foodCourtView;
-    #receptionView;
     #scheduleListView;
     #currentLecturesView;
     #lectureView;
@@ -51,10 +40,6 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
-    }
-
-    getFoyerView() {
-        return this.#foyerView;
     }
 
     getOwnAvatarView() {
@@ -245,41 +230,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#statusBar.drawClock();
     }
 
-    //Is called when participant enters Foyer
-    initFoyerView(map, listOfNPCs) {
+    //Is called when participant enters Room
+    initRoomView(map, listOfNPCs, typeOfRoom) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), typeOfRoom));
         });
 
-        this.#currentMap = new FoyerView(map);
-    }
-
-    initReceptionView(map, listOfNPCs) {
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        $('#avatarCanvas').off();
-
-        this.#npcAvatarViews = [];
-        listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
-        });
-
-        this.#currentMap = new ReceptionView(map);
-    }
-
-    initFoodCourtView(map, listOfNPCs) {
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        $('#avatarCanvas').off();
-
-        this.#npcAvatarViews = [];
-        listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
-        });
-
-        this.#currentMap = new FoodCourtView(map);
+        this.#currentMap = new RoomView(map);
     }
 
     /**
