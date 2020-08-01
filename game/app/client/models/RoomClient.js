@@ -1,4 +1,5 @@
 
+
 /*module.exports = */class RoomClient {
 
     #roomId;
@@ -20,8 +21,12 @@
      * 
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
+     * @param {Array of GameObjectClient} listOfGameObjects
+     * @param {Array of NPCClient} listOfNPCs
+     * @param {int} length 
+     * @param {int} width 
      */
-    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs) {
+    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width ,length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -32,6 +37,8 @@
         listOfNPCs.forEach(npc => {
             TypeChecker.isInstanceOf(npc, NPCClient);
         });
+        TypeChecker.isInt(width);
+        TypeChecker.isInt(length);
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
         if (!!RoomClient.instance) {
@@ -45,17 +52,9 @@
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;
         this.#listOfPPants = [];
-
-        if (this.#typeOfRoom === "FOYER") {
-            this.#width = RoomDimensionsClient.FOYER_WIDTH;
-            this.#length = RoomDimensionsClient.FOYER_LENGTH;
-        } else if (this.#typeOfRoom === "FOODCOURT") {
-            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
-            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
-        } else if (this.#typeOfRoom === "RECEPTION") {
-            this.#width = RoomDimensionsClient.RECEPTION_WIDTH;
-            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
-        }
+        this.#width = width;
+        this.#length = length;
+        
 
         //TODO: add other room types
 
@@ -175,12 +174,12 @@
      * 
      * @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
+     * @param {Array of GameObjectClient} listOfGameObjects
+     * @param {Array of NPCClient} listOfNPCs
      * @param {int} length 
      * @param {int} width 
-     * @param {Array of ParticipantClient} listOfPPants 
-     * @param {Array of Array of int} occupationMap 
      */
-    swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs) {
+    swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -191,6 +190,8 @@
         listOfNPCs.forEach(npcPosition => {
             TypeChecker.isInstanceOf(npcPosition, NPCClient);
         });
+        TypeChecker.isInt(width);
+        TypeChecker.isInt(length);
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
@@ -198,18 +199,9 @@
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;
         this.#listOfPPants = [];
-
-        if (this.#typeOfRoom === "FOYER") {
-            this.#width = RoomDimensionsClient.FOYER_WIDTH;
-            this.#length = RoomDimensionsClient.FOYER_LENGTH;
-        } else if (this.#typeOfRoom === "FOODCOURT") {
-            this.#width = RoomDimensionsClient.FOODCOURT_WIDTH;
-            this.#length = RoomDimensionsClient.FOODCOURT_LENGTH;
-        } else if (this.#typeOfRoom === "RECEPTION") {
-            this.#width = RoomDimensionsClient.RECEPTION_WIDTH;
-            this.#length = RoomDimensionsClient.RECEPTION_LENGTH;
-        }
-        //TODO: add other rooms
+        this.#width = width;
+        this.#length = length;
+        
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
