@@ -897,9 +897,10 @@ module.exports = class ServerController {
                                     let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
                                 
                                     socketPartner.join(loadedChat.getId());
-                                }
 
                                 ParticipantService.addChatID(chatPartnerID, loadedChat.getId(), Settings.CONFERENCE_ID, this.#db);
+
+                                }
 
                             });
                             
