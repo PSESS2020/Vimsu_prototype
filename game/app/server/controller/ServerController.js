@@ -237,7 +237,7 @@ module.exports = class ServerController {
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom, 
-                                                gameObjectData, npcData);
+                            gameObjectData, npcData, this.#rooms[currentRoomId - 1].getWidth(), this.#rooms[currentRoomId - 1].getLength());
 
                                                 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -462,7 +462,8 @@ module.exports = class ServerController {
                 });
                     
                 //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData);
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData, 
+                        this.#rooms[targetRoomId - 1].getWidth(), this.#rooms[targetRoomId - 1].getLength());
 
                 //set new position in server model
                 this.#ppants.get(ppantID).setPosition(newPos);
