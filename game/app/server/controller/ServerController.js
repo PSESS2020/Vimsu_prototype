@@ -864,6 +864,8 @@ module.exports = class ServerController {
                             timestamp: '', //please dont change the timestamp here
                             previewUsername: '',
                             previewMessage: '',
+                            areFriends: true,
+                            friendRequestSent: true,
                             messages: []
                         };
 
@@ -999,9 +1001,9 @@ module.exports = class ServerController {
                         msgText: message.getMessageText()});
                     });
 
-                    let partnerId = chat.getOtherUserId(participant.getBusinessCard().getUsername())
-
                     if (chat instanceof OneToOneChat) {
+                        let partnerId = chat.getOtherUserId(participant.getBusinessCard().getUsername())
+
                         var chatData = {
                             chatId: chat.getId(),
                             title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
@@ -1014,6 +1016,9 @@ module.exports = class ServerController {
                         var chatData = {
                             chatId: chat.getId(),
                             title: chat.getChatName(),
+                            areFriends: true,
+                            friendRequestSent: true,
+                            partnerId: undefined,
                             messages: messageInfoData
                         }
                     }
