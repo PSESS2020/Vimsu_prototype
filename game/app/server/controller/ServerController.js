@@ -689,6 +689,10 @@ module.exports = class ServerController {
             }); 
 
             socket.on('getInviteFriends', (ppantID, groupName) => {
+                if(!groupName) {
+                    socket.emit('inviteFriends', undefined, groupName, Settings.MAXGROUPPARTICIPANTS);
+                }
+                
                 var friendList = this.#ppants.get(ppantID).getFriendList();
 
                 var friendListData = [];
