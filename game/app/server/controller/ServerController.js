@@ -50,6 +50,7 @@ const SlotService = require('../../../../website/services/SlotService')
 module.exports = class ServerController {
     
     #io;
+    #db;
     #conference;
     #listOfConfCont;
     #DEBUGMODE;
@@ -59,8 +60,9 @@ module.exports = class ServerController {
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
     
-    constructor(socket) {
+    constructor(socket, db) {
         this.#io = socket;
+        this.#db = db;
         this.#DEBUGMODE = true;
     }
     
@@ -113,8 +115,8 @@ module.exports = class ServerController {
          * This may late be moved into the server or conference-controller?
          * - (E) */
         this.#io.on('connection', (socket) => {
-
-            LectureService.createAllLectures(Settings.CONFERENCE_ID).then(lectures => {
+            console.log(this.#db)
+            LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
                 var schedule = new Schedule(lectures);
                 var conference = new Conference(schedule);
                 this.#conference = conference;
@@ -162,7 +164,7 @@ module.exports = class ServerController {
                 
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
-                ParticipantService.createParticipant(account, Settings.CONFERENCE_ID).then(ppant => {
+                ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {
                     
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
@@ -279,7 +281,7 @@ module.exports = class ServerController {
                         this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT, socket);
                     }
                     
-                    RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID).then(rank => { 
+                    RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => { 
                         socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank); 
                     }).catch(err => {
                         console.error(err);
@@ -542,7 +544,7 @@ module.exports = class ServerController {
                     var messages = lecture.getLectureChat().getMessages();
                     console.log(messages);
 
-                    LectureService.getVideo(currentLecturesData[idx].videoId).then(videoName => {
+                    LectureService.getVideo(currentLecturesData[idx].videoId, this.#db).then(videoName => {
                         currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
                         socket.emit('lectureEntered',  currentLecturesData[idx], token, messages);
                         socket.broadcast.emit('hideAvatar', ppantID);
@@ -643,7 +645,7 @@ module.exports = class ServerController {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank);
                 } else {
-                    RankListService.getRank(targetID, Settings.CONFERENCE_ID).then(rank => {
+                    RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
                         targetRank = rank;
                         socket.emit('businessCard', businessCardObject, targetRank);
                     })
@@ -655,7 +657,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getRankList', () => {
-                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30).then(rankList => {
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30, this.#db).then(rankList => {
                     socket.emit('rankList', rankList);
                 })
             })
@@ -745,7 +747,7 @@ module.exports = class ServerController {
 
                     let creatorUsername = creator.getBusinessCard().getUsername();
                     //creates new chat and writes it in DB
-                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID, this.#db).then(chat => {
                     
                         //add chat to creator
                         creator.addChat(chat);
@@ -764,8 +766,8 @@ module.exports = class ServerController {
                         socket.join(chat.getId());
 
                         //write ID in Participant Collection in DB
-                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
-                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
+                        ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
 
                         let chatData = {
                             title: chatPartnerUsername,
@@ -786,7 +788,7 @@ module.exports = class ServerController {
                         this.#io.to(socket.id).emit('newChat', chatData, true);
                     }); 
                 } else {
-                    ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID, this.#db).then(chat => {
                         let chatData = {
                             title: chatPartnerUsername,
                             chatId: chat.chatId,
@@ -820,7 +822,7 @@ module.exports = class ServerController {
                     chatPartnerIDList.push(creatorID);
 
                     //creates new group chat and writes it in DB
-                    ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID).then(chat => {
+                    ChatService.newGroupChat(creatorID, chatPartnerIDList, chatName, Settings.CONFERENCE_ID, this.#db).then(chat => {
 
                         //add chat to chat creator
                         creator.addChat(chat);
@@ -837,7 +839,7 @@ module.exports = class ServerController {
                                 socketPartner.join(chat.getId());
                             }
 
-                            ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
+                            ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
                         });
                         
                         //Creator joins chat channel
@@ -989,7 +991,7 @@ module.exports = class ServerController {
                     let chatPartnerIDList = sender.getChat(chatId).getParticipantList();
 
                     //creates a new chat message and stores it into DB.
-                    ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
+                    ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
 
                         //seems not optimal. Don't know if it work if only one chat gets updated.
                         chatPartnerIDList.forEach(chatPartnerID => {
@@ -1035,7 +1037,7 @@ module.exports = class ServerController {
                 //target is offline
                 } else if (target === undefined && requester !== undefined) {
                     //get BusCard from DB and add it to sent friend Request
-                    ParticipantService.getBusinessCard(targetID, Settings.CONFERENCE_ID).then(targetBusCard => {
+                    ParticipantService.getBusinessCard(targetID, Settings.CONFERENCE_ID, this.#db).then(targetBusCard => {
                         requester.addSentFriendRequest(targetBusCard);
                     }).catch(err => {
                         console.error(err);
@@ -1045,7 +1047,7 @@ module.exports = class ServerController {
                 //extremly unlikely to happen but safer
                 } else if (target !== undefined && requester === undefined) {
                     //get BusCard from DB and add it to sent friend Request
-                    ParticipantService.getBusinessCard(requesterID, Settings.CONFERENCE_ID).then(requesterBusCard => {
+                    ParticipantService.getBusinessCard(requesterID, Settings.CONFERENCE_ID, this.#db).then(requesterBusCard => {
                         target.addFriendRequest(requesterBusCard);
                     }).catch(err => {
                         console.error(err);
@@ -1053,8 +1055,8 @@ module.exports = class ServerController {
                 }
                 
                 //update DB
-                FriendRequestListService.storeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID);
-                FriendRequestListService.storeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID);
+                FriendRequestListService.storeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID, this.#db);
+                FriendRequestListService.storeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID, this.#db);
             });
 
             //handles a friendrequest, either accepted or declined
@@ -1075,8 +1077,8 @@ module.exports = class ServerController {
                     }
                     
                     //update DB
-                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID);
-                    FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID);
+                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db);
+                    FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db);
                 } else {
                     //check if target is online
                     if (target !== undefined) {
@@ -1089,8 +1091,8 @@ module.exports = class ServerController {
                 }
 
                 //update DB
-                FriendRequestListService.removeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID);
-                FriendRequestListService.removeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID);
+                FriendRequestListService.removeReceivedFriendRequest(targetID, requesterID, Settings.CONFERENCE_ID, this.#db);
+                FriendRequestListService.removeSentFriendRequest(requesterID, targetID, Settings.CONFERENCE_ID, this.#db);
 
                 //Not sure if a answer from server is necessary
             });
@@ -1111,8 +1113,8 @@ module.exports = class ServerController {
                 }
 
                 //update DB
-                FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID);
-                FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
+                FriendListService.removeFriend(removerID, removedFriendID, Settings.CONFERENCE_ID, this.#db);
+                FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID, this.#db);
             });
 
             socket.on('removeChat', (removerId, chatId) => {
@@ -1139,7 +1141,7 @@ module.exports = class ServerController {
                         });
                     
                 }
-                ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID);
+                ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID, this.#db);
             })
 
             socket.on('getNPCStory', (ppantID, npcID) => {
@@ -1180,8 +1182,8 @@ module.exports = class ServerController {
                 //write position and direction from disconnecting participant in DB
                 let pos = this.#ppants.get(ppantID).getPosition();
                 let direction = this.#ppants.get(ppantID).getDirection();
-                ParticipantService.updateParticipantPosition(ppantID, Settings.CONFERENCE_ID, pos);
-                ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction);
+                ParticipantService.updateParticipantPosition(ppantID, Settings.CONFERENCE_ID, pos, this.#db);
+                ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
                 var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
@@ -1488,15 +1490,15 @@ module.exports = class ServerController {
         newAchievements.forEach(ach => {
             socket.emit('newAchievement', ach); 
             
-            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color).then(res => {
+            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
                 console.log('level of ' + ach.id + ' updated') 
             }).catch(err => {
                 console.error(err);
             })
         });
  
-        ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints()).then(res => {
-            RankListService.getRank(participantId, Settings.CONFERENCE_ID).then(rank => { 
+        ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
+            RankListService.getRank(participantId, Settings.CONFERENCE_ID, this.#db).then(rank => { 
                 socket.emit('updateSuccessesBar', participant.getAwardPoints(), rank); 
             });  
         });

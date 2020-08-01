@@ -2,10 +2,10 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 const ParticipantService = require('./ParticipantService');
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 module.exports = class RankListService {
-    static getRankList(conferenceId) {
+    static getRankList(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
 
 
@@ -28,11 +28,11 @@ module.exports = class RankListService {
 
     }
 
-    static getRankListWithUsername(conferenceId, lastRank) {
+    static getRankListWithUsername(conferenceId, lastRank, vimsudb) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(lastRank);
 
-        return this.getRankList(conferenceId).then(async rankList => {
+        return this.getRankList(conferenceId, vimsudb).then(async rankList => {
             var rankListLength = 1;
 
             for (var i = rankList.length - 1; i >= 0; i--) {
@@ -44,7 +44,7 @@ module.exports = class RankListService {
 
             rankList.slice(0, rankListLength);
             await Promise.all(rankList.map(async ppant => {
-                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId)
+                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb)
                 ppant.username = username;
             }));
             return rankList;
@@ -53,11 +53,11 @@ module.exports = class RankListService {
         })
     }
 
-    static getRank(participantId, conferenceId) {
+    static getRank(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return this.getRankList(conferenceId).then(rankList => {
+        return this.getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
             if (idx < 0) {
                 throw new Error(participantId + " is not in ranklist")

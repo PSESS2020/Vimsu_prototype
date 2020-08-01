@@ -12,10 +12,12 @@ module.exports = class RouteController {
 
     #app;
     #io;
+    #db;
 
-    constructor(app, io) {
+    constructor(app, io, db) {
         this.#app = app;
         this.#io = io;
+        this.#db = db;
     }
 
     init() {
@@ -99,9 +101,9 @@ module.exports = class RouteController {
                     return response.render('upload', {fileSizeExceeded: true});
                 }
                 else {
-                    return SlotService.storeVideo(video).then(videoData => {
+                    return SlotService.storeVideo(video, this.#db).then(videoData => {
                         if(videoData) {
-                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                 response.redirect('/');
                                 response.end();
                             }).catch(err => {
@@ -178,7 +180,7 @@ module.exports = class RouteController {
             username = request.body.username;
             var password = request.body.password;
 
-            return AccountService.verifyLoginData(username, password).then(user => {
+            return AccountService.verifyLoginData(username, password, this.#db).then(user => {
                 
                 if(user) {
                     request.session.loggedin = true;
@@ -234,9 +236,9 @@ module.exports = class RouteController {
                 return response.render('register', {invalidEmail: true});
             }
 
-            return AccountService.isUsernameValid(username).then(res => {
+            return AccountService.isUsernameValid(username, this.#db).then(res => {
                 if(res) {
-                    return AccountService.isEmailValid(email).then(res => {
+                    return AccountService.isEmailValid(email, this.#db).then(res => {
                         if(res) {
                             request.session.registerValid = true;
                             request.session.username = username;
@@ -279,7 +281,7 @@ module.exports = class RouteController {
             email = request.session.email;
             var password = request.body.password;
 
-            return AccountService.createAccount(username, title, surname, forename, job, company, email, password).then(res => {
+            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, this.#db).then(res => {
                 request.session.accountId = res.getAccountID();
                 request.session.registerValid = false;
                 request.session.loggedin = true;
@@ -360,7 +362,7 @@ module.exports = class RouteController {
             username = request.session.username;
             email = request.session.email;
 
-            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email).then(res => {
+            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, this.#db).then(res => {
                 request.session.accountId = res.getAccountID();
                 request.session.title = res.getTitle();
                 request.session.surname = res.getSurname();

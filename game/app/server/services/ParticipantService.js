@@ -14,28 +14,28 @@ const ChatService = require('./ChatService.js');
 const FriendList = require('../models/FriendList.js');
 const TaskService = require('./TaskService')
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 module.exports = class ParticipantService {
-    static async createParticipant(account, conferenceId) {
+    static async createParticipant(account, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
         var accountId = account.getAccountID();
         console.log('test');
 
-        return this.getParticipant(accountId, conferenceId).then(par => {
+        return this.getParticipant(accountId, conferenceId, vimsudb).then(par => {
             var participant;
 
             if (par) {
                 //Get Chats
-                return ChatService.loadChatList(par.chatIDList, conferenceId).then(async chatList => {
+                return ChatService.loadChatList(par.chatIDList, conferenceId, vimsudb).then(async chatList => {
                     console.log(chatList[0]);
                     let friendList = [];
                     let friendRequestListReceived = [];
                     let friendRequestListSent = [];
 
                     await par.friendIds.forEach(friendId => {
-                        this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                        this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendList.push(busCard);
                         }).catch(err => {
                             console.error(err)
@@ -43,7 +43,7 @@ module.exports = class ParticipantService {
                     });
 
                     await par.friendRequestIds.received.forEach(friendId => {
-                        this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                        this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendRequestListReceived.push(busCard);
                         }).catch(err => {
                             console.error(err)
@@ -51,7 +51,7 @@ module.exports = class ParticipantService {
                     });
 
                     await par.friendRequestIds.sent.forEach(friendId => {
-                        this.getBusinessCard(friendId, conferenceId).then(busCard => {
+                        this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendRequestListSent.push(busCard);
                         }).catch(err => {
                             console.error(err)
@@ -122,7 +122,7 @@ module.exports = class ParticipantService {
                                     currentLevel: achievement.currentLevel,
                                     color: achievement.color,
                                 }]
-                            const res = await this.storeAchievements(participant.getId(), Settings.CONFERENCE_ID, achievementData);
+                            const res = await this.storeAchievements(participant.getId(), Settings.CONFERENCE_ID, achievementData, vimsudb);
                         }
                     })).then(res => {
                         return participant;
@@ -191,7 +191,7 @@ module.exports = class ParticipantService {
                         )
                     })
 
-                    return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData).then(res => {
+                    return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData, vimsudb).then(res => {
                         console.log('all achievements stored');
                         return participant;
                     }).catch(err => {
@@ -204,7 +204,7 @@ module.exports = class ParticipantService {
         })
     }
 
-    static getParticipant(accountId, conferenceId) {
+    static getParticipant(accountId, conferenceId, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(conferenceId);
 
@@ -222,14 +222,14 @@ module.exports = class ParticipantService {
         })
     }
 
-    static getUsername(participantId, conferenceId) {
+    static getUsername(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
 
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
 
             if (par) {
-                return AccountService.getAccountUsername(par.accountId).then(username => {
+                return AccountService.getAccountUsername(par.accountId, vimsudb).then(username => {
                     return username;
                 }).catch(err => {
                     console.error(err);
@@ -243,7 +243,7 @@ module.exports = class ParticipantService {
         })
     }
 
-    static getBusinessCard(participantId, conferenceId) {
+    static getBusinessCard(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -251,7 +251,7 @@ module.exports = class ParticipantService {
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
 
             if (par) {
-                return AccountService.getAccountById(par.accountId).then(account => {
+                return AccountService.getAccountById(par.accountId, vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
                         account.username,
                         account.title,
@@ -270,7 +270,7 @@ module.exports = class ParticipantService {
         })
     }
 
-    static updateParticipantPosition(participantId, conferenceId, position) {
+    static updateParticipantPosition(participantId, conferenceId, position, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(position, Position);
@@ -289,7 +289,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateParticipantDirection(participantId, conferenceId, direction) {
+    static updateParticipantDirection(participantId, conferenceId, direction, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isEnumOf(direction, Direction);
@@ -301,7 +301,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateIsModerator(participantId, conferenceId, isModerator) {
+    static updateIsModerator(participantId, conferenceId, isModerator, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isBoolean(isModerator);
@@ -312,7 +312,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updatePoints(participantId, conferenceId, points) {
+    static updatePoints(participantId, conferenceId, points, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(points)
@@ -324,7 +324,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static storeAchievements(participantId, conferenceId, achievementsData) {
+    static storeAchievements(participantId, conferenceId, achievementsData, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -339,7 +339,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static deleteAchievement(participantId, conferenceId, achievementId) {
+    static deleteAchievement(participantId, conferenceId, achievementId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -354,7 +354,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color) {
+    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
@@ -373,7 +373,7 @@ module.exports = class ParticipantService {
     }
 
     //Method to add a chatID in DB
-    static addChatID(participantId, chatId, conferenceId) {
+    static addChatID(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);

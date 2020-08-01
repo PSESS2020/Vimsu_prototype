@@ -8,6 +8,14 @@ module.exports = class db {
     #vimsudb;
     #client;
 
+    constructor() {
+        if(!!db.instance){
+            return db.instance;
+        }
+
+        db.instance = this;
+    }
+
     connectDB() {
         return mongodb.MongoClient.connect(connectionString, { 
             useUnifiedTopology: true

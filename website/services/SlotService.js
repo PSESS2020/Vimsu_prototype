@@ -4,10 +4,10 @@ const ObjectId = require('mongodb').ObjectID;
 const TypeChecker = require('../../game/app/utils/TypeChecker');
 const Slot = require('../models/Slot')
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 module.exports = class SlotService {
-    static storeVideo(video) {
+    static storeVideo(video, vimsudb) {
         var dir = __dirname + "/upload/";
         
         return FileSystem.moveFile(video, dir).then(res => {
@@ -28,7 +28,7 @@ module.exports = class SlotService {
 
     }
 
-    static createSlot(videoId, duration, conferenceId, title, remarks, startingTime, oratorId, maxParticipants) {
+    static createSlot(videoId, duration, conferenceId, title, remarks, startingTime, oratorId, maxParticipants, vimsudb) {
 
     
             var id = new ObjectId().toString();
@@ -57,7 +57,7 @@ module.exports = class SlotService {
 
     }
 
-    static deleteAllVideos() {
+    static deleteAllVideos(vimsudb) {
 
             return vimsudb.deleteAllFromCollection("lectures.chunks").then(res => {
                 return vimsudb.deleteAllFromCollection("lectures.files").then (res => {
@@ -72,7 +72,7 @@ module.exports = class SlotService {
 
     }
 
-    static deleteVideo(videoId) {
+    static deleteVideo(videoId, vimsudb) {
         TypeChecker.isString(videoId);
 
 

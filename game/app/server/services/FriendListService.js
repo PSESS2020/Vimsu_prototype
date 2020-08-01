@@ -1,10 +1,10 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 
-var vimsudb = dbconf.getDB()
+//var vimsudb = dbconf.getDB()
 
 module.exports = class FriendListService {
-    static getFriendList(participantId, conferenceId) {
+    static getFriendList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -24,7 +24,7 @@ module.exports = class FriendListService {
 
     }
 
-    static storeFriend(participantId, friendId, conferenceId) {
+    static storeFriend(participantId, friendId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(friendId);
         TypeChecker.isString(conferenceId);
@@ -40,7 +40,7 @@ module.exports = class FriendListService {
 
     }
 
-    static storeFriends(participantId, friendIds, conferenceId) {
+    static storeFriends(participantId, friendIds, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -55,7 +55,7 @@ module.exports = class FriendListService {
 
     }
 
-    static removeFriend(participantId, friendId, conferenceId) {
+    static removeFriend(participantId, friendId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(friendId);
         TypeChecker.isString(conferenceId);

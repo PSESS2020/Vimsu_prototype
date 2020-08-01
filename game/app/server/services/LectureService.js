@@ -2,10 +2,10 @@ const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 const Lecture = require('../models/Lecture')
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 module.exports = class LectureService {
-    static getVideo(videoId) {
+    static getVideo(videoId, vimsudb) {
         TypeChecker.isString(videoId);
 
         return vimsudb.downloadFile("lectures", videoId).then(res => {
@@ -17,8 +17,8 @@ module.exports = class LectureService {
     }
 
 
-    static createAllLectures(conferenceId) {
-        return this.getAllLecturesWithOratorData(conferenceId).then(lectures => {
+    static createAllLectures(conferenceId, vimsudb) {
+        return this.getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
             var lectureLists = [];
 
             if (lectures) {
@@ -35,7 +35,7 @@ module.exports = class LectureService {
         })
     }
 
-    static getAllLectures(conferenceId) {
+    static getAllLectures(conferenceId, vimsudb) {
         return vimsudb.findInCollection("lectures", { conferenceId: conferenceId, isAccepted: true }, {}).then(lectures => {
             if (lectures.length > 0) {
                 return lectures;
@@ -48,7 +48,7 @@ module.exports = class LectureService {
         })
     }
 
-    static getAllLecturesWithOratorData(conferenceId) {
+    static getAllLecturesWithOratorData(conferenceId, vimsudb) {
 
         return vimsudb.joinCollection("lectures", "accounts", "oratorId", "accountId").then(allLectures => {
             if (allLectures.length > 0) {
@@ -76,7 +76,7 @@ module.exports = class LectureService {
 
     }
 
-    static getOratorLectureIds(oratorId, conferenceId) {
+    static getOratorLectureIds(oratorId, conferenceId, vimsudb) {
         return vimsudb.findInCollection("lectures", { oratorId: oratorId, conferenceId: conferenceId, isAccepted: true }, { id: 1 }).then(lectures => {
 
             if (lectures.length > 0) {

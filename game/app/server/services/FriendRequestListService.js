@@ -1,12 +1,12 @@
 const TypeChecker = require('../../utils/TypeChecker.js');
 const dbconf = require('../../../../config/dbconf');
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 
 
 module.exports = class FriendRequestListService {
-    static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
+    static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
@@ -21,7 +21,7 @@ module.exports = class FriendRequestListService {
 
     }
 
-    static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
+    static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
@@ -37,7 +37,7 @@ module.exports = class FriendRequestListService {
 
     }
 
-    static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId) {
+    static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
@@ -53,7 +53,7 @@ module.exports = class FriendRequestListService {
 
     }
 
-    static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId) {
+    static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
@@ -69,7 +69,7 @@ module.exports = class FriendRequestListService {
 
     }
 
-    static getReceivedRequestList(participantId, conferenceId) {
+    static getReceivedRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
@@ -89,7 +89,7 @@ module.exports = class FriendRequestListService {
 
     }
 
-    static getSentRequestList(participantId, conferenceId) {
+    static getSentRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 

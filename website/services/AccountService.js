@@ -4,12 +4,12 @@ const dbconf = require('../../config/dbconf');
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 
 module.exports = class AccountService {
 
-    static isUsernameValid(username) {
+    static isUsernameValid(username, vimsudb) {
         TypeChecker.isString(username);
 
             return vimsudb.findInCollection("accounts", {username: username}, {username: username}).then(results => {
@@ -25,7 +25,7 @@ module.exports = class AccountService {
 
     }
 
-    static isEmailValid(email) {
+    static isEmailValid(email, vimsudb) {
         TypeChecker.isString(email);
 
 
@@ -42,7 +42,7 @@ module.exports = class AccountService {
 
     }
     
-    static createAccount(username, title, surname, forename, job, company, email, password) {
+    static createAccount(username, title, surname, forename, job, company, email, password, vimsudb) {
         
 
     
@@ -71,7 +71,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountById(accountId) {
+    static getAccountById(accountId, vimsudb) {
         TypeChecker.isString(accountId);
         
 
@@ -90,7 +90,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountByUsername(username) {
+    static getAccountByUsername(username, vimsudb) {
         TypeChecker.isString(username);
         
 
@@ -109,7 +109,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountID(username) {
+    static getAccountID(username, vimsudb) {
         TypeChecker.isString(username);
 
 
@@ -129,7 +129,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountUsername(accountId) {
+    static getAccountUsername(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -150,7 +150,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountName(accountId) {
+    static getAccountName(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -172,7 +172,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountTitle(accountId) {
+    static getAccountTitle(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -193,7 +193,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountSurname(accountId) {
+    static getAccountSurname(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -214,7 +214,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountForename(accountId) {
+    static getAccountForename(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -235,7 +235,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountEmail(accountId) {
+    static getAccountEmail(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -256,7 +256,7 @@ module.exports = class AccountService {
 
     }
 
-    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email) {
+    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, vimsudb) {
         var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
         //TypeChecker.isString(newPassword);
 
@@ -273,7 +273,7 @@ module.exports = class AccountService {
 
     }
 
-    static updateUsername(accountId, newUsername) {
+    static updateUsername(accountId, newUsername, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newUsername);
 
@@ -293,7 +293,7 @@ module.exports = class AccountService {
             })
     }
 
-    static updateEmail(accountId, newEmail) {
+    static updateEmail(accountId, newEmail, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newEmail);
 
@@ -313,7 +313,7 @@ module.exports = class AccountService {
             })
     }
 
-    static updatePassword(accountId, newPassword) {
+    static updatePassword(accountId, newPassword, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newPassword);
         var newPasswordHash = passwordHash.generate(newPassword);
@@ -327,7 +327,7 @@ module.exports = class AccountService {
 
     }
 
-    static deleteAccount(accountId) {
+    static deleteAccount(accountId, vimsudb) {
         TypeChecker.isString(accountId);
 
 
@@ -340,11 +340,11 @@ module.exports = class AccountService {
 
     }
 
-    static verifyLoginData(username, password) {
+    static verifyLoginData(username, password, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isString(password);
 
-            return this.getAccountByUsername(username).then(user => 
+            return this.getAccountByUsername(username, vimsudb).then(user => 
             {
                 if (user && passwordHash.verify(password, user.passwordHash)){
                     console.log("User and password match")

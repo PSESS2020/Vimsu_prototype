@@ -11,12 +11,12 @@ const ObjectId = require('mongodb').ObjectID;
 const ParticipantService = require('../services/ParticipantService');
 const Settings = require('../../utils/Settings.js');
 
-var vimsudb = dbconf.getDB();
+//var vimsudb = dbconf.getDB();
 
 module.exports = class Chatservice {
 
     //tested
-    static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId) {
+    static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(chatPartnerId);
@@ -50,7 +50,7 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static newGroupChat(ownerId, memberIds, groupName, conferenceId) {
+    static newGroupChat(ownerId, memberIds, groupName, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(groupName);
         TypeChecker.isInstanceOf(memberIds, Array);
@@ -85,7 +85,7 @@ module.exports = class Chatservice {
     }
 
 
-    static existsOneToOneChat(ownerId, chatPartnerId, conferenceId) {
+    static existsOneToOneChat(ownerId, chatPartnerId, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(conferenceId);
@@ -108,7 +108,7 @@ module.exports = class Chatservice {
 
     //tested
     //loads all chats of the specified participant
-    static loadChatList(chatIDList, conferenceId) {
+    static loadChatList(chatIDList, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(chatIDList, Array);
         chatIDList.forEach(id => {
             TypeChecker.isString(id);
@@ -148,7 +148,7 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static storeParticipant(chatId, ownerId, participantId) {
+    static storeParticipant(chatId, ownerId, participantId, vimsudb) {
         TypeChecker.isString(chatId);
 
 
@@ -165,7 +165,7 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static removeChat(chatId, participantId, conferenceId) {
+    static removeChat(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
 
 
@@ -203,7 +203,7 @@ module.exports = class Chatservice {
 
     }
 
-    static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId) {
+    static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(msgText);
 
