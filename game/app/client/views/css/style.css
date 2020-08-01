@@ -138,8 +138,13 @@ overflow-wrap: break-word;
   font-size: 15px;
 }
 
-.friendRequestListButton:hover {
+.navbarIconsDisabled {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
   opacity: .5 !important;
+  box-shadow: 0px 0px 0px transparent;
+  transform: scale(0.8);
 }
 
 .leavingChat:hover {
