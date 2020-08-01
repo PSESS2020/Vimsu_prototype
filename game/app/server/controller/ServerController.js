@@ -182,7 +182,14 @@ module.exports = class ServerController {
                     //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
 
+                    
+                    /**
+                     * This doesnt do anything because chatlist is empty.
+                     * Probably because ppant is not loaded fast enough.                     
+                     * 
+                    */
                     //Join all Chat Channels
+                    console.log("server ppant chatlist: " + ppant.getChatList());
                     ppant.getChatList().forEach(chat => {
                         socket.join(chat.getId());
                     });
@@ -735,6 +742,8 @@ module.exports = class ServerController {
                 socket.emit('friendRequestList', friendRequestListData);
             });
 
+
+
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID, chatPartnerUsername) => {
                 let creator = this.ppants.get(creatorID);
@@ -747,21 +756,23 @@ module.exports = class ServerController {
                 if (!creator.hasChatWith(chatPartnerID)) {
 
                     let creatorUsername = creator.getBusinessCard().getUsername();
+                    
                     //creates new chat and writes it in DB
-                    ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
+                   ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID).then(chat => {
                     
                         //add chat to creator
                         creator.addChat(chat);
                     
+                        /*let onetooneChat = new OneToOneChat(chat[0].getId(),
+                            chat[0].getParticipantList()[0],
+                            chat[0].getParticipantList()[1],
+                            chat[0].getMessageList(),
+                            Settings.MAXNUMMESSAGES_ONETOONECHAT,
+                            chat[0].getCreatorUsername(),
+                            chat[0].getChatPartnerUsername())*/
 
-                        //check if chatPartner is online
-                        if (chatPartner !== undefined) {
-                            chatPartner.addChat(chat);
-
-                            //chat partner joins chat channel
-                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                            socketPartner.join(chat.getId());
-                        }
+                             //check if chatPartner is online
+                     
                     
                         //Creator joins chat channel
                         socket.join(chat.getId());
@@ -787,7 +798,27 @@ module.exports = class ServerController {
                         * so that the creator can start sending messages.
                         * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
+
+                        return chat;
+                    
+                    }).then(chat => {
+
+                        let chatId = chat.getId();
+                        
+                        ChatService.loadChat(chatId, Settings.CONFERENCE_ID).then(loadedChat => {
+
+                            //check if chatPartner is online
+                            if (chatPartner !== undefined) {
+                                chatPartner.addChat(loadedChat);
+       
+                                //chat partner joins chat channel
+                                let socketPartner = this.getSocketObject(this.getSocketId(chatPartnerID));
+                                socketPartner.join(loadedChat.getId());
+                            }
+    
+                         })
                     }); 
+
                 } else {
                     ChatService.existsOneToOneChat(creatorID, chatPartnerID, Settings.CONFERENCE_ID).then(chat => {
                         let chatData = {
@@ -798,17 +829,12 @@ module.exports = class ServerController {
                             messages: chat.messageList,
                         }
 
-                        if (chatPartner !== undefined) {
-                            //chat partner joins chat channel
-                            let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                            socketPartner.join(chat.chatId);
-                        }
-
-                        socket.join(chat.chatId);
                         this.#io.to(socket.id).emit('chatThread', chatData);
                     })
                 }
             });
+
+
 
             //Called whenever a participant creates a new group chat (N)
             socket.on('createNewGroupChat', (creatorID, chatName, chatPartnerIDList) => {
@@ -816,6 +842,7 @@ module.exports = class ServerController {
                 if(chatPartnerIDList.length > Settings.MAXGROUPPARTICIPANTS || chatPartnerIDList.length < 1) {
                     return false;
                 } else {
+                console.log("new groupchat participants: " + chatPartnerIDList);
 
                     let creator = this.ppants.get(creatorID);
 
@@ -827,22 +854,10 @@ module.exports = class ServerController {
 
                         //add chat to chat creator
                         creator.addChat(chat);
-
-                        chatPartnerIDList.forEach(chatPartnerID => {
-
-                            let chatPartner = this.ppants.get(chatPartnerID);
-
-                            if (chatPartner !== undefined) {
-                                chatPartner.addChat(chat);
-
-                                //chat partner joins chat channel
-                                let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-                                socketPartner.join(chat.getId());
-                            }
-
-                            ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID);
-                        });
                         
+                        //write ID in Participant Collection of chat owner in DB
+                        ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID);
+
                         //Creator joins chat channel
                         socket.join(chat.getId());
 
@@ -860,6 +875,33 @@ module.exports = class ServerController {
                             * so that the creator can start sending messages.
                             * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
+
+                        return chat;
+
+                    }).then(chat => {
+                        let chatId = chat.getId();
+
+                        chatPartnerIDList.forEach(chatPartnerID => {
+                            ChatService.loadChat(chatId, Settings.CONFERENCE_ID).then(loadedChat => {
+
+                                let chatPartner = this.ppants.get(chatPartnerID);
+                            
+                                if (chatPartnerID !== creatorID && chatPartner !== undefined) {
+                                    chatPartner.addChat(loadedChat);
+
+
+                                    //chat partner joins chat channel
+                                    let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+                                
+                                    socketPartner.join(loadedChat.getId());
+                                }
+
+                                ParticipantService.addChatID(chatPartnerID, loadedChat.getId(), Settings.CONFERENCE_ID);
+
+                            });
+                            
+                        });
+
                     })
                 }
             });
@@ -941,8 +983,10 @@ module.exports = class ServerController {
              * If he is, gets the chat-object, gets it's message list and "copy-pastes" the 
              * relevant information into a new field, which is then send to the client.
              * - (E) */
-            socket.on('getChatThread', (chatID) => {
-                var participant = this.ppants.get(socket.ppantId);
+            socket.on('getChatThread', (requesterId, chatID) => {
+                
+                var participant = this.ppants.get(requesterId);
+                //var participant = this.ppants.get(socket.ppantId);
                 console.log(participant);
                 if(participant.isMemberOfChat(chatID)){
                 console.log('hi from server get thread 2');
@@ -951,6 +995,7 @@ module.exports = class ServerController {
                     var messageInfoData = [];
                     // Maybe only the info of like the first 16 messages or so?
                     chat.getMessageList().forEach( (message) => {
+                        console.log("getChatThreadMessages: " + message.getMessageText());
                         messageInfoData.push({
                         senderUsername: message.getUsername(),
                         timestamp: message.getTimestamp(),
@@ -973,7 +1018,6 @@ module.exports = class ServerController {
                         }
                     }
 
-                    socket.join(chatID);
                     //console.log(JSON.stringify(chatData));
                     this.#io.to(socket.id).emit('chatThread', chatData);
                 }
@@ -994,7 +1038,13 @@ module.exports = class ServerController {
                     //creates a new chat message and stores it into DB.
                     ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID).then(msg => {
 
-                        //seems not optimal. Don't know if it work if only one chat gets updated.
+                        console.log("chatParticipantList: " + chatPartnerIDList);
+                        
+                        //Works if only one chat gets updated!!!
+                        //Somehow chat room handles the distribution of chat instance
+                        //Sender chat and updates it for everyone.
+                        //var chat = sender.getChat(chatId);
+
                         chatPartnerIDList.forEach(chatPartnerID => {
                             let chatPartner = this.ppants.get(chatPartnerID);
                             
@@ -1005,6 +1055,8 @@ module.exports = class ServerController {
                                 chatPartnerChat.addMessage(msg);
                             }  
                         });
+
+                        //chat.addMessage(msg);
                     
                         var msgToEmit = {
                             senderUsername: msg.getUsername(),
@@ -1118,7 +1170,7 @@ module.exports = class ServerController {
                 FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID);
             });
 
-            socket.on('removeChat', (removerId, chatId) => {
+            socket.on('removeParticipantFromChat', (removerId, chatId) => {
                 let remover = this.ppants.get(removerId);
 
                 if(remover !== undefined) {
@@ -1127,7 +1179,7 @@ module.exports = class ServerController {
 
                 if (remover.isMemberOfChat(chatId)){
                     //console.log('from server 2 ' + msgText);
-                    //gets list of chat participants to which send the message to
+                    //gets list of chat participants for removing participant in their chat.
                     let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
 
                         chatPartnerIDList.forEach(chatPartnerID => {
@@ -1142,7 +1194,7 @@ module.exports = class ServerController {
                         });
                     
                 }
-                ChatService.removeChat(chatId, removerId, Settings.CONFERENCE_ID);
+                ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID);
             })
 
             socket.on('getNPCStory', (ppantID, npcID) => {

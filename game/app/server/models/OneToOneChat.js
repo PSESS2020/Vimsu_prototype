@@ -57,6 +57,14 @@ module.exports = class OneToOneChat extends Chat{
 
         super.removeParticipant(participantId);
     }
+
+    getCreatorUsername() {
+        return this.#creatorUsername;
+    }
+
+    getChatPartnerUsername() {
+        return this.#chatPartnerUsername;
+    }
     /*
     isSent() {
         return this.#sentStatus;
