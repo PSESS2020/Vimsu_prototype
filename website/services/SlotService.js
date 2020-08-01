@@ -13,9 +13,12 @@ module.exports = class SlotService {
         return FileSystem.moveFile(video, dir).then(res => {
 
                 return vimsudb.uploadFile("lectures", video.name, dir).then(videoData => {
-
                     FileSystem.deleteDirectory(dir);
-                    return videoData;
+                    if(videoData) {
+                        return videoData;
+                    } else {
+                        return false;
+                    }
                 }).catch(err => {
                     console.error(err)
                 })

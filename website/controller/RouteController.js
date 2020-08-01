@@ -100,13 +100,17 @@ module.exports = class RouteController {
                 }
                 else {
                     return SlotService.storeVideo(video).then(videoData => {
-                        return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
-                            response.redirect('/');
-                            response.end();
-                        }).catch(err => {
-                            console.error(err);
-                            return response.render('upload', {createSlotFailed: true});
-                        })
+                        if(videoData) {
+                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants).then(res => {
+                                response.redirect('/');
+                                response.end();
+                            }).catch(err => {
+                                console.error(err);
+                                return response.render('upload', {createSlotFailed: true});
+                            })
+                        } else {
+                            return response.render('upload', {uploadFailed: true});
+                        }
                     }).catch(err => {
                         console.error(err);
                         return response.render('upload', {uploadFailed: true});

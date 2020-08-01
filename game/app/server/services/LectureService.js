@@ -9,6 +9,7 @@ module.exports = class LectureService {
         TypeChecker.isString(videoId);
 
         return vimsudb.downloadFile("lectures", videoId).then(res => {
+            return res;
         }).catch(err => {
             console.error(err)
         });

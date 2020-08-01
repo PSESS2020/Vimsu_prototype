@@ -30,8 +30,7 @@ class LectureView extends WindowView {
                     sendMessage();
                 }
             });
-        
-        
+            
             $(document).on('click', ".closeButton" , () => {
                 this.leaveLecture();
             })
@@ -153,7 +152,19 @@ class LectureView extends WindowView {
                     video.controlsList.remove('nodownload');
                     video.pause();
                 }
-            }, 100); // check lecture status every 100ms
+            }, 1000); // check lecture status every 1s
+
+            video.addEventListener('pause', () => {
+                if(this.#lectureStatus === LectureStatus.RUNNING) {
+                    video.play();
+                }
+            })
+
+            video.addEventListener('play', () => {
+                if(this.#lectureStatus === LectureStatus.OVER) {
+                    video.pause();
+                }
+            })
         });
     }   
 
@@ -166,8 +177,16 @@ class LectureView extends WindowView {
                 shouldLeave = confirm('Are you sure you want to leave?')
             }
 
-            if (shouldLeave) { this.close(); }
-        } else {
+            if (shouldLeave) { 
+                this.close(); 
+            }
+        
+        } else if (this.#lectureStatus === LectureStatus.PENDING) {
+            alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!')
+            this.close(); 
+        }
+        
+        else {
             this.close();
         }
     }
@@ -179,9 +198,11 @@ class LectureView extends WindowView {
         clearInterval(this.#timerIntervalId);
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
-        if(this.#lectureStatus === LectureStatus.RUNNING) {
-            var eventManager = new EventManager();
+        var eventManager = new EventManager();
+        if(this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
             eventManager.handleLectureLeft(this.#lectureId, false);
+        } else {
+            eventManager.handleLectureLeft(this.#lectureId, true);
         }
     }
 }
