@@ -1280,7 +1280,7 @@ module.exports = class ServerController {
                             let chatPartner = this.#ppants.get(chatPartnerID);
                             
                             //Checks if receiver of message is online
-                            if (chatPartner !== undefined) {
+                            if (chatPartnerID !== removerId && chatPartner !== undefined) {
                                
                                 let chatPartnerChat = chatPartner.getChat(chatId);
                                 chatPartnerChat.removeParticipant(removerId);
