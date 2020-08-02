@@ -516,8 +516,9 @@ class ClientController {
         this.#gameView.updateChatThread(chatId, false, false);
     }
 
-    handleFromServerRemovedFriend(friendId) {
+    handleFromServerRemovedFriend(friendId, chatId) {
         this.#gameView.removeFriend(friendId);
+        this.#gameView.updateChatThread(chatId, false, false);
     }
 
     handleFromServerRankList(rankList) {

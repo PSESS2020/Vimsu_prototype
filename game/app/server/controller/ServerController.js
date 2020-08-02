@@ -1255,7 +1255,10 @@ module.exports = class ServerController {
                 //if removed friend is online, remove friend from ppant instance
                 if(removedFriend !== undefined) {
                     removedFriend.removeFriend(removerID);
-                    this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend', removerID);
+
+                    ChatService.existsOneToOneChat(removerID, removedFriendID, Settings.CONFERENCE_ID, this.#db).then(chat => {    
+                        this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend', removerID, chat.chatId);
+                    })
                 }
 
                 //update DB
