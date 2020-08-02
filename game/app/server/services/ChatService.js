@@ -85,7 +85,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
 
-        return vimsudb.findOneInCollection("chats_" + conferenceId, { memberId: { $all: [ownerId, chatPartnerId] } }, "").then(chat => {
+        return vimsudb.findOneInCollection("chats_" + conferenceId, { memberId: [ownerId, chatPartnerId], memberId: [chatPartnerId, ownerId]}, "").then(chat => {
 
             if (chat) {
                 return chat;
