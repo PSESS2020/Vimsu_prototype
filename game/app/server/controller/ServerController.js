@@ -76,9 +76,9 @@ module.exports = class ServerController {
 
         this.#banList = [];
 
-     // Array to hold all participants
+        // Array to hold all participants
         this.#ppants = new Map();
-
+        this.init();
     }
     
     //There are currently 3 differenct socketIo Channels
@@ -1084,14 +1084,14 @@ module.exports = class ServerController {
 
                         console.log("chatParticipantList: " + chatPartnerIDList);
                         
-                        chatPartnerIDList.forEach(chatPartnerID => {
-                            let chatPartner = this.#ppants.get(chatPartnerID);
+                        chatPartnerIDList.forEach(chatParticipantID => {
+                            let chatParticipant = this.#ppants.get(chatParticipantID);
                             
                             //Checks if receiver of message is online
-                            if (chatPartner !== undefined) {
+                            if (chatParticipant !== undefined) {
                                
-                                let chatPartnerChat = chatPartner.getChat(chatId)
-                                chatPartnerChat.addMessage(msg);
+                                let chatParticipantChat = chatParticipant.getChat(chatId)
+                                chatParticipantChat.addMessage(msg);
                             }  
                         });
 
@@ -1207,32 +1207,39 @@ module.exports = class ServerController {
                 FriendListService.removeFriend(removedFriendID, removerID, Settings.CONFERENCE_ID, this.#db);
             });
 
+
+
             socket.on('removeParticipantFromChat', (removerId, chatId) => {
                 let remover = this.#ppants.get(removerId);
-
-                if(remover !== undefined) {
-                    remover.removeChat(chatId);
-                }
-
-                if (remover.isMemberOfChat(chatId)){
+                
+                if (remover !== undefined && remover.isMemberOfChat(chatId)){
                     //console.log('from server 2 ' + msgText);
                     //gets list of chat participants for removing participant in their chat.
                     let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
-
+                    console.log("before " + chatPartnerIDList);
                         chatPartnerIDList.forEach(chatPartnerID => {
                             let chatPartner = this.#ppants.get(chatPartnerID);
                             
                             //Checks if receiver of message is online
                             if (chatPartner !== undefined) {
                                
-                                let chatPartnerChat = chatPartner.getChat(chatId)
-                                chatPartnerChat.removeParticipant(chatPartnerID);
+                                let chatPartnerChat = chatPartner.getChat(chatId);
+                                chatPartnerChat.removeParticipant(removerId);
+                                console.log("chatpartner " + chatPartnerChat.getParticipantList());
+                                
                             }  
+
                         });
-                    
+
+                        remover.removeChat(chatId);
+                        console.log("after " + remover.getChatList());
+                        socket.leave(chatId);
                 }
+
                 ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID, this.#db);
-            })
+            });
+
+
 
             socket.on('getNPCStory', (ppantID, npcID) => {
                 let npcService = new NPCService();

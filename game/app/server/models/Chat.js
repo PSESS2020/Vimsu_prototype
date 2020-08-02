@@ -119,5 +119,5 @@ module.exports = class Chat {
     generateNewMsgId(senderId) {
         return this.#chatId + "." + senderId + "." + this.#messageList.length;
     };
-
+    
 }

@@ -65,6 +65,7 @@ module.exports = class OneToOneChat extends Chat{
     getChatPartnerUsername() {
         return this.#chatPartnerUsername;
     }
+
     /*
     isSent() {
         return this.#sentStatus;

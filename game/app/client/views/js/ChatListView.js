@@ -12,6 +12,9 @@ class ChatListView extends WindowView {
     }
     
     draw(chats) {
+
+        console.log("hiho " + chats.length)
+
         if(chats.length < 1) {
             $('#chatListModal .modal-body').text("No chats found. Let's connect with others!")
         }

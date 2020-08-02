@@ -497,6 +497,7 @@ class GameView {
     }
     
     initChatListView(chats) {
+
         this.#chatListView = new ChatListView();
         this.#chatListView.draw(chats);
     };

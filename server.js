@@ -73,9 +73,9 @@ const database = new db()
 
 database.connectDB().then(result => {
     const ServerController = require('./game/app/server/controller/ServerController.js');
-    const RouteController = require('./website/controller/RouteController')
-    serverController = new ServerController(io, database).init()
-    routeController = new RouteController(app, io, database).init()
+    const RouteController = require('./website/controller/RouteController');
+    serverController = new ServerController(io, database);
+    routeController = new RouteController(app, io, database);
 })
 
 

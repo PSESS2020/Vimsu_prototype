@@ -18,6 +18,7 @@ module.exports = class RouteController {
         this.#app = app;
         this.#io = io;
         this.#db = db;
+        this.init();
     }
 
     init() {
