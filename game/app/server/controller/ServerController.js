@@ -1276,11 +1276,9 @@ module.exports = class ServerController {
                     //gets list of chat participants for removing participant in their chat.
                     let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
                     console.log("before " + chatPartnerIDList);
-                        for(let i = 0, n = chatPartnerIDList.length; i < n; i++) {
+                        chatPartnerIDList.forEach(chatPartnerID => {
+                            let chatPartner = this.#ppants.get(chatPartnerID);
                             
-                            console.log("inside chatPartner " + chatPartnerIDList[i]);
-                            let chatPartner = this.#ppants.get(chatPartnerIDList);
-                            console.log("inside chatPartner " + chatPartnerIDList[i] + " " + i);
                             //Checks if receiver of message is online
                             if (chatPartner !== undefined) {
                                
@@ -1290,7 +1288,7 @@ module.exports = class ServerController {
                                 
                             }  
 
-                        }
+                        });
 
                         remover.removeChat(chatId);
                         console.log("after " + remover.getChatList());
