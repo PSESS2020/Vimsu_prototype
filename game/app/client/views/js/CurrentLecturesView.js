@@ -6,9 +6,10 @@ class CurrentLecturesView extends WindowView {
 
     draw(lectures) {
         $('#currentLecturesContainer').empty();
+        $('#nolecture').empty();
         
         if(lectures.length < 1) {
-            $('#currentLecturesContainer').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
+            $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
         }
         lectures.forEach(lecture => {
             // this is really messy i know, should move it somewhere else

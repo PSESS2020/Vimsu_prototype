@@ -505,9 +505,11 @@ class GameView {
     initChatThreadView(chat, openNow) {
         this.#chatThreadView = new ChatThreadView();
         this.#chatThreadView.draw(chat);
+
         if(openNow) {
-            if(!$('#chatThreadModal').is(':visible'))
+            if(!$('#chatThreadModal').is(':visible')) {
                 $('#chatThreadModal').modal('show');
+            }
         }
     };
 
@@ -521,19 +523,21 @@ class GameView {
         }
         this.initChatThreadView(chat, openNow);
     };
+
+    updateChatThread(chatId, areFriends, friendRequestSent) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
+            this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent); 
+        }
+    }
     
     addNewChatMessage(chatId, message) {
         if (this.#chatListView) {
             this.#chatListView.addNewMessage(chatId, message); // TODO
         }
 
-       
-
         if (this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
-        
-        
     };
 
     updateSuccessesBar(points, rank) {
@@ -541,7 +545,9 @@ class GameView {
     }
 
     removeFriend(participantId) {
-        this.#friendListView.deleteFriend(participantId)
+        if(this.#friendListView) {
+            this.#friendListView.deleteFriend(participantId)
+        }
     }
 
     removeChat(chatId) {
@@ -549,7 +555,10 @@ class GameView {
     }
 
     addFriend(businessCard) {
-        this.#friendListView.addToFriendList(businessCard);
+        if(this.#friendListView) {
+            console.log("addFriend")
+            this.#friendListView.addToFriendList(businessCard);
+        }
     }
 
     initFriendRequestListView(businessCards) {
@@ -558,7 +567,15 @@ class GameView {
     }
 
     updateFriendRequestListView(participantId, isAccepted) {
-        this.#friendRequestListView.update(participantId, isAccepted);
+        if($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+            this.#friendRequestListView.update(participantId, isAccepted);
+        }
+    }
+
+    addFriendRequest(businessCard) {
+        if($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+            this.#friendRequestListView.addToFriendRequestList(businessCard);
+        }
     }
         
     updateOwnAvatarRoom(typeOfRoom) {

@@ -7,19 +7,18 @@ class FriendRequestListView extends WindowView {
     }
 
     draw(businessCards) {
+
+        $('#friendRequestListModal .modal-body #nofriendrequest').empty();
         if(businessCards.length < 1) {
-            $('#friendListModal .modal-header .dropdown .dropdown-menu').text("No friend request received.")
+            $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
         }
 
-        $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').empty()
-        $('#friendListModal .modal-header .modal-title').empty()
+        $('#friendRequestListModal .modal-body .list-group').empty()
 
-        $('#friendListModal .modal-header .modal-title').append(`Friend Request List`)
-    
         this.#businessCards = businessCards;
         this.#businessCards.forEach(businessCard => {
-            $('#friendListModal .modal-header .dropdown .dropdown-menu .list-group').append(`
-                
+            $('#friendRequestListModal .modal-body .list-group').append(`
+            <ul id="${"friendRequest" + businessCard.getParticipantId()}">
                 <li class="list-group-item bg-transparent">
                     <div class="row w-100">
                         <div class="col-12 col-sm-2 px-0">
@@ -42,6 +41,7 @@ class FriendRequestListView extends WindowView {
                         </div>
                     </div>
                 </li>
+            </ul>
     
                 <script> 
                     $('#accept' + '${businessCard.getParticipantId()}').on('click', function (event) {
@@ -60,6 +60,18 @@ class FriendRequestListView extends WindowView {
         })
     }
 
+    deleteFriendRequest(participantId) {
+        this.#businessCards.forEach(businessCard => {
+
+            if (businessCard.getParticipantId() === participantId) {
+                let index = this.#businessCards.indexOf(businessCard);
+                this.#businessCards.splice(index, 1);
+            }
+        });
+
+        this.draw(this.#businessCards);
+    }
+
     update(participantId, isAccepted) {
         $('#accept' + participantId).hide()
         $('#reject' + participantId).hide()
@@ -68,9 +80,13 @@ class FriendRequestListView extends WindowView {
             $('#accepted' + participantId).show()
             $('#rejectdisable' + participantId).show()
         } else {
-            $('#acceptdisable' + participantId).show()
-            $('#rejected' + participantId).show()
+            this.deleteFriendRequest(participantId);
         }
+    }
+
+    addToFriendRequestList(businessCard) {
+        this.#businessCards.push(businessCard);
+        this.draw(this.#businessCards);
     }
 
     onclick() {

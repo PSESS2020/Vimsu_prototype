@@ -157,7 +157,7 @@ class EventManager {
         this.#clientController.handleFromViewGetNPCStory(npcId);
     }
 
-    handleSendFriendRequest(participantRecipientId) {
-        this.#clientController.handleFromViewNewFriendRequest(participantRecipientId);
+    handleSendFriendRequest(participantRecipientId, chatId) {
+        this.#clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
     }
 }

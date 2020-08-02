@@ -7,8 +7,10 @@ class ScheduleListView extends WindowView {
     }
 
     draw(lectures) {
+
+        $('#scheduleModal .modal-body #noschedule').empty();
         if(lectures.length < 1) {
-            $('#scheduleModal .modal-body #schedule').text("Sorry, no lecture is found.")
+            $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.")
         }
 
         lectures.forEach(lecture => {

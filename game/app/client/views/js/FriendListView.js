@@ -7,8 +7,10 @@ class FriendListView extends WindowView {
     }
 
     draw(businessCards) {
+        $('#friendListModal .modal-body #nofriend').empty();
+
         if(businessCards.length < 1) {
-            $('#friendListModal .modal-body').text("No friend is found. Chat with others and send some friend requests!")
+            $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")
         }
 
         $('#friendListModal .modal-body .list-group').empty()
@@ -59,13 +61,22 @@ class FriendListView extends WindowView {
                             event.stopImmediatePropagation();
                         }
                     })
+
                 </script>
             `)
         })
     }
 
     deleteFriend(participantId) {
-        $('#friend' + participantId).empty()
+        this.#businessCards.forEach(businessCard => {
+
+            if (businessCard.getParticipantId() === participantId) {
+                let index = this.#businessCards.indexOf(businessCard);
+                this.#businessCards.splice(index, 1);
+            }
+        });
+
+        this.draw(this.#businessCards);
     }
 
     addToFriendList(businessCard) {

@@ -287,11 +287,11 @@ module.exports = class ServerController {
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                     
                     if(typeOfCurrentRoom === TypeOfRoom.FOYER) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT, socket);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT, socket.id);
                     } else if (typeOfCurrentRoom === TypeOfRoom.FOODCOURT) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT, socket);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT, socket.id);
                     } else if (typeOfCurrentRoom === TypeOfRoom.RECEPTION) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT, socket);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT, socket.id);
                     }
                     
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => { 
@@ -403,13 +403,13 @@ module.exports = class ServerController {
                 var targetRoomId;
                 if (targetRoomType === TypeOfRoom.FOYER) {
                     targetRoomId = Settings.FOYER_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT, socket.id);
                 } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
                     targetRoomId = Settings.FOODCOURT_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT, socket.id);
                 } else if (targetRoomType === TypeOfRoom.RECEPTION) {
                     targetRoomId = Settings.RECEPTION_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT, socket.id);
                 }
 
                 var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
@@ -514,7 +514,7 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket);
+                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
                 
 
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
@@ -578,7 +578,7 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', participantId);
                 console.log(lectureEnded);
                 if(lectureEnded) {
-                    this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT, socket);
+                    this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT, socket.id);
                 }
             });
 
@@ -767,6 +767,7 @@ module.exports = class ServerController {
                 if (!creator.hasChatWith(chatPartnerID)) {
 
                     let creatorUsername = creator.getBusinessCard().getUsername();
+                    let chatData;
                     
                     //creates new chat and writes it in DB
                     ChatService.newOneToOneChat(creatorID, chatPartnerID, creatorUsername, chatPartnerUsername, Settings.CONFERENCE_ID, this.#db).then(chat => {
@@ -792,7 +793,7 @@ module.exports = class ServerController {
                         ParticipantService.addChatID(creatorID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
                         ParticipantService.addChatID(chatPartnerID, chat.getId(), Settings.CONFERENCE_ID, this.#db);
 
-                        let chatData = {
+                        chatData = {
                             title: chatPartnerUsername,
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
@@ -805,7 +806,7 @@ module.exports = class ServerController {
                             
                         };
 
-                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket);
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket.id);
 
                         /* Tell the creator's client to create a new chat. The true tells
                         * the client to immediately open the chatThreadView of the new chat 
@@ -828,6 +829,7 @@ module.exports = class ServerController {
                                 //chat partner joins chat channel
                                 let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
                                 socketPartner.join(loadedChat.getId());
+                                this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
                             }
     
                          })
@@ -860,6 +862,7 @@ module.exports = class ServerController {
                 console.log("new groupchat participants: " + chatPartnerIDList);
 
                     let creator = this.#ppants.get(creatorID);
+                    let chatData;
 
                     //still store creatorID in memberID, so that chat removal is easy
                     chatPartnerIDList.push(creatorID);
@@ -876,7 +879,7 @@ module.exports = class ServerController {
                         //Creator joins chat channel
                         socket.join(chat.getId());
 
-                        let chatData = {
+                        chatData = {
                             title: chat.getChatName(),
                             chatId: chat.getId(),
                             timestamp: '', //please dont change the timestamp here
@@ -887,7 +890,7 @@ module.exports = class ServerController {
                             messages: []
                         };
 
-                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket);
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket.id);
 
                         /* Tell the creator's client to create a new chat. The true tells
                             * the client to immediately open the chatThreadView of the new chat 
@@ -934,6 +937,8 @@ module.exports = class ServerController {
                                     let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
 
                                     socketPartner.join(loadedChat.getId());
+
+                                    this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
     
                                 });
                             }
@@ -1110,7 +1115,7 @@ module.exports = class ServerController {
             });
         
             //adds a new Friend Request to the system
-            socket.on('newFriendRequest', (requesterID, targetID) => {
+            socket.on('newFriendRequest', (requesterID, targetID, chatID) => {
                 console.log(`Received friend request from ${requesterID} for ${targetID}.`);
 
                 let target = this.#ppants.get(targetID);
@@ -1123,6 +1128,20 @@ module.exports = class ServerController {
 
                     target.addFriendRequest(requesterBusCard);
                     requester.addSentFriendRequest(targetBusCard);
+
+                    let requesterBusCardData = {
+                        friendId: requesterBusCard.getParticipantId(),
+                        username: requesterBusCard.getUsername(),
+                        title: requesterBusCard.getTitle(),
+                        surname: requesterBusCard.getSurname(),
+                        forename: requesterBusCard.getForename(),
+                        surname: requesterBusCard.getSurname(),
+                        job: requesterBusCard.getJob(),
+                        company: requesterBusCard.getCompany(),
+                        email: requesterBusCard.getEmail()
+                    }
+
+                    this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
 
                 //target is offline
                 } else if (target === undefined && requester !== undefined) {
@@ -1139,6 +1158,20 @@ module.exports = class ServerController {
                     //get BusCard from DB and add it to sent friend Request
                     ParticipantService.getBusinessCard(requesterID, Settings.CONFERENCE_ID, this.#db).then(requesterBusCard => {
                         target.addFriendRequest(requesterBusCard);
+
+                        let requesterBusCardData = {
+                            friendId: requesterBusCard.getParticipantId(),
+                            username: requesterBusCard.getUsername(),
+                            title: requesterBusCard.getTitle(),
+                            surname: requesterBusCard.getSurname(),
+                            forename: requesterBusCard.getForename(),
+                            surname: requesterBusCard.getSurname(),
+                            job: requesterBusCard.getJob(),
+                            company: requesterBusCard.getCompany(),
+                            email: requesterBusCard.getEmail()
+                        }
+
+                        this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
                     }).catch(err => {
                         console.error(err);
                     });
@@ -1158,12 +1191,30 @@ module.exports = class ServerController {
                     //check if target is online
                     if (target !== undefined) {
                         target.acceptFriendRequest(requesterID);
-                        this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket);
+                        this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket.id);
                     }
                     //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestAccepted(targetID);
-                        this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, socket);
+                        this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, this.getSocketId(requester.getId()));
+
+                        let targetBusCard = target.getBusinessCard();
+                        let targetBusCardData = {
+                            friendId: targetBusCard.getParticipantId(),
+                            username: targetBusCard.getUsername(),
+                            title: targetBusCard.getTitle(),
+                            surname: targetBusCard.getSurname(),
+                            forename: targetBusCard.getForename(),
+                            surname: targetBusCard.getSurname(),
+                            job: targetBusCard.getJob(),
+                            company: targetBusCard.getCompany(),
+                            email: targetBusCard.getEmail()
+                        }
+
+                        ChatService.existsOneToOneChat(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(chat => {    
+                            this.#io.to(this.getSocketId(requester.getId())).emit('acceptedFriendRequest', targetBusCardData, chat.chatId);
+                        })
+                        
                     }
                     
                     //update DB
@@ -1177,6 +1228,10 @@ module.exports = class ServerController {
                     //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestDeclined(targetID);
+
+                        ChatService.existsOneToOneChat(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(chat => {    
+                            this.#io.to(this.getSocketId(requester.getId())).emit('rejectedFriendRequest', chat.chatId);
+                        })
                     }
                 }
 
@@ -1200,6 +1255,7 @@ module.exports = class ServerController {
                 //if removed friend is online, remove friend from ppant instance
                 if(removedFriend !== undefined) {
                     removedFriend.removeFriend(removerID);
+                    this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend', removerID);
                 }
 
                 //update DB
@@ -1247,11 +1303,11 @@ module.exports = class ServerController {
                 let name = npc.getName();
                 let story = npc.getStory();
                 if(name === "BasicTutorial") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket.id);
                 } else if (name === "Chef") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK, socket.id);
                 } else if (name === "FoyerHelper") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK, socket);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK, socket.id);
                 }
                 
                 socket.emit('showNPCStory', name, story);
@@ -1580,7 +1636,7 @@ module.exports = class ServerController {
         };
     
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client
-    applyTaskAndAchievement(participantId, taskType, socket) {
+    applyTaskAndAchievement(participantId, taskType, socketId) {
         var participant = this.#ppants.get(participantId);
         participant.addTask(new TaskService().getTaskByType(taskType));
 
@@ -1588,7 +1644,7 @@ module.exports = class ServerController {
         var newAchievements = new AchievementService().computeAchievements(participant);
 
         newAchievements.forEach(ach => {
-            socket.emit('newAchievement', ach); 
+            this.#io.to(socketId).emit('newAchievement', ach);
             
             ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
                 console.log('level of ' + ach.id + ' updated') 
@@ -1599,7 +1655,7 @@ module.exports = class ServerController {
  
         ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
             RankListService.getRank(participantId, Settings.CONFERENCE_ID, this.#db).then(rank => { 
-                socket.emit('updateSuccessesBar', participant.getAwardPoints(), rank); 
+                this.#io.to(socketId).emit('updateSuccessesBar', participant.getAwardPoints(), rank); 
             });  
         });
     }

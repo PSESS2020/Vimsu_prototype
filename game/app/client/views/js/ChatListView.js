@@ -12,11 +12,10 @@ class ChatListView extends WindowView {
     }
     
     draw(chats) {
-
-        console.log("hiho " + chats.length)
+        $('#chatListModal .modal-body #nochat').empty();
 
         if(chats.length < 1) {
-            $('#chatListModal .modal-body').text("No chats found. Let's connect with others!")
+            $('#chatListModal .modal-body #nochat').text("No chats found. Let's connect with others!")
         }
         
         /* Clear view to make sure we don't draw anything twice */
@@ -78,7 +77,15 @@ class ChatListView extends WindowView {
     }
     
     deleteChat(chatId) {
-        $('#chat' + chatId).empty()
+        this.#chats.forEach(chat => {
+
+            if (chat.chatId === chatId) {
+                let index = this.#chats.indexOf(chat);
+                this.#chats.splice(index, 1);
+            }
+        });
+
+        this.draw(this.#chats);
     };
     
     addNewChat(chat) {
@@ -87,38 +94,17 @@ class ChatListView extends WindowView {
     };
     
     addNewMessage(chatID, message) {
-        
-        return; // TODO fix;
-        // Check if this view is visible and either change the display of that chat
-        // or add a "new message" icon
-        if($('#chatListModal').hidden) /* No idea if this works */ {
-            // TODO
-        } else {
-            var chat = this.#getChat(chatID);
-            if(chat != undefined) {
+        this.#chats.forEach(chat => {
+            if(chat.chatId === chatID) {
                 chat.timestamp = message.timestamp;
-                chat.previewUsername = message.sender; // might be wrong
-                chat.previewMessage = message.text; // need to be shortened
+                chat.previewUsername = message.senderUsername;
+                chat.previewMessage = message.msgText;
                 this.draw(this.#chats);
-            } else {
-                /* If we don't have a chat with the passed ID, we just force an update
-                 * of the chatListWindow.
-                 * - (E) */
-                this.onlick();
             }
-        }
-        
+        })
     };
 
     onclick() {
         return new EventManager().handleChatListClicked();
-    }
-    
-    #getChat = function(chatID) {
-        for(var i = 0; i < this.#chats.length; i++) {
-            if(chats[i].chatId == chatID) {
-                return chats[i];
-            }
-        }
     }
 }

@@ -206,12 +206,16 @@ class ClientController {
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
         this.socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
+        this.socket.on('acceptedFriendRequest', this.handleFromServerAcceptedFriendRequest.bind(this));
+        this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
+        this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
         this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
+        this.socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
         this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
         this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
@@ -496,6 +500,26 @@ class ClientController {
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
 
+    handleFromServerNewFriendRequest(data, chatId) {
+        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        this.#gameView.addFriendRequest(friendRequest);
+        this.#gameView.updateChatThread(chatId, false, true);
+    }
+
+    handleFromServerAcceptedFriendRequest(data, chatId) {
+        var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        this.#gameView.addFriend(friend);
+        this.#gameView.updateChatThread(chatId, true, false);
+    }
+
+    handleFromServerRejectedFriendRequest(chatId) {
+        this.#gameView.updateChatThread(chatId, false, false);
+    }
+
+    handleFromServerRemovedFriend(friendId) {
+        this.#gameView.removeFriend(friendId);
+    }
+
     handleFromServerRankList(rankList) {
         //remark own participant's ranking
         let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
@@ -669,9 +693,9 @@ class ClientController {
     }
 
     //called after 'Add Friend' Button
-    handleFromViewNewFriendRequest(participantRepicientId) {
+    handleFromViewNewFriendRequest(participantRepicientId, chatId) {
         this.socketReady;
-        this.socket.emit('newFriendRequest', this.#ownParticipant.getId(), participantRepicientId);
+        this.socket.emit('newFriendRequest', this.#ownParticipant.getId(), participantRepicientId, chatId);
     }
 
     //called when a friend request is accepted

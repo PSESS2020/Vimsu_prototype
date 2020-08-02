@@ -13,6 +13,7 @@
                 </button>
                 </div>
                 <div class="modal-body">
+                    <div id="noschedule"></div>
                     <table id="schedule" class="table" style="width:100%">
                         <thead>
                             <tr>
@@ -69,48 +70,55 @@
             </div>
         </div>
 
-        <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle" aria-hidden="true">
+        <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle" aria-hidden="true" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                    <div class = "dropdown" id="dropdownFriendRequestList">
-                        <a class="action_button nav-item nav-link d-flex flex-column" href="" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="dropdownFriendRequestList" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="action_button nav-item nav-link d-flex flex-column" href="#friendRequestListModal" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList" data-toggle="modal">
                             <i class="fa fa-user-plus friendRequestListButton navbarIcons" style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
                             <small style="color: white; font-size: 10px;">Requests</small>
                         </a>
 
                         <script>
-                            $('#dropdownFriendRequestList').on('show.bs.dropdown', function (event) {
+                            $('#friendRequestList').off();
+                            $('#friendRequestList').on('click', function (event) {
                                 new FriendRequestListView().onclick();
-                            })
-
-                            $('#dropdownFriendRequestList').on('hide.bs.dropdown', function () {
-                                $('#friendListModal .modal-header .modal-title').empty()
-                                $('#friendListModal .modal-header .modal-title').append(`Friend List`)
                             })
                         </script>
 
-                        <div class="dropdown-menu dropdown-menu-right" style="margin-top: 57px; margin-left: 10px;" aria-labelledby="dropdownFriendRequestList">
-                            <ul class ="list-group bg-transparent" style="margin-top: 8px">
-
-
-                            </ul>
-                        </div>
-
-                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" style="overflow: auto; height: 500px">
+                    <div id="nofriend"></div>
                     <ul class="list-group bg-transparent">
                         
                     </ul>
                 </div>
             </div>
             </div>
+        </div>
+
+        <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog" aria-labelledby="friendRequestListModalTitle" data-focus-on="input:first">
+            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow: auto; height: 500px;">
+                    <div id="nofriendrequest"></div>
+                    <ul class="list-group bg-transparent">
+                        
+                    </ul>
+                </div>
+            </div>
+            </div>        
         </div>
 
         <div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -183,6 +191,7 @@
                     </button>
                 </div>
                 <div class="modal-body" style="overflow: auto; height: 500px">
+                    <div id="nochat"></div>
                     <ul class="list-group bg-transparent">
                         
                     </ul>
