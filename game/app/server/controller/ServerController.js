@@ -63,6 +63,12 @@ module.exports = class ServerController {
     #roomService;
     
     constructor(socket, db) {
+        if(!!ServerController.instance){
+            return ServerController.instance;
+        }
+
+        ServerController.instance = this;
+
         this.#io = socket;
         this.#db = db;
         this.#DEBUGMODE = true;

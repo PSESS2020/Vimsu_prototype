@@ -15,6 +15,12 @@ module.exports = class RouteController {
     #db;
 
     constructor(app, io, db) {
+        if(!!RouteController.instance){
+            return RouteController.instance;
+        }
+
+        RouteController.instance = this;
+        
         this.#app = app;
         this.#io = io;
         this.#db = db;
@@ -139,6 +145,8 @@ module.exports = class RouteController {
                     response.redirect('/');
                 } else {
                     request.session.gameEntered = true;
+                    const ServerController = require('../../game/app/server/controller/ServerController');
+                    new ServerController(this.#io, this.#db);
                     response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
                 }
             } else {
