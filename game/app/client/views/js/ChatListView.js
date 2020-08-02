@@ -36,7 +36,7 @@ class ChatListView extends WindowView {
             console.log(chat)
 
             if(chat.timestamp && chat.timestamp instanceof Date) {
-                timestamp = "on " + new DateParser(chat.timestamp).parse() + " " + chat.previewUsername + " wrote"
+                timestamp = "on " + new DateParser(chat.timestamp).parse() + " " + chat.previewUsername + ":"
             } else {
                 timestamp = 'no messages'
             }
