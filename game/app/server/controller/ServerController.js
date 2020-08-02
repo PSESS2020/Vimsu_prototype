@@ -1046,9 +1046,10 @@ module.exports = class ServerController {
                     chat.getMessageList().forEach( (message) => {
                         console.log("getChatThreadMessages: " + message.getMessageText());
                         messageInfoData.push({
-                        senderUsername: message.getUsername(),
-                        timestamp: message.getTimestamp(),
-                        msgText: message.getMessageText()});
+                            senderUsername: message.getUsername(),
+                            timestamp: message.getTimestamp(),
+                            msgText: message.getMessageText()
+                        });
                     });
 
                     if (chat instanceof OneToOneChat) {
@@ -1276,12 +1277,18 @@ module.exports = class ServerController {
 
             socket.on('removeParticipantFromChat', (removerId, chatId) => {
                 let remover = this.#ppants.get(removerId);
+                let removerUsername = remover.getBusinessCard().getUsername();
+
                 
                 if (remover !== undefined && remover.isMemberOfChat(chatId)){
                     //console.log('from server 2 ' + msgText);
                     //gets list of chat participants for removing participant in their chat.
                     let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
                     console.log("before " + chatPartnerIDList);
+
+                    let msgText = removerUsername + " has left the chat";
+
+                    ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
                         chatPartnerIDList.forEach(chatPartnerID => {
                             let chatPartner = this.#ppants.get(chatPartnerID);
                             
@@ -1291,14 +1298,25 @@ module.exports = class ServerController {
                                 let chatPartnerChat = chatPartner.getChat(chatId);
                                 chatPartnerChat.removeParticipant(removerId);
                                 console.log("chatpartner " + chatPartnerChat.getParticipantList());
+                                chatPartnerChat.addMessage(msg);
+                            }
+                        })
                                 
-                            }  
+                        var msgToEmit = {
+                            senderUsername: msg.getUsername(),
+                            msgId: msg.getMessageId(),
+                            senderId: msg.getSenderId(),
+                            timestamp: msg.getTimestamp(),
+                            msgText: msg.getMessageText()
+                        };
+                                
+                        // readded this line because it is required to distribute chat messages after joining the 1to1 chat 
+                        this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                    })
 
-                        });
-
-                        remover.removeChat(chatId);
-                        console.log("after " + remover.getChatList());
-                        socket.leave(chatId);
+                    remover.removeChat(chatId);
+                    console.log("after " + remover.getChatList());
+                    socket.leave(chatId);
                 }
 
                 ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID, this.#db);
