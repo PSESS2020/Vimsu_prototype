@@ -99,9 +99,20 @@ module.exports = class Chat {
 
             if (participant === participantId) {
                 let index = this.#participantList.indexOf(participant);
-                this.#participantList.splice(index, 1);
+                this.spliceOne(this.#participantList, index);
             }
         });
+    }
+
+    spliceOne(array, index) {
+        let len = array.length;
+        if (!len) return;
+
+        while (index < len) {
+            array[index] = array[index + 1]; 
+            index++;
+        }
+        array.length--;
     }
 
     getNumParticipants() {

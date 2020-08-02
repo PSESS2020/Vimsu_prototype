@@ -48,12 +48,14 @@ class InviteFriendsView extends WindowView {
                     <script> 
                         var invitedFriends = [];
 
+                        $('#invite' + '${businessCard.getParticipantId()}').off('click');
                         $('#invite' + '${businessCard.getParticipantId()}').on('click', function (event) {
                             invitedFriends.push('${businessCard.getParticipantId()}');
                             $('#invite' + '${businessCard.getParticipantId()}').hide();
                             $('#selected' + '${businessCard.getParticipantId()}').show();
                         })
 
+                        $('#selected' + '${businessCard.getParticipantId()}').off('click');
                         $('#selected' + '${businessCard.getParticipantId()}').on('click', function (event) {
                             let index = invitedFriends.indexOf('${businessCard.getParticipantId()}');
                             invitedFriends.splice(index, 1);
