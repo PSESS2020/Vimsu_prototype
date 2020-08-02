@@ -20,7 +20,7 @@ module.exports = class RouteController {
         }
 
         RouteController.instance = this;
-        
+
         this.#app = app;
         this.#io = io;
         this.#db = db;
@@ -141,25 +141,7 @@ module.exports = class RouteController {
 
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
-                if (request.session.gameEntered === true) {
-                    response.redirect('/');
-                } else {
-                    request.session.gameEntered = true;
-                    const ServerController = require('../../game/app/server/controller/ServerController');
-                    new ServerController(this.#io, this.#db);
-                    response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
-                }
-            } else {
-                response.redirect('/');
-            }
-        })
-
-        this.#app.get('/game/disconnect', (request,response) => {
-            if (request.session.loggedin === true) {
-                if(request.session.gameEntered === true) {
-                    request.session.gameEntered = false;
-                    response.redirect('/')
-                }
+                response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
             } else {
                 response.redirect('/');
             }
