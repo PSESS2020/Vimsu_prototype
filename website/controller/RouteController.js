@@ -135,6 +135,8 @@ module.exports = class RouteController {
 
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
+                const ServerController = require('../../game/app/server/controller/ServerController');
+                new ServerController(this.#io, this.#db);
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
             } else {
                 response.redirect('/');

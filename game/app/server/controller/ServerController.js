@@ -78,6 +78,15 @@ module.exports = class ServerController {
 
         // Array to hold all participants
         this.#ppants = new Map();
+
+        LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
+            var schedule = new Schedule(lectures);
+            var conference = new Conference(schedule);
+            this.#conference = conference;
+        }).catch(err => {
+            console.error(err);    
+        })
+        
         this.init();
     }
     
@@ -128,16 +137,6 @@ module.exports = class ServerController {
          * This may late be moved into the server or conference-controller?
          * - (E) */
         this.#io.on('connection', (socket) => {
-
-            LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
-                var schedule = new Schedule(lectures);
-                var conference = new Conference(schedule);
-                this.#conference = conference;
-            }).catch(err => {
-                console.error(err);    
-            })
-
-
             /* When a new player connects, we create a participant instance, initialize it to
              * the right position (whatever that is) and the emit that to all the other players,
              * unless we're just doing regular game-state updates.
