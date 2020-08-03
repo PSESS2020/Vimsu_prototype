@@ -113,9 +113,9 @@ module.exports = class Lecture {
         let currDate = new Date();
 
         //time difference in ms
-        let timeDifference = currDate - this.#startingTime;
+        //let timeDifference = currDate - this.#startingTime;
         //lecture is full or started longer than 5 minutes ago
-        if (this.#activeParticipants.length >= this.#maxParticipants || timeDifference >= 300000) { 
+        if (this.#activeParticipants.length >= this.#maxParticipants/* || timeDifference >= 300000*/) { 
 
             return false;
         } 
