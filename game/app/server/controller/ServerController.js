@@ -1293,6 +1293,9 @@ module.exports = class ServerController {
                 
                 if (remover !== undefined && remover.isMemberOfChat(chatId)){
                     //console.log('from server 2 ' + msgText);
+
+                    //BEWARE: Do not change/manipulate the chatPartnerIDList of remover, because it is referenced here and
+                    //any change will affect the code above.
                     //gets list of chat participants for removing participant in their chat.
                     let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
                     console.log("before " + chatPartnerIDList);
