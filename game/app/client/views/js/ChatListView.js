@@ -31,14 +31,20 @@ class ChatListView extends WindowView {
 
         this.#chats.forEach(chat => {
             console.log("chatId client: " + chat.chatId);
-            var timestamp;
+            var timestamp, previewMessage;
 
             console.log(chat)
 
             if(chat.timestamp && chat.timestamp instanceof Date) {
-                timestamp = "on " + new DateParser(chat.timestamp).parse() + " " + chat.previewUsername + ":"
+                timestamp = new DateParser(chat.timestamp).parse();
             } else {
-                timestamp = 'no messages'
+                timestamp = 'no messages';
+            }
+
+            if(chat.previewUsername) {
+                previewMessage = chat.previewUsername + ": " + chat.previewMessage;
+            } else {
+                previewMessage = chat.previewMessage;
             }
 
             // Now we want to append each chat as a clickable element
@@ -55,7 +61,7 @@ class ChatListView extends WindowView {
                                     <br>
                                     <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
                                     <br>
-                                    <span class ="small p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
+                                    <span class ="small p-0 wrapword" style="opacity: 0.8">${previewMessage}</span>                                
                                 </div>  
                             </div>
                         
