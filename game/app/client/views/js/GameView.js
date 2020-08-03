@@ -192,7 +192,7 @@ class GameView {
                 this.#currentMap.drawSelectedTile();
             }   
 
-            this.drawClock();
+            this.#statusBar.drawClock();
 
             //put all AvatarViews in one list
             var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
@@ -224,10 +224,6 @@ class GameView {
                 this.#updateList[i].update();
             }
         }
-    }
-
-    drawClock() {
-        this.#statusBar.drawClock();
     }
 
     //Is called when participant enters Room
