@@ -109,11 +109,17 @@ class ChatThreadView extends WindowView {
     
     #appendMessage = (message) => {        
         var timestamp = new DateParser(new Date(message.timestamp)).parse();
+        var senderUsername;
+        if(message.senderUsername) {
+            senderUsername = message.senderUsername + ":"
+        } else {
+            senderUsername = "";
+        }
 
         var messageDiv = `
         <div>
             <small class="p-1" style="opacity: 0.3; float: right;">${timestamp}</small>
-            <small><b>${message.senderUsername}</b>:</small>
+            <small><b>${senderUsername}</b></small>
             <small class="wrapword">${message.msgText}</small>
         </div>
         `;
