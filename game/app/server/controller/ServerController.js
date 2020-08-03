@@ -973,8 +973,8 @@ module.exports = class ServerController {
                     if (chat.getMessageList().length > 0) {
                         var lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
-                        if(previewText.length > 28) {
-                            previewText = previewText.slice(0, 28) + "...";
+                        if(previewText.length > 36) {
+                            previewText = previewText.slice(0, 36) + "...";
                         } 
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {

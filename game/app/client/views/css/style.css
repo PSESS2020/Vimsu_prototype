@@ -360,6 +360,10 @@ body::-webkit-scrollbar {
   display:none
 }
 
+#chatThreadModalList::-webkit-scrollbar {
+  display:none
+}
+
 .modal-header .dropdown-menu {
   width: 464px !important;
   min-height: 501px !important;

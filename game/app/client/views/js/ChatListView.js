@@ -100,9 +100,12 @@ class ChatListView extends WindowView {
     addNewMessage(chatID, message) {
         this.#chats.forEach(chat => {
             if(chat.chatId === chatID) {
+                if(message.msgText.length > 36) {
+                    var msgText = message.msgText.slice(0, 36) + "...";
+                } 
                 chat.timestamp = message.timestamp;
                 chat.previewUsername = message.senderUsername;
-                chat.previewMessage = message.msgText;
+                chat.previewMessage = msgText;
                 this.draw(this.#chats);
             }
         })
