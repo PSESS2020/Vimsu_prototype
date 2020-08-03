@@ -709,29 +709,30 @@ module.exports = class ServerController {
             socket.on('getInviteFriends', (ppantID, groupName) => {
                 if(!groupName) {
                     socket.emit('inviteFriends', undefined, groupName, Settings.MAXGROUPPARTICIPANTS);
+                } else {
+                    
+                    var friendList = this.#ppants.get(ppantID).getFriendList();
+
+                    var friendListData = [];
+                    
+                    friendList.getAllBusinessCards().forEach(businessCard => {
+                        friendListData.push(
+                            {   
+                                friendId: businessCard.getParticipantId(),
+                                username: businessCard.getUsername(),
+                                title: businessCard.getTitle(),
+                                surname: businessCard.getSurname(),
+                                forename: businessCard.getForename(),
+                                surname: businessCard.getSurname(),
+                                job: businessCard.getJob(),
+                                company: businessCard.getCompany(),
+                                email: businessCard.getEmail()
+                            }
+                        )
+                    });
+
+                    socket.emit('inviteFriends', friendListData, groupName, Settings.MAXGROUPPARTICIPANTS);
                 }
-                
-                var friendList = this.#ppants.get(ppantID).getFriendList();
-
-                var friendListData = [];
-                
-                friendList.getAllBusinessCards().forEach(businessCard => {
-                    friendListData.push(
-                        {   
-                            friendId: businessCard.getParticipantId(),
-                            username: businessCard.getUsername(),
-                            title: businessCard.getTitle(),
-                            surname: businessCard.getSurname(),
-                            forename: businessCard.getForename(),
-                            surname: businessCard.getSurname(),
-                            job: businessCard.getJob(),
-                            company: businessCard.getCompany(),
-                            email: businessCard.getEmail()
-                        }
-                    )
-                });
-
-                socket.emit('inviteFriends', friendListData, groupName, Settings.MAXGROUPPARTICIPANTS);
             });
 
             socket.on('getFriendRequestList', (ppantID) => {
