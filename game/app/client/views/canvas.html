@@ -52,6 +52,7 @@
             <div class="d-flex flex-column ml-5" style="text-align: center">
                 <div id="time" style="color: antiquewhite"></div>
                 <div id="location" style="color: antiquewhite"></div>
+                <div id="connectionStatus" style="color: firebrick"></div>
             </div>
             <div class="d-flex flex-column ml-auto">
                 <div class= "achievementBox p-1 align-items-center text-center">
@@ -118,7 +119,7 @@
                     </a>
                 </li>
                 <li class="nav-item"> 
-                    <a class="action_button nav-item nav-link" href="/" onclick="return confirm('Are you sure you want to leave?')">
+                    <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" onclick="return confirm('Are you sure you want to leave?')">
                         <i class="fa fa-sign-out fa-4x navbarIcons"></i>
                         <p class="navbarIconsText" style="margin-left: 7px;">Leave</p>
                     </a>
@@ -246,13 +247,66 @@
         <script src="client/libraries/require.js"></script>
         <!--<script> const socket = io('http://localhost:5000'); </script>-->
         <script>
-            requirejs(['client/utils/TypeChecker', 'client/utils/LectureStatus', 'client/utils/DateParser', 'client/utils/DirectionClient', 'client/config/GameConfig', 'client/utils/TypeOfRoomClient', 'client/utils/GameObjectTypeClient', 'client/models/BusinessCardClient', 'client/models/ParticipantClient', 
-                        'client/models/PositionClient','client/models/NPCClient', 'client/models/GameObjectClient', 'client/models/RoomClient'], () => {
-                requirejs(['client/views/js/Views', 'client/utils/Settings'], () => {
-                    requirejs(['client/utils/ImageLoader', 'client/utils/CacheImages', 'client/utils/SpriteAnimation', 'client/utils/SpriteSheet'], () => {
-                        requirejs(['client/views/js/WindowView','client/views/js/MapView', 'client/views/js/GameObjectView', 'client/views/js/GameObjectViewFactory', 'client/views/js/AvatarView', 'client/views/js/LoadingView'], () => {
-                            requirejs(['client/views/js/ProfileView', 'client/views/js/ChatListView', 'client/views/js/ChatThreadView', 'client/views/js/GlobalChatView', 'client/views/js/StatusBar', 'client/views/js/SuccessesBar', 'client/views/js/FriendListView', 'client/views/js/InviteFriendsView', 'client/views/js/FriendRequestListView', 'client/views/js/BusinessCardView', 'client/views/js/NPCStoryView', 'client/views/js/ScheduleListView', 'client/views/js/RankListView', 'client/views/js/AchievementView',  'client/views/js/NewAchievementView', 'client/views/js/CurrentLecturesView', 'client/views/js/LectureView', 'client/views/js/RoomView', 'client/views/js/NPCAvatarView', 'client/views/js/ParticipantAvatarView', 'client/views/js/TileView', 'client/views/js/SelectedTileView', 'client/views/js/WallView', 'client/views/js/TableView', 'client/views/js/DoorView'], () => {
-                                requirejs(['client/views/js/GameView', 'client/controller/ClientController', 'client/utils/EventManager'], () => {
+            requirejs(['client/utils/ConnectionState',
+                       'client/utils/TypeChecker', 
+                       'client/utils/LectureStatus', 
+                       'client/utils/DateParser', 
+                       'client/utils/DirectionClient', 
+                       'client/config/GameConfig', 
+                       'client/utils/TypeOfRoomClient', 
+                       'client/utils/GameObjectTypeClient', 
+                       'client/models/BusinessCardClient', 
+                       'client/models/ParticipantClient', 
+                       'client/models/PositionClient', 
+                       'client/models/NPCClient', 
+                       'client/models/GameObjectClient', 
+                       'client/models/RoomClient'], () => {
+
+                requirejs(['client/views/js/Views', 
+                           'client/utils/Settings'], () => {
+
+                    requirejs(['client/utils/ImageLoader', 
+                               'client/utils/CacheImages', 
+                               'client/utils/SpriteAnimation', 
+                               'client/utils/SpriteSheet'], () => {
+
+                        requirejs(['client/views/js/WindowView',
+                                   'client/views/js/MapView', 
+                                   'client/views/js/GameObjectView', 
+                                   'client/views/js/GameObjectViewFactory', 
+                                   'client/views/js/AvatarView', 
+                                   'client/views/js/LoadingView'], () => {
+
+                            requirejs(['client/views/js/ProfileView', 
+                                       'client/views/js/ChatListView', 
+                                       'client/views/js/ChatThreadView', 
+                                       'client/views/js/GlobalChatView', 
+                                       'client/views/js/StatusBar', 
+                                       'client/views/js/SuccessesBar', 
+                                       'client/views/js/FriendListView', 
+                                       'client/views/js/InviteFriendsView', 
+                                       'client/views/js/FriendRequestListView', 
+                                       'client/views/js/BusinessCardView', 
+                                       'client/views/js/NPCStoryView', 
+                                       'client/views/js/ScheduleListView', 
+                                       'client/views/js/RankListView', 
+                                       'client/views/js/AchievementView',  
+                                       'client/views/js/NewAchievementView', 
+                                       'client/views/js/CurrentLecturesView', 
+                                       'client/views/js/LectureView', 
+                                       'client/views/js/RoomView', 
+                                       'client/views/js/NPCAvatarView', 
+                                       'client/views/js/ParticipantAvatarView', 
+                                       'client/views/js/TileView', 
+                                       'client/views/js/SelectedTileView', 
+                                       'client/views/js/WallView', 
+                                       'client/views/js/TableView', 
+                                       'client/views/js/DoorView'], () => {
+
+                                requirejs(['client/views/js/GameView', 
+                                           'client/controller/ClientController', 
+                                           'client/utils/EventManager'], () => {
+                                               
                                     requirejs(['client/index'], () => {
                                     });    
                                 });

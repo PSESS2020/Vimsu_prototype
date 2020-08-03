@@ -183,6 +183,9 @@ class GameView {
     {
         return this.#updateList;
     }
+    drawStatusBar() {
+        this.#statusBar.draw();
+    }
 
     draw()
     {
@@ -191,8 +194,6 @@ class GameView {
             if(this.#currentMap.selectionOnMap) {
                 this.#currentMap.drawSelectedTile();
             }   
-
-            this.#statusBar.drawClock();
 
             //put all AvatarViews in one list
             var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
@@ -224,6 +225,10 @@ class GameView {
                 this.#updateList[i].update();
             }
         }
+    }
+
+    updateConnectionStatus(status) {
+        this.#statusBar.updateConnectionStatus(status);
     }
 
     //Is called when participant enters Room

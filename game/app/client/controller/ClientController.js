@@ -44,6 +44,7 @@ class ClientController {
     #ownParticipant;
     #roomClient;
     #ownBusinessCard;
+    #connectionStatus;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -119,6 +120,7 @@ class ClientController {
         var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
         if (map !== null) {
+            this.#gameView.drawStatusBar();
             this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
         }
         
@@ -165,9 +167,20 @@ class ClientController {
             *Without the arguments the client starts a http connection and upgrades later to websocket protocol.
             *This caused a disconnect from the server and therefore a server scrash. 
             */
-            this.socket = io({transports: ['websocket'], upgrade: false});
+            this.socket = io({
+                transports: ['websocket'], 
+                upgrade: false,
+                'reconnection': true,
+                'reconnectionDelay': 100,
+                'reconnectionAttempts': 120
+            });
             this.socket.on('connect', (socket) => {
+                this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
                 console.log("test connect");
+            });
+
+            this.socket.on('disconnect', () => {
+                this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
             });
             this.setUpSocket();
             this.socket.emit('new participant');
@@ -227,6 +240,7 @@ class ClientController {
     /* #################################################### */
     
     updateGame() {
+
         this.#gameView.update()
         this.#gameView.draw();
     }
