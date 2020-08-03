@@ -1053,13 +1053,25 @@ module.exports = class ServerController {
                     if (chat instanceof OneToOneChat) {
                         let partnerId = chat.getOtherUserId(requesterId);
 
-                        var chatData = {
-                            chatId: chat.getId(),
-                            title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
-                            areFriends: participant.hasFriend(partnerId),
-                            friendRequestSent: participant.hasSentFriendRequest(partnerId),
-                            partnerId: partnerId,
-                            messages: messageInfoData
+                        //partner left before
+                        if(partnerId === undefined) {
+                            var chatData = {
+                                chatId: chat.getId(),
+                                title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                                areFriends: true,
+                                friendRequestSent: true,
+                                partnerId: undefined,
+                                messages: messageInfoData
+                            }
+                        } else {
+                            var chatData = {
+                                chatId: chat.getId(),
+                                title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                                areFriends: participant.hasFriend(partnerId),
+                                friendRequestSent: participant.hasSentFriendRequest(partnerId),
+                                partnerId: partnerId,
+                                messages: messageInfoData
+                            }
                         }
                     } else {
                         var chatData = {
