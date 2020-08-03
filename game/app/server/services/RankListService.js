@@ -34,7 +34,6 @@ module.exports = class RankListService {
             var rankListLength = 1;
 
             for (var i = rankList.length - 1; i >= 0; i--) {
-                console.log("lastRank: " + lastRank);
                 if (rankList[i].rank === lastRank) {
                     rankListLength = rankListLength + i;
                     rankList = rankList.slice(0, rankListLength);
