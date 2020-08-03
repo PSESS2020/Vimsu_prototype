@@ -60,11 +60,10 @@ class EventManager {
 
     handleLectureClicked(lectureId) {
         this.#clientController.handleFromViewEnterLecture(lectureId);
-        this.handleAchievementEvent('lecturesVisited');
     }
 
-    handleLectureLeft(lectureId) {
-        this.#clientController.handleFromViewLectureLeft(lectureId);
+    handleLectureLeft(lectureId, lectureEnded) {
+        this.#clientController.handleFromViewLectureLeft(lectureId, lectureEnded);
     }
 
     handleScheduleClicked() {
@@ -79,13 +78,41 @@ class EventManager {
         this.#clientController.handleFromViewShowProfile();
     }
 
-    handleChatNowClicked(participantId, isFriend) {
-        this.#clientController.handleFromViewCreateNewChat(participantId, isFriend);
-    }
 
-    handleFriendListClicked() {
-        this.#clientController.handleFromViewShowFriendList();
+
+    handleFriendListClicked(isInviteFriends) {
+        this.#clientController.handleFromViewShowFriendList(isInviteFriends, "");
     }
+    
+    /* One function to display the list of all chats.
+     * - (E) */
+    handleChatListClicked() {
+        this.#clientController.handleFromViewShowChatList();
+    };
+    
+    /* One function to display the messages in a chat.
+     * - (E) */
+     handleChatThreadClicked(chatId) {
+         this.#clientController.handleFromViewShowChatThread(chatId);
+     };
+     
+    /* One function to create a new chat.
+     * - (E) */
+    handleChatNowClicked(participantId, username) {
+        this.#clientController.handleFromViewCreateNewChat(participantId, username);
+    }
+    
+    /* One function to create a new group chat
+     * - (E) */
+    handleCreateGroupChat(chatName, participantIdList) {
+        this.#clientController.handleFromViewCreateNewGroupChat(chatName, participantIdList)
+    }
+     
+    /* One function to send a new message in a chat.
+     * - (E) */
+     handleChatMessageInput(chatId, message) {
+         this.#clientController.handleFromViewSendNewMessage(chatId, message);
+     };
 
     handleFriendRequestListClicked() {
         this.#clientController.handleFromViewShowFriendRequestList();
@@ -98,6 +125,10 @@ class EventManager {
     handleRankListClicked() {
         this.#clientController.handleFromViewShowRankList();
     }
+    
+    handleSendFriendRequest(chatId) {
+        this.#clientController.handleSendFriendRequest();
+    };
     
     handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
         var businessCard = {
@@ -120,5 +151,13 @@ class EventManager {
 
     handleRemoveFriend(friendId) {
         this.#clientController.handleFromViewRemoveFriend(friendId);
+    }
+
+    handleLeaveChat(chatId) {
+        this.#clientController.handleFromViewLeaveChat(chatId);
+    }
+
+    handleNPCClick(npcId) {
+        this.#clientController.handleFromViewGetNPCStory(npcId);
     }
 }

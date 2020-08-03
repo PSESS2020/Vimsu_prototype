@@ -1,4 +1,4 @@
-const Direction = require('../server/models/Direction')
+const Direction = require('./Direction')
 
 module.exports = Object.freeze
 ({
@@ -11,14 +11,17 @@ module.exports = Object.freeze
     FOYER_ID: 1,
     FOODCOURT_ID: 2,
     RECEPTION_ID: 3,
-    STARTPOSITION_X: 0,
-    STARTPOSITION_Y: 0,
-    STARTDIRECTION: Direction.DOWNRIGHT,
+    STARTROOM_ID: 3,
+    STARTPOSITION_X: 3,
+    STARTPOSITION_Y: 12,
+    STARTDIRECTION: Direction.UPLEFT,
+    TYPE_OF_STARTROOM: 'RECEPTION',
     MAXNUMMESSAGES_LECTURECHAT: 100,
     MAXNUMMESSAGES_ALLCHAT: 100,
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
+    CONFERENCE_ID: '1',
 
     /* Moderator-Settings */
     CMDSTARTCHAR: "\\" // moved the actual commands into a seperate file for easier handling

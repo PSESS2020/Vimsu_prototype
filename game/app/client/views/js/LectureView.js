@@ -1,11 +1,49 @@
 // TODO: need refactoring
 class LectureView extends WindowView {
 
-    constructor(){
+    #timerIntervalId;
+    #lectureStatus;
+    #hasToken;
+    #lectureId;
+    #timeLeft;
+
+    constructor() {
         super();
+
+        this.#lectureStatus = LectureStatus.PENDING;
+
+        $(document).ready(() => {
+            function sendMessage() {
+                let messageVal = $('#lectureChatInput').val();
+                if(messageVal !== '') {
+                  clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+                  $('#lectureChatInput').val('');
+                  $('#lectureChatInput').focus();
+                }
+            }
+        
+            $(document).on('click', '#lectureChatButton', () => { 
+                sendMessage();
+            });
+        
+            $('#lectureChatInput').keydown((e) => {
+                if (e.keyCode === 13) {
+                    sendMessage();
+                }
+            });
+        
+        
+            $(document).on('click', ".closeButton" , () => {
+                this.leaveLecture();
+            })
+        
+        });
+        
     }
 
     draw(lecture, hasToken, lectureChat) {
+        this.#hasToken = hasToken;
+        this.#lectureId = lecture.id;
         // hide the overview of current lectures
         $('#currentLectures').hide(); 
 
@@ -26,8 +64,8 @@ class LectureView extends WindowView {
             }
         } 
         
-        //the input field is added if the user has a valif token
-        if(hasToken) {
+        //the input field is added if the user has a valid token
+        if(this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
             $('#lectureChatInputGroup').append(`
             <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
@@ -61,67 +99,96 @@ class LectureView extends WindowView {
 
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
-        
-        $('#lectureVideo').attr('src', lecture.videoUrl);
-        $('#lectureVideo').load();
 
-        $('#lectureVideoWindow').show();
-    }
-    
-    updateChat(lectureChat) {
-        if (lectureChat.length > 0) {
-            for(var i = 0; i < lectureChat.length; i++) {
-                var message = lectureChat[i];
-                var messageHeader = message.username + ", " + message.timestamp + ":";
-                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
-                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
-                $newMessageHeader.text(messageHeader);
-                $newMessageBody.text(message.messageText);
-                $('#lectureChatMessages').append($newMessageHeader);
-                $('#lectureChatMessages').append($newMessageBody);
-            }
-        } else {
-            $('#lectureChatMessages').empty();
-        }
-    };
-    
-    updateToken(hasToken) {
-        if(hasToken) {
-            if ($('#lectureChatInputGroup').is(':empty')) {   
-            $('#lectureChatInputGroup').append(`
-            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
-            <div class="input-group-append">
-                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+        $('#lectureVideo').empty();
+        $('#lectureVideo').append(`
+            <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                <div id="countdown"></div>
+                <div>seconds left till the</div>
+                <div>presentation starts</div>
             </div>
-            `)
-            }
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-question-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You obtained a question token!')
+            <div id="lectureFinished" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1052; padding: 15%;" class="text-center">The Presentation is Over</div>
+            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+        `)
 
-        // the input field is emptied if the user does not have a valid token
-        } else {
-            $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-times-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('Your question token has been revoked. Therefore, you are not able to ask questions in the lecture chat.')
-        }
-    };   
+        $('#lectureVideoWindow').show(); 
+        
+        var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
     
+        // set default controls
+        video.disablePictureInPicture = true;
+        
+        
+        video.addEventListener('loadeddata', () => {
+            video.pause();
+
+            var lectureStartingTime = Date.now() + 5000; // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
+
+
+            var lectureDuration = video.duration * 1000; //duration of the lecture in milliseconds
+
+            this.#timerIntervalId = setInterval(() => {
+                var currentTimeDifference =  Date.now() - lectureStartingTime;
+
+                if (currentTimeDifference < 0) {
+                    $('#lectureFinished').hide();
+                    $('#lecturePending').show();
+                    this.#lectureStatus = LectureStatus.PENDING;
+
+                    var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
+                    if (this.#timeLeft !== newTimeLeft) {
+                        this.#timeLeft = newTimeLeft;
+                        $('#countdown').empty()
+                        $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
+                    }
+                    
+
+                    video.pause();
+                } else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
+                    $('#lecturePending').hide();
+                    $('#lectureFinished').hide();
+                    this.#lectureStatus = LectureStatus.RUNNING;
+                    video.play();
+                } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
+                    $('#lecturePending').hide();
+                    $('#lectureFinished').show();
+                    this.#lectureStatus = LectureStatus.OVER;
+                }
+            }, 100); // check lecture status every 100ms
+        });
+    }   
+
+    leaveLecture() {
+        if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
+            var shouldLeave = false;
+            if (this.#hasToken) {
+                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
+            } else {
+                shouldLeave = confirm('Are you sure you want to leave?')
+            }
+
+            if (shouldLeave) { this.close(); }
+        } else {
+            this.close();
+        }
+    }
+
+    close() {
+        var video = $(`#lectureVideo${this.#lectureId}`)[0];
+        video.removeAttribute('src'); // empty source
+        video.load();
+        clearInterval(this.#timerIntervalId);
+        $('#lectureVideo').empty();
+        $('#lectureVideoWindow').hide();
+        var eventManager = new EventManager();
+        eventManager.handleLectureLeft(this.#lectureId, false);
+    }
 }
 
-$(document).ready(() => {
-    $(document).on('click', '#lectureChatButton', function(){ 
-        let messageVal = $('#lectureChatInput').val();
-        if(messageVal !== '') {
-          clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-          $('#lectureChatInput').val('');
-        }
-    });
+
+const LectureStatus = Object.freeze
+({
+    PENDING: "PENDING",
+    RUNNING: "RUNNING",
+    OVER: "OVER"
 });

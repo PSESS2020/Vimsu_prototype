@@ -32,7 +32,7 @@ setInterval( function() {
   //gameView.draw();  
 }, GameConfig.TIME_DELTA);
 
-$('form').submit(function(event) {
+$('#allchat').submit(function(event) {
     
     event.preventDefault();
     let messageVal = $('#allchatMessageInput').val();
@@ -50,10 +50,32 @@ $('form').submit(function(event) {
 
 });
 
+
+
+$('#groupName').submit(function(event) {
+  event.preventDefault();
+  let groupName = $('#groupNameInput').val();
+  if(groupName !== '') {
+      $('#inputGroupNameModal').modal('hide');
+      $('#inviteFriendsModal').modal('toggle');
+      clientController.handleFromViewShowFriendList(true, groupName);
+      $('#groupNameInput').val('');
+  }
+});
+
+
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();
 };
 
+document.getElementById("groupName").onkeydown = function(event) {
+  event.stopPropagation();
+};
+
+
+/*document.getElementById("chatInput").onkeydown = function(event) {
+  event.stopPropagation();
+};*/
 
 document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being

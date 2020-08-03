@@ -3,41 +3,58 @@ var Chat = require('./Chat.js');
 
 module.exports = class OneToOneChat extends Chat{
     
-    #chatName;
-    #sentStatus;
-    #memberId;
-    #messageList;
+    #creatorUsername;
+    #chatPartnerUsername;
 
-    constructor(chatId, chatName, sentStatus, memberId, messageList) {
-        super(chatId, ownerId);
+    constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages, creatorUsername, chatPartnerUsername) {
+        super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
 
-        this.#chatName = chatName;
-        this.#sentStatus = sentStatus;
-        this.#memberId = memberId;
-        this.#messageList = messageList;
+        //Needed as a title for the ChatView (P)
+        TypeChecker.isString(creatorUsername);
+        TypeChecker.isString(chatPartnerUsername);
+        this.#creatorUsername = creatorUsername;
+        this.#chatPartnerUsername = chatPartnerUsername;
+        
     }
 
     //Adds a message to the message list.
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(this.#messageList.length >= super.getMaxNumMessages())
-            this.#messageList.splice(0, super.getMaxNumMessages());
+        if(super.getMessageList().length >= super.getMaxNumMessages())
+            super.getMessageList().splice(0, super.getMaxNumMessages());
 
-        this.#messageList.push(msg);
+        super.getMessageList().push(msg);
     }
 
+    //method to get the other user ID in this 1:1 chat (P)
+    getOtherUsername(ownUsername) {
+        if (ownUsername !== this.#creatorUsername && ownUsername !== this.#chatPartnerUsername) {
+            return new Error(ownUsername + ' is not in ppantList of this chat!');
+        }
+
+        if (ownUsername === this.#creatorUsername) {
+            return this.#chatPartnerUsername;
+        } else {
+            return this.#creatorUsername;
+        }
+    }
+
+    /*
     isSent() {
         return this.#sentStatus;
     }
+    
 
     getChatName() {
         return this.#chatName;
     }
+    
 
     getReceiverName() {
         return this.#memberId;
     }
+    
 
     sendRequest(senderId) {
         //TODO
@@ -57,5 +74,6 @@ module.exports = class OneToOneChat extends Chat{
         TypeChecker.isString(memberId);
         this.#memberId = memberId;
     }
+    */
 
 }

@@ -60,6 +60,11 @@ pointer-events: none;
 z-index: 0;
 }
 
+video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton, 
+video::-webkit-media-controls-timeline {
+  display: none;
+}
+
 #avatarCanvas {
 position: absolute;
 width: 1280px;
@@ -82,7 +87,6 @@ z-index: 2;
 form {
 border-radius: 5px;
 top: 0;
-background: #000;
 z-index: 3;
 } 
 
@@ -138,7 +142,15 @@ overflow-wrap: break-word;
   opacity: .5 !important;
 }
 
+.leavingChat:hover {
+  opacity: .5 !important;
+}
+
 .fa-sort-desc:hover {
+  opacity: .5 !important;
+}
+
+.fa-users:hover {
   opacity: .5 !important;
 }
 
@@ -242,6 +254,10 @@ body::-webkit-scrollbar {
   z-index: 1100;
   width: 40%; 
   height: 30%;
+}
+
+.globalChatWindow::-webkit-scrollbar {
+  display:none
 }
 
 .globalChatWindowHeader {
@@ -419,6 +435,14 @@ body::-webkit-scrollbar {
   -webkit-filter: blur(8px);    /* Blur */
   -moz-filter: blur(8px);
   filter: blur(8px);
+}
+
+.achievementBox {
+  border: 1px solid antiquewhite; 
+  border-top: none; 
+  border-radius: 0px 0px 5px 5px; 
+  min-width: 70px;
+  height: 35px;
 }
 
 .progress {

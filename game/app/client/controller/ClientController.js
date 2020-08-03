@@ -1,7 +1,4 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
-
-
-
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -119,13 +116,14 @@ class ClientController {
         
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map);
+            this.#gameView.initFoyerView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map);
+            this.#gameView.initFoodCourtView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map);
+            this.#gameView.initReceptionView(map, listOfNPCs);
         }
 
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
@@ -146,13 +144,14 @@ class ClientController {
 
         var map = this.#currentRoom.getMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
         if (map !== null && typeOfRoom === TypeOfRoomClient.FOYER) {
-            this.#gameView.initFoyerView(map);
+            this.#gameView.initFoyerView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.FOODCOURT) {
-            this.#gameView.initFoodCourtView(map);
+            this.#gameView.initFoodCourtView(map, listOfNPCs);
         } else if (map !== null && typeOfRoom === TypeOfRoomClient.RECEPTION) {
-            this.#gameView.initReceptionView(map);
+            this.#gameView.initReceptionView(map, listOfNPCs);
         }
 
         this.#gameView.resetAnotherAvatarViews();
@@ -216,9 +215,17 @@ class ClientController {
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
+        this.socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
+        this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
+        this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
+        this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
+        this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
+        this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
+        this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
+        this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
     }
 
     /* #################################################### */    
@@ -270,6 +277,20 @@ class ClientController {
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
     
+        }
+
+    sendToServerChatMessage(text) {
+
+            this.socketReady;
+            if(this.socket.connected) {
+
+            let chatId = this.#gameView.getChatThreadView();
+            console.log(chatId);
+            this.socket.emit('newChatMessage', this.#ownParticipant.getId(), chatId, text);
+
+            } else
+                $('#chatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+        
         }
 
     sendToServerEvalInput(input) {
@@ -336,7 +357,7 @@ class ClientController {
     }*/
 
     //Third message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData, npcData) {
         
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
@@ -345,13 +366,18 @@ class ClientController {
                 new PositionClient(element.cordX, element.cordY), element.isSolid));
         });
 
+        var listOfNPCs = [];
+        npcData.forEach(npc => {
+            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
+        });
+
         //First room? 
         if(!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs);
             
         //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
             this.switchRoomGameView();    
         }
@@ -454,27 +480,30 @@ class ClientController {
     }
 
     //Is called after server send the answer of avatarclick
-    handleFromServerBusinessCard(businessCardObject) {
+    handleFromServerBusinessCard(businessCardObject, rank) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username, 
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename, 
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
         
         //check if ppant is a friend or not
         if (businessCard.getEmail() === undefined) {
-            this.#gameView.initBusinessCardView(businessCard, false);
+            this.#gameView.initBusinessCardView(businessCard, false, rank);
         } else {
-            this.#gameView.initBusinessCardView(businessCard, true);
+            this.#gameView.initBusinessCardView(businessCard, true, rank);
         }
     }
 
     //Is called after server send the answer of friendlistclick
-    handleFromServerFriendList(friendListData) {
+    handleFromServerFriendList(friendListData, isInviteFriends, groupName) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
-
-        this.#gameView.initFriendListView(friendList);
+        if(isInviteFriends) {
+            this.#gameView.initInviteFriendsView(friendList, groupName);
+        } else {
+            this.#gameView.initFriendListView(friendList);
+        }
     }
 
     //Is called after server send the answer of friendrequestlistclick
@@ -490,7 +519,7 @@ class ClientController {
     handleFromServerRankList(rankList) {
         //remark own participant's ranking
         let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
-        if (!idx < 0) {
+        if (idx > -1) {
             rankList[idx].self = true;
         }
         this.#gameView.initRankListView(rankList);
@@ -498,7 +527,7 @@ class ClientController {
 
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
-        var msgText = "[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text;
+        var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
         $('#allchatMessages').prepend($('<div>').text(msgText));
         $('#allchatMessages').scrollTop(0);
     }
@@ -521,6 +550,17 @@ class ClientController {
         this.#gameView.updateLectureToken(hasToken);
     };
     
+    handleFromServerUpdateSuccessesBar(points, rank) {
+        if(points) {
+            TypeChecker.isInt(points);
+        }
+
+        if(rank) {
+            TypeChecker.isInt(rank);
+        }
+
+        this.#gameView.updateSuccessesBar(points, rank);
+    }
     
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
@@ -528,7 +568,7 @@ class ClientController {
     handleFromServerInitAllchat(messages) {
         $('#allchatMessages').empty();
         messages.forEach( (message) => {
-            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + "(" + message.senderID + ") " + message.username + ": " + message.text));
+            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + message.username + ": " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
     }
@@ -547,6 +587,39 @@ class ClientController {
     
     handleFromServerRemoved() {
         $('#viewBlocker').show();
+    };
+
+    handleFromServerShowNPCStory(name, story) {
+        this.#gameView.initNPCStoryView(name, story);
+    }
+
+    handleFromServerNewAchievement(achievement) {
+        this.#gameView.handleNewAchievement(achievement);
+    }
+    
+    handleFromServerShowChatList(chats) {
+        this.#gameView.initChatListView(chats);
+    };
+    
+    handleFromServerShowChatThread(chat) {
+        this.#gameView.initChatThreadView(chat, true);
+    };
+    
+    /* This function is called when another user creates a new chat
+     * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
+     * INTO THAT CHAT (or if a friend request has been send).
+     * - (E) */
+    handleFromServerNewChat(chat, openNow) {
+        this.#gameView.addNewChat(chat, openNow);
+    };
+    
+
+    //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
+    handleFromServerNewChatMessage(chatId, message) {
+        var msgText = "[" + message.timestamp + "] " + message.senderId + ": " + message.msgText;
+        $('#chatMessages').prepend($('<div>').text(msgText));
+        $('#chatMessages').scrollTop(0);
+        //this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /* #################################################### */    
@@ -579,29 +652,9 @@ class ClientController {
         this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
     }
 
-    handleFromViewLectureLeft(lectureId) {
+    handleFromViewLectureLeft(lectureId, lectureEnded) {
         this.socketReady;
-        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId);
-    }
-
-    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
-    the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId, isFriend) {
-        //if isFriend is undefined, checking isFriend is necessary
-        this.socketReady
-        var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', {creatorId, participantId, isFriend})
-    }
-
-    handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
-        this.socketReady
-        this.socket.emit('createNewGroupChat', {creatorId, participantIdList})
-    }
-
-    handleFromViewNewMessage(sendDateTime, chatId, messageText) {
-        this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newMessage', {sendDateTime, senderId, chatId, messageText});
+        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId, lectureEnded);
     }
 
     handleFromViewLectureDownload(lectureId) {
@@ -627,9 +680,9 @@ class ClientController {
     }
 
     //called after click on friendlist button
-    handleFromViewShowFriendList() {
+    handleFromViewShowFriendList(isInviteFriends, groupName) {
         this.socketReady;
-        this.socket.emit('getFriendList', this.#ownParticipant.getId());
+        this.socket.emit('getFriendList', this.#ownParticipant.getId(), isInviteFriends, groupName);
     }
 
     //called after click on friendrequestlist button
@@ -677,6 +730,12 @@ class ClientController {
         
     }
 
+    handleFromViewLeaveChat(chatId) {
+        this.socketReady;
+        this.socket.emit('removeChat', this.#ownParticipant.getId(), chatId);
+        this.#gameView.removeChat(chatId);
+    }
+
     handleFromViewShowBusinessCard(participantId) {
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {
@@ -691,6 +750,11 @@ class ClientController {
         this.#gameView.initProfileView(this.#ownBusinessCard);
     }
 
+    handleFromViewGetNPCStory(npcId) {
+        this.socketReady;
+        this.socket.emit('getNPCStory', this.#ownParticipant.getId(), npcId);
+    }
+
     handleFromServerAchievements(achievements) {
         this.#gameView.initCurrentAchievementsView(achievements);
     }
@@ -698,6 +762,41 @@ class ClientController {
     handleFromViewShowRankList() {
         this.socket.emit('getRankList');
     }
+    
+    /* Gets the list of chats the user is in - one-on-one and group - from the
+     * server. The actual displaying is done in the method dealing with the 
+     * response from the server.
+     * - (E) */
+    handleFromViewShowChatList() {
+        let participantID = this.#ownParticipant.getId();
+        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
+    };
+    
+    handleFromViewShowChatThread(chatID) {
+        this.socket.emit('getChatThread', chatID);
+    };
+
+    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
+    the id of the other chat participant to the server.*/
+    handleFromViewCreateNewChat(participantId, username) {
+        //if isFriend is undefined, checking isFriend is necessary  
+        //isFriend not necessary, because server knows all friendLists
+        this.socketReady
+        var creatorId = this.#ownParticipant.getId();
+        this.socket.emit('createNewChat', creatorId, participantId, username);
+    }
+
+    handleFromViewCreateNewGroupChat(chatName, participantIdList) {
+        this.socketReady
+        var creatorId = this.#ownParticipant.getId();
+        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
+    }
+
+    handleFromViewSendNewMessage(chatId, messageText) {
+        this.socketReady
+        this.socket.emit('newChatMessage', this.#ownParticipant.getId(), this.#ownBusinessCard.getUsername(), chatId, messageText);
+    }
+    
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {

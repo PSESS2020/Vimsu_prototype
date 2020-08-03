@@ -1,19 +1,48 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
+const Participant = require('./Participant.js');
+const Message = require('./Message.js');
 
 module.exports = class Chat {
     #chatId;
-    #ownerId;
+    //#ownerId;
+    #title
     #participantList;
     #messageList;
     #maxNumMessages;
 
-    constructor(chatId, ownerId) {
+    constructor(chatId, participantList, messageList, maxNumMessages) {
         TypeChecker.isString(chatId);
-        TypeChecker.isString(ownerId);
+        TypeChecker.isInstanceOf(participantList, Array);
+        participantList.forEach(participantID => {
+            TypeChecker.isString(participantID);
+        });
+
+        
+        TypeChecker.isInstanceOf(messageList, Array);
+        messageList.forEach(message => {
+            TypeChecker.isInstanceOf(message, Message);
+        });
+        
+
+        TypeChecker.isInt(maxNumMessages);
 
         this.#chatId = chatId;
-        this.#ownerId = ownerId;
+        this.#participantList = participantList;
+        this.#maxNumMessages = maxNumMessages;
+        this.#messageList = messageList;
+        this.#title = "test";
+        /*
+        this.#messageList = []; // creating an empty message list
+        this.#participantList = []; // creating an empty participant list
+        this.#participantList.push(ownerId);
+        */
+        
+        /* instead of several constructors, we could write a wrapper method
+         * in the service-class or somewhere that creates a new chat and then
+         * "fills it up" with the data supplied from the database.
+         * - (E) */
     }
+    
     /*
     *Multiple constructors are not allowed.
     constructor(idChat, idOwner, participantList, messageList) {
@@ -23,25 +52,29 @@ module.exports = class Chat {
         this.#messageList = messageList;
     }*/
 
-    addMessage() {
-
+    addMessage(msg) {
+        // Intentionally left blank - to implement in child classes
     }
 
-    addParticipant() {
-
+    addParticipant(ppantId) {
+        // Intentionally left blank - to implement in child classes
     }
 
     getId() {
         return this.#chatId;
     }
 
-    getMessageL() {
+    getMessageList() {
         return this.#messageList;
     }
 
-    getParticipantL() {
+    getParticipantList() {
         return this.#participantList;
     }
+    
+    getTitle() {
+        return this.#title;
+    };
 
     notifyMessageAll(participantId) {
         //TODO
@@ -68,7 +101,7 @@ module.exports = class Chat {
 
         this.#participantList.forEach(participant => {
 
-            if (participant.getId() === participantId) {
+            if (participant === participantId) {
                 let index = this.#participantList.indexOf(participant);
                 this.#participantList.splice(index, 1);
             }
@@ -86,5 +119,9 @@ module.exports = class Chat {
     getMaxNumMessages() {
         return this.#maxNumMessages;
     }
+    
+    generateNewMsgId(senderId) {
+        return this.#chatId + "." + senderId + "." + this.#messageList.length;
+    };
 
 }

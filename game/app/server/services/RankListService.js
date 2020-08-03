@@ -17,7 +17,7 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
 
         return getDB().then(res => {
-            return vimsudb.findInCollection("participants_" + conferenceId, "", {participantId: 1, points: 1}).then(ppants => {
+            return vimsudb.findInCollection("participants_" + conferenceId, {}, {participantId: 1, points: 1}).then(ppants => {
                 var rankList = ppants.sort((a,b) => b.points - a.points);
 
                 var rank = 1;
@@ -38,9 +38,9 @@ module.exports = class RankListService {
 
     static getRankListWithUsername(conferenceId, lastRank) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInt(num);
+        TypeChecker.isInt(lastRank);
 
-        return this.getRankList(conferenceId).then(rankList => {
+        return this.getRankList(conferenceId).then(async rankList => {
             var rankListLength = 1;
 
             for(var i = rankList.length - 1; i >= 0; i--){
@@ -51,13 +51,10 @@ module.exports = class RankListService {
             }    
 
             rankList.slice(0, rankListLength);
-            rankList.forEach(ppant => {
-                return ParticipantService.getUsername(ppant.participantId, conferenceId).then(username => {
-                    ppant.username = username;
-                }).catch(err => {
-                    console.error(err);
-                })
-            })
+            await Promise.all(rankList.map(async ppant => {
+                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId)
+                ppant.username = username;
+            }));
             return rankList;
         }).catch(err => {
             console.error(err);
@@ -68,12 +65,14 @@ module.exports = class RankListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return this.getRankList(conferenceId, "").then(rankList => {
+        return this.getRankList(conferenceId).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
             if (idx < 0) {
                 throw new Error(participantId + " is not in ranklist")
             }
             return rankList[idx].rank;
+        }).catch(err => {
+            console.error(err);
         })
     }
 } 

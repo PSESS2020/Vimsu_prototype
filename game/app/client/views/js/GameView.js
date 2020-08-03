@@ -21,17 +21,24 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     #currentLecturesView;
     #lectureView;
     #rankListView;
+    #chatListView;
+    #chatThreadView;
     #statusBar;
     #globalChatView;
     #friendListView;
+    #inviteFriendsView;
     #friendRequestListView;
+    #successesBar;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
     #businessCardView;
     #gameViewInit;
     #achievementView;
-
+    #newAchievementView;
+    #npcAvatarViews = [];
+    #npcStoryView;
+   
     constructor(gameWidth, gameHeight) 
     {
         TypeChecker.isInt(gameWidth);
@@ -127,9 +134,17 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                     
                     if (ppantView.getPosition().getCordX() === selectedTileCords.x 
                      && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
-                        ppantView.onclick();
+                        ppantView.onClick();
                     }
                 });
+
+                //then, check if there is an NPC at this position
+                self.#npcAvatarViews.forEach(npcView => {
+                    if (npcView.getPosition().getCordX() === selectedTileCords.x 
+                     && npcView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        npcView.onClick();
+                    }
+                })
             
             }
         });
@@ -195,7 +210,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             this.drawClock();
 
             //put all AvatarViews in one list
-            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews);
+            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
             
 
             //sort all Avatars in CordX
@@ -231,21 +246,39 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
     }
 
     //Is called when participant enters Foyer
-    initFoyerView(map) {
+    initFoyerView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOYER));
+        });
+
         this.#currentMap = new FoyerView(map);
     }
 
-    initReceptionView(map) {
+    initReceptionView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.RECEPTION));
+        });
+
         this.#currentMap = new ReceptionView(map);
     }
 
-    initFoodCourtView(map) {
+    initFoodCourtView(map, listOfNPCs) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), TypeOfRoomClient.FOODCOURT));
+        });
+
         this.#currentMap = new FoodCourtView(map);
     }
 
@@ -468,12 +501,12 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#globalChatView = new GlobalChatView().draw(messageHeader, messageText);
     };
 
-    initProfileView(businessCard) {
-        this.#profileView = new ProfileView().draw(businessCard);
+    initProfileView(businessCard, rank) {
+        this.#profileView = new ProfileView().draw(businessCard, rank);
     }
 
-    initBusinessCardView(businessCard, isFriend) {
-        this.#businessCardView = new BusinessCardView(businessCard, isFriend).draw();
+    initBusinessCardView(businessCard, isFriend, rank) {
+        this.#businessCardView = new BusinessCardView(businessCard, isFriend, rank).draw();
     }
 
     initFriendListView(businessCards) {
@@ -481,16 +514,74 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#friendListView.draw(businessCards)
     }
 
+    initInviteFriendsView(businessCards, groupName) {
+        this.#inviteFriendsView = new InviteFriendsView();
+        this.#inviteFriendsView.draw(businessCards, groupName);
+    }
+
     initCurrentAchievementsView(achievements) {
-        this.achievementView = new AchievementView().draw(achievements);
+        this.#achievementView = new AchievementView().draw(achievements);
+    }
+
+    handleNewAchievement(achievement) {
+        this.#newAchievementView = new NewAchievementView().draw(achievement);
+    }
+
+    initNPCStoryView(name, story) {
+        this.#npcStoryView = new NPCStoryView().draw(name, story);
     }
 
     initRankListView(rankList) {
         this.#rankListView = new RankListView().draw(rankList);
     }
+    
+    initChatListView(chats) {
+        this.#chatListView = new ChatListView();
+        this.#chatListView.draw(chats);
+    };
+    
+    initChatThreadView(chat, openNow) {
+        this.#chatThreadView = new ChatThreadView();
+        this.#chatThreadView.draw(chat);
+        if(openNow) {
+            if(!$('#chatThreadModal').is(':visible'))
+                $('#chatThreadModal').modal('show');
+        }
+    };
+
+    getChatThreadView() {
+        return this.#chatThreadView;
+    }
+    
+    addNewChat(chat, openNow) {
+        if($('#chatListModal').is(':visible') && this.#chatListView) {
+            this.#chatListView.addNewChat(chat);
+        }
+        this.initChatThreadView(chat, openNow);
+    };
+    
+    addNewChatMessage(chatId, message) {
+
+        if (this.#chatListView) {
+            this.#chatListView.addNewMessage(chatId, message); // TODO
+        }
+
+        if (this.#chatThreadView) {
+            this.#chatThreadView.addNewMessage(chatId, message);
+        }
+        
+    };
+
+    updateSuccessesBar(points, rank) {
+        this.#successesBar = new SuccessesBar().update(points, rank);
+    }
 
     removeFriend(participantId) {
         this.#friendListView.deleteFriend(participantId)
+    }
+
+    removeChat(chatId) {
+        this.#chatListView.deleteChat(chatId);
     }
 
     addFriend(businessCard) {
