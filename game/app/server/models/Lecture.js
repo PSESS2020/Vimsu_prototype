@@ -112,10 +112,9 @@ module.exports = class Lecture {
         TypeChecker.isString(participantId);
         let currDate = new Date();
 
-        //time difference in ms
-        //let timeDifference = currDate - this.#startingTime;
-        //lecture is full or started longer than 5 minutes ago
-        if (this.#activeParticipants.length >= this.#maxParticipants/* || timeDifference >= 300000*/) { 
+
+        //lecture is full
+        if (this.#activeParticipants.length >= this.#maxParticipants) { 
 
             return false;
         } 
@@ -182,33 +181,49 @@ module.exports = class Lecture {
     #checkToken = function(participantId) {
         let currDate = new Date();
 
+        //check if participant was in this lecture before
         for(var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
+
+            //participant was here before
             if(element[0] === participantId) {
-                
-                //time difference in ms between Leaving Date and Current Date
-                let timeDifference = currDate - element[1];
 
-                //Token Counter - timeDifference
-                element[2] -= timeDifference;
-                console.log(this.#tokenList);
+                //check if lecture has already begon
+                //if so, token counter needs to be decreased
+                if (currDate.getTime() > this.#startingTime.getTime()) {
+
+                    //time difference in ms between Leaving Date and Current Date
+                    let timeDifference = currDate.getTime() - element[1].getTime();
+
+                    //Token Counter - timeDifference
+                    element[2] -= timeDifference;
+                    
+                }
+                console.log('token counter: ' + element[2]);
+
+                //if not, token counter stays the same
                 return;  
-
             }
 
         }
 
-        let timeLeftUntilStart = this.#startingTime.getTime() - currDate.getTime();
-        let tokenCounter = Settings.TOKENCOUNTERSTART;
+        //There is no entry with participantId
+        
+        var timeToLate = 0;
 
-        if(timeLeftUntilStart > 0) {
-            tokenCounter = tokenCounter + timeLeftUntilStart;
+        //calculate time difference between starting time and date, if user joined the lecture after starting time
+        if (currDate.getTime() > this.#startingTime.getTime()) {
+            timeToLate = currDate.getTime() - this.#startingTime.getTime();
         }
 
-        //There is no entry with participantId
-        //make new entry with participantID, undefined Leaving Time, Token Counter 300.000ms
+        let tokenCounter = Settings.TOKENCOUNTERSTART;
+
+        //make new entry with participantID, undefined Leaving Time, Token Counter 300.000ms - Time to late
+        tokenCounter = tokenCounter - timeToLate;
+        console.log('token counter: ' + tokenCounter);
+        
+        
         this.#tokenList.push([participantId, undefined, tokenCounter]);
-        console.log(this.#tokenList);
     }
 
 }
