@@ -1051,7 +1051,7 @@ module.exports = class ServerController {
                     });
 
                     if (chat instanceof OneToOneChat) {
-                        let partnerId = chat.getOtherUserId(participant.getBusinessCard().getUsername())
+                        let partnerId = chat.getOtherUserId(requesterId);
 
                         var chatData = {
                             chatId: chat.getId(),
