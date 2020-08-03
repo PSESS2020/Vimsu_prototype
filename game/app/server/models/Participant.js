@@ -253,7 +253,7 @@ module.exports = class Participant {
         if(ppantId) {
             TypeChecker.isString(ppantId);
 
-            return this.#sentRequestList.includes(ppantId);
+            return (this.#sentRequestList.includes(ppantId) || this.#receivedRequestList.includes(ppantId));
         }
     }
 
