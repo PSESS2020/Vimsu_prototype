@@ -1251,6 +1251,9 @@ module.exports = class ServerController {
     
     }
     
+    
+    // TODO
+    // - Switch all the commands from using ids to using usernames
     commandHandler(moderator, input) {
         /* commands need to be delimited by a space. So we first split
          * the input at each occurence of a whitespace character.
@@ -1561,6 +1564,7 @@ module.exports = class ServerController {
                         socket.leave(lectureId);
                         socket.currentLecture = undefined;
                         socket.broadcast.emit('showAvatar', participantId);
+                        this.#io.to(socket.id).emit('force close lecture');
                         this.sendRemoval(socket.id);
                     }
                 }
@@ -1603,7 +1607,10 @@ module.exports = class ServerController {
                                    "\\grant <list of participantIDs> --  Takes a list of participantIDs, each one " +
                                    "seperated from the next by a whitespace-character, and grants them lecture tokens " +
                                    "(if they are currently listening to the lecture and do not own one). They will " +
-                                   "be able to post messages into the lecture chat."];
+                                   "be able to post messages into the lecture chat.",
+                                   "\close -- Closes the lecture and makes it inaccessible. Every current participant " +
+                                   "will be forcefully ejected and nobody will be able to rejoin the lecture. " + 
+                                   "WARNING: this command can NOT be reversed."];
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.LOGMESSAGES:
@@ -1615,6 +1622,21 @@ module.exports = class ServerController {
                  }
                  this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                  break;
+            case Commands.CLOSE:
+                var ppantsInLecture = lecture.getActiveParticipants();
+                lecture.hide();
+                this.#io.in(socket.currentLecture).emit('force close lecture');
+                ppantsInLecture.forEach( (ppant) => {
+                    var ppantId = ppant.getId();
+                    // Get the necessary data to use the socket-connection
+                    var socket = this.getSocketObject(this.getSocketId(ppantId));
+                    lecture.leave(ppantId);
+                    lecture.revokeToken(ppantId);
+                    socket.leave(lectureId);
+                    socket.currentLecture = undefined;
+                    socket.broadcast.emit('showAvatar', participantId);
+                    this.sendClosed(socket.id);                    
+                });
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
@@ -1626,7 +1648,7 @@ module.exports = class ServerController {
     
         getSocketId(ppantID) {
             /* So this is functional using this helping variable, but I will need to redo it in pretty.
-             * The problem is that, since the forEach()-method takes a function as a callbkac-parameter,
+             * The problem is that, since the forEach()-method takes a function as a callback-parameter,
              * when we call "return socketId;" inside of the if-statement, we only return it to the
              * method calling the function containing the if-statement, which is the forEach()-method.
              * This means that the return-value doesn't actually reach the commandHandler the way it is
@@ -1672,6 +1694,7 @@ module.exports = class ServerController {
         /* Sends a warning to the user who is connected to the socket with the passed Id.
          * If the id is undefined, this will do nothing.
          * - (E) */
+         // TODO: merge all these into a single function
         sendWarning(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", Messages.WARNING.header, Messages.WARNING.body);
@@ -1699,6 +1722,12 @@ module.exports = class ServerController {
         sendUnmute(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", Messages.UNMUTE.header, Messages.UNMUTE.body);
+            }
+        };
+        
+        sendClosed(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.CLOSED.header, Messages.CLOSED.body);
             }
         };
         

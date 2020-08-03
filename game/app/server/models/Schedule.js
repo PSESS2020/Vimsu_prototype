@@ -34,7 +34,7 @@ module.exports = class Schedule {
             var stopToShow = (startingTime + (150000000000000 * 60 * 1000)); //TODO: set to 15 minutes
             var withinMargin = startToShow <= now && now <= stopToShow;
 
-            if (withinMargin) {
+            if (withinMargin && !lecture.isHidden()) {
                 currentLectures.push(lecture);
             }
         }

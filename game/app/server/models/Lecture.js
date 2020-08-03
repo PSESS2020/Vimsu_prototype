@@ -14,7 +14,8 @@ module.exports = class Lecture {
     #maxParticipants;
     #activeParticipants;
     #removedParticipants;
-    #tokenList;                 
+    #tokenList;
+    #hideThis;                 
     //#lectureController //Probably not needed 
 
 
@@ -47,6 +48,8 @@ module.exports = class Lecture {
         this.#maxParticipants = maxParticipants;
         this.#activeParticipants = [];
         this.#removedParticipants = [];
+        
+        this.#hideThis = false; // will prevent this from showing up on the current lectures screen
 
         /*This will be an array of arrays with with size 3
         that means every element is an array, 
@@ -87,10 +90,25 @@ module.exports = class Lecture {
         return this.#maxParticipants
     }
 
- 
     getLectureChat() {
         return this.#lectureChat;
     }
+    
+    getActiveParticipants() {
+        return this.#activeParticipants;
+    };
+    
+    isHidden() {
+        return this.#hideThis;
+    };
+    
+    // Hides the lecture, so that it will no longer be displayed
+    // in the currentLecturesView 
+    hide() {
+        if(!this.#hideThis) {
+            this.#hideThis = true;
+        }
+    };
 
 
     /**

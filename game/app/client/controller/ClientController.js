@@ -210,6 +210,7 @@ class ClientController {
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
         this.socket.on('updateLectureChat', this.handleFromServerUpdateLectureChat.bind(this));
         this.socket.on('update token', this.handleFromServerUpdateToken.bind(this));
+        this.socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
@@ -548,6 +549,10 @@ class ClientController {
     
     handleFromServerUpdateToken(hasToken) {
         this.#gameView.updateLectureToken(hasToken);
+    };
+    
+    handleFromServerForceCloseLecture() {
+        this.#gameView.closeLectureView();
     };
     
     handleFromServerUpdateSuccessesBar(points, rank) {

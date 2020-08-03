@@ -12,5 +12,6 @@ module.exports = Object.freeze({
     REVOKETOKEN: "revoke",
     GRANTTOKEN: "grant",
     UNBANPLAYER: "unban",
+    CLOSE: "close",
     HELP: "help"
 });
