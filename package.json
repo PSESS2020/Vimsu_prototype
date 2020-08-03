@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -27,11 +28,14 @@
     "get-video-duration": "^3.0.1",
     "merge-images": "^2.0.0",
     "mkdirp": "^1.0.4",
-    "mocha": "^8.0.1",
     "mongodb": "^3.5.9",
     "password-hash": "^1.2.2",
     "popper.js": "^1.16.1",
     "requirejs": "^2.3.6",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^8.1.0",
+    "nyc": "^15.1.0"
   }
 }
