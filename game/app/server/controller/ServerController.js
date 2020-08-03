@@ -1053,17 +1053,7 @@ module.exports = class ServerController {
                     if (chat instanceof OneToOneChat) {
                         let partnerId = chat.getOtherUserId(requesterId);
 
-                        //partner left before
-                        if(partnerId === undefined) {
-                            var chatData = {
-                                chatId: chat.getId(),
-                                title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
-                                areFriends: true,
-                                friendRequestSent: true,
-                                partnerId: undefined,
-                                messages: messageInfoData
-                            }
-                        } else {
+                        if(partnerId) {
                             var chatData = {
                                 chatId: chat.getId(),
                                 title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
@@ -1072,7 +1062,18 @@ module.exports = class ServerController {
                                 partnerId: partnerId,
                                 messages: messageInfoData
                             }
+                        //partner left before
+                        } else {
+                            var chatData = {
+                                chatId: chat.getId(),
+                                title: chat.getOtherUsername(participant.getBusinessCard().getUsername()),
+                                areFriends: true,
+                                friendRequestSent: true,
+                                partnerId: undefined,
+                                messages: messageInfoData
+                            }
                         }
+
                     } else {
                         var chatData = {
                             chatId: chat.getId(),
