@@ -59,7 +59,6 @@ module.exports = class Door {
      */
     isValidEnterPosition(position) {
         TypeChecker.isInstanceOf(position, Position);
-        console.log(this.#enterPositions[0]);
 
         for (var i = 0; i < this.#enterPositions.length; i++) {
             if (position.getRoomId() === this.#enterPositions[i].getRoomId() &&
