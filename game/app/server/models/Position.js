@@ -18,23 +18,9 @@ module.exports = class Position {
      */
     constructor(roomId, cordX, cordY) {
         TypeChecker.isInt(roomId);
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
 
-        if(cordX instanceof Array) {
-            cordX.forEach(x => {
-                TypeChecker.isInt(x);
-            })
-        } else {
-            TypeChecker.isInt(cordX);
-        }
-        
-        if(cordY instanceof Array) {
-            cordY.forEach(y => {
-                TypeChecker.isInt(y);
-            })
-        } else {
-            TypeChecker.isInt(cordY);
-        }
-        
         this.#roomId = roomId;
         this.#cordX = cordX;
         this.#cordY = cordY;

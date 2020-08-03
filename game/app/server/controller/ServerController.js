@@ -418,7 +418,8 @@ module.exports = class ServerController {
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT, socket.id);
                 }
 
-                var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
+                let enterPosition = this.#ppants.get(ppantID).getPosition();
+                let currentRoomId = enterPosition.getRoomId();
 
                 //Singleton
                 let doorService = new DoorService();
@@ -428,9 +429,7 @@ module.exports = class ServerController {
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (this.#ppants.get(ppantID).getPosition().getRoomId() !== door.getStartPosition().getRoomId() ||
-                    !door.getStartPosition().getCordX().includes(this.#ppants.get(ppantID).getPosition().getCordX()) ||
-                    !door.getStartPosition().getCordY().includes(this.#ppants.get(ppantID).getPosition().getCordY())) {
+                if (!door.isValidEnterPosition(enterPosition)) {
                     console.log('wrong position');
                     return;
                 }
@@ -590,13 +589,11 @@ module.exports = class ServerController {
 
             socket.on('getCurrentLectures', (ppantID) => {
                 let doorService = new DoorService();
-                let lectureDoorPosition = doorService.getLectureDoorPosition();
+                let enterPosition = this.#ppants.get(ppantID).getPosition();
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (this.#ppants.get(ppantID).getPosition().getRoomId() !== lectureDoorPosition.getRoomId() ||
-                    !lectureDoorPosition.getCordX().includes(this.#ppants.get(ppantID).getPosition().getCordX()) ||
-                    !lectureDoorPosition.getCordY().includes(this.#ppants.get(ppantID).getPosition().getCordY())) {
+                if (!doorService.isValidLectureEnterPosition(enterPosition)) {
                     console.log('wrong position');
                     return;
                 }

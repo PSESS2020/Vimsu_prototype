@@ -5,7 +5,7 @@ const Direction = require('../../utils/Direction.js');
 module.exports = class Door {
 
     #id;
-    #position;
+    #enterPositions;
     #targetPosition;
     #direction;
 
@@ -13,32 +13,35 @@ module.exports = class Door {
      * @author Philipp
      * 
      * @param {int} id 
-     * @param {Position} position
+     * @param {Array of Position} enterPositions
      * @param {Position} targetPosition 
      * @param {Direction} direction
      */
-    constructor(id, position, targetPosition, direction) {
+    constructor(id, enterPositions, targetPosition, direction) {
         TypeChecker.isInt(id);
-        TypeChecker.isInstanceOf(position, Position);
+        TypeChecker.isInstanceOf(enterPositions, Array);
+        enterPositions.forEach(enterPosition => {
+            TypeChecker.isInstanceOf(enterPosition, Position);
+        });
         TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
         this.#id = id;
-        this.#position = position;
+        this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
     }
 
     getStartingRoomId() {
-        return this.#position.getRoomId();
+        return this.#enterPositions[0].getRoomId();
     }
 
     getTargetRoomId() {
         return this.#targetPosition.getRoomId();
     }
 
-    getStartPosition() {
-        return this.#position;
+    getEnterPositions() {
+        return this.#enterPositions;
     }
 
     getTargetPosition() {
@@ -47,5 +50,24 @@ module.exports = class Door {
 
     getDirection() {
         return this.#direction;
+    }
+
+    /**
+     * Checks if position is a valid enter position for this door
+     * 
+     * @param {Position} position 
+     */
+    isValidEnterPosition(position) {
+        TypeChecker.isInstanceOf(position, Position);
+        console.log(this.#enterPositions[0]);
+
+        for (var i = 0; i < this.#enterPositions.length; i++) {
+            if (position.getRoomId() === this.#enterPositions[i].getRoomId() &&
+                position.getCordX() === this.#enterPositions[i].getCordX() &&
+                position.getCordY() === this.#enterPositions[i].getCordY()) {
+                return true;
+            }
+        }
+        return false;  
     }
 }
