@@ -1,4 +1,4 @@
-@import url("http://cdnjs.cloudflare.com/ajax/libs/octicons/3.1.0/octicons.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.min.css");
 html {
   overflow: hidden; 
 margin: 0;
@@ -7,7 +7,7 @@ margin: 0;
   body{
     margin: 0;
     font-size: 16px;
-    font-family: 'Nunito' !important;
+    font-family: sans-serif;
     height: 100vh;
     perspective: 1px;
     transform-style: preserve-3d;
@@ -25,7 +25,36 @@ margin: 0;
     background-color: #e5d80e !important;
     border-color: #e5d80e !important;
     color: black !important;
+    -webkit-transition: all 0.2s ease-in-out 0s;
+    -moz-transition: all 0.2s ease-in-out 0s;
+    -o-transition: all 0.2s ease-in-out 0s;
+    transition: all 0.2s ease-in-out 0s;
   }
+
+  .btn-outline-warning:hover {
+    -webkit-transform:scale(1.1);
+    -moz-transform:scale(1.1);
+    -o-transform:scale(1.1);
+    -ms-transform:scale(1.1);
+    transform:scale(1.1)
+  }
+
+  .btn-submit {
+    background-color: #028090;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #028090;
+}
+
+  .btn-submit:hover {
+    background-color: white;
+    border: 2px solid #028090;
+    color: #028090;
+}
+
   .navbrand {
     display: table-cell;
     text-align: center;
@@ -73,15 +102,23 @@ margin: 0;
   display: block;
   max-width: 100%;
 }
+
+.wrongDataIcon {
+  color: red;
+  padding-right: 10px;
+}
+
 .octicons {
-  font: normal normal 24px octicons;
+  font: normal normal 20px octicons;
   text-align: left;
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   color: #e5e5e5;
   line-height: 30px;
 }
+
 #octicon_text {
+  font: normal normal 20px sans-serif;
   display: inline-block;
   vertical-align: -0.15em;
 }
@@ -91,6 +128,15 @@ margin: 0;
 .p-2:hover .octicons {
   color: #e5d80e !important;
 }
+
+.profileIcon {
+  vertical-align: center;
+}
+
+.iconProfile {
+  color: #434343;
+}
+
 .nav-item {
   padding-left: 0 !important;
   padding-right: 5rem !important;
@@ -119,16 +165,6 @@ margin: 0;
 .bg-custom {
   background-color: #028090;
 }
-
-canvas {
-  max-width: 100%;
-  background: #fff;
-  padding: 0;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  display: block;
-  visibility: hidden;
-}
 #site-name {
   width: 643px;
   height: 119px;
@@ -138,7 +174,7 @@ canvas {
 .site-name-child {
   width: 100%;
   height: 100%;
-  background-image: url("assets/Logo_Vimsu.png");
+  background-image: url("../assets/Logo_Vimsu.png");
   background-position: center;
   -webkit-font-smoothing: antialiased;
   background-repeat: no-repeat;
@@ -154,4 +190,35 @@ canvas {
     -webkit-transform: scale(1.1);
     -o-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.accountHeader {
+  font-size: x-large;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 40px;
+}
+
+.accountLabel {
+  display: inline-block;
+  vertical-align: top;
+  font-size: large;
+  font-weight: bold;
+  color: #028090;
+}
+
+.accountCard {
+  margin-top: 20px;
+}
+
+.accountData {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 3px;
+  margin-left: auto;
+}
+
+.editAccountOcticon {
+  color: #028090;
+  height: 30px;
 }

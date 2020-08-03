@@ -1,34 +1,45 @@
-/*var Views = require('./Views.js')
-/var FoyerView = require('./FoyerView.js')
-var AvatarView = require('./AvatarView.js')
-var TypeChecker = require('../../../utils/TypeChecker.js')
-const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
-/*module.exports =*/ class GameView {
+class GameView {
 
     #gameWidth;
     #gameHeight;
-    #roomId;
+    //#roomId;
     #updateList = [];
-    #foyerView;
+    #profileView;
+    #scheduleListView;
+    #currentLecturesView;
+    #lectureView;
+    #rankListView;
+    #chatListView;
+    #chatThreadView;
+    #statusBar;
+    #globalChatView;
+    #friendListView;
+    #inviteFriendsView;
+    #friendRequestListView;
+    #successesBar;
+    #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
-
+    #businessCardView;
+    #gameViewInit;
+    #achievementView;
+    #newAchievementView;
+    #npcAvatarViews = [];
+    #npcStoryView;
+   
     constructor(gameWidth, gameHeight) 
     {
         TypeChecker.isInt(gameWidth);
         TypeChecker.isInt(gameHeight);
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
+        this.#statusBar = new StatusBar();
+        //this.#roomId = 1;
+        //this.initOwnAvatarView(" ");
 
-        this.#roomId = 1;
-
-        //this.addToUpdateList(this.#foyerView);
-        this.initOwnAvatarView(" ");
-    }
-
-    getFoyerView() {
-        return this.#foyerView;
+        //bool to check, if game view is already initialized. If not, draw is not possible
+        this.#gameViewInit = false;
     }
 
     getOwnAvatarView() {
@@ -37,6 +48,106 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     getAnotherParticipantAvatarViews() {
         return this.#anotherParticipantAvatarViews;
+    }
+
+    setGameViewInit(bool) {
+        TypeChecker.isBoolean(bool);
+        this.#gameViewInit = bool;
+    }
+
+    initCanvasEvents() {
+
+        if(this.#currentMap === null || this.#currentMap === undefined)
+            return;
+
+        var canvas = document.getElementById('avatarCanvas');
+        
+        var self = this;
+
+        //Handle mouse movement on canvas
+        $('#avatarCanvas').on('mousemove', function (e) {
+            
+            //Translates the current mouse position to the mouse position on the canvas.
+            var newPosition = self.getMousePos(canvas, e);
+
+            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+
+            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+
+                /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
+                
+                if(alpha !== 0)
+                    canvas.style.cursor = "pointer";
+                else
+                    canvas.style.cursor = "default";*/
+
+                self.#currentMap.selectionOnMap = true;
+            } else
+                self.#currentMap.selectionOnMap = false;
+
+            self.#currentMap.updateSelectedTile(selectedTileCords);
+
+        });
+
+        //Handles mouse click on canvas
+        $('#avatarCanvas').on('click', function (e) {
+
+            //Translates the current mouse position to the mouse position on the canvas.
+            var newPosition = self.getMousePos(canvas, e);
+
+            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+
+            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+
+                //first check if click is on door or clickable object in room (not existing at this point)
+                self.#currentMap.findClickedTile(selectedTileCords);
+
+                //then, check if there is an avatar at this position
+                self.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                    
+                    /*
+                    console.log("avatar screen x: " + ppantView.getScreenX());
+                    console.log("mouse screen x: " + newPosition.x);
+                    console.log("avatar screen width: " + ppantView.getAvatarWidth());
+                    */
+
+                    /*
+                   if ( newPosition.x > ppantView.getScreenX() && newPosition.x < ppantView.getScreenX() + ppantView.getAvatarWidth() 
+                   && newPosition.y > ppantView.getScreenY() && newPosition.y < ppantView.getScreenY() + ppantView.getAvatarHeight()) {
+                   ppantView.onclick(newPosition);
+                   */
+                    
+                    if (ppantView.getPosition().getCordX() === selectedTileCords.x 
+                     && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        ppantView.onClick();
+                    }
+                });
+
+                //then, check if there is an NPC at this position
+                self.#npcAvatarViews.forEach(npcView => {
+                    if (npcView.getPosition().getCordX() === selectedTileCords.x 
+                     && npcView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        npcView.onClick();
+                    }
+                })
+            
+            }
+        });
+    }
+
+    getMousePos(canvas, e) {
+
+        //gets the absolute size of canvas and calculates the scaling factor
+        var rect = canvas.getBoundingClientRect();
+        var scaleX = canvas.width / rect.width;
+        var scaleY = canvas.height / rect.height;
+
+        //Apply scaling factor to cursor position
+        return {
+            x: (e.pageX - rect.left) * scaleX,
+            y: (e.pageY - rect.top) * scaleY,
+
+        }
     }
 
     addToUpdateList(viewInstance)
@@ -75,18 +186,30 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
     draw()
     {
-        for (var i = 0; i < this.#updateList.length; i++) {
+        //check if game view is already initalized
+        if (this.#gameViewInit) {
+            if(this.#currentMap.selectionOnMap) {
+                this.#currentMap.drawSelectedTile();
+            }   
 
-            if (this.#updateList[i] instanceof Array) {
-                for(var j = 0; j < this.#updateList[i].length; j++) {
-                    this.#updateList[i][j].draw();
-                }
-            }
-            else {
-                this.#updateList[i].draw();
+            this.#statusBar.drawClock();
+
+            //put all AvatarViews in one list
+            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
+            
+
+            //sort all Avatars in CordX
+            allAvatars.sort(function(a, b) {
+                return b.getPosition().getCordX() - a.getPosition().getCordX();
+            });
+            
+            //draw all avatars
+            for (var i = 0; i < allAvatars.length; i++) {
+                allAvatars[i].draw();
             }
         }
     }
+    
 
     update()
     {
@@ -103,20 +226,24 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         }
     }
 
-    initFoyerView(map) {
-        this.#foyerView = new FoyerView(map);
-        
-        //the execution of below doesn't work because FoyerView is not creating fast enough.
-        //the map tile array is therefore empty.
-        //this.#foyerView.draw();
+    //Is called when participant enters Room
+    initRoomView(map, listOfNPCs, typeOfRoom) {
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
+        $('#avatarCanvas').off();
 
+        this.#npcAvatarViews = [];
+        listOfNPCs.forEach(npc => {
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), typeOfRoom));
+        });
+
+        this.#currentMap = new RoomView(map);
     }
 
     /**
      * 
      * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
      */
-    initAnotherAvatarViews(participants)
+    initAnotherAvatarViews(participants, typeOfRoom)
     {
         if(!(this.#ownAvatarView instanceof ParticipantAvatarView))
         {
@@ -138,7 +265,13 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
                 if(participants[i] !== this.#ownAvatarView) 
                 {
                     var participant = participants[i];
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId()));
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
+                                                            participant.getPosition(),
+                                                            participant.getDirection(),
+                                                            participant.getId(),
+                                                            typeOfRoom,
+                                                            participant.getUsername(),
+                                                            ));
                 }
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -154,8 +287,14 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
             if(participants !== this.#ownAvatarView) 
             {
-                    console.log(participants.getId());
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(participants.getPosition(), participants.getDirection(), participants.getId()));
+                    console.log("other avatarView init: " + participants.getId());
+                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
+                                                            participants.getPosition(), 
+                                                            participants.getDirection(), 
+                                                            participants.getId(),
+                                                            typeOfRoom,
+                                                            participants.getUsername()
+                                                            ));
             }
             this.addToUpdateList(this.#anotherParticipantAvatarViews);
         }
@@ -200,10 +339,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
 
         this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
         this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
-        
-        this.#foyerView.draw();
         this.#anotherParticipantAvatarViews[index].draw(); 
-         
     }
 
     /**
@@ -217,7 +353,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             var i;
             for (i = 0; i < participantIds.length; i++)
             {
-                TypeChecker.isInt(participantIds[i]);
+                TypeChecker.isString(participantIds[i]);
 
                 var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
 
@@ -230,7 +366,7 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             }
         }
         else {
-            TypeChecker.isInt(participantIds);
+            TypeChecker.isString(participantIds);
 
             //Searches in Array of other Avatars for participant with this ID
             var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
@@ -243,42 +379,45 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
             //Removes disconnected Avatar from participant avatar views
             this.#anotherParticipantAvatarViews.splice(index, 1);
 
-            //draws Foyerview, so the disconnected Avatar disappers from View
-            this.#foyerView.draw();
         }
-        
-        /*participantIds.forEach(id => 
-            TypeChecker.isInt(id),
-            this.#updateList.splice(index, 1)
-        );*/
     }
 
+    resetAnotherAvatarViews() {
+        //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+        
+        this.#anotherParticipantAvatarViews.length = 0;
+
+        //console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
+        //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+    }   
+
+    /*
     setRoomId(roomId)
     {
         TypeChecker.isInt(roomId);
         this.#roomId = roomId;
     }
+    */
 
-    initOwnAvatarView()
+    //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
+    initOwnAvatarView(ownParticipant, typeOfRoom)
     {
-        //var initX = 2 * 32 + this.#gameWidth / 2 - 27 * 64 / 2;
-        //var initY = 2 * 16 + this.#gameHeight / 2 - (64 + 32)/4 - 64;
-        //TypeChecker.isInstanceOf(participant, ParticipantClient);
-        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(0, 0), 'DOWNRIGHT', 0); 
+        TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        
+        let startingPos = ownParticipant.getPosition();
+        let startingDir = ownParticipant.getDirection();
+        let id = ownParticipant.getId();
+        let username = ownParticipant.getUsername();
+        this.#statusBar.updateLocation(typeOfRoom);
+        
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);
         this.addToUpdateList(this.#ownAvatarView);
-        //this.#anotherParticipantAvatarViews.push(this.#ownAvatarView);
+        
+        
 
-        //TypeChecker.isInstanceOf(participant, ParticipantClient);
-        //this.#ownAvatarView = new ParticipantAvatarView(participant.getPosition(), participant.getDirection(), participant.getId());
-        //this.#ownAvatarView = new ParticipantAvatarView(new PositionClient(200, 450), 'DOWNLEFT', 1); 
-        //this.addToUpdateList(this.#ownAvatarView);
-    }
-
-    //is called after server sends participantId
-    setOwnAvatarViewId(participantId) {
-        TypeChecker.isInt(participantId);
-        this.#ownAvatarView.setId(participantId);
+        //Game View is now fully initialized (Is now set by ClientController in initGameView())
+        //this.#gameViewInit = true;
     }
 
     updateOwnAvatarPosition(newPosition)
@@ -300,8 +439,170 @@ const ParticipantClient = require('../../models/ParticipantClient.js')*/
         this.#ownAvatarView.updateCurrentAnimation();
     }
 
+    initCurrentLectures(lectures) {
+        this.#currentLecturesView = new CurrentLecturesView()
+        this.#currentLecturesView.draw(lectures);
+    }
+
+    updateCurrentLectures(lectureId) {
+        this.#currentLecturesView.drawLectureFull(lectureId);
+    }
+
+    initCurrentSchedule(lectures) {
+        this.#scheduleListView = new ScheduleListView().draw(lectures);
+    }
+    
+    updateCurrentLecture(lecture, hasToken, lectureChat) {
+        this.#lectureView = new LectureView().draw(lecture, hasToken, lectureChat);
+    }
+    
+    initGlobalChatView(messageHeader, messageText) {
+        this.#globalChatView = new GlobalChatView().draw(messageHeader, messageText);
+    };
+
+    initProfileView(businessCard, rank) {
+        this.#profileView = new ProfileView().draw(businessCard, rank);
+    }
+
+    initBusinessCardView(businessCard, isFriend, rank) {
+        this.#businessCardView = new BusinessCardView(businessCard, isFriend, rank).draw();
+    }
+
+    initFriendListView(businessCards) {
+        this.#friendListView = new FriendListView();
+        this.#friendListView.draw(businessCards)
+    }
+
+    initInviteFriendsView(businessCards, groupName, limit) {
+        this.#inviteFriendsView = new InviteFriendsView();
+        this.#inviteFriendsView.draw(businessCards, groupName, limit);
+    }
+
+    initCurrentAchievementsView(achievements) {
+        this.#achievementView = new AchievementView().draw(achievements);
+    }
+
+    handleNewAchievement(achievement) {
+        this.#newAchievementView = new NewAchievementView().draw(achievement);
+    }
+
+    initNPCStoryView(name, story) {
+        this.#npcStoryView = new NPCStoryView().draw(name, story);
+    }
+
+    initRankListView(rankList) {
+        this.#rankListView = new RankListView().draw(rankList);
+    }
+    
+    initChatListView(chats) {
+
+        this.#chatListView = new ChatListView();
+        this.#chatListView.draw(chats);
+    };
+    
+    initChatThreadView(chat, openNow) {
+        this.#chatThreadView = new ChatThreadView();
+        this.#chatThreadView.draw(chat);
+
+        if(openNow) {
+            if(!$('#chatThreadModal').is(':visible')) {
+                $('#chatThreadModal').modal('show');
+            }
+        }
+    };
+
+    getChatThreadView() {
+        return this.#chatThreadView;
+    }
+    
+    addNewChat(chat, openNow) {
+        if($('#chatListModal').is(':visible') && this.#chatListView) {
+            this.#chatListView.addNewChat(chat);
+        }
+        this.initChatThreadView(chat, openNow);
+    };
+
+    updateChatThread(chatId, areFriends, friendRequestSent) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
+            this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent); 
+        }
+    }
+    
+    addNewChatMessage(chatId, message) {
+        if (this.#chatListView) {
+            this.#chatListView.addNewMessage(chatId, message); // TODO
+        }
+
+        if (this.#chatThreadView) {
+            this.#chatThreadView.addNewMessage(chatId, message);
+        }
+    };
+
+    updateSuccessesBar(points, rank) {
+        this.#successesBar = new SuccessesBar().update(points, rank);
+    }
+
+    removeFriend(participantId) {
+        if(this.#friendListView) {
+            this.#friendListView.deleteFriend(participantId)
+        }
+    }
+
+    removeChat(chatId) {
+        this.#chatListView.deleteChat(chatId);
+    }
+
+    addFriend(businessCard) {
+        if(this.#friendListView) {
+            console.log("addFriend")
+            this.#friendListView.addToFriendList(businessCard);
+        }
+    }
+
+    initFriendRequestListView(businessCards) {
+        this.#friendRequestListView = new FriendRequestListView()
+        this.#friendRequestListView.draw(businessCards);
+    }
+
+    updateFriendRequestListView(participantId, isAccepted) {
+        if($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+            this.#friendRequestListView.update(participantId, isAccepted);
+        }
+    }
+
+    addFriendRequest(businessCard) {
+        if($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+            this.#friendRequestListView.addToFriendRequestList(businessCard);
+        }
+    }
+        
+    updateOwnAvatarRoom(typeOfRoom) {
+        this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
+        this.#statusBar.updateLocation(typeOfRoom);
+    }
+
     removeOwnAvatarView()
     {
         this.#ownAvatarView = undefined;
+    }
+
+    //used to hide an avatar without destroying the avatarView instance
+    hideAvatar(participantId) {
+        for(var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.#anotherParticipantAvatarViews[i];
+            console.log(avatar.getId());
+            if (avatar.getId() === participantId) {
+                avatar.setVisibility(false);
+            }
+        }
+    }
+
+    showAvatar(participantId) {
+        for(var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.#anotherParticipantAvatarViews[i];
+            if (avatar.getId() === participantId) {
+                avatar.setVisibility(true);
+            }
+        }
     }
 }

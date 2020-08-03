@@ -7,6 +7,7 @@ module.exports =*/ class AvatarView extends Views {
     #direction;
     #walking = false;
     #spriteSheet;
+    #isVisible;
 
 
 
@@ -52,6 +53,14 @@ module.exports =*/ class AvatarView extends Views {
     //returns true if the Avatar is currently walking
     isWalking() {
         return this.#walking;
+    }
+
+    getVisibility() {
+        return this.#isVisible;
+    }
+
+    setVisibility(visible) {
+        this.#isVisible = visible;
     }
 
     //setWalking(walking) {

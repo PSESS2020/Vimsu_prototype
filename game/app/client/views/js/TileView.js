@@ -9,7 +9,7 @@ class TileView extends GameObjectView {
     }
 
     draw() {
-        ctx.drawImage(this.#tileImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#tileImage, this.#position.getCordX(), this.#position.getCordY());
     }
 
     onclick() {

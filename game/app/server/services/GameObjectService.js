@@ -1,7 +1,7 @@
 var GameObject = require('../models/GameObject.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
-var TypeOfRoom = require('../models/TypeOfRoom.js');
+var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 
 module.exports = class GameObjectService {
 
@@ -61,14 +61,31 @@ module.exports = class GameObjectService {
                 }
             }*/
 
-            for (var i = 4; i < 10; i++)
-                this.#objects.push(new GameObject(1, "Table" + 1, 1, 1, new Position(roomId, i, 0), true));
+            for (var i = 4; i < 9; i++)
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, i, 0), true));
 
             //Anderen Objekte für Foyer
         }
 
         else if (typeOfRoom === 'RECEPTION') {
-            //Objekte für Rezeption
+            for (var i = 3; i <= 9; i++) {
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, i), true));
+            }
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 11, 9), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 12, 9), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 11, 3), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 12, 3), true));
+        }
+
+        else if (typeOfRoom === 'FOODCOURT') {
+            for (var i = 2; i <= 10; i++) {
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 10, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 8, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 6, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 4, i), true));
+                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, 2, i), true));
+            }
+            
         }
     }
 }
