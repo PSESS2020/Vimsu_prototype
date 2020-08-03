@@ -43,26 +43,24 @@ class ChatListView extends WindowView {
 
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
-            
-            <a class="" style="color: antiquewhite" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
-                <ul>
-                    <li class="list-group-item bg-transparent" >
-                        <div class="row w-100">
-                            <div class="col-12 col-sm-2 px-0">
-                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+            <li class="list-group-item bg-transparent chatthread">
+                <a class="" style="color: antiquewhite" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                        
+                            <div class="row w-100">
+                                <div class="col-12 col-sm-2 px-0">
+                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                                </div>
+                                <div class="col-12 col-md-10 text-center text-sm-left">
+                                    <label class="name lead">${chat.title}</label>
+                                    <br>
+                                    <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
+                                    <br>
+                                    <span class ="small p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
+                                </div>  
                             </div>
-                            <div class="col-12 col-md-10 text-center text-sm-left">
-                                <label class="name lead">${chat.title}</label>
-                                <br>
-                                <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
-                                <br>
-                                <span class ="small p-0 wrapword" style="opacity: 0.8">${chat.previewMessage}</span>                                
-                            </div>  
-                        </div>
-                    </li>
-                </ul>
-            </a>
-            
+                        
+                </a>
+            </li>
             
 
                 <script> 

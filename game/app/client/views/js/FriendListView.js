@@ -19,7 +19,6 @@ class FriendListView extends WindowView {
 
         this.#businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
-            <ul id="${"friend" + businessCard.getParticipantId()}">
                 <li class="list-group-item bg-transparent" >
                     <div class="row w-100">
                         <div class="col-12 col-sm-2 px-0">
@@ -45,7 +44,6 @@ class FriendListView extends WindowView {
                         </div>    
                     </div>
                 </li>
-            </ul>
 
                 <script> 
                     $('#chatfriend' + '${businessCard.getParticipantId()}').on('click', function (event) {

@@ -421,13 +421,18 @@ body::-webkit-scrollbar {
   border-bottom: none;
 }
 
-.list-group-item:first-of-type {
-  border-top: none;
+.list-group-item:first-child { 
+  border-top: 1pt solid antiquewhite !important;
 }
 
 .list-group-item {
-  border-top: 1pt solid antiquewhite !important;
+  border-top: none !important;
   border-bottom: 1pt solid antiquewhite !important;
+  border-radius: 0px 0px 0px 0px !important;
+}
+
+.chatthread:hover {
+  background-color:rgba(34, 43, 46, 1) !important;
 }
 
 .achievement-icon {
