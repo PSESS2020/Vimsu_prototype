@@ -19,7 +19,7 @@ class FriendListView extends WindowView {
 
         this.#businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent" >
+                <li class="list-group-item bg-transparent chatthread" >
                     <div class="row w-100">
                         <div class="col-12 col-sm-2 px-0">
                             <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
