@@ -29,7 +29,7 @@ module.exports = Object.freeze({
         header: "Unmuted",
         body: "You are no longer muted and able to post messages into the allchat again. " +
               "Please remember to follow the chat etiquette."
-    }
+    },
     CLOSED: {
         header: "Lecture closed",
         body: "The orator has closed this lecture. It is no longer accessible."
