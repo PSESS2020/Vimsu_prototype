@@ -7,9 +7,10 @@ const Settings = require('../game/app/utils/Settings');
 const Lecture = require('../game/app/server/models/Lecture')
 
 var lectureList = [];
+var now = new Date();
 lectureList.push(new Lecture("53d", "Computer Science", "123c", 13, "Computer science is fun", new Date("Tue Aug 03 2020 10:42:24 GMT+0200"), "Prof. Max Mustermann", 1000))
-lectureList.push(new Lecture("53f", "Math", "123b", 10.5, "Math is fun", new Date("Tue Aug 04 2020 11:21:24 GMT+0200"), "Prof. Max Mustermann", 1000));
-lectureList.push(new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date("Tue Aug 04 2020 11:10:24 GMT+0200"), "Prof. Max Mustermann", 1000));
+lectureList.push(new Lecture("53f", "Math", "123b", 10.5, "Math is fun", new Date(now.setMinutes(now.getMinutes() + 10)), "Prof. Max Mustermann", 1000));
+lectureList.push(new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", 1000));
 var schedule = new Schedule(lectureList);
 
 
