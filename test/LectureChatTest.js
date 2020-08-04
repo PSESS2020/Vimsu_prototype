@@ -1,5 +1,6 @@
 const LectureChat = require('../game/app/server/models/LectureChat.js');
 const chai = require('chai');
+const { expect } = require('chai');
 const assert = chai.assert;
 
 // example lecture chat
@@ -13,20 +14,23 @@ var timestamp2 = '<22:46>';
 var messageText1 = 'Hallo!';
 var messageText2 = 'Hi';
 var message1 = {senderID: senderid1, username: senderUsername1, timestamp: timestamp1, messageText: messageText1};
-var message1 = {senderID: senderid2, username: senderUsername2, timestamp: timestamp2, messageText: messageText2};
+var message2 = {senderID: senderid2, username: senderUsername2, timestamp: timestamp2, messageText: messageText2};
+var messageList1 = [message1];
+var messageList2 = [message1, message2];
+
 var lectureChat = new LectureChat(lectureId);
-lectureChat.appendMessage(message1);
 
 describe('LectureChat getter functions', function() {
     it('test getMessages', function() {
-        assert.equal(lectureChat.getMessages(), [message1]);
+        lectureChat.appendMessage(message1);
+        expect(lectureChat.getMessages()).to.eql(messageList1);
     })
 })
 
 describe('LectureChat message handling', function() {
     it('test appendMessage', function() {
         lectureChat.appendMessage(message2);
-        assert.equal(lectureChat.getMessages(), [message1, message2]);
+        expect(lectureChat.getMessages()).to.eql(messageList2)
     })
 })
 
