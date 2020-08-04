@@ -1,5 +1,4 @@
 
-
 /*module.exports = */class RoomClient {
 
     #roomId;
@@ -11,7 +10,7 @@
     #occupationMap;
     #listOfNPCs;
     #listOfGameObjects;
-    //listOfDoors
+    #listOfDoors;
     #map;
     
     /**
@@ -23,10 +22,11 @@
      * @param {TypeOfRoomClient} typeOfRoom
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
+     * @param {Array of DoorClient} listOfDoors
      * @param {int} length 
      * @param {int} width 
      */
-    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width ,length) {
+    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width ,length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -36,6 +36,10 @@
         TypeChecker.isInstanceOf(listOfNPCs, Array);
         listOfNPCs.forEach(npc => {
             TypeChecker.isInstanceOf(npc, NPCClient);
+        });
+        TypeChecker.isInstanceOf(listOfDoors, Array);
+        listOfDoors.forEach(door => {
+            TypeChecker.isInstanceOf(door, DoorClient);
         });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -51,6 +55,7 @@
         this.#typeOfRoom = typeOfRoom;
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;
+        this.#listOfDoors = listOfDoors;
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
@@ -172,14 +177,15 @@
      * 
      * @author Philipp
      * 
-     * @param {int} roomId 
+     ** @param {int} roomId 
      * @param {TypeOfRoomClient} typeOfRoom
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
+     * @param {Array of DoorClient} listOfDoors
      * @param {int} length 
      * @param {int} width 
      */
-    swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width, length) {
+    swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -190,6 +196,10 @@
         listOfNPCs.forEach(npcPosition => {
             TypeChecker.isInstanceOf(npcPosition, NPCClient);
         });
+        TypeChecker.isInstanceOf(listOfDoors, Array);
+        listOfDoors.forEach(door => {
+            TypeChecker.isInstanceOf(door, DoorClient);
+        });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
 
@@ -198,6 +208,7 @@
         //reset list of game objects, participants, occMap
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;
+        this.#listOfDoors = listOfDoors;
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
@@ -242,23 +253,32 @@
             }
         }
 
-        if (this.#typeOfRoom === "FOYER") {
-            this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
-            this.#map[2][1] = GameObjectTypeClient.LECTUREDOOR;
-            this.#map[mapLength - 2][4] = GameObjectTypeClient.FOODCOURTDOOR;
-            this.#map[mapLength - 1][4] = GameObjectTypeClient.RIGHTTILE;
-            this.#map[mapLength - 2][this.#map[0].length - 3] = GameObjectTypeClient.RECEPTIONDOOR;
-            this.#map[mapLength - 1][this.#map[0].length - 3] = GameObjectTypeClient.RIGHTTILE;
-        } else if (this.#typeOfRoom === "RECEPTION") {
+        //set door positions in map
+        for (var i = 0; i < this.#listOfDoors.length; i++) {
+            var positionX = this.#listOfDoors[i].getMapPosition().getCordX();
+            var positionY = this.#listOfDoors[i].getMapPosition().getCordY();
+            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.FOYER_DOOR) {
 
-                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
-                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
+                this.#map[positionX][positionY - 1] = GameObjectTypeClient.LEFTTILE;
+                this.#map[positionX][positionY] = GameObjectTypeClient.FOYERDOOR;
 
-        } else if (this.#typeOfRoom === "FOODCOURT") {
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.RECEPTION_DOOR) {
+
+                this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
+                this.#map[positionX][positionY] = GameObjectTypeClient.RECEPTIONDOOR;
+                
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.FOODCOURT_DOOR) {
+
+                this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
+                this.#map[positionX][positionY] = GameObjectTypeClient.FOODCOURTDOOR;
             
-                this.#map[2][0] = GameObjectTypeClient.LEFTTILE;
-                this.#map[2][1] = GameObjectTypeClient.FOYERDOOR;
 
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.LECTURE_DOOR) {
+                this.#map[positionX][positionY - 1] = GameObjectTypeClient.LEFTTILE;
+                this.#map[positionX][positionY] = GameObjectTypeClient.LECTUREDOOR;
+
+            }
+        
         }
     }
 

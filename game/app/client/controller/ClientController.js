@@ -352,7 +352,7 @@ class ClientController {
     }*/
 
     //Third message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData, npcData, width, length) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData, npcData, doorData, width, length) {
         
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
@@ -361,18 +361,25 @@ class ClientController {
                 new PositionClient(element.cordX, element.cordY), element.isSolid));
         });
 
+        //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
             listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
         });
 
+        //transform Doors to DoorClients
+        var listOfDoors = [];
+        doorData.forEach(door => {
+            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, new PositionClient(door.cordX, door.cordY)));
+        });
+
         //First room? 
         if(!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width, length);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
             
         //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, width, length);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
             this.switchRoomGameView();    
         }

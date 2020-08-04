@@ -240,6 +240,19 @@ module.exports = class ServerController {
                                     direction: npc.getDirection()});
                     });
 
+                    //Get all Doors from starting room
+                    let doors = this.#rooms[currentRoomId - 1].getListOfDoors();
+                    let doorData = [];
+
+                    //needed to init all Doors in clients game view
+                    doors.forEach(door => {
+                        doorData.push({id: door.getId(), typeOfDoor: door.getTypeOfDoor(), 
+                                    cordX: door.getMapPosition().getCordX(), 
+                                    cordY: door.getMapPosition().getCordY()});
+                    });
+
+
+
                     //Needed for emiting this business card to other participants in room
                     var businessCardObject = { 
                         id: ppant.getId(), 
@@ -255,7 +268,7 @@ module.exports = class ServerController {
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom, 
-                            gameObjectData, npcData, this.#rooms[currentRoomId - 1].getWidth(), this.#rooms[currentRoomId - 1].getLength());
+                            gameObjectData, npcData, doorData, this.#rooms[currentRoomId - 1].getWidth(), this.#rooms[currentRoomId - 1].getLength());
 
                                                 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -423,11 +436,8 @@ module.exports = class ServerController {
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
 
-                //Singleton
-                let doorService = new DoorService();
-
                 //get door from current room to target room
-                let door = doorService.getDoorByRoom(currentRoomId, targetRoomId);
+                let door = this.#rooms[currentRoomId - 1].getDoorTo(targetRoomId);
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
@@ -479,9 +489,20 @@ module.exports = class ServerController {
                                   cordY: npc.getPosition().getCordY(),
                                   direction: npc.getDirection()});
                 });
+
+                //Get all Doors from starting room
+                let doors = this.#rooms[targetRoomId - 1].getListOfDoors();
+                let doorData = [];
+
+                //needed to init all Doors in clients game view
+                doors.forEach(door => {
+                    doorData.push({id: door.getId(), typeOfDoor: door.getTypeOfDoor(), 
+                                cordX: door.getMapPosition().getCordX(), 
+                                cordY: door.getMapPosition().getCordY()});
+                });
                     
                 //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData, 
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData, doorData, 
                         this.#rooms[targetRoomId - 1].getWidth(), this.#rooms[targetRoomId - 1].getLength());
 
                 //set new position in server model
@@ -590,12 +611,14 @@ module.exports = class ServerController {
             });
 
             socket.on('getCurrentLectures', (ppantID) => {
-                let doorService = new DoorService();
+
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
+                let currentRoomId = enterPosition.getRoomId();
+                let lectureDoor = this.#rooms[currentRoomId - 1].getLectureDoor();
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
-                if (!doorService.isValidLectureEnterPosition(enterPosition)) {
+                if (!lectureDoor.isValidEnterPosition(enterPosition)) {
                     console.log('wrong position');
                     return;
                 }
