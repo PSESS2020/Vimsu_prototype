@@ -69,11 +69,11 @@ module.exports = class Room {
         
         //Alle GameObjekte die in diesen Raum gehören von Service holen
         let objService = new GameObjectService();
-        this.#listOfGameObjects = objService.getObjects(this.#roomId, this.#typeOfRoom);
+        this.#listOfGameObjects = objService.getObjects(this.#roomId);
 
         //Alle NPCs die in diesen Raum gehören vom Service holen
         let npcService = new NPCService();
-        this.#listOfNPCs = npcService.getNPCs(this.#roomId, this.#typeOfRoom);
+        this.#listOfNPCs = npcService.getNPCs(this.#roomId);
 
         this.#buildOccMap();
     }
