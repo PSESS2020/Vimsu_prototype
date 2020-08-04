@@ -34,6 +34,8 @@ class LectureView extends WindowView {
                     sendMessage(event);
                 }
             });
+
+            $(document).off('click', ".closeButton");
             
             $(document).on('click', ".closeButton" , () => {
                 this.leaveLecture();
