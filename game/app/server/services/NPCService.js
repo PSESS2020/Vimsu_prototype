@@ -48,7 +48,7 @@ module.exports = class NPCService {
         return this.#npcs[index];
     }
 
-    initAllNPCs(roomId, typeOfRoom)
+    initAllNPCs()
     {    
         //FOYER NPCS
         let lectureStory = [    'Hey! Welcome to our Foyer!',
