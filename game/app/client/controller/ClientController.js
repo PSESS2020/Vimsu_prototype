@@ -171,7 +171,7 @@ class ClientController {
                 transports: ['websocket'], 
                 upgrade: false,
                 'reconnection': true,
-                'reconnectionDelay': 100,
+                'reconnectionDelay': 0,
                 'reconnectionAttempts': 120
             });
             this.socket.on('connect', (socket) => {
@@ -182,6 +182,7 @@ class ClientController {
             this.socket.on('disconnect', () => {
                 this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
             });
+
             this.setUpSocket();
             this.socket.emit('new participant');
           
