@@ -181,8 +181,8 @@ class ClientController {
 
             this.socket.on('disconnect', () => {
                 this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
-                this.socket.socket.connect();
             });
+
             this.setUpSocket();
             this.socket.emit('new participant');
           
