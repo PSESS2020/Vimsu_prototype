@@ -111,7 +111,7 @@ form button {
   box-shadow: none !important;
   background: rgb(27, 27, 27);
   border: none;
-  color: #fff;
+  color: antiquewhite;
   padding: 2px;
 }
 
@@ -121,12 +121,12 @@ form button:hover {
 
 #allchatMessages {
 font-size: 15px;
-background:rgba(24, 30, 32, 0.699);
+background:none;
 overflow-y: scroll;
 margin: 0;
 padding: 0;
 z-index: 1;
-max-height: 150px;
+max-height: 25%;
 max-width: 250px;
 }
 
@@ -137,12 +137,13 @@ max-width: 250px;
 }
 
 #allchatMessages div {
-background: rgba(24, 30, 32, 0.699);
-color: #fff;
+background: none;
+color: antiquewhite;
 border-radius: 5px;
 border: 1px solid antiquewhite;
 padding: 5px 10px;
 overflow-wrap: break-word;
+
 }
 
 #allchatMessages::-webkit-scrollbar {
@@ -463,6 +464,8 @@ body::-webkit-scrollbar {
 
 .list-group-item {
   border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
   border-bottom: 1pt solid antiquewhite !important;
   border-radius: 0px 0px 0px 0px !important;
 }
