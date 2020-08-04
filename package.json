@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "nyc --reporter=html --reporter=text mocha"
+    "test": "mocha",
+    "coverage": "nyc --reporter html --reporter text npm test"
   },
   "repository": {
     "type": "git",
