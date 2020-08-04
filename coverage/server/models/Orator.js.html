@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/models/Task.js</title>
+    <title>Code coverage report for server/models/Orator.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">server/models</a> Task.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">server/models</a> Orator.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>5/11</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>5/11</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,63 +89,63 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var TypeChecker = require('../../utils/TypeChecker.js');
-var TypeOfTask = require('../../utils/TypeOfTask')
+var Position = require('./Position.js');
+var Direction = require('../../utils/Direction.js');
+var Participant = require('./Participant.js');
 &nbsp;
-module.exports = class Task {
+module.exports = class Orator extends Participant {
 &nbsp;
-    #id;
-    #taskType;
-    #awardPoints;
+    #ownLectureList;
 &nbsp;
-    constructor(id, taskType, awardPoints) {
-        TypeChecker.isInt(id);
-        TypeChecker.isEnumOf(taskType, TypeOfTask);
-        TypeChecker.isInt(awardPoints);
+    /**
+     * @author Philipp
+     * 
+     * @param {String} id 
+     * @param {Position} position 
+     * @param {Direction} direction 
+     * @param {Array of String} ownLectureList  //IDs von Lectures
+     */
+<span class="fstat-no" title="function not covered" >    co</span>nstructor(id, position, direction, ownLectureList) {
+<span class="cstat-no" title="statement not covered" >        super(id, position, direction);</span>
+<span class="cstat-no" title="statement not covered" >        TypeChecker.isInstanceOf(ownLectureList, Array);</span>
+<span class="cstat-no" title="statement not covered" >        ownLectureList.forEach(<span class="fstat-no" title="function not covered" >le</span>ctureId =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            TypeChecker.isString(lectureId);</span>
+        });
 &nbsp;
-        this.#id = id;
-        this.#taskType = taskType;
-        this.#awardPoints = awardPoints;
+<span class="cstat-no" title="statement not covered" >        this.#ownLectureList = ownLectureList;</span>
     }
 &nbsp;
-    getId() {
-        return this.#id
-    }
-&nbsp;
-    getTaskType() {
-        return this.#taskType;
-    }
-&nbsp;
-    getAwardPoints() {
-        return this.#awardPoints;
+<span class="fstat-no" title="function not covered" >    ge</span>tOwnLectureList() {
+<span class="cstat-no" title="statement not covered" >        return this.#ownLectureList;</span>
     }
 }</pre></td></tr></table></pre>
 
