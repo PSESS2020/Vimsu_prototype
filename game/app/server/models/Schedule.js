@@ -1,4 +1,6 @@
-const Settings = require('../../utils/Settings')
+const Settings = require('../../utils/Settings');
+const TypeChecker = require('../../utils/TypeChecker');
+const Lecture = require('../models/Lecture');
 
 module.exports = class Schedule {
     
@@ -11,10 +13,15 @@ module.exports = class Schedule {
     */
 
     constructor(lectureList) {
+        lectureList.forEach(lecture => {
+            TypeChecker.isInstanceOf(lecture, Lecture);
+        })
         this.#lectureList = lectureList;
     }
 
     getLecture(lectureId) {
+        TypeChecker.isString(lectureId);
+        
         for(var i = 0; i < this.#lectureList.length; i++) {
             var lecture = this.#lectureList[i];
             if(lecture.getId() === lectureId) {

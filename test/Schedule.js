@@ -13,11 +13,23 @@ lectureList.push(new Lecture("53f", "Math", "123b", 10.5, "Math is fun", new Dat
 lectureList.push(new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", 1000));
 var schedule = new Schedule(lectureList);
 
-
 describe("Test getter", function() {
+    it("Test schedule constructor", function() {
+        var lectureList2 = [1];
+        expect(() => new Schedule(lectureList2.push(new Lecture(1, 2, 3, "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", 2, 3, "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", 3, "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a number");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", 6, 7, "8")))).to.throw(TypeError, "not an instance of");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", new Date(), 7, "8")))).to.throw(TypeError, "not a string");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8")))).to.throw(TypeError, "not an int");
+        expect(() => new Schedule(lectureList2)).to.throw(TypeError, "an instance of");
+    })
+
     it("Test getLecture", function() {
         var lecture = schedule.getLecture("53f");
-        assert.instanceOf(lecture, Lecture, "getLecture returns value of Lecture")
+        assert.instanceOf(lecture, Lecture)
         expect(lecture.getId()).to.be.a('string').and.equal("53f");
         expect(lecture.getTitle()).to.be.a('string').and.equal("Math");
         expect(lecture.getVideoId()).to.be.a('string').and.equal("123b");

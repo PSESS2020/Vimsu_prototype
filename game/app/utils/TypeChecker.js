@@ -24,6 +24,14 @@ class TypeChecker {
         }
     }
 
+    static isNumber(value) 
+    {
+        if((typeof value !== 'number') || !(isFinite(value)))
+        {
+            throw new TypeError(value + ' is not a number!')
+        }
+    }
+
     static isFloat(value) 
     {
         if ((typeof value !== 'number') || value % 1 === 0 || !(isFinite(value))) 
