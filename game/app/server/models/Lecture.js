@@ -145,12 +145,22 @@ module.exports = class Lecture {
             this.#activeParticipants.splice(index, 1);
         }
 
-        //Adds current time as leaving time in token list
         this.#tokenList.forEach(element => {
 
             //check if there is an element with this ID
             if (element[0] === participantId) {
-                element[1] = new Date();
+                let leaveDate = new Date();
+
+                //check if ppant left before lecture started
+                //if so, leaving time should be the starting time so the token counter gets decreased correctly when he joins again during the lecture
+                if (this.#startingTime.getTime() > leaveDate.getTime()) {
+                    element[1] = this.#startingTime;
+                } 
+                
+                //if not, leaving date needs to be stored to decrease the token counter when ppant joins again
+                else {
+                    element[1] = leaveDate;
+                }
             }
         });
     }
