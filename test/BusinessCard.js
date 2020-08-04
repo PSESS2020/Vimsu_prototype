@@ -5,42 +5,34 @@ var businessCard = new BusinessCard("53f", "maxmust", "Prof.", "Mustermann", "Ma
 
 describe("Test getter", function() {
     it("Test getParticipantId", function() {
-        expect(businessCard.getParticipantId()).to.be.a('string');
-        expect(businessCard.getParticipantId()).to.be.equal("53f");
+        expect(businessCard.getParticipantId()).to.be.a('string').and.equal("53f");
     })
 
     it("Test getUsername", function() {
-        expect(businessCard.getUsername()).to.be.a('string');
-        expect(businessCard.getUsername()).to.be.equal("maxmust");
+        expect(businessCard.getUsername()).to.be.a('string').and.equal("maxmust");
     })
 
     it("Test getTitle", function() {
-        expect(businessCard.getTitle()).to.be.a('string');
-        expect(businessCard.getTitle()).to.be.equal('Prof.');
+        expect(businessCard.getTitle()).to.be.a('string').and.equal('Prof.');
     })
 
     it("Test getSurname", function() {
-        expect(businessCard.getSurname()).to.be.a('string');
-        expect(businessCard.getSurname()).to.be.equal('Mustermann');
+        expect(businessCard.getSurname()).to.be.a('string').and.equal('Mustermann');
     })
 
     it("Test getForename", function() {
-        expect(businessCard.getForename()).to.be.a('string');
-        expect(businessCard.getForename()).to.be.equal('Max');
+        expect(businessCard.getForename()).to.be.a('string').and.equal('Max');
     })
 
     it("Test getJob", function() {
-        expect(businessCard.getJob()).to.be.a('string');
-        expect(businessCard.getJob()).to.be.equal('Professor');
+        expect(businessCard.getJob()).to.be.a('string').and.equal('Professor');
     })
 
     it("Test getCompany", function() {
-        expect(businessCard.getCompany()).to.be.a('string');
-        expect(businessCard.getCompany()).to.be.equal('KIT');
+        expect(businessCard.getCompany()).to.be.a('string').and.equal('KIT');
     })
 
     it("Test getEmail", function() {
-        expect(businessCard.getEmail()).to.be.a('string');
-        expect(businessCard.getEmail()).to.be.equal('maxmustermann@kit.edu');
+        expect(businessCard.getEmail()).to.be.a('string').and.equal('maxmustermann@kit.edu');
     })
 })
