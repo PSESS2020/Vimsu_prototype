@@ -12,7 +12,9 @@ class LectureView extends WindowView {
         this.#lectureStatus = LectureStatus.PENDING;
 
         $(document).ready(() => {
-            function sendMessage() {
+            function sendMessage(event) {
+                event.preventDefault();
+
                 let messageVal = $('#lectureChatInput').val();
                 if(messageVal !== '') {
                   clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
@@ -22,12 +24,14 @@ class LectureView extends WindowView {
             }
         
             $(document).on('click', '#lectureChatButton', () => { 
-                sendMessage();
+                sendMessage(event);
             });
         
             $('#lectureChatInput').keydown((e) => {
+                e.stopPropagation();
+
                 if (e.keyCode === 13) {
-                    sendMessage();
+                    sendMessage(event);
                 }
             });
             
