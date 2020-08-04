@@ -54,43 +54,6 @@ module.exports = class DoorService {
         return this.#doors[index];
     }
 
-    /*
-    getDoorByRoom(startingRoomId, targetRoomId) {
-        TypeChecker.isInt(startingRoomId);
-        TypeChecker.isInt(targetRoomId);
-
-        let index = this.#doors.findIndex(door => door.getStartingRoomId() === startingRoomId 
-                                                && door.getTargetRoomId() === targetRoomId);
-
-        if (index < 0) 
-        {
-            throw new Error("Wrong IDs");
-        }
-
-        return this.#doors[index];
-    }
-    */
-
-    /**
-     * Checks if position is a valid enter position for the lecture Door
-     * 
-     * @param {Position} position 
-     */
-    /*
-    isValidLectureEnterPosition(position) {
-        TypeChecker.isInstanceOf(position, Position);
-
-        for (var i = 0; i < this.#lectureDoorEnterPositions.length; i++) {
-            if (position.getRoomId() === this.#lectureDoorEnterPositions[i].getRoomId() &&
-                position.getCordX() === this.#lectureDoorEnterPositions[i].getCordX() &&
-                position.getCordY() === this.#lectureDoorEnterPositions[i].getCordY()) {
-                return true;
-            }
-        }
-        return false;  
-    }
-    */
-
     initAllDoors() {
         //Door from Foyer to Food Court 
         let foyerFoodCourtEnterPositions = [];
