@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.63% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/27</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/25</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -136,38 +136,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,39 +192,39 @@ module.exports = class Schedule {
         this.#lectureList = lectureList;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    ge</span>tLecture(lectureId) {
-<span class="cstat-no" title="statement not covered" >        TypeChecker.isString(lectureId);</span>
+    getLecture(lectureId) {
+        TypeChecker.isString(lectureId);
         
-<span class="cstat-no" title="statement not covered" >        for(var i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; this.#lectureList.length; i++) {</span>
-            var lecture = <span class="cstat-no" title="statement not covered" >this.#lectureList[i];</span>
-<span class="cstat-no" title="statement not covered" >            if(lecture.getId() === lectureId) {</span>
-<span class="cstat-no" title="statement not covered" >                return lecture;</span>
+        for(var i = 0; i &lt; this.#lectureList.length; i++) {
+            var lecture = this.#lectureList[i];
+            if(lecture.getId() === lectureId) {
+                return lecture;
             }
         }
     }
 &nbsp;
     //returns the lectures that start soon or have started already.
     //TODO: maybe move Timedeltas in global constants file
-<span class="fstat-no" title="function not covered" >    ge</span>tCurrentLectures() {
-        var currentLectures = <span class="cstat-no" title="statement not covered" >[];</span>
+    getCurrentLectures() {
+        var currentLectures = [];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        for(var i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; this.#lectureList.length; i++) {</span>
-            var lecture = <span class="cstat-no" title="statement not covered" >this.#lectureList[i];</span>
-            var startingTime = <span class="cstat-no" title="statement not covered" >lecture.getStartingTime().getTime();</span>
-            var now = <span class="cstat-no" title="statement not covered" >new Date().getTime();</span>
-            var startToShow = (<span class="cstat-no" title="statement not covered" >startingTime - Settings.SHOWLECTURE)</span>;
-            var stopToShow = (<span class="cstat-no" title="statement not covered" >startingTime + lecture.getDuration()*1000)</span>;
-            var withinMargin = <span class="cstat-no" title="statement not covered" >startToShow &lt;= now &amp;&amp; now &lt;= stopToShow;</span>
+        for(var i = 0; i &lt; this.#lectureList.length; i++) {
+            var lecture = this.#lectureList[i];
+            var startingTime = lecture.getStartingTime().getTime();
+            var now = new Date().getTime();
+            var startToShow = (startingTime - Settings.SHOWLECTURE);
+            var stopToShow = (startingTime + lecture.getDuration()*1000);
+            var withinMargin = startToShow &lt;= now &amp;&amp; now &lt;= stopToShow;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            if (withinMargin) {</span>
-<span class="cstat-no" title="statement not covered" >                currentLectures.push(lecture);</span>
+            if (withinMargin) {
+                currentLectures.push(lecture);
             }
         }
-<span class="cstat-no" title="statement not covered" >        return currentLectures;</span>
+        return currentLectures;
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    ge</span>tAllLectures() {
-<span class="cstat-no" title="statement not covered" >        return this.#lectureList;</span>
+    getAllLectures() {
+        return this.#lectureList;
     }
 &nbsp;
 }
@@ -235,7 +235,7 @@ module.exports = class Schedule {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Aug 04 2020 12:20:33 GMT+0200 (Central European Summer Time)
+                at Tue Aug 04 2020 12:34:27 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
