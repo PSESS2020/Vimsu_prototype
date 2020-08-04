@@ -185,8 +185,10 @@ module.exports = class ServerController {
                     } else if (currentRoomId === Settings.RECEPTION_ID) {
                         typeOfCurrentRoom = TypeOfRoom.RECEPTION;
                     } else if (currentRoomId === Settings.FOODCOURT_ID) {
-                        typeOfCurrentRoom === TypeOfRoom.FOODCOURT;
+                        typeOfCurrentRoom = TypeOfRoom.FOODCOURT;
                     }
+
+                    console.log("roomId:" + currentRoomId)
                     
                     socket.ppantId = ppant.getId();
 
