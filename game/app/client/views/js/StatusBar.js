@@ -19,7 +19,7 @@ class StatusBar extends Views{
         if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
 
             if (this.#timeLeft < 0) {
-                var redirect = $('nav_leave_button').attr('href');
+                var redirect = $('#nav_leave_button').attr('href');
                 window.location.href = redirect;
             } else {
                 $('#connectionStatus').empty();
