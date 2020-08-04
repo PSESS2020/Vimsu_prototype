@@ -21,7 +21,7 @@ describe("Test getter", function() {
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", 3, "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a number");
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
-        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", 6, 7, "8")))).to.throw(TypeError, "not an instance of");
+        expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", 6, 7, "8")))).to.throw(TypeError, "not a Date");
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", new Date(), 7, "8")))).to.throw(TypeError, "not a string");
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8")))).to.throw(TypeError, "not an int");
         expect(() => new Schedule(lectureList2)).to.throw(TypeError, "an instance of");

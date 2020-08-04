@@ -36,7 +36,7 @@ module.exports = class Lecture {
         TypeChecker.isString(videoId);
         TypeChecker.isNumber(duration);
         TypeChecker.isString(remarks);
-        TypeChecker.isInstanceOf(startingTime, Date);
+        TypeChecker.isDate(startingTime);
         TypeChecker.isString(oratorName);
         TypeChecker.isInt(maxParticipants);
 
