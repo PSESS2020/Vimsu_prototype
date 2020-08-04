@@ -49,6 +49,7 @@ class LectureView extends WindowView {
         this.#hasToken = hasToken;
         this.#lectureId = lecture.id;
         // hide the overview of current lectures
+        $('#waitforlectureload').hide(); 
         $('#currentLectures').hide(); 
 
         //chat box is emptied to prevent messages from showing in the wrong lecture chat
