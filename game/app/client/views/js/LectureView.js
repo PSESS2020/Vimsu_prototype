@@ -285,6 +285,7 @@ class LectureView extends WindowView {
 
 }
 
+<<<<<<< HEAD
 
 /*const LectureStatus = Object.freeze
 ({
@@ -293,8 +294,10 @@ class LectureView extends WindowView {
     OVER: "OVER"
 });*/
 
+=======
+>>>>>>> 1d540e16a013b3e52ad99726605c00f1eae3c163
 const NoTokenMessage = Object.freeze({
     LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
     REVOKED: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
             "Please remember to follow chat etiquette."
-})
+});
