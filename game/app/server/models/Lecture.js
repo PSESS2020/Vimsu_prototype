@@ -98,6 +98,14 @@ module.exports = class Lecture {
         return this.#lectureChat;
     }
 
+    getActiveParticipants() {
+        return this.#activeParticipants;
+    }
+
+    getTokenList() {
+        return this.#tokenList;
+    }
+
 
     /**
      * Is called when a participant with this ID joins a lecture
