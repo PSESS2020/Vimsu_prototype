@@ -165,7 +165,7 @@ module.exports = class ServerController {
                 
                 // TODO: make tis not display ban-message on double-log-in
                 var accountId = socket.request.session.accountId;
-                if (this.isBanned(accountId) || this.isLoggedIn(accountId)) {
+                if (this.isBanned(accountId)) {
                     this.#io.to(socket.id).emit('remove yourself');
                     return;
                 }
@@ -2029,19 +2029,6 @@ module.exports = class ServerController {
             if (this.#banList.includes(accountId)) {
                 this.#banList.splice(this.#banList.indexOf(accountId), 1);
             };
-        };
-        
-        isLoggedIn(accountId) {
-            var mainNamespace = this.#io.of('/');
-            // this chucks an error as we get the keys (read IDs) instead
-            // of the socket-objects
-            var socketKeys = Object.keys(mainNamespace.connected);
-            for(var i = 0; i < socketKeys.length; i++) {
-                if(accountId === socketKeys[i].request.session.accountId){
-                    return true;
-                }
-            }
-            return false;
         };
     
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client

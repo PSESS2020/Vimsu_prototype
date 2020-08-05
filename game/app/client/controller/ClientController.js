@@ -237,11 +237,7 @@ class ClientController {
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
         this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
         this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
-<<<<<<< HEAD
         this.socket.on('inviteFriends', this.handleFromServerInviteFriends.bind(this));
-=======
-        this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
->>>>>>> LectureChatCommands
     }
 
     /* #################################################### */    
