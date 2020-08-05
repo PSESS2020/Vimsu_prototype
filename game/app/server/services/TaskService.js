@@ -33,7 +33,7 @@ module.exports = class TaskService {
     }
 
     getTaskByType(taskType) {
-        // TODO: type check
+        TypeChecker.isEnumOf(taskType, TypeOfTask);
 
         let index = this.#tasks.findIndex(task => task.getTaskType() === taskType);
 
