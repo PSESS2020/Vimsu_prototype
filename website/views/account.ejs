@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<%- include('partials/head') %>
+</head>
+<body>
+	<%- include('partials/header') %>
+        <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-10">
+        <div class="card accountCard">
+            <div class="card-header accountHeader d-flex flex-row">Account Information
+                <div class="ml-auto">
+                    <a href="/editAccount"><div class="octicons octicon octicon-gear editAccountOcticon"></div></a>
+                </div>
+            </div>
+            <div class="card-body pt-0 pb-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><p class="accountLabel">Username:</p> <p class="accountData"><%=username%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Email:</p> <p class="accountData"><%=email%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Title:</p> <p class="accountData"><%=title%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Surname:</p> <p class="accountData"><%=surname%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Forename:</p> <p class="accountData"><%=forename%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Company/University:</p> <p class="accountData"><%=company%></p></li>
+                    <li class="list-group-item"><p class="accountLabel">Job/Profession:</p> <p class="accountData"><%=job%></p></li>
+                  </ul>
+            </div>
+        </div>
+          </div>
+        </div>
+    </div>
+</body>
+</html>

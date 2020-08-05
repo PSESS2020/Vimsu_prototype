@@ -1,8 +1,8 @@
 var GameObject = require('../models/GameObject.js');
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('../models/Position.js')
-var TypeOfRoom = require('../models/TypeOfRoom.js');
-var RoomDimensions = require('../models/RoomDimensions.js');
+var TypeOfRoom = require('../../utils/TypeOfRoom.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class GameObjectService {
 
@@ -15,16 +15,14 @@ module.exports = class GameObjectService {
 
         GameObjectService.instance = this;
         this.#objects = [];
+        this.initAllObjects();
     }
 
-    getObjects(roomId, typeOfRoom)
+    getObjects(roomId)
     {
         TypeChecker.isInt(roomId);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
-
+        
         var roomObjects = [], i;
-
-        this.initAllObjects(roomId, typeOfRoom);
 
         for(i = 0; i < this.#objects.length; i++){
             if (this.#objects[i].getPosition().getRoomId() === roomId) {
@@ -53,23 +51,30 @@ module.exports = class GameObjectService {
         return this.#objects[index];
     }
 
-    initAllObjects(roomId, typeOfRoom)
+    initAllObjects()
     {    
-        if (typeOfRoom === 'FOYER') {
-            /**for (var i = 1; i < RoomDimensions.FOYER_WIDTH + 1; i++) {
-                for (var j = 1; j < RoomDimensions.FOYER_LENGTH + 1; i++) {
-                    this.#objects.push(new GameObject(RoomDimensions.FOYER_LENGTH*(i-1)+j, "Tile" + RoomDimensions.FOYER_LENGTH*(i-1)+j, 1, 1, new Position(roomId, i, j), false));
-                }
-            }*/
+        
+        //FOYER OBJECTS
+        for (var i = 4; i < 9; i++)
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOYER_ID, i, 0), true));
 
-            for (var i = 4; i < 10; i++)
-                this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(roomId, i, 0), true));
-
-            //Anderen Objekte für Foyer
+        //RECEPTION OBJECTS
+        for (var i = 3; i <= 9; i++) {
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 10, i), true));
         }
+        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 11, 9), true));
+        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 12, 9), true));
+        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 11, 3), true));
+        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 12, 3), true));
+        
 
-        else if (typeOfRoom === 'RECEPTION') {
-            //Objekte für Rezeption
+        //FOOD COURT OBJECTS
+        for (var i = 2; i <= 10; i++) {
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 10, i), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 8, i), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 6, i), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 4, i), true));
+            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 2, i), true));
         }
     }
 }

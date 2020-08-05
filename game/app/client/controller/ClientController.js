@@ -1,5 +1,4 @@
 //TODO: Vielleicht alle Events in einer Utildatei? Müssen Server und Client gleichermaßen bekannt sein.
-
 /* ******************************************************************************* */
 /* NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ *** NOTE PLEASE READ */
 /* ******************************************************************************* */
@@ -10,7 +9,7 @@
  * Stuff that will be altered in the following steps:
  *
  *   (i) Every constant will be moved into a shared /utils/Settings.js file (name
- *       not final).
+ *       not final). DONE
  *
  *  (ii) This class will set up the game in the final product. The idea here being
  *       that the index.js will call a method setUpGame() from this class.
@@ -33,10 +32,7 @@
 
 
 
-/* For quicker changing of the movement-rate. 
- * - (E) */
-const movementX = 1,
-      movementY = 1;
+//const Settings = require('../../utils/Settings')
 
 class ClientController {
 
@@ -45,7 +41,10 @@ class ClientController {
     #gameView;
     #currentRoom;
     #participantId;
+    #ownParticipant;
     #roomClient;
+    #ownBusinessCard;
+    #connectionStatus;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -61,23 +60,20 @@ class ClientController {
      */
 
 
-    constructor(gameView/*, participantId*/) { //TODO: instanciate ParticipantClient
+    constructor(/*, participantId*/) { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
-        this.#gameView = gameView;
+        this.#gameView = new GameView(GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         //this.#participantId = participantId;
         
         //TODO: add Participant List from Server
-        this.#currentRoom = new RoomClient(1, TypeOfRoomClient.FOYER, []);
-
         console.log("fully init cc");
         return this;
     }
-
 
     getPort() {
         return this.#port;
@@ -95,19 +91,15 @@ class ClientController {
         this.socket = socket;
     }
 
-    setCurrentRoom(currentRoom) {
-        this.#currentRoom = currentRoom;
-    }
-
-    setParticipantId(id) {
-        this.#participantId = id;
-    }
-
     getCurrentRoom() {
         return this.#currentRoom;
     }
 
+    getGameView() {
+        return this.#gameView;
+    }
 
+    
     /* #################################################### */    
     /* ###################### SOCKET ###################### */
     /* #################################################### */
@@ -117,17 +109,50 @@ class ClientController {
         if (!this.socket) {
             //TODO: exception
         }
+        return true;
     }
 
     /*Initializes the initial view for the player*/
     initGameView() {
         
         var map = this.#currentRoom.getMap();
-        if (map !== null)
-            this.#gameView.initFoyerView(map);
+        var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
         
-        //TODO this.#gameView.initOwnAvatarView(participant);
+        if (map !== null) {
+            this.#gameView.drawStatusBar();
+            this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
+        }
+        
+        this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
+        this.#gameView.initCanvasEvents();
+        
+        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
         //TODO this.#gameView.initAnotherAvatarViews(participants);
+
+        //Game View is now fully initialised
+        this.#gameView.setGameViewInit(true);
+
+    }
+
+    switchRoomGameView() {
+        
+        //disables update of gameview
+        this.#gameView.setGameViewInit(false);
+
+        var map = this.#currentRoom.getMap();
+        var typeOfRoom = this.#currentRoom.getTypeOfRoom();
+        var listOfNPCs = this.#currentRoom.getListOfNPCs();
+        
+        if (map !== null) {
+            this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
+        }
+
+        this.#gameView.resetAnotherAvatarViews();
+        this.#gameView.updateOwnAvatarRoom(typeOfRoom);
+        this.#gameView.initCanvasEvents();
+        this.#gameView.setGameViewInit(true);
+
     }
 
     /*opens a new socket connection between the client and the server and initializes the events to be handled.
@@ -135,12 +160,30 @@ class ClientController {
     // We also need reconnection handling
     openSocketConnection() {
         if (this.#port && !this.socket) {
-            /* It seems you don't need to pass an argument here - socket.io figures it out by itself.
-             * - (E) */
-            this.socket = io();
+            
+            /* WARNING: WEBSOCKETS ONLY CONFIGURATION*/
+            /*
+            *Arguments prevent initial http polling and start the websocket directly.
+            *Without the arguments the client starts a http connection and upgrades later to websocket protocol.
+            *This caused a disconnect from the server and therefore a server scrash. 
+            */
+            this.socket = io({
+                transports: ['websocket'], 
+                upgrade: false,
+                'reconnection': true,
+                'reconnectionDelay': 0,
+                'reconnectionAttempts': 120
+            });
             this.socket.on('connect', (socket) => {
+                this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
                 console.log("test connect");
             });
+
+            this.socket.on('disconnect', () => {
+                this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
+                this.socket.close();
+            });
+
             this.setUpSocket();
             this.socket.emit('new participant');
           
@@ -152,15 +195,57 @@ class ClientController {
 
     setUpSocket() {
         console.log("test set up socket");
-        this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this));
-        this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); // The bind(this) fixes scoping-issues
+        this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
+        //this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
+        this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this)); 
+        this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
         this.socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
-        this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
+        //this.socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
+        this.socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
+        this.socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
+        this.socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
+        this.socket.on('lectureFull', this.handleFromServerLectureFull.bind(this));
+        this.socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
+        this.socket.on('friendList', this.handleFromServerFriendList.bind(this));
+        this.socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
+        this.socket.on('rankList', this.handleFromServerRankList.bind(this));
+        this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
+        this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
+        this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
+        this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
+        this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
+        this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
+        this.socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
+        this.socket.on('acceptedFriendRequest', this.handleFromServerAcceptedFriendRequest.bind(this));
+        this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
+        this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
+        this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
+        this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
+                console.log(data);
+        });
+        this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
+        this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
+        this.socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
+        this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
+        this.socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
+        this.socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
+        this.socket.on('inviteFriends', this.handleFromServerInviteFriends.bind(this));
     }
+
+    /* #################################################### */    
+    /* #################### EDIT VIEW ##################### */
+    /* #################################################### */
     
+    updateGame() {
+
+        this.#gameView.update()
+        this.#gameView.draw();
+    }
 
     /* #################################################### */    
     /* ################## SEND TO SERVER ################## */
@@ -168,101 +253,167 @@ class ClientController {
 
     //asks the server for an update of the current game state
     requestGameStateUpdate() {
-        this.socketReady;
+        if(this.socketReady())
         this.socket.emit('requestGameStateUpdate');
     }
 
     sendToServerRequestMovStart(direction) {
-        this.socketReady;
-        TypeChecker.isEnumOf(direction, DirectionClient);
-        var currPos = this.#gameView.getOwnAvatarView().getPosition();
-        var currPosX = currPos.getCordX();
-        var currPosY = currPos.getCordY();
-
-        this.socket.emit('requestMovementStart', this.#participantId, direction, currPosX, currPosY);
-    }
+        
+        if(this.socketReady()) {
+            TypeChecker.isEnumOf(direction, DirectionClient);
+            let currPos = this.#gameView.getOwnAvatarView().getPosition();
+            let currPosX = currPos.getCordX();
+            let currPosY = currPos.getCordY();
+            let participantId = this.#ownParticipant.getId();
+            console.log("request mov start " + this.#ownParticipant.getId());
+            this.socket.emit('requestMovementStart', participantId, direction, currPosX, currPosY);
+        }
+    }   
 
     sendToServerRequestMovStop() {
+
         this.socketReady;
-        
-        this.socket.emit('requestMovementStop', this.#participantId);
+            let participantId = this.#ownParticipant.getId();
+
+        this.socket.emit('requestMovementStop', participantId);
+
     }
 
+    sendToServerAllchatMessage(text) {
+
+        this.socketReady;
+        if(this.socket.connected)
+            this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+    
+        }
+
+    sendToServerEvalInput(input) {
+
+        this.socketReady;
+        if(this.socket.connected)
+            this.socket.emit('evalServer', input);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
+
+    }
+
+    sendToServerLectureChatMessage(text, lectureId) {
+        this.socketReady;
+        if(this.socket.connected)
+            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), this.#ownParticipant.getUsername(), text, lectureId);
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+   
+        }
 
     /* #################################################### */    
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
     
-    handleFromServerUpdateID(id) {
+
+    //Second message from server, gives you information of starting position, business card and participant id
+    //After that, there is everything to init the game view
+    handleFromServerInitOwnParticipant(initInfo) {
+        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
+
+        this.#ownBusinessCard = new BusinessCardClient(
+                                initInfo.businessCard.id,
+                                initInfo.businessCard.username,
+                                initInfo.businessCard.title,
+                                initInfo.businessCard.surname,
+                                initInfo.businessCard.forename,
+                                initInfo.businessCard.job,
+                                initInfo.businessCard.company,
+                                initInfo.businessCard.email
+                                );
+
+        this.#ownParticipant = new ParticipantClient(
+                                initInfo.id,
+                                this.#ownBusinessCard.getUsername(),
+                                initPos, 
+                                initInfo.dir
+                                );
+        this.#currentRoom.enterParticipant(this.#ownParticipant);
+        this.initGameView();
+
+    }
+    /**
+     * Not used.
+     *  
+     */
+    //First Message from Server, gives you your ID
+    /*handleFromServerUpdateID(id) {
         console.log("test update id");
-        // Throws the error that this is not a function?
-        this.setParticipantId(id);
-        this.#gameView.setOwnAvatarViewId(id);
+        
+
+        this.#participantId = id;
         console.log(this.#participantId);
+    }*/
+
+    //Third message from Server, gives you information of starting room
+    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfGameObjectsData, npcData, doorData, width, length) {
+        
+        //transform GameObjects to GameObjectClients
+        var listOfGameObjects = [];
+        listOfGameObjectsData.forEach(element => {
+            listOfGameObjects.push(new GameObjectClient(element.id, element.name, element.width, element.length,
+                new PositionClient(element.cordX, element.cordY), element.isSolid));
+        });
+
+        //transform NPCs to NPCClients
+        var listOfNPCs = [];
+        npcData.forEach(npc => {
+            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
+        });
+
+        //transform Doors to DoorClients
+        var listOfDoors = [];
+        doorData.forEach(door => {
+            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, new PositionClient(door.cordX, door.cordY)));
+        });
+
+        //First room? 
+        if(!this.#currentRoom) {
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+            
+        //If not, only swap the room
+        } else {
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+            this.#currentRoom.enterParticipant(this.#ownParticipant);
+            this.switchRoomGameView();    
+        }
     }
 
+    //updates own avatar position
     handleFromServerUpdatePosition(posInfo) {
-        console.log("test update pos");
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
-        // This will not work and throws error
-        // Uncaught TypeError: Cannot read property updateOwnAvatarPosition of undefined 
-        this.#gameView.updateOwnAvatarPosition(posUpdate);
+        var dirUpdate = posInfo.dir;
 
-        // This is probably overkill, but better safe than sorry
-        switch(posInfo.dir) {
-            case DirectionClient.UPRIGHT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
-                break;
-            case DirectionClient.DOWNRIGHT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
-                break;
-            case DirectionClient.UPLEFT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
-                break;
-            case DirectionClient.DOWNLEFT:
-                this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
-                break;
-        }
+            this.#ownParticipant.setPosition(posUpdate);
+            this.#ownParticipant.setDirection(dirUpdate);
+            this.#gameView.updateOwnAvatarPosition(posUpdate);
+            this.#gameView.updateOwnAvatarDirection(dirUpdate);
+        
         console.log("test finish update pos");
     }
 
-    handleFromServerStartMovementOther(ppantID, direction) {
-        // Type-Checking handled in gameView
-        //TypeChecker.isInt(ppantID);
-        //TypeChecker.isEnumOf(direction, DirectionClient);
-        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);      
+    //Server does collision testing, so this method is only called when movement from other user is legit (P)
+    handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
+
+        TypeChecker.isString(ppantID);
+        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isInt(newCordX);
+        TypeChecker.isInt(newCordY);
+ 
+        let newPos = new PositionClient(newCordX, newCordY);
+        console.log("mov other: " + ppantID);
+
+        this.#gameView.updateAnotherAvatarDirection(ppantID, direction);    
+        this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
+        this.#gameView.updateAnotherAvatarWalking(ppantID, true);  
         
-        console.log(ppantID);
-        
-        // This is very unwieldy. Can we maybe just change the updatePosition()-function to take two arguments,
-        // offsetX and offsetY, and then do all the other stuff inside the method?
-        var index = this.#gameView.getAnotherParticipantAvatarViews().findIndex(participant => participant.getId() === ppantID);
-        console.log(index); //index = -1
-        var oldPos = this.#gameView.getAnotherParticipantAvatarViews()[index].getPosition();        
-        var newPos;
-
-        switch(direction) {
-            case DirectionClient.UPRIGHT:
-                newPos = new PositionClient(oldPos.getCordX() + 1, oldPos.getCordY());
-                break;
-            case DirectionClient.UPLEFT:
-                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() - 1);
-                break;
-            case DirectionClient.DOWNLEFT:
-                newPos = new PositionClient(oldPos.getCordX() - 1, oldPos.getCordY());
-                break;
-            case DirectionClient.DOWNRIGHT:
-                newPos = new PositionClient(oldPos.getCordX(), oldPos.getCordY() + 1);
-                break;
-       }
-
-        if (!this.#currentRoom.checkForCollision(newPos)) {
-            this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-            this.#gameView.updateAnotherAvatarWalking(ppantID, true);
-        }
-
-        //this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
-
     }
 
     handleFromServerStopMovementOther(ppantID) {
@@ -272,28 +423,34 @@ class ClientController {
         
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
+
+    handleFromServerLectureEntered(lecture, hasToken, lectureChat) {
+        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
+    }
+
+    handleFromServerLectureFull(lectureId) {
+        this.#gameView.updateCurrentLectures(lectureId);
+    }
  
     /* TODO
      * Change argument from object into list (nicer to read)
      * - (E) */ 
     handleFromServerRoomEnteredByParticipant(initInfo) {
+        
         console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
+        
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-
         console.log("init info id" + initInfo.id);
-        var participant = new ParticipantClient(initInfo.id, initPos, initInfo.dir);
+        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir);
         console.log(" get id " + participant.getId());
-        // Here we get another error (which we always get on handling the private fields 
-        // in these methods
-        // Uncaught TypeError: Cannot read private member #currentRoom from an object whose class did not declare it
-        // this.#currentRoom.enterParticipant(participant);
+        this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
-        this.#gameView.initAnotherAvatarViews(participant);
-
+        this.#gameView.initAnotherAvatarViews(participant, this.#currentRoom.getTypeOfRoom());
     }
     
+    /*
     // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
     handleFromServerCollisionDetectionAnswer(isOccupied) {
         if (isOccupied) {
@@ -302,10 +459,11 @@ class ClientController {
             //TODO: Avatar wird bewegt
         }
     }
+    */
 
     // Removes disconnected Player from Model and View (P)
     handleFromServerRemovePlayer(ppantId) {
-        //TypeChecker.isInt(ppantId);
+        //TypeChecker.isString(ppantId);
 
         this.#currentRoom.exitParticipant(ppantId);
 
@@ -313,35 +471,209 @@ class ClientController {
         this.#gameView.removeAnotherAvatarViews(ppantId);
         
     }
+    
 
+    // get the current lectures from the server to display in the UI for selection
+    handleFromServerCurrentLectures(lectures) {
+        this.#gameView.initCurrentLectures(lectures);
+    }
+
+    handleFromServerCurrentSchedule(lectures) {
+        this.#gameView.initCurrentSchedule(lectures);
+    }
+
+    //Is called after server send the answer of avatarclick
+    handleFromServerBusinessCard(businessCardObject, rank) {
+        let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username, 
+            businessCardObject.title, businessCardObject.surname, businessCardObject.forename, 
+            businessCardObject.job, businessCardObject.company, businessCardObject.email);
+        
+        //check if ppant is a friend or not
+        if (businessCard.getEmail() === undefined) {
+            this.#gameView.initBusinessCardView(businessCard, false, rank);
+        } else {
+            this.#gameView.initBusinessCardView(businessCard, true, rank);
+        }
+    }
+
+    handleFromServerInviteFriends(friendListData, groupName, limit) {
+        var friendList = [];
+        friendListData.forEach(data => {
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+        this.#gameView.initInviteFriendsView(friendList, groupName, limit);
+    }
+
+    //Is called after server send the answer of friendlistclick
+    handleFromServerFriendList(friendListData) {
+        var friendList = [];
+        friendListData.forEach(data => {
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+        this.#gameView.initFriendListView(friendList);
+    }
+
+    //Is called after server send the answer of friendrequestlistclick
+    handleFromServerFriendRequestList(friendRequestListData) {
+        var friendRequestList = [];
+        friendRequestListData.forEach(data => {
+            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+        });
+
+        this.#gameView.initFriendRequestListView(friendRequestList);
+    }
+
+    handleFromServerNewFriendRequest(data, chatId) {
+        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        this.#gameView.addFriendRequest(friendRequest);
+        this.#gameView.updateChatThread(chatId, false, true);
+    }
+
+    handleFromServerAcceptedFriendRequest(data, chatId) {
+        var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        this.#gameView.addFriend(friend);
+        this.#gameView.updateChatThread(chatId, true, false);
+    }
+
+    handleFromServerRejectedFriendRequest(chatId) {
+        this.#gameView.updateChatThread(chatId, false, false);
+    }
+
+    handleFromServerRemovedFriend(friendId, chatId) {
+        this.#gameView.removeFriend(friendId);
+        this.#gameView.updateChatThread(chatId, false, false);
+    }
+
+    handleFromServerRankList(rankList) {
+        //remark own participant's ranking
+        let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
+        if (idx > -1) {
+            rankList[idx].self = true;
+        }
+        this.#gameView.initRankListView(rankList);
+    }
+
+    // Adds a new message to the all-chat
+    handleFromServerNewAllchatMessage(message) {
+        var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
+        $('#allchatMessages').prepend($('<div>').text(msgText));
+        $('#allchatMessages').scrollTop(0);
+    }
+
+    handleFromServerNewLectureChatMessage(message) {
+        var messageHeader = message.username + ", " + message.timestamp + ":";
+        var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+        var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+        $newMessageHeader.text(messageHeader);
+        $newMessageBody.text(message.messageText);
+        $('#lectureChatMessages').append($newMessageHeader);
+        $('#lectureChatMessages').append($newMessageBody);
+    }
+    
+    handleFromServerUpdateSuccessesBar(points, rank) {
+        if(points) {
+            TypeChecker.isInt(points);
+        }
+
+        if(rank) {
+            TypeChecker.isInt(rank);
+        }
+
+        this.#gameView.updateSuccessesBar(points, rank);
+    }
+    
+    // Called when a new room is entered.
+    // The argument is an array of objects of the following structure:
+    // { senderID: <String>, timestamp: <String>, text: <String> }
+    handleFromServerInitAllchat(messages) {
+        $('#allchatMessages').empty();
+        messages.forEach( (message) => {
+            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + message.username + ": " + message.text));
+        });
+        $('#allchatMessages').scrollTop(0);
+    }
+
+    handleFromServerNewGlobalMessage(messageHeader, messageText) {
+        this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
+
+    handleFromServerHideAvatar(participantId) {
+        this.#gameView.hideAvatar(participantId);
+    }
+
+    handleFromServerShowAvatar(participantId) {
+        this.#gameView.showAvatar(participantId);
+    }
+    
+    handleFromServerRemoved() {
+        $('#viewBlocker').show();
+    };
+
+    handleFromServerShowNPCStory(name, story) {
+        this.#gameView.initNPCStoryView(name, story);
+    }
+
+    handleFromServerNewAchievement(achievement) {
+        this.#gameView.handleNewAchievement(achievement);
+    }
+    
+    handleFromServerShowChatList(chats) {
+        this.#gameView.initChatListView(chats);
+    };
+    
+    handleFromServerShowChatThread(chat) {
+        //console.log(JSON.stringify(chat));
+        this.#gameView.initChatThreadView(chat, true);
+    };
+    
+    /* This function is called when another user creates a new chat
+     * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
+     * INTO THAT CHAT (or if a friend request has been send).
+     * - (E) */
+    handleFromServerNewChat(chat, openNow) {
+        
+        this.#gameView.addNewChat(chat, openNow);
+    };
+    
+
+    //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
+    handleFromServerNewChatMessage(chatId, message) {
+        this.#gameView.addNewChatMessage(chatId, message);
+    };
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
 
-    handleFromViewEnterDoor(doorId) {
+    handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterDoor', doorId);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.RECEPTION);
         //update currentRoom;
         //update View
     }
 
-    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
-    the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(creatorId, participantId) {
-        this.socketReady
-        this.socket.emit('createNewChat', {creatorId, participantId})
+    handleFromViewEnterFoodCourt() {
+        this.socketReady;
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOODCOURT);
+        //update currentRoom;
+        //update View
     }
 
-    handleFromViewCreateNewGroupChat(creatorId, participantIdList) {
-        this.socketReady
-        this.socket.emit('createNewGroupChat', {creatorId, participantIdList})
+    handleFromViewEnterFoyer() {
+        this.socketReady;
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOYER);
+        //update currentRoom;
+        //update View
     }
 
-    handleFromViewNewMessage(sendDateTime, chatId, messageText) {
-        this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newMessage', {sendDateTime, senderId, chatId, messageText});
+    handleFromViewEnterLecture(lectureId) {
+        this.socketReady;
+        this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
+    }
+
+    handleFromViewLectureLeft(lectureId, lectureEnded) {
+        this.socketReady;
+        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId, lectureEnded);
     }
 
     handleFromViewLectureDownload(lectureId) {
@@ -351,21 +683,143 @@ class ClientController {
 
     handleFromViewGetCurrentLectures() {
         this.socketReady
-        this.socket.emit('getCurrentLectures');
+        this.socket.emit('getCurrentLectures', this.#ownParticipant.getId());
     }
 
-    handleFromViewNewFriendRequest(participantRepicientId) {
+    handleFromViewShowSchedule() {
         this.socketReady
-        var senderId = this.participant.getId;
-        this.socket.emit('newFriendRequest', {senderId, participantRepicientId});
+        this.socket.emit('getSchedule');
     }
 
-    handleFromViewRespondFriendRequest(senderId) {
+    // called after clicking on achievement list
+    handleFromViewShowAchievements() {
         this.socketReady
-        var responderId = this.participant.getId;
-        this.socket.emit('newFriendRequest', {senderId, responderId});
+        this.socket.emit('getAchievements', this.#ownParticipant.getId());
+        
     }
 
+    //called after click on friendlist button
+    handleFromViewShowFriendList() {
+        this.socketReady;
+        this.socket.emit('getFriendList', this.#ownParticipant.getId());
+    }
+
+    handleFromViewShowInviteFriends(groupName) {
+        this.socketReady;
+        this.socket.emit('getInviteFriends', this.#ownParticipant.getId(), groupName);
+    }
+
+    //called after click on friendrequestlist button
+    handleFromViewShowFriendRequestList() {
+        this.socketReady;
+        this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
+        
+    }
+
+    //called after 'Add Friend' Button
+    handleFromViewNewFriendRequest(participantRepicientId, chatId) {
+        this.socketReady;
+        this.socket.emit('newFriendRequest', this.#ownParticipant.getId(), participantRepicientId, chatId);
+    }
+
+    //called when a friend request is accepted
+    handleFromViewAcceptRequest(businessCard) {
+        this.socketReady;
+
+        var participantId = businessCard.participantId;
+        console.log(participantId);
+        TypeChecker.isString(participantId);
+
+        //Tells server to accept this request
+        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, true);
+        this.#gameView.updateFriendRequestListView(participantId, true);
+        this.#gameView.addFriend(new BusinessCardClient(participantId, businessCard.username, businessCard.title,
+            businessCard.surname, businessCard.forename, businessCard.job, businessCard.company, businessCard.email))
+    }
+
+    //called when a friend request is declined
+    handleFromViewRejectRequest(participantId) {
+        this.socketReady;
+
+        //Tells server to reject this request
+        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, false);
+        this.#gameView.updateFriendRequestListView(participantId, false);
+    }
+
+    //called when this participants removes another from his friendlist
+    handleFromViewRemoveFriend(friendId) {
+        this.socketReady;
+        this.socket.emit('removeFriend', this.#ownParticipant.getId(), friendId);
+        this.#gameView.removeFriend(friendId);
+    }
+
+    handleFromViewLeaveChat(chatId) {
+        this.socketReady;
+        this.socket.emit('removeParticipantFromChat', this.#ownParticipant.getId(), chatId);
+        this.#gameView.removeChat(chatId);
+    }
+
+    handleFromViewShowBusinessCard(participantId) {
+        let ppant = this.#currentRoom.getParticipant(participantId);
+        if (ppant === undefined) {
+            throw new Error('Ppant with ' + participantId + ' is not in room');
+        }
+        this.socketReady;
+        //Emits to server own ID and target ID
+        this.socket.emit('getBusinessCard', this.#ownParticipant.getId(), participantId);
+    }
+
+    handleFromViewShowProfile() {
+        this.#gameView.initProfileView(this.#ownBusinessCard);
+    }
+
+    handleFromViewGetNPCStory(npcId) {
+        this.socketReady;
+        this.socket.emit('getNPCStory', this.#ownParticipant.getId(), npcId);
+    }
+
+    handleFromServerAchievements(achievements) {
+        this.#gameView.initCurrentAchievementsView(achievements);
+    }
+
+    handleFromViewShowRankList() {
+        this.socket.emit('getRankList');
+    }
+    
+    /* Gets the list of chats the user is in - one-on-one and group - from the
+     * server. The actual displaying is done in the method dealing with the 
+     * response from the server.
+     * - (E) */
+    handleFromViewShowChatList() {
+        let participantID = this.#ownParticipant.getId();
+        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
+    };
+    
+    handleFromViewShowChatThread(chatID) {
+        this.socket.emit('getChatThread', this.#ownParticipant.getId(), chatID);
+    };
+
+    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
+    the id of the other chat participant to the server.*/
+    handleFromViewCreateNewChat(participantId, username) {
+        //if isFriend is undefined, checking isFriend is necessary  
+        //isFriend not necessary, because server knows all friendLists
+        this.socketReady
+        var creatorId = this.#ownParticipant.getId();
+        this.socket.emit('createNewChat', creatorId, participantId, username);
+    }
+
+    handleFromViewCreateNewGroupChat(chatName, participantIdList) {
+        this.socketReady
+        var creatorId = this.#ownParticipant.getId();
+        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
+    }
+
+    handleFromViewSendNewMessage(chatId, messageText) {
+        this.socketReady
+        
+        this.socket.emit('newChatMessage', this.#ownParticipant.getId(), this.#ownBusinessCard.getUsername(), chatId, messageText);
+    }
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
@@ -373,7 +827,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -386,7 +840,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + 1);
+        let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -399,7 +853,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() + 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
@@ -412,7 +866,7 @@ class ClientController {
         //this.sendMovementToServer(DirectionClient.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
-        let newPos = new PositionClient(currPos.getCordX() - 1, currPos.getCordY());
+        let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);

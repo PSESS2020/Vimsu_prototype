@@ -6,12 +6,24 @@
 body {
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: rgb(27, 27, 27);
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-canvas {
-  width: 1280px;
-  height: 640px;
+input,
+textarea {
+     -moz-user-select: text;
+     outline: none;
+}
+
+.form-control:focus {
+  outline: none !important;
+  -webkit-appearance:none !important;
+  box-shadow: none !important;
+  border-color: antiquewhite;
 }
 
 #overlay{
@@ -22,7 +34,8 @@ canvas {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: black;
+  pointer-events: none;
+  background-color: rgb(27,27,27);
   z-index: 3;
   transition: 1s 0.4s;
 }
@@ -43,5 +56,491 @@ canvas {
   margin-top: -20px;
   width: 100%;
   text-align: center;
-  color: white;
+  color: antiquewhite;
+}
+#mapCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+pointer-events: none;
+z-index: 0;
+}
+
+video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton, 
+video::-webkit-media-controls-timeline {
+  display: none;
+}
+
+#avatarCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+left: 0;
+z-index: 1;
+}
+
+#uiCanvas {
+position: absolute;
+width: 1280px;
+height: 640px;
+top: 0;
+pointer-events: none;
+left: 0;
+z-index: 2;
+}
+
+form {
+border-radius: 5px;
+top: 0;
+z-index: 3;
+} 
+
+form input {
+outline: none;
+border: none;
+border-radius: 5px;
+padding: 4px;
+width: 250px;
+}
+
+form button {
+  outline: none !important;
+  box-shadow: none !important;
+  background: rgb(27, 27, 27);
+  border: none;
+  color: antiquewhite;
+  padding: 2px;
+}
+
+form button:hover {
+  opacity: 0.8;
+}
+
+#allchatMessages {
+font-size: 15px;
+background:none;
+overflow-y: scroll;
+margin: 0;
+padding: 0;
+z-index: 1;
+max-height: 25%;
+max-width: 250px;
+}
+
+#allchatMessageInput {
+  outline: none;
+  background-color: rgb(27, 27, 27); 
+  color: antiquewhite
+}
+
+#allchatMessages div {
+background: none;
+color: antiquewhite;
+border-radius: 5px;
+border: 1px solid antiquewhite;
+padding: 5px 10px;
+overflow-wrap: break-word;
+
+}
+
+#allchatMessages::-webkit-scrollbar {
+  display: none;
+}
+
+.navbarIcons {
+  color: antiquewhite;
+  transform: scale(0.8)
+}
+
+.navbarIconsText {
+  color: antiquewhite;
+  font-size: 15px;
+}
+
+.navbarIconsDisabled {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  opacity: .5 !important;
+  box-shadow: 0px 0px 0px transparent;
+  transform: scale(0.8);
+}
+
+.friendRequestListButton:hover {
+  opacity: .5 !important;
+}
+
+.leavingChat:hover {
+  opacity: .5 !important;
+}
+
+.fa-sort-desc:hover {
+  opacity: .5 !important;
+}
+
+.fa-users:hover {
+  opacity: .5 !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.icon-align {
+vertical-align: middle;
+}
+
+.currentLecturesContainer {
+  border-style: solid;
+  border-color: antiquewhite;
+  border-radius: 10px;
+  background-color: rgba(24, 30, 32, 0.699);
+
+}
+
+.lectureChatInput {
+  background-color: #1b1e24; 
+  color: antiquewhite;
+  outline: none;
+}
+
+.close {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.lectureChatContainer {
+  border-style: solid;
+  border-color: antiquewhite;
+  border-radius: 10px;
+  background-color: rgb(33, 41, 44);
+  overflow-wrap: break-word;
+}
+
+.currentLecturesWindow {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow: scroll;
+  display: none; 
+  position: fixed; 
+  top: 0px; 
+  left: 0px; 
+  border-radius: 10px; 
+  z-index: 1050; 
+  width: 100%; 
+  height: 100%
+}
+
+.currentLecturesWindow::-webkit-scrollbar {
+  display: none;
+}
+
+.lectureVideoWindow {
+  background-color:rgba(34, 43, 46, 1) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow: scroll;
+  display: none; 
+  position: fixed; 
+  top: 0px; 
+  left: 0px; 
+  border-radius: 10px; 
+  z-index: 1050; 
+  width: 100%; 
+  height: 100%;
+}
+
+.lectureVideoWindow::-webkit-scrollbar {
+  display: none;
+}
+
+body::-webkit-scrollbar {
+  display:none;
+}
+
+.currentLecturesHeader {
+  background-color: rgba(24, 30, 32, 0.699);
+  color: antiquewhite;
+  font-size: 30px;
+
+}
+
+.lectureVideoHeader {
+  background-color: rgba(24, 30, 32, 1);
+  color: antiquewhite;
+  font-size: 30px;
+
+}
+
+.lectureChatHeader {
+  background-color: rgba(24, 30, 32, 1);
+  border-color: transparent !important; 
+  border-radius: 10px 10px 0px 0px;
+  color: antiquewhite;
+}
+
+.globalChatWindow {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow-y: auto;
+  display: none; 
+  position: fixed; 
+  top: 30%; 
+  left: 30%; 
+  border-radius: 10px; 
+  z-index: 1050;
+  width: 40%; 
+  height: 30%;
+}
+
+.globalChatWindow::-webkit-scrollbar {
+  display:none
+}
+
+.globalChatWindowHeader {
+  background-color: rgba(24, 30, 32, 1);
+  position: sticky;
+  color: antiquewhite;
+  font-size: 30px;
+}
+
+.viewBlockerWindow {
+  background-color:rgba(34, 43, 46, 1) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow: scroll;
+  display: none; 
+  position: fixed; 
+  top: 0px; 
+  left: 0px; 
+  border-radius: 10px; 
+  z-index: 2000; 
+  width: 100%; 
+  height: 100%;
+}
+
+.btn-lecture {
+  background-color: #028090;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+
+}
+
+.btn-lecture:hover {
+  background-color: #015a66;
+  color: antiquewhite;
+}
+
+.btn-reject {
+  background-color: rgb(231, 218, 200) !important;
+  width: 75px;
+  border: none !important;
+  box-shadow: 0px 0px 0px transparent !important;
+  border-radius: 3px !important;
+  color: rgba(34, 43, 46, 1) !important;
+  text-decoration: none;
+}
+
+.btn-reject:hover {
+  background-color: rgb(179, 170, 159) !important;
+  color: rgba(34, 43, 46, 1) !important;
+  border: none !important;
+  box-shadow: 0px 0px 0px transparent !important;
+  text-decoration: none !important;
+  border-radius: 3px !important;
+}
+
+.modal-header {
+  text-align: center;
+  background-color: rgba(24, 30, 32, 0.699);
+  color: antiquewhite;
+  font-size: 30px;
+  border-color: transparent !important; 
+  box-shadow: 0px 0px 0px transparent;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.modal-header .dropdown-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-header::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-header, 
+.modal-header .dropdown {
+  position: static !important;
+}
+
+.modal::-webkit-scrollbar {
+  display:none
+}
+
+#chatThreadModalList::-webkit-scrollbar {
+  display:none
+}
+
+.modal-header .dropdown-menu {
+  width: 464px !important;
+  min-height: 501px !important;
+  background-color: rgba(34, 43, 46, 1) !important;
+  color: antiquewhite;
+}
+
+.modal-content {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow: scroll;
+  border-color: antiquewhite;
+  border-style: solid;
+  border-width: medium;
+  border-radius: 10px;
+  box-shadow: 0px 0px 0px transparent;
+ }
+
+
+ .close {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  opacity: 1 !important;
+  box-shadow: 0px 0px 0px transparent;
+}
+
+.close:hover {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  opacity: .5 !important;
+  box-shadow: 0px 0px 0px transparent;
+}
+
+.table {
+  color: antiquewhite;
+}
+
+.table thead tr th{
+  border-top: none;
+  border-bottom: 2pt solid antiquewhite
+}
+
+.table tbody tr th{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr td{
+  border-bottom: 1pt solid antiquewhite;
+}
+
+.table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.list-group-item:first-child { 
+  border-top: 1pt solid antiquewhite !important;
+}
+
+.list-group-item {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1pt solid antiquewhite !important;
+  border-radius: 0px 0px 0px 0px !important;
+}
+
+.chatthread:hover {
+  background-color:rgba(34, 43, 46, 1) !important;
+}
+
+.achievement-icon {
+  font-size: 120px;
+  opacity: 1;                /* Opacity (Transparency) */
+  -webkit-filter: blur(0px);    /* Blur */
+  -moz-filter: blur(0px);
+  filter: blur(0px);
+}
+
+.achievement-blur {
+  color: darkslategray;
+  opacity: 0.75;                /* Opacity (Transparency) */
+  -webkit-filter: blur(8px);    /* Blur */
+  -moz-filter: blur(8px);
+  filter: blur(8px);
+}
+
+.achievementBox {
+  border: 1px solid antiquewhite; 
+  border-top: none; 
+  border-radius: 0px 0px 5px 5px; 
+  min-width: 70px;
+  height: 35px;
+}
+
+.progress {
+  width: 100%;
+  height: 5px;
+}
+
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #000000;
+}
+::-webkit-scrollbar-track {
+  background: #666666;
+  border: 0px none #ffffff;
+  border-radius: 51px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.wrapword {
+  white-space: -webkit-pre-wrap;          /* Chrome & Safari */ 
+  white-space: pre-wrap;                  /* CSS3 */
+  word-break: break-all;
+  white-space: normal;
 }

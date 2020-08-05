@@ -3,13 +3,17 @@ var TypeChecker = require('../../../utils/TypeChecker.js')
 
 
 module.exports = */
+
+const AVATAR_WIDTH = 64;
+const AVATAR_HEIGHT = 128;
+
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('../assets/CharacterSpriteSheetBody.png', 64, 128);
-    #topClothing = new SpriteSheet('../assets/TopClothingBlueShirtSpriteSheet.png', 64, 128);
-    #bottomClothing = new SpriteSheet('../assets/BottomBlackTrousersSpriteSheet.png', 64, 128);
-    #shoes = new SpriteSheet('../assets/ShoesBlackSpriteSheet.png', 64, 128);
+    #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #shoes = new SpriteSheet('client/assets/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
@@ -18,12 +22,15 @@ class ParticipantAvatarView extends AvatarView {
     #standingUpRightAnimation;
     #standingDownLeftAnimation;
     #standingDownRightAnimation;
-    #currentAnimation
+    #currentAnimation;
     #walking = false;
+    #isVisible = true;
+    #typeOfRoom;
+    #username;
 
-    constructor(position, direction, participantId) {
+    constructor(position, direction, participantId, typeOfRoom, username) {
         super(position, direction);
-        TypeChecker.isInt(participantId);
+        TypeChecker.isString(participantId);
         this.#participantId = participantId;
         console.log(this.#participantId);
         this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 1, 4);
@@ -35,7 +42,8 @@ class ParticipantAvatarView extends AvatarView {
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
-
+        this.#typeOfRoom = typeOfRoom;
+        this.#username = username;
 
     }
     
@@ -48,6 +56,19 @@ class ParticipantAvatarView extends AvatarView {
     //Is called after server sends participantId
     setId(participantId) {
         this.#participantId = participantId;
+    }
+
+    //Is called after room switch
+    setTypeOfRoom(typeOfRoom) {
+        this.#typeOfRoom = typeOfRoom;
+    }
+
+    getVisibility() {
+        return this.#isVisible;
+    }
+
+    setVisibility(visible) {
+        this.#isVisible = visible;
     }
 
     update() {
@@ -92,14 +113,67 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     draw() {
+        if (this.#isVisible) {
+
         let cordX = super.getPosition().getCordX();
         let cordY = super.getPosition().getCordY();
         this.updateCurrentAnimation();
     
-        //should be done somewhere else, 86 and 419 are room dependent
-        let screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-        let screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        //should be done somewhere else, 150 and 419 are room dependent
+        if (this.#typeOfRoom === 'FOYER') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'FOODCOURT') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        else if (this.#typeOfRoom === 'RECEPTION') {
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+        }
+        
+
+        ctx_avatar.font = "1em sans-serif";
+        ctx_avatar.textBaseline = 'top';
+        ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx_avatar.textAlign = "center";
+        ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+
+        ctx_avatar.fillStyle = "black";
+        ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH/2, screenY);
 
         this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
+        }
+    }
+
+    onClick(/*mousePos*/) {
+        
+        /*
+        //Needed for calculating the correct position of 
+        //sprite animation in the spritesheet body click map.
+        var clickMapOffsetX;
+        var clickMapOffsetY;
+
+        //Getting the row and column at which the animation frame was taken of the body sprite sheet.
+        //Calc the actual offset of animation frame.
+        clickMapOffsetX = this.#currentAnimation.getCol() * AVATAR_WIDTH;
+        clickMapOffsetY = this.#currentAnimation.getRow() * AVATAR_HEIGHT;
+
+        var clickImgCordX = Math.abs( this.#screenX - Math.round(mousePos.x) ) + clickMapOffsetX;
+        var clickImgCordY = Math.abs( this.#screenY - Math.round(mousePos.y) ) + clickMapOffsetY;
+
+        console.log("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
+        
+        if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
+            //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
+            */
+            if (this.#isVisible) {
+        
+                $('#businessCardModal').modal('toggle');
+                let eventManager = new EventManager();
+                eventManager.handleAvatarClick(this.#participantId);
+            }
+        //}
     }
 }

@@ -3,6 +3,7 @@ class ParticipantClient {
     #id;
     #position;
     #direction;
+    #username;
 
     /**
      * Erstellt ParticipantClient Instanz
@@ -10,17 +11,20 @@ class ParticipantClient {
      * @author Klaudia
      * 
      * @param {PositionClient} position 
-     * @param {DirectionClient} direction 
+     * @param {DirectionClient} direction
+     * @param {BusinessCardClient} businessCard
      */
-    constructor(id, position, direction) 
+    constructor(id, username, position, direction) 
     {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isString(username);
 
         this.#id = id;
         this.#position = position;
         this.#direction = direction;
+        this.#username = username;
     }
 
     getId()
@@ -49,4 +53,10 @@ class ParticipantClient {
         TypeChecker.isEnumOf(direction, DirectionClient);
         this.#direction = direction;
     }
+
+    getUsername()
+    {
+        return this.#username;
+    }
+    
 }

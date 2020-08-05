@@ -1,16 +1,23 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
-var TypeOfRoom = require('./TypeOfRoom.js');
+var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
 var GameObjectService = require('../services/GameObjectService.js');
-var RoomDimensions = require('./RoomDimensions.js');
+var RoomDimensions = require('../../utils/RoomDimensions.js');
 const Position = require('./Position.js');
-const Direction = require('./Direction.js');
+const Direction = require('../../utils/Direction.js');
+const Settings = require('../../utils/Settings.js');
+const Door = require('./Door.js');
+const NPCService = require('../services/NPCService.js');
+const NPC = require('./NPC.js');
+const TypeOfDoor = require('../../utils/TypeOfDoor.js');
+const DoorService = require('../services/DoorService.js');
 
 module.exports = class Room {
 
     #roomId;
+    #typeOfRoom;
     //roomChat
     #length;
     #width;
@@ -18,10 +25,10 @@ module.exports = class Room {
     #occupationMap;
     //listOfNPCs
     #listOfGameObjects;
+    #listOfNPCs;
     //listOfDoors;
-    #startPosition; // The position in which new participants are initialized - (E)
-    #startDirection; // The direction in which new particpants are looking on initialization - (E)
-    
+    #listOfDoors; //TODO: Get right doors from service
+    #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
 
     /**
      * Erstellt Rauminstanz
@@ -36,31 +43,43 @@ module.exports = class Room {
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         this.#roomId = roomId;
+        this.#typeOfRoom = typeOfRoom;
         this.#listOfPPants = [];
+        this.#listOfMessages = [];
 
         //andere Fälle später
-        if (typeOfRoom == "FOYER") {
+        if (this.#typeOfRoom == "FOYER") {
 
             this.#length = RoomDimensions.FOYER_LENGTH;
             this.#width = RoomDimensions.FOYER_WIDTH;
-            this.#startPosition = new Position(roomId, 0, 0); // Sets the startPosition to (1,1).
-                                                              // This should prolly be a constant loaded from
-                                                              // a settings file somewhere - (E)
-            this.#startDirection = Direction.DOWNRIGHT; // See above
 
-            //Initialisiert width*length Feld gefüllt mit 0
-            this.#occupationMap = new Array(this.#width);
-            for (var i = 0; i < this.#width; i++) {
-                this.#occupationMap[i] = new Array(this.#length).fill(0);
-            }
-            
-            //Alle GameObjekte die in diesen Raum gehören von Service holen
-            
-            
+        } else if (this.#typeOfRoom === "FOODCOURT") {
 
-            let objService = new GameObjectService(this.#roomId, this.#width, this.#length);
-            this.#listOfGameObjects = objService.getObjects(this.#roomId);
+            this.#length = RoomDimensions.FOODCOURT_LENGTH;
+            this.#width = RoomDimensions.FOODCOURT_WIDTH;
+        
+        } else if (this.#typeOfRoom === "RECEPTION") {
+
+            this.#length = RoomDimensions.RECEPTION_LENGTH;
+            this.#width = RoomDimensions.RECEPTION_WIDTH;
         }
+        //Initialisiert width*length Feld gefüllt mit 0
+        this.#occupationMap = new Array(this.#width);
+        for (var i = 0; i < this.#width; i++) {
+            this.#occupationMap[i] = new Array(this.#length).fill(0);
+        }
+        
+        //Alle GameObjekte die in diesen Raum gehören von Service holen
+        let objService = new GameObjectService();
+        this.#listOfGameObjects = objService.getObjects(this.#roomId);
+
+        //Alle NPCs die in diesen Raum gehören vom Service holen
+        let npcService = new NPCService();
+        this.#listOfNPCs = npcService.getNPCs(this.#roomId);
+
+        //Alle Türen die in diesen Raum gehören vom Service holen
+        let doorService = new DoorService();
+        this.#listOfDoors = doorService.getDoors(this.#roomId);
 
         this.#buildOccMap();
     }
@@ -69,6 +88,14 @@ module.exports = class Room {
         return this.#roomId;
     }
 
+    getTypeOfRoom() {
+        return this.#typeOfRoom;
+    }
+
+    getMessages() {
+        return this.#listOfMessages;
+    }
+    
     /*
     getRoomController() {
         return this.#roomController;
@@ -87,19 +114,16 @@ module.exports = class Room {
         return this.#listOfPPants;
     }
 
-    /* A simple getter for the startPosition-field.
-     * Is needed to make sure positions of new participants
-     * can be set correctly. 
-     * - (E) */
-    getStartPosition() {
-        return this.#startPosition;
+    getListOfGameObjects() {
+        return this.#listOfGameObjects;
     }
-    
-    /* A simple getter for the startDirection-field
-     * Is needed because see above.
-     * - (E) */
-    getStartDirection() {
-        return this.#startDirection;
+
+    getListOfNPCs() {
+        return this.#listOfNPCs;
+    }
+
+    getListOfDoors() {
+        return this.#listOfDoors;
     }
 
     /**
@@ -125,17 +149,40 @@ module.exports = class Room {
      * 
      * @param {Participant} participant 
      */
-    exitParticipant(participant) {
-        TypeChecker.isInstanceOf(participant, Participant);
-        if (this.#listOfPPants.includes(participant)) {
-            let index = this.#listOfPPants.indexOf(participant);
-            this.#listOfPPants.splice(index, 1);
-        }
+    exitParticipant(participantId) {
+        TypeChecker.isString(participantId);
+        this.#listOfPPants.forEach(participant => {
+            if (participant.getId() === participantId) {
+                let index = this.#listOfPPants.indexOf(participant);
+                this.#listOfPPants.splice(index, 1);
+            }
+        });
 
-        //TODO: Entfernen aus Allchat
     }
 
-    //Not needed at this points
+    //Checks if ppant with ppantID is currently in this room
+    includesParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+        this.#listOfPPants.forEach(ppant => {
+            if (ppant.getId() === ppantID) {
+                return true;
+            }
+        });
+        return false;
+    }
+
+    //Method to get a Participant who is currently in this room
+    getParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+        var result;
+        this.#listOfPPants.forEach(ppant => {
+            if (ppantID === ppant.getId()) {
+                result = ppant;
+            }
+        });
+        return result;
+    }
+
     /**
      * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
      * 
@@ -146,20 +193,36 @@ module.exports = class Room {
      * @returns false, sonst
      */
 
-     /*
+     
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
         let cordY = position.getCordY();
 
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        if(position.getRoomId() != this.#roomId) {
+            throw new Error('Wrong room id!');
+        }
+
+        //WALLS
+        if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
+            return true;
+        }
+
+        if (this.#occupationMap[cordX][cordY]  == 1) {
             return true;
         }
         else {
             return false;
         }
     }
-    */
+
+
+    addMessage(ppantID, username, date, text) {
+        
+        var message = { senderID: ppantID, messageID: this.#listOfMessages.length, username: username, timestamp: date, text: text };
+        this.#listOfMessages.push(message);
+    }
+
 
    #buildOccMap = function() {
         //Geht jedes Objekt in der Objektliste durch
@@ -180,6 +243,45 @@ module.exports = class Room {
                     }
                 }
             } 
+        }
+
+        //collision with NPCs
+        for (var i = 0; i < this.#listOfNPCs.length; i++) {
+            let npcPosition = this.#listOfNPCs[i].getPosition();
+            let cordX = npcPosition.getCordX();
+            let cordY = npcPosition.getCordY();
+            this.#occupationMap[cordX][cordY] = 1;
+        }
+    }
+
+    /**
+     * Gets Door to room with roomId if it exists
+     * 
+     * @author Philipp
+     * 
+     * @param {int} targetId 
+     */
+    getDoorTo(targetId) {
+        TypeChecker.isInt(targetId);
+        for (var i = 0; i < this.#listOfDoors.length; i++) {
+            if (this.#listOfDoors[i].getTargetRoomId() === targetId) {
+                return this.#listOfDoors[i];
+            }
+        }
+    }
+
+    /**
+     * Return Lecture Door if it exists in this room
+     */
+    getLectureDoor() {
+        if (this.#typeOfRoom !== TypeOfRoom.FOYER) {
+            throw new Error('Lecture Door is only in FOYER!');
+        }
+
+        for (var i = 0; i < this.#listOfDoors.length; i++) {
+            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
+                return this.#listOfDoors[i];
+            }
         }
     }
 }

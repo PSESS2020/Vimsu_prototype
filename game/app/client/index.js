@@ -1,48 +1,97 @@
-var canvas = $('#canvas');
-var ctx = canvas[0].getContext("2d");
-const GAME_WIDTH = this.ctx.canvas.width = 1900;
-const GAME_HEIGHT = this.ctx.canvas.height = 950;
+var ctx_map = document.getElementById("mapCanvas").getContext("2d");
+var ctx_avatar = document.getElementById("avatarCanvas").getContext("2d");
+var ctx_ui = document.getElementById("uiCanvas").getContext("2d");
 
-let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+const GAME_WIDTH = GameConfig.CTX_WIDTH;
+const GAME_HEIGHT = GameConfig.CTX_HEIGHT;
 
-/* The participantID should not be one (as we want to make sure it is congruent with the
- * server).
- * - (E) */
-let clientController = new ClientController(gameView);
-clientController.setPort(5000);
+this.ctx_map.canvas.width = GAME_WIDTH;
+this.ctx_map.canvas.height = GAME_HEIGHT;
+
+this.ctx_avatar.canvas.width = GAME_WIDTH;
+this.ctx_avatar.canvas.height = GAME_HEIGHT;
+
+this.ctx_ui.canvas.width = GAME_WIDTH;
+this.ctx_ui.canvas.height = GAME_HEIGHT;
+
+//let gameView = new GameView(GAME_WIDTH, GAME_HEIGHT);
+
+let clientController = new ClientController();
+clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
-clientController.initGameView();
+//clientController.initGameView();
 
-function gameLoop() {
+setInterval( function() {
   //let deltaTime = timestamp - lastTime;
   //lastTime = timestamp;
 
-  ctx.clearRect(0, 0, 0, 0);
+  ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  gameView.update();
-  gameView.draw();  
-}
-
-window.setInterval(function(){
-
-  requestAnimationFrame(gameLoop);
-  //ctx.clearRect(0, 0, 0, 0);
-
+  clientController.updateGame();
   //gameView.update();
-  //gameView.draw();
+  //gameView.draw();  
+}, GameConfig.TIME_DELTA);
+
+$('#allchat').submit(function(event) {
+    
+    event.preventDefault();
+    let messageVal = $('#allchatMessageInput').val();
+    
+    if(messageVal !== '') {
+      
+      if(messageVal[0] === '/') {
+          clientController.sendToServerEvalInput(messageVal.slice(1));
+        } else
+          clientController.sendToServerAllchatMessage(messageVal);
+      
+      $('#allchatMessageInput').val('');
+      return false;
+    }
+
+});
+
+$('#groupName').submit(function(event) {
+  event.preventDefault();
+  let groupName = $('#groupNameInput').val();
+  if(groupName !== '') {
+      $('#inputGroupNameModal').modal('hide');
+      $('#inviteFriendsModal').modal('toggle');
+      clientController.handleFromViewShowInviteFriends(groupName);
+      $('#groupNameInput').val('');
+  }
+});
+
+/*$('#chatInput').submit(function(event) {
+    
+  event.preventDefault();
+  let messageVal = $('#chatMessageInput').val();
   
-  // As a part of the gameplay loop, the client does emit on each frame
-  // whether he is moving and in which direction (E)
-  // This will probably be removed in my next proper commit.
-  // clientController.sendMovementToServer();
+  if(messageVal !== '') {
+    
+    if(messageVal[0] === '/') {
+        clientController.sendToServerEvalInput(messageVal.slice(1));
+      } else
+        clientController.sendToServerChatMessage(messageVal);
+    
+    $('#chatMessageInput').val('');
+    return false;
+  }
 
-  //bei dem eigenen Avatar sieht man ein ständiges Zeichnen auch wenn man sich nicht bewegt wenn man den 
-  //Timer auf höher als 0 setzt. Daher hab ich den Timer auf 0 gesetzt (K)
+});*/
 
-}, 0); // can we replace this by a global constant in a settings file somewhere (E)?
+document.getElementById("allchat").onkeydown = function(event) {
+    event.stopPropagation();
+};
 
+document.getElementById("groupName").onkeydown = function(event) {
+  event.stopPropagation();
+};
 
-document.onkeydown = function(event) {
+document.getElementById("chatMessageInput").onkeydown = function(event) {
+  event.stopPropagation();
+};
+
+document.body.onkeydown = function(event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
@@ -70,12 +119,13 @@ document.onkeydown = function(event) {
     case "ArrowLeft":
       clientController.handleLeftArrowDown();
       break;
+    default:
+      return;
   }
-  
-  event.preventDefault();
+  //event.preventDefault();
 };
 
-document.onkeyup = function(event) {
+document.body.onkeyup = function(event) {
   if (event.defaultPrevented) {
     return;
   }
@@ -102,5 +152,5 @@ document.onkeyup = function(event) {
       break;
   }
 
-  event.preventDefault();
+  //event.preventDefault();
 }
