@@ -1358,7 +1358,7 @@ module.exports = class ServerController {
             
             // This will need a complete rewrite once the server-side models are properly implemented
             // as of now, this is completely broken
-            socket.on('disconnect', () => {
+            socket.on('disconnect', (reason) => {
                 //Prevents server crash because client sends sometimes disconnect" event on connection to server.
                 if(!this.#ppantControllers.has(socket.id)) {
                     console.log("disconnect");
