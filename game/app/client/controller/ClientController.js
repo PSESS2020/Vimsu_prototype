@@ -225,6 +225,7 @@ class ClientController {
         this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
         this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
+        this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -640,6 +641,11 @@ class ClientController {
     handleFromServerNewChatMessage(chatId, message) {
         this.#gameView.addNewChatMessage(chatId, message);
     };
+
+    handleFromServerGameEntered() {
+        var redirect = $('#nav_leave_button').attr('href');
+        window.location.href = redirect;
+    }
 
     /* #################################################### */    
     /* ################# HANDLE FROM VIEW ################# */

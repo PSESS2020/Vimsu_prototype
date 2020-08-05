@@ -73,7 +73,7 @@ module.exports = class DoorService {
             }
         }
 
-        this.#doors.push(new Door(2, TypeOfDoor.RECEPTION_DOOR, new Position(Settings.FOYER_ID, 25, 24), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 3, 0), Direction.DOWNRIGHT));
+        this.#doors.push(new Door(2, TypeOfDoor.RECEPTION_DOOR, new Position(Settings.FOYER_ID, 25, 24), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
 
         //Door from FoodCourt to Foyer
         let foodCourtFoyerEnterPositions = [];
@@ -91,7 +91,7 @@ module.exports = class DoorService {
                 receptionFoyerEnterPositions.push(new Position(Settings.RECEPTION_ID, i, j));
             }
         }
-        this.#doors.push(new Door(4, TypeOfDoor.FOYER_DOOR, new Position(Settings.RECEPTION_ID, 3, 1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
+        this.#doors.push(new Door(4, TypeOfDoor.FOYER_DOOR, new Position(Settings.RECEPTION_ID, 2, 1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
 
         //LectureDoor
         let lectureDoorEnterPositions = [];
