@@ -12,15 +12,17 @@ class LectureView extends WindowView {
 
         this.#lectureStatus = LectureStatus.PENDING;
 
+        /*sets functions when document is ready, without this it is not possible to assign functions to
+          appended buttons*/
         $(document).ready(() => {
             function sendMessage(event) {
                 event.preventDefault();
 
                 let messageVal = $('#lectureChatInput').val();
                 if(messageVal !== '') {
-                  clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-                  $('#lectureChatInput').val('');
-                  $('#lectureChatInput').focus();
+                    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+                    $('#lectureChatInput').val('');
+                    $('#lectureChatInput').focus();
                 }
             }
         
@@ -30,7 +32,7 @@ class LectureView extends WindowView {
         
             $('#lectureChatInput').keydown((e) => {
                 e.stopPropagation();
-
+                //enables sending messages with enter key
                 if (e.keyCode === 13) {
                     sendMessage(event);
                 }
@@ -47,8 +49,11 @@ class LectureView extends WindowView {
     }
 
     draw(lecture, hasToken, lectureChat) {
+        console.log(JSON.stringify(lecture));
         this.#hasToken = hasToken;
+        console.log(hasToken);
         this.#lectureId = lecture.id;
+        console.log(this.#lectureId);
         // hide the overview of current lectures
         $('#waitforlectureload').hide(); 
         $('#currentLectures').hide(); 
@@ -73,9 +78,10 @@ class LectureView extends WindowView {
         } */
         
         this.drawChat(lectureChat);
+        console.log("lectureChat:" + JSON.stringify.lectureChat);
         
+        //empties chat input to disable lecture chat
         $('#lectureChatInputGroup').empty();
-       
         $('#closeButton').empty();
 
         $('#closeButton').append(`
@@ -85,11 +91,15 @@ class LectureView extends WindowView {
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
 
+        //empties video div to prevent showing the wrong video
         $('#lectureVideo').empty();
-    
 
+        //opens lecture video window
         $('#lectureVideoWindow').show(); 
-        
+
+        $('#lectureVideo').append(`
+        <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+        `)
         var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
         alert(video)
     
@@ -99,10 +109,8 @@ class LectureView extends WindowView {
         
         video.addEventListener('loadeddata', () => {
             video.pause();
-
             
             var lectureStartingTime = new Date(lecture.startingTime).getTime(); // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
-
 
             var lectureDuration = lecture.duration * 1000; //duration of the lecture in milliseconds
 
