@@ -8,12 +8,21 @@ const Lecture = require('../game/app/server/models/Lecture')
 
 var lectureList = [];
 var now = new Date();
+var id = "53f";
+var title = "Math";
+var videoId = "123b";
+var duration = 10.5;
+var remarks = "Math is fun";
+var startingTime = new Date(now.setMinutes(now.getMinutes() + 10));
+var oratorName = "Prof. Max Mustermann";
+var maxParticipants = 1000;
 lectureList.push(new Lecture("53d", "Computer Science", "123c", 13, "Computer science is fun", new Date("Tue Aug 03 2020 10:42:24 GMT+0200"), "Prof. Max Mustermann", 1000))
-lectureList.push(new Lecture("53f", "Math", "123b", 10.5, "Math is fun", new Date(now.setMinutes(now.getMinutes() + 10)), "Prof. Max Mustermann", 1000));
+lectureList.push(new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants));
 lectureList.push(new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", 1000));
 var schedule = new Schedule(lectureList);
 
-describe("Test getter", function() {
+
+describe("Test constructor", function () {
     it("Test schedule constructor", function() {
         var lectureList2 = [1];
         expect(() => new Schedule(lectureList2.push(new Lecture(1, 2, 3, "4", 5, 6, 7, "8")))).to.throw(TypeError, "not a string");
@@ -26,18 +35,21 @@ describe("Test getter", function() {
         expect(() => new Schedule(lectureList2.push(new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8")))).to.throw(TypeError, "not an int");
         expect(() => new Schedule(lectureList2)).to.throw(TypeError, "an instance of");
     })
+})
 
+describe("Test getter", function() {
+    
     it("Test getLecture", function() {
-        var lecture = schedule.getLecture("53f");
+        var lecture = schedule.getLecture(id);
         assert.instanceOf(lecture, Lecture)
-        expect(lecture.getId()).to.be.a('string').and.equal("53f");
-        expect(lecture.getTitle()).to.be.a('string').and.equal("Math");
-        expect(lecture.getVideoId()).to.be.a('string').and.equal("123b");
-        expect(lecture.getDuration()).to.be.a('number').and.equal(10.5);
-        expect(lecture.getRemarks()).to.be.a('string').and.equal("Math is fun");
-        expect(lecture.getStartingTime()).to.equalDate(new Date("Tue Aug 04 2020 10:42:24 GMT+0200"));
-        expect(lecture.getOratorName()).to.be.a('string').and.equal("Prof. Max Mustermann");
-        expect(lecture.getMaxParticipants()).to.be.a('number').and.equal(1000);
+        expect(lecture.getId()).to.be.a('string').and.equal(id);
+        expect(lecture.getTitle()).to.be.a('string').and.equal(title);
+        expect(lecture.getVideoId()).to.be.a('string').and.equal(videoId);
+        expect(lecture.getDuration()).to.be.a('number').and.equal(duration);
+        expect(lecture.getRemarks()).to.be.a('string').and.equal(remarks);
+        expect(lecture.getStartingTime()).to.equalDate(startingTime);
+        expect(lecture.getOratorName()).to.be.a('string').and.equal(oratorName);
+        expect(lecture.getMaxParticipants()).to.be.a('number').and.equal(maxParticipants);
     })
 
     it("Test getAllLectures", function() {
@@ -48,7 +60,7 @@ describe("Test getter", function() {
     it("Test getCurrentLectures", function() {
         var currentLectures = schedule.getCurrentLectures();
         expect(currentLectures).to.be.an('array').and.to.have.lengthOf(2);
-        expect(currentLectures[0].getId()).to.be.equal("53f");
+        expect(currentLectures[0].getId()).to.be.equal(id);
         expect(currentLectures[1].getId()).to.be.equal("53g");
     })
 })
