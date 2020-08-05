@@ -24,6 +24,7 @@ class StatusBar extends Views{
             } else {
                 $('#connectionStatus').empty();
                 $('#connectionStatus').text(`Lost connection to the server. Time left until leave: ${this.#timeLeft}s.`);
+                $('#connectionStatus').show();
                 this.#timeLeft--;
             }
 
