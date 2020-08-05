@@ -209,6 +209,7 @@ margin: 0;
 
 .accountCard {
   margin-top: 20px;
+  border-radius: 5px !important;
 }
 
 .accountData {
