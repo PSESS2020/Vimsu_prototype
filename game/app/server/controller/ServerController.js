@@ -974,6 +974,7 @@ module.exports = class ServerController {
                                     socketPartner.join(loadedChat.getId());
 
                                     this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
+                                    this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewChat');
     
                                 });
                             }
