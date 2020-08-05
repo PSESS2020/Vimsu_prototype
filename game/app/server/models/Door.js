@@ -1,10 +1,13 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
 var Position = require('./Position.js');
 const Direction = require('../../utils/Direction.js');
+const TypeOfDoor = require('../../utils/TypeOfDoor.js');
 
 module.exports = class Door {
 
     #id;
+    #typeOfDoor;
+    #mapPosition;
     #enterPositions;
     #targetPosition;
     #direction;
@@ -13,31 +16,53 @@ module.exports = class Door {
      * @author Philipp
      * 
      * @param {int} id 
+     * @param {TypeOfDoor} typeOfDoor
+     * @param {Position} mapPosition
      * @param {Array of Position} enterPositions
      * @param {Position} targetPosition 
      * @param {Direction} direction
      */
-    constructor(id, enterPositions, targetPosition, direction) {
+    constructor(id, typeOfDoor, mapPosition, enterPositions, targetPosition, direction) {
         TypeChecker.isInt(id);
+        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
+        TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isInstanceOf(enterPositions, Array);
         enterPositions.forEach(enterPosition => {
             TypeChecker.isInstanceOf(enterPosition, Position);
         });
-        TypeChecker.isInstanceOf(targetPosition, Position);
-        TypeChecker.isEnumOf(direction, Direction);
+
+        //these 2 arguments are only defined when door is not a lecture door
+        if (typeOfDoor !== TypeOfDoor.LECTURE_DOOR) {
+            TypeChecker.isInstanceOf(targetPosition, Position);
+            TypeChecker.isEnumOf(direction, Direction);
+        }
 
         this.#id = id;
+        this.#typeOfDoor = typeOfDoor;
+        this.#mapPosition = mapPosition;
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
     }
 
+    getId() {
+        return this.#id;
+    }
+    
     getStartingRoomId() {
-        return this.#enterPositions[0].getRoomId();
+        return this.#mapPosition.getRoomId();
     }
 
     getTargetRoomId() {
         return this.#targetPosition.getRoomId();
+    }
+
+    getTypeOfDoor() {
+        return this.#typeOfDoor;
+    }
+
+    getMapPosition() {
+        return this.#mapPosition;
     }
 
     getEnterPositions() {

@@ -11,6 +11,8 @@ const Settings = require('../../utils/Settings.js');
 const Door = require('./Door.js');
 const NPCService = require('../services/NPCService.js');
 const NPC = require('./NPC.js');
+const TypeOfDoor = require('../../utils/TypeOfDoor.js');
+const DoorService = require('../services/DoorService.js');
 
 module.exports = class Room {
 
@@ -69,11 +71,15 @@ module.exports = class Room {
         
         //Alle GameObjekte die in diesen Raum gehören von Service holen
         let objService = new GameObjectService();
-        this.#listOfGameObjects = objService.getObjects(this.#roomId, this.#typeOfRoom);
+        this.#listOfGameObjects = objService.getObjects(this.#roomId);
 
         //Alle NPCs die in diesen Raum gehören vom Service holen
         let npcService = new NPCService();
-        this.#listOfNPCs = npcService.getNPCs(this.#roomId, this.#typeOfRoom);
+        this.#listOfNPCs = npcService.getNPCs(this.#roomId);
+
+        //Alle Türen die in diesen Raum gehören vom Service holen
+        let doorService = new DoorService();
+        this.#listOfDoors = doorService.getDoors(this.#roomId);
 
         this.#buildOccMap();
     }
@@ -114,6 +120,10 @@ module.exports = class Room {
 
     getListOfNPCs() {
         return this.#listOfNPCs;
+    }
+
+    getListOfDoors() {
+        return this.#listOfDoors;
     }
 
     /**
@@ -239,6 +249,37 @@ module.exports = class Room {
             let cordX = npcPosition.getCordX();
             let cordY = npcPosition.getCordY();
             this.#occupationMap[cordX][cordY] = 1;
+        }
+    }
+
+    /**
+     * Gets Door to room with roomId if it exists
+     * 
+     * @author Philipp
+     * 
+     * @param {int} targetId 
+     */
+    getDoorTo(targetId) {
+        TypeChecker.isInt(targetId);
+        for (var i = 0; i < this.#listOfDoors.length; i++) {
+            if (this.#listOfDoors[i].getTargetRoomId() === targetId) {
+                return this.#listOfDoors[i];
+            }
+        }
+    }
+
+    /**
+     * Return Lecture Door if it exists in this room
+     */
+    getLectureDoor() {
+        if (this.#typeOfRoom !== TypeOfRoom.FOYER) {
+            throw new Error('Lecture Door is only in FOYER!');
+        }
+
+        for (var i = 0; i < this.#listOfDoors.length; i++) {
+            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
+                return this.#listOfDoors[i];
+            }
         }
     }
 }
