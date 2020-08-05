@@ -2,8 +2,8 @@
 
 // Needs a button to return to chat overview
 // Needs a button to send friend request
-// Needs an input field
-// We can probably make this look like the lecture chat
+// Needs to know the id of the other participant for reusing the friend request method
+// Also the friendRequest-button should only be drawn if the members aren't already friends
 
 class ChatThreadView extends WindowView {
     
@@ -102,7 +102,6 @@ class ChatThreadView extends WindowView {
         if(this.#chat.chatId != chatId) {
             return;
         }
-
         this.#messages.push(message);
         this.#appendMessage(message);
     };

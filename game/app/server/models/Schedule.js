@@ -43,7 +43,7 @@ module.exports = class Schedule {
             var stopToShow = (startingTime + lecture.getDuration()*1000);
             var withinMargin = startToShow <= now && now <= stopToShow;
 
-            if (withinMargin) {
+            if (withinMargin && !lecture.isHidden()) {
                 currentLectures.push(lecture);
             }
         }

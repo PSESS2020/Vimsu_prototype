@@ -534,6 +534,7 @@ class GameView {
     }
     
     addNewChatMessage(chatId, message) {
+
         if (this.#chatListView) {
             this.#chatListView.addNewMessage(chatId, message); // TODO
         }
@@ -541,6 +542,7 @@ class GameView {
         if (this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
+
     };
 
     updateSuccessesBar(points, rank) {
@@ -610,4 +612,22 @@ class GameView {
             }
         }
     }
+    
+    updateLectureChat(messages) {
+        if(this.#lectureView) {
+            this.#lectureView.drawChat(messages);
+        }
+    };
+    
+    updateLectureToken(hasToken) {
+        if(this.#lectureView) {
+            this.#lectureView.updateToken(hasToken);
+        }
+    };
+    
+    closeLectureView() {
+        if(this.#lectureView) {
+            this.#lectureView.close();
+        }
+    };
 }
