@@ -1,4 +1,4 @@
-const LectureChat = require('../game/app/server/models/LectureChat.js');
+const LectureChat = require('../../../game/app/server/models/LectureChat.js');
 const chai = require('chai');
 const { expect } = require('chai');
 const assert = chai.assert;

@@ -1,6 +1,6 @@
-const Task = require('../game/app/server/models/Task');
+const Task = require('../../../game/app/server/models/Task');
 const expect = require('chai').expect;
-const TypeOfTask = require('../game/app/utils/TypeOfTask')
+const TypeOfTask = require('../../../game/app/utils/TypeOfTask')
 
 var task = new Task(1, TypeOfTask.BASICTUTORIALCLICK, 10);
 

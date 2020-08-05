@@ -1,4 +1,4 @@
-const BusinessCard = require('../game/app/server/models/BusinessCard');
+const BusinessCard = require('../../../game/app/server/models/BusinessCard');
 const expect = require('chai').expect;
 
 var businessCard = new BusinessCard("53f", "maxmust", "Prof.", "Mustermann", "Max", "Professor", "KIT", "maxmustermann@kit.edu");
