@@ -20,10 +20,6 @@ module.exports = class GroupChat extends Chat {
         this.#maxParticipants = maxParticipants;
     }
 
-    inviteFriend(participantId) {
-        //TODO
-    }
-
     getChatName() {
         return this.#chatName;
     }
@@ -32,7 +28,7 @@ module.exports = class GroupChat extends Chat {
         return this.#ownerId;
     }
 
-    setName(chatName) {
+    setChatName(chatName) {
         TypeChecker.isString(chatName);
         this.#chatName = chatName;
     }
@@ -41,10 +37,12 @@ module.exports = class GroupChat extends Chat {
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(super.getMessageList().length >= super.getMaxNumMessages())
-            super.getMessageList().splice(0, super.getMaxNumMessages());
-
-            super.getMessageList().push(msg);
+        let msgList = super.getMessageList();
+        if(msgList.length >= super.getMaxNumMessages())
+            msgList.splice(0, super.getMaxNumMessages());
+            
+            if (!msgList.includes(msg))
+                msgList.push(msg);
     }
 
     //Addds a participant to the participant list
