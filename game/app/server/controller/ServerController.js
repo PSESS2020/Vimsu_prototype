@@ -54,7 +54,7 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     #muteList;
-    ppantControllers;
+    #ppantControllers;
     
 
     //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
