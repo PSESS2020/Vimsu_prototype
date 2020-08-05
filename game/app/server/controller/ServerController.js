@@ -1422,8 +1422,8 @@ module.exports = class ServerController {
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (creatorID, chatPartnerID) => {
                 
-                let creator = this.ppants.get(creatorID);
-                let chatPartner = this.ppants.get(chatPartnerID);
+                let creator = this.#ppants.get(creatorID);
+                let chatPartner = this.#ppants.get(chatPartnerID);
                 //creates new chat and writes it in DB
                 // last argument is a placeholder
                 ChatService.newOneToOneChat(creatorID, chatPartnerID, creator.getBusinessCard().getUsername(),
