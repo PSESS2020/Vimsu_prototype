@@ -16,10 +16,10 @@ class NPCStoryView extends WindowView {
         for (var i = 0; i < story.length; i++) {
             $('#npcStoryModal .modal-body').append(`
                 <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + i.toString()}'>${story[i]}</h5>
-                <button style="float:left; display: none" class="btn" id='${"backwardStory" + i.toString()}'>
+                <button style="float:left; display: none; outline: none" class="btn" id='${"backwardStory" + i.toString()}'>
                     <i class="fa fa-arrow-left fa-3x navbarIcons"></i>
                 </button>
-                <button style="float:right; display: none" class="btn" id='${"forwardStory" + i.toString()}'>
+                <button style="float:right; display: none; outline: none" class="btn" id='${"forwardStory" + i.toString()}'>
                     <i class="fa fa-arrow-right fa-3x navbarIcons"></i>
                 </button>
 

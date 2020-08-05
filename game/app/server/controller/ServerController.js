@@ -177,6 +177,11 @@ module.exports = class ServerController {
                 //create Participant
                 //ParticipantService either creates a new one or gets old data from DB
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {
+                    if(this.#ppants.has(ppant.getId())) {
+                        console.log("ppant already joined the game");
+                        this.#io.to(socket.id).emit('gameEntered');
+                        return;
+                    }
                     
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
