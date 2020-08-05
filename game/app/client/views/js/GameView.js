@@ -27,6 +27,7 @@ class GameView {
     #newAchievementView;
     #npcAvatarViews = [];
     #npcStoryView;
+    #notificationBar;
    
     constructor(gameWidth, gameHeight) 
     {

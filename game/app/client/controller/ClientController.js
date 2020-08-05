@@ -226,6 +226,8 @@ class ClientController {
         this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
+        this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
+        this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
         });
@@ -528,12 +530,14 @@ class ClientController {
         var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriendRequest(friendRequest);
         this.#gameView.updateChatThread(chatId, false, true);
+        $('#notifFriendRequest').show();
     }
 
     handleFromServerAcceptedFriendRequest(data, chatId) {
         var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriend(friend);
         this.#gameView.updateChatThread(chatId, true, false);
+        $('#notifFriend').show();
     }
 
     handleFromServerRejectedFriendRequest(chatId) {
@@ -632,10 +636,16 @@ class ClientController {
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
     handleFromServerNewChat(chat, openNow) {
-        
         this.#gameView.addNewChat(chat, openNow);
     };
+
+    handleFromServerGotNewChat() {
+        $('#notifChat').show();
+    }
     
+    handleFromServerGotNewChatMessage() {
+        $('#notifMessage').show();
+    }
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
     handleFromServerNewChatMessage(chatId, message) {

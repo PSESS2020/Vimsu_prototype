@@ -6,7 +6,7 @@
 body {
   width: 100%;
   height: 100%;
-  background-color: rgb(27, 27, 27);
+  background-color: rgb(15, 15, 15);
   -webkit-user-select: none;
   -moz-user-select: -moz-none;
   -ms-user-select: none;
@@ -35,7 +35,7 @@ textarea {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background-color: rgb(27,27,27);
+  background-color: rgb(15,15,15);
   z-index: 3;
   transition: 1s 0.4s;
 }
@@ -109,7 +109,7 @@ width: 250px;
 form button {
   outline: none !important;
   box-shadow: none !important;
-  background: rgb(27, 27, 27);
+  background: rgb(15, 15, 15);
   border: none;
   color: antiquewhite;
   padding: 2px;
@@ -119,7 +119,7 @@ form button:hover {
   opacity: 0.8;
 }
 
-#allchatMessages {
+.messageBar {
 font-size: 15px;
 background:none;
 overflow-y: scroll;
@@ -132,7 +132,7 @@ max-width: 250px;
 
 #allchatMessageInput {
   outline: none;
-  background-color: rgb(27, 27, 27); 
+  background-color: rgb(15, 15, 15); 
   color: antiquewhite
 }
 
@@ -144,6 +144,19 @@ border: 1px solid antiquewhite;
 padding: 5px 10px;
 overflow-wrap: break-word;
 
+}
+
+.notifBarDiv {
+  background: rgb(221, 221, 221, 0.2);
+  color: antiquewhite;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+  overflow-wrap: break-word;
+}
+
+#notifBar::-webkit-scrollbar {
+  display:none;
 }
 
 #allchatMessages::-webkit-scrollbar {
@@ -209,6 +222,15 @@ vertical-align: middle;
 
 .close {
   outline: none !important;
+  box-shadow: none !important;
+}
+
+.closeBtn {
+  background-color: transparent !important; 
+  border-color: transparent !important; 
+  color: antiquewhite; 
+  outline: none !important;
+  -webkit-appearance:none !important;
   box-shadow: none !important;
 }
 
