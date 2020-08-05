@@ -85,6 +85,12 @@ class LectureView extends WindowView {
         <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
+        $('#lectureChatMessages').append(`
+            <div id="pendingLectureChatMessage">
+            <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+            </div>
+        `);
+
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
 
@@ -229,14 +235,6 @@ class LectureView extends WindowView {
     }
 
     drawChat(lectureChat) {
-        if (this.#lectureStatus === LectureStatus.PENDING || this.#lectureStatus === LectureStatus.RUNNING) {
-            $('#lectureChatMessages').append(`
-            <div id="pendingLectureChatMessage">
-            <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
-            </div>
-            `);
-        } 
-        else {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
@@ -249,7 +247,7 @@ class LectureView extends WindowView {
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
             }
-            }
+
         }
     }
     
