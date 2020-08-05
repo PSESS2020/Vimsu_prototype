@@ -91,6 +91,7 @@ class LectureView extends WindowView {
         $('#lectureVideoWindow').show(); 
         
         var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+        alert(video)
     
         // set default controls
         video.disablePictureInPicture = true;
@@ -206,17 +207,22 @@ class LectureView extends WindowView {
 
     close() {
         var video = $(`#lectureVideo${this.#lectureId}`)[0];
+        if (video !== undefined) {
         video.removeAttribute('src'); // empty source
         video.load();
         clearInterval(this.#timerIntervalId);
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
+
         var eventManager = new EventManager();
         if(this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
             eventManager.handleLectureLeft(this.#lectureId, false);
         } else {
             eventManager.handleLectureLeft(this.#lectureId, true);
         }
+    } else {
+        $('#lectureVideoWindow').hide();
+    }
     }
 
     drawChat(lectureChat) {
@@ -285,7 +291,6 @@ class LectureView extends WindowView {
 
 }
 
-<<<<<<< HEAD
 
 /*const LectureStatus = Object.freeze
 ({
@@ -294,8 +299,6 @@ class LectureView extends WindowView {
     OVER: "OVER"
 });*/
 
-=======
->>>>>>> 1d540e16a013b3e52ad99726605c00f1eae3c163
 const NoTokenMessage = Object.freeze({
     LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
     REVOKED: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
