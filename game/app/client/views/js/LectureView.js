@@ -74,33 +74,8 @@ class LectureView extends WindowView {
         
         this.drawChat(lectureChat);
         
-        //the input field is added if the user has a valid token
-        if(this.#hasToken) {
-            if ($('#lectureChatInputGroup').is(':empty')) {   
-            $('#lectureChatInputGroup').append(`
-            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
-            <div class="input-group-append">
-                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
-            </div>
-            `)
-            }
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-question-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You obtained a question token!')
-
-        // the input field is emptied if the user does not have a valid token
-        } else {
-            $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-times-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
-        }
+        $('#lectureChatInputGroup').empty();
+       
         $('#closeButton').empty();
 
         $('#closeButton').append(`
@@ -111,14 +86,7 @@ class LectureView extends WindowView {
         $('#lectureSpeakerLabel').text(lecture.oratorName);
 
         $('#lectureVideo').empty();
-        $('#lectureVideo').append(`
-            <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
-                <div id="countdown"></div>
-                <div>seconds left till the</div>
-                <div>presentation starts</div>
-            </div>
-            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
-        `)
+    
 
         $('#lectureVideoWindow').show(); 
         
@@ -141,7 +109,14 @@ class LectureView extends WindowView {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
-                    $('#lecturePending').show();
+                    $('#lectureVideo').append(`
+                    <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                        <div id="countdown"></div>
+                        <div>seconds left till the</div>
+                        <div>presentation starts</div>
+                    </div>
+                    <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+                `)
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -159,9 +134,36 @@ class LectureView extends WindowView {
                     video.play();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
                     $('#lecturePending').hide();
+                    $('#pendingLectureChatMessage').empty();
                     this.#lectureStatus = LectureStatus.OVER;
                     video.controlsList.remove('nodownload');
                     video.pause();
+                    if(this.#hasToken) {
+                        if ($('#lectureChatInputGroup').is(':empty')) {   
+                        $('#lectureChatInputGroup').append(`
+                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                        <div class="input-group-append">
+                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                        </div>
+                        `)
+                        }
+                        $('#tokenIcon').empty();
+                        $('#tokenIcon').append(`
+                        <i class="fa fa-question-circle fa-4x"></i>
+                        `)
+                        $('#tokenLabel').empty();
+                        $('#tokenLabel').append('You obtained a question token!')
+            
+                    // the input field is emptied if the user does not have a valid token
+                    } else {
+                        $('#lectureChatInputGroup').empty();
+                        $('#tokenIcon').empty();
+                        $('#tokenIcon').append(`
+                        <i class="fa fa-times-circle fa-4x"></i>
+                        `)
+                        $('#tokenLabel').empty();
+                        $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
+                    }
                 }
             }, 1000); // check lecture status every 1s
 
@@ -218,6 +220,15 @@ class LectureView extends WindowView {
     }
 
     drawChat(lectureChat) {
+        if (this.#lectureStatus === LectureStatus.PENDING || this.#lectureStatus === LectureStatus.RUNNING) {
+            alert('pending');
+            $('#lectureChatMessages').append(`
+            <div id="pendingLectureChatMessage">
+            <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+            </div>
+            `);
+        } 
+        else {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
@@ -229,6 +240,7 @@ class LectureView extends WindowView {
                 $newMessageBody.text(message.messageText);
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
+            }
             }
         }
     }
@@ -274,12 +286,12 @@ class LectureView extends WindowView {
 }
 
 
-const LectureStatus = Object.freeze
+/*const LectureStatus = Object.freeze
 ({
     PENDING: "PENDING",
     RUNNING: "RUNNING",
     OVER: "OVER"
-});
+});*/
 
 const NoTokenMessage = Object.freeze({
     LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
