@@ -558,7 +558,7 @@ module.exports = class ServerController {
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
-                var participant = ppants.get(ppantID);
+                var participant = this.#ppants.get(ppantID);
                 
                 /* We want to check if the ppant "owns" the lecture here.
                  * As the orator-class seems not be actually used yet, we just use
@@ -581,7 +581,8 @@ module.exports = class ServerController {
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
                 } else {
                 
-                    participant.increaseAchievementCount('messagesSent')
+                    
+                    //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
