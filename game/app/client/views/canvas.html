@@ -49,7 +49,7 @@
                 </form>
                 <div id="allchatMessages"></div>
             </div>
-            <div class="d-flex flex-column ml-5" style="text-align: center">
+            <div class="d-flex flex-column ml-3" style="text-align: center">
                 <div id="time" style="color: antiquewhite"></div>
                 <div id="location" style="color: antiquewhite"></div>
                 <div id="connectionStatus" style="color: firebrick"></div>
@@ -254,12 +254,14 @@
                        'client/utils/DirectionClient', 
                        'client/config/GameConfig', 
                        'client/utils/TypeOfRoomClient', 
+                       'client/utils/TypeOfDoorClient', 
                        'client/utils/GameObjectTypeClient', 
                        'client/models/BusinessCardClient', 
                        'client/models/ParticipantClient', 
                        'client/models/PositionClient', 
                        'client/models/NPCClient', 
                        'client/models/GameObjectClient', 
+                       'client/models/DoorClient', 
                        'client/models/RoomClient'], () => {
 
                 requirejs(['client/views/js/Views', 
