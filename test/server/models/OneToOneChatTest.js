@@ -12,48 +12,48 @@ const MessageTestData = require('./TestData/MessageTestData.js');
 
 
 //Test Data Messages
-oldMessage = new Message(MessageTestData.messageId,
+var oldMessage = new Message(MessageTestData.messageId,
                          MessageTestData.senderId,
                          MessageTestData.senerUsername,
                          new Date(),
                          MessageTestData.messageTest
                          );
-newMessage1 = new Message(MessageTestData.alt_messageId,
+var newMessage1 = new Message(MessageTestData.alt_messageId,
                           MessageTestData.alt_senderId,
                           MessageTestData.alt_senderUsername,
                           new Date(),
                           MessageTestData.alt_messageText
                           );
-newMessage2 = new Message(MessageTestData.messageId,
+var newMessage2 = new Message(MessageTestData.messageId,
                           MessageTestData.senderId,
                           MessageTestData.senerUsername,
                           new Date(),
                           MessageTestData.alt_messageText
                           );
 //Test Data Participants
-newParticipant1 = OneToOneChatTestData.alt_chatPartnerID;
+var newParticipant1 = OneToOneChatTestData.alt_chatPartnerID;
 
 //Test Data OneToOneChat
-chatId = OneToOneChatTestData.chatId;
-creatorID = OneToOneChatTestData.creatorID;
-chatPartnerID = OneToOneChatTestData.chatPartnerID;
-maxNumMessages = OneToOneChatTestData.maxNumMessages;
-creatorUsername = OneToOneChatTestData.creatorUsername;
-chatPartnerUsername = OneToOneChatTestData.chatPartnerUsername;
+var chatId = OneToOneChatTestData.chatId;
+var creatorID = OneToOneChatTestData.creatorID;
+var chatPartnerID = OneToOneChatTestData.chatPartnerID;
+var maxNumMessages = OneToOneChatTestData.maxNumMessages;
+var creatorUsername = OneToOneChatTestData.creatorUsername;
+var chatPartnerUsername = OneToOneChatTestData.chatPartnerUsername;
 
-messageList = [ oldMessage ];
-participantList = [creatorID, chatPartnerID];
+var messageList = [ oldMessage ];
+var participantList = [creatorID, chatPartnerID];
 
-oneToOneChat = new OneToOneChat(chatId, creatorID, chatPartnerID, [ oldMessage ], maxNumMessages, creatorUsername, chatPartnerUsername);
+var oneToOneChat = new OneToOneChat(chatId, creatorID, chatPartnerID, [ oldMessage ], maxNumMessages, creatorUsername, chatPartnerUsername);
 
 //Results
-creatorUsername_result = oneToOneChat.getOtherUsername(chatPartnerUsername);
-chatPartnerUsername_result = oneToOneChat.getOtherUsername(creatorUsername);
-creatorID_result = oneToOneChat.getOtherUserId(chatPartnerID);
-chatPartnerID_result = oneToOneChat.getOtherUserId(creatorID);
+var creatorUsername_result = oneToOneChat.getOtherUsername(chatPartnerUsername);
+var chatPartnerUsername_result = oneToOneChat.getOtherUsername(creatorUsername);
+var creatorID_result = oneToOneChat.getOtherUserId(chatPartnerID);
+var chatPartnerID_result = oneToOneChat.getOtherUserId(creatorID);
 
-messageList_result = oneToOneChat.getMessageList();
-participantList_result = oneToOneChat.getParticipantList();
+var messageList_result = oneToOneChat.getMessageList();
+var participantList_result = oneToOneChat.getParticipantList();
 
 describe('OneToOneChat Testing', function() {
 

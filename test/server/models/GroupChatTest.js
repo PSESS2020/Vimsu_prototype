@@ -12,50 +12,50 @@ const MessageTestData = require('./TestData/MessageTestData.js');
 
 
 //Test Data Messages
-oldMessage = new Message(MessageTestData.messageId,
+var oldMessage = new Message(MessageTestData.messageId,
                          MessageTestData.senderId,
                          MessageTestData.senerUsername,
                          new Date(),
                          MessageTestData.messageTest
                          );
-newMessage1 = new Message(MessageTestData.alt_messageId,
+var newMessage1 = new Message(MessageTestData.alt_messageId,
                           MessageTestData.alt_senderId,
                           MessageTestData.alt_senderUsername,
                           new Date(),
                           MessageTestData.alt_messageText
                           );
-newMessage2 = new Message(MessageTestData.messageId,
+var newMessage2 = new Message(MessageTestData.messageId,
                           MessageTestData.senderId,
                             MessageTestData.senerUsername,
                             new Date(),
                             MessageTestData.alt_messageText
                             );
 //Test Data Participants
-newParticipant1 = GroupChatTestData.chatPartnerID;
+var newParticipant1 = GroupChatTestData.chatPartnerID;
 
 //Test Data Chatnames
-newChatname1 = GroupChatTestData.alt_chatName;
+var newChatname1 = GroupChatTestData.alt_chatName;
 
 //Test Data GroupChat
-chatId = GroupChatTestData.chatId;
-ownerId = GroupChatTestData.ownerId;
-chatName = GroupChatTestData.chatName;
-maxParticipants = GroupChatTestData.maxParticipants;
-maxNumMessages = GroupChatTestData.maxNumMessages;
+var chatId = GroupChatTestData.chatId;
+var ownerId = GroupChatTestData.ownerId;
+var chatName = GroupChatTestData.chatName;
+var maxParticipants = GroupChatTestData.maxParticipants;
+var maxNumMessages = GroupChatTestData.maxNumMessages;
 
 //Not set in the constructor of group chat because on update this lists get also udated.
 //Seems like the reference still exists when passing to group chat instance.
-messageList = [ oldMessage ];
-participantList = [ ownerId ];
+var messageList = [ oldMessage ];
+var participantList = [ ownerId ];
 
-groupChat = new GroupChat(chatId, ownerId, chatName, [ ownerId ], [ oldMessage ], maxParticipants, maxNumMessages);
+var groupChat = new GroupChat(chatId, ownerId, chatName, [ ownerId ], [ oldMessage ], maxParticipants, maxNumMessages);
 
 //Results
-chatName_result = groupChat.getChatName();
-ownerId_result = groupChat.getOwnerId();
+var chatName_result = groupChat.getChatName();
+var ownerId_result = groupChat.getOwnerId();
 
-messageList_result = groupChat.getMessageList();
-participantList_result = groupChat.getParticipantList();
+var messageList_result = groupChat.getMessageList();
+var participantList_result = groupChat.getParticipantList();
 
 
 describe('GroupChat Testing', function() {
