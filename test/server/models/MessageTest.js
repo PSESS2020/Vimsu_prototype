@@ -18,6 +18,9 @@ timestamp_result = message.getTimestamp();
 messageText_result = message.getMessageText();
 
 describe('Message Testing', function() {
+    it('Test instance', function() {
+        assert.instanceOf(message, Message);
+    })
     describe('Message getter functions', function() {
         it('Test getMessageId()', function() {
             assert.equal(messageId_result, messageId);

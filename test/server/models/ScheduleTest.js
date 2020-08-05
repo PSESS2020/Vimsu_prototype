@@ -4,18 +4,19 @@ chai.use(require('chai-datetime'));
 const expect = chai.expect;
 const assert = chai.assert;
 const Settings = require('../../../game/app/utils/Settings');
-const Lecture = require('../../../game/app/server/models/Lecture')
+const Lecture = require('../../../game/app/server/models/Lecture');
+const LectureTestData = require('./TestData/LectureTestData');
 
 var lectureList = [];
 var now = new Date();
-var id = "53f";
-var title = "Math";
-var videoId = "123b";
-var duration = 10.5;
-var remarks = "Math is fun";
+var id = LectureTestData.id;
+var title = LectureTestData.title;
+var videoId = LectureTestData.videoId;
+var duration = LectureTestData.duration;
+var remarks = LectureTestData.remarks;
 var startingTime = new Date(now.setMinutes(now.getMinutes() + 10));
-var oratorName = "Prof. Max Mustermann";
-var maxParticipants = 1000;
+var oratorName = LectureTestData.oratorName;
+var maxParticipants = LectureTestData.maxParticipants;
 lectureList.push(new Lecture("53d", "Computer Science", "123c", 13, "Computer science is fun", new Date("Tue Aug 03 2020 10:42:24 GMT+0200"), "Prof. Max Mustermann", 1000))
 lectureList.push(new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants));
 lectureList.push(new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", 1000));
