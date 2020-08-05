@@ -11,6 +11,7 @@ const Chat = require('../../../game/app/server/models/Chat.js');
 const Message = require('../../../game/app/server/models/Message.js');
 const OneToOneChat = require('../../../game/app/server/models/OneToOneChat.js');
 const Task = require('../../../game/app/server/models/Task.js');
+const MessageTestData = require('./TestData/MessageTestData.js');
 const assert = chai.assert;
 
 //create example participant
@@ -27,7 +28,7 @@ var achievements = [new Achievement(1, 'Test', 'Icon', 'Description', 1, 'color'
 var taskService = new TaskService();
 var tasks = taskService.getAllTasks();
 var awardPoints = 10;
-var chat = new Chat('1', [id, '2'], [new Message('5', id, 'username', new Date(), 'hello')], 10);
+var chat = new Chat('1', [id, '2'], [new Message(MessageTestData.messageId, id, MessageTestData.senderUsername, new Date(), MessageTestData.messageText)], 10);
 var chatList = [chat];
 var ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList);
 

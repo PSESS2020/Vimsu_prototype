@@ -21,6 +21,7 @@ maxParticipants = LectureTestData.maxParticipants;
 
 //Conference Test Data
 var lectureList = [];
+lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants);
 lectureList.push( new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants) );
 
 schedule = new Schedule( lectureList );
@@ -47,14 +48,11 @@ describe('Conference Testing', function() {
             assert.instanceOf(schedule_result, Schedule);
 
             expect(lectures_result).to.be.an('array').and.to.have.lengthOf(1);
-            expect(lectures_result[0].getId()).to.be.a('string').and.equal(id);
-            expect(lectures_result[0].getTitle()).to.be.a('string').and.equal(title);
-            expect(lectures_result[0].getVideoId()).to.be.a('string').and.equal(videoId);
-            expect(lectures_result[0].getDuration()).to.be.a('number').and.equal(duration);
-            expect(lectures_result[0].getRemarks()).to.be.a('string').and.equal(remarks);
-            expect(lectures_result[0].getStartingTime()).to.equalDate(startingTime);
-            expect(lectures_result[0].getOratorName()).to.be.a('string').and.equal(oratorName);
-            expect(lectures_result[0].getMaxParticipants()).to.be.a('number').and.equal(maxParticipants);
+
+            //equal not working because of the stric equality of javascript.
+            //eql uses the deep-algorithm to compare sameness to all depths.
+            expect(schedule_result).to.be.eql(schedule);
+            expect(lectures_result[0]).to.be.eql(lecture);
         })
     })
 })

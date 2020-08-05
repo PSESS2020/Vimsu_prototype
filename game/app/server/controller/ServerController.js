@@ -853,17 +853,6 @@ module.exports = class ServerController {
                         //add chat to creator
                         creator.addChat(chat);
                     
-                        /*let onetooneChat = new OneToOneChat(chat[0].getId(),
-                            chat[0].getParticipantList()[0],
-                            chat[0].getParticipantList()[1],
-                            chat[0].getMessageList(),
-                            Settings.MAXNUMMESSAGES_ONETOONECHAT,
-                            chat[0].getCreatorUsername(),
-                            chat[0].getChatPartnerUsername())*/
-
-                             //check if chatPartner is online
-                     
-                    
                         //Creator joins chat channel
                         socket.join(chat.getId());
 

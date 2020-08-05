@@ -1,12 +1,14 @@
 const assert = require('chai').assert;
 const Message = require('../../../game/app/server/models/Message.js');
+const MessageTestData = require('./TestData/MessageTestData.js');
+
 
 //Test Data
-messageId = "1";
-senderId = "2";
-senderUsername  = "Hans";
+messageId = MessageTestData.messageId;
+senderId = MessageTestData.senderId;
+senderUsername  = MessageTestData.senderUsername;
 timestamp = new Date();
-messageText = 'Hi, my name is Hans and I\'m living here.';
+messageText = MessageTestData.messageText;
 
 message = new Message(messageId, senderId, senderUsername, timestamp, messageText);
 
@@ -24,7 +26,8 @@ describe('Message Testing', function() {
     describe('Message getter functions', function() {
         it('Test getMessageId()', function() {
             assert.equal(messageId_result, messageId);
-            assert.typeOf(messageId_result,'string')
+            assert.typeOf(messageId_result, 'string');
+            //assert.typeOf(messageId_result,'string');
         })
         it('Test getSenderId()', function() {
             assert.equal(senderId_result, senderId);

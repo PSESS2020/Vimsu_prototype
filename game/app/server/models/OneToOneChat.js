@@ -21,10 +21,12 @@ module.exports = class OneToOneChat extends Chat{
     //If message list is full then the half of the message list gets deleted.
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
-        if(super.getMessageList().length >= super.getMaxNumMessages())
-            super.getMessageList().splice(0, super.getMaxNumMessages());
+        let msgList = super.getMessageList();
+        if (msgList.length >= super.getMaxNumMessages())
+            msgList.splice(0, super.getMaxNumMessages());
 
-        super.getMessageList().push(msg);
+        if (!msgList.includes(msg))
+            msgList.push(msg);
     }
 
     //method to get the other username in this 1:1 chat (P)
@@ -57,14 +59,6 @@ module.exports = class OneToOneChat extends Chat{
         TypeChecker.isString(participantId);
 
         super.removeParticipant(participantId);
-    }
-
-    getCreatorUsername() {
-        return this.#creatorUsername;
-    }
-
-    getChatPartnerUsername() {
-        return this.#chatPartnerUsername;
     }
 
     /*
