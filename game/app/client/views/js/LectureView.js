@@ -49,11 +49,8 @@ class LectureView extends WindowView {
     }
 
     draw(lecture, hasToken, lectureChat) {
-        console.log(JSON.stringify(lecture));
         this.#hasToken = hasToken;
-        console.log(hasToken);
         this.#lectureId = lecture.id;
-        console.log(this.#lectureId);
         // hide the overview of current lectures
         $('#waitforlectureload').hide(); 
         $('#currentLectures').hide(); 
@@ -78,10 +75,10 @@ class LectureView extends WindowView {
         } */
         
         this.drawChat(lectureChat);
-        console.log("lectureChat:" + JSON.stringify.lectureChat);
         
         //empties chat input to disable lecture chat
         $('#lectureChatInputGroup').empty();
+        $('#pendingLectureChatMessage').empty();
         $('#closeButton').empty();
 
         $('#closeButton').append(`
@@ -101,7 +98,6 @@ class LectureView extends WindowView {
         <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
         var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
-        alert(video)
     
         // set default controls
         video.disablePictureInPicture = true;
@@ -118,14 +114,13 @@ class LectureView extends WindowView {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
-                    $('#lectureVideo').append(`
+                   /* $('#lectureVideo').append(`
                     <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
                         <div id="countdown"></div>
                         <div>seconds left till the</div>
                         <div>presentation starts</div>
                     </div>
-                    <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
-                `)
+                `)*/
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -235,7 +230,6 @@ class LectureView extends WindowView {
 
     drawChat(lectureChat) {
         if (this.#lectureStatus === LectureStatus.PENDING || this.#lectureStatus === LectureStatus.RUNNING) {
-            alert('pending');
             $('#lectureChatMessages').append(`
             <div id="pendingLectureChatMessage">
             <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
