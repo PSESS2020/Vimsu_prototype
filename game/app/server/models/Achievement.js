@@ -40,6 +40,10 @@ module.exports = class Achievement {
         return this.awardPoints;
     }
 
+    getColor() {
+        return this.color;
+    }
+
     setCurrentLevel(currentLevel) {
         this.currentLevel = currentLevel;
     }
