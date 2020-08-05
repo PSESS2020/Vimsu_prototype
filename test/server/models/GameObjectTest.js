@@ -1,6 +1,6 @@
-const GameObject = require('../game/app/server/models/GameObject.js');
+const GameObject = require('../../../game/app/server/models/GameObject.js');
 const chai = require('chai');
-const Position = require('../game/app/server/models/Position.js');
+const Position = require('../../../game/app/server/models/Position.js');
 const assert = chai.assert;
 
 //create example gameObject 

@@ -1,10 +1,10 @@
-const Schedule = require('../game/app/server/models/Schedule');
+const Schedule = require('../../../game/app/server/models/Schedule');
 const chai = require('chai');
 chai.use(require('chai-datetime'));
 const expect = chai.expect;
 const assert = chai.assert;
-const Settings = require('../game/app/utils/Settings');
-const Lecture = require('../game/app/server/models/Lecture')
+const Settings = require('../../../game/app/utils/Settings');
+const Lecture = require('../../../game/app/server/models/Lecture')
 
 var lectureList = [];
 var now = new Date();
