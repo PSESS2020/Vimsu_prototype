@@ -1,3 +1,7 @@
+/**
+ * This Test covers Participant.js AND FriendList.js
+ */
+
 const Participant = require('../../../game/app/server/models/Participant.js');
 const chai = require('chai');
 const Position = require('../../../game/app/server/models/Position.js');
