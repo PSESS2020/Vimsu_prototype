@@ -120,13 +120,14 @@ class LectureView extends WindowView {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
-                   /* $('#lectureVideo').append(`
+                   $('#lecturePending').remove();
+                   $('#lectureVideo').append(`
                     <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
                         <div id="countdown"></div>
                         <div>seconds left till the</div>
                         <div>presentation starts</div>
                     </div>
-                `)*/
+                `)
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -143,6 +144,7 @@ class LectureView extends WindowView {
                     video.currentTime = Math.round(currentTimeDifference / 1000);
                     video.play();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
+                    clearInterval(this.#timerIntervalId);
                     $('#lecturePending').hide();
                     $('#pendingLectureChatMessage').empty();
                     this.#lectureStatus = LectureStatus.OVER;
