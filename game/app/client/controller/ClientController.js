@@ -227,6 +227,7 @@ class ClientController {
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
+        this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
         this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
         this.socket.on('evalAnswer', function(data) {   //Displays evaluated input.
                 console.log(data);
@@ -530,14 +531,14 @@ class ClientController {
         var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriendRequest(friendRequest);
         this.#gameView.updateChatThread(chatId, false, true);
-        $('#notifFriendRequest').show();
+        this.#gameView.drawNewFriendRequest(data.username);
     }
 
     handleFromServerAcceptedFriendRequest(data, chatId) {
         var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriend(friend);
         this.#gameView.updateChatThread(chatId, true, false);
-        $('#notifFriend').show();
+        this.#gameView.drawNewFriend(data.username);
     }
 
     handleFromServerRejectedFriendRequest(chatId) {
@@ -639,12 +640,16 @@ class ClientController {
         this.#gameView.addNewChat(chat, openNow);
     };
 
-    handleFromServerGotNewChat() {
-        $('#notifChat').show();
+    handleFromServerGotNewChat(senderUsername) {
+        this.#gameView.drawNewChat(senderUsername);
     }
-    
-    handleFromServerGotNewChatMessage() {
-        $('#notifMessage').show();
+
+    handleFromServerGotNewGroupChat(groupName, creatorUsername) {
+        this.#gameView.drawNewGroupChat(groupName, creatorUsername);
+    }
+
+    handleFromServerGotNewChatMessage(senderUsername) {
+        this.#gameView.drawNewMessage(senderUsername);
     }
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
@@ -653,6 +658,7 @@ class ClientController {
     };
 
     handleFromServerGameEntered() {
+        alert("You have entered the conference with the same account. Redirect to homepage...")
         var redirect = $('#nav_leave_button').attr('href');
         window.location.href = redirect;
     }
