@@ -37,9 +37,12 @@ var newParticipant1 = OneToOneChatTestData.alt_chatPartnerID;
 var chatId = OneToOneChatTestData.chatId;
 var creatorID = OneToOneChatTestData.creatorID;
 var chatPartnerID = OneToOneChatTestData.chatPartnerID;
+var unknownUserID = OneToOneChatTestData.alt_creatorID;
+
 var maxNumMessages = OneToOneChatTestData.maxNumMessages;
 var creatorUsername = OneToOneChatTestData.creatorUsername;
 var chatPartnerUsername = OneToOneChatTestData.chatPartnerUsername;
+var unknownUsername = OneToOneChatTestData.alt_creatorUsername;
 
 var messageList = [ oldMessage ];
 var participantList = [creatorID, chatPartnerID];
@@ -49,6 +52,7 @@ var oneToOneChat = new OneToOneChat(chatId, creatorID, chatPartnerID, [ oldMessa
 //Results
 var creatorUsername_result = oneToOneChat.getOtherUsername(chatPartnerUsername);
 var chatPartnerUsername_result = oneToOneChat.getOtherUsername(creatorUsername);
+
 var creatorID_result = oneToOneChat.getOtherUserId(chatPartnerID);
 var chatPartnerID_result = oneToOneChat.getOtherUserId(creatorID);
 
@@ -58,12 +62,28 @@ var participantList_result = oneToOneChat.getParticipantList();
 describe('OneToOneChat Testing', function() {
 
     describe('OneToOneChat getter functions', function() {
+        it('Test get unknown username', function() {
+            try {
+                oneToOneChat.getOtherUsername(unknownUsername);
+            } catch (err) {
+                expect(err).to.be.eql(new Error(unknownUsername + ' is not in ppantList of this chat!'));
+            }
+        })
+
         it('Test get creator username', function() {
             expect(creatorUsername_result).to.be.a('string').and.equal(creatorUsername);
         })
 
         it('Test get chatpartner username', function() {
             expect(chatPartnerUsername_result).to.be.a('string').and.equal(chatPartnerUsername);
+        })
+
+        it('Test get unknown id', function() {
+            try {
+                oneToOneChat.getOtherUserId(unknownUserID);
+            } catch (err) {
+                expect(err).to.be.eql(new Error(unknownUserID + ' is not in ppantList of this chat!'));
+            }
         })
 
         it('Test get creator id', function() {
