@@ -1,5 +1,7 @@
 var TypeChecker = require('../../utils/TypeChecker.js');
-const Participant = require('./Participant.js');
+/* Commented out because classes cannot require each other at the same time.
+   This causes at least an error in the test class. */
+//const Participant = require('./Participant.js');
 const Message = require('./Message.js');
 
 module.exports = class Chat {
@@ -31,18 +33,37 @@ module.exports = class Chat {
         this.#participantList = participantList;
         this.#maxNumMessages = maxNumMessages;
         this.#messageList = messageList;
-        /*
-        this.#messageList = []; // creating an empty message list
-        this.#participantList = []; // creating an empty participant list
-        this.#participantList.push(ownerId);
-        */
-        
-        /* instead of several constructors, we could write a wrapper method
+    }
+
+    getId() {
+        return this.#chatId;
+    }
+
+    getMaxNumMessages() {
+        return this.#maxNumMessages;
+    }
+
+    getNumParticipants() {
+        return this.#participantList.length;
+    }
+
+    getMessageList() {
+        return this.#messageList;
+    }
+
+    getParticipantList() {
+        return this.#participantList;
+    }
+
+    setMaxNumMessages(maxNumMsg) {
+        this.#maxNumMessages = maxNumMsg;
+    }
+    
+    /* instead of several constructors, we could write a wrapper method
          * in the service-class or somewhere that creates a new chat and then
          * "fills it up" with the data supplied from the database.
          * - (E) */
-    }
-    
+
     /*
     *Multiple constructors are not allowed.
     constructor(idChat, idOwner, participantList, messageList) {
@@ -60,37 +81,20 @@ module.exports = class Chat {
         // Intentionally left blank - to implement in child classes
     }
 
-    getId() {
-        return this.#chatId;
-    }
-
-    getMessageList() {
-        return this.#messageList;
-    }
-
-    getParticipantList() {
-        return this.#participantList;
-    }
-
-    notifyMessageAll(participantId) {
-        //TODO
-    }
-
-    notifyParticipantAll(participantId) {
-        //TODO
+    generateNewMsgId(senderId) {
+        return this.#chatId + "." + senderId + "." + this.#messageList.length;
     }
 
     removeMessage(msgId) {
         TypeChecker.isString(msgId);
 
         this.#messageList.forEach(msg => {
-            if (msg.getId() === msgId) {
+            if (msg.getMessageId() === msgId) {
                 let index = this.#messageList.indexOf(msg);
                 this.#messageList.splice(index, 1);
             }
         });
     }
-    
 
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -103,21 +107,5 @@ module.exports = class Chat {
             }
         });
     }
-
-    getNumParticipants() {
-        return this.#participantList.length;
-    }
-
-    setMaxNumMessages(maxNumMsg) {
-        this.#maxNumMessages = maxNumMsg;
-    }
-
-    getMaxNumMessages() {
-        return this.#maxNumMessages;
-    }
-    
-    generateNewMsgId(senderId) {
-        return this.#chatId + "." + senderId + "." + this.#messageList.length;
-    };
     
 }

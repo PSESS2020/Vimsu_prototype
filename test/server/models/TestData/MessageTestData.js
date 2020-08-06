@@ -8,4 +8,5 @@ module.exports = Object.freeze
     alt_senderId: "42",
     alt_senderUsername: "Fred",
     alt_messageText: "Hi, my name is Fred. Nice to meet you.",
+    alt_alt_messageId: "17",
 })
