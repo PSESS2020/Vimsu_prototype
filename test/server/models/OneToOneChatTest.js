@@ -3,7 +3,6 @@ chai.use(require('chai-datetime'));
 const assert = chai.assert;
 const expect = chai.expect;
 
-const Chat = require('../../../game/app/server/models/Chat.js');
 const OneToOneChat = require('../../../game/app/server/models/OneToOneChat.js');
 const Message = require('../../../game/app/server/models/Message.js');
 

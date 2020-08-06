@@ -68,8 +68,8 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 
 /* HAS BEEN MOVED INTO ServerController.js */
 
-const db = require('./config/db')
-const database = new db()
+const db = require('./config/db');
+const database = new db();
 
 database.connectDB().then(result => {
     const RouteController = require('./website/controller/RouteController');
