@@ -1887,7 +1887,7 @@ module.exports = class ServerController {
                                    "seperated from the next by a whitespace-character, and grants them lecture tokens " +
                                    "(if they are currently listening to the lecture and do not own one). They will " +
                                    "be able to post messages into the lecture chat.",
-                                   "\close -- Closes the lecture and makes it inaccessible. Every current participant " +
+                                   "\\close -- Closes the lecture and makes it inaccessible. Every current participant " +
                                    "will be forcefully ejected and nobody will be able to rejoin the lecture. " + 
                                    "WARNING: this command can NOT be reversed."];
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
@@ -1905,8 +1905,7 @@ module.exports = class ServerController {
                 var ppantsInLecture = lecture.getActiveParticipants();
                 lecture.hide();
                 this.#io.in(socket.currentLecture).emit('force close lecture');
-                ppantsInLecture.forEach( (ppant) => {
-                    var ppantId = ppant.getId();
+                ppantsInLecture.forEach( (ppantId) => {
                     // Get the necessary data to use the socket-connection
                     var socket = this.getSocketObject(this.getSocketId(ppantId));
                     lecture.leave(ppantId);
