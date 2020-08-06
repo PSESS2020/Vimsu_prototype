@@ -30,7 +30,7 @@ module.exports = class Message {
         return this.#timestamp;
     };
     
-    getText() {
+    getMessageText() {
         return this.#messageText;
     };
     
