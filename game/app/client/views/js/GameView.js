@@ -27,6 +27,7 @@ class GameView {
     #newAchievementView;
     #npcAvatarViews = [];
     #npcStoryView;
+    #notifBar;
    
     constructor(gameWidth, gameHeight) 
     {
@@ -35,6 +36,7 @@ class GameView {
         this.#gameWidth = gameWidth;
         this.#gameHeight = gameHeight;
         this.#statusBar = new StatusBar();
+        this.#notifBar = new NotificationBar();
         //this.#roomId = 1;
         //this.initOwnAvatarView(" ");
 
@@ -562,6 +564,26 @@ class GameView {
             console.log("addFriend")
             this.#friendListView.addToFriendList(businessCard);
         }
+    }
+
+    drawNewChat(senderUsername) {
+        this.#notifBar.drawNewChat(senderUsername);
+    }
+
+    drawNewGroupChat(groupName, creatorUsername) {
+        this.#notifBar.drawNewGroupChat(groupName, creatorUsername);
+    }
+
+    drawNewMessage(senderUsername) {
+        this.#notifBar.drawNewMessage(senderUsername);
+    }
+
+    drawNewFriendRequest(senderUsername) {
+        this.#notifBar.drawNewFriendRequest(senderUsername);
+    }
+
+    drawNewFriend(friendUsername) {
+        this.#notifBar.drawNewFriend(friendUsername);
     }
 
     initFriendRequestListView(businessCards) {

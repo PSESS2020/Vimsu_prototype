@@ -12,7 +12,7 @@ class RankListView extends WindowView {
 
         this.#rankList.forEach(ppant => {
             $('#rankListModal .modal-body .card-columns').append(`
-                <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-color: #A9A9A9; color: #A9A9A9">
+                <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: #A9A9A9; color: #A9A9A9; border-style: groove;">
                     <div class="card-body">
                         <div class="row card-text" id="${"cardtext" + ppant.participantId}">
                             <div class="col-lg">${ppant.rank}</div>
@@ -32,9 +32,9 @@ class RankListView extends WindowView {
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
                 $('#cardtext' + ppant.participantId)[0].style.color = "antiquewhite";
             } else if(ppant.rank == 3) {
-                $('#rank' + ppant.participantId)[0].style.borderColor = "#cd7f32";
+                $('#rank' + ppant.participantId)[0].style.borderColor = "#f79736";
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
-                $('#cardtext' + ppant.participantId)[0].style.color = "#cd7f32";
+                $('#cardtext' + ppant.participantId)[0].style.color = "#f79736";
             }
 
             if(ppant.self) {

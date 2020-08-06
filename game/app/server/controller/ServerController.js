@@ -853,6 +853,7 @@ module.exports = class ServerController {
                                 let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
                                 socketPartner.join(loadedChat.getId());
                                 this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
+                                this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewChat', creatorUsername);
                             }
     
                          })
@@ -885,6 +886,7 @@ module.exports = class ServerController {
                 console.log("new groupchat participants: " + chatPartnerIDList);
 
                     let creator = this.#ppants.get(creatorID);
+                    let creatorUsername = creator.getBusinessCard().getUsername();
                     let chatData;
 
                     //still store creatorID in memberID, so that chat removal is easy
@@ -962,6 +964,7 @@ module.exports = class ServerController {
                                     socketPartner.join(loadedChat.getId());
 
                                     this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
+                                    this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername);
     
                                 });
                             }
@@ -1147,6 +1150,7 @@ module.exports = class ServerController {
                     
                         // readded this line because it is required to distribute chat messages after joining the 1to1 chat 
                         this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                        socket.broadcast.to(chatId).emit('gotNewChatMessage', msg.getUsername());
                     });
                 }
             });
