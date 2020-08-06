@@ -50,11 +50,16 @@ module.exports = class GroupChat extends Chat {
     addParticipant(participantId) {
         TypeChecker.isString(participantId);
 
-        if(super.getParticipantList().length >= this.#maxParticipants) {
+        let ppantList = super.getParticipantList();
+        if(ppantList.length >= this.#maxParticipants) {
             return false;
         } else {
-            super.addParticipant(participantId);
+            
+            if (!ppantList.includes(participantId)) {
+            ppantList.push(participantId);
             return true;
+            }
+            
         }
     }
 

@@ -32,6 +32,7 @@ var newMessage2 = new Message(MessageTestData.messageId,
                             );
 //Test Data Participants
 var newParticipant1 = GroupChatTestData.chatPartnerID;
+var newParticipant2 = GroupChatTestData.alt_chatPartnerID;
 
 //Test Data Chatnames
 var newChatname1 = GroupChatTestData.alt_chatName;
@@ -85,65 +86,89 @@ describe('GroupChat Testing', function() {
     })
 
     describe('GroupChat chat functions', function() {
-        it('Test add old Message', function() {
-            //Status of message list before addig message
-            expect(messageList_result).to.have.members(messageList).and.to.have.lengthOf(1);
-
-            groupChat.addMessage( oldMessage );
-
-            //Status of message list after adding message
-            expect(messageList_result).to.have.members(messageList).and.to.have.lengthOf(1);
+        describe('GroupChat messageList functions', function() {
+            it('Test add old Message', function() {
+                //Status of message list before addig message
+                expect(messageList_result).to.be.a('array').and.to.have.members(messageList).and.to.have.lengthOf(1);
+    
+                groupChat.addMessage( oldMessage );
+    
+                //Status of message list after adding message
+                expect(messageList_result).to.be.a('array').and.to.have.members(messageList).and.to.have.lengthOf(1);
+            })
+    
+            it('Test add new message', function() {
+                //Status of message list before addig message
+                expect(messageList_result).to.be.a('array').and.to.have.members(messageList).and.to.have.lengthOf(1);
+    
+                groupChat.addMessage( newMessage1 );
+    
+                //Status of message list after adding message
+                expect(messageList_result).to.be.a('array').and.to.have.members( [newMessage1, oldMessage] ).and.to.have.lengthOf(2);
+            })
+    
+            it('Test split on max messages', function() {
+                //Status of message list before addig message
+                expect(messageList_result).to.be.a('array').and.to.have.members( [newMessage1, oldMessage] ).and.to.have.lengthOf(2);
+    
+                groupChat.addMessage( newMessage2 );
+    
+                //Status of message list after adding message
+                expect(messageList_result).to.be.a('array').and.to.have.members( [newMessage2] ).and.to.have.lengthOf(1);
+            })
         })
+        
+        describe('GroupChat participantList functions', function() {
+            it('Test remove stranger from group chat', function() {
+                //Status of participant List before removing stranger
+                expect(participantList_result).to.be.a('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
+                
+                groupChat.removeParticipant( newParticipant1 );
+    
+                //Status of participant List after removing stranger
+                expect(participantList_result).to.be.a('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
+            })
 
-        it('Test add new message', function() {
-            //Status of message list before addig message
-            expect(messageList_result).to.have.members(messageList).and.to.have.lengthOf(1);
+            it('Test add old participant to group chat', function() {
+                //Status of participant List before adding old participant
+                expect(participantList_result).to.be.a('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
 
-            groupChat.addMessage( newMessage1 );
+                groupChat.addParticipant(ownerId);
 
-            //Status of message list after adding message
-            expect(messageList_result).to.have.members( [newMessage1, oldMessage] ).and.to.have.lengthOf(2);
+                //Status of participant List after adding old participant
+                expect(participantList_result).to.be.a('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
+            })
+    
+            it('Test add participant to group chat', function() {
+                //Status of participant List before adding participant
+                expect(participantList_result).to.be.a('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
+    
+                expect(groupChat.addParticipant(newParticipant2)).to.be.a('boolean').and.to.be.true;
+                
+                //Status of participant List after removing creator
+                expect(participantList_result).to.be.a('array').and.to.have.members([newParticipant2, ownerId]).and.to.have.lengthOf(2);
+            })
+
+            it('Test add participant to group chat fails due to participant list limit', function() {
+                //Status of participant List before adding participant
+                expect(participantList_result).to.be.a('array').and.to.have.members([newParticipant2, ownerId]).and.to.have.lengthOf(2);
+    
+                expect(groupChat.addParticipant(newParticipant1)).to.be.a('boolean').and.to.be.false;
+                
+                //Status of participant List after removing creator
+                expect(participantList_result).to.be.a('array').and.to.have.members([newParticipant2, ownerId]).and.to.have.lengthOf(2);
+            })
+
+            it('Test remove owner from group chat', function() {
+                //Status of participant List before removing creator
+                expect(participantList_result).to.be.a('array').and.to.have.members([newParticipant2, ownerId]).and.to.have.lengthOf(2);
+    
+                groupChat.removeParticipant(ownerId);
+                
+                //Status of participant List after removing creator
+                expect(participantList_result).to.be.a('array').and.to.have.members([newParticipant2]).and.to.have.lengthOf(1);
+            })
         })
-
-        it('Test split on max messages', function() {
-            //Status of message list before addig message
-            expect(messageList_result).to.have.members( [newMessage1, oldMessage] ).and.to.have.lengthOf(2);
-
-            groupChat.addMessage( newMessage2 );
-
-            //Status of message list after adding message
-            expect(messageList_result).to.have.members( [newMessage2] ).and.to.have.lengthOf(1);
-        })
-
-        it('Test remove stranger from chat', function() {
-            //Status of participant List before removing stranger
-            expect(participantList_result).to.have.members(participantList).and.to.have.lengthOf(1);
-            
-            groupChat.removeParticipant( newParticipant1 );
-
-            //Status of participant List after removing stranger
-            expect(participantList_result).to.have.members(participantList).and.to.have.lengthOf(1);
-        })
-
-        it('Test remove owner from chat', function() {
-            //Status of participant List before removing creator
-            expect(participantList_result).to.have.members(participantList).and.to.have.lengthOf(1);
-
-            groupChat.removeParticipant(ownerId);
-            
-            //Status of participant List after removing creator
-            expect(participantList_result).to.have.members([]).and.to.have.lengthOf(0);
-        })
-
-        /*it('Test remove chatpartner from chat', function() {
-            //Status of participant List before removing chatpartner
-            expect(participantList_result).to.have.members([chatPartnerID]).and.to.have.lengthOf(1);
-
-            oneToOneChat.removeParticipant(chatPartnerID);
-
-            //Status of participant List after removing chatpartner
-            expect(participantList_result).to.have.members([]).and.to.have.lengthOf(0);
-        })*/
         
     })
 })
