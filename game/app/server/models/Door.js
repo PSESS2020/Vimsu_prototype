@@ -54,7 +54,11 @@ module.exports = class Door {
     }
 
     getTargetRoomId() {
-        return this.#targetPosition.getRoomId();
+        if(this.#targetPosition) {
+            return this.#targetPosition.getRoomId();
+        } else {
+            return undefined;
+        }
     }
 
     getTypeOfDoor() {
@@ -74,7 +78,11 @@ module.exports = class Door {
     }
 
     getDirection() {
-        return this.#direction;
+        if(this.#direction) {
+            return this.#direction;
+        } else {
+            return undefined;
+        }
     }
 
     /**

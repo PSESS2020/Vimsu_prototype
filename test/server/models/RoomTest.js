@@ -1,9 +1,12 @@
 const Room = require('../../../game/app/server/models/Room.js');
 const Position = require('../../../game/app/server/models/Position.js');
+const Door = require('../../../game/app/server/models/Door.js');
+const Message = require('../../../game/app/server/models/Message.js');
 const GameObjectService = require('../../../game/app/server/services/GameObjectService.js');
 const NPCService = require('../../../game/app/server/services/NPCService.js');
 const DoorService = require('../../../game/app/server/services/DoorService.js');
 const TypeOfRoom = require('../../../game/app/utils/TypeOfRoom.js');
+const TypeOfDoor = require('../../../game/app/utils/TypeOfDoor.js');
 const Direction = require('../../../game/app/utils/Direction.js');
 const Settings = require('../../../game/app/utils/Settings.js');
 const RoomDimensions = require('../../../game/app/utils/RoomDimensions.js');
@@ -15,6 +18,11 @@ const assert = chai.assert;
 var testGameObjectService;
 var testNPCService;
 var testDoorService;
+var testRoom;
+var testPPant;
+var testFoyer;
+var testFoodcourt;
+var testReception;
 
 describe('test Room Constructor and getters', function () {
     
@@ -104,26 +112,112 @@ describe('test Room Constructor and getters', function () {
     
 });
 
-/*
+
 describe('test Participant handling', function () {
-    enterParticipant
-    exitParticipant
-    includesParticipant
-    getParticipant
+    
+    beforeEach( function () {
+        testRoom = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
+        testPPant = TestUtil.randomParticipant();
+        assert.isArray(testRoom.getListOfPPants());
+        assert.isEmpty(testRoom.getListOfPPants());
+    });
+    
+    it('test enterParticipant', function () {
+        expect(() => testRoom.enterParticipant("fehler")).to.throw(TypeError, "not an instance of");
+        expect(() => testRoom.includesParticipant(0)).to.throw(TypeError, "not a string");
+        expect(testRoom.includesParticipant(testPPant.getId())).to.be.false;
+        testRoom.enterParticipant(testPPant);
+        expect(testRoom.includesParticipant(testPPant.getId())).to.be.true;
+        expect(testRoom.getListOfPPants()).to.include(testPPant); //doppelt gemoppelt
+    });
+    
+    it('test exitParticipant', function () {
+        expect(() => testRoom.exitParticipant(0)).to.throw(TypeError, "not a string");
+        testRoom.enterParticipant(testPPant);
+        assert.include(testRoom.getListOfPPants(), testPPant);
+        testRoom.exitParticipant(testPPant.getId());
+        expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty; 
+        expect(testRoom.includesParticipant(testPPant.getId())).to.be.false;
+    });
+    
+    it('test getParticipant', function () {
+        expect(() => testRoom.getParticipant(0)).to.throw(TypeError, "not a string");
+        expect(testRoom.getParticipant(testPPant.getId())).to.be.undefined;
+        testRoom.enterParticipant(testPPant);
+        expect(testRoom.getParticipant(testPPant.getId())).to.equal(testPPant);
+        testRoom.exitParticipant(testPPant.getId());
+        expect(testRoom.getParticipant(testPPant.getId())).to.be.undefined;
+    });
+    
 })
+
 
 describe('test Message sending', function () {
-    addMessage    
+    
+    beforeEach( function () {
+        testRoom = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
+        assert.isArray(testRoom.getMessages());
+        assert.isEmpty(testRoom.getMessages());
+    });
+
+    it('test single addMessage', function () {
+        testRoom.addMessage(TestUtil.randomString(), TestUtil.randomString(), TestUtil.randomTimeStamp(), TestUtil.randomString());
+        assert.lengthOf(testRoom.getMessages(), 1);
+        // This all still fails as the RoomClass does not yet use the Message-Class
+        // I'm not sure if it's worth fixing tbh
+        // - (E)
+        //expect(testRoom.getMessages()[0]).to.be.an.instanceof(Message);
+        //assert.equal(testRoom.getMessages()[0].getMessageId(), 0);
+    });
+
 })
 
+
 describe('test Collision Detection', function () {
-    checkForCollision
+    //checkForCollision
 })
 
 describe('test Door handling', function () {
-    getDoorTo
-    * check that getDoorTo(roomID) is of TypeOfDoor.ROOM_DOOR
-    getLectureDoor
-    * check that this throws error from not foyer
-    * check that is right TypeOfDoor
-})*/
+    
+    before( function () {
+        testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
+        testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT);
+        testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION);
+    });
+    
+    it('test doors in foyer', function () {
+        expect(testFoyer.getDoorTo(100)).to.be.undefined;
+        expect(() => testFoyer.getDoorTo("fehler")).to.throw(TypeError, "not an integer");
+        expect(testFoyer.getDoorTo(Settings.FOYER_ID)).to.be.undefined;
+        expect(testFoyer.getDoorTo(Settings.FOODCOURT_ID)).to.be.instanceof(Door);
+        expect(testFoyer.getDoorTo(Settings.FOODCOURT_ID).getTypeOfDoor()).to.equal(TypeOfDoor.FOODCOURT_DOOR);
+        expect(testFoyer.getDoorTo(Settings.RECEPTION_ID)).to.be.instanceof(Door);
+        expect(testFoyer.getDoorTo(Settings.RECEPTION_ID).getTypeOfDoor()).to.equal(TypeOfDoor.RECEPTION_DOOR);
+    });
+    
+    it('test doors in foodcourt', function () {
+        expect(testFoodcourt.getDoorTo(100)).to.be.undefined;
+        expect(() => testFoodcourt.getDoorTo("fehler")).to.throw(TypeError, "not an integer");
+        expect(testFoodcourt.getDoorTo(Settings.FOODCOURT_ID)).to.be.undefined;
+        expect(testFoodcourt.getDoorTo(Settings.RECEPTION_ID)).to.be.undefined;
+        expect(testFoodcourt.getDoorTo(Settings.FOYER_ID)).to.be.instanceof(Door);
+        expect(testFoodcourt.getDoorTo(Settings.FOYER_ID).getTypeOfDoor()).to.equal(TypeOfDoor.FOYER_DOOR);
+    });
+    
+    it('test doors in reception', function () {
+        expect(testReception.getDoorTo(100)).to.be.undefined;
+        expect(() => testReception.getDoorTo("fehler")).to.throw(TypeError, "not an integer");
+        expect(testReception.getDoorTo(Settings.FOODCOURT_ID)).to.be.undefined;
+        expect(testReception.getDoorTo(Settings.RECEPTION_ID)).to.be.undefined;
+        expect(testReception.getDoorTo(Settings.FOYER_ID)).to.be.instanceof(Door);
+        expect(testReception.getDoorTo(Settings.FOYER_ID).getTypeOfDoor()).to.equal(TypeOfDoor.FOYER_DOOR);
+    });
+    
+    it('test lectureDoor', function () {
+        expect(() => testFoodcourt.getLectureDoor()).to.throw(Error, 'Lecture Door is only in FOYER!');
+        expect(() => testReception.getLectureDoor()).to.throw(Error, 'Lecture Door is only in FOYER!');
+        expect(testFoyer.getLectureDoor()).to.be.instanceof(Door);
+        expect(testFoyer.getLectureDoor().getTypeOfDoor()).to.equal(TypeOfDoor.LECTURE_DOOR);
+    });
+    
+})

@@ -5,8 +5,8 @@ const Achievement = require('../../../../game/app/server/models/Achievement.js')
 const Message = require('../../../../game/app/server/models/Message.js');
 const Task = require('../../../../game/app/server/models/Task.js');
 const Chat = require('../../../../game/app/server/models/Chat.js');
-const Direction = require('../../../../game/app/server/utils/Direction.js');
-const TypeOfTask = require('../../../../game/app/server/utils/TypeOfTask.js');
+const Direction = require('../../../../game/app/utils/Direction.js');
+const TypeOfTask = require('../../../../game/app/utils/TypeOfTask.js');
 const Participant = require('../../../../game/app/server/models/Participant.js');
 const Weekdays = require('./Weekdays.js');
 
@@ -36,6 +36,10 @@ class TestUtil {
         return Math.floor(Math.random() * 16);
     };
     
+    static randomBool() {
+        return (Math.floor(Math.random() * 2)===1?true:false);
+    };
+    
     static randomTimeStamp() {
         var randomHours = Math.floor(Math.random() * 24);
         var randomMinutes = Math.floor(Math.random() * 60);
@@ -50,7 +54,8 @@ class TestUtil {
     static randomParticipant() {
         return (new Participant(this.randomString(), this.randomString(), this.randomBusinessCard(),
                     this.randomPosition(), this.randomObjectValue(Direction), this.randomFriendList(),
-                    this.randomFriendList(), this.randomFriendList(), )
+                    this.randomFriendList(), this.randomFriendList(), this.randomAchievementList(),
+                    this.randomTaskList(), this.randomBool(), this.randomAwardPoints(), /* causes stack-overflow this.randomChatList()*/ []));
     };
     
     static randomMessage() {
@@ -64,9 +69,9 @@ class TestUtil {
     
     static randomAchievement() {
         var randomLevel = this.randomLevel();
-        var randoMaxLevel = randomLevel + this.randomLevel();
+        var randomMaxLevel = randomLevel + this.randomLevel();
         return (new Achievement(this.randomString(), this.randomString(), this.randomString(), this.randomString(), 
-                   randomLevel, this.randomRGB(), this.randomAwardPoints(), randomMaxLevel, this.randomObjectValue(TypeOfTask));
+                   randomLevel, this.randomRGB(), this.randomAwardPoints(), randomMaxLevel, this.randomObjectValue(TypeOfTask)));
     };
     
     static randomTask() {
@@ -83,7 +88,7 @@ class TestUtil {
     
     static randomPositionList() {
         var listToReturn = [];
-        var amount = Math.floor(Math.random() * 256)++;
+        var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomPosition()); 
         }
@@ -92,7 +97,7 @@ class TestUtil {
     
     static randomParticipantList() {
         var listToReturn = [];
-        var amount = Math.floor(Math.random() * 256)++;
+        var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomParticipant()); 
         }
@@ -101,7 +106,7 @@ class TestUtil {
     
     static randomBusinessCardList() {
         var listToReturn = [];
-        var amount = Math.floor(Math.random() * 256)++;
+        var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomBusinessCard()); 
         }
@@ -110,18 +115,36 @@ class TestUtil {
     
     static randomAchievementList() {
         var listToReturn = [];
-        var amount = Math.floor(Math.random() * 256)++;
+        var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomAchievement()); 
         }
         return listToReturn;
     };
     
+    static randomTaskList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomTask()); 
+        }
+        return listToReturn;
+    };
+    
     static randomMessageList() {
         var listToReturn = [];
-        var amount = Math.floor(Math.random() * 256)++;
+        var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomMessage()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomChatList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomChat()); 
         }
         return listToReturn;
     };
