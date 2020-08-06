@@ -50,18 +50,18 @@ module.exports = class Room {
         //andere Fälle später
         if (this.#typeOfRoom == "FOYER") {
 
-            this.#length = RoomDimensions.FOYERLENGTH;
-            this.#width = RoomDimensions.FOYERWIDTH;
+            this.#length = RoomDimensions.FOYER_LENGTH;
+            this.#width = RoomDimensions.FOYER_WIDTH;
 
         } else if (this.#typeOfRoom === "FOODCOURT") {
 
-            this.#length = RoomDimensions.FOODCOURTLENGTH;
-            this.#width = RoomDimensions.FOODCOURTWIDTH;
+            this.#length = RoomDimensions.FOODCOURT_LENGTH;
+            this.#width = RoomDimensions.FOODCOURT_WIDTH;
         
         } else if (this.#typeOfRoom === "RECEPTION") {
 
-            this.#length = RoomDimensions.RECEPTIONLENGTH;
-            this.#width = RoomDimensions.RECEPTIONWIDTH;
+            this.#length = RoomDimensions.RECEPTION_LENGTH;
+            this.#width = RoomDimensions.RECEPTION_WIDTH;
         }
         //Initialisiert width*length Feld gefüllt mit 0
         this.#occupationMap = new Array(this.#width);
