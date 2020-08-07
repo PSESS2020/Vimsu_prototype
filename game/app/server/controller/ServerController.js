@@ -2043,5 +2043,12 @@ module.exports = class ServerController {
                 this.#io.to(socketId).emit('updateSuccessesBar', participant.getAwardPoints(), rank); 
             });  
         });
+
+        Promise.all([ ...this.#ppants.keys() ].map(async ppantId => {
+            RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => { 
+                this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank); 
+            });  
+        }))
+
     }
 }
