@@ -119,7 +119,7 @@ module.exports = class ParticipantService {
                                     currentLevel: achievement.currentLevel,
                                     color: achievement.color,
                                 }]
-                            const res = await this.storeAchievements(participant.getId(), Settings.CONFERENCE_ID, achievementData, vimsudb);
+                            const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
                     })).then(res => {
                         return participant;
@@ -188,7 +188,7 @@ module.exports = class ParticipantService {
                         )
                     })
 
-                    return this.storeAchievements(par.participantId, Settings.CONFERENCE_ID, achievementsData, vimsudb).then(res => {
+                    return this.storeAchievements(par.participantId, conferenceId, achievementsData, vimsudb).then(res => {
                         console.log('all achievements stored');
                         return participant;
                     }).catch(err => {
