@@ -62,8 +62,8 @@ module.exports = class RankListService {
                 throw new Error(participantId + " is not in ranklist")
             }
             return rankList[idx].rank;
-        }).catch(err => {
+        })/*.catch(err => {
             console.error(err);
-        })
+        })*/
     }
 } 
