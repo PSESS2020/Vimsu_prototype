@@ -3,7 +3,7 @@ const { expect } = require('chai');
 var conferenceId = "test";
 var participantId = "5f2be0d2d135ca621e4f9003"
 var participantId2 = "1";
-const db = require('../../../config/db')
+const db = require('../../../config/db');
 const database = new db()
 database.connectDB().then(res => {
     describe('RankListService getter', function() {
@@ -27,6 +27,10 @@ database.connectDB().then(res => {
                 expect(rankList).to.be.an('array').and.to.have.lengthOf.above(2);
             })     
         });
+
+        after(function() {
+            process.exit(0);
+        })
     });
 })
     
