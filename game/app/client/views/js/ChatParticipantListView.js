@@ -8,7 +8,7 @@ class ChatParticipantListView extends Views {
 
     draw(usernames) {
         $('#chatParticipantListModal .modal-body .list-group').empty()
-        const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b))
+        const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
         this.#usernames = sortedUsernames;
 
         this.#usernames.forEach(username => {
