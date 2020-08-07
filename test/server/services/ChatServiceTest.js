@@ -25,11 +25,7 @@ var chatPartnerID = OneToOneChatTestData.chatPartnerID;
 var maxNumMessages_ONE = Settings.MAXNUMMESSAGES_ONETOONECHAT;
 var creatorUsername = OneToOneChatTestData.creatorUsername;
 var chatPartnerUsername = OneToOneChatTestData.chatPartnerUsername;
-<<<<<<< HEAD
 var conferenceId = ServiceTestData.conferenceId_1;
-=======
-var conferenceId = 'test';
->>>>>>> c35a3d9b6c1962d0512c817430eb917038a156fe
 
 var messageList_ONE = [];
 var participantList_ONE = [creatorID, chatPartnerID];
