@@ -772,7 +772,7 @@ module.exports = class ServerController {
             }); 
 
             socket.on('getInviteFriends', (ppantID, groupName) => {
-                if(!groupName) {
+                if(!groupName || groupName.length > 20) {
                     socket.emit('inviteFriends', undefined, groupName, Settings.MAXGROUPPARTICIPANTS);
                 } else {
                     

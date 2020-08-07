@@ -50,11 +50,13 @@ $('#allchat').submit(function(event) {
 
 });
 
-
-
 $('#groupName').submit(function(event) {
   event.preventDefault();
   let groupName = $('#groupNameInput').val();
+  if (groupName.length > 20) {
+    return false;
+  }
+  
   if(groupName !== '') {
       $('#inputGroupNameModal').modal('hide');
       $('#inviteFriendsModal').modal('toggle');
