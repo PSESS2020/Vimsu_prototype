@@ -256,11 +256,14 @@ class LectureView extends WindowView {
         }
     }
     
+    /* No longer needed
     updateToken(hasToken) {
         this.#setToken(hasToken);
         this.#drawToken(NoTokenMessage.REVOKED);
     };
+    * */
     
+    /* No longer needed
     #drawToken = function(message) {
         if(this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
@@ -289,10 +292,13 @@ class LectureView extends WindowView {
             $('#tokenLabel').append(message);
         }
     };
+    * */
     
+    /* No longer needed
     #setToken = function(newToken) {
         this.#hasToken = newToken;
     };
+    * */
 
 }
 
@@ -304,8 +310,10 @@ class LectureView extends WindowView {
     OVER: "OVER"
 });*/
 
+/* No longer needed.
 const NoTokenMessage = Object.freeze({
     LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
     REVOKED: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
             "Please remember to follow chat etiquette."
 });
+* */
