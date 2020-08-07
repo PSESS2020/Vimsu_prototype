@@ -14,13 +14,19 @@ describe('TaskServiceTest getter', function() {
         expect(taskService.getAllTasks()).to.be.an('array').and.to.have.lengthOf(10);
     });
 
-    it('test getTask', function() {
+    /*it('test getTask', function() {
         expect(taskService.getTask(taskId)).to.eql(task1);
-        expect(() => taskService.getTask(30)).to.throw(Error);
     });
+
+    it('test getTask error', function() {
+        expect(() => taskService.getTask(30)).to.throw(Error);
+    })*/
 
     it('test getTaskByType', function() {
         expect(taskService.getTaskByType(taskType)).to.eql(task1);
-        expect(() => taskService.getTaskByType(TypeOfTask.SENDALLCHAT)).to.throw(Error);
     });
+
+    it('test getTaskByType error', function() {
+        expect(() => taskService.getTaskByType(TypeOfTask.SENDALLCHAT)).to.throw(Error);
+    })
 });

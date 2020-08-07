@@ -1,5 +1,6 @@
 const LectureChat = require('../../../game/app/server/models/LectureChat.js');
 const chai = require('chai');
+chai.use(require('chai-datetime'));
 const { expect } = require('chai');
 const Lecture = require('../../../game/app/server/models/Lecture.js');
 const Participant = require('../../../game/app/server/models/Participant.js');
@@ -21,10 +22,59 @@ var tokenList = [['1', undefined, 300000]];
 
 lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants);
 
+describe('Lecture constructor error', function() {
+    it('test id error', function() {
+        expect(() => new Lecture(1, 2, 3, "4", 5, 6, 7, "8")).to.throw(TypeError, "not a string");
+    })
+
+    it('test duration error', function() {
+        expect(() => new Lecture("1", "2", "3", "4", 5, 6, 7, "8")).to.throw(TypeError, "not a number");
+    })
+
+    it('test startingTime error', function() {
+        expect(() => new Lecture("1", "2", "3", 4, "5", 6, 7, "8")).to.throw(TypeError, "not a Date");
+    })
+
+    it('test maxParticipants', function() {
+        expect(() => new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8")).to.throw(TypeError, "not an int");
+    })  
+})
 
 describe('Lecture getter functions', function() {
     it('test getLectureChat', function() {
         expect(lecture.getLectureChat()).to.eql(lectureChat);
+    })
+
+    it('test getId', function() {
+        expect(lecture.getId()).to.be.a('string').and.equal(id);
+    })
+
+    it('test getTitle', function() {
+        expect(lecture.getTitle()).to.be.a('string').and.equal(title);
+    })
+
+    it('test getVideoId', function() {
+        expect(lecture.getVideoId()).to.be.a('string').and.equal(videoId);
+    })
+
+    it('test getDuration', function() {
+        expect(lecture.getDuration()).to.be.a('number').and.equal(duration);
+    })
+
+    it('test getRemarks', function() {
+        expect(lecture.getRemarks()).to.be.a('string').and.equal(remarks);
+    })
+
+    it('test getStartingTime', function() {
+        expect(lecture.getStartingTime()).to.equalDate(startingTime);
+    })
+
+    it('test getOratorName', function() {
+        expect(lecture.getOratorName()).to.be.a('string').and.equal(oratorName);
+    })
+
+    it('test getMaxParticipants', function() {
+        expect(lecture.getMaxParticipants()).to.be.a('number').and.equal(maxParticipants);
     })
 })
 
