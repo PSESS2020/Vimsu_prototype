@@ -228,6 +228,7 @@ class ClientController {
         this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
         this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
+        this.socket.on('chatParticipantList', this.handleFromServerChatParticipantList.bind(this))
         this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
@@ -503,12 +504,12 @@ class ClientController {
         }
     }
 
-    handleFromServerInviteFriends(friendListData, groupName, limit) {
+    handleFromServerInviteFriends(friendListData, groupName, limit, chatId) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
-        this.#gameView.initInviteFriendsView(friendList, groupName, limit);
+        this.#gameView.initInviteFriendsView(friendList, groupName, limit, chatId);
     }
 
     //Is called after server send the answer of friendlistclick
@@ -562,6 +563,10 @@ class ClientController {
         this.#gameView.initRankListView(rankList);
     }
 
+    handleFromServerChatParticipantList(usernames) {
+        this.#gameView.drawChatParticipantList(usernames);
+    }
+
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
         var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
@@ -580,6 +585,7 @@ class ClientController {
     }
     
     handleFromServerUpdateLectureChat(messages) {
+        console.log("update message test 0");
         this.#gameView.updateLectureChat(messages);
     };
     
@@ -741,9 +747,9 @@ class ClientController {
         this.socket.emit('getFriendList', this.#ownParticipant.getId());
     }
 
-    handleFromViewShowInviteFriends(groupName) {
+    handleFromViewShowInviteFriends(groupName, chatId) {
         this.socketReady;
-        this.socket.emit('getInviteFriends', this.#ownParticipant.getId(), groupName);
+        this.socket.emit('getInviteFriends', this.#ownParticipant.getId(), groupName, chatId);
     }
 
     //called after click on friendrequestlist button
@@ -836,6 +842,10 @@ class ClientController {
         this.socket.emit('getChatThread', this.#ownParticipant.getId(), chatID);
     };
 
+    handleFromViewShowChatParticipantList(chatId) {
+        this.socket.emit('getChatParticipantList', this.#ownParticipant.getId(), chatId);
+    }
+
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/
     handleFromViewCreateNewChat(participantId, username) {
@@ -846,10 +856,10 @@ class ClientController {
         this.socket.emit('createNewChat', creatorId, participantId, username);
     }
 
-    handleFromViewCreateNewGroupChat(chatName, participantIdList) {
+    handleFromViewCreateNewGroupChat(chatName, participantIdList, limit, chatId) {
         this.socketReady
         var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList);
+        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList, limit, chatId);
     }
 
     handleFromViewSendNewMessage(chatId, messageText) {

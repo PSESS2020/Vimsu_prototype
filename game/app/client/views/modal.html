@@ -200,6 +200,47 @@
             </div>        
         </div>
 
+        <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle" aria-hidden="true" data-focus-on="input:first">
+            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chatThreadModalTitle"></h5>
+                    <button id="chatLeaveButton" class="close mr-2 btn">
+                        <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
+                    </button>
+                    <button id="chatFriendRequestButton" class="close mr-5 btn">
+                        <i class="fa fa-user-plus navbarIcons" style ="margin-top: 2px; margin-right: -12px" aria-hidden="true"></i>
+                    </button>
+                    <div id="friendRequestSent" class="mr-5 navbarIconsDisabled">
+                        <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;" aria-hidden="true"></i>
+                    </div>
+                    <a class="action_button nav-item nav-link mr-5 close btn" href="#chatParticipantListModal" role="button" id="chatParticipantListBtn" data-toggle="modal">
+                        <i class="fa fa-info-circle navbarIcons" style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
+                    </a>
+                    <a class="action_button nav-item nav-link close btn" href="#inviteFriendsModal" role="button" id="inviteFriendsBtn" data-toggle="modal">
+                        <i class="fa fa-plus-square navbarIcons" style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
+                    </a>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
+                    <div id="chatThreadModalList" class="list-group mb-3" style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
+                    
+                    </div>
+                    <div class="d-flex">
+                        <div id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
+                            <input id="chatMessageInput" type="text" style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                            <div class="input-group-append">
+                                <button id="chatMessageButton" class="btn btn-lecture" type="button">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>        
+        </div>
+
         <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
@@ -211,7 +252,7 @@
                 </div>
                 <div class="modal-body" style="overflow: auto; height: 500px;">
                     <form id="groupName" action="" style="text-align: center; margin-top: 35%">
-                        <input id="groupNameInput" autocomplete="off" style="width: 100%; background-color: #1b1e24; color: antiquewhite" placeholder ="Enter group name" required/>
+                        <input id="groupNameInput" autocomplete="off" style="width: 100%; background-color: #1b1e24; color: antiquewhite" placeholder ="Enter group name" maxlength="20" required/>
                         <button class="btn btn-lecture mt-3" style=" width: auto;">Invite Friends</button>
                     </form>
                 </div>
@@ -237,42 +278,25 @@
                     </br>
                     <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!</div>
                     <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                    <button class="btn btn-lecture mt-3" style=" width: auto;" id="createGroupChat" type="button">Create Group Chat</button>
+                    <button class="btn btn-lecture mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite friends to group chat</button>
                 </div>
             </div>
             </div>
         </div>
-        
-        <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle" aria-hidden="true" data-focus-on="input:first">
+
+        <div class="modal" id="chatParticipantListModal" tabindex="-1" role="dialog" aria-labelledby="chatParticipantListModalTitle" aria-hidden="true" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="chatThreadModalTitle"></h5>
-                    <button id="chatLeaveButton" class="close mr-2 btn">
-                        <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                    </button>
-                    <button id="chatFriendRequestButton" class="close mr-5 btn">
-                        <i class="fa fa-user-plus navbarIcons" style ="margin-top: 2px; margin-right: -12px" aria-hidden="true"></i>
-                    </button>
-                    <div id="friendRequestSent" class="mr-5 navbarIconsDisabled">
-                        <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;" aria-hidden="true"></i>
-                    </div>
+                    <h5 class="modal-title" id="chatParticipantListModalTitle">Chat Participant List</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
-                    <div id="chatThreadModalList" class="list-group mb-3" style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
-                    
-
-                    <div class="d-flex">
-                        <div id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
-                            <input id="chatMessageInput" type="text" style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite" class="form-control" placeholder="Enter message ...">
-                            <div class="input-group-append">
-                                <button id="chatMessageButton" class="btn btn-lecture" type="button">Send</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-body" style="overflow: auto; height: 500px;">
+                    <ul class="list-group bg-transparent">
+                        
+                    </ul>
                 </div>
             </div>
             </div>        

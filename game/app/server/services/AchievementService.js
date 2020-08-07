@@ -19,6 +19,7 @@ module.exports = class AchievementService {
         return this.#achievementDefinitions;
     }
 
+    /* 
     getAchievementDefinition(achievementDefinitionId) {
         TypeChecker.isInt(achievementDefinitionId);
 
@@ -44,7 +45,7 @@ module.exports = class AchievementService {
         }
 
         return this.#achievementDefinitions[index];
-    }
+    }*/
 
     initAllAchievements() {
         var id = 0;
@@ -123,8 +124,6 @@ module.exports = class AchievementService {
                 participant.addAwardPoints(achievements[i].getAwardPoints());
             }
         }
-
-        console.log("Achivements: " + newAchievements.length);
 
         if(participant.getAchievements().length < 1) {
             participant.setAchievements(achievements);
