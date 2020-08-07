@@ -50,6 +50,8 @@ $('#allchat').submit(function(event) {
 
 });
 
+
+
 $('#groupName').submit(function(event) {
   event.preventDefault();
   let groupName = $('#groupNameInput').val();
@@ -61,23 +63,6 @@ $('#groupName').submit(function(event) {
   }
 });
 
-/*$('#chatInput').submit(function(event) {
-    
-  event.preventDefault();
-  let messageVal = $('#chatMessageInput').val();
-  
-  if(messageVal !== '') {
-    
-    if(messageVal[0] === '/') {
-        clientController.sendToServerEvalInput(messageVal.slice(1));
-      } else
-        clientController.sendToServerChatMessage(messageVal);
-    
-    $('#chatMessageInput').val('');
-    return false;
-  }
-
-});*/
 
 document.getElementById("allchat").onkeydown = function(event) {
     event.stopPropagation();

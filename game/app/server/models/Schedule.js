@@ -1,5 +1,5 @@
 const Settings = require('../../utils/Settings');
-const TypeChecker = require('../../utils/TypeChecker');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 const Lecture = require('../models/Lecture');
 
 module.exports = class Schedule {
@@ -43,7 +43,7 @@ module.exports = class Schedule {
             var stopToShow = (startingTime + lecture.getDuration()*1000);
             var withinMargin = startToShow <= now && now <= stopToShow;
 
-            if (withinMargin) {
+            if (withinMargin && !lecture.isHidden()) {
                 currentLectures.push(lecture);
             }
         }

@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
@@ -125,6 +125,10 @@ module.exports = class Room {
     getListOfDoors() {
         return this.#listOfDoors;
     }
+    
+    getOccMap() {
+        return this.#occupationMap;
+    };
 
     /**
      * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
@@ -163,12 +167,13 @@ module.exports = class Room {
     //Checks if ppant with ppantID is currently in this room
     includesParticipant(ppantID) {
         TypeChecker.isString(ppantID);
+        var returnValue = false;
         this.#listOfPPants.forEach(ppant => {
             if (ppant.getId() === ppantID) {
-                return true;
+                returnValue = true;
             }
         });
-        return false;
+        return returnValue;
     }
 
     //Method to get a Participant who is currently in this room
@@ -216,11 +221,13 @@ module.exports = class Room {
         }
     }
 
+
     addMessage(ppantID, username, date, text) {
-        
+
         var message = { senderID: ppantID, messageID: this.#listOfMessages.length, username: username, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
+
 
    #buildOccMap = function() {
         //Geht jedes Objekt in der Objektliste durch

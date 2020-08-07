@@ -1,6 +1,6 @@
 const FileSystem = require('../../config/FileSystem');
 const ObjectId = require('mongodb').ObjectID;
-const TypeChecker = require('../../game/app/utils/TypeChecker');
+const TypeChecker = require('../../config/TypeChecker')
 const Slot = require('../models/Slot')
 
 module.exports = class SlotService {
@@ -29,19 +29,18 @@ module.exports = class SlotService {
 
     
             var id = new ObjectId().toString();
-            var slot = new Slot(title, conferenceId, videoId, remarks, startingTime, oratorId, maxParticipants);
-            slot.setId(id);
+            var slot = new Slot(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants);
 
             var lecture = {
-                id: id,
-                videoId: videoId,
-                duration: duration,
-                conferenceId: conferenceId,
-                title: title,
-                remarks: remarks,
-                startingTime: startingTime,
-                oratorId: oratorId,
-                maxParticipants: maxParticipants,
+                id: slot.getId(),
+                videoId: slot.getVideoId(),
+                duration: slot.getDuration(),
+                conferenceId: slot.getConferenceId(),
+                title: slot.getTitle(),
+                remarks: slot.getRemarks(),
+                startingTime: slot.getStartingTime(),
+                oratorId: slot.getOratorId(),
+                maxParticipants: slot.getMaxParticipants(),
                 isAccepted: false
             }
 

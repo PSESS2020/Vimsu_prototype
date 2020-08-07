@@ -1,6 +1,6 @@
 const mongodb = require('mongodb');
 const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
-const TypeChecker = require('../game/app/utils/TypeChecker');
+const TypeChecker = require('./TypeChecker');
 const FileSystem = require('./FileSystem');
 const { getVideoDurationInSeconds } = require('get-video-duration')
 

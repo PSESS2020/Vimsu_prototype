@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Position = require('./Position.js');
 const Direction = require('../../utils/Direction.js');
 const TypeOfDoor = require('../../utils/TypeOfDoor.js');
@@ -54,7 +54,11 @@ module.exports = class Door {
     }
 
     getTargetRoomId() {
-        return this.#targetPosition.getRoomId();
+        if(this.#targetPosition) {
+            return this.#targetPosition.getRoomId();
+        } else {
+            return undefined;
+        }
     }
 
     getTypeOfDoor() {
@@ -74,7 +78,11 @@ module.exports = class Door {
     }
 
     getDirection() {
-        return this.#direction;
+        if(this.#direction) {
+            return this.#direction;
+        } else {
+            return undefined;
+        }
     }
 
     /**

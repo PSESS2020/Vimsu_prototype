@@ -1,5 +1,5 @@
 var GameObject = require('../models/GameObject.js');
-var TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 var Position = require('../models/Position.js')
 var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
