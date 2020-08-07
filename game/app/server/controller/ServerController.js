@@ -1200,7 +1200,6 @@ module.exports = class ServerController {
             });
 
             socket.on('getChatParticipantList', (requesterId, chatId) => {
-                console.log("hello from SC")
                 let requester = this.#ppants.get(requesterId);
 
                 if (requester.isMemberOfChat(chatId)){
