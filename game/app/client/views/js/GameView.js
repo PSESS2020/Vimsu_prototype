@@ -186,9 +186,14 @@ class GameView {
     {
         return this.#updateList;
     }
+
     drawStatusBar() {
         this.#statusBar.draw();
     }
+
+    drawProfileBox(username) {
+        this.#statusBar.drawProfile(username);
+    } 
 
     draw()
     {

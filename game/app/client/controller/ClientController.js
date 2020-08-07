@@ -124,6 +124,7 @@ class ClientController {
             this.#gameView.initRoomView(map, listOfNPCs, typeOfRoom);
         }
         
+        this.#gameView.drawProfileBox(this.#ownParticipant.getUsername())
         this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
         this.#gameView.initCanvasEvents();
         

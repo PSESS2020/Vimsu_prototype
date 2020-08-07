@@ -31,6 +31,11 @@ class StatusBar extends Views{
         } 
     }
 
+    drawProfile(username) {
+        $('#profilePlaceholder').empty();
+        $('#profilePlaceholder').text(username);
+    }
+
     draw() {
         this.drawClock();
         this.drawConnectionStatus();
