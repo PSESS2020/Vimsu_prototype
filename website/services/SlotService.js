@@ -32,7 +32,7 @@ module.exports = class SlotService {
             var slot = new Slot(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants);
 
             var lecture = {
-                id: slot.getId(),
+                lectureId: slot.getId(),
                 videoId: slot.getVideoId(),
                 duration: slot.getDuration(),
                 conferenceId: slot.getConferenceId(),
@@ -83,5 +83,21 @@ module.exports = class SlotService {
                 console.error(err);
             })
 
+    }
+
+    static deleteAllSlots(vimsudb) {
+        return vimsudb.deleteAllFromCollection("lectures").then(res => {
+            console.log("all slots deleted");
+        }).catch(err => {
+            console.error(err);
+        })
+    }
+
+    static deleteSlot(lectureId, vimsudb) {
+        return vimsudb.deleteOneFromCollection("lectures", {lectureId: lectureId}).then(res => {
+            console.log("slot with lectureId " + lectureId + " deleted");
+        }).catch(err => {
+            console.error(err);
+        })
     }
 } 

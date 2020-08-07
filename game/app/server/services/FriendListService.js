@@ -58,13 +58,24 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: friendId}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: friendId}).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
 
+    static removeAllFriends(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: {$exists: true}}).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
     }
 } 

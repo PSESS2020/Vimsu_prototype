@@ -49,6 +49,18 @@ module.exports = class FriendRequestListService {
 
     }
 
+    static removeAllSentFriendRequests(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': {$exists: true}}).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
     static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
         TypeChecker.isString(ownParticipantId);
@@ -63,6 +75,18 @@ module.exports = class FriendRequestListService {
                 return false;
             })
 
+    }
+
+    static removeAllReceivedFriendRequests(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': {$exists: true}}).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
     }
 
     static getReceivedRequestList(participantId, conferenceId, vimsudb) {

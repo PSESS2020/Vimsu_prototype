@@ -385,4 +385,22 @@ module.exports = class ParticipantService {
         });
 
     }
+
+    static deleteAllParticipants(conferenceId, vimsudb) {
+        return vimsudb.deleteAllFromCollection("participants_" + conferenceId).then(res => {
+            console.log("all participants deleted");
+        }).catch(err => {
+            console.error(err);
+        })
+    }
+
+    static deleteParticipant(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        return vimsudb.deleteOneFromCollection("participants_" + conferenceId, {participantId: participantId}).then(res => {
+            console.log("participant with participantId " + participantId + " deleted");
+        }).catch(err => {
+            console.error(err);
+        })
+
+    }
 } 
