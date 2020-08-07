@@ -25,13 +25,13 @@ database.connectDB().then(res => {
         it('test getRankListWithUsername', function() {
             RankListService.getRankListWithUsername(conferenceId, 2, database).then(rankList => {
                 expect(rankList).to.be.an('array').and.to.have.lengthOf.above(2);
-            })     
+            })
         });
-
-        after(function() {
-            process.exit(0);
-        })
     });
+
+    after(function() {
+        setTimeout(function(){ process.exit(0); }, 3000);
+    })
 })
     
     
