@@ -1,5 +1,5 @@
 const Settings = require('../../utils/Settings');
-const TypeChecker = require('../../utils/TypeChecker');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 const Lecture = require('../models/Lecture');
 
 module.exports = class Schedule {

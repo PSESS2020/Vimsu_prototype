@@ -1,12 +1,12 @@
 class TypeChecker {
 
-    static isValidString(value) 
+    /*static isValidString(value) 
     {
         if ((typeof value !== 'string') || !value) 
         {   
             throw new TypeError(value + ' is not a string or is an empty string!')
         }
-    }
+    }*/
 
     static isString(value) 
     {
@@ -32,13 +32,13 @@ class TypeChecker {
         }
     }
 
-    static isFloat(value) 
+    /*static isFloat(value) 
     {
         if ((typeof value !== 'number') || value % 1 === 0 || !(isFinite(value))) 
         {
             throw new TypeError(value + ' is not a float!')
         }
-    }
+    }*/
 
     static isBoolean(value) 
     {
@@ -64,12 +64,12 @@ class TypeChecker {
         }
     }
 
-    static isFunction(value) 
+    /*static isFunction(value) 
     {
         if(typeof value !== 'function') {
             throw new TypeError(value + ' is not a function!')
         }
-    }
+    }*/
 
     static isEnumOf(object, Enum)
     {

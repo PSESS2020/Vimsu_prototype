@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Orator = require('./Orator.js');
 const LectureChat = require('./LectureChat.js');
 const Settings = require('../../utils/Settings.js');

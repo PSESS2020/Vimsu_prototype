@@ -1,6 +1,6 @@
 const FileSystem = require('../../config/FileSystem');
 const ObjectId = require('mongodb').ObjectID;
-const TypeChecker = require('../../game/app/utils/TypeChecker');
+const TypeChecker = require('../../config/TypeChecker')
 const Slot = require('../models/Slot')
 
 module.exports = class SlotService {

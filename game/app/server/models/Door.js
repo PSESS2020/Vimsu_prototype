@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Position = require('./Position.js');
 const Direction = require('../../utils/Direction.js');
 const TypeOfDoor = require('../../utils/TypeOfDoor.js');

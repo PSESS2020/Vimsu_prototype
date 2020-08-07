@@ -1,6 +1,6 @@
 var Position = require('./Position.js')
 var ParticipantController = require('../../server/controller/ParticipantController.js')
-var TypeChecker = require('../../utils/TypeChecker.js')
+var TypeChecker = require('../../../../config/TypeChecker.js')
 const Settings = require('../../utils/Settings.js');
 const Direction = require('../../utils/Direction.js')
 const BusinessCard = require('./BusinessCard.js')

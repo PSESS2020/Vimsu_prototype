@@ -1,7 +1,7 @@
 //Nicht sicher ob so ein Service nötig ist
 
 
-var TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 var Door = require('../models/Door.js');
 var Settings = require('../../utils/Settings.js');
 var Position = require('../models/Position.js');

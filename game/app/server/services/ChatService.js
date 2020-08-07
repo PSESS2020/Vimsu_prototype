@@ -1,4 +1,4 @@
-const TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 const Message = require('../models/Message');
 const Chat = require('../models/Chat');
 const OneToOneChat = require('../models/OneToOneChat');

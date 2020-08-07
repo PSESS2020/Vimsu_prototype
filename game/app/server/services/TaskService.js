@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Task = require('../models/Task.js');
 var TypeOfTask = require('../../utils/TypeOfTask')
 

@@ -1,4 +1,4 @@
-const TypeChecker = require('../../game/app/utils/TypeChecker')
+const TypeChecker = require('../../config/TypeChecker')
 const Account = require('../models/Account')
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
