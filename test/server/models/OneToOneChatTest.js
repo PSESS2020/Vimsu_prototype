@@ -62,11 +62,9 @@ describe('OneToOneChat Testing', function() {
 
     describe('OneToOneChat getter functions', function() {
         it('Test get unknown username', function() {
-            try {
+            expect(() => {
                 oneToOneChat.getOtherUsername(unknownUsername);
-            } catch (err) {
-                expect(err).to.be.eql(new Error(unknownUsername + ' is not in ppantList of this chat!'));
-            }
+            }).to.throw(Error, unknownUsername + ' is not in ppantList of this chat!');
         })
 
         it('Test get creator username', function() {
@@ -78,11 +76,9 @@ describe('OneToOneChat Testing', function() {
         })
 
         it('Test get unknown id', function() {
-            try {
+            expect(() => {
                 oneToOneChat.getOtherUserId(unknownUserID);
-            } catch (err) {
-                expect(err).to.be.eql(new Error(unknownUserID + ' is not in ppantList of this chat!'));
-            }
+            }).to.throw(Error, unknownUserID + ' is not in ppantList of this chat!');
         })
 
         it('Test get creator id', function() {

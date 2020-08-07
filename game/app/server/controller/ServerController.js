@@ -1429,7 +1429,7 @@ module.exports = class ServerController {
                 //creates new chat and writes it in DB
                 // last argument is a placeholder
                 ChatService.newOneToOneChat(creatorID, chatPartnerID, creator.getBusinessCard().getUsername(),
-                                                chatPartner.getBusinessCard().getUsername(), "testconference").then(chat => {
+                                                chatPartner.getBusinessCard().getUsername(), Settings.CONFERENCE_ID).then(chat => {
                     console.log(chat.getTitle());
                     
                     //check if creator is online

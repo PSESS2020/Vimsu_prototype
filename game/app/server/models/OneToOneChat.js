@@ -32,7 +32,7 @@ module.exports = class OneToOneChat extends Chat{
     //method to get the other username in this 1:1 chat (P)
     getOtherUsername(ownUsername) {
         if (ownUsername !== this.#creatorUsername && ownUsername !== this.#chatPartnerUsername) {
-            return new Error(ownUsername + ' is not in ppantList of this chat!');
+            throw new Error(ownUsername + ' is not in ppantList of this chat!');
         }
 
         if (ownUsername === this.#creatorUsername) {
@@ -45,7 +45,7 @@ module.exports = class OneToOneChat extends Chat{
     //method to get the other user id in this 1:1 chat
     getOtherUserId(ownId) {
         if (ownId !== super.getParticipantList()[0] && ownId !== super.getParticipantList()[1]) {
-            return new Error(ownId + ' is not in ppantList of this chat!');
+            throw new Error(ownId + ' is not in ppantList of this chat!');
         }
 
         if (ownId === super.getParticipantList()[0]) {
