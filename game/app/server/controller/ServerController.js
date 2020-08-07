@@ -1099,7 +1099,7 @@ module.exports = class ServerController {
             socket.on('getChatThread', (requesterId, chatID) => {
                 
                 var participant = this.#ppants.get(requesterId);
-                //var participant = this.ppants.get(socket.ppantId);
+                //var participant = this.#ppants.get(socket.ppantId);
                 console.log("CHAT THREAD PARTICIPANT: " + participant.getId());
                 if(participant.isMemberOfChat(chatID)){
                     // Load chat-data into chatData field
@@ -1419,41 +1419,6 @@ module.exports = class ServerController {
                 }
                 
                 socket.emit('showNPCStory', name, story);
-            });
-
-            //Called whenever a ppant creates a new 1:1 chat (P)
-            socket.on('createNewChat', (creatorID, chatPartnerID) => {
-                
-                let creator = this.ppants.get(creatorID);
-                let chatPartner = this.ppants.get(chatPartnerID);
-                //creates new chat and writes it in DB
-                // last argument is a placeholder
-                ChatService.newOneToOneChat(creatorID, chatPartnerID, creator.getBusinessCard().getUsername(),
-                                                chatPartner.getBusinessCard().getUsername(), "testconference").then(chat => {
-                    console.log(chat.getTitle());
-                    
-                    //check if creator is online
-                    if (creator !== undefined) {
-                        creator.addChat(chat);
-                    }
-
-                    //check if chatPartner is online
-                    if (chatPartner !== undefined) {
-                        chatPartner.addChat(chat);
-                    }
-                    
-                    var chatData = {
-                        title: chat.getTitle(),
-                        chatId: chat.getId(),
-                        messages: []
-                    }
-                    
-                    /* Tell the creator's client to create a new chat. The true tells
-                     * the client to immediately open the chatThreadView of the new chat 
-                     * so that the creator can start sending messages.
-                     * - (E) */
-                    this.#io.to(socket.id).emit('newChat', chatData, true);
-                });
             });
             
             // This will need a complete rewrite once the server-side models are properly implemented
