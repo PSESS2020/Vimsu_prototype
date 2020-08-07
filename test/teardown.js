@@ -1,3 +1,3 @@
 after(function() {
-    process.exit(0);
+    setTimeout(function(){ process.exit(0); }, 3000);
 })
