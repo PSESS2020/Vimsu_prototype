@@ -1,4 +1,4 @@
-var TypeChecker = require('../../game/app/utils/TypeChecker')
+var TypeChecker = require('../../config/TypeChecker')
 var Account = require('./Account')
 
 module.exports = class Slot {

@@ -2,6 +2,7 @@ const GameObject = require('../../../game/app/server/models/GameObject.js');
 const chai = require('chai');
 const Position = require('../../../game/app/server/models/Position.js');
 const assert = chai.assert;
+const expect = chai.expect;
 
 //create example gameObject 
 var id = 1;
@@ -39,4 +40,8 @@ describe('GameObjectTest getter functions', function() {
     it('test getSolid', function() {
         assert.equal(gameObject.getSolid(), isSolid);
     });
+
+    it('test solid type Error', function() {
+        expect(() => new GameObject(id, name, width, length, position, 1)).to.throw(TypeError);
+    })
 });

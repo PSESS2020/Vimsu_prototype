@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Chat = require('./Chat.js');
 
 module.exports = class GroupChat extends Chat {

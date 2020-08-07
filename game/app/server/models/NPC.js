@@ -1,4 +1,4 @@
-const TypeChecker = require("../../utils/TypeChecker.js");
+var TypeChecker = require('../../../../config/TypeChecker.js');
 const Position = require("./Position.js");
 const Direction = require('../../utils/Direction.js');
 

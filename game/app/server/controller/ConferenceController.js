@@ -4,12 +4,12 @@ const Conference = require('../models/Conference.js');
 const TypeOfRoom = require('../../utils/TypeOfRoom');
 
 /* Import Controller */
-const RoomController = ('./RoomController.js');
+const RoomController = require('./RoomController.js');
 
 
 /* Import Utils */
-const Settings = ('../../utils/Settings.js');
-const TypeChecker = ('../../utils/TypeChecker.js');
+const Settings = require('../../utils/Settings.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 
 module.exports = class ConferenceController {
 

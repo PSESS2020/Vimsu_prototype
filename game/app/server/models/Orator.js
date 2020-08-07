@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Position = require('./Position.js');
 var Direction = require('../../utils/Direction.js');
 var Participant = require('./Participant.js');

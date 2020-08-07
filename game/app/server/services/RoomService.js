@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 var TypeOfRoom = require('../../utils/TypeOfRoom.js');
 var Room = require('../models/Room.js');
 const Settings = require('../../utils/Settings.js');
