@@ -15,7 +15,6 @@ const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../config/db');
 const database = new db();
-database.connectDB();
 
 //Test Data OneToOneChat
 var chatId = OneToOneChatTestData.chatId;
@@ -74,6 +73,7 @@ describe('ChatService Testing', function() {
     var globalResults;
     
     before(async () => {
+    await database.connectDB();
     var newOneToOneChat_result = await newOneToOneChat(); 
     var newGroupChat_result = await newGroupChat();
     var results = [newOneToOneChat_result, newGroupChat_result];
@@ -119,21 +119,23 @@ it('Test newOneToOneChat()', function() {
             expect(participantList_ONE_result).to.have.members(participantList_ONE).and.to.have.lengthOf(2);
 
 })
-    /*it('Test existsOneToOneChat() with valid chat', async function() {
+    it('Test existsOneToOneChat() with valid chat', async () => {
         await ChatService.existsOneToOneChat(creatorID, chatPartnerID, conferenceId, database).then(chat => {
-            expect(chat).to.be.instanceOf(OneToOneChat).and.to.be.eql(superChat);
+            expect(chat).to.be.instanceOf(Object).and.to.have.property('chatId');
+            expect(chat.memberId).to.be.an('array').and.to.have.members(participantList_ONE).and.to.have.lengthOf(2);
+            expect(chat.messageList).to.be.an('array').and.to.have.members([]).and.to.have.lengthOf(0);
+            expect(chat.username1).to.be.a('string').and.to.equal(creatorUsername);
+            expect(chat.username2).to.be.a('string').and.to.equal(chatPartnerUsername);
+        })
+    })
+
+    it('Test existsOneToOneChat() with invalid chat', async () => {
+       await ChatService.existsOneToOneChat(ownerId, chatPartnerID, conferenceId, database).then(chat => {
+            expect(chat).to.be.false.and.not.to.be.eql(globalResults[0]);
         }).catch(err => {
             console.log(err);
         })
     })
-
-    it('Test existsOneToOneChat() with invalid chat', async function() {
-       await ChatService.existsOneToOneChat(ownerId, chatPartnerID, conferenceId, database).then(chat => {
-            expect(chat).to.be.true.and.not.to.be.eql(superChat);
-        }).catch(err => {
-            console.log(err);
-        })
-    })*/
 
 
 it('Test newGroupChat()', function() {
