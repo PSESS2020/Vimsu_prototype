@@ -185,13 +185,12 @@ module.exports = class Chatservice {
     }
 
     //tested
-    static storeParticipant(chatId, ownerId, participantId, vimsudb) {
+    static storeParticipant(chatId, conferenceId, participantId, vimsudb) {
         TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isString(participantId);
 
-
-        return vimsudb.insertToArrayInCollection("chats_" + ownerId, { chatId: chatId }, { memberId: participantId }).then(res => {
-
-
+        return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
             return true;
 
         }).catch(err => {

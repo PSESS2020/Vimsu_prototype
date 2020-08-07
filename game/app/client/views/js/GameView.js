@@ -481,9 +481,9 @@ class GameView {
         this.#friendListView.draw(businessCards)
     }
 
-    initInviteFriendsView(businessCards, groupName, limit) {
+    initInviteFriendsView(businessCards, groupName, limit, chatId) {
         this.#inviteFriendsView = new InviteFriendsView();
-        this.#inviteFriendsView.draw(businessCards, groupName, limit);
+        this.#inviteFriendsView.draw(businessCards, groupName, limit, chatId);
     }
 
     initCurrentAchievementsView(achievements) {

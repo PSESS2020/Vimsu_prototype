@@ -63,6 +63,16 @@ class ChatThreadView extends WindowView {
             new EventManager().handleShowChatParticipantList(this.#chat.chatId);
         })
 
+        $('#inviteFriendsBtn').click((event) => {
+            event.preventDefault();
+
+            if(this.#chat.partnerId) {
+                return;
+            }
+
+            new EventManager().handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
+        });
+
     }
 
     sendMessage() {
@@ -92,8 +102,10 @@ class ChatThreadView extends WindowView {
         
         if(chat.groupChat) {
             $('#chatParticipantListBtn').show();
+            $('#inviteFriendsBtn').show();
         } else {
             $('#chatParticipantListBtn').hide();
+            $('#inviteFriendsBtn').hide();
         }
     };
 

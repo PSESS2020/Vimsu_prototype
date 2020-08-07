@@ -6,13 +6,15 @@ class InviteFriendsView extends WindowView {
         super()
     }
 
-    draw(businessCards, groupName, limit) {
+    draw(businessCards, groupName, limit, chatId) {
         $('#inviteFriendsModal .modal-body .list-group').empty()
 
         if (businessCards) {
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
             this.#businessCards = sortedBusinessCards;
 
+            $('#noinvitedfriends').hide();
+            $('#toomanyinvitedfriends').hide();
             $('#toomanyinvitedfriends').empty();
             $('#toomanyinvitedfriends').text("Max. number group participant of " + limit + " is reached!");
 
@@ -60,28 +62,24 @@ class InviteFriendsView extends WindowView {
                             $('#selected' + '${businessCard.getParticipantId()}').hide();
                             $('#invite' + '${businessCard.getParticipantId()}').show();
                         })
+
+                        $('#createGroupChat').off();
+                        $('#createGroupChat').on('click', function (event) {
+                            console.log("hehehehe")
+                            if(invitedFriends.length > 0 && invitedFriends.length < ${limit} + 1) {
+                                $('#inviteFriendsModal').modal('hide');
+                                new EventManager().handleCreateGroupChat('${groupName}', invitedFriends, ${limit}, '${chatId}');
+                            } else if (invitedFriends.length < 1) {
+                                $('#noinvitedfriends').show();
+                            } else {
+                                $('#toomanyinvitedfriends').show()
+                            }
+
+                        })
                     </script>
                 `)
                 });
 
-                $('#inviteFriendsModal .modal-body .list-group').append(`
-            
-                <script>
-                $('#createGroupChat').off();
-                    $('#createGroupChat').on('click', function (event) {
-
-                    if(invitedFriends.length > 0 && invitedFriends.length < ${limit} + 1) {
-                        $('#inviteFriendsModal').modal('hide');
-                        new EventManager().handleCreateGroupChat('${groupName}', invitedFriends);
-                    } else if (invitedFriends.length < 1) {
-                        $('#noinvitedfriends').show();
-                    } else {
-                        $('#toomanyinvitedfriends').show()
-                    }
-
-                })
-                </script>
-            `)
         } else {
             $('#inviteFriendsModal .modal-body').text("Group name was empty!")
         }
