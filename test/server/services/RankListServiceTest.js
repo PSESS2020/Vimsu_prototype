@@ -9,18 +9,18 @@ database.connectDB().then(res => {
     describe('RankListService getter', function() {
 
         it('test getRank', function() {
-
             RankListService.getRank(participantId, conferenceId, database).then(rank => {
                 expect(rank).to.eql(1);
             })
+        });
 
+        it('test getRank Error', function() {
             try {
                 RankListService.getRank(participantId2, conferenceId, database)
             } catch {
                 expect(err).to.be.eql(new Error(participantId2 + ' is not in ranklist'));
             }
-
-        });
+        })
 
         it('test getRankListWithUsername', function() {
             RankListService.getRankListWithUsername(conferenceId, 2, database).then(rankList => {
