@@ -569,7 +569,6 @@ class GameView {
     }
 
     drawChatParticipantList(usernames) {
-        console.log("hello from gameview")
         this.#chatParticipantListView = new ChatParticipantListView().draw(usernames);
     }
 

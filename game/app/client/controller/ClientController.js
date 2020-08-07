@@ -564,7 +564,6 @@ class ClientController {
     }
 
     handleFromServerChatParticipantList(usernames) {
-        console.log("hello from CC2");
         this.#gameView.drawChatParticipantList(usernames);
     }
 
@@ -844,7 +843,6 @@ class ClientController {
     };
 
     handleFromViewShowChatParticipantList(chatId) {
-        console.log("hello from CC");
         this.socket.emit('getChatParticipantList', this.#ownParticipant.getId(), chatId);
     }
 

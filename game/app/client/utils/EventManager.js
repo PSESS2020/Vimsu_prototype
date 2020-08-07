@@ -97,7 +97,6 @@ class EventManager {
      };
 
      handleShowChatParticipantList(chatId) {
-         console.log("hello from eventmanager")
          this.#clientController.handleFromViewShowChatParticipantList(chatId);
      }
      
