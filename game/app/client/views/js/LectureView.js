@@ -238,8 +238,10 @@ class LectureView extends WindowView {
 
     drawChat(lectureChat) {
         $('#lectureChatMessages').empty();
+        console.log("emptied messages");
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
+                console.log("drawing message " + i);
                 var message = lectureChat[i];
                 var messageHeader = message.username + ", " + message.timestamp + ":";
                 var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
@@ -248,6 +250,7 @@ class LectureView extends WindowView {
                 $newMessageBody.text(message.messageText);
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
+                console.log("finished drawing message " + i);
             }
 
         }

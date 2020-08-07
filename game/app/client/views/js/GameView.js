@@ -613,18 +613,25 @@ class GameView {
     }
     
     updateLectureChat(messages) {
+        console.log("update message test 1");
+        // This if statement evaluates as false and prevents
+        // the lectureView from updating properly after a
+        // message has been deleted
         if(this.#lectureView) {
+            console.log("update message test 2");
             this.#lectureView.drawChat(messages);
         }
     };
     
     updateLectureToken(hasToken) {
+        // see above
         if(this.#lectureView) {
             this.#lectureView.updateToken(hasToken);
         }
     };
     
     closeLectureView() {
+        // see above
         if(this.#lectureView) {
             this.#lectureView.close();
         }

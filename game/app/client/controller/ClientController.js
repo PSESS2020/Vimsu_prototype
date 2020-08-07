@@ -575,6 +575,7 @@ class ClientController {
     }
     
     handleFromServerUpdateLectureChat(messages) {
+        console.log("update message test 0");
         this.#gameView.updateLectureChat(messages);
     };
     

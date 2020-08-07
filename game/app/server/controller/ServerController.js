@@ -553,8 +553,6 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
-                
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
@@ -579,9 +577,9 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
-                } else {
+                } else if (lecture.hasToken(ppantID)) {
                 
-                    
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
                     //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
@@ -1836,15 +1834,15 @@ module.exports = class ServerController {
                 for(var i = 1; i < commandArgs.length; i++) {
                     var ppantId = commandArgs[i];
                     if(lecture.hasPPant(ppantId)) {
-                        var socket = this.getSocketObject(this.getSocketId(ppantId));
+                        var socketClient = this.getSocketObject(this.getSocketId(ppantId));
                         lecture.leave(ppantId);
                         lecture.revokeToken(ppantId);
                         lecture.ban(socket.request.session.accountId);
-                        socket.leave(lectureId);
-                        socket.currentLecture = undefined;
-                        socket.broadcast.emit('showAvatar', participantId);
-                        this.#io.to(socket.id).emit('force close lecture');
-                        this.sendRemoval(socket.id);
+                        socketClient.leave(socketClient.currentLecture);
+                        socketClient.currentLecture = undefined;
+                        socketClient.broadcast.emit('showAvatar', ppantId);
+                        this.#io.to(socketClient.id).emit('force close lecture');
+                        this.sendRemoval(socketClient.id);
                     }
                 }
                 break;
@@ -1860,6 +1858,7 @@ module.exports = class ServerController {
                 for(var i = 1; i < commandArgs.length; i++) {
                     lecture.grantToken(commandArgs[i]);
                     var socketid = this.getSocketId(commandArgs[i]);
+                    this.sendGrant(socketid);
                     this.#io.to(socketid).emit('update token', true);
                 }
                 break;
@@ -1907,13 +1906,13 @@ module.exports = class ServerController {
                 this.#io.in(socket.currentLecture).emit('force close lecture');
                 ppantsInLecture.forEach( (ppantId) => {
                     // Get the necessary data to use the socket-connection
-                    var socket = this.getSocketObject(this.getSocketId(ppantId));
+                    var socketClient = this.getSocketObject(this.getSocketId(ppantId));
                     lecture.leave(ppantId);
                     lecture.revokeToken(ppantId);
-                    socket.leave(lectureId);
-                    socket.currentLecture = undefined;
-                    socket.broadcast.emit('showAvatar', participantId);
-                    this.sendClosed(socket.id);                    
+                    socketClient.leave(socketClient.currentLecture);
+                    socketClient.currentLecture = undefined;
+                    socketClient.broadcast.emit('showAvatar', ppantId);
+                    this.sendClosed(socketClient.id);                    
                 });
             default:
                 var messageHeader = "Unrecognized command."
@@ -1990,6 +1989,12 @@ module.exports = class ServerController {
         sendRevoke(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body);
+            }
+        };
+        
+        sendGrant(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.GRANT.header, Messages.GRANT.body);
             }
         };
         

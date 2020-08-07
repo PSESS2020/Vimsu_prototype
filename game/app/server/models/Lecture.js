@@ -226,20 +226,26 @@ module.exports = class Lecture {
      * the counter to zero. 
      * - (E) */
     revokeToken(participantId) {
+        TypeChecker.isString(participantId);
+        
         for(var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if(element[0] === participantId && this.hasToken(participantId)) {
-                element[2] = 0;
+                element[2] = -100; // needs to be negative as setting it to zero won't
+                                   // change behaviour of hasToken
             }
         }
     };
     
     grantToken(participantID) {
+        TypeChecker.isString(participantID);
+        
         // If the participant already has a token, we don't need to do anything
         // We can not grant a token to a participant not yet in the lecture
-        if(!this.hasToken(participantID) && this.#activeParticipants.includes(participantID)) {
-            this.#tokenList.push([participantId, undefined, 300000]);
+        if(this.hasToken(participantID) || !this.#activeParticipants.includes(participantID)) {
+            return;
         }
+        this.#tokenList[this.#getTokenIndex(participantID)][2] = 30000;
     };
 
     #checkToken = function(participantId) {
@@ -290,7 +296,14 @@ module.exports = class Lecture {
         this.#tokenList.push([participantId, undefined, tokenCounter]);
     }
     
-    
+    #getTokenIndex = function(participantId) {
+        for(var i = 0; i < this.#tokenList.length; i++) {
+            if(this.#tokenList[i][0] === participantId) {
+                return i;
+            }
+        }
+        return -1;
+    }
     
     
 }
