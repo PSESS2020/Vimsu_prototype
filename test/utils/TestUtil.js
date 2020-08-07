@@ -1,14 +1,14 @@
-const Position = require('../../../../game/app/server/models/Position.js');
-const BusinessCard = require('../../../../game/app/server/models/BusinessCard.js');
-const FriendList = require('../../../../game/app/server/models/FriendList.js');
-const Achievement = require('../../../../game/app/server/models/Achievement.js');
-const Message = require('../../../../game/app/server/models/Message.js');
-const Task = require('../../../../game/app/server/models/Task.js');
-const Chat = require('../../../../game/app/server/models/Chat.js');
-const Direction = require('../../../../game/app/utils/Direction.js');
-const TypeOfTask = require('../../../../game/app/utils/TypeOfTask.js');
-const Participant = require('../../../../game/app/server/models/Participant.js');
-const Weekdays = require('./Weekdays.js');
+const Position = require('../../game/app/server/models/Position.js');
+const BusinessCard = require('../../game/app/server/models/BusinessCard.js');
+const FriendList = require('../../game/app/server/models/FriendList.js');
+const Achievement = require('../../game/app/server/models/Achievement.js');
+const Message = require('../../game/app/server/models/Message.js');
+const Task = require('../../game/app/server/models/Task.js');
+const Chat = require('../../game/app/server/models/Chat.js');
+const Direction = require('../../game/app/utils/Direction.js');
+const TypeOfTask = require('../../game/app/utils/TypeOfTask.js');
+const Participant = require('../../game/app/server/models/Participant.js');
+const Weekdays = require('../server/models/TestData/Weekdays.js');
 
 class TestUtil {
     
