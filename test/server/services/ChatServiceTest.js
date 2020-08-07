@@ -15,7 +15,7 @@ const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../config/db');
 const database = new db();
-database.connectDB().then(result => {
+database.connectDB();
 
 //Test Data OneToOneChat
 var chatId = OneToOneChatTestData.chatId;
@@ -170,10 +170,6 @@ ChatService.removeParticipant
 ChatService.createChatMessage
 ChatService.removeChat
 ChatService.removeAllChats*/
-
-})
-
-
 
 })
 
