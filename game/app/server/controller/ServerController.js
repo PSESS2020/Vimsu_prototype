@@ -962,41 +962,48 @@ module.exports = class ServerController {
 
                     if(chatId) {
                         //group chat already exists
-
-                        let existingChatPartnerIDList = creator.getChat(chatId).getParticipantList();
+                        let chat = creator.getChat(chatId);
+                        
+                        if(chat instanceof OneToOneChat) {
+                            return;
+                        }
 
                         chatPartnerIDList.forEach(newChatPartnerID => {
                             let newChatPartner = this.#ppants.get(newChatPartnerID);
-                            let newChatPartnerUsername = newChatPartner.getBusinessCard().getUsername();
 
-                            let msgText = newChatPartnerUsername + " has joined the chat";
-
-                            ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
-                                existingChatPartnerIDList.forEach(existingChatParticipantID => {
-                                    let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
-    
-                                    if (existingChatParticipant !== undefined) {
-                                        let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-                                        existingChatParticipantChat.addParticipant(newChatPartnerID);
-                                        existingChatParticipantChat.addMessage(msg);
-                                    }
-                                })
-
-                                var msgToEmit = {
-                                    senderUsername: msg.getUsername(),
-                                    msgId: msg.getMessageId(),
-                                    senderId: msg.getSenderId(),
-                                    timestamp: msg.getTimestamp(),
-                                    msgText: msg.getMessageText()
-                                };
-
-                                this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-
-                                if (newChatPartnerID !== creatorID) {
+                            if (newChatPartnerID !== creatorID) {
                                 
-                                    ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
+                                ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
     
-                                    ChatService.storeParticipant(chatId, Settings.CONFERENCE_ID, newChatPartnerID, this.#db).then(res => {
+                                ChatService.storeParticipant(chatId, Settings.CONFERENCE_ID, newChatPartnerID, this.#db).then(res => {
+
+                                    let newChatPartnerUsername = newChatPartner.getBusinessCard().getUsername();
+
+                                    let msgText = newChatPartnerUsername + " has joined the chat";
+
+                                    ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
+                                        let existingChatPartnerIDList = chat.getParticipantList();
+
+                                        existingChatPartnerIDList.forEach(existingChatParticipantID => {
+                                            let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
+                
+                                            if (existingChatParticipant !== undefined) {
+                                                let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
+                                                existingChatParticipantChat.addParticipant(newChatPartnerID);
+                                                existingChatParticipantChat.addMessage(msg);
+                                            }
+                                        })
+
+                                        var msgToEmit = {
+                                            senderUsername: msg.getUsername(),
+                                            msgId: msg.getMessageId(),
+                                            senderId: msg.getSenderId(),
+                                            timestamp: msg.getTimestamp(),
+                                            msgText: msg.getMessageText()
+                                        };
+
+                                        this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+
                                         if (newChatPartner !== undefined) {
     
                                             ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
@@ -1059,8 +1066,8 @@ module.exports = class ServerController {
                                             })
                                         }
                                     })
-                                }
-                            })       
+                                })
+                            }       
                         })
                         
                     } else {
