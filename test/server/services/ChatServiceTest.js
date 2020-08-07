@@ -13,6 +13,7 @@ const MessageTestData = require('../models/TestData/MessageTestData.js');
 const Settings = require('../../../game/app/utils/Settings.js');
 
 const db = require('../../../config/db');
+const { Server } = require('mongodb');
 const database = new db();
 database.connectDB().then(result => {
 
@@ -116,4 +117,6 @@ var participantList_GROUP_result = chat.getParticipantList();
 
 })
 
+
 })
+
