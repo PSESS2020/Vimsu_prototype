@@ -81,6 +81,7 @@ module.exports = class ServerController {
         this.#rooms = this.#roomService.getAllRooms();
 
         this.#banList = [];
+        this.#muteList = [];
 
         // Array to hold all participants
         this.#ppants = new Map();
@@ -95,16 +96,8 @@ module.exports = class ServerController {
     init() {
         
         //JUST FOR TESTING PURPOSES
-
-        //ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        //ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
-
-        this.#banList = [];
-        this.#muteList = [];
-        
-        //Init all rooms
-        var roomService = new RoomService();
-        this.#rooms = roomService.getAllRooms();
+        //#ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
+        //#ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
 
         /*
         FOYER: this.#rooms[Settings.FOYER_ID - 1];
@@ -567,7 +560,7 @@ module.exports = class ServerController {
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
                 var lectureChat = lecture.getLectureChat();
-                var participant = ppants.get(ppantID);
+                var participant = this.#ppants.get(ppantID);
                 
                 /* We want to check if the ppant "owns" the lecture here.
                  * As the orator-class seems not be actually used yet, we just use
@@ -588,9 +581,10 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
-                } else {
+                } else if (lecture.hasToken(ppantID)) {
                 
-                    participant.increaseAchievementCount('messagesSent')
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
+                    //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
@@ -1828,15 +1822,15 @@ module.exports = class ServerController {
                 for(var i = 1; i < commandArgs.length; i++) {
                     var ppantId = commandArgs[i];
                     if(lecture.hasPPant(ppantId)) {
-                        var socket = this.getSocketObject(this.getSocketId(ppantId));
+                        var socketClient = this.getSocketObject(this.getSocketId(ppantId));
                         lecture.leave(ppantId);
                         lecture.revokeToken(ppantId);
                         lecture.ban(socket.request.session.accountId);
-                        socket.leave(lectureId);
-                        socket.currentLecture = undefined;
-                        socket.broadcast.emit('showAvatar', participantId);
-                        this.#io.to(socket.id).emit('force close lecture');
-                        this.sendRemoval(socket.id);
+                        socketClient.leave(socketClient.currentLecture);
+                        socketClient.currentLecture = undefined;
+                        socketClient.broadcast.emit('showAvatar', ppantId);
+                        this.#io.to(socketClient.id).emit('force close lecture');
+                        this.sendRemoval(socketClient.id);
                     }
                 }
                 break;
@@ -1852,6 +1846,7 @@ module.exports = class ServerController {
                 for(var i = 1; i < commandArgs.length; i++) {
                     lecture.grantToken(commandArgs[i]);
                     var socketid = this.getSocketId(commandArgs[i]);
+                    this.sendGrant(socketid);
                     this.#io.to(socketid).emit('update token', true);
                 }
                 break;
@@ -1879,7 +1874,7 @@ module.exports = class ServerController {
                                    "seperated from the next by a whitespace-character, and grants them lecture tokens " +
                                    "(if they are currently listening to the lecture and do not own one). They will " +
                                    "be able to post messages into the lecture chat.",
-                                   "\close -- Closes the lecture and makes it inaccessible. Every current participant " +
+                                   "\\close -- Closes the lecture and makes it inaccessible. Every current participant " +
                                    "will be forcefully ejected and nobody will be able to rejoin the lecture. " + 
                                    "WARNING: this command can NOT be reversed."];
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
@@ -1897,16 +1892,15 @@ module.exports = class ServerController {
                 var ppantsInLecture = lecture.getActiveParticipants();
                 lecture.hide();
                 this.#io.in(socket.currentLecture).emit('force close lecture');
-                ppantsInLecture.forEach( (ppant) => {
-                    var ppantId = ppant.getId();
+                ppantsInLecture.forEach( (ppantId) => {
                     // Get the necessary data to use the socket-connection
-                    var socket = this.getSocketObject(this.getSocketId(ppantId));
+                    var socketClient = this.getSocketObject(this.getSocketId(ppantId));
                     lecture.leave(ppantId);
                     lecture.revokeToken(ppantId);
-                    socket.leave(lectureId);
-                    socket.currentLecture = undefined;
-                    socket.broadcast.emit('showAvatar', participantId);
-                    this.sendClosed(socket.id);                    
+                    socketClient.leave(socketClient.currentLecture);
+                    socketClient.currentLecture = undefined;
+                    socketClient.broadcast.emit('showAvatar', ppantId);
+                    this.sendClosed(socketClient.id);                    
                 });
             default:
                 var messageHeader = "Unrecognized command."
@@ -1983,6 +1977,12 @@ module.exports = class ServerController {
         sendRevoke(socketid) {
             if(socketid != undefined) {
                 this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body);
+            }
+        };
+        
+        sendGrant(socketid) {
+            if(socketid != undefined) {
+                this.#io.to(socketid).emit("New global message", Messages.GRANT.header, Messages.GRANT.body);
             }
         };
         
