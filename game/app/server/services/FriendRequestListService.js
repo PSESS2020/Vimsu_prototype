@@ -1,4 +1,4 @@
-const TypeChecker = require('../../utils/TypeChecker.js');
+const TypeChecker = require('../../../../config/TypeChecker.js');
 
 
 module.exports = class FriendRequestListService {

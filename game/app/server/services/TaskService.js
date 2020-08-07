@@ -1,4 +1,4 @@
-var TypeChecker = require('../../utils/TypeChecker.js');
+var TypeChecker = require('../../../../config/TypeChecker.js');
 var Task = require('../models/Task.js');
 var TypeOfTask = require('../../utils/TypeOfTask')
 
@@ -19,7 +19,7 @@ module.exports = class TaskService {
         return this.#tasks;
     }
 
-    getTask(taskId) {
+    /*getTask(taskId) {
         TypeChecker.isInt(taskId);
 
         let index = this.#tasks.findIndex(task => task.getId() === taskId);
@@ -30,7 +30,7 @@ module.exports = class TaskService {
         }
 
         return this.#tasks[index];
-    }
+    }*/
 
     getTaskByType(taskType) {
         TypeChecker.isEnumOf(taskType, TypeOfTask);

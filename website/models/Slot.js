@@ -1,5 +1,4 @@
-var TypeChecker = require('../../game/app/utils/TypeChecker')
-var Account = require('./Account')
+var TypeChecker = require('../../config/TypeChecker')
 
 module.exports = class Slot {
 
@@ -7,6 +6,7 @@ module.exports = class Slot {
     #title;
     #conferenceId;
     #videoId;
+    #duration;
     #remarks;
     #startingTime;
     #oratorId;
@@ -15,35 +15,36 @@ module.exports = class Slot {
     /**
      * @author Klaudia
      * 
+     * @param {String} id
      * @param {String} title 
      * @param {String} videoId 
+     * @param {String} duration
      * @param {String} conferenceId
      * @param {String} remarks 
      * @param {Date} startingTime 
      * @param {String} oratorId 
      * @param {int} maxParticipants 
      */
-    constructor(title, conferenceId, videoId, remarks, startingTime, oratorId, maxParticipants) {
+    constructor(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants) {
+        TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(videoId);
+        TypeChecker.isNumber(duration);
         TypeChecker.isString(remarks);
         TypeChecker.isInstanceOf(startingTime, Date);
         TypeChecker.isString(oratorId);
         TypeChecker.isInt(maxParticipants);
 
+        this.#id = id;
         this.#title = title;
         this.#videoId = videoId;
         this.#conferenceId = conferenceId;
+        this.#duration = duration;
         this.#remarks = remarks;
         this.#startingTime = startingTime;
         this.#oratorId = oratorId;
         this.#maxParticipants = maxParticipants;
-    }
-
-    setId(id) {
-        TypeChecker.isString(id);
-        this.#id = id;
     }
 
     getId() {
@@ -56,6 +57,10 @@ module.exports = class Slot {
 
     getConferenceId() {
         return this.#conferenceId;
+    }
+    
+    getDuration() {
+        return this.#duration;
     }
 
     getVideoId() {
