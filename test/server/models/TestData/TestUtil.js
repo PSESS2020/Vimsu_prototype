@@ -12,8 +12,21 @@ const Weekdays = require('./Weekdays.js');
 
 class TestUtil {
     
+    
     static randomInt() {
         return Math.floor((Math.random() * 1000000) - 500000);
+    };
+    
+    static randomIntWithMax(max) {
+        return Math.floor(Math.random() * max);
+    };
+    
+    static randomIntWithMin(min) {
+        return (Math.floor(Math.random() * 1000000)) + min;
+    };
+    
+    static randomIntWithMaxAndMin(max, min) {
+        return (Math.floor(Math.random() * max) + min);
     };
     
     static randomString() {
@@ -51,11 +64,23 @@ class TestUtil {
         return (new Position(this.randomInt(), this.randomInt(), this.randomInt()));
     };
     
+    static randomPositionWithIdAndMax(id, maxX, maxY) {
+        return (new Position(id, this.randomIntWithMax(maxX), this.randomIntWithMax(maxY)));
+    };
+    
+    static randomPositionWithIdAndMin(id, minX, minY) {
+        return (new Position(id, this.randomIntWithMin(minX), this.randomIntWithMin(minY)));
+    };
+    
+    static randomPositionExcludeId(id) {
+        return (new Position(this.randomIntWithMin(++id), this.randomInt(), this.randomInt()));
+    };
+    
     static randomParticipant() {
         return (new Participant(this.randomString(), this.randomString(), this.randomBusinessCard(),
                     this.randomPosition(), this.randomObjectValue(Direction), this.randomFriendList(),
                     this.randomFriendList(), this.randomFriendList(), this.randomAchievementList(),
-                    this.randomTaskList(), this.randomBool(), this.randomAwardPoints(), /* causes stack-overflow this.randomChatList()*/ []));
+                    this.randomTaskList(), this.randomBool(), this.randomIntWithMax(1024), /* causes stack-overflow this.randomChatList()*/ []));
     };
     
     static randomMessage() {
@@ -68,14 +93,14 @@ class TestUtil {
     };
     
     static randomAchievement() {
-        var randomLevel = this.randomLevel();
-        var randomMaxLevel = randomLevel + this.randomLevel();
+        var randomLevel = this.randomIntWithMax(10);
+        var randomMaxLevel = this.randomIntWithMaxAndMin(10, randomLevel);
         return (new Achievement(this.randomString(), this.randomString(), this.randomString(), this.randomString(), 
-                   randomLevel, this.randomRGB(), this.randomAwardPoints(), randomMaxLevel, this.randomObjectValue(TypeOfTask)));
+                   randomLevel, this.randomRGB(), this.randomIntWithMax(1024), randomMaxLevel, this.randomObjectValue(TypeOfTask)));
     };
     
     static randomTask() {
-        return (new Task(this.randomInt(), this.randomObjectValue(TypeOfTask), this.randomAwardPoints()));
+        return (new Task(this.randomInt(), this.randomObjectValue(TypeOfTask), this.randomIntWithMax(1024)));
     };
     
     static randomChat() {
@@ -145,6 +170,30 @@ class TestUtil {
         var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomChat()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomPositionListWithSizeAndIdAndMax(size, id, maxX, maxY) {
+        var listToReturn = [];
+        for (var i = 0; i < size; i++) {
+           listToReturn.push(this.randomPositionWithIdAndMax(id, maxX, maxY)); 
+        }
+        return listToReturn;
+    };
+    
+    static randomPositionListWithSizeAndIdAndMin(size, id, minX, minY) {
+        var listToReturn = [];
+        for (var i = 0; i < size; i++) {
+           listToReturn.push(this.randomPositionWithIdAndMin(id, minX, minY)); 
+        }
+        return listToReturn;
+    };
+    
+    static randomPositionListWithSizeAndExcludeId(size, id) {
+        var listToReturn = [];
+        for (var i = 0; i < size; i++) {
+           listToReturn.push(this.randomPositionExcludeId(id)); 
         }
         return listToReturn;
     };

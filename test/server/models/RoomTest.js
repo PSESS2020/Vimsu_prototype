@@ -173,8 +173,124 @@ describe('test Message sending', function () {
 })
 
 
-describe('test Collision Detection', function () {
-    //checkForCollision
+describe('test OccMap Init', function () {
+    
+    before( function () {
+        testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
+        testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT);
+        testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION);
+        testGameObjectService = new GameObjectService();
+        testNPCService = new NPCService();
+    });
+    
+    it('test OccMap Foyer', function () {
+        var objects = testGameObjectService.getObjects(Settings.FOYER_ID);
+        for(var i = 0; i < objects.length; i++) {
+            var testPos = objects[i].getPosition();
+            assert.equal(testFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+        var NPCs = testNPCService.getNPCs(Settings.FOYER_ID);
+        for(var i = 0; i < NPCs.length; i++) {
+            var testPos = NPCs[i].getPosition();
+            assert.equal(testFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+    });
+    
+    it('test OccMap FoodCourt', function () {
+        var objects = testGameObjectService.getObjects(Settings.FOODCOURT_ID);
+        for(var i = 0; i < objects.length; i++) {
+            var testPos = objects[i].getPosition();
+            assert.equal(testFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+        var NPCs = testNPCService.getNPCs(Settings.FOODCOURT_ID);
+        for(var i = 0; i < NPCs.length; i++) {
+            var testPos = NPCs[i].getPosition();
+            assert.equal(testFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+    });
+    
+    it('test OccMap Reception', function () {
+        var objects = testGameObjectService.getObjects(Settings.RECEPTION_ID);
+        for(var i = 0; i < objects.length; i++) {
+            var testPos = objects[i].getPosition();
+            assert.equal(testReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+        var NPCs = testNPCService.getNPCs(Settings.RECEPTION_ID);
+        for(var i = 0; i < NPCs.length; i++) {
+            var testPos = NPCs[i].getPosition();
+            assert.equal(testReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            expect(testReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
+        }
+    });
+    
+
+    
+})
+
+describe('test collision checking', function () {
+    
+    before( function () {
+        testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
+        testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT);
+        testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION);
+    });
+
+    it('test CheckCollision Illegal', function () {
+        expect(() => testFoyer.checkForCollision(0)).to.throw(TypeError, 'not an instance of');
+        expect(() => testFoyer.checkForCollision("fehler")).to.throw(TypeError, 'not an instance of');
+        var testIllegalPositionsWrongRoom = TestUtil.randomPositionListWithSizeAndExcludeId(10, Settings.FOYER_ID);
+        testIllegalPositionsWrongRoom.forEach( (position) => {
+            expect( () => testFoyer.checkForCollision(position)).to.throw(Error, 'Wrong room id!');
+        });
+        var testIllegalPositionsNegativeCord = TestUtil.randomPositionListWithSizeAndIdAndMax(10, Settings.FOYER_ID, -25, -25);
+        testIllegalPositionsNegativeCord.forEach( (position) => {
+            expect(testFoyer.checkForCollision(position)).to.be.true;
+        });
+        var testIllegalPositionsOutOfBounds = TestUtil.randomPositionListWithSizeAndIdAndMin(10, Settings.FOYER_ID,
+                                                            RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
+        testIllegalPositionsOutOfBounds.forEach( (position) => {
+            expect(testFoyer.checkForCollision(position)).to.be.true;
+        });
+    });
+    
+    it('test CheckCollision Legal Foyer', function () {
+        for(var i = 0; i < testFoyer.getWidth(); i++) {
+            for(var j = 0; j < testFoyer.getLength(); j++) {
+                var testPos = new Position(Settings.FOYER_ID, i, j);
+                if(!(testFoyer.getOccMap()[i][j])){
+                    expect(testFoyer.checkForCollision(testPos)).to.be.false;
+                }
+            }
+        }
+    });
+    
+    it('test CheckCollision Legal Foodcourt', function () {
+        for(var i = 0; i < testFoodcourt.getWidth(); i++) {
+            for(var j = 0; j < testFoodcourt.getLength(); j++) {
+                var testPos = new Position(Settings.FOODCOURT_ID, i, j);
+                if(!(testFoodcourt.getOccMap()[i][j])){
+                    expect(testFoodcourt.checkForCollision(testPos)).to.be.false;
+                }
+            }
+        }
+    });
+    
+    it('test CheckCollision Legal Reception', function () {
+        for(var i = 0; i < testReception.getWidth(); i++) {
+            for(var j = 0; j < testReception.getLength(); j++) {
+                var testPos = new Position(Settings.RECEPTION_ID, i, j);
+                if(!(testReception.getOccMap()[i][j])){
+                    expect(testReception.checkForCollision(testPos)).to.be.false;
+                }
+            }
+        }
+    });
+    
 })
 
 describe('test Door handling', function () {
