@@ -544,7 +544,6 @@ class GameView {
         if (this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
-
     };
 
     updateSuccessesBar(points, rank) {
@@ -635,21 +634,77 @@ class GameView {
         }
     }
     
-    updateLectureChat(messages) {
-        if(this.#lectureView) {
-            this.#lectureView.drawChat(messages);
+    updateLectureChat(lectureChat) {
+        /*
+        console.log("update message test 1");
+        // This if statement evaluates as false and prevents
+        // the lectureView from updating properly after a
+        // message has been deleted
+        //if(this.#lectureView) {
+            console.log("update message test 2");
+            this.#lectureView.drawChat(messages); // as the lectureView is undefined, this does nothing
+        //}
+        * */
+        $('#lectureChatMessages').empty();
+        console.log("emptied messages");
+        if (lectureChat.length > 0) {
+            for(var i = 0; i < lectureChat.length; i++) {
+                console.log("drawing message " + i);
+                var message = lectureChat[i];
+                var messageHeader = message.username + ", " + message.timestamp + ":";
+                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
+                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
+                $newMessageHeader.text(messageHeader);
+                $newMessageBody.text(message.messageText);
+                $('#lectureChatMessages').append($newMessageHeader);
+                $('#lectureChatMessages').append($newMessageBody);
+                console.log("finished drawing message " + i);
+            }
         }
     };
     
     updateLectureToken(hasToken) {
-        if(this.#lectureView) {
+        /*
+        // see above
+        //if(this.#lectureView) {
             this.#lectureView.updateToken(hasToken);
+        //}
+        * */
+        if(hasToken) {
+            if ($('#lectureChatInputGroup').is(':empty')) {   
+            $('#lectureChatInputGroup').append(`
+            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+            <div class="input-group-append">
+                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+            </div>
+            `)
+            }
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+            <i class="fa fa-question-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append('You obtained a question token!')
+
+        // the input field is emptied if the user does not have a valid token
+        } else {
+            $('#lectureChatInputGroup').empty();
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+            <i class="fa fa-times-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append("Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
+            "Please remember to follow chat etiquette.");
         }
     };
     
     closeLectureView() {
-        if(this.#lectureView) {
+        /*
+        // see above
+        //if(this.#lectureView) {
             this.#lectureView.close();
-        }
+        //}
+        * */
     };
 }

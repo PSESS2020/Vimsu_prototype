@@ -12,15 +12,17 @@ class LectureView extends WindowView {
 
         this.#lectureStatus = LectureStatus.PENDING;
 
+        /*sets functions when document is ready, without this it is not possible to assign functions to
+          appended buttons*/
         $(document).ready(() => {
             function sendMessage(event) {
                 event.preventDefault();
 
                 let messageVal = $('#lectureChatInput').val();
                 if(messageVal !== '') {
-                  clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
-                  $('#lectureChatInput').val('');
-                  $('#lectureChatInput').focus();
+                    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+                    $('#lectureChatInput').val('');
+                    $('#lectureChatInput').focus();
                 }
             }
         
@@ -30,7 +32,7 @@ class LectureView extends WindowView {
         
             $('#lectureChatInput').keydown((e) => {
                 e.stopPropagation();
-
+                //enables sending messages with enter key
                 if (e.keyCode === 13) {
                     sendMessage(event);
                 }
@@ -74,54 +76,33 @@ class LectureView extends WindowView {
         
         this.drawChat(lectureChat);
         
-        //the input field is added if the user has a valid token
-        if(this.#hasToken) {
-            if ($('#lectureChatInputGroup').is(':empty')) {   
-            $('#lectureChatInputGroup').append(`
-            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
-            <div class="input-group-append">
-                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
-            </div>
-            `)
-            }
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-question-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You obtained a question token!')
-
-        // the input field is emptied if the user does not have a valid token
-        } else {
-            $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-times-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
-        }
+        //empties chat input to disable lecture chat
+        $('#lectureChatInputGroup').empty();
+        $('#pendingLectureChatMessage').empty();
         $('#closeButton').empty();
 
         $('#closeButton').append(`
         <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
+        $('#lectureChatMessages').append(`
+            <div id="pendingLectureChatMessage">
+            <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+            </div>
+        `);
+
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
 
+        //empties video div to prevent showing the wrong video
         $('#lectureVideo').empty();
-        $('#lectureVideo').append(`
-            <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
-                <div id="countdown"></div>
-                <div>seconds left till the</div>
-                <div>presentation starts</div>
-            </div>
-            <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
-        `)
 
+        //opens lecture video window
         $('#lectureVideoWindow').show(); 
-        
+
+        $('#lectureVideo').append(`
+        <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+        `)
         var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
     
         // set default controls
@@ -130,10 +111,8 @@ class LectureView extends WindowView {
         
         video.addEventListener('loadeddata', () => {
             video.pause();
-
             
             var lectureStartingTime = new Date(lecture.startingTime).getTime(); // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
-
 
             var lectureDuration = lecture.duration * 1000; //duration of the lecture in milliseconds
 
@@ -141,7 +120,14 @@ class LectureView extends WindowView {
                 var currentTimeDifference =  Date.now() - lectureStartingTime;
 
                 if (currentTimeDifference < 0) {
-                    $('#lecturePending').show();
+                   $('#lecturePending').remove();
+                   $('#lectureVideo').append(`
+                    <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                        <div id="countdown"></div>
+                        <div>seconds left till the</div>
+                        <div>presentation starts</div>
+                    </div>
+                `)
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -158,10 +144,38 @@ class LectureView extends WindowView {
                     video.currentTime = Math.round(currentTimeDifference / 1000);
                     video.play();
                 } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
+                    clearInterval(this.#timerIntervalId);
                     $('#lecturePending').hide();
+                    $('#pendingLectureChatMessage').empty();
                     this.#lectureStatus = LectureStatus.OVER;
                     video.controlsList.remove('nodownload');
                     video.pause();
+                    if(this.#hasToken) {
+                        if ($('#lectureChatInputGroup').is(':empty')) {   
+                        $('#lectureChatInputGroup').append(`
+                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                        <div class="input-group-append">
+                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                        </div>
+                        `)
+                        }
+                        $('#tokenIcon').empty();
+                        $('#tokenIcon').append(`
+                        <i class="fa fa-question-circle fa-4x"></i>
+                        `)
+                        $('#tokenLabel').empty();
+                        $('#tokenLabel').append('You obtained a question token!')
+            
+                    // the input field is emptied if the user does not have a valid token
+                    } else {
+                        $('#lectureChatInputGroup').empty();
+                        $('#tokenIcon').empty();
+                        $('#tokenIcon').append(`
+                        <i class="fa fa-times-circle fa-4x"></i>
+                        `)
+                        $('#tokenLabel').empty();
+                        $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
+                    }
                 }
             }, 1000); // check lecture status every 1s
 
@@ -204,23 +218,30 @@ class LectureView extends WindowView {
 
     close() {
         var video = $(`#lectureVideo${this.#lectureId}`)[0];
+        if (video !== undefined) {
         video.removeAttribute('src'); // empty source
         video.load();
         clearInterval(this.#timerIntervalId);
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
+
         var eventManager = new EventManager();
         if(this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
             eventManager.handleLectureLeft(this.#lectureId, false);
         } else {
             eventManager.handleLectureLeft(this.#lectureId, true);
         }
+    } else {
+        $('#lectureVideoWindow').hide();
+    }
     }
 
     drawChat(lectureChat) {
         $('#lectureChatMessages').empty();
+        console.log("emptied messages");
         if (lectureChat.length > 0) {
             for(var i = 0; i < lectureChat.length; i++) {
+                console.log("drawing message " + i);
                 var message = lectureChat[i];
                 var messageHeader = message.username + ", " + message.timestamp + ":";
                 var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
@@ -229,15 +250,20 @@ class LectureView extends WindowView {
                 $newMessageBody.text(message.messageText);
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
+                console.log("finished drawing message " + i);
             }
+
         }
     }
     
+    /* No longer needed
     updateToken(hasToken) {
         this.#setToken(hasToken);
         this.#drawToken(NoTokenMessage.REVOKED);
     };
+    * */
     
+    /* No longer needed
     #drawToken = function(message) {
         if(this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {   
@@ -266,15 +292,20 @@ class LectureView extends WindowView {
             $('#tokenLabel').append(message);
         }
     };
+    * */
     
+    /* No longer needed
     #setToken = function(newToken) {
         this.#hasToken = newToken;
     };
+    * */
 
 }
 
+/* No longer needed.
 const NoTokenMessage = Object.freeze({
     LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
     REVOKED: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
             "Please remember to follow chat etiquette."
 })
+*/
