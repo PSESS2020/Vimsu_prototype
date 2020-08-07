@@ -1,7 +1,7 @@
 
 const { expect } = require('chai');
 const { assert } = require('chai');
-const TestUtil = require('../../utils/TestUtil.js');
+const TestUtil = require('../../server/models/utils/TestUtil.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 
 describe('PositionClient test', function() {
