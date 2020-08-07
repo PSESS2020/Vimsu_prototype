@@ -7,6 +7,7 @@ const Message = require('./Message.js');
 module.exports = class Chat {
     #chatId;
     //#ownerId;
+    #title
     #participantList;
     #messageList;
     #maxNumMessages;
@@ -58,11 +59,6 @@ module.exports = class Chat {
     setMaxNumMessages(maxNumMsg) {
         this.#maxNumMessages = maxNumMsg;
     }
-    
-    /* instead of several constructors, we could write a wrapper method
-         * in the service-class or somewhere that creates a new chat and then
-         * "fills it up" with the data supplied from the database.
-         * - (E) */
 
     /*
     *Multiple constructors are not allowed.

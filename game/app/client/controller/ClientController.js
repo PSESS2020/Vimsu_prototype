@@ -215,6 +215,9 @@ class ClientController {
         this.socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
+        this.socket.on('updateLectureChat', this.handleFromServerUpdateLectureChat.bind(this));
+        this.socket.on('update token', this.handleFromServerUpdateToken.bind(this));
+        this.socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
@@ -575,6 +578,18 @@ class ClientController {
         $('#lectureChatMessages').append($newMessageHeader);
         $('#lectureChatMessages').append($newMessageBody);
     }
+    
+    handleFromServerUpdateLectureChat(messages) {
+        this.#gameView.updateLectureChat(messages);
+    };
+    
+    handleFromServerUpdateToken(hasToken) {
+        this.#gameView.updateLectureToken(hasToken);
+    };
+    
+    handleFromServerForceCloseLecture() {
+        this.#gameView.closeLectureView();
+    };
     
     handleFromServerUpdateSuccessesBar(points, rank) {
         if(points) {

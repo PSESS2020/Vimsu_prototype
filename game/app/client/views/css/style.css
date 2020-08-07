@@ -315,7 +315,7 @@ body::-webkit-scrollbar {
   top: 30%; 
   left: 30%; 
   border-radius: 10px; 
-  z-index: 1050;
+  z-index: 1100;
   width: 40%; 
   height: 30%;
 }
