@@ -95,6 +95,11 @@ class EventManager {
      handleChatThreadClicked(chatId) {
          this.#clientController.handleFromViewShowChatThread(chatId);
      };
+
+     handleShowChatParticipantList(chatId) {
+         console.log("hello from eventmanager")
+         this.#clientController.handleFromViewShowChatParticipantList(chatId);
+     }
      
     /* One function to create a new chat.
      * - (E) */

@@ -228,6 +228,7 @@ class ClientController {
         this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
         this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
+        this.socket.on('chatParticipantList', this.handleFromServerChatParticipantList.bind(this))
         this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
@@ -562,6 +563,11 @@ class ClientController {
         this.#gameView.initRankListView(rankList);
     }
 
+    handleFromServerChatParticipantList(usernames) {
+        console.log("hello from CC2");
+        this.#gameView.drawChatParticipantList(usernames);
+    }
+
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
         var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
@@ -835,6 +841,11 @@ class ClientController {
     handleFromViewShowChatThread(chatID) {
         this.socket.emit('getChatThread', this.#ownParticipant.getId(), chatID);
     };
+
+    handleFromViewShowChatParticipantList(chatId) {
+        console.log("hello from CC");
+        this.socket.emit('getChatParticipantList', this.#ownParticipant.getId(), chatId);
+    }
 
     /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
     the id of the other chat participant to the server.*/

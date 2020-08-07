@@ -23,6 +23,7 @@ class GameView {
     #anotherParticipantAvatarViews = [];
     #businessCardView;
     #gameViewInit;
+    #chatParticipantListView;
     #achievementView;
     #newAchievementView;
     #npcAvatarViews = [];
@@ -566,6 +567,11 @@ class GameView {
             console.log("addFriend")
             this.#friendListView.addToFriendList(businessCard);
         }
+    }
+
+    drawChatParticipantList(usernames) {
+        console.log("hello from gameview")
+        this.#chatParticipantListView = new ChatParticipantListView().draw(usernames);
     }
 
     drawNewChat(senderUsername) {

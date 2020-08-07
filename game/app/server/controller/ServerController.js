@@ -869,6 +869,7 @@ module.exports = class ServerController {
                             areFriends: areFriends,
                             friendRequestSent: friendRequestSent,
                             partnerId: chatPartnerID,
+                            groupChat: false,
                             messages: [],
                             
                         };
@@ -911,6 +912,7 @@ module.exports = class ServerController {
                             areFriends: areFriends,
                             friendRequestSent: friendRequestSent,
                             partnerId: chatPartnerID,
+                            groupChat: false,
                             messages: chat.messageList,
                         }
 
@@ -956,6 +958,7 @@ module.exports = class ServerController {
                             previewMessage: '',
                             areFriends: true,
                             friendRequestSent: true,
+                            groupChat: true,
                             messages: []
                         };
 
@@ -1125,6 +1128,7 @@ module.exports = class ServerController {
                                 areFriends: participant.hasFriend(partnerId),
                                 friendRequestSent: participant.hasSentFriendRequest(partnerId),
                                 partnerId: partnerId,
+                                groupChat: false,
                                 messages: messageInfoData
                             }
                         //partner left before
@@ -1135,6 +1139,7 @@ module.exports = class ServerController {
                                 areFriends: true,
                                 friendRequestSent: true,
                                 partnerId: undefined,
+                                groupChat: false,
                                 messages: messageInfoData
                             }
                         }
@@ -1146,6 +1151,7 @@ module.exports = class ServerController {
                             areFriends: true,
                             friendRequestSent: true,
                             partnerId: undefined,
+                            groupChat: true,
                             messages: messageInfoData
                         }
                     }
@@ -1198,6 +1204,26 @@ module.exports = class ServerController {
                     });
                 }
             });
+
+            socket.on('getChatParticipantList', (requesterId, chatId) => {
+                console.log("hello from SC")
+                let requester = this.#ppants.get(requesterId);
+
+                if (requester.isMemberOfChat(chatId)){
+                    //console.log('from server 2 ' + msgText);
+                    //gets list of chat participants to which send the message to
+                    let chatPartnerIDList = requester.getChat(chatId).getParticipantList();
+
+                    let chatParticipantList = [];
+                    
+                    Promise.all(chatPartnerIDList.map(async chatPartnerID => {
+                        const username = await ParticipantService.getUsername(chatPartnerID, Settings.CONFERENCE_ID, this.#db)
+                        chatParticipantList.push(username);
+                    })).then(res => {
+                        this.#io.to(socket.id).emit('chatParticipantList', chatParticipantList);
+                    })
+                }
+            })
         
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (requesterID, targetID, chatID) => {
