@@ -40,31 +40,28 @@ module.exports = class AccountService {
     }
     
     static createAccount(username, title, surname, forename, job, company, email, password, vimsudb) {
-        
-
     
-            var accountId = new ObjectId().toString();
-            var account = new Account(accountId, username, title, surname, forename, job, company, email);
+        var accountId = new ObjectId().toString();
+        var account = new Account(accountId, username, title, surname, forename, job, company, email);
                 
-            var acc = {
-                accountId: accountId,
-                username: username, 
-                title: title,
-                surname: surname,
-                forename: forename,
-                job: job,
-                company: company,
-                email: email,
-                passwordHash: passwordHash.generate(password)
-            }
+        var acc = {
+            accountId: account.getAccountID(),
+            username: account.getUsername(), 
+            title: account.getTitle(),
+            surname: account.getSurname(),
+            forename: account.getForename(),
+            job: account.getJob(),
+            company: account.getCompany(),
+            email: account.getEmail(),
+            passwordHash: passwordHash.generate(password)
+        }
 
-            return vimsudb.insertOneToCollection("accounts", acc).then(res => {
-                console.log("user saved")
-
-                return account;
-            }).catch(err => {
-                console.error(err);
-            })
+        return vimsudb.insertOneToCollection("accounts", acc).then(res => {
+            console.log("user saved")
+            return account;
+        }).catch(err => {
+            console.error(err);
+        })
 
     }
 
