@@ -12,7 +12,7 @@ class PositionClient {
      * @param {int} cordY 
      */
     constructor(cordX, cordY) {
-        if (typeof cordX !== 'number' || typeof cordX !== 'number') {
+        if (typeof cordX !== 'number' || typeof cordY !== 'number') {
             throw new TypeError(cordX +' or ' + cordY + ' is not a number!');
         }
 
@@ -27,4 +27,9 @@ class PositionClient {
     getCordY() {
         return this.#cordY;
     }
+}
+
+//Makes it possible to import this class to server classes
+if (typeof exports === "object") {
+    module.exports = PositionClient;
 }
