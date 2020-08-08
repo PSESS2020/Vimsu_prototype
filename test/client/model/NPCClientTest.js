@@ -21,5 +21,12 @@ describe('NPCClient test', function() {
         assert.equal(name, npc.getName());
         assert.equal(direction, npc.getDirection());
     });
+
+    it('test constructor invalid input', function() {
+        expect(() => new NPCClient('fehler', name, position, direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, 42, position, direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, name, 'fehler', direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, name, position, 'fehler')).to.throw(TypeError);
+    });
 })
 
