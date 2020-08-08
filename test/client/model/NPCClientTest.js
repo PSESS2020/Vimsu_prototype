@@ -14,7 +14,7 @@ var direction = DirectionClient.DOWNLEFT;
 
 describe('NPCClient test', function() {
     it('test constructor and getters', function() {
-        var npc = new NPCClient(id, name, position, direction);
+        let npc = new NPCClient(id, name, position, direction);
 
         assert.equal(id, npc.getId());
         assert.equal(position, npc.getPosition());

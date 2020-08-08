@@ -1,3 +1,9 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    DirectionClient = require('../utils/DirectionClient.js');
+}
+
 class ParticipantClient {
     
     #id;
@@ -10,9 +16,10 @@ class ParticipantClient {
      * 
      * @author Klaudia
      * 
-     * @param {PositionClient} position 
+     * @param {String} id
+     * @param {String} username
+     * @param {PositionClient} position
      * @param {DirectionClient} direction
-     * @param {BusinessCardClient} businessCard
      */
     constructor(id, username, position, direction) 
     {
@@ -59,4 +66,8 @@ class ParticipantClient {
         return this.#username;
     }
     
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = ParticipantClient;
 }
