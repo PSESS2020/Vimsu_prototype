@@ -60,15 +60,14 @@ class ClientController {
      */
 
 
-    constructor(/*, participantId*/) { //TODO: instanciate ParticipantClient
+    constructor() { //TODO: instanciate ParticipantClient
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
-        this.#gameView = new GameView(GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
-        //this.#participantId = participantId;
+        this.#gameView = new GameView();
         
         //TODO: add Participant List from Server
         console.log("fully init cc");
