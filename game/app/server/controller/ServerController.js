@@ -969,102 +969,104 @@ module.exports = class ServerController {
                     }
 
                     chatPartnerIDList.forEach(newChatPartnerID => {
-                        let newChatPartner = this.#ppants.get(newChatPartnerID);
-
+                
                         if (newChatPartnerID !== creatorID) {
                             
                             ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
 
                             ChatService.storeParticipant(chatId, Settings.CONFERENCE_ID, newChatPartnerID, this.#db).then(res => {
 
-                                let newChatPartnerUsername = newChatPartner.getBusinessCard().getUsername();
+                                ParticipantService.getUsername(newChatPartnerID, Settings.CONFERENCE_ID, this.#db).then(newChatPartnerUsername => {
+                                    let msgText = newChatPartnerUsername + " has joined the chat";
 
-                                let msgText = newChatPartnerUsername + " has joined the chat";
+                                    ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
 
-                                ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
-                                    let existingChatPartnerIDList = chat.getParticipantList();
-
-                                    existingChatPartnerIDList.forEach(existingChatParticipantID => {
-                                        let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
-            
-                                        if (existingChatParticipant !== undefined) {
-                                            let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-                                            existingChatParticipantChat.addParticipant(newChatPartnerID);
-                                            existingChatParticipantChat.addMessage(msg);
-                                        }
-                                    })
-
-                                    var msgToEmit = {
-                                        senderUsername: msg.getUsername(),
-                                        msgId: msg.getMessageId(),
-                                        senderId: msg.getSenderId(),
-                                        timestamp: msg.getTimestamp(),
-                                        msgText: msg.getMessageText()
-                                    };
-
-                                    this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-
-                                    if (newChatPartner !== undefined) {
+                                        let newChatPartner = this.#ppants.get(newChatPartnerID);
 
                                         ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
+
+                                            if (newChatPartner !== undefined) {
                                         
-                                            newChatPartner.addChat(loadedChat);
-                
-                                            let socketPartner = this.getSocketObject(this.getSocketId(newChatPartner.getId()));
-        
-                                            socketPartner.join(loadedChat.getId());
+                                                newChatPartner.addChat(loadedChat);
+                    
+                                                let socketPartner = this.getSocketObject(this.getSocketId(newChatPartner.getId()));
+            
+                                                socketPartner.join(loadedChat.getId());
 
-                                            var messageInfoData = [];
+                                                var messageInfoData = [];
 
-                                            loadedChat.getMessageList().forEach( (message) => {
-                                                console.log("getChatThreadMessages: " + message.getMessageText());
-                                                messageInfoData.push({
-                                                    senderUsername: message.getUsername(),
-                                                    timestamp: message.getTimestamp(),
-                                                    msgText: message.getMessageText()
+                                                loadedChat.getMessageList().forEach( (message) => {
+                                                    messageInfoData.push({
+                                                        senderUsername: message.getUsername(),
+                                                        timestamp: message.getTimestamp(),
+                                                        msgText: message.getMessageText()
+                                                    });
                                                 });
-                                            });
 
-                                            if (loadedChat.getMessageList().length > 0) {
-                                                var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
-                                                var previewText = lastMessage.getMessageText();
+                                                if (loadedChat.getMessageList().length > 0) {
+                                                    var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
+                                                    var previewText = lastMessage.getMessageText();
 
-                                                if(previewText.length > 36) {
-                                                    previewText = previewText.slice(0, 36) + "...";
-                                                } 
-                                            
-                                                var chatData = {
-                                                    chatId: loadedChat.getId(),
-                                                    title: loadedChat.getChatName(),
-                                                    timestamp: lastMessage.getTimestamp(),
-                                                    previewUsername: lastMessage.getUsername(),
-                                                    previewMessage: previewText,
-                                                    areFriends: true,
-                                                    friendRequestSent: true,
-                                                    partnerId: undefined,
-                                                    groupChat: true,
-                                                    messages: messageInfoData
-                                                }
+                                                    if(previewText.length > 36) {
+                                                        previewText = previewText.slice(0, 36) + "...";
+                                                    } 
                                                 
-                                            } else {
-                                                var chatData = {
-                                                    chatId: loadedChat.getId(),
-                                                    title: loadedChat.getChatName(),
-                                                    timestamp: '',
-                                                    previewUsername: '',
-                                                    previewMessage: '',
-                                                    areFriends: true,
-                                                    friendRequestSent: true,
-                                                    partnerId: undefined,
-                                                    groupChat: true,
-                                                    messages: messageInfoData
+                                                    var chatData = {
+                                                        chatId: loadedChat.getId(),
+                                                        title: loadedChat.getChatName(),
+                                                        timestamp: lastMessage.getTimestamp(),
+                                                        previewUsername: lastMessage.getUsername(),
+                                                        previewMessage: previewText,
+                                                        areFriends: true,
+                                                        friendRequestSent: true,
+                                                        partnerId: undefined,
+                                                        groupChat: true,
+                                                        messages: messageInfoData
+                                                    }
+                                                    
+                                                } else {
+                                                    var chatData = {
+                                                        chatId: loadedChat.getId(),
+                                                        title: loadedChat.getChatName(),
+                                                        timestamp: '',
+                                                        previewUsername: '',
+                                                        previewMessage: '',
+                                                        areFriends: true,
+                                                        friendRequestSent: true,
+                                                        partnerId: undefined,
+                                                        groupChat: true,
+                                                        messages: messageInfoData
+                                                    }
                                                 }
+
+                                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('newChat', chatData, false);
+                                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername);
                                             }
 
-                                            this.#io.to(this.getSocketId(newChatPartner.getId())).emit('newChat', chatData, false);
-                                            this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername);
+                                            let existingChatPartnerIDList = chat.getParticipantList();
+
+                                            existingChatPartnerIDList.forEach(existingChatParticipantID => {
+                                                let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
+                    
+                                                if (existingChatParticipant !== undefined) {
+                                                    let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
+                                                    existingChatParticipantChat.addParticipant(newChatPartnerID);
+                                                    existingChatParticipantChat.addMessage(msg);
+                                                }
+                                            })
+
+                                            var msgToEmit = {
+                                                senderUsername: msg.getUsername(),
+                                                msgId: msg.getMessageId(),
+                                                senderId: msg.getSenderId(),
+                                                timestamp: msg.getTimestamp(),
+                                                msgText: msg.getMessageText()
+                                            };
+
+                                            this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                                            
                                         })
-                                    }
+                                    })
                                 })
                             })
                         }       
