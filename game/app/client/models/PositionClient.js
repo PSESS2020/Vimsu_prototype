@@ -1,3 +1,7 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+ }
+
 class PositionClient {
 
     #cordX;
@@ -29,7 +33,6 @@ class PositionClient {
     }
 }
 
-//Makes it possible to import this class to server classes
-if (typeof exports === "object") {
+define(function(require, exports, module) {
     module.exports = PositionClient;
-}
+});

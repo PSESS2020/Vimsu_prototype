@@ -1,3 +1,7 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+
 class TypeChecker {
 
     static isValidString(value) 
@@ -71,3 +75,7 @@ class TypeChecker {
         }
     }
 }
+
+define(function(require, exports, module) {
+    module.exports = TypeChecker;
+});
