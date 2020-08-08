@@ -1,3 +1,10 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    DirectionClient = require('../utils/DirectionClient.js');
+ }
+
 class NPCClient {
 
     #id;
@@ -41,3 +48,7 @@ class NPCClient {
         return this.#direction;
     }
 }
+
+define(function(require, exports, module) {
+    module.exports = NPCClient;
+});
