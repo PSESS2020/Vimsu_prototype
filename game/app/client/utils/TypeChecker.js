@@ -1,6 +1,3 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
 class TypeChecker {
 
@@ -76,6 +73,6 @@ class TypeChecker {
     }
 }
 
-define(function(require, exports, module) {
+if (typeof module === 'object' && typeof exports === 'object') {
     module.exports = TypeChecker;
-});
+}

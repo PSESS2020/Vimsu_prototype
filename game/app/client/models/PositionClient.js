@@ -1,6 +1,3 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
- }
 
 class PositionClient {
 
@@ -33,6 +30,6 @@ class PositionClient {
     }
 }
 
-define(function(require, exports, module) {
+if (typeof module === 'object' && typeof exports === 'object') {
     module.exports = PositionClient;
-});
+}
