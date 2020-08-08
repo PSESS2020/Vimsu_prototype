@@ -1,3 +1,8 @@
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+}
+
 class BusinessCardClient {
 
     #participantId;
@@ -64,4 +69,8 @@ class BusinessCardClient {
     getEmail() {
         return this.#email;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = BusinessCardClient;
 }
