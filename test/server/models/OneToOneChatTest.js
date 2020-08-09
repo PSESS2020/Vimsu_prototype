@@ -15,7 +15,7 @@ var oldMessage = new Message(MessageTestData.messageId,
                          MessageTestData.senderId,
                          MessageTestData.senerUsername,
                          new Date(),
-                         MessageTestData.messageTest
+                         MessageTestData.messageText
                          );
 var newMessage1 = new Message(MessageTestData.alt_messageId,
                           MessageTestData.alt_senderId,
@@ -88,6 +88,7 @@ describe('OneToOneChat Testing', function() {
         it('Test get chatpartner id', function() {
             expect(chatPartnerID_result).to.be.a('string').and.equal(chatPartnerID);
         })
+        
     })
 
     describe('OneToOneChat chat functions', function() {

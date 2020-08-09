@@ -16,7 +16,7 @@ var oldMessage = new Message(MessageTestData.messageId,
                          MessageTestData.senderId,
                          MessageTestData.senerUsername,
                          new Date(),
-                         MessageTestData.messageTest
+                         MessageTestData.messageText
                          );
 var newMessageId1 = MessageTestData.alt_messageId;
 var newMessage1 = new Message(MessageTestData.alt_messageId,
