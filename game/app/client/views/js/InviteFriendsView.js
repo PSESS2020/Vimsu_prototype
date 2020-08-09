@@ -23,7 +23,7 @@ class InviteFriendsView extends WindowView {
             $('#noinvitedfriends').hide();
             $('#toomanyinvitedfriends').hide();
             $('#toomanyinvitedfriends').empty();
-            $('#toomanyinvitedfriends').text("Max. number group participant of " + limit + " is reached!");
+            $('#toomanyinvitedfriends').text("You may only invite " + limit + " friends!");
 
             this.#businessCards.forEach(businessCard => {
                 $('#inviteFriendsModal .modal-body .list-group').append(`
