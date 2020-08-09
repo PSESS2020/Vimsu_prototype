@@ -18,7 +18,7 @@ class BusinessCardView extends WindowView {
                 <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
                 ${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
                 </br>
-                <table id="profile" style = "color: antiquewhite; width:100%; margin-left: 0">
+                <table id="${"profile" + this.#businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
                         <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
@@ -26,14 +26,14 @@ class BusinessCardView extends WindowView {
         `)
 
         if(this.#isFriend) {
-            $('#businessCardModal .modal-body #profile').append(`
+            $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
                     <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
                 </tr>
             `)
         } else {
-            $('#businessCardModal .modal-body #profile').append(`
+            $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Rank</td>
                     <td style="padding: 15px">${this.#rank}</td>
