@@ -1,4 +1,5 @@
-const expect = require('chai').expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 const ChatService = require('../../../game/app/server/services/ChatService.js');
 const OneToOneChat = require('../../../game/app/server/models/OneToOneChat.js');
@@ -21,6 +22,7 @@ const database = new db();
 var chatId = OneToOneChatTestData.chatId;
 var maxNumMessages_ONE = Settings.MAXNUMMESSAGES_ONETOONECHAT;
 var conferenceId = ServiceTestData.conferenceId_1;
+var conferenceId_2 = ServiceTestData.conferenceId_2;
 
 var creatorID = OneToOneChatTestData.creatorID;
 var creatorUsername = OneToOneChatTestData.creatorUsername;
@@ -95,8 +97,20 @@ describe('ChatService Testing', function() {
     });*/
     var globalResults;
     
+    /*//Gets the chat of the chat creator in the globalResults
+    var getChatOfCreator = (chatCreator, chatPartner) => {
+        globalResults.forEach(chat => {
+            if(chat instanceof GroupChat && chat.getOwnerId() === chatCreator) {
+                return chat;
+            } else if(chat instanceof OneToOneChat && chat.getOtherUserId(chatPartner) === chatCreator) {
+                return chat;
+            }
+        })
+    }*/
+
     before(async () => {
     await database.connectDB();
+    //vimsudb = await database.getDB();
     var newOneToOneChat_result = await newOneToOneChat(); 
     var newGroupChat_result = await newGroupChat();
     var newGroupChat2_result = await newGroupChat2();
@@ -229,7 +243,7 @@ describe('Load new chat function testing', () => {
 
     })
 
-
+/* The following tests do all depend on the result of the previous test. */
 describe('Create message in chat function testing', () => {
     
     it('Test create new OneToOneChat message from chat owner', async () => {
@@ -406,12 +420,17 @@ describe('Create message in chat function testing', () => {
                 })
             })
 
-            /*it('Test load invalid chat list', async () => {
+            it('Test load invalid chat list', async () => {
                 var chatIDList = ['0','-126', '.,*+'];
 
-                expect( async() => await ChatService.loadChatList(chatIDList, conferenceId, database)).to.throw(TypeError);
+                return await ChatService.loadChatList(chatIDList, conferenceId, database).then(result => {
 
-            })*/
+                }).catch(err => {
+                    expect(err).to.be.instanceOf(TypeError);
+                    expect(err.message).to.equal("Cannot read property 'messageList' of null");
+                })
+
+            })
         })
         
         describe('Remove participant from chat function testing', () => {
@@ -452,17 +471,16 @@ describe('Create message in chat function testing', () => {
                 var newOneToOneChat_result = globalResults[0];
     
                 var result = await ChatService.loadChat(newOneToOneChat_result.getId(), conferenceId, database);
-    
+                    
                 expect(result).to.be.a('boolean').and.to.be.false;
 
+                globalResults.splice(0, 1);
 
-                /*globalResults.splice(0, 1);
-
-                expect(globalResults).to.be.an('array').and.to.have.lengthOf(2);*/
+                expect(globalResults).to.be.an('array').and.to.have.lengthOf(2);
             })
     
             it('Test remove valid chat owner from GroupChat', async () => {
-                var newGroupChat_result = globalResults[1];
+                var newGroupChat_result = globalResults[0];
                 var chatId_result = newGroupChat_result.getId();
                 
                 var result = await ChatService.removeParticipant(chatId_result, ownerId, conferenceId, database);
@@ -475,7 +493,7 @@ describe('Create message in chat function testing', () => {
             })
         
             it('Test remove invalid participant from Chat', async () => {
-                var newGroupChat_result = globalResults[1];
+                var newGroupChat_result = globalResults[0];
                 var chatId_result = newGroupChat_result.getId();
                 
                 var result = await ChatService.removeParticipant(chatId_result, '0', conferenceId, database);
@@ -490,38 +508,71 @@ describe('Create message in chat function testing', () => {
             
         })
 
-        /*describe('Remove chat from database function testing', () => {
+        describe('Remove chat from database function testing', () => {
             
             it('Test remove group chat from database', async () => {
-                var newGroupChat2_result = globalResults[2];
+                var newGroupChat2_result = globalResults[1];
                 var newGroupChat2_Id_result = newGroupChat2_result.getId();
-                var chatId_results = [];
+                var chatId_results_before = [];
+                var chatId_results_after = [];
+
                  globalResults.forEach(chat => {
-                    chatId_results.push(chat.getId());
+                     var chatId = chat.getId();
+                     if(chatId === newGroupChat2_Id_result) {
+                        chatId_results_before.push(chatId);
+
+                     } else {
+                        chatId_results_before.push(chatId);
+                        chatId_results_after.push(chatId);
+                     }
                  })
 
+                var chats_before = await ChatService.loadChatList(chatId_results_before, conferenceId, database);
 
-                var chats_before = await ChatService.loadChatList(chatId_results, conferenceId, database);
-
-                expect(chats_before).to.be.an('array').and.to.have.lengthOf(3);
+                expect(chats_before).to.be.an('array').and.to.have.lengthOf(2);
 
                 var result =  await ChatService.removeChat(newParticipant2_Id, newGroupChat2_Id_result, conferenceId, database);
 
                 expect(result).to.be.true;
 
-                chatId_results.forEach(chatId => {
-                    if (chatId === newGroupChat2_Id_result) {
-                        let index = chatId_results.indexOf(chatId);
-                        chatId_results.splice(index, 1);
-                    }
-                })
+                var chats_after = await ChatService.loadChatList(chatId_results_after, conferenceId, database);
 
-                var chats_after = await ChatService.loadChatList(chatId_results, conferenceId, database);
+                expect(chats_after).to.be.an('array').and.to.have.lengthOf(1);
 
-                expect(chats_after).to.be.an('array').and.to.have.lengthOf(2);
             })
 
-        })*/
+            it('Test remove invalid chat from database', async () => {
+                var result = await ChatService.removeChat(",.-+*", ",.-+*", conferenceId, database);
+
+                expect(result).to.be.a('boolean').and.to.be.false;
+
+            })
+
+        })
+
+        describe('Remove all chats from database function testing', () => {
+
+            it('Test remove all chats from collection', async () => {
+                var result = await ChatService.removeAllChats(conferenceId, database);
+
+                expect(result).to.be.true;
+
+                var chats_test_1_count = await database.getCollectionDocCount("chats_" + conferenceId);
+                expect(chats_test_1_count).to.equal(0);
+            })
+
+            it('Test remove all chats from invalid database', async () => {
+                let error = null;
+                try {
+                    await ChatService.removeAllChats(conferenceId, 12345);
+                } catch(err) {
+                    error = err;
+                }
+                expect(error).to.be.instanceOf(TypeError);
+                expect(error.message).to.equal("vimsudb.deleteAllFromCollection is not a function");
+
+            })
+        })
     
     })
 
@@ -532,14 +583,10 @@ describe('Create message in chat function testing', () => {
 
 
     after(async () => {
-        ChatService.removeAllChats(conferenceId, database);
+        //ChatService.removeAllChats(conferenceId, database);
     })
 
 })
-
-/*ChatService.loadChatList
-ChatService.removeChat
-ChatService.removeAllChats*/
 
 })
 

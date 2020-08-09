@@ -272,9 +272,12 @@ module.exports = class Chatservice {
     }
 
     static removeAllChats(conferenceId, vimsudb) {
-        return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(res => {
+        return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(chatsRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: {$exists: true} }).then(res => {
-                console.log("all chats deleted");
+                if(chatsRes) 
+                    console.log("all chats deleted");
+
+                return chatsRes;
             }).catch(err => {
                 console.error(err);
             })
@@ -285,14 +288,12 @@ module.exports = class Chatservice {
 
     static removeChat(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
-        return vimsudb.deleteOneFromCollection("chats_" + conferenceId, {chatId: chatId}).then(res => {
+        return vimsudb.deleteOneFromCollection("chats_" + conferenceId, {chatId: chatId}).then(chatRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, { chatIDList: chatId }).then(res => {
-                if(res) {
+                if(chatRes) 
                     console.log("chat with chatId " + chatId + " deleted");
-                    return true;
-                } else {
-                    return false;
-                }
+
+                return chatRes;
             }).catch(err => {
                 console.error(err);
             })

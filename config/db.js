@@ -32,6 +32,16 @@ module.exports = class db {
         )
     }
 
+    getCollectionDocCount(collectionName) {
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.countDocuments({}).then(count => {
+            return count;
+        }).catch(err => {
+            console.error(err)
+        })
+    }
+
     closeDB() {
         this.#client.close();
         console.log("db closed");
@@ -172,7 +182,13 @@ module.exports = class db {
 
         return collection.deleteOne(query)
         .then(result => {
-            console.log(query + " deleted from " + collectionName);
+            if(result.deletedCount > 0) {
+                console.log(query + " deleted from " + collectionName);
+                return true;
+            } else {
+                return false;
+            }
+
         })
         .catch(err => {
             console.error(err)
@@ -185,7 +201,13 @@ module.exports = class db {
 
         return collection.deleteMany()
         .then(result => {
-            console.log("all documents deleted from " + collectionName);
+            if(result.deletedCount > 0) {
+                console.log("all documents deleted from " + collectionName);
+                return true;
+            } else {
+                return false;
+            }
+
         })
         .catch(err => {
             console.error(err)

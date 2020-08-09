@@ -1,13 +1,13 @@
 var TypeChecker = require('../../../../config/TypeChecker.js');
 /* Commented out because classes cannot require each other at the same time.
-   This causes at least an error in the test class. */
+   This causes at least an error in the test class. (N)*/
 //const Participant = require('./Participant.js');
 const Message = require('./Message.js');
 
 module.exports = class Chat {
     #chatId;
     //#ownerId;
-    #title
+    //#title
     #participantList;
     #messageList;
     #maxNumMessages;
