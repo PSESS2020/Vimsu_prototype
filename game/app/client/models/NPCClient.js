@@ -1,5 +1,4 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
+if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../utils/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     DirectionClient = require('../utils/DirectionClient.js');
@@ -49,6 +48,6 @@ class NPCClient {
     }
 }
 
-define(function(require, exports, module) {
+if (typeof module === 'object' && typeof exports === 'object') {
     module.exports = NPCClient;
-});
+}

@@ -14,12 +14,19 @@ var direction = DirectionClient.DOWNLEFT;
 
 describe('NPCClient test', function() {
     it('test constructor and getters', function() {
-        var npc = new NPCClient(id, name, position, direction);
+        let npc = new NPCClient(id, name, position, direction);
 
         assert.equal(id, npc.getId());
         assert.equal(position, npc.getPosition());
         assert.equal(name, npc.getName());
         assert.equal(direction, npc.getDirection());
+    });
+
+    it('test constructor invalid input', function() {
+        expect(() => new NPCClient('fehler', name, position, direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, 42, position, direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, name, 'fehler', direction)).to.throw(TypeError);
+        expect(() => new NPCClient(id, name, position, 'fehler')).to.throw(TypeError);
     });
 })
 

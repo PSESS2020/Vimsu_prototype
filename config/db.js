@@ -136,7 +136,12 @@ module.exports = class db {
 
         return collection.updateOne(query, {'$push': queryToPush})
         .then(result => {
-            console.log(queryToPush + " added in " + collectionName + " with " + query);
+            if(result.matchedCount > 0 && result.modifiedCount > 0) {
+                console.log(queryToPush + " added in " + collectionName + " with " + query);
+                return true;
+            } else {
+                return false;
+            }
         })
         .catch(err => {
             console.error(err)
@@ -149,7 +154,12 @@ module.exports = class db {
 
         return collection.updateOne(query, {'$pull': queryToPull})
         .then(result => {
-            console.log(queryToPull + " removed from " + collectionName + " with " + query);
+            if(result.matchedCount > 0 && result.modifiedCount > 0) {
+                console.log(queryToPull + " removed from " + collectionName + " with " + query);
+                return true;
+            } else {
+                return false;
+            }
         })
         .catch(err => {
             console.error(err)

@@ -12,11 +12,12 @@ const Settings = require('../../utils/Settings.js');
 
 module.exports = class Chatservice {
 
-    //tested
     static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(chatPartnerId);
+        TypeChecker.isString(chatPartnerUsername);
+        TypeChecker.isString(ownerUsername);
 
         var chat = {
             chatId: new ObjectId().toString(),
@@ -43,7 +44,6 @@ module.exports = class Chatservice {
 
     }
 
-    //tested
     static newGroupChat(ownerId, memberIds, groupName, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(groupName);
@@ -100,7 +100,6 @@ module.exports = class Chatservice {
 
     }
 
-    //tested
     //loads all chats of the specified participant
     static loadChatList(chatIDList, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(chatIDList, Array);
@@ -184,14 +183,18 @@ module.exports = class Chatservice {
         
     }
 
-    //tested
-    static storeParticipant(chatId, conferenceId, participantId, vimsudb) {
+    static storeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(participantId);
 
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
-            return true;
+            if(res) {
+                return true;
+
+            } else {
+                return false;
+            }
 
         }).catch(err => {
             console.error(err);
@@ -200,15 +203,15 @@ module.exports = class Chatservice {
 
     }
 
-    //tested
     static removeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
 
 
         return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
+                var dbRes = res;
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
                 return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: 1 }).then(chat => {
-                    if (chat) {
+                    if (chat && dbRes) {
                         if (chat.memberId.length < 1) {
                             return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(res => {
 
@@ -218,6 +221,7 @@ module.exports = class Chatservice {
                                 return false;
                             })
                         }
+                        return true;
                     } else {
 
                         console.log("no chat found with " + chatId);
@@ -256,7 +260,7 @@ module.exports = class Chatservice {
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { messageList: message }).then(res => {
 
             console.log("chat message saved");
-            return new Message(message.magId,
+            return new Message(message.msgId,
                 message.senderId,
                 message.senderUsername,
                 message.timestamp,
@@ -283,7 +287,12 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
         return vimsudb.deleteOneFromCollection("chats_" + conferenceId, {chatId: chatId}).then(res => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, { chatIDList: chatId }).then(res => {
-                console.log("chat with chatId " + chatId + " deleted");
+                if(res) {
+                    console.log("chat with chatId " + chatId + " deleted");
+                    return true;
+                } else {
+                    return false;
+                }
             }).catch(err => {
                 console.error(err);
             })

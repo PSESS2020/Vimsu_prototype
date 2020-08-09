@@ -1,6 +1,3 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
 const DirectionClient = Object.freeze
 ({
@@ -10,6 +7,6 @@ const DirectionClient = Object.freeze
     DOWNRIGHT: "DOWNRIGHT"
 });
 
-define(function(require, exports, module) {
+if (typeof module === 'object' && typeof exports === 'object') {
     module.exports = DirectionClient;
-});
+}
