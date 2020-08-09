@@ -1,3 +1,9 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    TypeOfDoorClient = require('../utils/TypeOfDoorClient.js');
+ }
+
 class DoorClient {
 
     #id;
@@ -8,7 +14,7 @@ class DoorClient {
      * @author Philipp
      * 
      * @param {int} id 
-     * @param {String} typeOfDoor
+     * @param {TypeOfDoorClient} typeOfDoor
      * @param {PositionClient} mapPosition
      */
     constructor(id, typeOfDoor, mapPosition) {
@@ -21,10 +27,10 @@ class DoorClient {
         this.#mapPosition = mapPosition;
     }
 
-    getStartingRoomId() {
-        return this.#mapPosition.getRoomId();
+    getId() {
+        return this.#id;
     }
-
+    
     getTypeOfDoor() {
         return this.#typeOfDoor;
     }
@@ -32,4 +38,8 @@ class DoorClient {
     getMapPosition() {
         return this.#mapPosition;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = DoorClient;
 }

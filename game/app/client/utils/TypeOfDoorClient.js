@@ -6,3 +6,7 @@ const TypeOfDoorClient = Object.freeze
     RECEPTION_DOOR: "RECEPTION_DOOR",
     LECTURE_DOOR: "LECTURE_DOOR"
 });
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = TypeOfDoorClient;
+}
