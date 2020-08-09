@@ -773,7 +773,7 @@ module.exports = class ServerController {
 
             socket.on('getInviteFriends', (ppantID, groupName, chatId) => {
                 if(!groupName || groupName.length > 20) {
-                    socket.emit('inviteFriends', undefined, groupName, Settings.MAXGROUPPARTICIPANTS);
+                    socket.emit('inviteFriends', undefined, groupName, undefined);
                 } else {
                     let ppant = this.#ppants.get(ppantID);
                     let friendList = ppant.getFriendList();
@@ -802,7 +802,7 @@ module.exports = class ServerController {
 
                     } else {
                         var businessCards = friendList.getAllBusinessCards();
-                        var chatPartnerLength = 0;
+                        var chatPartnerLength = 1;
                     }
                 
                     var friendListData = [];
