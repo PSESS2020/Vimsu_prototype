@@ -1,3 +1,8 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+ }
+
 class GameObjectClient {
 
     #id;
@@ -73,4 +78,8 @@ class GameObjectClient {
 
     }
     */
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameObjectClient;
 }
