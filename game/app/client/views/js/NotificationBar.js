@@ -51,7 +51,7 @@ class NotificationBar extends Views {
             $('#notifBar').prepend(`
                 <div id="${"notifGroupChat" + parsedGroupName + parsedCreatorUsername}" class="notifBarDiv">
                     <button class="self-align-end closeBtn" id="${"closeNotifGroupChat" + parsedGroupName + parsedCreatorUsername}" type="button"><i class="fa fa-close"></i></button>
-                    <small>${creatorUsername} made a group chat '${groupName}' with you.</small>
+                    <small>${creatorUsername} invited you to the group chat '${groupName}'.</small>
                 </div>
             `)
         }
