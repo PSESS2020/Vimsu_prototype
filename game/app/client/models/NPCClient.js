@@ -1,3 +1,9 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    DirectionClient = require('../utils/DirectionClient.js');
+ }
+
 class NPCClient {
 
     #id;
@@ -40,4 +46,8 @@ class NPCClient {
     getDirection() {
         return this.#direction;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = NPCClient;
 }

@@ -1,45 +1,26 @@
 
 class GameView {
 
-    #gameWidth;
-    #gameHeight;
-    //#roomId;
     #updateList = [];
-    #profileView;
-    #scheduleListView;
     #currentLecturesView;
     #lectureView;
-    #rankListView;
     #chatListView;
     #chatThreadView;
     #statusBar;
-    #globalChatView;
     #friendListView;
     #inviteFriendsView;
     #friendRequestListView;
-    #successesBar;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
-    #businessCardView;
     #gameViewInit;
-    #chatParticipantListView;
-    #achievementView;
-    #newAchievementView;
     #npcAvatarViews = [];
-    #npcStoryView;
     #notifBar;
    
-    constructor(gameWidth, gameHeight) 
+    constructor() 
     {
-        TypeChecker.isInt(gameWidth);
-        TypeChecker.isInt(gameHeight);
-        this.#gameWidth = gameWidth;
-        this.#gameHeight = gameHeight;
         this.#statusBar = new StatusBar();
         this.#notifBar = new NotificationBar();
-        //this.#roomId = 1;
-        //this.initOwnAvatarView(" ");
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
@@ -254,63 +235,34 @@ class GameView {
 
     /**
      * 
-     * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
+     * @param {ParticipantClient} participant array of another participants / an participant instance excluding the current client
      */
-    initAnotherAvatarViews(participants, typeOfRoom)
+    initAnotherAvatarViews(participant, typeOfRoom)
     {
         if(!(this.#ownAvatarView instanceof ParticipantAvatarView))
         {
             throw new Error("Please initialize the current client's avatar view first using initOwnAvatarView(participant)");
         }
 
-        if(participants instanceof Array) 
+        TypeChecker.isInstanceOf(participant, ParticipantClient);
+
+        if(this.#anotherParticipantAvatarViews.includes(participant)) 
         {
-            var i;
-            for(i = 0; i < participants.length; i++)
-            {
-                TypeChecker.isInstanceOf(participants[i], ParticipantClient);
-
-                if(this.#anotherParticipantAvatarViews.includes(participants[i])) 
-                {
-                    throw new Error(participants[i] + " is already in list of participants")
-                }
-
-                if(participants[i] !== this.#ownAvatarView) 
-                {
-                    var participant = participants[i];
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
-                                                            participant.getPosition(),
-                                                            participant.getDirection(),
-                                                            participant.getId(),
-                                                            typeOfRoom,
-                                                            participant.getUsername(),
-                                                            ));
-                }
-            }
-            this.addToUpdateList(this.#anotherParticipantAvatarViews);
+            throw new Error(participant + " is already in list of participants")
         }
-        else 
+
+        if(participant !== this.#ownAvatarView) 
         {
-            TypeChecker.isInstanceOf(participants, ParticipantClient);
-
-            if(this.#anotherParticipantAvatarViews.includes(participants)) 
-            {
-                throw new Error(participants + " is already in list of participants")
-            }
-
-            if(participants !== this.#ownAvatarView) 
-            {
-                    console.log("other avatarView init: " + participants.getId());
-                    this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
-                                                            participants.getPosition(), 
-                                                            participants.getDirection(), 
-                                                            participants.getId(),
-                                                            typeOfRoom,
-                                                            participants.getUsername()
-                                                            ));
-            }
-            this.addToUpdateList(this.#anotherParticipantAvatarViews);
+                console.log("other avatarView init: " + participant.getId());
+                this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
+                                                        participant.getPosition(), 
+                                                        participant.getDirection(), 
+                                                        participant.getId(),
+                                                        typeOfRoom,
+                                                        participant.getUsername()
+                                                        ));
         }
+        this.addToUpdateList(this.#anotherParticipantAvatarViews);
     }
         
     updateAnotherAvatarPosition(participantId, newPosition)
@@ -359,58 +311,26 @@ class GameView {
      * 
      * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
      */
-    removeAnotherAvatarViews(participantIds)
+    removeAnotherAvatarViews(participantId)
     {
+        TypeChecker.isString(participantId);
 
-        if (participantIds instanceof Array) {
-            var i;
-            for (i = 0; i < participantIds.length; i++)
-            {
-                TypeChecker.isString(participantIds[i]);
-
-                var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds[i]);
-
-                if (!(index >= 0)) 
-                {
-                    throw new Error(participantsIds[i] + " is not in list of participants")
-                }
-
-                this.#anotherParticipantAvatarViews.splice(index, 1)
-            }
-        }
-        else {
-            TypeChecker.isString(participantIds);
-
-            //Searches in Array of other Avatars for participant with this ID
-            var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantIds);
-            
-            if (!(index >= 0)) 
-            {
-                throw new Error(participantsIds + " is not in list of participants")
-            }
-            
-            //Removes disconnected Avatar from participant avatar views
-            this.#anotherParticipantAvatarViews.splice(index, 1);
-
-        }
-    }
-
-    resetAnotherAvatarViews() {
-        //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
+        //Searches in Array of other Avatars for participant with this ID
+        var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
         
-        this.#anotherParticipantAvatarViews.length = 0;
+        if (index < 0) 
+        {
+            throw new Error(participantsId + " is not in list of participants")
+        }
+        
+        //Removes disconnected Avatar from participant avatar views
+        this.#anotherParticipantAvatarViews.splice(index, 1);
 
-        //console.log('Now resetting Update list...');        //JUST FOR TEST PURPOSES
-        //console.log(this.#anotherParticipantAvatarViews);   //JUST FOR TEST PURPOSES
-    }   
-
-    /*
-    setRoomId(roomId)
-    {
-        TypeChecker.isInt(roomId);
-        this.#roomId = roomId;
     }
-    */
+
+    resetAnotherAvatarViews() {        
+        this.#anotherParticipantAvatarViews.length = 0;
+    }   
 
     //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
     initOwnAvatarView(ownParticipant, typeOfRoom)
@@ -462,23 +382,24 @@ class GameView {
     }
 
     initCurrentSchedule(lectures) {
-        this.#scheduleListView = new ScheduleListView().draw(lectures);
+        new ScheduleListView().draw(lectures);
     }
     
     updateCurrentLecture(lecture, hasToken, lectureChat) {
-        this.#lectureView = new LectureView().draw(lecture, hasToken, lectureChat);
+        this.#lectureView = new LectureView()
+        this.#lectureView.draw(lecture, hasToken, lectureChat);
     }
     
     initGlobalChatView(messageHeader, messageText) {
-        this.#globalChatView = new GlobalChatView().draw(messageHeader, messageText);
+        new GlobalChatView().draw(messageHeader, messageText);
     };
 
     initProfileView(businessCard, rank) {
-        this.#profileView = new ProfileView().draw(businessCard, rank);
+        new ProfileView().draw(businessCard, rank);
     }
 
     initBusinessCardView(businessCard, isFriend, rank) {
-        this.#businessCardView = new BusinessCardView(businessCard, isFriend, rank).draw();
+        new BusinessCardView(businessCard, isFriend, rank).draw();
     }
 
     initFriendListView(businessCards) {
@@ -492,19 +413,19 @@ class GameView {
     }
 
     initCurrentAchievementsView(achievements) {
-        this.#achievementView = new AchievementView().draw(achievements);
+        new AchievementView().draw(achievements);
     }
 
     handleNewAchievement(achievement) {
-        this.#newAchievementView = new NewAchievementView().draw(achievement);
+        new NewAchievementView().draw(achievement);
     }
 
     initNPCStoryView(name, story) {
-        this.#npcStoryView = new NPCStoryView().draw(name, story);
+        new NPCStoryView().draw(name, story);
     }
 
     initRankListView(rankList) {
-        this.#rankListView = new RankListView().draw(rankList);
+        new RankListView().draw(rankList);
     }
     
     initChatListView(chats) {
@@ -553,7 +474,7 @@ class GameView {
     };
 
     updateSuccessesBar(points, rank) {
-        this.#successesBar = new SuccessesBar().update(points, rank);
+        new SuccessesBar().update(points, rank);
     }
 
     removeFriend(participantId) {
@@ -574,7 +495,7 @@ class GameView {
     }
 
     drawChatParticipantList(usernames) {
-        this.#chatParticipantListView = new ChatParticipantListView().draw(usernames);
+        new ChatParticipantListView().draw(usernames);
     }
 
     drawNewChat(senderUsername) {

@@ -1,3 +1,4 @@
+
 class PositionClient {
 
     #cordX;
@@ -29,7 +30,6 @@ class PositionClient {
     }
 }
 
-//Makes it possible to import this class to server classes
-if (typeof exports === "object") {
+if (typeof module === 'object' && typeof exports === 'object') {
     module.exports = PositionClient;
 }

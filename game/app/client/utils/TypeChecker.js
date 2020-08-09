@@ -1,3 +1,4 @@
+
 class TypeChecker {
 
     static isValidString(value) 
@@ -70,4 +71,8 @@ class TypeChecker {
             throw new TypeError(object + ' is not an enum of ' + Enum + '!')
         }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = TypeChecker;
 }

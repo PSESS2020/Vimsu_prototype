@@ -1,3 +1,4 @@
+
 const DirectionClient = Object.freeze
 ({
     UPLEFT: "UPLEFT",
@@ -5,3 +6,7 @@ const DirectionClient = Object.freeze
     UPRIGHT: "UPRIGHT",
     DOWNRIGHT: "DOWNRIGHT"
 });
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = DirectionClient;
+}
