@@ -1,8 +1,18 @@
 
-/*module.exports = */class RoomClient {
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../utils/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    GameObjectClient = require('./GameObjectClient.js');
+    NPCClient = require('./NPCClient.js');
+    DoorClient = require('./DoorClient.js');
+    ParticipantClient = require('./ParticipantClient.js');
+    TypeOfRoomClient = require('../utils/TypeOfRoomClient');
+    GameObjectTypeClient = require('../utils/GameObjectTypeClient.js');
+}
+
+class RoomClient {
 
     #roomId;
-    //clientRoomChat
     #typeOfRoom;
     #length;
     #width;
@@ -99,6 +109,10 @@
 
     getListOfNPCs() {
         return this.#listOfNPCs;
+    }
+
+    getListOfDoors() {
+        return this.#listOfDoors;
     }
 
     /**
@@ -318,4 +332,8 @@
 
         }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = RoomClient;
 }

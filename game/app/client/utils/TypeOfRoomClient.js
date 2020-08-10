@@ -4,3 +4,7 @@ const TypeOfRoomClient = Object.freeze
     FOODCOURT: "FOODCOURT",
     RECEPTION: "RECEPTION"
 });
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = TypeOfRoomClient;
+}
