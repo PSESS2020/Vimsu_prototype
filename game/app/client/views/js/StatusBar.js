@@ -1,3 +1,8 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    Views = require('./Views');
+    ConnectionState = require('../../utils/ConnectionState')
+}
+
 class StatusBar extends Views{
     #timeLeft;
     #connectionStatus;
@@ -73,4 +78,8 @@ class StatusBar extends Views{
             this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
         }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = StatusBar;
 }

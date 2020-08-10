@@ -1,4 +1,4 @@
-/*module.exports = */class Views {
+class Views {
     
     constructor() {
         
@@ -10,4 +10,8 @@
     draw() {
         throw new Error('draw() has to be implemented!');
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = Views;
 }

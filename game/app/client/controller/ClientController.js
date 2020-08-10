@@ -34,6 +34,10 @@
 
 //const Settings = require('../../utils/Settings')
 
+if (typeof module === 'object' && typeof exports === 'object') {
+    GameView = require('../views/js/GameView')
+}
+
 class ClientController {
 
     #port; // Does this class even need this? - (E)
@@ -925,4 +929,8 @@ class ClientController {
         this.#gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
     } 
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = ClientController;
 }

@@ -1,3 +1,8 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    GameObjectView = require('./GameObjectView');
+    EventManager = require('../../utils/EventManager')
+}
+
 class DoorView extends GameObjectView {
     #doorImage;
     #position;
@@ -19,7 +24,7 @@ class DoorView extends GameObjectView {
     }
 
     onclick() {
-        let eventManager = new EventManager();
+        
         if (this.#DOORTYPE === GameObjectTypeClient.LECTUREDOOR) {
             eventManager.handleLectureDoorClick();
         }
@@ -33,4 +38,8 @@ class DoorView extends GameObjectView {
             eventManager.handleFoyerDoorClick();
         }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = DoorView;
 }

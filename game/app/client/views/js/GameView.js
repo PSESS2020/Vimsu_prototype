@@ -1,3 +1,7 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    StatusBar = require('./StatusBar');
+    NotificationBar = require('./NotificationBar')
+}
 
 class GameView {
 
@@ -638,4 +642,8 @@ class GameView {
         //}
         * */
     };
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameView;
 }

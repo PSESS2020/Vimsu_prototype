@@ -1,3 +1,7 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    Views = require('./Views')
+}
+
 class NotificationBar extends Views {
     constructor() {
         super();
@@ -104,4 +108,8 @@ class NotificationBar extends Views {
         string = string.replace(/ /g,"_");
         return string;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = NotificationBar;
 }

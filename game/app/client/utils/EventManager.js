@@ -1,4 +1,6 @@
-
+if (typeof module === 'object' && typeof exports === 'object') {
+    ClientController = require('../controller/ClientController')
+}
 
 class EventManager {
 
@@ -172,4 +174,8 @@ class EventManager {
     handleSendFriendRequest(participantRecipientId, chatId) {
         this.#clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = EventManager;
 }
