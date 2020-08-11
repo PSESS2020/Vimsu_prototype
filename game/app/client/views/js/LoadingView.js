@@ -20,7 +20,3 @@ class LoadingView extends Views {
         this.#overlay[0].style.opacity = 0;
     }
 }
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = LoadingView;
-}

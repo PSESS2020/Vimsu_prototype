@@ -1,12 +1,6 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    Views = require('./Views');
-    GameObjectViewFactory = require('./GameObjectViewFactory');
-    PositionClient = require('../../models/PositionClient');
-    DoorView = require('./DoorView');
-    GameObjectTypeClient = require('../../utils/GameObjectTypeClient');
-}
+/*var Views = require('./Views.js')
 
-class MapView extends Views {
+module.exports = */class MapView extends Views {
     #map;
     #clickableTiles;
     #tiles;
@@ -165,12 +159,11 @@ class MapView extends Views {
 
 
     }
-
     draw() {
         throw new Error('draw() has to be implemented!');
     }
-}
 
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = MapView;
+    #drawGameObjects = function (objectType) {
+        throw new Error('drawGameObjects() has to be implemented!');
+    }
 }
