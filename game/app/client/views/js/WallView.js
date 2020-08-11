@@ -1,3 +1,9 @@
+const GameObjectView = require("./GameObjectView");
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    GameObjectView = require('./GameObjectView')
+}
+
 class WallView extends GameObjectView {
     #wallImage;
     #position;
@@ -11,8 +17,8 @@ class WallView extends GameObjectView {
     draw() {
         ctx_map.drawImage(this.#wallImage, this.#position.getCordX(), this.#position.getCordY());
     }
+}
 
-    onclick() {
-        //TODO
-    }
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = WallView;
 }

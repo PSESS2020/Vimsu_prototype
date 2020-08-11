@@ -1,3 +1,9 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    MapView = require('./MapView');
+    LoadingView = require('./LoadingView');
+    ImageLoader = require('../../utils/ImageLoader');
+}
+
 class RoomView extends MapView {
     
     #loader;
@@ -10,8 +16,6 @@ class RoomView extends MapView {
         this.#loader = new LoadingView();
         this.loadImages();
     }
-
-    
 
     //loads the images that are needed for tilecreation.
     //this was the best not error prone way.
@@ -57,9 +61,6 @@ class RoomView extends MapView {
     
     }
 
-    
-
-
     draw() {
         
         let tiles = super.getTiles();
@@ -68,11 +69,8 @@ class RoomView extends MapView {
             tiles.forEach( object => object.draw());
         }
     }
+}
 
-
-    //TODO
-    drawGameObjects(objectType) {
-        TypeChecker.isInt(objectType);
-    }
-
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = RoomView;
 }

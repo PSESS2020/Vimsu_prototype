@@ -1,3 +1,12 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    PositionClient = require('../../models/PositionClient');
+    SelectedTileView = require('./SelectedTileView');
+    TileView = require('./TileView');
+    WallView = require('./WallView');
+    DoorView = require('./DoorView');
+    TableView = require('./TableView');
+}
+
 class GameObjectViewFactory {
     #tileColumnOffset;
     #tileRowOffset;
@@ -170,4 +179,8 @@ class GameObjectViewFactory {
 
         return gameObjectView;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameObjectViewFactory;
 }

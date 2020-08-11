@@ -1,3 +1,9 @@
+const GameObjectView = require("./GameObjectView");
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    GameObjectView = require('./GameObjectView')
+}
+
 class TileView extends GameObjectView {
     #tileImage;
     #position;
@@ -11,8 +17,8 @@ class TileView extends GameObjectView {
     draw() {
         ctx_map.drawImage(this.#tileImage, this.#position.getCordX(), this.#position.getCordY());
     }
+}
 
-    onclick() {
-        //TODO
-    }
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = TileView;
 }

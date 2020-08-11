@@ -1,3 +1,9 @@
+const GameObjectView = require("./GameObjectView");
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    GameObjectView = require('./GameObjectView')
+}
+
 class SelectedTileView extends GameObjectView {
     #tileImage;
     #position;
@@ -25,8 +31,8 @@ class SelectedTileView extends GameObjectView {
         return this.#position;
 
     }
+}
 
-    onclick() {
-        //TODO
-    }
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = SelectedTileView;
 }
