@@ -9,7 +9,7 @@ const RoomController = require('./RoomController.js');
 
 /* Import Utils */
 const Settings = require('../../utils/Settings.js');
-const TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 module.exports = class ConferenceController {
 

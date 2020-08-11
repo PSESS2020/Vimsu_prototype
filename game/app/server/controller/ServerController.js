@@ -28,7 +28,7 @@ const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../../utils/TypeOfTask.js')
 
-const TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Messages = require('../../utils/Messages.js');
 const Conference = require('../models/Conference.js');
 

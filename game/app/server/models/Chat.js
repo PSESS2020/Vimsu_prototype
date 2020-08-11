@@ -1,4 +1,4 @@
-var TypeChecker = require('../../../../config/TypeChecker.js');
+var TypeChecker = require('../../client/shared/TypeChecker.js');
 /* Commented out because classes cannot require each other at the same time.
    This causes at least an error in the test class. (N)*/
 //const Participant = require('./Participant.js');

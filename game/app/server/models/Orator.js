@@ -1,4 +1,4 @@
-var TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 var Position = require('./Position.js');
 var Direction = require('../../utils/Direction.js');
 var Participant = require('./Participant.js');
