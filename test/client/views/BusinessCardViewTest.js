@@ -9,7 +9,7 @@ var businessCard2 = new BusinessCardClient("53a", "maxmust", "Prof.", "Musterman
 var businessCardView1 = new BusinessCardView(businessCard1, true, 5);
 var businessCardView2 = new BusinessCardView(businessCard2, false, 3)
 
-describe('DoorView test', function() {
+describe('BusinessCardView test', function() {
 
     it('test draw method friend', function() {
         businessCardView1.draw();
