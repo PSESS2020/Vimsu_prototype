@@ -895,6 +895,20 @@ module.exports = class ServerController {
                             //check if chatPartner is online
                             if (chatPartner !== undefined) {
                                 chatPartner.addChat(loadedChat);
+
+                                chatData = {
+                                    title: creatorUsername,
+                                    chatId: loadedChat.getId(),
+                                    timestamp: '', //please dont change the timestamp here
+                                    previewUsername: '',
+                                    previewMessage: '',
+                                    areFriends: areFriends,
+                                    friendRequestSent: friendRequestSent,
+                                    partnerId: chatPartnerID,
+                                    groupChat: false,
+                                    messages: [],
+                                    
+                                };
        
                                 //chat partner joins chat channel
                                 let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
