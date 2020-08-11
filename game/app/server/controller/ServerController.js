@@ -78,6 +78,7 @@ module.exports = class ServerController {
 
         //Init all rooms
         this.#roomService = new RoomService();
+        //Array to hold all Rooms
         this.#rooms = this.#roomService.getAllRooms();
 
         this.#banList = [];
@@ -85,6 +86,7 @@ module.exports = class ServerController {
 
         // Array to hold all participants
         this.#ppants = new Map();
+
         this.init();
     }
     
@@ -191,7 +193,7 @@ module.exports = class ServerController {
                     });
                     
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-                    this.#rooms[currentRoomId - 1].enterParticipant(ppant);
+                    this.#rooms[currentRoomId - 1].getRoom().enterParticipant(ppant);
                     var ppantCont = new ParticipantController(ppant);
                     this.#ppants.set(ppant.getId(), ppant);
 
@@ -201,7 +203,7 @@ module.exports = class ServerController {
                     
 
                     //Get GameObjects of starting room
-                    let gameObjects = this.#rooms[currentRoomId - 1].getListOfGameObjects();
+                    let gameObjects = this.#rooms[currentRoomId - 1].getRoom().getListOfGameObjects();
                     let gameObjectData = [];
 
                     //needed to send all gameObjects of starting room to client
@@ -218,7 +220,7 @@ module.exports = class ServerController {
                     });
 
                     //Get all NPCs from starting room
-                    let npcs = this.#rooms[currentRoomId - 1].getListOfNPCs();
+                    let npcs = this.#rooms[currentRoomId - 1].getRoom().getListOfNPCs();
                     let npcData = [];
 
                     //needed to init all NPCs in clients game view
@@ -230,7 +232,7 @@ module.exports = class ServerController {
                     });
 
                     //Get all Doors from starting room
-                    let doors = this.#rooms[currentRoomId - 1].getListOfDoors();
+                    let doors = this.#rooms[currentRoomId - 1].getRoom().getListOfDoors();
                     let doorData = [];
 
                     //needed to init all Doors in clients game view
@@ -257,14 +259,14 @@ module.exports = class ServerController {
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom, 
-                            gameObjectData, npcData, doorData, this.#rooms[currentRoomId - 1].getWidth(), this.#rooms[currentRoomId - 1].getLength());
+                            gameObjectData, npcData, doorData, this.#rooms[currentRoomId - 1].getRoom().getWidth(), this.#rooms[currentRoomId - 1].getRoom().getLength());
 
                                                 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection()});
                 
                     // Initialize Allchat
-                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getMessages());
+                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getRoom().getMessages());
 
                     this.#ppants.forEach((participant, id, map) => {
                     
@@ -355,7 +357,7 @@ module.exports = class ServerController {
                 var currentDate = new Date();
                 var currentTime = (currentDate.getHours()<10?'0':'') +currentDate.getHours().toString() + ":" + (currentDate.getMinutes()<10?'0':'') + currentDate.getMinutes().toString();
                 console.log("<" + currentTime + "> " + ppantID + " says " + text);
-                this.#rooms[roomID - 1].addMessage(ppantID, username, currentTime, text);
+                this.#rooms[roomID - 1].getRoom().addMessage(ppantID, username, currentTime, text);
                 
                 // Getting the roomID from the ppant seems to not work?
                 this.#io.in(roomID.toString()).emit('newAllchatMessage', { username: username, timestamp: currentTime, text: text });
@@ -393,7 +395,7 @@ module.exports = class ServerController {
 
                 //CollisionCheck
                 //No Collision, so every other participant gets the new position (P)
-                if (!this.#rooms[roomId - 1].checkForCollision(newPos)) {
+                if (!this.#rooms[roomId - 1].getRoom().checkForCollision(newPos)) {
                     this.#ppants.get(ppantID).setPosition(newPos);
                     this.#ppants.get(ppantID).setDirection(direction);
                     socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
@@ -431,7 +433,7 @@ module.exports = class ServerController {
                 let currentRoomId = enterPosition.getRoomId();
 
                 //get door from current room to target room
-                let door = this.#rooms[currentRoomId - 1].getDoorTo(targetRoomId);
+                let door = this.#rooms[currentRoomId - 1].getRoom().getDoorTo(targetRoomId);
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
@@ -453,11 +455,11 @@ module.exports = class ServerController {
                 /Reception has ID 3 and is this.#rooms[2]
                 */
 
-                this.#rooms[targetRoomId - 1].enterParticipant(this.#ppants.get(ppantID));
-                this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
+                this.#rooms[targetRoomId - 1].getRoom().enterParticipant(this.#ppants.get(ppantID));
+                this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
 
                 //get all GameObjects from target room
-                let gameObjects = this.#rooms[targetRoomId - 1].getListOfGameObjects();
+                let gameObjects = this.#rooms[targetRoomId - 1].getRoom().getListOfGameObjects();
                 let gameObjectData = [];
             
                 //needed to send all gameObjects of starting room to client
@@ -473,7 +475,7 @@ module.exports = class ServerController {
                     });
                 });
 
-                let npcs = this.#rooms[targetRoomId - 1].getListOfNPCs();
+                let npcs = this.#rooms[targetRoomId - 1].getRoom().getListOfNPCs();
                 let npcData = [];
 
                 //needed to init all NPCs in clients game view
@@ -485,7 +487,7 @@ module.exports = class ServerController {
                 });
 
                 //Get all Doors from starting room
-                let doors = this.#rooms[targetRoomId - 1].getListOfDoors();
+                let doors = this.#rooms[targetRoomId - 1].getRoom().getListOfDoors();
                 let doorData = [];
 
                 //needed to init all Doors in clients game view
@@ -497,7 +499,7 @@ module.exports = class ServerController {
                     
                 //emit new room data to client
                 this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData, doorData, 
-                        this.#rooms[targetRoomId - 1].getWidth(), this.#rooms[targetRoomId - 1].getLength());
+                        this.#rooms[targetRoomId - 1].getRoom().getWidth(), this.#rooms[targetRoomId - 1].getRoom().getLength());
 
                 //set new position in server model
                 this.#ppants.get(ppantID).setPosition(newPos);
@@ -531,7 +533,7 @@ module.exports = class ServerController {
                 //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getMessages());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
 
             });
 
@@ -638,7 +640,7 @@ module.exports = class ServerController {
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
-                let lectureDoor = this.#rooms[currentRoomId - 1].getLectureDoor();
+                let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
@@ -1599,7 +1601,7 @@ module.exports = class ServerController {
 
                 //remove participant from room
                 var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
-                this.#rooms[currentRoomId - 1].exitParticipant(ppantID);
+                this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
 
                 console.log("delete participant from ppantController: " + socket.id);
                 this.#ppantControllers.delete(socket.id);
@@ -1736,9 +1738,9 @@ module.exports = class ServerController {
                  * so that the moderator can remove the right user from a conference.
                  * - (E) */
                  var room = this.#rooms[moderator.getPosition().getRoomId() - 1];
-                 var messageHeader = "List of messages posted in " + room.getTypeOfRoom();
+                 var messageHeader = "List of messages posted in " + room.getRoom().getTypeOfRoom();
                  var messageBody = [];
-                 var msg = room.getMessages();
+                 var msg = room.getRoom().getMessages();
                  for(var i = 0; i < msg.length; i++) {
                      messageBody.splice(0 , 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
                       ") has messageId: " + msg[i].messageID);
@@ -1845,7 +1847,7 @@ module.exports = class ServerController {
             case Commands.REMOVEMESSAGE:
                 var messagesToDelete = commandArgs.slice(1);
                 var roomID = moderator.getPosition().getRoomId();
-                var msg = this.#rooms[roomID - 1].getMessages();
+                var msg = this.#rooms[roomID - 1].getRoom().getMessages();
                 for(var i = 0; i < msg.length; i++) {
                      if(messagesToDelete.includes(msg[i].messageID.toString())) {
                          this.sendWarning(this.getSocketId(msg[i].senderID));
@@ -1858,7 +1860,7 @@ module.exports = class ServerController {
                 break;
             case Commands.REMOVEMESSAGESBYPLAYER:
                 var roomID = moderator.getPosition().getRoomId();
-                var msg = this.#rooms[roomID - 1].getMessages();
+                var msg = this.#rooms[roomID - 1].getRoom().getMessages();
                 var newMsg = msg;
                 for(var i = 0; i < msg.length; i++) {
                      if(commandArgs.includes(msg[i].senderID.toString())) {

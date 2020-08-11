@@ -4,7 +4,6 @@ var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
 var GameObjectService = require('../services/GameObjectService.js');
-var RoomDimensions = require('../../utils/RoomDimensions.js');
 const Position = require('./Position.js');
 const Direction = require('../../utils/Direction.js');
 const Settings = require('../../utils/Settings.js');
@@ -38,7 +37,7 @@ module.exports = class Room {
      * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom 
      */
-    constructor(roomId, typeOfRoom) {
+    constructor(roomId, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
@@ -47,22 +46,9 @@ module.exports = class Room {
         this.#listOfPPants = [];
         this.#listOfMessages = [];
 
-        //andere Fälle später
-        if (this.#typeOfRoom == "FOYER") {
+        this.#length = length;
+        this.#width = width;
 
-            this.#length = RoomDimensions.FOYER_LENGTH;
-            this.#width = RoomDimensions.FOYER_WIDTH;
-
-        } else if (this.#typeOfRoom === "FOODCOURT") {
-
-            this.#length = RoomDimensions.FOODCOURT_LENGTH;
-            this.#width = RoomDimensions.FOODCOURT_WIDTH;
-        
-        } else if (this.#typeOfRoom === "RECEPTION") {
-
-            this.#length = RoomDimensions.RECEPTION_LENGTH;
-            this.#width = RoomDimensions.RECEPTION_WIDTH;
-        }
         //Initialisiert width*length Feld gefüllt mit 0
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
