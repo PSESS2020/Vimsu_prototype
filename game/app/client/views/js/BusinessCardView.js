@@ -1,3 +1,7 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    WindowView = require('./WindowView')
+}
+
 class BusinessCardView extends WindowView {
     #businessCard;
     #isFriend;
@@ -59,4 +63,8 @@ class BusinessCardView extends WindowView {
             $('#businessCardModal .modal-body').empty()
         })
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = BusinessCardView;
 }
