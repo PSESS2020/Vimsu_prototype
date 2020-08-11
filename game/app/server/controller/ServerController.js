@@ -1558,8 +1558,10 @@ module.exports = class ServerController {
 
 
             socket.on('getNPCStory', (ppantID, npcID) => {
-                let npcService = new NPCService();
-                let npc = npcService.getNPC(npcID);
+                //let npcService = new NPCService();
+                let currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
+                let npc = this.#rooms[currentRoomId - 1].getRoom().getNPC(npcID);
+                //let npc = npcService.getNPC(npcID);
                 let name = npc.getName();
                 let story = npc.getStory();
                 if(name === "BasicTutorial") {

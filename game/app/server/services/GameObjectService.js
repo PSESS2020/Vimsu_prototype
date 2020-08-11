@@ -15,10 +15,9 @@ module.exports = class GameObjectService {
 
         GameObjectService.instance = this;
         this.#objects = [];
-        this.initAllObjects();
     }
 
-    getObjects(roomId)
+    /*getObjects(roomId)
     {
         TypeChecker.isInt(roomId);
         
@@ -35,9 +34,9 @@ module.exports = class GameObjectService {
         }
 
         return roomObjects;
-    }
+    }*/
 
-    getObject(id)
+    /*getObject(id)
     {
         TypeChecker.isInt(id);
 
@@ -49,32 +48,18 @@ module.exports = class GameObjectService {
         }
 
         return this.#objects[index];
+    }*/
+
+    randomInt() {
+        return Math.floor((Math.random() * 1000000) - 500000);
+    };
+
+    createTable(roomId, width, heigth, xPos, yPos, solidity) {
+        return new GameObject(this.randomInt(), "table" + 1, width, heigth, new Position(roomId, xPos, yPos), solidity);
     }
 
-    initAllObjects()
-    {    
-        
-        //FOYER OBJECTS
-        for (var i = 4; i < 9; i++)
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOYER_ID, i, 0), true));
-
-        //RECEPTION OBJECTS
-        for (var i = 3; i <= 9; i++) {
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 10, i), true));
-        }
-        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 11, 9), true));
-        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 12, 9), true));
-        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 11, 3), true));
-        this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.RECEPTION_ID, 12, 3), true));
-        
-
-        //FOOD COURT OBJECTS
-        for (var i = 2; i <= 10; i++) {
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 10, i), true));
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 8, i), true));
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 6, i), true));
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 4, i), true));
-            this.#objects.push(new GameObject(1, "table" + 1, 1, 1, new Position(Settings.FOODCOURT_ID, 2, i), true));
-        }
+    createSchedule(roomId, width, heigth, xPos, yPos, solidity) {
+        return new GameObject(this.randomInt(), "schedule" + 1, width, heigth, new Position(roomId, xPos, yPos), solidity);
     }
+
 }

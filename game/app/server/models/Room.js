@@ -54,20 +54,17 @@ module.exports = class Room {
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
         }
-        
-        //Alle GameObjekte die in diesen Raum gehören von Service holen
-        let objService = new GameObjectService();
-        this.#listOfGameObjects = objService.getObjects(this.#roomId);
-
-        //Alle NPCs die in diesen Raum gehören vom Service holen
-        let npcService = new NPCService();
-        this.#listOfNPCs = npcService.getNPCs(this.#roomId);
 
         //Alle Türen die in diesen Raum gehören vom Service holen
         let doorService = new DoorService();
         this.#listOfDoors = doorService.getDoors(this.#roomId);
+    }
+    setGameObjects(listOfGameObjects) {
+        this.#listOfGameObjects = listOfGameObjects;
+    }
 
-        this.#buildOccMap();
+    setNPCs(listOfNPCs) {
+        this.#listOfNPCs = listOfNPCs;
     }
 
     getRoomId() {
@@ -115,6 +112,20 @@ module.exports = class Room {
     getOccMap() {
         return this.#occupationMap;
     };
+
+    getNPC(id)
+    {
+        TypeChecker.isInt(id);
+
+        let index = this.#listOfNPCs.findIndex(npc => npc.getId() === id);
+
+        if (index < 0) 
+        {
+            throw new Error(id + " is not in list of npcs")
+        }
+
+        return this.#listOfNPCs[index];
+    }
 
     /**
      * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
@@ -215,7 +226,7 @@ module.exports = class Room {
     }
 
 
-   #buildOccMap = function() {
+   buildOccMap() {
         //Geht jedes Objekt in der Objektliste durch
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
             
