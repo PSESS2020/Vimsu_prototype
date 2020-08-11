@@ -171,12 +171,11 @@ module.exports = class ServerController {
                     
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let typeOfCurrentRoom;
-                    if (currentRoomId === Settings.FOYER_ID) {
-                        typeOfCurrentRoom = TypeOfRoom.FOYER;
-                    } else if (currentRoomId === Settings.RECEPTION_ID) {
-                        typeOfCurrentRoom = TypeOfRoom.RECEPTION;
-                    } else if (currentRoomId === Settings.FOODCOURT_ID) {
-                        typeOfCurrentRoom = TypeOfRoom.FOODCOURT;
+                    for(var i = 0, n = this.#rooms.length; i < n; i++ ) {
+                        if (this.#rooms[i].getRoom().getRoomId() === currentRoomId) {
+                            typeOfCurrentRoom = this.#rooms[i].getRoom().getTypeOfRoom();
+                            break;
+                        }
                     }
 
                     console.log("roomId:" + currentRoomId)
