@@ -57,12 +57,6 @@ module.exports = class ParticipantService {
 
                     var achievements = [];
 
-                    /*par.achievements.forEach(ach => {
-                        achievements.push(new Achievement(ach.id, ach.title, ach.icon,
-                            ach.description, ach.currentLevel, ach.color,
-                            ach.awardPoints, ach.maxLevel, ach.taskType))
-                    })*/
-
                     participant = new Participant(par.participantId,
                         accountId,
                         new BusinessCard(par.participantId,
@@ -94,15 +88,10 @@ module.exports = class ParticipantService {
                         let idx = ppantAchievements.findIndex(ach => ach.id === achievement.id);
 
                         if (idx > -1) {
-                            achievements.push(new Achievement(achievement.id,
-                                ppantAchievements[idx].title,
-                                ppantAchievements[idx].icon,
-                                ppantAchievements[idx].description,
-                                achievement.currentLevel,
-                                achievement.color,
-                                ppantAchievements[idx].awardPoints,
-                                ppantAchievements[idx].maxLevel,
-                                ppantAchievements[idx].getTaskType()));
+                            var taskType = ppantAchievements[idx].getTaskType();
+                            var achievementDefinition = achievementService.getAchievementDefinitionByTypeOfTask(taskType);
+                            var achievement = achievementDefinition.computeAchievement(achievement.currentLevel);
+                            achievements.push(achievement);
                         }
                     })
 
@@ -117,7 +106,6 @@ module.exports = class ParticipantService {
                                 [{
                                     id: achievement.id,
                                     currentLevel: achievement.currentLevel,
-                                    color: achievement.color,
                                 }]
                             const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
@@ -189,7 +177,6 @@ module.exports = class ParticipantService {
                             {
                                 id: ach.id,
                                 currentLevel: ach.currentLevel,
-                                color: ach.color,
                             },
                         )
                     })
@@ -378,7 +365,7 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color, vimsudb) {
+    static updateAchievementLevel(participantId, conferenceId, achievementId, level, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
@@ -386,7 +373,7 @@ module.exports = class ParticipantService {
 
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId, 'achievements.id': achievementId },
-            { 'achievements.$.currentLevel': level, 'achievements.$.color': color }).then(res => {
+            { 'achievements.$.currentLevel': level }).then(res => {
 
                 return true;
             }).catch(err => {

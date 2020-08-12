@@ -2178,7 +2178,7 @@ module.exports = class ServerController {
             newAchievements.forEach(ach => {
                 this.#io.to(this.getSocketId(participantId)).emit('newAchievement', ach);
 
-                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
+                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, this.#db).then(res => {
                     console.log('level of ' + ach.id + ' updated')
                 }).catch(err => {
                     console.error(err);
@@ -2212,7 +2212,7 @@ module.exports = class ServerController {
                         var awardPoints = levels[i].points;
 
                         if(friends.length == count) {
-                            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), i + 1, levels[i].color, this.#db).then(res => {
+                            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), i + 1, this.#db).then(res => {
                                 console.log('level of ' + achievementDefinition.getId() + ' updated');
                             });
                                 
