@@ -1,5 +1,5 @@
 var ConferenceController = require('./ConferenceController.js');
-var ParticipantController = require('./ParticipantController.js');
+var ParticipantController = require('../game/app/server/controller/ParticipantController.js');
 var Room = require('../game/app/server/models/Room.js');
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 var Position = require('../game/app/server/models/Position.js');
