@@ -77,9 +77,15 @@ class FriendRequestListView extends WindowView {
         if (isAccepted) {
             $('#accepted' + participantId).show()
             $('#rejectdisable' + participantId).show()
+            
         } else {
-            this.deleteFriendRequest(participantId);
+            $('#rejected' + participantId).show()
+            $('#acceptdisable' + participantId).show()
         }
+
+        setTimeout(() => {
+            this.deleteFriendRequest(participantId);
+        }, 300)
     }
 
     addToFriendRequestList(businessCard) {
