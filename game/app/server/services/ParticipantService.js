@@ -387,7 +387,12 @@ module.exports = class ParticipantService {
                 console.error(err);
                 return false;
             })
+    }
 
+    static updateTaskCounts(participantId, taskCount) {
+        TypeChecker.isString(participantId);
+        
+        
     }
 
     //Method to add a chatID in DB
