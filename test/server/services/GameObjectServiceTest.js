@@ -1,55 +1,44 @@
 const { expect } = require('chai');
 const GameObjectService = require('../../../game/app/server/services/GameObjectService');
-const Settings = require('../../../game/app/client/shared/Settings');
 const GameObject = require('../../../game/app/server/models/GameObject');
+const Settings = require('../../../game/app/client/shared/Settings');
+const TestUtil = require('../models/utils/TestUtil');
 
 
-//Test data
-var initGameObjectService = new GameObjectService();
-//Called twice to cover singleton constructor
-var gameObjectService = new GameObjectService();
-var foyerID = Settings.FOYER_ID;
-var foodCourtID = Settings.FOODCOURT_ID;
-var receptionID = Settings.RECEPTION_ID;
-var invalidRoomID = 42;
-var tableID = 1;
-var tableName = 'table1';
-var invalidObjectID = 42;
-
-describe('GameObjectServiceTest getter', function () {
-    it('test getObjects Foyer', function() {
-        let foyerObjects = gameObjectService.getObjects(foyerID);
-        expect(foyerObjects).to.be.an('array').and.to.have.lengthOf(5);
-        foyerObjects.forEach(object => {
-            expect(object).to.be.instanceOf(GameObject);
-        });
+describe('GameObjectService test', function () {
+    it('test create Table', function() {
+        let gameObjectService = new GameObjectService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let solidity = TestUtil.randomBool();
+        let table = gameObjectService.createTable(roomId, cordX, cordY, solidity);
+        expect(table).to.be.instanceOf(GameObject);
+        expect(table.getPosition().getRoomId()).to.equal(roomId);
+        expect(table.getPosition().getCordX()).to.equal(cordX);
+        expect(table.getPosition().getCordY()).to.equal(cordY);
+        expect(table.getSolid()).to.equal(solidity);
+        expect(table.getId()).to.be.a('number');
+        expect(table.getWidth()).to.equal(Settings.TABLE_WIDTH);
+        expect(table.getLength()).to.equal(Settings.TABLE_LENGTH);
     });
 
-    it('test getObjects Reception', function() {
-        let receptionObjects = gameObjectService.getObjects(receptionID);
-        expect(receptionObjects).to.be.an('array').and.to.have.lengthOf(11);
-        receptionObjects.forEach(object => {
-            expect(object).to.be.instanceOf(GameObject);
-        });
-    });
-
-    it('test getObjects FoodCourt', function() {
-        let foodCourtObjects = gameObjectService.getObjects(foodCourtID);
-        expect(foodCourtObjects).to.be.an('array').and.to.have.lengthOf(45);
-        foodCourtObjects.forEach(object => {
-            expect(object).to.be.instanceOf(GameObject);
-        });
-    });
-
-    it('test getObjects invalid Room', function() {
-        expect(() => gameObjectService.getObjects(invalidRoomID)).to.throw(Error);
-    })
-
-    it('test getObject table', function() {
-        expect(gameObjectService.getObject(tableID).getName()).equal(tableName);
-    });
-
-    it('test getObject invalid Object', function() {
-        expect(() => gameObjectService.getObject(invalidObjectID)).to.throw(Error);
-    });
+    it('test create ScheduleBoard', function() {
+        let gameObjectService = new GameObjectService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let solidity = TestUtil.randomBool();
+        let width = TestUtil.randomIntWithMin(1);
+        let length = TestUtil.randomIntWithMin(1);
+        let scheduleBoard = gameObjectService.createSchedule(roomId, width, length, cordX, cordY, solidity);
+        expect(scheduleBoard).to.be.instanceOf(GameObject);
+        expect(scheduleBoard.getPosition().getRoomId()).to.equal(roomId);
+        expect(scheduleBoard.getPosition().getCordX()).to.equal(cordX);
+        expect(scheduleBoard.getPosition().getCordY()).to.equal(cordY);
+        expect(scheduleBoard.getSolid()).to.equal(solidity);
+        expect(scheduleBoard.getId()).to.be.a('number');
+        expect(scheduleBoard.getWidth()).to.equal(width);
+        expect(scheduleBoard.getLength()).to.equal(length);
+    });  
 });

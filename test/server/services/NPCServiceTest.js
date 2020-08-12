@@ -6,13 +6,9 @@ const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../game/app/client/shared/Direction');
 
 
-//Test data
-var initNPCService = new NPCService();
-//called twice to cover singleton constructor
-var npcService = new NPCService();
-
 describe('NPCService test', function () {
     it('test create FoyerHelperNPC', function() {
+        let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -31,6 +27,7 @@ describe('NPCService test', function () {
     });
 
     it('test create BasicTutorialNPC', function() {
+        let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -49,6 +46,7 @@ describe('NPCService test', function () {
     });
 
     it('test create ChefNPC', function() {
+        let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
