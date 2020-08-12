@@ -40,7 +40,7 @@ module.exports = class Participant {
      * @param {int} awardPoints
      * @param {Array of Chat} chatList 
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList) {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -81,10 +81,7 @@ module.exports = class Participant {
         this.#friendList = friendList; //this.#friendList = new FriendList(this.#id, []);  //TESTING
         this.#receivedRequestList = receivedRequestList; //this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
         this.#sentRequestList = sentRequestList; //this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
-        this.#taskTypeMapping = {};
-        tasks.forEach((x) => {
-            this.#taskTypeMapping[x.getTaskType()] = 0;
-        });
+        this.#taskTypeMapping = taskMapping;
 
         this.#achievements = achievements;
 

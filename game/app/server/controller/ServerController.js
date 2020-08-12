@@ -2169,6 +2169,9 @@ module.exports = class ServerController {
         if (participant) {
             participant.addTask(task);
 
+            console.log("pushing into db " + JSON.stringify(participant.getTaskTypeMappingCounts()));
+            ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, participant.getTaskTypeMappingCounts(), this.#db);
+
             // computes achievements, updates participants, and returns newly unlocked achievements
             var newAchievements = new AchievementService().computeAchievements(participant);
 
