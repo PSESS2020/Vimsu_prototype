@@ -389,10 +389,15 @@ module.exports = class ParticipantService {
             })
     }
 
-    static updateTaskCounts(participantId, taskCount) {
+    static updateTaskCounts(participantId, conferenceId, taskCount, vimsudb) {
         TypeChecker.isString(participantId);
         
-        
+        return vimsudb.updateOneToCollection("particpants_" + conferenceId, { participantId: participantId }, { taskCount: taskCount }).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
     }
 
     //Method to add a chatID in DB
