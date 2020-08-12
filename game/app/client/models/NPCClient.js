@@ -1,7 +1,7 @@
 if (typeof module === 'object' && typeof exports === 'object') {
-    TypeChecker = require('../utils/TypeChecker.js');
+    TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
-    DirectionClient = require('../utils/DirectionClient.js');
+    Direction = require('../shared/Direction.js');
  }
 
 class NPCClient {
@@ -23,7 +23,7 @@ class NPCClient {
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(position, PositionClient);
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
 
         this.#id = id;
         this.#name = name;

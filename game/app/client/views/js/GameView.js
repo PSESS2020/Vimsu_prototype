@@ -1,3 +1,7 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    StatusBar = require('./StatusBar');
+    NotificationBar = require('./NotificationBar')
+}
 
 class GameView {
 
@@ -281,7 +285,7 @@ class GameView {
 
     updateAnotherAvatarDirection(participantId, direction)
     {
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
  
         let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
@@ -336,7 +340,7 @@ class GameView {
     initOwnAvatarView(ownParticipant, typeOfRoom)
     {
         TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
@@ -361,7 +365,7 @@ class GameView {
 
     updateOwnAvatarDirection(direction)
     {
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
         this.#ownAvatarView.setDirection(direction);
         
     }
@@ -638,4 +642,8 @@ class GameView {
         //}
         * */
     };
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameView;
 }

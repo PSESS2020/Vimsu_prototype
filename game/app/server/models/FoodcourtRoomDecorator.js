@@ -1,8 +1,8 @@
 const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
-const Direction = require('../../utils/Direction.js');
-const Settings = require('../../utils/Settings.js');
+const Direction = require('../../client/shared/Direction.js');
+const Settings = require('../../client/shared/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 

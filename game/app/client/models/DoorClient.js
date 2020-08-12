@@ -1,3 +1,9 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../shared/TypeChecker.js');
+    PositionClient = require('./PositionClient.js');
+    TypeOfDoor = require('../shared/TypeOfDoor.js');
+ }
+
 class DoorClient {
 
     #id;
@@ -8,12 +14,12 @@ class DoorClient {
      * @author Philipp
      * 
      * @param {int} id 
-     * @param {String} typeOfDoor
+     * @param {TypeOfDoor} typeOfDoor
      * @param {PositionClient} mapPosition
      */
     constructor(id, typeOfDoor, mapPosition) {
         TypeChecker.isInt(id);
-        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoorClient);
+        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isInstanceOf(mapPosition, PositionClient);
 
         this.#id = id;
@@ -21,10 +27,10 @@ class DoorClient {
         this.#mapPosition = mapPosition;
     }
 
-    getStartingRoomId() {
-        return this.#mapPosition.getRoomId();
+    getId() {
+        return this.#id;
     }
-
+    
     getTypeOfDoor() {
         return this.#typeOfDoor;
     }
@@ -32,4 +38,8 @@ class DoorClient {
     getMapPosition() {
         return this.#mapPosition;
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = DoorClient;
 }

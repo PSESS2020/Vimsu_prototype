@@ -1,4 +1,4 @@
-var TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 var TypeOfTask = require('../../utils/TypeOfTask');
 const Achievement = require('./Achievement.js');
 

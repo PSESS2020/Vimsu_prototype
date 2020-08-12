@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 const DoorService = require('../../../game/app/server/services/DoorService.js');
 const Door = require('../../../game/app/server/models/Door.js');
-const Settings = require('../../../game/app/utils/Settings.js');
-const TypeOfDoor = require('../../../game/app/utils/TypeOfDoor.js');
+const Settings = require('../../../game/app/client/shared/Settings.js');
+const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
 
 
 //Test data

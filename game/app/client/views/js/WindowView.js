@@ -1,3 +1,7 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    Views = require('./Views')
+}
+
 class WindowView extends Views {
 
     constructor() {
@@ -7,8 +11,8 @@ class WindowView extends Views {
     draw() {
         throw new Error('draw() has to be implemented!');
     }
+}
 
-    /*onclick() {
-        throw new Error('onclick() has to be implemented!');
-    }   */
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = WindowView;
 }

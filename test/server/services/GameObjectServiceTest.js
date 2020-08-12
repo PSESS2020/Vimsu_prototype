@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const GameObjectService = require('../../../game/app/server/services/GameObjectService');
-const Settings = require('../../../game/app/utils/Settings');
+const Settings = require('../../../game/app/client/shared/Settings');
 const GameObject = require('../../../game/app/server/models/GameObject');
 
 

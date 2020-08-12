@@ -1,4 +1,4 @@
-const TypeChecker = require("../../../../config/TypeChecker.js");
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 const BusinessCard = require("./BusinessCard.js");
 
 

@@ -53,6 +53,7 @@ class ChatThreadView extends WindowView {
             new EventManager().handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
         });
 
+        $('#chatParticipantListBtn').off()
         $('#chatParticipantListBtn').click((event) => {
             event.preventDefault();
 
@@ -63,6 +64,7 @@ class ChatThreadView extends WindowView {
             new EventManager().handleShowChatParticipantList(this.#chat.chatId);
         })
 
+        $('#inviteFriendsBtn').off()
         $('#inviteFriendsBtn').click((event) => {
             event.preventDefault();
 

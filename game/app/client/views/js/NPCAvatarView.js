@@ -21,7 +21,7 @@ module.exports = */class NPCAvatarView extends AvatarView {
         super(position, direction);
         TypeChecker.isInt(npcId);
         TypeChecker.isString(name);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
         this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10); 
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);

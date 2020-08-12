@@ -1,6 +1,6 @@
 
 if (typeof module === 'object' && typeof exports === 'object') {
-    TypeChecker = require('../utils/TypeChecker.js');
+    TypeChecker = require('../shared/TypeChecker.js');
 }
 
 class BusinessCardClient {

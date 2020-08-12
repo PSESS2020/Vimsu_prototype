@@ -1,9 +1,9 @@
 const NPC = require('../models/NPC.js');
 const Position = require('../models/Position.js');
-const Direction = require('../../utils/Direction.js');
-const TypeChecker = require('../../../../config/TypeChecker.js');
-const TypeOfRoom = require('../../utils/TypeOfRoom.js');
-const Settings = require('../../utils/Settings.js');
+const Direction = require('../../client/shared/Direction.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class NPCService {
 

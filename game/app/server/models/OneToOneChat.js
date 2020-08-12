@@ -1,4 +1,4 @@
-var TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 var Chat = require('./Chat.js');
 
 module.exports = class OneToOneChat extends Chat{

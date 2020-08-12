@@ -2,7 +2,7 @@
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const DirectionClient = require('../../../game/app/client/utils/DirectionClient.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
 const NPCClient = require('../../../game/app/client/models/NPCClient.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 
@@ -10,7 +10,7 @@ const PositionClient = require('../../../game/app/client/models/PositionClient.j
 var id = TestUtil.randomInt();
 var position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
 var name = TestUtil.randomString();
-var direction = DirectionClient.DOWNLEFT;
+var direction = Direction.DOWNLEFT;
 
 describe('NPCClient test', function() {
     it('test constructor and getters', function() {

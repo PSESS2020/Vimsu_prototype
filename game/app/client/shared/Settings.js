@@ -1,6 +1,8 @@
-const Direction = require('./Direction')
+if (typeof module === 'object' && typeof exports === 'object') {
+    Direction = require('./Direction');
+}
 
-module.exports = Object.freeze
+const Settings = Object.freeze
 ({
 
     /* Movement-Speed Constants */
@@ -16,16 +18,29 @@ module.exports = Object.freeze
     STARTPOSITION_Y: 12,
     STARTDIRECTION: Direction.UPLEFT,
     TYPE_OF_STARTROOM: 'RECEPTION',
+
+    /* Chat Constants */
     MAXNUMMESSAGES_LECTURECHAT: 100,
     MAXNUMMESSAGES_ALLCHAT: 100,
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
+    
+
     CONFERENCE_ID: '1',
+
+    /* Lecture Constants */
     SHOWLECTURE: 10*60*1000, //lecture is shown 10 minutes before lecture start 
     TOKENCOUNTERSTART: 5*60*1000,
+
+    /* StatusBar Constants */
+    TIME_UNTIL_LEAVE: 60,
 
     /* Moderator-Settings */
     CMDSTARTCHAR: "\\" // moved the actual commands into a seperate file for easier handling
 
 });
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = Settings;
+}

@@ -6,7 +6,7 @@ const socketio = require('socket.io');
 const path = require('path');
 
 const Position = require('../models/Position.js');
-const Direction = require('../../utils/Direction.js');
+const Direction = require('../../client/shared/Direction.js');
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -14,8 +14,8 @@ const ParticipantController = require('./ParticipantController.js');
 const Room  = require('../models/Room.js');
 const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
-const TypeOfRoom = require('../../utils/TypeOfRoom.js');
-const Settings = require('../../utils/Settings.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const Settings = require('../../client/shared/Settings.js');
 const Commands = require('../../utils/Commands.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');
@@ -28,7 +28,7 @@ const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../../utils/TypeOfTask.js')
 
-const TypeChecker = require('../../../../config/TypeChecker.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Messages = require('../../utils/Messages.js');
 const Conference = require('../models/Conference.js');
 
@@ -896,6 +896,20 @@ module.exports = class ServerController {
                             //check if chatPartner is online
                             if (chatPartner !== undefined) {
                                 chatPartner.addChat(loadedChat);
+
+                                chatData = {
+                                    title: creatorUsername,
+                                    chatId: loadedChat.getId(),
+                                    timestamp: '', //please dont change the timestamp here
+                                    previewUsername: '',
+                                    previewMessage: '',
+                                    areFriends: areFriends,
+                                    friendRequestSent: friendRequestSent,
+                                    partnerId: chatPartnerID,
+                                    groupChat: false,
+                                    messages: [],
+                                    
+                                };
        
                                 //chat partner joins chat channel
                                 let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));

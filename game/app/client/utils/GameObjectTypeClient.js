@@ -13,3 +13,7 @@ const GameObjectTypeClient = Object.freeze
     RIGHTTILE: 9,
     FOYERDOOR: 10,
 });
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameObjectTypeClient;
+}

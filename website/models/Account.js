@@ -1,4 +1,4 @@
-var TypeChecker = require('../../config/TypeChecker')
+const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 
 module.exports = class Account {
 

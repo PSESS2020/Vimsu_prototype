@@ -94,3 +94,7 @@ class InviteFriendsView extends WindowView {
 
     }
 }
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = InviteFriendsView;
+}

@@ -1,15 +1,15 @@
 /* Import Models */
 const Room = require('../models/Room.js');
 const Conference = require('../models/Conference.js');
-const TypeOfRoom = require('../../utils/TypeOfRoom');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom');
 
 /* Import Controller */
 const RoomController = require('./RoomController.js');
 
 
 /* Import Utils */
-const Settings = require('../../utils/Settings.js');
-const TypeChecker = require('../../../../config/TypeChecker.js');
+const Settings = require('../../client/shared/Settings.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 module.exports = class ConferenceController {
 

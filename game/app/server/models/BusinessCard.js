@@ -1,4 +1,4 @@
-var TypeChecker = require('../../../../config/TypeChecker.js');
+var TypeChecker = require('../../client/shared/TypeChecker.js');
 
 module.exports = class BusinessCard {
 
