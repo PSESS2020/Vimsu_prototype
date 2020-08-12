@@ -1,7 +1,7 @@
 const NPC = require('../../../game/app/server/models/NPC.js');
 const chai = require('chai');
 const Position = require('../../../game/app/server/models/Position.js');
-const Direction = require('../../../game/app/utils/Direction.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
 const assert = chai.assert;
 
 //create example NPC

@@ -6,7 +6,7 @@ const socketio = require('socket.io');
 const path = require('path');
 
 const Position = require('../models/Position.js');
-const Direction = require('../../utils/Direction.js');
+const Direction = require('../../client/shared/Direction.js');
 
 const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
@@ -14,8 +14,8 @@ const ParticipantController = require('./ParticipantController.js');
 const Room  = require('../models/Room.js');
 const RoomService = require('../services/RoomService.js');
 const RoomController = require('./RoomController.js');
-const TypeOfRoom = require('../../utils/TypeOfRoom.js');
-const Settings = require('../../utils/Settings.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const Settings = require('../../client/shared/Settings.js');
 const Commands = require('../../utils/Commands.js');
 const Door = require('../models/Door.js');
 const DoorService = require('../services/DoorService.js');

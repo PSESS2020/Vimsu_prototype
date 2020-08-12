@@ -1,4 +1,4 @@
-const TypeOfRoomClient = Object.freeze
+const TypeOfRoom = Object.freeze
 ({
     FOYER: "FOYER",
     FOODCOURT: "FOODCOURT",
@@ -6,5 +6,5 @@ const TypeOfRoomClient = Object.freeze
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = TypeOfRoomClient;
+    module.exports = TypeOfRoom;
 }

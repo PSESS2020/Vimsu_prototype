@@ -6,7 +6,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     NPCClient = require('./NPCClient.js');
     DoorClient = require('./DoorClient.js');
     ParticipantClient = require('./ParticipantClient.js');
-    TypeOfRoomClient = require('../utils/TypeOfRoomClient');
+    TypeOfRoom = require('../shared/TypeOfRoom');
     GameObjectTypeClient = require('../utils/GameObjectTypeClient.js');
 }
 
@@ -29,7 +29,7 @@ class RoomClient {
      * @author Philipp
      * 
      * @param {int} roomId 
-     * @param {TypeOfRoomClient} typeOfRoom
+     * @param {TypeOfRoom} typeOfRoom
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
      * @param {Array of DoorClient} listOfDoors
@@ -38,7 +38,7 @@ class RoomClient {
      */
     constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width ,length) {
         TypeChecker.isInt(roomId);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
         listOfGameObjects.forEach(gameObject => {
             TypeChecker.isInstanceOf(gameObject, GameObjectClient);
@@ -192,7 +192,7 @@ class RoomClient {
      * @author Philipp
      * 
      ** @param {int} roomId 
-     * @param {TypeOfRoomClient} typeOfRoom
+     * @param {TypeOfRoom} typeOfRoom
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
      * @param {Array of DoorClient} listOfDoors
@@ -201,7 +201,7 @@ class RoomClient {
      */
     swapRoom(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
         TypeChecker.isInt(roomId);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoomClient);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
         listOfGameObjects.forEach(gameObject => {
             TypeChecker.isInstanceOf(gameObject, GameObjectClient);
@@ -271,23 +271,23 @@ class RoomClient {
         for (var i = 0; i < this.#listOfDoors.length; i++) {
             var positionX = this.#listOfDoors[i].getMapPosition().getCordX();
             var positionY = this.#listOfDoors[i].getMapPosition().getCordY();
-            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.FOYER_DOOR) {
+            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.FOYER_DOOR) {
 
                 this.#map[positionX][positionY - 1] = GameObjectTypeClient.LEFTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.FOYERDOOR;
 
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.RECEPTION_DOOR) {
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.RECEPTION_DOOR) {
 
                 this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.RECEPTIONDOOR;
                 
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.FOODCOURT_DOOR) {
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.FOODCOURT_DOOR) {
 
                 this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.FOODCOURTDOOR;
             
 
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoorClient.LECTURE_DOOR) {
+            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
                 this.#map[positionX][positionY - 1] = GameObjectTypeClient.LEFTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.LECTUREDOOR;
 

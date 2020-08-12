@@ -1,4 +1,4 @@
-const Settings = require('../../utils/Settings');
+const Settings = require('../../client/shared/Settings');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Lecture = require('../models/Lecture');
 

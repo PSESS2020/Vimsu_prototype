@@ -1,7 +1,7 @@
 if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
-    TypeOfDoorClient = require('../utils/TypeOfDoorClient.js');
+    TypeOfDoor = require('../shared/TypeOfDoor.js');
  }
 
 class DoorClient {
@@ -14,12 +14,12 @@ class DoorClient {
      * @author Philipp
      * 
      * @param {int} id 
-     * @param {TypeOfDoorClient} typeOfDoor
+     * @param {TypeOfDoor} typeOfDoor
      * @param {PositionClient} mapPosition
      */
     constructor(id, typeOfDoor, mapPosition) {
         TypeChecker.isInt(id);
-        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoorClient);
+        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isInstanceOf(mapPosition, PositionClient);
 
         this.#id = id;

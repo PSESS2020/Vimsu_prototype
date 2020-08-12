@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Position = require("./Position.js");
-const Direction = require('../../utils/Direction.js');
+const Direction = require('../../client/shared/Direction.js');
 
 module.exports = class NPC {
 

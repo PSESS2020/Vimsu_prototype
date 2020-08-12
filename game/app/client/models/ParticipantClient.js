@@ -1,7 +1,7 @@
 if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
-    DirectionClient = require('../utils/DirectionClient.js');
+    Direction = require('../shared/Direction.js');
 }
 
 class ParticipantClient {
@@ -19,13 +19,13 @@ class ParticipantClient {
      * @param {String} id
      * @param {String} username
      * @param {PositionClient} position
-     * @param {DirectionClient} direction
+     * @param {Direction} direction
      */
     constructor(id, username, position, direction) 
     {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isString(username);
 
         this.#id = id;
@@ -57,7 +57,7 @@ class ParticipantClient {
 
     setDirection(direction) 
     {
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
 

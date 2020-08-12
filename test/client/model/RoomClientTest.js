@@ -7,14 +7,13 @@ const PositionClient = require('../../../game/app/client/models/PositionClient.j
 const NPCClient = require('../../../game/app/client/models/NPCClient.js');
 const ParticipantClient = require('../../../game/app/client/models/ParticipantClient.js');
 const DoorClient = require('../../../game/app/client/models/DoorClient.js');
-const DirectionClient = require('../../../game/app/client/utils/DirectionClient.js');
-const TypeOfDoorClient = require('../../../game/app/client/utils/TypeOfDoorClient.js');
-const TypeOfRoomClient = require('../../../game/app/client/utils/TypeOfRoomClient.js');
-const TypeOfRoom = require('../../../game/app/utils/TypeOfRoom.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
+const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
+const TypeOfRoom = require('../../../game/app/client/shared/TypeOfRoom.js');
 
 //test data
 var roomId = TestUtil.randomInt();
-var typeOfRoom = TypeOfRoomClient.FOODCOURT;
+var typeOfRoom = TypeOfRoom.FOODCOURT;
 var width = TestUtil.randomIntWithMaxAndMin(1000, 1);
 var length = TestUtil.randomIntWithMaxAndMin(1000, 1);
 var listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), 'table', TestUtil.randomIntWithMaxAndMin(5, 1), 
@@ -24,13 +23,13 @@ var listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), 'table', Tes
                         TestUtil.randomIntWithMaxAndMin(5, 1), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), 
                         TestUtil.randomBool())];
 var listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)),
-                  DirectionClient.DOWNLEFT),
+                  Direction.DOWNLEFT),
                   new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)),
-                  DirectionClient.DOWNLEFT)];
-var listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoorClient.LECTURE_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoorClient.FOYER_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoorClient.FOODCOURT_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoorClient.RECEPTION_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)))];
+                  Direction.DOWNLEFT)];
+var listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LECTURE_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOYER_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOODCOURT_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.RECEPTION_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)))];
 
 var room = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
 //called twice to cover singleton constructor
@@ -66,10 +65,10 @@ describe('RoomClient test', function() {
         let ppantID = TestUtil.randomString();
         let ppantUsername = TestUtil.randomString();
         let ppantPosition = new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1));
-        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, DirectionClient.DOWNLEFT);
+        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, Direction.DOWNLEFT);
         let secondPpantID = TestUtil.randomString();
         let secondPpantUsername = TestUtil.randomString();
-        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, DirectionClient.DOWNLEFT);
+        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, Direction.DOWNLEFT);
 
         //ppant is not in room before
         assert.equal(room.getParticipant(ppantID), undefined);
@@ -105,8 +104,8 @@ describe('RoomClient test', function() {
         let newWidth = TestUtil.randomIntWithMaxAndMin(1000, 5);
         let newLength = TestUtil.randomIntWithMaxAndMin(1000, 5);
         let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), 'table', 1, 1, new PositionClient(0, 1), true)];
-        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 1), DirectionClient.DOWNRIGHT)];
-        let newListOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoorClient.FOODCOURT_DOOR, new PositionClient(4, 4))];
+        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 1), Direction.DOWNRIGHT)];
+        let newListOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOODCOURT_DOOR, new PositionClient(4, 4))];
         room.swapRoom(newRoomID, newTypeOfRoom, newListOfGameObjects, newListOfNPCs, newListOfDoors, newWidth, newLength);
 
         expect(room.getRoomId()).to.equal(newRoomID);

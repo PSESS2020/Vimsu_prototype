@@ -29,11 +29,6 @@
  *
  * - (E) */
 
-
-
-
-//const Settings = require('../../utils/Settings')
-
 if (typeof module === 'object' && typeof exports === 'object') {
     GameView = require('../views/js/GameView')
 }
@@ -272,7 +267,7 @@ class ClientController {
     sendToServerRequestMovStart(direction) {
         
         if(this.socketReady()) {
-            TypeChecker.isEnumOf(direction, DirectionClient);
+            TypeChecker.isEnumOf(direction, Direction);
             let currPos = this.#gameView.getOwnAvatarView().getPosition();
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
@@ -415,7 +410,7 @@ class ClientController {
     handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
 
         TypeChecker.isString(ppantID);
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isInt(newCordX);
         TypeChecker.isInt(newCordY);
  
@@ -694,21 +689,21 @@ class ClientController {
 
     handleFromViewEnterReception() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.RECEPTION);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.RECEPTION);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoodCourt() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOODCOURT);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.FOODCOURT);
         //update currentRoom;
         //update View
     }
 
     handleFromViewEnterFoyer() {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoomClient.FOYER);
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.FOYER);
         //update currentRoom;
         //update View
     }
@@ -874,8 +869,8 @@ class ClientController {
    
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
-        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPLEFT);
-        //this.sendMovementToServer(DirectionClient.UPLEFT);
+        this.#gameView.updateOwnAvatarDirection(Direction.UPLEFT);
+        //this.sendMovementToServer(Direction.UPLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
@@ -883,12 +878,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
-        this.sendToServerRequestMovStart(DirectionClient.UPLEFT);
+        this.sendToServerRequestMovStart(Direction.UPLEFT);
     }
 
     handleRightArrowDown() {
-        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNRIGHT);
-        //this.sendMovementToServer(DirectionClient.DOWNRIGHT);
+        this.#gameView.updateOwnAvatarDirection(Direction.DOWNRIGHT);
+        //this.sendMovementToServer(Direction.DOWNRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
@@ -896,12 +891,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
-        this.sendToServerRequestMovStart(DirectionClient.DOWNRIGHT);
+        this.sendToServerRequestMovStart(Direction.DOWNRIGHT);
     }
 
     handleUpArrowDown() {
-        this.#gameView.updateOwnAvatarDirection(DirectionClient.UPRIGHT);
-        //this.sendMovementToServer(DirectionClient.UPRIGHT);
+        this.#gameView.updateOwnAvatarDirection(Direction.UPRIGHT);
+        //this.sendMovementToServer(Direction.UPRIGHT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
@@ -909,12 +904,12 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
-        this.sendToServerRequestMovStart(DirectionClient.UPRIGHT);
+        this.sendToServerRequestMovStart(Direction.UPRIGHT);
     }
 
     handleDownArrowDown() {
-        this.#gameView.updateOwnAvatarDirection(DirectionClient.DOWNLEFT);
-        //this.sendMovementToServer(DirectionClient.DOWNLEFT);
+        this.#gameView.updateOwnAvatarDirection(Direction.DOWNLEFT);
+        //this.sendMovementToServer(Direction.DOWNLEFT);
         //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getPosition();
         let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
@@ -922,7 +917,7 @@ class ClientController {
             this.#gameView.updateOwnAvatarPosition(newPos);
             this.#gameView.updateOwnAvatarWalking(true);
         }
-        this.sendToServerRequestMovStart(DirectionClient.DOWNLEFT);
+        this.sendToServerRequestMovStart(Direction.DOWNLEFT);
     }
 
     handleArrowUp() {

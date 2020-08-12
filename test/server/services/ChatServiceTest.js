@@ -12,7 +12,7 @@ const OneToOneChatTestData = require('../models/TestData/OneToOneChatTestData.js
 const GroupChatTestData = require('../models/TestData/GroupChatTestData.js');
 const ChatTestData = require('../models/TestData/ChatTestData.js');
 const MessageTestData = require('../models/TestData/MessageTestData.js');
-const Settings = require('../../../game/app/utils/Settings.js');
+const Settings = require('../../../game/app/client/shared/Settings.js');
 const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../config/db');

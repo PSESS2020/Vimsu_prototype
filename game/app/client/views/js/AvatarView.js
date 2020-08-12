@@ -14,7 +14,7 @@ module.exports =*/ class AvatarView extends Views {
     constructor(position, direction) {
         super();
         //TypeChecker.isInstanceOf(position, PositionClient);
-        //TypeChecker.isEnumOf(direction, DirectionClient);
+        //TypeChecker.isEnumOf(direction, Direction);
         this.#position = position;
         this.#direction = direction;
 
@@ -34,7 +34,7 @@ module.exports =*/ class AvatarView extends Views {
     }
 
     setDirection(direction) {
-        TypeChecker.isEnumOf(direction, DirectionClient);
+        TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
 

@@ -262,10 +262,10 @@
                        'client/shared/TypeChecker', 
                        'client/utils/LectureStatus', 
                        'client/utils/DateParser', 
-                       'client/utils/DirectionClient', 
+                       'client/shared/Direction', 
                        'client/config/GameConfig', 
-                       'client/utils/TypeOfRoomClient', 
-                       'client/utils/TypeOfDoorClient', 
+                       'client/shared/TypeOfRoom', 
+                       'client/shared/TypeOfDoor', 
                        'client/utils/GameObjectTypeClient', 
                        'client/models/BusinessCardClient', 
                        'client/models/ParticipantClient', 
@@ -276,7 +276,7 @@
                        'client/models/RoomClient'], () => {
 
                 requirejs(['client/views/js/Views', 
-                           'client/utils/Settings'], () => {
+                           'client/shared/Settings'], () => {
 
                     requirejs(['client/utils/ImageLoader', 
                                'client/utils/CacheImages', 

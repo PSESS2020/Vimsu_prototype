@@ -1,8 +1,8 @@
 var GameObject = require('../models/GameObject.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 var Position = require('../models/Position.js')
-var TypeOfRoom = require('../../utils/TypeOfRoom.js');
-const Settings = require('../../utils/Settings.js');
+var TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class GameObjectService {
 

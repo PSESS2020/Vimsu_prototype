@@ -1,17 +1,17 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var TypeOfRoom = require('../../utils/TypeOfRoom.js');
+var TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 var RoomController = require('../controller/RoomController.js');
 var GameObject = require('./GameObject.js');
 var Participant = require('./Participant.js');
 var GameObjectService = require('../services/GameObjectService.js');
 var RoomDimensions = require('../../utils/RoomDimensions.js');
 const Position = require('./Position.js');
-const Direction = require('../../utils/Direction.js');
-const Settings = require('../../utils/Settings.js');
+const Direction = require('../../client/shared/Direction.js');
+const Settings = require('../../client/shared/Settings.js');
 const Door = require('./Door.js');
 const NPCService = require('../services/NPCService.js');
 const NPC = require('./NPC.js');
-const TypeOfDoor = require('../../utils/TypeOfDoor.js');
+const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const DoorService = require('../services/DoorService.js');
 
 module.exports = class Room {

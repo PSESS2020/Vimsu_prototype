@@ -1,7 +1,7 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var TypeOfRoom = require('../../utils/TypeOfRoom.js');
+var TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 var Room = require('../models/Room.js');
-const Settings = require('../../utils/Settings.js');
+const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class RoomService {
     #rooms;

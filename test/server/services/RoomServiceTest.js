@@ -1,9 +1,9 @@
 const RoomService = require('../../../game/app/server/services/RoomService.js');
 const Room = require('../../../game/app/server/models/Room.js');
 const Position = require('../../../game/app/server/models/Position.js');
-const TypeOfRoom = require('../../../game/app/utils/TypeOfRoom.js');
-const Direction = require('../../../game/app/utils/Direction.js');
-const Settings = require('../../../game/app/utils/Settings.js');
+const TypeOfRoom = require('../../../game/app/client/shared/TypeOfRoom.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
+const Settings = require('../../../game/app/client/shared/Settings.js');
 const RoomDimensions = require('../../../game/app/utils/RoomDimensions.js');
 const chai = require('chai');
 const { expect } = require('chai');

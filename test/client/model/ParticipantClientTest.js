@@ -1,15 +1,15 @@
 const { expect } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const DirectionClient = require('../../../game/app/client/utils/DirectionClient.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 const ParticipantClient = require('../../../game/app/client/models/ParticipantClient.js');
-const Direction = require('../../../game/app/utils/Direction.js');
+const Direction = require('../../../game/app/client/shared/Direction.js');
 
 //test data
 var id = TestUtil.randomString();
 var username = TestUtil.randomString();
 var position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
-var direction = DirectionClient.DOWNLEFT;
+var direction = Direction.DOWNLEFT;
 var ppant = new ParticipantClient(id, username, position, direction);
 
 describe('ParticipantClient test', function() {
@@ -27,7 +27,7 @@ describe('ParticipantClient test', function() {
     });
 
     it('test set new valid direction', function() {
-        let newDirection = DirectionClient.DOWNRIGHT;
+        let newDirection = Direction.DOWNRIGHT;
         ppant.setDirection(newDirection);
         expect(ppant.getDirection()).to.equal(newDirection);
     });
