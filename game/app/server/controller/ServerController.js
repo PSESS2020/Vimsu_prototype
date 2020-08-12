@@ -281,11 +281,11 @@ module.exports = class ServerController {
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT, socket.id);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
                     } else if (typeOfCurrentRoom === TypeOfRoom.FOODCOURT) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT, socket.id);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT);
                     } else if (typeOfCurrentRoom === TypeOfRoom.RECEPTION) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT, socket.id);
+                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT);
                     }
 
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
@@ -402,13 +402,13 @@ module.exports = class ServerController {
                 var targetRoomId;
                 if (targetRoomType === TypeOfRoom.FOYER) {
                     targetRoomId = Settings.FOYER_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
                 } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
                     targetRoomId = Settings.FOODCOURT_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
                 } else if (targetRoomType === TypeOfRoom.RECEPTION) {
                     targetRoomId = Settings.RECEPTION_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
                 }
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
@@ -525,7 +525,7 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
+                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
@@ -553,7 +553,7 @@ module.exports = class ServerController {
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
                 } else if (lecture.hasToken(ppantID)) {
 
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
                     //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
@@ -619,7 +619,7 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', participantId);
                 console.log(lectureEnded);
                 if (lectureEnded) {
-                    this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT, socket.id);
+                    this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT);
                 }
             });
 
@@ -865,7 +865,7 @@ module.exports = class ServerController {
 
                         };
 
-                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket.id);
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
 
                         /* Tell the creator's client to create a new chat. The true tells
                         * the client to immediately open the chatThreadView of the new chat 
@@ -1091,7 +1091,7 @@ module.exports = class ServerController {
                             messages: []
                         };
 
-                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT, socket.id);
+                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
 
                         /* Tell the creator's client to create a new chat. The true tells
                             * the client to immediately open the chatThreadView of the new chat 
@@ -1427,15 +1427,14 @@ module.exports = class ServerController {
                 let requester = this.#ppants.get(requesterID);
 
                 if (acceptRequest) {
+
                     //check if target is online
                     if (target !== undefined) {
                         target.acceptFriendRequest(requesterID);
-                        this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER, socket.id);
                     }
                     //check if requester is online
                     if (requester !== undefined) {
                         requester.sentFriendRequestAccepted(targetID);
-                        this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER, this.getSocketId(requester.getId()));
 
                         let targetBusCard = target.getBusinessCard();
                         let targetBusCardData = {
@@ -1457,8 +1456,13 @@ module.exports = class ServerController {
                     }
 
                     //update DB
-                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db);
-                    FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db);
+                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(res => {
+                        FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db).then(res => {
+                            this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER);
+                            this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER);
+                        })
+                    })
+
                 } else {
                     //check if target is online
                     if (target !== undefined) {
@@ -1567,11 +1571,11 @@ module.exports = class ServerController {
                 let name = npc.getName();
                 let story = npc.getStory();
                 if (name === "BasicTutorial") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK);
                 } else if (name === "Chef") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK);
                 } else if (name === "FoyerHelper") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK, socket.id);
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK);
                 }
 
                 socket.emit('showNPCStory', name, story);
@@ -2157,34 +2161,71 @@ module.exports = class ServerController {
     };
 
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client
-    applyTaskAndAchievement(participantId, taskType, socketId) {
+    applyTaskAndAchievement(participantId, taskType) {
         var participant = this.#ppants.get(participantId);
-        participant.addTask(new TaskService().getTaskByType(taskType));
 
-        // computes achievements, updates participants, and returns newly unlocked achievements
-        var newAchievements = new AchievementService().computeAchievements(participant);
+        var task = new TaskService().getTaskByType(taskType)
 
-        newAchievements.forEach(ach => {
-            this.#io.to(socketId).emit('newAchievement', ach);
+        if (participant) {
+            participant.addTask(task);
 
-            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
-                console.log('level of ' + ach.id + ' updated')
-            }).catch(err => {
-                console.error(err);
+            // computes achievements, updates participants, and returns newly unlocked achievements
+            var newAchievements = new AchievementService().computeAchievements(participant);
+
+            newAchievements.forEach(ach => {
+                this.#io.to(this.getSocketId(participantId)).emit('newAchievement', ach);
+
+                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
+                    console.log('level of ' + ach.id + ' updated')
+                }).catch(err => {
+                    console.error(err);
+                })
+            });
+
+            ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
+                RankListService.getRank(participantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
+                    this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), rank);
+                })
+
+                Promise.all([...this.#ppants.keys()].map(async ppantId => {
+                    RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
+                        this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                    });
+                }))
+            });
+        } else {
+            ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db).then(points => {
+                var awardPoints = task.getAwardPoints();
+                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, points + awardPoints, this.#db)
             })
-        });
 
-        ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
-            RankListService.getRank(participantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                this.#io.to(socketId).emit('updateSuccessesBar', participant.getAwardPoints(), rank);
-            });
-        });
+            if (taskType == TypeOfTask.BEFRIENDOTHER) {
+                FriendListService.getFriendList(participantId, Settings.CONFERENCE_ID, this.#db).then(friends => {
+                    var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
+                    var levels = achievementDefinition.getLevels();
 
-        Promise.all([...this.#ppants.keys()].map(async ppantId => {
-            RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
-            });
-        }))
+                    for(var i = 0; i < levels.length; i++) {
+                        var count = levels[i].count;
+                        var awardPoints = levels[i].points;
 
+                        if(friends.length == count) {
+                            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), i + 1, levels[i].color, this.#db).then(res => {
+                                console.log('level of ' + achievementDefinition.getId() + ' updated');
+                            });
+                                
+                            ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db).then(points => {
+                                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, points + awardPoints, this.#db).then(res => {
+                                    Promise.all([...this.#ppants.keys()].map(async ppantId => {
+                                        RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
+                                            this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                                        });
+                                    }))
+                                })
+                            })
+                        }
+                    }
+                })
+            }
+        }
     }
 }

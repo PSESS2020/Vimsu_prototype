@@ -5,11 +5,10 @@ module.exports = class FriendListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: 1 }).then(par => {
 
             if (par) {
-                return par.friendId;
+                return par.friendIds;
             }
             else {
                 console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);

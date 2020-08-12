@@ -309,6 +309,24 @@ module.exports = class ParticipantService {
 
     }
 
+    static getPoints(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { points: 1 }).then(par => {
+            if (par) {
+                return par.points;
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
     static updatePoints(participantId, conferenceId, points, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
@@ -317,6 +335,9 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { points: points }).then(res => {
             return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
         })
 
     }
