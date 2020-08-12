@@ -19,7 +19,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let listOfGameObjects = [];
 
         for (var i = 4; i < 9; i++)
-            listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, 1, 1, i, 0, true));
+            listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, i, 0, true));
 
 
         //Get all npcs from service

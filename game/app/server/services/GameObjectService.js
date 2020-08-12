@@ -1,6 +1,7 @@
 const GameObject = require('../models/GameObject.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Position = require('../models/Position.js')
+const Position = require('../models/Position.js');
+const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class GameObjectService {
 
@@ -27,15 +28,13 @@ module.exports = class GameObjectService {
         }
     }
 
-    createTable(roomId, width, length, xPos, yPos, solidity) {
+    createTable(roomId, xPos, yPos, solidity) {
         TypeChecker.isInt(roomId);
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
         TypeChecker.isBoolean(solidity);
 
-        return new GameObject(this.#generateGameObjectID(), "table" + 1, width, length, new Position(roomId, xPos, yPos), solidity);
+        return new GameObject(this.#generateGameObjectID(), "table" + 1, Settings.TABLE_WIDTH, Settings.TABLE_LENGTH, new Position(roomId, xPos, yPos), solidity);
     }
 
     createSchedule(roomId, width, length, xPos, yPos, solidity) {

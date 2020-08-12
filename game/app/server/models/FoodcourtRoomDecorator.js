@@ -19,11 +19,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let listOfGameObjects = [];
 
         for (var i = 2; i <= 10; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 1, 1, 10, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 1, 1, 8, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 1, 1, 6, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 1, 1, 4, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 1, 1, 2, i, true));
+            listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 10, i, true),
+                objService.createTable(Settings.FOODCOURT_ID, 8, i, true),
+                objService.createTable(Settings.FOODCOURT_ID, 6, i, true),
+                objService.createTable(Settings.FOODCOURT_ID, 4, i, true),
+                objService.createTable(Settings.FOODCOURT_ID, 2, i, true));
         }
 
         //Get all npcs from service
