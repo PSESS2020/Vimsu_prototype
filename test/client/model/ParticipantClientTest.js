@@ -3,7 +3,7 @@ const TestUtil = require('../../server/models/utils/TestUtil.js');
 const Direction = require('../../../game/app/client/shared/Direction.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 const ParticipantClient = require('../../../game/app/client/models/ParticipantClient.js');
-const Direction = require('../../../game/app/client/shared/Direction.js');
+
 
 //test data
 var id = TestUtil.randomString();
