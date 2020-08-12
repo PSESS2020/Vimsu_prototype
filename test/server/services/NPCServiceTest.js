@@ -14,6 +14,7 @@ describe('NPCService test', function () {
         let cordY = TestUtil.randomIntWithMin(0);
         let direction = Direction.DOWNRIGHT;
         let foyerNPC = npcService.createFoyerHelperNPC(roomId, cordX, cordY, direction);
+
         expect(foyerNPC).to.be.instanceOf(NPC);
         expect(foyerNPC.getPosition().getRoomId()).to.equal(roomId);
         expect(foyerNPC.getPosition().getCordX()).to.equal(cordX);
@@ -33,6 +34,7 @@ describe('NPCService test', function () {
         let cordY = TestUtil.randomIntWithMin(0);
         let direction = Direction.DOWNRIGHT;
         let tutorialNPC = npcService.createBasicTutorialNPC(roomId, cordX, cordY, direction);
+
         expect(tutorialNPC).to.be.instanceOf(NPC);
         expect(tutorialNPC.getPosition().getRoomId()).to.equal(roomId);
         expect(tutorialNPC.getPosition().getCordX()).to.equal(cordX);
@@ -52,6 +54,7 @@ describe('NPCService test', function () {
         let cordY = TestUtil.randomIntWithMin(0);
         let direction = Direction.DOWNRIGHT;
         let chefNPC = npcService.createChefNPC(roomId, cordX, cordY, direction);
+        
         expect(chefNPC).to.be.instanceOf(NPC);
         expect(chefNPC.getPosition().getRoomId()).to.equal(roomId);
         expect(chefNPC.getPosition().getCordX()).to.equal(cordX);

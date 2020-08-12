@@ -13,6 +13,7 @@ describe('GameObjectService test', function () {
         let cordY = TestUtil.randomIntWithMin(0);
         let solidity = TestUtil.randomBool();
         let table = gameObjectService.createTable(roomId, cordX, cordY, solidity);
+
         expect(table).to.be.instanceOf(GameObject);
         expect(table.getPosition().getRoomId()).to.equal(roomId);
         expect(table.getPosition().getCordX()).to.equal(cordX);
@@ -32,6 +33,7 @@ describe('GameObjectService test', function () {
         let width = TestUtil.randomIntWithMin(1);
         let length = TestUtil.randomIntWithMin(1);
         let scheduleBoard = gameObjectService.createSchedule(roomId, width, length, cordX, cordY, solidity);
+        
         expect(scheduleBoard).to.be.instanceOf(GameObject);
         expect(scheduleBoard.getPosition().getRoomId()).to.equal(roomId);
         expect(scheduleBoard.getPosition().getCordX()).to.equal(cordX);
