@@ -220,11 +220,6 @@ vertical-align: middle;
   outline: none;
 }
 
-.close {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
 .closeBtn {
   background-color: transparent !important; 
   border-color: transparent !important; 
@@ -438,13 +433,15 @@ body::-webkit-scrollbar {
   box-shadow: 0px 0px 0px transparent;
  }
 
-
  .close {
   background-color: transparent !important; 
   border-color: transparent !important; 
   color: antiquewhite; 
   opacity: 1 !important;
-  box-shadow: 0px 0px 0px transparent;
+  outline: none !important;
+  box-shadow: none !important;
+  position: absolute; 
+  right: 1rem;
 }
 
 .close:hover {
