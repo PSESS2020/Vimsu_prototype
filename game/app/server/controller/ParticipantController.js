@@ -9,20 +9,20 @@ module.exports = class ParticipantController {
 
 
     constructor(participant) {
-       //TypeChecker.isInstanceOf(participant, Participant);
+        //TypeChecker.isInstanceOf(participant, Participant);
 
-       this.#participant = participant;
+        this.#participant = participant;
 
-       // Throws an error-Message that this is not a constructor?
-       //this.#participant = new Participant(ppantID, new Position(1,0,0), Direction.DOWNRIGHT); // PLACEHOLDER
+        // Throws an error-Message that this is not a constructor?
+        //this.#participant = new Participant(ppantID, new Position(1,0,0), Direction.DOWNRIGHT); // PLACEHOLDER
     }
-    
+
 
     getParticipant() {
         return this.#participant;
     }
 
-    
+
 
     //TODO: Sagt ClientController, dass Teilnehmer mit participantId seine Position geändert hat
     sendMovementOther(participantId, position) {
@@ -36,6 +36,6 @@ module.exports = class ParticipantController {
 
     //TODO: Schickt ClientController Ergebnis der Kollisionserkennung, collision ist ein bool
     sendResultCollisionDetection(collision) {
-        
+
     }
 }

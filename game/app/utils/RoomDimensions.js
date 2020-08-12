@@ -2,8 +2,7 @@
 // Move this into /utils
 // Using object.freeze would make settings immutable - is this something we want?
 
-module.exports = Object.freeze
-({
+module.exports = Object.freeze({
     FOYER_WIDTH: 25,
     FOYER_LENGTH: 25,
     RECEPTION_WIDTH: 13,

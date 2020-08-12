@@ -23,7 +23,7 @@ module.exports = class GroupChat extends Chat {
     getChatName() {
         return this.#chatName;
     }
-    
+
     getOwnerId() {
         return this.#ownerId;
     }
@@ -38,11 +38,11 @@ module.exports = class GroupChat extends Chat {
     addMessage(msg) {
         //TypeChecker.isInstanceOf(msg, StatusMessage);
         let msgList = super.getMessageList();
-        if(msgList.length >= super.getMaxNumMessages())
+        if (msgList.length >= super.getMaxNumMessages())
             msgList.splice(0, super.getMaxNumMessages());
-            
-            if (!msgList.includes(msg))
-                msgList.push(msg);
+
+        if (!msgList.includes(msg))
+            msgList.push(msg);
     }
 
     //Addds a participant to the participant list
@@ -51,15 +51,15 @@ module.exports = class GroupChat extends Chat {
         TypeChecker.isString(participantId);
 
         let ppantList = super.getParticipantList();
-        if(ppantList.length >= this.#maxParticipants) {
+        if (ppantList.length >= this.#maxParticipants) {
             return false;
         } else {
-            
+
             if (!ppantList.includes(participantId)) {
-            ppantList.push(participantId);
-            return true;
+                ppantList.push(participantId);
+                return true;
             }
-            
+
         }
     }
 

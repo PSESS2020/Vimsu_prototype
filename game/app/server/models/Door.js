@@ -48,13 +48,13 @@ module.exports = class Door {
     getId() {
         return this.#id;
     }
-    
+
     getStartingRoomId() {
         return this.#mapPosition.getRoomId();
     }
 
     getTargetRoomId() {
-        if(this.#targetPosition) {
+        if (this.#targetPosition) {
             return this.#targetPosition.getRoomId();
         } else {
             return undefined;
@@ -78,7 +78,7 @@ module.exports = class Door {
     }
 
     getDirection() {
-        if(this.#direction) {
+        if (this.#direction) {
             return this.#direction;
         } else {
             return undefined;
@@ -100,6 +100,6 @@ module.exports = class Door {
                 return true;
             }
         }
-        return false;  
+        return false;
     }
 }

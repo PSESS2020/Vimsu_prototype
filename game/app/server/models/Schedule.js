@@ -3,10 +3,10 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Lecture = require('../models/Lecture');
 
 module.exports = class Schedule {
-    
+
     #lectureList = [];
-    
-    
+
+
     /**
     * @author Laura
     * 
@@ -21,10 +21,10 @@ module.exports = class Schedule {
 
     getLecture(lectureId) {
         TypeChecker.isString(lectureId);
-        
-        for(var i = 0; i < this.#lectureList.length; i++) {
+
+        for (var i = 0; i < this.#lectureList.length; i++) {
             var lecture = this.#lectureList[i];
-            if(lecture.getId() === lectureId) {
+            if (lecture.getId() === lectureId) {
                 return lecture;
             }
         }
@@ -35,12 +35,12 @@ module.exports = class Schedule {
     getCurrentLectures() {
         var currentLectures = [];
 
-        for(var i = 0; i < this.#lectureList.length; i++) {
+        for (var i = 0; i < this.#lectureList.length; i++) {
             var lecture = this.#lectureList[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
             var startToShow = (startingTime - Settings.SHOWLECTURE);
-            var stopToShow = (startingTime + lecture.getDuration()*1000);
+            var stopToShow = (startingTime + lecture.getDuration() * 1000);
             var withinMargin = startToShow <= now && now <= stopToShow;
 
             if (withinMargin && !lecture.isHidden()) {
@@ -55,4 +55,4 @@ module.exports = class Schedule {
     }
 
 }
-   
+

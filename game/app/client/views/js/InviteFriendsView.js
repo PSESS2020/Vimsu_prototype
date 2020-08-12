@@ -12,11 +12,11 @@ class InviteFriendsView extends WindowView {
         $('#createGroupChat').show();
 
         if (businessCards) {
-            if(businessCards.length < 1) {
+            if (businessCards.length < 1) {
                 $('#inviteFriendsModal .modal-body #nofriendtoinvite').text("No friends to invite.");
                 $('#createGroupChat').hide();
             }
-            
+
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
             this.#businessCards = sortedBusinessCards;
 
@@ -85,7 +85,7 @@ class InviteFriendsView extends WindowView {
                         })
                     </script>
                 `)
-                });
+            });
 
         } else {
             $('#inviteFriendsModal .modal-body').text("Group name was empty!")

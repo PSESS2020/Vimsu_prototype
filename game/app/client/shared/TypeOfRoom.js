@@ -1,5 +1,4 @@
-const TypeOfRoom = Object.freeze
-({
+const TypeOfRoom = Object.freeze({
     FOYER: "FOYER",
     FOODCOURT: "FOODCOURT",
     RECEPTION: "RECEPTION"

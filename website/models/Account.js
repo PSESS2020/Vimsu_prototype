@@ -20,7 +20,7 @@ module.exports = class Account {
         TypeChecker.isString(job);
         TypeChecker.isString(company);
         TypeChecker.isString(email);
-        
+
         this.#accountID = accountID;
         this.#username = username;
         this.#title = title;

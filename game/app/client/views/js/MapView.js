@@ -9,7 +9,7 @@ module.exports = */class MapView extends Views {
     #selectedTile;
     #originX;
     #originY;
-    
+
     //For calculation the right positions of sprites on the map.
     #offset;
     selectionOnMap = false;
@@ -43,7 +43,7 @@ module.exports = */class MapView extends Views {
     getTiles() {
 
         return this.#tiles;
-    
+
     }
 
     initProperties(tileColumnOffset) {
@@ -101,8 +101,7 @@ module.exports = */class MapView extends Views {
         this.#clickableTiles.push(tile);
     }
 
-    findClickedTile(selectedTileCords)
-    {
+    findClickedTile(selectedTileCords) {
         this.#clickableTiles.forEach(object => {
             if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
                 object.onclick();
@@ -139,16 +138,16 @@ module.exports = */class MapView extends Views {
 
     }
 
-    
+
     updateSelectedTile(selectedTileCords) {
 
-         //Calculate new screen Position of tile indicator.
-         var screenX = selectedTileCords.x * this.#offset.tileColumnOffset / 2 + selectedTileCords.y * this.#offset.tileColumnOffset / 2 + this.#originX;
-         var screenY = selectedTileCords.y * this.#offset.tileRowOffset / 2 - selectedTileCords.x * this.#offset.tileRowOffset / 2 + this.#originY;
-         
-         var position = new PositionClient(screenX, screenY);
+        //Calculate new screen Position of tile indicator.
+        var screenX = selectedTileCords.x * this.#offset.tileColumnOffset / 2 + selectedTileCords.y * this.#offset.tileColumnOffset / 2 + this.#originX;
+        var screenY = selectedTileCords.y * this.#offset.tileRowOffset / 2 - selectedTileCords.x * this.#offset.tileRowOffset / 2 + this.#originY;
 
-         if(this.#selectedTile !== undefined)
+        var position = new PositionClient(screenX, screenY);
+
+        if (this.#selectedTile !== undefined)
             this.#selectedTile.updatePos(position);
 
     }

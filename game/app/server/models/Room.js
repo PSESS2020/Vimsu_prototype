@@ -99,7 +99,7 @@ module.exports = class Room {
     getMessages() {
         return this.#listOfMessages;
     }
-    
+
     /*
     getRoomController() {
         return this.#roomController;
@@ -129,19 +129,17 @@ module.exports = class Room {
     getListOfDoors() {
         return this.#listOfDoors;
     }
-    
+
     getOccMap() {
         return this.#occupationMap;
     };
 
-    getNPC(id)
-    {
+    getNPC(id) {
         TypeChecker.isInt(id);
 
         let index = this.#listOfNPCs.findIndex(npc => npc.getId() === id);
 
-        if (index < 0) 
-        {
+        if (index < 0) {
             throw new Error(id + " is not in list of npcs")
         }
 
@@ -164,13 +162,13 @@ module.exports = class Room {
         //TODO: Einfügen in Allchat
     }
 
-     /**
-     * Entfernt Participant aus Raumliste, falls dieser darin ist
-     * 
-     * @author Philipp
-     * 
-     * @param {Participant} participant 
-     */
+    /**
+    * Entfernt Participant aus Raumliste, falls dieser darin ist
+    * 
+    * @author Philipp
+    * 
+    * @param {Participant} participant 
+    */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
         this.#listOfPPants.forEach(participant => {
@@ -216,13 +214,13 @@ module.exports = class Room {
      * @returns false, sonst
      */
 
-     
+
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
         let cordY = position.getCordY();
 
-        if(position.getRoomId() != this.#roomId) {
+        if (position.getRoomId() != this.#roomId) {
             throw new Error('Wrong room id!');
         }
 
@@ -231,7 +229,7 @@ module.exports = class Room {
             return true;
         }
 
-        if (this.#occupationMap[cordX][cordY]  == 1) {
+        if (this.#occupationMap[cordX][cordY] == 1) {
             return true;
         }
         else {
@@ -247,10 +245,10 @@ module.exports = class Room {
     }
 
 
-   buildOccMap() {
+    buildOccMap() {
         //Geht jedes Objekt in der Objektliste durch
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-            
+
             //Check ob Objekt fest ist oder nicht
             if (this.#listOfGameObjects[i].getSolid()) {
 
@@ -260,12 +258,12 @@ module.exports = class Room {
 
                 //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
                 for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
-            
+
                     for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;      
+                        this.#occupationMap[j][k] = 1;
                     }
                 }
-            } 
+            }
         }
 
         //collision with NPCs

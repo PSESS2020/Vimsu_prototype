@@ -6,8 +6,6 @@ class EventManager {
 
     #clientController;
 
-
-
     /**
      * Handles Events from View and emits it to ClientController
      * 
@@ -49,7 +47,7 @@ class EventManager {
         
     }
 
-       /**
+    /**
      * called from View when lecture door tile is clicked
      *
      */
@@ -79,8 +77,6 @@ class EventManager {
     handleProfileClicked() {
         this.#clientController.handleFromViewShowProfile();
     }
-
-
 
     handleFriendListClicked() {
         this.#clientController.handleFromViewShowFriendList();

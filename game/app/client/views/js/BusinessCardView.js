@@ -29,7 +29,7 @@ class BusinessCardView extends WindowView {
                     </tr>
         `)
 
-        if(this.#isFriend) {
+        if (this.#isFriend) {
             $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
@@ -44,7 +44,7 @@ class BusinessCardView extends WindowView {
                 </tr>
             `)
         }
-                    
+
         $('#businessCardModal .modal-body').append(`
             </table>
             </br>
@@ -58,7 +58,7 @@ class BusinessCardView extends WindowView {
             </script>
 
         `)
-    
+
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
             $('#businessCardModal .modal-body').empty()
         })

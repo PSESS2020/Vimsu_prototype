@@ -14,7 +14,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
     constructor(room) {
         super();
         this.#room = room;
-        
+
         //Get all gameObjects from service
         let objService = new GameObjectService();
         let listOfGameObjects = [];
@@ -23,9 +23,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
             listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 1, 1, 10, i, true));
         }
         listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 1, 1, 11, 9, true),
-                                     objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 9, true),
-                                     objService.createTable(Settings.RECEPTION_ID, 1, 1, 11, 3, true),
-                                     objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 3, true));
+            objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 9, true),
+            objService.createTable(Settings.RECEPTION_ID, 1, 1, 11, 3, true),
+            objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 3, true));
 
         //Get all npcs from service
         let npcService = new NPCService();

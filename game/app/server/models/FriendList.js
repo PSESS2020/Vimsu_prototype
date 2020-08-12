@@ -41,7 +41,7 @@ module.exports = class FriendList {
      * Removes BusinessCard of ppant with ppantID from FriendList, if the BusinessCard is part of it
      * @param {String} ppantID 
      */
-    removeBusinessCard(ppantID) { 
+    removeBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
         this.#memberList.forEach(card => {
             if (card.getParticipantId() === ppantID) {

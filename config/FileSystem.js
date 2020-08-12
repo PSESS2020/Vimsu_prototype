@@ -20,7 +20,7 @@ module.exports = class FileSystem {
         return new Promise((resolve, reject) => {
             this.createDirectory(dir);
 
-            file.mv(dir + file.name, function(err) {
+            file.mv(dir + file.name, function (err) {
                 if (err)
                     reject(err);
                 else

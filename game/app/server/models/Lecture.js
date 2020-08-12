@@ -12,12 +12,12 @@ module.exports = class Lecture {
     #remarks;
     #startingTime;
     #oratorName;
-    #lectureChat; 
+    #lectureChat;
     #maxParticipants;
     #activeParticipants;
     #removedParticipants;
     #tokenList;
-    #hideThis;                 
+    #hideThis;
     //#lectureController //Probably not needed 
 
 
@@ -52,7 +52,7 @@ module.exports = class Lecture {
         this.#maxParticipants = maxParticipants;
         this.#activeParticipants = [];
         this.#removedParticipants = [];
-        
+
         this.#hideThis = false; // will prevent this from showing up on the current lectures screen
 
         /*This will be an array of arrays with with size 3
@@ -61,7 +61,7 @@ module.exports = class Lecture {
         element[1] is the leaving time (Date),
         element[2] is the token counter (Int, init. with 300.000ms (5min))
         */
-        this.#tokenList = []; 
+        this.#tokenList = [];
 
         this.#lectureChat = new LectureChat(this.#id);
     }
@@ -101,19 +101,19 @@ module.exports = class Lecture {
     getLectureChat() {
         return this.#lectureChat;
     }
-    
+
     getActiveParticipants() {
         return this.#activeParticipants;
     };
-    
+
     isHidden() {
         return this.#hideThis;
     };
-    
+
     // Hides the lecture, so that it will no longer be displayed
     // in the currentLecturesView 
     hide() {
-        if(!this.#hideThis) {
+        if (!this.#hideThis) {
             this.#hideThis = true;
         }
     };
@@ -143,11 +143,11 @@ module.exports = class Lecture {
 
 
         //lecture is full
-        if (this.#activeParticipants.length >= this.#maxParticipants) { 
+        if (this.#activeParticipants.length >= this.#maxParticipants) {
 
             return false;
-        } 
-        
+        }
+
         //lecture is not full and started not longer than 5 minutes ago
         else {
             this.#activeParticipants.push(participantId);
@@ -183,8 +183,8 @@ module.exports = class Lecture {
                 //if so, leaving time should be the starting time so the token counter gets decreased correctly when he joins again during the lecture
                 if (this.#startingTime.getTime() > leaveDate.getTime()) {
                     element[1] = this.#startingTime;
-                } 
-                
+                }
+
                 //if not, leaving date needs to be stored to decrease the token counter when ppant joins again
                 else {
                     element[1] = leaveDate;
@@ -192,15 +192,15 @@ module.exports = class Lecture {
             }
         });
     }
-    
+
     hasPPant(participantId) {
         return this.#activeParticipants.includes(participantId);
     };
-    
+
     ban(accountId) {
         this.#removedParticipants.push(accountId);
     };
-    
+
     isBanned(accountId) {
         return this.#removedParticipants.includes(accountId);
     };
@@ -217,18 +217,18 @@ module.exports = class Lecture {
     hasToken(participantId) {
         TypeChecker.isString(participantId);
 
-            for(var i = 0; i < this.#tokenList.length; i++) {
-                var element = this.#tokenList[i];
-                if(element[0] === participantId) {
-                    if (element[2] >= 0) {
-                        console.log(true);
-                        return true;
-                    }
+        for (var i = 0; i < this.#tokenList.length; i++) {
+            var element = this.#tokenList[i];
+            if (element[0] === participantId) {
+                if (element[2] >= 0) {
+                    console.log(true);
+                    return true;
                 }
             }
-            return false;
+        }
+        return false;
     }
-    
+
     /* Traverses through the tokenList of the lecture and checks for an entry
      * that belongs to the passed participant. If it finds such a token,
      * and the token has not already run out, it revokes it by setting 
@@ -236,36 +236,36 @@ module.exports = class Lecture {
      * - (E) */
     revokeToken(participantId) {
         TypeChecker.isString(participantId);
-        
-        for(var i = 0; i < this.#tokenList.length; i++) {
+
+        for (var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
-            if(element[0] === participantId && this.hasToken(participantId)) {
+            if (element[0] === participantId && this.hasToken(participantId)) {
                 element[2] = -100; // needs to be negative as setting it to zero won't
-                                   // change behaviour of hasToken
+                // change behaviour of hasToken
             }
         }
     };
-    
+
     grantToken(participantID) {
         TypeChecker.isString(participantID);
-        
+
         // If the participant already has a token, we don't need to do anything
         // We can not grant a token to a participant not yet in the lecture
-        if(this.hasToken(participantID) || !this.#activeParticipants.includes(participantID)) {
+        if (this.hasToken(participantID) || !this.#activeParticipants.includes(participantID)) {
             return;
         }
         this.#tokenList[this.#getTokenIndex(participantID)][2] = 30000;
     };
 
-    #checkToken = function(participantId) {
+    #checkToken = function (participantId) {
         let currDate = new Date();
 
         //check if participant was in this lecture before
-        for(var i = 0; i < this.#tokenList.length; i++) {
+        for (var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
 
             //participant was here before
-            if(element[0] === participantId) {
+            if (element[0] === participantId) {
 
                 //check if lecture has already begon
                 //if so, token counter needs to be decreased
@@ -276,18 +276,18 @@ module.exports = class Lecture {
 
                     //Token Counter - timeDifference
                     element[2] -= timeDifference;
-                    
+
                 }
                 console.log('token counter: ' + element[2]);
 
                 //if not, token counter stays the same
-                return;  
+                return;
             }
 
         }
 
         //There is no entry with participantId
-        
+
         var timeToLate = 0;
 
         //calculate time difference between starting time and date, if user joined the lecture after starting time
@@ -300,19 +300,19 @@ module.exports = class Lecture {
         //make new entry with participantID, undefined Leaving Time, Token Counter 300.000ms - Time to late
         tokenCounter = tokenCounter - timeToLate;
         console.log('token counter: ' + tokenCounter);
-        
-        
+
+
         this.#tokenList.push([participantId, undefined, tokenCounter]);
     }
-    
-    #getTokenIndex = function(participantId) {
-        for(var i = 0; i < this.#tokenList.length; i++) {
-            if(this.#tokenList[i][0] === participantId) {
+
+    #getTokenIndex = function (participantId) {
+        for (var i = 0; i < this.#tokenList.length; i++) {
+            if (this.#tokenList[i][0] === participantId) {
                 return i;
             }
         }
         return -1;
     }
-    
-    
+
+
 }

@@ -38,7 +38,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 6, 9);
         this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 16, 19);
         this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
-        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10); 
+        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10);
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
@@ -46,7 +46,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#username = username;
 
     }
-    
+
     // changed the name here for test-purposes
     // otherwise the whole "finding the index"-routine in the GameView will not work
     getId() {
@@ -88,7 +88,7 @@ class ParticipantAvatarView extends AvatarView {
             } else if (direction === 'DOWNRIGHT') {
                 this.#currentAnimation = this.#walkingDownRightAnimation;
             }
-        
+
 
         } else {
             if (direction === 'UPLEFT') {
@@ -115,40 +115,40 @@ class ParticipantAvatarView extends AvatarView {
     draw() {
         if (this.#isVisible) {
 
-        let cordX = super.getPosition().getCordX();
-        let cordY = super.getPosition().getCordY();
-        this.updateCurrentAnimation();
-    
-        //should be done somewhere else, 150 and 419 are room dependent
-        if (this.#typeOfRoom === 'FOYER') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
-        else if (this.#typeOfRoom === 'FOODCOURT') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
-        else if (this.#typeOfRoom === 'RECEPTION') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
-        }
-        
+            let cordX = super.getPosition().getCordX();
+            let cordY = super.getPosition().getCordY();
+            this.updateCurrentAnimation();
 
-        ctx_avatar.font = "1em sans-serif";
-        ctx_avatar.textBaseline = 'top';
-        ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx_avatar.textAlign = "center";
-        ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+            //should be done somewhere else, 150 and 419 are room dependent
+            if (this.#typeOfRoom === 'FOYER') {
+                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
+                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            }
+            else if (this.#typeOfRoom === 'FOODCOURT') {
+                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            }
+            else if (this.#typeOfRoom === 'RECEPTION') {
+                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            }
 
-        ctx_avatar.fillStyle = "black";
-        ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH/2, screenY);
 
-        this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
+            ctx_avatar.font = "1em sans-serif";
+            ctx_avatar.textBaseline = 'top';
+            ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
+            ctx_avatar.textAlign = "center";
+            ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+
+            ctx_avatar.fillStyle = "black";
+            ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH / 2, screenY);
+
+            this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }
     }
 
     onClick(/*mousePos*/) {
-        
+
         /*
         //Needed for calculating the correct position of 
         //sprite animation in the spritesheet body click map.
@@ -168,12 +168,12 @@ class ParticipantAvatarView extends AvatarView {
         if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
             //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
             */
-            if (this.#isVisible) {
-        
-                $('#businessCardModal').modal('toggle');
-                let eventManager = new EventManager();
-                eventManager.handleAvatarClick(this.#participantId);
-            }
+        if (this.#isVisible) {
+
+            $('#businessCardModal').modal('toggle');
+            let eventManager = new EventManager();
+            eventManager.handleAvatarClick(this.#participantId);
+        }
         //}
     }
 }

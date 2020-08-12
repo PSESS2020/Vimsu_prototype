@@ -2,8 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     Direction = require('./Direction');
 }
 
-const Settings = Object.freeze
-({
+const Settings = Object.freeze({
 
     /* Movement-Speed Constants */
     MOVEMENTSPEED_X: 1,
@@ -25,13 +24,13 @@ const Settings = Object.freeze
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
-    
+
 
     CONFERENCE_ID: '1',
 
     /* Lecture Constants */
-    SHOWLECTURE: 10*60*1000, //lecture is shown 10 minutes before lecture start 
-    TOKENCOUNTERSTART: 5*60*1000,
+    SHOWLECTURE: 10 * 60 * 1000, //lecture is shown 10 minutes before lecture start 
+    TOKENCOUNTERSTART: 5 * 60 * 1000,
 
     /* StatusBar Constants */
     TIME_UNTIL_LEAVE: 60,

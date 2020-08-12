@@ -6,10 +6,10 @@ class SpriteSheet {
         this.frameHeight = frameHeight;
 
         var self = this;
-        this.image.onload = function() {
+        this.image.onload = function () {
             self.framesPerRow = Math.floor(self.image.width / self.frameWidth);
         };
- 
+
         this.image.src = path;
 
     }

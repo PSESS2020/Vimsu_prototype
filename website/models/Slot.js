@@ -58,7 +58,7 @@ module.exports = class Slot {
     getConferenceId() {
         return this.#conferenceId;
     }
-    
+
     getDuration() {
         return this.#duration;
     }

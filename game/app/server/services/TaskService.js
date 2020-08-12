@@ -6,7 +6,7 @@ module.exports = class TaskService {
     #tasks;
 
     constructor() {
-        if(!!TaskService.instance){
+        if (!!TaskService.instance) {
             return TaskService.instance;
         }
 
@@ -19,26 +19,12 @@ module.exports = class TaskService {
         return this.#tasks;
     }
 
-    /*getTask(taskId) {
-        TypeChecker.isInt(taskId);
-
-        let index = this.#tasks.findIndex(task => task.getId() === taskId);
-
-        if (index < 0) 
-        {
-            throw new Error(taskId + " is not in list of tasks")
-        }
-
-        return this.#tasks[index];
-    }*/
-
     getTaskByType(taskType) {
         TypeChecker.isEnumOf(taskType, TypeOfTask);
 
         let index = this.#tasks.findIndex(task => task.getTaskType() === taskType);
 
-        if (index < 0) 
-        {
+        if (index < 0) {
             throw new Error(taskType + " is not in list of tasks")
         }
 

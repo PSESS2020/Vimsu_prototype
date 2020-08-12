@@ -20,7 +20,7 @@ module.exports = class BusinessCard {
         TypeChecker.isString(job);
         TypeChecker.isString(company);
         TypeChecker.isString(email);
-        
+
         this.#participantId = participantId;
         this.#username = username;
         this.#title = title;

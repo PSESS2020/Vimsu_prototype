@@ -1,14 +1,14 @@
 class CurrentLecturesView extends WindowView {
 
-    constructor(){
+    constructor() {
         super();
     }
 
     draw(lectures) {
         $('#currentLecturesContainer').empty();
         $('#nolecture').empty();
-        
-        if(lectures.length < 1) {
+
+        if (lectures.length < 1) {
             $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
         }
         lectures.forEach(lecture => {
@@ -37,7 +37,7 @@ class CurrentLecturesView extends WindowView {
     }
 
     drawLectureFull(lectureId) {
-        $('#waitforlectureload').hide(); 
+        $('#waitforlectureload').hide();
         $('#show' + lectureId).hide();
         $('#full' + lectureId).show()
     }

@@ -42,8 +42,7 @@ module.exports = class Participant {
      * @param {int} awardPoints
      * @param {Array of Chat} chatList 
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList)
-    {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -53,11 +52,11 @@ module.exports = class Participant {
         TypeChecker.isEnumOf(direction, Direction);
 
         //Currently disable because not included yet
-        
+
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
-        if(achievements) {
+        if (achievements) {
             TypeChecker.isInstanceOf(achievements, Array);
             achievements.forEach(achievement => {
                 TypeChecker.isInstanceOf(achievement, Achievement);
@@ -73,7 +72,7 @@ module.exports = class Participant {
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
         });
-        
+
 
 
         this.#id = id;
@@ -89,20 +88,18 @@ module.exports = class Participant {
             this.#taskTypeMapping[x.getTaskType()] = 0;
         });
 
-        this.#achievements = achievements; 
+        this.#achievements = achievements;
 
         this.#isMod = isMod; //this.#isMod = true;  //TESTING
         this.#awardPoints = awardPoints; //this.#points = 0;
         this.#chatList = chatList; //this.#chatList = [];
     }
 
-    getId() 
-    {
+    getId() {
         return this.#id;
     }
 
-    getPosition() 
-    {
+    getPosition() {
         return this.#position;
     }
 
@@ -110,13 +107,11 @@ module.exports = class Participant {
         return this.#direction;
     }
 
-    getAccountId()
-    {
+    getAccountId() {
         return this.#accountId;
     }
 
-    getBusinessCard()
-    {
+    getBusinessCard() {
         return this.#businessCard;
     }
 
@@ -151,14 +146,12 @@ module.exports = class Participant {
         }
     }
 
-    setPosition(position) 
-    {
+    setPosition(position) {
         TypeChecker.isInstanceOf(position, Position);
         this.#position = position;
     }
 
-    setDirection(direction) 
-    {
+    setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
@@ -247,15 +240,15 @@ module.exports = class Participant {
     }
 
     hasFriend(ppantId) {
-        if(ppantId) {
+        if (ppantId) {
             TypeChecker.isString(ppantId);
-        
+
             return this.#friendList.includes(ppantId) // TODO: method does more than the name says it does
         }
     }
 
     hasSentFriendRequest(ppantId) {
-        if(ppantId) {
+        if (ppantId) {
             TypeChecker.isString(ppantId);
 
             return (this.#sentRequestList.includes(ppantId) || this.#receivedRequestList.includes(ppantId));
@@ -298,18 +291,18 @@ module.exports = class Participant {
     getAwardPoints() {
         return this.#awardPoints;
     }
-    
+
     getChat(chatId) {
-        for(var i = 0; i < this.#chatList.length; i++) {
-            if(this.#chatList[i].getId() == chatId) {
+        for (var i = 0; i < this.#chatList.length; i++) {
+            if (this.#chatList[i].getId() == chatId) {
                 return this.#chatList[i];
             }
         }
     };
-    
+
     isMemberOfChat(chatId) {
-        for(var i = 0; i < this.#chatList.length; i++) {
-            if(this.#chatList[i].getId() == chatId) {
+        for (var i = 0; i < this.#chatList.length; i++) {
+            if (this.#chatList[i].getId() == chatId) {
                 return true;
             }
         }
@@ -323,7 +316,7 @@ module.exports = class Participant {
     removeAchievement(achievementId) {
         let index = this.#achievements.findIndex(ach => ach.id === achievementId);
 
-        if(index < 0) {
+        if (index < 0) {
             throw new Error(achievementId + " not found in list of achievements")
         }
 
@@ -334,7 +327,7 @@ module.exports = class Participant {
     hasChatWith(chatPartnerID) {
         TypeChecker.isString(chatPartnerID);
         //check each chat
-        for(var i = 0; i < this.#chatList.length; i++) {
+        for (var i = 0; i < this.#chatList.length; i++) {
             //check if chat is 1:1
             let chat = this.#chatList[i];
             if (chat instanceof OneToOneChat) {

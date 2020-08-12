@@ -11,7 +11,7 @@ class ScheduleView extends GameObjectView {
     draw() {
 
         ctx_map.drawImage(this.#scheduleImage, this.#position.getCordX(), this.#position.getCordY());
-    
+
     }
 
     updatePos(position) {
@@ -20,7 +20,7 @@ class ScheduleView extends GameObjectView {
 
     }
 
-    getPosition()  {
+    getPosition() {
 
         return this.#position;
 

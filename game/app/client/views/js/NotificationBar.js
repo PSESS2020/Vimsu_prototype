@@ -49,7 +49,7 @@ class NotificationBar extends Views {
         var parsedGroupName = this.#replaceSpaceWithUnderscore(groupName);
         var parsedCreatorUsername = this.#replaceSpaceWithUnderscore(creatorUsername);
 
-        if($('#notifGroupChat' + parsedGroupName + parsedCreatorUsername).length) {
+        if ($('#notifGroupChat' + parsedGroupName + parsedCreatorUsername).length) {
             $('#notifGroupChat' + parsedGroupName + parsedCreatorUsername).show();
         } else {
             $('#notifBar').prepend(`
@@ -104,8 +104,8 @@ class NotificationBar extends Views {
         })
     }
 
-    #replaceSpaceWithUnderscore = function(string) {
-        string = string.replace(/ /g,"_");
+    #replaceSpaceWithUnderscore = function (string) {
+        string = string.replace(/ /g, "_");
         return string;
     }
 }

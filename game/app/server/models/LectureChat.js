@@ -4,7 +4,7 @@ module.exports = class LectureChat {
     #listOfMessages;
     #locked;
 
-   
+
     /**
      * @author Laura
      * 

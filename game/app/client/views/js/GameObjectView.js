@@ -12,7 +12,7 @@ class GameObjectView extends Views {
         this.#tileImage = tileImage;
         TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
-        
+
         if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
         }
@@ -24,7 +24,7 @@ class GameObjectView extends Views {
 
     onclick() {
         throw new Error('onClick() has to be implemented!');
-    }   
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

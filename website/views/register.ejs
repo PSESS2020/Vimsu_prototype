@@ -1,120 +1,136 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<%- include('partials/head') %>        
-    </head>
-    <body>
-        <%- include('partials/header') %>
 
-        <% if (locals.registerValid === true) { %>
-                    <div class="container" id="registerValid">
-                        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
-                        
-                    <form action="editRegistration" method="POST" style="max-width: 600px; margin: 0 auto">
-                        <hr />
-                        <div class="form-row" style="margin-bottom: -15px; margin-top: -15px">
-                            <div class="form-group col-md-6">
-                                <label for="staticUsername" class="col-form-label">Username</label>
-                                <input class="form-control" type="text" placeholder="<%=username%>" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="staticEmail" class="col-form-label">Email</label>
-                                <input class="form-control" type="text" placeholder="<%=email%>" readonly>
-                            </div>
-                        </div>    
-                        <hr/>
-                        <input class="btn btn-block btn-submit" type="submit" value="Edit Registration"></button>
-                        <hr/>
-                    </form>
-                        
-                    <form action="registerValid" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:-20px">
-                        <hr/>
-                        <div class="form-group">
-                            <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group col-md-2">
-                                <select class="form-control" id="title" name="title" required>
-                                    <option selected>Title</option>
-                                    <option>Mr.</option>
-                                    <option>Mrs.</option>
-                                    <option>Ms.</option>
-                                    <option>Miss</option>
-                                    <option>Dr.</option>
-                                    <option>Prof.</option>
-                                    <option>Rev.</option>
-                                  </select>
-                              </select>
-                            </div>
-                            <div class="form-group col-md-5">
-                                <input type="text" class="form-control" id="inputSurname" name="surname" placeholder="Surname" required>
-                            </div>
-                            <div class="form-group col-md-5">
-                              <input type="text" class="form-control" id="inputForename" name="forename" placeholder="Forename" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row" style="margin-bottom: -15px; ">
-                            <div class="form-group col-md-6">
-                                <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job/Profession" required>
-                              </div>
-                            <div class="form-group col-md-6">
-                              <input type="text" class="form-control" id="inputCompany" name="company" placeholder="Company/University" required>
-                            </div>
-                        </div>
-                        <hr/>
-                        <div class="row justify-content-left m-0 p-0">
-                            <% if(locals.invalidTitle === true) { %>
-                                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Invalid title. Please choose a title from the options we provided.</p>
-                            <% } else if (locals.registerFailed === true) { %>
-                                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while registering your account. Please try again.</p>
-                            <% } else { %>
-                            <% } %>
-                        </div>
-                        <input class="btn btn-block btn-submit" type="submit" value="Register now" style="margin-bottom: 30px; "></button>
-                    </form>
+<head>
+    <%- include('partials/head') %>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <% if (locals.registerValid === true) { %>
+    <div class="container" id="registerValid">
+        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
+
+        <form action="editRegistration" method="POST" style="max-width: 600px; margin: 0 auto">
+            <hr />
+            <div class="form-row" style="margin-bottom: -15px; margin-top: -15px">
+                <div class="form-group col-md-6">
+                    <label for="staticUsername" class="col-form-label">Username</label>
+                    <input class="form-control" type="text" placeholder="<%=username%>" readonly>
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="staticEmail" class="col-form-label">Email</label>
+                    <input class="form-control" type="text" placeholder="<%=email%>" readonly>
                 </div>
-                    </div>    
+            </div>
+            <hr />
+            <input class="btn btn-block btn-submit" type="submit" value="Edit Registration"></button>
+            <hr />
+        </form>
 
-                    <% } else { %> 
+        <form action="registerValid" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:-20px">
+            <hr />
+            <div class="form-group">
+                <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
+                    required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="title" name="title" required>
+                        <option selected>Title</option>
+                        <option>Mr.</option>
+                        <option>Mrs.</option>
+                        <option>Ms.</option>
+                        <option>Miss</option>
+                        <option>Dr.</option>
+                        <option>Prof.</option>
+                        <option>Rev.</option>
+                    </select>
+                    </select>
+                </div>
+                <div class="form-group col-md-5">
+                    <input type="text" class="form-control" id="inputSurname" name="surname" placeholder="Surname"
+                        required>
+                </div>
+                <div class="form-group col-md-5">
+                    <input type="text" class="form-control" id="inputForename" name="forename" placeholder="Forename"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom: -15px; ">
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="inputJob" name="job" placeholder="Job/Profession"
+                        required>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="inputCompany" name="company"
+                        placeholder="Company/University" required>
+                </div>
+            </div>
+            <hr />
+            <div class="row justify-content-left m-0 p-0">
+                <% if(locals.invalidTitle === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Invalid title.
+                    Please choose a title from the options we provided.</p>
+                <% } else if (locals.registerFailed === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
+                    error while registering your account. Please try again.</p>
+                <% } else { %>
+                <% } %>
+            </div>
+            <input class="btn btn-block btn-submit" type="submit" value="Register now"
+                style="margin-bottom: 30px; "></button>
+        </form>
+    </div>
+    </div>
+    </div>
+
+    <% } else { %>
 
 
-                    <div class="container" id="register">
-                        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
-                        
-                        <form action="register" method="POST" style="max-width: 600px; margin: 0 auto">
-                            <hr/>
-                            <div class="form-group">                
-                                <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username (max. 10 chars)" maxlength="10" required>
-                            </div>
-                            <div class="form-group">
-                
-                                <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email" required>
-                            </div>
-                            <hr/>
-                            <div class="row justify-content-left m-0 p-0">
-                                <% if(locals.emailTaken === true) { %>
-                                     <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you entered is already registered. Please use another email to register.</p>
-                                <% } else if (locals.usernameTaken === true) { %>
-                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username you entered is already taken. Please use another username to register.</p>
-                                <% } else if (locals.verifyDataFailed === true) { %>
-                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an error while verifying the input data. Please try again.</p>
-                                <% } else if (locals.invalidUsername === true) { %>
-                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username you entered is too long. Please try again.</p>
-                                <% } else if (locals.invalidEmail === true) { %>
-                                    <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you entered is invalid. Please try again.</p>
-                                <% } else { %>
-                                <% } %>
-                            </div>
-                            <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; "></button>
-                            
-                        </form>
-                    </div>
-                    </div>
-                        </div>
-                    <% } %>
-            </body>
-        </html>
-        
+    <div class="container" id="register">
+        <h2 style="text-align: center; margin-top: 30px;">Registration</h2>
+
+        <form action="register" method="POST" style="max-width: 600px; margin: 0 auto">
+            <hr />
+            <div class="form-group">
+                <input type="text" class="form-control" id="usernameInput" name="username"
+                    placeholder="Username (max. 10 chars)" maxlength="10" required>
+            </div>
+            <div class="form-group">
+
+                <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email" required>
+            </div>
+            <hr />
+            <div class="row justify-content-left m-0 p-0">
+                <% if(locals.emailTaken === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you
+                    entered is already registered. Please use another email to register.</p>
+                <% } else if (locals.usernameTaken === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username
+                    you entered is already taken. Please use another username to register.</p>
+                <% } else if (locals.verifyDataFailed === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
+                    error while verifying the input data. Please try again.</p>
+                <% } else if (locals.invalidUsername === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username
+                    you entered is too long. Please try again.</p>
+                <% } else if (locals.invalidEmail === true) { %>
+                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you
+                    entered is invalid. Please try again.</p>
+                <% } else { %>
+                <% } %>
+            </div>
+            <input class="btn btn-block btn-submit" type="submit" value="Verify" style="margin-bottom: 30px; "></button>
+
+        </form>
+    </div>
+    </div>
+    </div>
+    <% } %>
+</body>
+
+</html>

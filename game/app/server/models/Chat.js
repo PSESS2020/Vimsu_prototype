@@ -16,17 +16,17 @@ module.exports = class Chat {
         TypeChecker.isString(chatId);
         TypeChecker.isInstanceOf(participantList, Array);
         participantList.forEach(participantID => {
-            if(participantID) {
+            if (participantID) {
                 TypeChecker.isString(participantID);
             }
         });
 
-        
+
         TypeChecker.isInstanceOf(messageList, Array);
         messageList.forEach(message => {
             TypeChecker.isInstanceOf(message, Message);
         });
-        
+
 
         TypeChecker.isInt(maxNumMessages);
 
@@ -103,5 +103,5 @@ module.exports = class Chat {
             }
         });
     }
-    
+
 }

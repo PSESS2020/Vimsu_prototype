@@ -24,7 +24,7 @@ class AchievementView extends WindowView {
                 </div>
             `)
         })
-        //alert(JSON.stringify(achievements));
+
     }
 
     onclick() {

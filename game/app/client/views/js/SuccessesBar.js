@@ -1,16 +1,16 @@
-class SuccessesBar extends Views{
+class SuccessesBar extends Views {
 
-    constructor(){
+    constructor() {
         super();
     }
 
     update(points, rank) {
-        if(points) {
+        if (points) {
             $('#pointBox').empty()
             $('#pointBox').text(points);
         }
 
-        if(rank) {
+        if (rank) {
             $('#rankBox').empty()
             $('#rankBox').text(rank);
         }

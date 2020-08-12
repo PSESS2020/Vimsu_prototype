@@ -14,7 +14,7 @@ class PositionClient {
      */
     constructor(cordX, cordY) {
         if (typeof cordX !== 'number' || typeof cordY !== 'number') {
-            throw new TypeError(cordX +' or ' + cordY + ' is not a number!');
+            throw new TypeError(cordX + ' or ' + cordY + ' is not a number!');
         }
 
         this.#cordX = cordX;

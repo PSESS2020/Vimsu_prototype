@@ -18,14 +18,14 @@ class ProfileView extends WindowView {
         `)
         $('#profileModal .modal-body').append(`
             <table id="profile" style = "color: antiquewhite; width:100%; margin-left: 0">
-                    <tr>
-                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                        <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                        <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
-                    </tr>
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
+                    <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
+                </tr>
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
+                    <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
+                </tr>
             </table>
         `)
 

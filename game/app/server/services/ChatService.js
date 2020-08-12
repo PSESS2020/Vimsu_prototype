@@ -85,7 +85,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
 
 
-        return vimsudb.findOneInCollection("chats_" + conferenceId, {ownerId: {$exists: false}, memberId: {$size: 2}, memberId: {$all: [ownerId, chatPartnerId]}}, "").then(chat => {
+        return vimsudb.findOneInCollection("chats_" + conferenceId, { ownerId: { $exists: false }, memberId: { $size: 2 }, memberId: { $all: [ownerId, chatPartnerId] } }, "").then(chat => {
 
             if (chat) {
                 return chat;
@@ -142,11 +142,11 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
 
-            return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
-                let messages = [];
-                let loadedChat;
+        return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
+            let messages = [];
+            let loadedChat;
 
-                if(chat) {
+            if (chat) {
                 if (chat.messageList.length > 0) {
                     chat.messageList.forEach(message => {
                         messages.push(new Message(message.msgId, message.senderId, message.senderUsername, message.timestamp, message.msgText));
@@ -176,11 +176,11 @@ module.exports = class Chatservice {
                 return false;
             }
 
-            }).catch(err => {
-                console.error(err);
-            })
-            
-        
+        }).catch(err => {
+            console.error(err);
+        })
+
+
     }
 
     static storeParticipant(chatId, participantId, conferenceId, vimsudb) {
@@ -189,7 +189,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(participantId);
 
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
-            if(res) {
+            if (res) {
                 return true;
 
             } else {
@@ -208,7 +208,7 @@ module.exports = class Chatservice {
 
 
         return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
-                var dbRes = res;
+            var dbRes = res;
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
                 return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: 1 }).then(chat => {
                     if (chat && dbRes) {
@@ -273,8 +273,8 @@ module.exports = class Chatservice {
 
     static removeAllChats(conferenceId, vimsudb) {
         return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(chatsRes => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: {$exists: true} }).then(res => {
-                if(chatsRes) 
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: { $exists: true } }).then(res => {
+                if (chatsRes)
                     console.log("all chats deleted");
 
                 return chatsRes;
@@ -288,9 +288,9 @@ module.exports = class Chatservice {
 
     static removeChat(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
-        return vimsudb.deleteOneFromCollection("chats_" + conferenceId, {chatId: chatId}).then(chatRes => {
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, { chatIDList: chatId }).then(res => {
-                if(chatRes) 
+        return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(chatRes => {
+            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
+                if (chatRes)
                     console.log("chat with chatId " + chatId + " deleted");
 
                 return chatRes;

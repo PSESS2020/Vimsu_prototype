@@ -1,16 +1,19 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="client/views/css/button.css">
-    </head>
-    <body>
-        <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="client/views/css/button.css">
+</head>
+
+<body>
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div id="noschedule"></div>
@@ -30,22 +33,24 @@
                     </table>
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center d-block">
                 </div>
                 <div class="modal-body">
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="businessCardModal" tabindex="-1" role="dialog" aria-labelledby="businessCardModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+    <div class="modal fade" id="businessCardModal" tabindex="-1" role="dialog" aria-labelledby="businessCardModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="businessCardModalTitle">Business Card</h5>
@@ -56,37 +61,42 @@
                 <div class="modal-body">
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="npcStoryModal" tabindex="-1" role="dialog" aria-labelledby="npcStoryTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+    <div class="modal fade" id="npcStoryModal" tabindex="-1" role="dialog" aria-labelledby="npcStoryTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                 </div>
                 <div class="modal-body">
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle" aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle"
+        aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    
-                    <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                        <a class="action_button nav-item nav-link d-flex flex-column" href="#friendRequestListModal" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList" data-toggle="modal">
-                            <i class="fa fa-user-plus friendRequestListButton navbarIcons" style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                            <small style="color: antiquewhite; font-size: 10px;">Requests</small>
-                        </a>
 
-                        <script>
-                            $('#friendRequestList').off();
-                            $('#friendRequestList').on('click', function (event) {
-                                new FriendRequestListView().onclick();
-                            })
-                        </script>
+                    <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
+                    <a class="action_button nav-item nav-link d-flex flex-column" href="#friendRequestListModal"
+                        style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList"
+                        data-toggle="modal">
+                        <i class="fa fa-user-plus friendRequestListButton navbarIcons"
+                            style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
+                        <small style="color: antiquewhite; font-size: 10px;">Requests</small>
+                    </a>
+
+                    <script>
+                        $('#friendRequestList').off();
+                        $('#friendRequestList').on('click', function (event) {
+                            new FriendRequestListView().onclick();
+                        })
+                    </script>
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -95,15 +105,16 @@
                 <div class="modal-body" style="overflow: auto; height: 500px">
                     <div id="nofriend"></div>
                     <ul class="list-group bg-transparent">
-                        
+
                     </ul>
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog" aria-labelledby="friendRequestListModalTitle" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog"
+        aria-labelledby="friendRequestListModalTitle" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
@@ -114,15 +125,15 @@
                 <div class="modal-body" style="overflow: auto; height: 500px;">
                     <div id="nofriendrequest"></div>
                     <ul class="list-group bg-transparent">
-                        
+
                     </ul>
                 </div>
             </div>
-            </div>        
         </div>
+    </div>
 
-        <div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+    <div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="achievementsModalTitle">Achievements</h5>
@@ -137,12 +148,14 @@
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        
-        <canvas style="position: fixed; top: 0; left: 0; z-index: 1051;" id="confettiCanvas" width="100%" heigh="100%"></canvas>
-        <div style="z-index: 1052;" class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+    </div>
+
+    <canvas style="position: fixed; top: 0; left: 0; z-index: 1051;" id="confettiCanvas" width="100%"
+        heigh="100%"></canvas>
+    <div style="z-index: 1052;" class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="newAchievementModalTitle">New Achievement Unlocked!</h5>
@@ -153,37 +166,41 @@
                 <div class="modal-body">
                     <div class="container container-fluid">
                         <div class="row" id="newAchievementModalContent">
-                            
+
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="rankListModal" tabindex="-1" role="dialog" aria-labelledby="rankListModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+    <div class="modal fade" id="rankListModal" tabindex="-1" role="dialog" aria-labelledby="rankListModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="rankListModalTitle">Rank List</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <h5 class="modal-title" id="rankListModalTitle">Rank List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="card-columns">
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        
-        <div class="modal fade" id="chatListModal" tabindex="-1" role="dialog" aria-labelledby="chatListModalTitle" aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    </div>
+
+    <div class="modal fade" id="chatListModal" tabindex="-1" role="dialog" aria-labelledby="chatListModalTitle"
+        aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
-                    <a class="action_button nav-item nav-link" href="#inputGroupNameModal" style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat" data-toggle="modal">
+                    <a class="action_button nav-item nav-link" href="#inputGroupNameModal"
+                        style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat"
+                        data-toggle="modal">
                         <i class="fa fa-users navbarIcons" style="transform: scale(0.8);"></i>
                     </a>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -193,15 +210,16 @@
                 <div class="modal-body" style="overflow: auto; height: 500px">
                     <div id="nochat"></div>
                     <ul class="list-group bg-transparent">
-                        
+
                     </ul>
                 </div>
             </div>
-            </div>        
         </div>
+    </div>
 
-        <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle" aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle"
+        aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatThreadModalTitle"></h5>
@@ -209,28 +227,37 @@
                         <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
                     </button>
                     <button id="chatFriendRequestButton" class="close mr-5 btn">
-                        <i class="fa fa-user-plus navbarIcons" style ="margin-top: 2px; margin-right: -12px" aria-hidden="true"></i>
+                        <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px; margin-right: -12px"
+                            aria-hidden="true"></i>
                     </button>
                     <div id="friendRequestSent" class="mr-5 navbarIconsDisabled">
-                        <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;" aria-hidden="true"></i>
+                        <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;"
+                            aria-hidden="true"></i>
                     </div>
-                    <a class="action_button nav-item nav-link mr-5 close btn" href="#chatParticipantListModal" role="button" id="chatParticipantListBtn" data-toggle="modal">
-                        <i class="fa fa-info-circle navbarIcons" style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
+                    <a class="action_button nav-item nav-link mr-5 close btn" href="#chatParticipantListModal"
+                        role="button" id="chatParticipantListBtn" data-toggle="modal">
+                        <i class="fa fa-info-circle navbarIcons"
+                            style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
                     </a>
-                    <a class="action_button nav-item nav-link close btn" href="#inviteFriendsModal" role="button" id="inviteFriendsBtn" data-toggle="modal">
-                        <i class="fa fa-plus-square navbarIcons" style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
+                    <a class="action_button nav-item nav-link close btn" href="#inviteFriendsModal" role="button"
+                        id="inviteFriendsBtn" data-toggle="modal">
+                        <i class="fa fa-plus-square navbarIcons"
+                            style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
                     </a>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
-                    <div id="chatThreadModalList" class="list-group mb-3" style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
-                    
+                    <div id="chatThreadModalList" class="list-group mb-3"
+                        style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
+
                     </div>
                     <div class="d-flex">
                         <div id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
-                            <input id="chatMessageInput" type="text" style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                            <input id="chatMessageInput" type="text"
+                                style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
+                                class="form-control" placeholder="Enter message ...">
                             <div class="input-group-append">
                                 <button id="chatMessageButton" class="btn btn-lecture" type="button">Send</button>
                             </div>
@@ -238,11 +265,12 @@
                     </div>
                 </div>
             </div>
-            </div>        
         </div>
+    </div>
 
-        <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
+        data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="inputGroupNameModalTitle">Input Group Name</h5>
@@ -252,21 +280,24 @@
                 </div>
                 <div class="modal-body" style="overflow: auto; height: 500px;">
                     <form id="groupName" action="" style="text-align: center; margin-top: 35%">
-                        <input id="groupNameInput" autocomplete="off" style="width: 100%; background-color: #1b1e24; color: antiquewhite" placeholder ="Enter group name" maxlength="20" required/>
+                        <input id="groupNameInput" autocomplete="off"
+                            style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                            placeholder="Enter group name" maxlength="20" required />
                         <button class="btn btn-lecture mt-3" style=" width: auto;">Invite Friends</button>
                     </form>
                 </div>
             </div>
-            </div>        
         </div>
+    </div>
 
-        <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle" aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
+        aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
-                    
+
                     <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
-                    
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -274,19 +305,21 @@
                 <div class="modal-body" style="overflow: auto; text-align: center; height: 500px">
                     <div id="nofriendtoinvite"></div>
                     <ul class="list-group bg-transparent">
-                        
+
                     </ul>
                     </br>
                     <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!</div>
                     <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                    <button class="btn btn-lecture mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite friends to group chat</button>
+                    <button class="btn btn-lecture mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
+                        friends to group chat</button>
                 </div>
             </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal" id="chatParticipantListModal" tabindex="-1" role="dialog" aria-labelledby="chatParticipantListModalTitle" aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal" id="chatParticipantListModal" tabindex="-1" role="dialog"
+        aria-labelledby="chatParticipantListModalTitle" aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatParticipantListModalTitle">Chat Participant List</h5>
@@ -296,11 +329,12 @@
                 </div>
                 <div class="modal-body" style="overflow: auto; height: 500px;">
                     <ul class="list-group bg-transparent">
-                        
+
                     </ul>
                 </div>
             </div>
-            </div>        
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

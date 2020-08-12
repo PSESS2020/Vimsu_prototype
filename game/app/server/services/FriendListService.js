@@ -6,18 +6,18 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: 1}).then(par => {
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: 1 }).then(par => {
 
-                if (par) {
-                    return par.friendId;
-                }
-                else {
-                    console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
+            if (par) {
+                return par.friendId;
+            }
+            else {
+                console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+        })
 
     }
 
@@ -27,13 +27,13 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: friendId}).then(res => {
+        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -42,13 +42,13 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: {$each: friendIds}}).then(res => {
+        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: { $each: friendIds } }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -58,7 +58,7 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
 
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: friendId}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
 
             return true;
         }).catch(err => {
@@ -71,7 +71,7 @@ module.exports = class FriendListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {friendIds: {$exists: true}}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: { $exists: true } }).then(res => {
             return true;
         }).catch(err => {
             console.error(err);

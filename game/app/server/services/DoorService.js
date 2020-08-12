@@ -18,7 +18,7 @@ module.exports = class DoorService {
      * 
      */
     constructor() {
-        if(!!DoorService.instance){
+        if (!!DoorService.instance) {
             return DoorService.instance;
         }
 
@@ -26,9 +26,9 @@ module.exports = class DoorService {
         this.#doorIDs = [];
     }
 
-    #generateDoorID = function() {
+    #generateDoorID = function () {
         let idIsGenerated = false;
-        while(!idIsGenerated) {
+        while (!idIsGenerated) {
             let id = Math.floor((Math.random() * 1000000) - 500000);
             if (!this.#doorIDs.includes(id)) {
                 idIsGenerated = true;

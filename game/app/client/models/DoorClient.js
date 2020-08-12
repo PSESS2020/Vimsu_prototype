@@ -2,7 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     TypeOfDoor = require('../shared/TypeOfDoor.js');
- }
+}
 
 class DoorClient {
 
@@ -30,7 +30,7 @@ class DoorClient {
     getId() {
         return this.#id;
     }
-    
+
     getTypeOfDoor() {
         return this.#typeOfDoor;
     }

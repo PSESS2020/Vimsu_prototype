@@ -10,9 +10,6 @@ class SpriteAnimation {
         this.firstFrame = firstFrame;
         this.lastFrame = lastFrame;
         this.frameRate = frameRate;
-        
-    
-
 
         for (var frameNumber = this.firstFrame; frameNumber <= this.lastFrame; frameNumber++) {
             this.animationSequence.push(frameNumber);
@@ -21,15 +18,11 @@ class SpriteAnimation {
     }
 
     update() {
- 
         if (this.counter == (this.frameRate - 1)) {
             this.currentFrame = (this.currentFrame + 1) % this.animationSequence.length;
         }
         this.counter = (this.counter + 1) % this.frameRate;
     }
-
-
-
 
     draw(x, y) {
         var row = Math.floor(this.animationSequence[this.currentFrame] / this.spritesheetBody.framesPerRow);

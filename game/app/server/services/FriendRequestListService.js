@@ -7,13 +7,13 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
 
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.sent': receiverId}).then(res => {
+        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -23,13 +23,13 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.insertToArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.received': senderId}).then(res => {
+        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -39,13 +39,13 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.sent': receiverId}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -53,7 +53,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': {$exists: true}}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': { $exists: true } }).then(res => {
             return true;
         }).catch(err => {
             console.error(err);
@@ -67,13 +67,13 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: ownParticipantId}, {'friendRequestIds.received': senderId}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
 
-                return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
 
     }
 
@@ -81,7 +81,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': {$exists: true}}).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': { $exists: true } }).then(res => {
             return true;
         }).catch(err => {
             console.error(err);
@@ -94,18 +94,18 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.received': 1}).then(par => {
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': 1 }).then(par => {
 
-                if (par) {
-                    return par.friendRequestId.received;
-                }
-                else {
-                    console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
+            if (par) {
+                return par.friendRequestId.received;
+            }
+            else {
+                console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+        })
 
     }
 
@@ -114,18 +114,18 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(conferenceId);
 
 
-            return vimsudb.findOneInCollection("participants_" + conferenceId, {participantId: participantId}, {'friendRequestIds.sent': 1}).then(par => {
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': 1 }).then(par => {
 
-                if (par) {
-                    return par.friendRequestId.sent;
-                }
-                else {
-                    console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
+            if (par) {
+                return par.friendRequestId.sent;
+            }
+            else {
+                console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+        })
 
     }
 } 

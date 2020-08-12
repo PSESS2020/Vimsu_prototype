@@ -11,7 +11,7 @@ module.exports = class RoomService {
     #rooms;
 
     constructor() {
-        if(!!RoomService.instance){
+        if (!!RoomService.instance) {
             return RoomService.instance;
         }
 
@@ -29,8 +29,7 @@ module.exports = class RoomService {
 
         let index = this.#rooms.findIndex(room => room.getRoomId() === roomId);
 
-        if (index < 0) 
-        {
+        if (index < 0) {
             throw new Error(roomId + " is not in list of rooms")
         }
 

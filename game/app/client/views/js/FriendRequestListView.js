@@ -9,7 +9,7 @@ class FriendRequestListView extends WindowView {
     draw(businessCards) {
 
         $('#friendRequestListModal .modal-body #nofriendrequest').empty();
-        if(businessCards.length < 1) {
+        if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
         }
 
@@ -74,7 +74,7 @@ class FriendRequestListView extends WindowView {
         $('#accept' + participantId).hide()
         $('#reject' + participantId).hide()
 
-        if(isAccepted) {
+        if (isAccepted) {
             $('#accepted' + participantId).show()
             $('#rejectdisable' + participantId).show()
         } else {

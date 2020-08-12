@@ -27,7 +27,7 @@ class BusinessCardClient {
         if (email !== undefined) {
             TypeChecker.isString(email);
         }
-        
+
         this.#participantId = participantId;
         this.#username = username;
         this.#title = title;

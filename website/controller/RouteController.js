@@ -15,7 +15,7 @@ module.exports = class RouteController {
     #db;
 
     constructor(app, io, db) {
-        if(!!RouteController.instance){
+        if (!!RouteController.instance) {
             return RouteController.instance;
         }
 
@@ -35,9 +35,9 @@ module.exports = class RouteController {
         this.#app.set('view engine', 'ejs');
 
         //sets the views directory for rendering the ejs templates
-        this.#app.set('views',path.join(__dirname, '../views/'));
+        this.#app.set('views', path.join(__dirname, '../views/'));
 
-        this.#app.use(bodyParser.urlencoded({extended : true}));
+        this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
         this.#app.use(fileUpload());
 
@@ -47,13 +47,13 @@ module.exports = class RouteController {
             saveUninitialized: true
         });
 
-         //Allows to access the session from the server side
-        this.#io.use(function(socket, next) {
+        //Allows to access the session from the server side
+        this.#io.use(function (socket, next) {
             sessionMiddleware(socket.request, socket.request.res || {}, next)
         });
 
         this.#app.use(sessionMiddleware);
-        
+
         /* On receiving a get-Request, the express-Server will deliver the
         * index.html file to the user.
         * - (E) */
@@ -64,16 +64,16 @@ module.exports = class RouteController {
                 title = request.session.title;
                 forename = request.session.forename;
                 surname = request.session.surname;
-                response.render('index', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname});
+                response.render('index', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             } else {
-            response.render('index');
+                response.render('index');
             }
 
         });
 
         this.#app.get('/upload', (request, response) => {
             if (request.session.loggedin === true) {
-                response.render('upload', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname});
+                response.render('upload', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             } else {
                 response.redirect('/');
             }
@@ -81,19 +81,19 @@ module.exports = class RouteController {
 
         this.#app.post('/upload', (request, response) => {
             if (!request.files || Object.keys(request.files).length === 0) {
-                return response.render('upload', {noFilesUploaded: true});
+                return response.render('upload', { noFilesUploaded: true });
             }
 
             var maxParticipants = parseInt(request.body.maxParticipants);
             if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                return response.render('upload', {notInt: true});
+                return response.render('upload', { notInt: true });
             }
 
             var startingTime = new Date(request.body.startingTime);
             if (startingTime == "Invalid Date") {
-                return response.render('upload', {notDate: true});
+                return response.render('upload', { notDate: true });
             }
-            
+
             var title = request.body.title;
             var remarks = request.body.remarks;
             var oratorId = request.session.accountId;
@@ -103,30 +103,30 @@ module.exports = class RouteController {
             var videoName = video.name;
             var videoSize = video.size;
 
-            if(videoName.includes(".mp4")) {
-                if(videoSize > 524288000) {
-                    return response.render('upload', {fileSizeExceeded: true});
+            if (videoName.includes(".mp4")) {
+                if (videoSize > 524288000) {
+                    return response.render('upload', { fileSizeExceeded: true });
                 }
                 else {
                     return SlotService.storeVideo(video, this.#db).then(videoData => {
-                        if(videoData) {
+                        if (videoData) {
                             return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                 response.redirect('/');
                                 response.end();
                             }).catch(err => {
                                 console.error(err);
-                                return response.render('upload', {createSlotFailed: true});
+                                return response.render('upload', { createSlotFailed: true });
                             })
                         } else {
-                            return response.render('upload', {uploadFailed: true});
+                            return response.render('upload', { uploadFailed: true });
                         }
                     }).catch(err => {
                         console.error(err);
-                        return response.render('upload', {uploadFailed: true});
+                        return response.render('upload', { uploadFailed: true });
                     })
                 }
             } else {
-                return response.render('upload', {unsupportedFileType: true});
+                return response.render('upload', { unsupportedFileType: true });
             }
         });
 
@@ -136,7 +136,7 @@ module.exports = class RouteController {
             } else {
                 response.render('login');
             }
-            
+
         });
 
         this.#app.get('/game', (request, response) => {
@@ -149,7 +149,7 @@ module.exports = class RouteController {
             }
         })
 
-        this.#app.get('/game/video/:videoName', (request,response) => {
+        this.#app.get('/game/video/:videoName', (request, response) => {
             if (request.session.loggedin === true) {
                 var videoPath = path.join(__dirname + '../../../config/download/' + request.params.videoName);
                 const stat = fs.statSync(videoPath);
@@ -159,11 +159,11 @@ module.exports = class RouteController {
                 if (range) {
                     const parts = range.replace(/bytes=/, "").split("-")
                     const start = parseInt(parts[0], 10)
-                    const end = parts[1] 
+                    const end = parts[1]
                         ? parseInt(parts[1], 10)
-                        : fileSize-1
-                    const chunksize = (end-start)+1
-                    const file = fs.createReadStream(videoPath, {start, end})
+                        : fileSize - 1
+                    const chunksize = (end - start) + 1
+                    const file = fs.createReadStream(videoPath, { start, end })
                     const head = {
                         'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                         'Accept-Ranges': 'bytes',
@@ -174,8 +174,8 @@ module.exports = class RouteController {
                     file.pipe(response);
                 } else {
                     const head = {
-                      'Content-Length': fileSize,
-                      'Content-Type': 'video/mp4',
+                        'Content-Length': fileSize,
+                        'Content-Type': 'video/mp4',
                     }
                     response.writeHead(200, head)
                     fs.createReadStream(videoPath).pipe(response)
@@ -190,8 +190,8 @@ module.exports = class RouteController {
             var password = request.body.password;
 
             return AccountService.verifyLoginData(username, password, this.#db).then(user => {
-                
-                if(user) {
+
+                if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
                     console.log(username)
@@ -206,12 +206,12 @@ module.exports = class RouteController {
                     response.redirect('/');
                 }
                 else {
-                    return response.render('login', {wrongLoginData: true});
+                    return response.render('login', { wrongLoginData: true });
                 }
                 response.end();
             }).catch(err => {
                 console.error(err);
-                return response.render('login', {verifyDataFailed: true});
+                return response.render('login', { verifyDataFailed: true });
             })
         });
 
@@ -219,20 +219,20 @@ module.exports = class RouteController {
             if (request.session.registerValid === true) {
                 username = request.session.username;
                 email = request.session.email;
-                response.render('register', {registerValid: true, username: username, email: email});
+                response.render('register', { registerValid: true, username: username, email: email });
             }
             else if (request.session.loggedin === true) {
                 response.redirect('/');
             }
             else {
-                response.render('register', {registerValid: false});
+                response.render('register', { registerValid: false });
             }
         });
 
         this.#app.post('/register', (request, response) => {
 
             if (request.body.username.length > 10) {
-                return response.render('register', {invalidUsername: true});
+                return response.render('register', { invalidUsername: true });
             }
 
             username = request.body.username;
@@ -242,33 +242,33 @@ module.exports = class RouteController {
             if (emailRegex.test(String(email).toLowerCase())) {
 
             } else {
-                return response.render('register', {invalidEmail: true});
+                return response.render('register', { invalidEmail: true });
             }
 
             return AccountService.isUsernameValid(username, this.#db).then(res => {
-                if(res) {
+                if (res) {
                     return AccountService.isEmailValid(email, this.#db).then(res => {
-                        if(res) {
+                        if (res) {
                             request.session.registerValid = true;
                             request.session.username = username;
                             request.session.email = email;
                             response.redirect('/register');
                         }
                         else {
-                            return response.render('register', {emailTaken: true})
+                            return response.render('register', { emailTaken: true })
                         }
                         response.end();
                     }).catch(err => {
                         console.error(err);
-                        return response.render('register', {verifyDataFailed: true})
+                        return response.render('register', { verifyDataFailed: true })
                     })
                 }
                 else {
-                    return response.render('register', {usernameTaken: true});
+                    return response.render('register', { usernameTaken: true });
                 }
             }).catch(err => {
                 console.error(err);
-                return response.render('register', {verifyDataFailed: true})
+                return response.render('register', { verifyDataFailed: true })
             })
         });
 
@@ -276,11 +276,11 @@ module.exports = class RouteController {
             username = request.session.username;
             title = request.body.title;
 
-            if(title === "Title") {
+            if (title === "Title") {
                 title = "";
             }
-            else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
-                return response.render('registerValid', {invalidTitle: true});
+            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                return response.render('registerValid', { invalidTitle: true });
             }
 
             surname = request.body.surname;
@@ -307,7 +307,7 @@ module.exports = class RouteController {
                 response.end();
             }).catch(err => {
                 console.error(err);
-                return response.render('registerValid', {registerFailed: true});
+                return response.render('registerValid', { registerFailed: true });
             })
         })
 
@@ -331,7 +331,7 @@ module.exports = class RouteController {
                 surname = request.session.surname;
                 job = request.session.job;
                 company = request.session.company;
-                response.render('account', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company});
+                response.render('account', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
             }
 
             else {
@@ -340,13 +340,13 @@ module.exports = class RouteController {
         })
 
         this.#app.get('/editAccount', (request, response) => {
-            if (request.session.loggedin = true)  {
+            if (request.session.loggedin = true) {
                 title = request.session.title;
                 forename = request.session.forename;
                 surname = request.session.surname;
                 job = request.session.job;
                 company = request.session.company;
-                response.render('editAccount', {loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company})
+                response.render('editAccount', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company })
             }
             else {
                 response.render('/');
@@ -356,11 +356,11 @@ module.exports = class RouteController {
         this.#app.post('/saveAccountChanges', (request, response) => {
             title = request.body.title;
 
-            if(title === "Title") {
+            if (title === "Title") {
                 title = "";
             }
-            else if(title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof."){
-                return response.render('editAccount', {invalidTitle: true});
+            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                return response.render('editAccount', { invalidTitle: true });
             }
 
             surname = request.body.surname;
@@ -383,7 +383,7 @@ module.exports = class RouteController {
                 response.redirect('/account');
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', {editAccountFailed: true});
+                return response.render('editAccount', { editAccountFailed: true });
             })
         })
     }

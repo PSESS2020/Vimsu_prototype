@@ -6,7 +6,7 @@ module.exports = class AchievementService {
     #achievementDefinitions;
 
     constructor() {
-        if(!!AchievementService.instance){
+        if (!!AchievementService.instance) {
             return AchievementService.instance;
         }
 
@@ -51,49 +51,49 @@ module.exports = class AchievementService {
         var id = 0;
 
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
-            { count: 5, color: '#D7D7D7', points: 15},
-            { count: 10, color: '#C9B037', points: 15}
+            { count: 5, color: '#D7D7D7', points: 15 },
+            { count: 10, color: '#C9B037', points: 15 }
         ]);
 
         this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(2, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend other participants to gain this achievement.", [
-            { count: 5, color: '#D7D7D7', points: 100},
-            { count: 10, color: '#C9B037' , points: 100}
+            { count: 5, color: '#D7D7D7', points: 100 },
+            { count: 10, color: '#C9B037', points: 100 }
         ]);
 
         this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(3, TypeOfTask.FOODCOURTVISIT, "Coffee Time", "coffee", "Visit food court room to gain this achievement.", [
-            { count: 1, color: '#C9B037' , points: 10},
+            { count: 1, color: '#C9B037', points: 10 },
         ]);
 
         this.#achievementDefinitions[TypeOfTask.FOYERVISIT] = new AchievementDefinition(4, TypeOfTask.FOYERVISIT, "New World", "globe", "Visit foyer room to gain this achievement.", [
-            { count: 1, color: '#C9B037' , points: 10},
+            { count: 1, color: '#C9B037', points: 10 },
         ]);
 
         this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(5, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Interact with other participants to gain this achievement.", [
-            { count: 5, color: '#D7D7D7' , points: 50},
-            { count: 10, color: '#C9B037', points: 50}
+            { count: 5, color: '#D7D7D7', points: 50 },
+            { count: 10, color: '#C9B037', points: 50 }
         ]);
 
         this.#achievementDefinitions[TypeOfTask.LECTUREVISIT] = new AchievementDefinition(6, TypeOfTask.LECTUREVISIT, "Good Listener", "headphones", "Stay till the end of lectures to gain this achievement.", [
-            { count: 5, color: '#D7D7D7' , points: 200},
-            { count: 10, color: '#C9B037', points: 200}
+            { count: 5, color: '#D7D7D7', points: 200 },
+            { count: 10, color: '#C9B037', points: 200 }
         ]);
 
         this.#achievementDefinitions[TypeOfTask.BASICTUTORIALCLICK] = new AchievementDefinition(7, TypeOfTask.BASICTUTORIALCLICK, "First Greeting", "info", "Click on the NPC in the reception room to gain this achievement.", [
-            { count: 1, color: '#C9B037', points: 15},
+            { count: 1, color: '#C9B037', points: 15 },
         ]);
 
         this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
-            { count: 1, color: '#C9B037', points: 10},
+            { count: 1, color: '#C9B037', points: 10 },
         ]);
 
         this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "cutlery", "Click on the NPC in the food court room to gain this achievement.", [
-            { count: 1, color: '#C9B037', points: 15},
+            { count: 1, color: '#C9B037', points: 15 },
         ]);
 
         this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(10, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
-            { count: 1, color: '#C9B037', points: 15},
+            { count: 1, color: '#C9B037', points: 15 },
         ]);
-        
+
     }
 
     getAllAchievements(participant) {
@@ -125,14 +125,14 @@ module.exports = class AchievementService {
             }
         }
 
-        if(participant.getAchievements().length < 1) {
+        if (participant.getAchievements().length < 1) {
             participant.setAchievements(achievements);
         } else {
-            if(newAchievements.length > 0) {
+            if (newAchievements.length > 0) {
                 newAchievements.forEach(achievement => {
                     let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
 
-                    if(index < 0) {
+                    if (index < 0) {
                         throw new Error(achievement.id + " is not found in list of achievements!")
                     }
 
@@ -140,7 +140,7 @@ module.exports = class AchievementService {
                     participant.getAchievements()[index].setAwardPoints(achievement.awardPoints);
                     participant.getAchievements()[index].setColor(achievement.color);
                 })
-                
+
             }
         }
 
@@ -155,7 +155,7 @@ module.exports = class AchievementService {
         return level;
     }
 
-    
+
     // required to check if list of latest achievements contains any new achievements
     containsAchievement(achievement, oldAchievements) {
         if (achievement.getCurrentLevel() === 0) return true;

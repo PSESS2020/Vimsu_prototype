@@ -3,13 +3,13 @@ if (typeof module === 'object' && typeof exports === 'object') {
     ConnectionState = require('../../utils/ConnectionState')
 }
 
-class StatusBar extends Views{
+class StatusBar extends Views {
     #timeLeft;
     #connectionStatus;
 
-    constructor(){
+    constructor() {
         super();
-        
+
         this.#connectionStatus = ConnectionState.CONNECTED;
     }
     drawClock() {
@@ -33,7 +33,7 @@ class StatusBar extends Views{
                 this.#timeLeft--;
             }
 
-        } 
+        }
     }
 
     drawProfile(username) {
@@ -45,22 +45,22 @@ class StatusBar extends Views{
         this.drawClock();
         this.drawConnectionStatus();
 
-        var interval = setInterval( () => {
-            
+        var interval = setInterval(() => {
+
             this.drawClock();
             this.drawConnectionStatus();
-            
+
         }, 1000);
     }
-     // this returns the time till next interval. If late will drop calls.
-   getNextCallTime() {
-    var nextCallIn = (startTime + interval * (count + 1)) - performance.now();
-    if (nextCallIn < -interval / 2) { // to late drop the call
-      count = Math.floor((performance.now() - startTime) / interval) + 1;
-      nextCallIn = (startTime + interval * count) - performance.now();
+    // this returns the time till next interval. If late will drop calls.
+    getNextCallTime() {
+        var nextCallIn = (startTime + interval * (count + 1)) - performance.now();
+        if (nextCallIn < -interval / 2) { // to late drop the call
+            count = Math.floor((performance.now() - startTime) / interval) + 1;
+            nextCallIn = (startTime + interval * count) - performance.now();
+        }
+        return nextCallIn;
     }
-    return nextCallIn;
-  }
 
     updateLocation(location) {
         TypeChecker.isString(location);
@@ -70,13 +70,13 @@ class StatusBar extends Views{
 
     updateConnectionStatus(status) {
         this.#connectionStatus = status;
-        
-        if (status === ConnectionState.CONNECTED){
+
+        if (status === ConnectionState.CONNECTED) {
             $('#connectionStatus').empty();
-        } else 
+        } else
             if (status === ConnectionState.DISCONNECTED) {
-            this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
-        }
+                this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
+            }
     }
 }
 

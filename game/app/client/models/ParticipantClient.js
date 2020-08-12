@@ -5,7 +5,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
 }
 
 class ParticipantClient {
-    
+
     #id;
     #position;
     #direction;
@@ -21,8 +21,7 @@ class ParticipantClient {
      * @param {PositionClient} position
      * @param {Direction} direction
      */
-    constructor(id, username, position, direction) 
-    {
+    constructor(id, username, position, direction) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
@@ -34,38 +33,32 @@ class ParticipantClient {
         this.#username = username;
     }
 
-    getId()
-    {
+    getId() {
         return this.#id;
     }
 
-    getPosition() 
-    {
+    getPosition() {
         return this.#position;
     }
 
-    setPosition(position) 
-    {
+    setPosition(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
     }
 
-    getDirection() 
-    {
+    getDirection() {
         return this.#direction;
     }
 
-    setDirection(direction) 
-    {
+    setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
 
-    getUsername()
-    {
+    getUsername() {
         return this.#username;
     }
-    
+
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

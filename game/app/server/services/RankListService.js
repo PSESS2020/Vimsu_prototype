@@ -40,7 +40,7 @@ module.exports = class RankListService {
                     break;
                 }
             }
-            
+
             return Promise.all(rankList.map(async ppant => {
                 const username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb)
                 ppant.username = username;

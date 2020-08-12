@@ -9,7 +9,7 @@ module.exports = class GameObjectService {
     #gameObjectIDs;
 
     constructor() {
-        if(!!GameObjectService.instance){
+        if (!!GameObjectService.instance) {
             return GameObjectService.instance;
         }
 
@@ -17,9 +17,9 @@ module.exports = class GameObjectService {
         this.#gameObjectIDs = [];
     }
 
-    #generateGameObjectID = function() {
+    #generateGameObjectID = function () {
         let idIsGenerated = false;
-        while(!idIsGenerated) {
+        while (!idIsGenerated) {
             let id = Math.floor((Math.random() * 1000000) - 500000);
             if (!this.#gameObjectIDs.includes(id)) {
                 idIsGenerated = true;

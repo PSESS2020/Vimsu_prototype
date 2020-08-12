@@ -23,7 +23,7 @@ class NewAchievementView extends WindowView {
                 <div class="mb-4">You have unlocked a new achievement: ${achievement.description}</div>
             </div>`
         );
-        
+
         var confettiSettings = { target: 'confettiCanvas' };
         this.#confetti = new ConfettiGenerator(confettiSettings);
         this.#confetti.render();

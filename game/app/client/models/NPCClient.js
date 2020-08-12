@@ -2,7 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     Direction = require('../shared/Direction.js');
- }
+}
 
 class NPCClient {
 

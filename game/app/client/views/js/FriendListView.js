@@ -9,7 +9,7 @@ class FriendListView extends WindowView {
     draw(businessCards) {
         $('#friendListModal .modal-body #nofriend').empty();
 
-        if(businessCards.length < 1) {
+        if (businessCards.length < 1) {
             $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")
         }
 

@@ -9,7 +9,7 @@ class ScheduleListView extends WindowView {
     draw(lectures) {
 
         $('#scheduleModal .modal-body #noschedule').empty();
-        if(lectures.length < 1) {
+        if (lectures.length < 1) {
             $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.")
         }
 
@@ -30,7 +30,7 @@ class ScheduleListView extends WindowView {
                     <td>${lecture.oratorName}</td>
                     <td>${startingTime}</td>
                     <td>${lecture.maxParticipants}</td>
-                    <td>${(lecture.remarks == ''?'-':'' + lecture.remarks)}</td>
+                    <td>${(lecture.remarks == '' ? '-' : '' + lecture.remarks)}</td>
                 </tr>
             `)
         })
@@ -38,7 +38,7 @@ class ScheduleListView extends WindowView {
         $('#scheduleModal').on('hidden.bs.modal', function (e) {
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
         })
-    }   
+    }
 
     onclick() {
         return new EventManager().handleScheduleClicked();

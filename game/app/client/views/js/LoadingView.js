@@ -15,7 +15,7 @@ class LoadingView extends Views {
         this.#bar[0].style.width = percentage;
         this.#status[0].innerHTML = "Loading Game " + percentage + " . . .";
     }
-    
+
     doneLoading() {
         this.#overlay[0].style.opacity = 0;
     }

@@ -1,5 +1,4 @@
-const LectureStatus = Object.freeze
-({
+const LectureStatus = Object.freeze({
     PENDING: "PENDING",
     RUNNING: "RUNNING",
     OVER: "OVER"

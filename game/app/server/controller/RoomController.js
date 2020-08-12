@@ -44,7 +44,7 @@ module.exports = class RoomController {
             this.#listOfPPantController.push(participantController);
             this.#room.enterParticipant(participantController.getParticipant());
         }
-        
+
         // Set the position of the participant to the proper starting position
         participantController.getParticipant().setPosition(this.#room.getStartPosition());
 
@@ -69,7 +69,7 @@ module.exports = class RoomController {
             this.#listOfPPantController.splice(index, 1);
             this.#room.exitParticipant(participantController.getParticipant());
         }
-        
+
         // Commented out for now, while this is still being handled in the server.js
         //this.#notifyLeftRoom(participantController);
     }
@@ -92,7 +92,7 @@ module.exports = class RoomController {
 
         //Wenn es zu keiner Kollision kommt, müssen alle anderen ParticipantController davon erfahren
         //if(!collision) {
-            this.#notifyNewPosition(participantController, position);
+        this.#notifyNewPosition(participantController, position);
         //}
 
         //return !collision;
@@ -100,30 +100,30 @@ module.exports = class RoomController {
 
 
     //TODO: handleNewMessage()
-    
 
-    #notifyNewPosition = function(participantController, position) {
+
+    #notifyNewPosition = function (participantController, position) {
         TypeChecker.isInstanceOf(participantController, ParticipantController);
         TypeChecker.isInstanceOf(position, Position);
         let participantId = participantController.getParticipant().getId();
 
         //Teilt jedem anderem ParticipantController mit, dass Participant mit participantId eine neue Position hat
-        this.#listOfPPantController.foreach(function(item) {
+        this.#listOfPPantController.foreach(function (item) {
             if (item != participantController) {
                 item.sendMovementOther(participantId, position);
             }
         });
     }
 
-    #notifyLeftRoom = function(participantController) {
+    #notifyLeftRoom = function (participantController) {
         TypeChecker.isInstanceOf(participantController, ParticipantController);
         let participantId = participantController.getParticipant().getId();
 
         //Teilt jedem anderem ParticipantController mit, dass Participant mit participantId den Raum verlassen hat
-        this.#listOfPPantController.foreach(function(item) {
+        this.#listOfPPantController.foreach(function (item) {
             if (item != participantController) {
                 item.sendRoomLeftByOther(participantId);
             }
         });
-    } 
+    }
 }

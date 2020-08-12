@@ -27,14 +27,14 @@ module.exports = class GameObject {
      * @param {boolean} isSolid 
      */
     constructor(id, name, width, length, position, isSolid) {
-        
+
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isBoolean(isSolid);
-        
+
         this.#id = id;
         this.#name = name;
         this.#width = width;

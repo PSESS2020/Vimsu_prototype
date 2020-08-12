@@ -22,7 +22,7 @@ class RoomClient {
     #listOfGameObjects;
     #listOfDoors;
     #map;
-    
+
     /**
      * Erzeugt RoomClient Instanz
      * 
@@ -36,7 +36,7 @@ class RoomClient {
      * @param {int} length 
      * @param {int} width 
      */
-    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width ,length) {
+    constructor(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -69,7 +69,7 @@ class RoomClient {
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
-        
+
 
         //TODO: add other room types
 
@@ -176,7 +176,7 @@ class RoomClient {
         if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
             return true;
         }
-    
+
         //GAMEOBJECTS in room
         if (this.#occupationMap[cordX][cordY] == 1) {
             return true;
@@ -226,12 +226,12 @@ class RoomClient {
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
-        
+
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
         }
-    
+
         this.#buildOccMap();
         this.buildMapArray();
     }
@@ -244,7 +244,7 @@ class RoomClient {
         for (var i = 0; i < mapLength; i++) {
             this.#map[i] = new Array(this.#length + 2).fill(GameObjectTypeClient.TILE);
         }
-        
+
 
         for (var i = 0; i < mapLength; i++) {
             this.#map[i][0] = GameObjectTypeClient.BLANK;
@@ -280,19 +280,19 @@ class RoomClient {
 
                 this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.RECEPTIONDOOR;
-                
+
             } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.FOODCOURT_DOOR) {
 
                 this.#map[positionX + 1][positionY] = GameObjectTypeClient.RIGHTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.FOODCOURTDOOR;
-            
+
 
             } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
                 this.#map[positionX][positionY - 1] = GameObjectTypeClient.LEFTTILE;
                 this.#map[positionX][positionY] = GameObjectTypeClient.LECTUREDOOR;
 
             }
-        
+
         }
     }
 
@@ -300,12 +300,12 @@ class RoomClient {
     getMap() {
         return this.#map;
     }
-    
 
-    #buildOccMap = function() {
+
+    #buildOccMap = function () {
         //Geht jedes Objekt in der Objektliste durch
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-                
+
             //Check ob Objekt fest ist oder nicht
             if (this.#listOfGameObjects[i].getSolid()) {
 
@@ -315,12 +315,12 @@ class RoomClient {
 
                 //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
                 for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
-                
+
                     for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;      
+                        this.#occupationMap[j][k] = 1;
                     }
                 }
-            } 
+            }
         }
 
         //NPC collision

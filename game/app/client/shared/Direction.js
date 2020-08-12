@@ -1,5 +1,4 @@
-const Direction = Object.freeze
-({
+const Direction = Object.freeze({
     UPLEFT: "UPLEFT",
     DOWNLEFT: "DOWNLEFT",
     UPRIGHT: "UPRIGHT",

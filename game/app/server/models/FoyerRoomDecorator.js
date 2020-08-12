@@ -19,7 +19,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let listOfGameObjects = [];
 
         for (var i = 4; i < 9; i++)
-            listOfGameObjects.push(objService.createTable( Settings.FOYER_ID, 1, 1,  i, 0, true));
+            listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, 1, 1, i, 0, true));
 
 
         //Get all npcs from service
@@ -32,7 +32,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         //Get all doors from service
         let doorService = new DoorService();
         let listOfDoors = [];
-        
+
         //enter positions for LectureDoor
         let lectureDoorEnterPositions = [];
         for (var i = 0; i <= 4; i++) {
@@ -57,9 +57,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             }
         }
 
-        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, 1), lectureDoorEnterPositions), 
-                         doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 4), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT), 
-                         doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 24), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
+        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, 1), lectureDoorEnterPositions),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 4), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 24), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
 
 
         //Assign lists to room and build occupation map

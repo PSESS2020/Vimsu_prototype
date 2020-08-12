@@ -1,6 +1,3 @@
-
-
-
 module.exports = class Achievement {
 
     // all fields are public as this object is transferred to the client for direct use

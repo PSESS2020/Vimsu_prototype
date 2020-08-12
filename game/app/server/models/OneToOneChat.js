@@ -1,8 +1,8 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 var Chat = require('./Chat.js');
 
-module.exports = class OneToOneChat extends Chat{
-    
+module.exports = class OneToOneChat extends Chat {
+
     #creatorUsername;
     #chatPartnerUsername;
 
@@ -14,7 +14,7 @@ module.exports = class OneToOneChat extends Chat{
         TypeChecker.isString(chatPartnerUsername);
         this.#creatorUsername = creatorUsername;
         this.#chatPartnerUsername = chatPartnerUsername;
-        
+
     }
 
     //Adds a message to the message list.

@@ -23,21 +23,21 @@ class RankListView extends WindowView {
                 </div>
             `)
 
-            if(ppant.rank == 1) {
+            if (ppant.rank == 1) {
                 $('#rank' + ppant.participantId)[0].style.borderColor = "gold";
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
                 $('#cardtext' + ppant.participantId)[0].style.color = "gold";
-            } else if(ppant.rank == 2) {
+            } else if (ppant.rank == 2) {
                 $('#rank' + ppant.participantId)[0].style.borderColor = "antiquewhite";
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
                 $('#cardtext' + ppant.participantId)[0].style.color = "antiquewhite";
-            } else if(ppant.rank == 3) {
+            } else if (ppant.rank == 3) {
                 $('#rank' + ppant.participantId)[0].style.borderColor = "#f79736";
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
                 $('#cardtext' + ppant.participantId)[0].style.color = "#f79736";
             }
 
-            if(ppant.self) {
+            if (ppant.self) {
                 $('#rank' + ppant.participantId)[0].style.backgroundColor = 'rgba(' + 39 + ',' + 81 + ',' + 94 + ',' + 0.699 + ')';
             }
         })

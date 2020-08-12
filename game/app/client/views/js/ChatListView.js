@@ -10,19 +10,19 @@ class ChatListView extends WindowView {
     constructor() {
         super()
     }
-    
+
     draw(chats) {
         $('#chatListModal .modal-body #nochat').empty();
 
-        if(chats.length < 1) {
+        if (chats.length < 1) {
             $('#chatListModal .modal-body #nochat').text("No chats found. Let's connect with others!")
         }
-        
+
         /* Clear view to make sure we don't draw anything twice */
         $('#chatListModal .modal-body .list-group').empty();
 
         chats.forEach(chat => {
-            if(chat.timestamp) {
+            if (chat.timestamp) {
                 chat.timestamp = new Date(chat.timestamp);
             }
         });
@@ -35,13 +35,13 @@ class ChatListView extends WindowView {
 
             console.log(chat)
 
-            if(chat.timestamp && chat.timestamp instanceof Date) {
+            if (chat.timestamp && chat.timestamp instanceof Date) {
                 timestamp = new DateParser(chat.timestamp).parse();
             } else {
                 timestamp = 'no messages';
             }
 
-            if(chat.previewUsername) {
+            if (chat.previewUsername) {
                 previewMessage = chat.previewUsername + ": " + chat.previewMessage;
             } else {
                 previewMessage = chat.previewMessage;
@@ -76,10 +76,10 @@ class ChatListView extends WindowView {
                 </script>
             `)
         })
-        
-        
+
+
     }
-    
+
     deleteChat(chatId) {
         this.#chats.forEach(chat => {
 
@@ -91,17 +91,17 @@ class ChatListView extends WindowView {
 
         this.draw(this.#chats);
     };
-    
+
     addNewChat(chat) {
         this.#chats.push(chat);
         this.draw(this.#chats);
     };
-    
+
     addNewMessage(chatID, message) {
         this.#chats.forEach(chat => {
-            if(chat.chatId === chatID) {
+            if (chat.chatId === chatID) {
                 console.log(message.msgText);
-                if(message.msgText.length > 36) {
+                if (message.msgText.length > 36) {
                     var msgText = message.msgText.slice(0, 36) + "...";
                 } else {
                     var msgText = message.msgText;

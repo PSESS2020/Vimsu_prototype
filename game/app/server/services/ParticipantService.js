@@ -396,7 +396,7 @@ module.exports = class ParticipantService {
 
     static deleteParticipant(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
-        return vimsudb.deleteOneFromCollection("participants_" + conferenceId, {participantId: participantId}).then(res => {
+        return vimsudb.deleteOneFromCollection("participants_" + conferenceId, { participantId: participantId }).then(res => {
             console.log("participant with participantId " + participantId + " deleted");
         }).catch(err => {
             console.error(err);

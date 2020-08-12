@@ -3,7 +3,7 @@
 var TypeChecker = require('../../../utils/TypeChecker.js')
 
 module.exports = */class NPCAvatarView extends AvatarView {
-   
+
     #npcId;
     #name;
     #typeOfRoom;
@@ -23,7 +23,7 @@ module.exports = */class NPCAvatarView extends AvatarView {
         TypeChecker.isString(name);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
-        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10); 
+        this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10);
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#npcId = npcId;
@@ -66,9 +66,9 @@ module.exports = */class NPCAvatarView extends AvatarView {
         ctx_map.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_map.font, 10));
 
         ctx_map.fillStyle = "white";
-        ctx_map.fillText(this.#name, screenX + AVATAR_WIDTH/2, screenY);
+        ctx_map.fillText(this.#name, screenX + AVATAR_WIDTH / 2, screenY);
 
-        this.#currentAnimation.draw(screenX, screenY); 
+        this.#currentAnimation.draw(screenX, screenY);
     }
 
     onClick() {

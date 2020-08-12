@@ -21,7 +21,7 @@ clientController.setPort(GameConfig.PORT);
 clientController.openSocketConnection();
 //clientController.initGameView();
 
-setInterval( function() {
+setInterval(function () {
   //let deltaTime = timestamp - lastTime;
   //lastTime = timestamp;
 
@@ -32,53 +32,53 @@ setInterval( function() {
   //gameView.draw();  
 }, GameConfig.TIME_DELTA);
 
-$('#allchat').submit(function(event) {
-    
-    event.preventDefault();
-    let messageVal = $('#allchatMessageInput').val();
-    
-    if(messageVal !== '') {
-      
-      if(messageVal[0] === '/') {
-          clientController.sendToServerEvalInput(messageVal.slice(1));
-        } else
-          clientController.sendToServerAllchatMessage(messageVal);
-      
-      $('#allchatMessageInput').val('');
-      return false;
-    }
+$('#allchat').submit(function (event) {
+
+  event.preventDefault();
+  let messageVal = $('#allchatMessageInput').val();
+
+  if (messageVal !== '') {
+
+    if (messageVal[0] === '/') {
+      clientController.sendToServerEvalInput(messageVal.slice(1));
+    } else
+      clientController.sendToServerAllchatMessage(messageVal);
+
+    $('#allchatMessageInput').val('');
+    return false;
+  }
 
 });
 
-$('#groupName').submit(function(event) {
+$('#groupName').submit(function (event) {
   event.preventDefault();
   let groupName = $('#groupNameInput').val();
   if (groupName.length > 20) {
     return false;
   }
-  
-  if(groupName !== '') {
-      $('#inputGroupNameModal').modal('hide');
-      $('#inviteFriendsModal').modal('toggle');
-      clientController.handleFromViewShowInviteFriends(groupName, "");
-      $('#groupNameInput').val('');
+
+  if (groupName !== '') {
+    $('#inputGroupNameModal').modal('hide');
+    $('#inviteFriendsModal').modal('toggle');
+    clientController.handleFromViewShowInviteFriends(groupName, "");
+    $('#groupNameInput').val('');
   }
 });
 
 
-document.getElementById("allchat").onkeydown = function(event) {
-    event.stopPropagation();
-};
-
-document.getElementById("groupName").onkeydown = function(event) {
+document.getElementById("allchat").onkeydown = function (event) {
   event.stopPropagation();
 };
 
-document.getElementById("chatMessageInput").onkeydown = function(event) {
+document.getElementById("groupName").onkeydown = function (event) {
   event.stopPropagation();
 };
 
-document.body.onkeydown = function(event) {
+document.getElementById("chatMessageInput").onkeydown = function (event) {
+  event.stopPropagation();
+};
+
+document.body.onkeydown = function (event) {
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
@@ -89,7 +89,7 @@ document.body.onkeydown = function(event) {
   /* In time, it would be cool to replace the key-codes by constant strings
    * that can be modified via a settings-menu.
    * - (E) */
-  switch(event.code) {
+  switch (event.code) {
     case "KeyW":
     case "ArrowUp":
       clientController.handleUpArrowDown();
@@ -112,7 +112,7 @@ document.body.onkeydown = function(event) {
   //event.preventDefault();
 };
 
-document.body.onkeyup = function(event) {
+document.body.onkeyup = function (event) {
   if (event.defaultPrevented) {
     return;
   }
@@ -120,7 +120,7 @@ document.body.onkeyup = function(event) {
   /* In time, it would be cool to replace the key-codes by constant strings
    * that can be modified via a settings-menu.
    * - (E) */
-  switch(event.code) {
+  switch (event.code) {
     case "KeyW":
     case "ArrowUp":
       clientController.handleArrowUp();

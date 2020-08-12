@@ -20,7 +20,7 @@ module.exports =*/ class AvatarView extends Views {
 
         if (new.target === AvatarView) {
             throw new Error("Cannot construct abstract AvatarView instances directly");
-        }    
+        }
     }
 
 
@@ -64,8 +64,8 @@ module.exports =*/ class AvatarView extends Views {
     }
 
     //setWalking(walking) {
-        //TypeChecker.isBoolean(walking);
-        //this.#walking = walking;
+    //TypeChecker.isBoolean(walking);
+    //this.#walking = walking;
     //}
 
     draw() {
@@ -77,8 +77,8 @@ module.exports =*/ class AvatarView extends Views {
     }
 
     update() {
-        throw new Error('update() has to be implemented!' )
+        throw new Error('update() has to be implemented!')
     }
 
-    
+
 }
