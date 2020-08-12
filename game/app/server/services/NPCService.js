@@ -6,8 +6,9 @@ const TypeOfRoom = require('../../utils/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 
 module.exports = class NPCService {
+
+    #npcIDs;
     
-    #npcs;
 
     constructor() {
         if(!!NPCService.instance){
@@ -15,26 +16,10 @@ module.exports = class NPCService {
         }
 
         NPCService.instance = this;
-        this.#npcs = [];
+        this.#npcIDs = [];
     }
-
-    /*getNPCs(roomId)
-    {
-        TypeChecker.isInt(roomId);
-
-        var roomNPCs = [], i;
-
-        for(i = 0; i < this.#npcs.length; i++){
-            if (this.#npcs[i].getPosition().getRoomId() === roomId) {
-                roomNPCs.push(this.#npcs[i]);
-            }
-        }
-
-        return roomNPCs;
-    }*/
-
     
-    STORYS = {
+    #STORYS = {
         foyerHelperStory: [    'Hey! Welcome to our Foyer!',
                            'The door to my left leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
                            'Enjoy your stay!'],
@@ -52,20 +37,43 @@ module.exports = class NPCService {
                     'Come back later to eat some of my fresh food!'],
     }
 
-    randomInt() {
-        return Math.floor((Math.random() * 1000000) - 500000);
-    };
+    #generateNpcID = function() {
+        let idIsGenerated = false;
+        while(!idIsGenerated) {
+            let id = Math.floor((Math.random() * 1000000) - 500000);
+            if (!this.#npcIDs.includes(id)) {
+                idIsGenerated = true;
+                this.#npcIDs.push(id);
+                return id;
+            }
+        }
+    }
 
     createFoyerHelperNPC(roomId, xPos, yPos, direction) {
-        return new NPC(this.randomInt(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.STORYS.foyerHelperStory);
+        TypeChecker.isInt(roomId);
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+        TypeChecker.isEnumOf(direction, Direction);
+        
+        return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.#STORYS.foyerHelperStory);
     } 
 
     createBasicTutorialNPC(roomId, xPos, yPos, direction) {
-        return new NPC(this.randomInt(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.STORYS.basicTutorialStory)
+        TypeChecker.isInt(roomId);
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.#STORYS.basicTutorialStory)
     }
 
     createChefNPC(roomId, xPos, yPos, direction) {
-        return new NPC(this.randomInt(), 'Chef', new Position(roomId, xPos, yPos), direction, this.STORYS.chefStory);
+        TypeChecker.isInt(roomId);
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        return new NPC(this.#generateNpcID(), 'Chef', new Position(roomId, xPos, yPos), direction, this.#STORYS.chefStory);
     }
             
         

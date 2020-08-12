@@ -46,6 +46,11 @@ module.exports = class Room {
         this.#listOfPPants = [];
         this.#listOfMessages = [];
 
+        //Assigned in decorator of room
+        this.#listOfNPCs = [];
+        this.#listOfGameObjects = [];
+        this.#listOfDoors = [];
+
         this.#length = length;
         this.#width = width;
 
@@ -54,17 +59,33 @@ module.exports = class Room {
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
         }
-
-        //Alle Türen die in diesen Raum gehören vom Service holen
-        let doorService = new DoorService();
-        this.#listOfDoors = doorService.getDoors(this.#roomId);
     }
+
     setGameObjects(listOfGameObjects) {
+        TypeChecker.isInstanceOf(listOfGameObjects, Array);
+        listOfGameObjects.forEach(gameObject => {
+            TypeChecker.isInstanceOf(gameObject, GameObject);
+        });
+
         this.#listOfGameObjects = listOfGameObjects;
     }
 
     setNPCs(listOfNPCs) {
+        TypeChecker.isInstanceOf(listOfNPCs, Array);
+        listOfNPCs.forEach(npc => {
+            TypeChecker.isInstanceOf(npc, NPC);
+        });
+
         this.#listOfNPCs = listOfNPCs;
+    }
+
+    setDoors(listOfDoors) {
+        TypeChecker.isInstanceOf(listOfDoors, Array);
+        listOfDoors.forEach(door => {
+            TypeChecker.isInstanceOf(door, Door);
+        });
+
+        this.#listOfDoors = listOfDoors;
     }
 
     getRoomId() {
