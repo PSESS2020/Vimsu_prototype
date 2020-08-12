@@ -1,13 +1,8 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Message = require('../models/Message');
-const Chat = require('../models/Chat');
 const OneToOneChat = require('../models/OneToOneChat');
-const LectureChat = require('../models/LectureChat');
-//const Allchat = require('../models/Allchat');
 const GroupChat = require('../models/GroupChat');
-//const GlobalChat = require('../models/GlobalChat');
 const ObjectId = require('mongodb').ObjectID;
-const ParticipantService = require('../services/ParticipantService');
 const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class Chatservice {

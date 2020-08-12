@@ -1,7 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const ParticipantService = require('./ParticipantService');
 
-
 module.exports = class RankListService {
     static getRankList(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);

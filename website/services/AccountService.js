@@ -3,7 +3,6 @@ const Account = require('../models/Account')
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 
-
 module.exports = class AccountService {
 
     static isUsernameValid(username, vimsudb) {

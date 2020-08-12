@@ -2,49 +2,27 @@
 /* ########################### LOADING REQUIREMENTS ############################## */
 /* ############################################################################### */
 
-const socketio = require('socket.io');
-const path = require('path');
-
 const Position = require('../models/Position.js');
-const Direction = require('../../client/shared/Direction.js');
-
-const Participant = require('../models/Participant.js');
 const ParticipantController = require('./ParticipantController.js');
-
-const Room = require('../models/Room.js');
 const RoomService = require('../services/RoomService.js');
-const RoomController = require('./RoomController.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Settings = require('../../client/shared/Settings.js');
 const Commands = require('../../utils/Commands.js');
-const Door = require('../models/Door.js');
-const DoorService = require('../services/DoorService.js');
-const Message = require('../models/Message.js');
-const BusinessCard = require('../models/BusinessCard.js');
 const LectureService = require('../services/LectureService');
-const AccountService = require('../../../../website/services/AccountService')
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../../utils/TypeOfTask.js')
-
-const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Messages = require('../../utils/Messages.js');
 const Conference = require('../models/Conference.js');
-
 const ChatService = require('../services/ChatService.js');
-const NPCService = require('../services/NPCService.js');
 const ParticipantService = require('../services/ParticipantService.js');
 const AchievementService = require('../services/AchievementService.js');
 const TaskService = require('../services/TaskService.js');
 const FriendListService = require('../services/FriendListService.js');
-const FriendList = require('../models/FriendList.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
 const OneToOneChat = require('../models/OneToOneChat.js');
-const SlotService = require('../../../../website/services/SlotService')
 
-
-/* This should later on be turned into a singleton */
 module.exports = class ServerController {
 
     #io;

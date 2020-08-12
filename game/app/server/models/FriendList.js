@@ -1,7 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const BusinessCard = require("./BusinessCard.js");
 
-
 module.exports = class FriendList {
 
     #ownerId;

@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var AchievementDefinition = require('../models/AchievementDefinition.js');
-var TypeOfTask = require('../../utils/TypeOfTask');
+const AchievementDefinition = require('../models/AchievementDefinition.js');
+const TypeOfTask = require('../../utils/TypeOfTask');
 
 module.exports = class AchievementService {
     #achievementDefinitions;

@@ -1,10 +1,6 @@
-//Nicht sicher ob so ein Service nötig ist
-
-
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var Door = require('../models/Door.js');
-var Settings = require('../../client/shared/Settings.js');
-var Position = require('../models/Position.js');
+const Door = require('../models/Door.js');
+const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 

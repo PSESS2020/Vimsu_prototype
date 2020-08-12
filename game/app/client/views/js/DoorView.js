@@ -1,4 +1,3 @@
-
 if (typeof module === 'object' && typeof exports === 'object') {
     GameObjectView = require('./GameObjectView');
     EventManager = require('../../utils/EventManager')

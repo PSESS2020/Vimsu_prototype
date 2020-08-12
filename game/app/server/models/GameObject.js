@@ -1,5 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var Position = require('./Position.js');
+const Position = require('./Position.js');
 
 module.exports = class GameObject {
 

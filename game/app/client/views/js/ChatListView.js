@@ -1,8 +1,3 @@
-/* Used to display the list of all chats the user is currently in */
-
-// TODO
-// - Add a button to create a new chat
-
 class ChatListView extends WindowView {
 
     #chats;

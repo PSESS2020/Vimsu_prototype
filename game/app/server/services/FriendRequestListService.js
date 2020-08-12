@@ -1,6 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 
-
 module.exports = class FriendRequestListService {
     static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);

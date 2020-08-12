@@ -1,15 +1,15 @@
 /* Import Models */
-const Room = require('../models/Room.js');
-const Conference = require('../models/Conference.js');
-const TypeOfRoom = require('../../client/shared/TypeOfRoom');
+const Room = require('../game/app/server/models/Room.js');
+const Conference = require('../game/app/server/models/Conference.js');
+const TypeOfRoom = require('../game/app/client/shared/TypeOfRoom');
 
 /* Import Controller */
 const RoomController = require('./RoomController.js');
 
 
 /* Import Utils */
-const Settings = require('../../client/shared/Settings.js');
-const TypeChecker = require('../../client/shared/TypeChecker.js');
+const Settings = require('../game/app/client/shared/Settings.js');
+const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 
 module.exports = class ConferenceController {
 

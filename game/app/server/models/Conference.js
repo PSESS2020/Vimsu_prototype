@@ -1,7 +1,3 @@
-// Add required imports
-
-const Schedule = require("./Schedule");
-
 module.exports = class Conference {
 
     #schedule;

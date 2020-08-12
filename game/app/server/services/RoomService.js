@@ -1,10 +1,10 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
-var Room = require('../models/Room.js');
-var RoomDimensions = require('../../utils/RoomDimensions.js');
-var FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
-var FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
-var ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const Room = require('../models/Room.js');
+const RoomDimensions = require('../../utils/RoomDimensions.js');
+const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
+const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
+const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
 const Settings = require('../../client/shared/Settings.js');
 
 module.exports = class RoomService {

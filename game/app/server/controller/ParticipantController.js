@@ -1,8 +1,3 @@
-const Participant = require('../models/Participant.js');
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Position = require('../models/Position.js');
-const Direction = require('../../client/shared/Direction.js');
-
 module.exports = class ParticipantController {
 
     #participant;

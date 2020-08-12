@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-var Task = require('../models/Task.js');
-var TypeOfTask = require('../../utils/TypeOfTask')
+const Task = require('../models/Task.js');
+const TypeOfTask = require('../../utils/TypeOfTask')
 
 module.exports = class TaskService {
     #tasks;

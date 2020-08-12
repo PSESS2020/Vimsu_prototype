@@ -1,7 +1,7 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-var Position = require('./Position.js');
-var Direction = require('../../client/shared/Direction.js');
-var Participant = require('./Participant.js');
+const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
+var Position = require('../game/app/server/models/Position.js');
+var Direction = require('../game/app/client/shared/Direction.js');
+var Participant = require('../game/app/server/models/Participant.js');
 
 module.exports = class Orator extends Participant {
 

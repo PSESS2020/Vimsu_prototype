@@ -1,10 +1,3 @@
-/* Used to display a chat the user is a member of */
-
-// Needs a button to return to chat overview
-// Needs a button to send friend request
-// Needs to know the id of the other participant for reusing the friend request method
-// Also the friendRequest-button should only be drawn if the members aren't already friends
-
 class ChatThreadView extends WindowView {
 
     #chat
