@@ -1,6 +1,7 @@
 if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
+    GameObjectType = require('../shared/GameObjectType.js');
 }
 
 class GameObjectClient {
@@ -22,16 +23,16 @@ class GameObjectClient {
      * @author Philipp
      * 
      * @param {int} id 
-     * @param {String} name 
+     * @param {GameObjectType} gameObjectType
      * @param {int} width 
      * @param {int} length 
      * @param {Position} position 
      * @param {boolean} isSolid 
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid) {
+    constructor(id, gameObjectType, width, length, position, isSolid) {
 
         TypeChecker.isInt(id);
-        TypeChecker.isString(name);
+        TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, PositionClient);
@@ -39,7 +40,6 @@ class GameObjectClient {
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
-        this.#name = name;
         this.#width = width;
         this.#length = length;
 
@@ -54,10 +54,6 @@ class GameObjectClient {
 
     getGameObjectType() {
         return this.#gameObjectType;
-    }
-
-    getName() {
-        return this.#name;
     }
 
     getWidth() {
@@ -75,14 +71,6 @@ class GameObjectClient {
     getSolid() {
         return this.#isSolid;
     }
-
-    /*
-    getDistance(otherPosition) {
-        TypeChecker.isInstanceOf(otherPosition, Position);
-
-
-    }
-    */
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

@@ -190,7 +190,6 @@ module.exports = class ServerController {
                         mapElementsData.push({
                             id: mapElement.getId(),
                             type: mapElement.getGameObjectType(),
-                            name: mapElement.getName(),
                             width: mapElement.getWidth(),
                             length: mapElement.getLength(),
                             cordX: mapElement.getPosition().getCordX(),
@@ -209,7 +208,6 @@ module.exports = class ServerController {
                         gameObjectData.push({
                             id: gameObject.getId(),
                             type: gameObject.getGameObjectType(),
-                            name: gameObject.getName(),
                             width: gameObject.getWidth(),
                             length: gameObject.getLength(),
                             cordX: gameObject.getPosition().getCordX(),
@@ -470,7 +468,6 @@ module.exports = class ServerController {
                     mapElementsData.push({
                         id: mapElement.getId(),
                         type: mapElement.getGameObjectType(),
-                        name: mapElement.getName(),
                         width: mapElement.getWidth(),
                         length: mapElement.getLength(),
                         cordX: mapElement.getPosition().getCordX(),
@@ -489,7 +486,6 @@ module.exports = class ServerController {
                     gameObjectData.push({
                         id: gameObject.getId(),
                         type: gameObject.getGameObjectType(),
-                        name: gameObject.getName(),
                         width: gameObject.getWidth(),
                         length: gameObject.getLength(),
                         cordX: gameObject.getPosition().getCordX(),

@@ -23,25 +23,22 @@ module.exports = class GameObject {
      * 
      * @param {int} id 
      * @param {GameObjectType} gameObjectType
-     * @param {String} name 
      * @param {int} width 
      * @param {int} length 
      * @param {Position} position 
      * @param {boolean} isSolid 
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid) {
+    constructor(id, gameObjectType, width, length, position, isSolid) {
 
         TypeChecker.isInt(id);
-        TypeChecker.isString(name);
+        TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, Position);
-        TypeChecker.isInt(gameObjectType);
         TypeChecker.isBoolean(isSolid);
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
-        this.#name = name;
         this.#width = width;
         this.#length = length;
 
@@ -56,10 +53,6 @@ module.exports = class GameObject {
 
     getGameObjectType() {
         return this.#gameObjectType;
-    }
-
-    getName() {
-        return this.#name;
     }
 
     getWidth() {
