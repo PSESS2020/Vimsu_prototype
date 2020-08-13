@@ -188,7 +188,7 @@ class RoomClient {
         let cordY = position.getCordY();
 
         //WALLS
-        if (cordX < 0 || cordY < 0 || cordX >= this.#length - Settings.WALL_OFFSET || cordY >= this.#width - Settings.WALL_OFFSET) {
+        if (cordX < 0 || cordY < 0 || cordX >= this.#length || cordY >= this.#width) {
             return true;
         }
 
@@ -258,13 +258,13 @@ class RoomClient {
 
     buildMapArray() {
 
-        var mapLength = this.#width + 2;
+        var mapLength = this.#width + 3;
         this.#map = new Array(mapLength);
         this.#objectMap = new Array(mapLength);
 
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i] = new Array(this.#length + 2).fill(null);
-            this.#objectMap[i] = new Array(this.#length + 2).fill(null);
+            this.#map[i] = new Array(this.#length + 3).fill(null);
+            this.#objectMap[i] = new Array(this.#length + 3).fill(null);
         }
 
         this.#listOfMapElements.forEach(mapElement => {

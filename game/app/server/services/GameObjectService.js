@@ -46,7 +46,7 @@ module.exports = class GameObjectService {
     createDefaultLeftTile(roomId, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, 1, 1, xPos, yPos, solidity);
 
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTTILE ,1, 1, new Position(roomId, xPos, yPos), solidity);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTTILE , 1, 1, new Position(roomId, xPos, yPos), solidity);
     }
     
     createDefaultRightTile(roomId, xPos, yPos, solidity) {

@@ -47,16 +47,16 @@ module.exports = */class NPCAvatarView extends AvatarView {
 
         //should be done somewhere else, 150 and 419 are room dependent
         if (this.#typeOfRoom === 'FOYER') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 182;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 54;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 475;
         }
         else if (this.#typeOfRoom === 'FOODCOURT') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 566;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
         }
         else if (this.#typeOfRoom === 'RECEPTION') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 566;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
         }
 
         ctx_map.font = "1em sans-serif";

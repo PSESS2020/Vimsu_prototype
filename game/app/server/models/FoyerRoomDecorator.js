@@ -21,22 +21,22 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         //Get tiles
         let listOfMapElements = [];
 
-        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+        for (var i = 0; i < this.#room.getLength(); i++) {
 
-            for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+            for(var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.FOYER_ID, i, j, false));
             }
 
         }
 
         //Get left walls
-        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+        for (var i = 0; i < this.#room.getLength(); i++) {
             listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOYER_ID, 1, 1, i, -1, false));
         }
 
         //Get right walls
-        for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
-            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength() - Settings.WALL_OFFSET, j, false));
+        for(var j = 0; j < this.#room.getWidth(); j++) {
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false));
         }
 
         /*//Get left doors
@@ -90,13 +90,13 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         }
 
         listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), lectureDoorEnterPositions),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 24, 2), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
-            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 24, 21), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
         
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID,  2, -2, false),
-                               objService.createDefaultRightTile(Settings.FOYER_ID, 25, 2, false),
-                               objService.createDefaultRightTile(Settings.FOYER_ID, 25, 21, false));
+                               objService.createDefaultRightTile(Settings.FOYER_ID, 26, 2, false),
+                               objService.createDefaultRightTile(Settings.FOYER_ID, 26, 21, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);
