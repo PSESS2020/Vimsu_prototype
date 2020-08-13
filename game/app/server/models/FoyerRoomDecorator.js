@@ -75,7 +75,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         //enter positions for FoodCourtDoor 
         let foyerFoodCourtEnterPositions = [];
-        for (var i = 21; i <= 23; i++) {
+        for (var i = 22; i <= 24; i++) {
             for (var j = 0; j <= 4; j++) {
                 foyerFoodCourtEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
             }
@@ -83,8 +83,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         //enter positions for ReceptionDoor
         let foyerReceptionEnterPositions = [];
-        for (var i = 21; i <= 23; i++) {
-            for (var j = 19; j <= 23; j++) {
+        for (var i = 22; i <= 24; i++) {
+            for (var j = 20; j <= 24; j++) {
                 foyerReceptionEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
             }
         }

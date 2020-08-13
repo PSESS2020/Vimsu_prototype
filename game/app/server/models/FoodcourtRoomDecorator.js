@@ -21,22 +21,22 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         //Get tiles
         let listOfMapElements = [];
 
-        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+        for (var i = 0; i < this.#room.getLength(); i++) {
 
-            for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+            for(var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.FOODCOURT_ID, i, j, false));
             }
 
         }
 
         //Get left walls
-        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+        for (var i = 0; i < this.#room.getLength(); i++) {
             listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOODCOURT_ID, 1, 1, i, -1, false));
         }
 
         //Get right walls
-        for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
-            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength() - Settings.WALL_OFFSET, j, false));
+        for(var j = 0; j < this.#room.getWidth(); j++) {
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength(), j, false));
         }
 
 
@@ -69,9 +69,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
             }
         }
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, 1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 2, 22), Direction.DOWNLEFT));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map
+        this.#room.setMapElements(listOfMapElements);
         this.#room.setGameObjects(listOfGameObjects);
         this.#room.setNPCs(listOfNPCs);
         this.#room.setDoors(listOfDoors);

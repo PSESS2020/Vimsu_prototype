@@ -105,7 +105,7 @@ class GameView {
                    */
 
                     if (ppantView.getPosition().getCordX() === selectedTileCords.x
-                        && ppantView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        && ppantView.getPosition().getCordY() === selectedTileCords.y - 3) {
                         ppantView.onClick();
                     }
                 });
@@ -113,7 +113,7 @@ class GameView {
                 //then, check if there is an NPC at this position
                 self.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getPosition().getCordX() === selectedTileCords.x
-                        && npcView.getPosition().getCordY() === selectedTileCords.y - 2) {
+                        && npcView.getPosition().getCordY() === selectedTileCords.y - 3) {
                         npcView.onClick();
                     }
                 })
