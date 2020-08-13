@@ -25,7 +25,11 @@ const Settings = Object.freeze({
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
 
+    /* Object Constants */
+    TABLE_WIDTH: 1,
+    TABLE_LENGTH: 1,
 
+    /* Conference Constants */
     CONFERENCE_ID: '1',
 
     /* Lecture Constants */

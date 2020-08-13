@@ -2,49 +2,68 @@ const { expect } = require('chai');
 const NPCService = require('../../../game/app/server/services/NPCService');
 const NPC = require('../../../game/app/server/models/NPC');
 const Settings = require('../../../game/app/client/shared/Settings');
+const TestUtil = require('../models/utils/TestUtil');
+const Direction = require('../../../game/app/client/shared/Direction');
 
 
-//Test data
-var initNPCService = new NPCService();
-//called twice to cover singleton constructor
-var npcService = new NPCService();
-var foyerID = Settings.FOYER_ID;
-var foodCourtID = Settings.FOODCOURT_ID;
-var receptionID = Settings.RECEPTION_ID;
-var validNPCId = 1;
-var invalidNPCId = 42;
-var npcName = 'BasicTutorial';
+describe('NPCService test', function () {
+    it('test create FoyerHelperNPC', function() {
+        let npcService = new NPCService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let direction = Direction.DOWNRIGHT;
+        let foyerNPC = npcService.createFoyerHelperNPC(roomId, cordX, cordY, direction);
 
-describe('NPCServiceTest getter', function () {
-    it('test getNPCs Foyer', function() {
-        let foyerNPCs = npcService.getNPCs(foyerID);
-        expect(foyerNPCs).to.be.an('array').and.to.have.lengthOf(1);
-        foyerNPCs.forEach(npc => {
-            expect(npc).to.be.instanceOf(NPC);
+        expect(foyerNPC).to.be.instanceOf(NPC);
+        expect(foyerNPC.getPosition().getRoomId()).to.equal(roomId);
+        expect(foyerNPC.getPosition().getCordX()).to.equal(cordX);
+        expect(foyerNPC.getPosition().getCordY()).to.equal(cordY);
+        expect(foyerNPC.getDirection()).to.equal(direction);
+        expect(foyerNPC.getId()).to.be.a('number');
+        expect(foyerNPC.getStory()).to.be.an('array');
+        foyerNPC.getStory().forEach(line => {
+            expect(line).to.be.a('string');
         });
     });
 
-    it('test getNPCs Reception', function() {
-        let receptionNPCs = npcService.getNPCs(receptionID);
-        expect(receptionNPCs).to.be.an('array').and.to.have.lengthOf(1);
-        receptionNPCs.forEach(npc => {
-            expect(npc).to.be.instanceOf(NPC);
+    it('test create BasicTutorialNPC', function() {
+        let npcService = new NPCService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let direction = Direction.DOWNRIGHT;
+        let tutorialNPC = npcService.createBasicTutorialNPC(roomId, cordX, cordY, direction);
+
+        expect(tutorialNPC).to.be.instanceOf(NPC);
+        expect(tutorialNPC.getPosition().getRoomId()).to.equal(roomId);
+        expect(tutorialNPC.getPosition().getCordX()).to.equal(cordX);
+        expect(tutorialNPC.getPosition().getCordY()).to.equal(cordY);
+        expect(tutorialNPC.getDirection()).to.equal(direction);
+        expect(tutorialNPC.getId()).to.be.a('number');
+        expect(tutorialNPC.getStory()).to.be.an('array');
+        tutorialNPC.getStory().forEach(line => {
+            expect(line).to.be.a('string');
         });
     });
 
-    it('test getNPCs FoodCourt', function() {
-        let foodCourtNPCs = npcService.getNPCs(foodCourtID);
-        expect(foodCourtNPCs).to.be.an('array').and.to.have.lengthOf(1);
-        foodCourtNPCs.forEach(npc => {
-            expect(npc).to.be.instanceOf(NPC);
+    it('test create ChefNPC', function() {
+        let npcService = new NPCService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let direction = Direction.DOWNRIGHT;
+        let chefNPC = npcService.createChefNPC(roomId, cordX, cordY, direction);
+        
+        expect(chefNPC).to.be.instanceOf(NPC);
+        expect(chefNPC.getPosition().getRoomId()).to.equal(roomId);
+        expect(chefNPC.getPosition().getCordX()).to.equal(cordX);
+        expect(chefNPC.getPosition().getCordY()).to.equal(cordY);
+        expect(chefNPC.getDirection()).to.equal(direction);
+        expect(chefNPC.getId()).to.be.a('number');
+        expect(chefNPC.getStory()).to.be.an('array');
+        chefNPC.getStory().forEach(line => {
+            expect(line).to.be.a('string');
         });
-    });
-
-    it('test getNPC valid', function() {
-        expect(npcService.getNPC(validNPCId).getName()).equal(npcName);
-    });
-
-    it('test getNPC invalid', function() {
-        expect(() => npcService.getNPC(invalidNPCId)).to.throw(Error);
-    });
+    });   
 });

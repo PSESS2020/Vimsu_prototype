@@ -45,12 +45,12 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let listOfGameObjects = [];
 
         for (var i = 3; i <= 9; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 1, 1, 10, i, true));
+            listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 10, i, true));
         }
-        listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 1, 1, 11, 9, true),
-            objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 9, true),
-            objService.createTable(Settings.RECEPTION_ID, 1, 1, 11, 3, true),
-            objService.createTable(Settings.RECEPTION_ID, 1, 1, 12, 3, true));
+        listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 11, 9, true),
+            objService.createTable(Settings.RECEPTION_ID, 12, 9, true),
+            objService.createTable(Settings.RECEPTION_ID, 11, 3, true),
+            objService.createTable(Settings.RECEPTION_ID, 12, 3, true));
 
         //Get all npcs from service
         let npcService = new NPCService();
