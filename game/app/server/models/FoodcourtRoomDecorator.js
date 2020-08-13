@@ -69,7 +69,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
             }
         }
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 2, 22), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map

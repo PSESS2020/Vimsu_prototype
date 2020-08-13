@@ -70,7 +70,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
             }
         }
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map
