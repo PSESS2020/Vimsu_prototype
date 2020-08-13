@@ -79,6 +79,7 @@ document.getElementById("chatMessageInput").onkeydown = function (event) {
 };
 
 document.body.onkeydown = function (event) {
+
   /* This little code-block (plus the one on the bottom) prevents a single input from being
    * handled twice (according to the mozilla-doc on this function).
    * - (E) */
@@ -92,24 +93,27 @@ document.body.onkeydown = function (event) {
   switch (event.code) {
     case "KeyW":
     case "ArrowUp":
+      event.preventDefault();
       clientController.handleUpArrowDown();
       break;
     case "KeyS":
     case "ArrowDown":
+      event.preventDefault();
       clientController.handleDownArrowDown();
       break;
     case "KeyD":
     case "ArrowRight":
+      event.preventDefault();
       clientController.handleRightArrowDown();
       break;
     case "KeyA":
     case "ArrowLeft":
+      event.preventDefault();
       clientController.handleLeftArrowDown();
       break;
     default:
       return;
   }
-  //event.preventDefault();
 };
 
 document.body.onkeyup = function (event) {
