@@ -14,8 +14,33 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         super();
         this.#room = room;
 
-        //Get all gameObjects from service
         let objService = new GameObjectService();
+
+        /* Get all map elements from service */
+
+        //Get tiles
+        let listOfMapElements = [];
+
+        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+
+            for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+                listOfMapElements.push(objService.createDefaultTile(Settings.FOYER_ID, i, j, false));
+            }
+
+        }
+
+        //Get left walls
+        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+            listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOYER_ID, 1, 1, i, -1, false));
+        }
+
+        //Get right walls
+        for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength() - Settings.WALL_OFFSET, j, false));
+        }
+
+
+        //Get all gameObjects from service
         let listOfGameObjects = [];
 
         for (var i = 2; i <= 10; i++) {

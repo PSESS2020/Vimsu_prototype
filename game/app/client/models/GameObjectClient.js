@@ -14,7 +14,7 @@ class GameObjectClient {
     #position;
     #isSolid;
     //isStatic;
-
+    #gameObjectType;
 
     /**
      * Erstellt GameObject-Instanz
@@ -28,7 +28,7 @@ class GameObjectClient {
      * @param {Position} position 
      * @param {boolean} isSolid 
      */
-    constructor(id, name, width, length, position, isSolid) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid) {
 
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
@@ -38,6 +38,7 @@ class GameObjectClient {
         TypeChecker.isBoolean(isSolid);
 
         this.#id = id;
+        this.#gameObjectType = gameObjectType;
         this.#name = name;
         this.#width = width;
         this.#length = length;
@@ -49,6 +50,10 @@ class GameObjectClient {
 
     getId() {
         return this.#id;
+    }
+
+    getGameObjectType() {
+        return this.#gameObjectType;
     }
 
     getName() {

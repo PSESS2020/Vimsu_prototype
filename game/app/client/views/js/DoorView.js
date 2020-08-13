@@ -25,16 +25,16 @@ class DoorView extends GameObjectView {
 
     onclick() {
         let eventManager = new EventManager();
-        if (this.#DOORTYPE === GameObjectTypeClient.LECTUREDOOR) {
+        if (this.#DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
             eventManager.handleLectureDoorClick();
         }
-        else if (this.#DOORTYPE === GameObjectTypeClient.FOODCOURTDOOR) {
+        else if (this.#DOORTYPE === TypeOfDoor.FOODCOURT_DOOR) {
             eventManager.handleFoodCourtDoorClick();
         }
-        else if (this.#DOORTYPE === GameObjectTypeClient.RECEPTIONDOOR) {
+        else if (this.#DOORTYPE === TypeOfDoor.RECEPTION_DOOR) {
             eventManager.handleReceptionDoorClick();
         }
-        else if (this.#DOORTYPE === GameObjectTypeClient.FOYERDOOR) {
+        else if (this.#DOORTYPE === TypeOfDoor.FOYER_DOOR) {
             eventManager.handleFoyerDoorClick();
         }
     }

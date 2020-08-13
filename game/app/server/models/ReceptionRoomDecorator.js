@@ -15,8 +15,33 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         super();
         this.#room = room;
 
-        //Get all gameObjects from service
         let objService = new GameObjectService();
+
+        /* Get all map elements from service */
+
+        //Get tiles
+        let listOfMapElements = [];
+
+        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+
+            for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+                listOfMapElements.push(objService.createDefaultTile(Settings.FOYER_ID, i, j, false));
+            }
+
+        }
+
+        //Get left walls
+        for (var i = 0, n = this.#room.getLength() - Settings.WALL_OFFSET; i < n; i++) {
+            listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOYER_ID, 1, 1, i, -1, false));
+        }
+
+        //Get right walls
+        for(var j = 0, m = this.#room.getWidth() - Settings.WALL_OFFSET; j < m; j++) {
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength() - Settings.WALL_OFFSET, j, false));
+        }
+
+
+        //Get all gameObjects from service
         let listOfGameObjects = [];
 
         for (var i = 3; i <= 9; i++) {
@@ -48,6 +73,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, 1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 22), Direction.DOWNLEFT));
 
         //Assign lists to room and build occupation map
+        this.#room.setMapElements(listOfMapElements);
         this.#room.setGameObjects(listOfGameObjects);
         this.#room.setNPCs(listOfNPCs);
         this.#room.setDoors(listOfDoors);

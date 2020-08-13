@@ -47,21 +47,21 @@ module.exports = */class NPCAvatarView extends AvatarView {
 
         //should be done somewhere else, 150 and 419 are room dependent
         if (this.#typeOfRoom === 'FOYER') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 182;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
         }
         else if (this.#typeOfRoom === 'FOODCOURT') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 566;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
         }
         else if (this.#typeOfRoom === 'RECEPTION') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 419;
+            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 566;
+            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
         }
 
         ctx_map.font = "1em sans-serif";
         ctx_map.textBaseline = 'top';
-        ctx_map.fillStyle = "red";
+        ctx_map.fillStyle = "firebrick";
         ctx_map.textAlign = "center";
         ctx_map.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_map.font, 10));
 

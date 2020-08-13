@@ -49,7 +49,9 @@ module.exports = class ServerController {
 
         this.#io = socket;
         this.#db = db;
-        this.#DEBUGMODE = true;
+
+        //Should be turned off if the product gets released.
+        this.#DEBUGMODE = false;
 
         //Should be initialized here, otherwise the controllers are reset every time a user joins.
         this.#ppantControllers = new Map();
@@ -124,7 +126,7 @@ module.exports = class ServerController {
                     return;
                 }
 
-                console.log('Participant ' + socket.id + ' has conected to the game . . . ');
+                console.log('Participant ' + socket.id + ' has connected to the game . . . ');
 
                 //variables for creating account instance
                 //let accountId = socket.request.session.accountId;
@@ -148,6 +150,8 @@ module.exports = class ServerController {
                     }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
+                    let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
+
                     let typeOfCurrentRoom;
                     for (var i = 0, n = this.#rooms.length; i < n; i++) {
                         if (this.#rooms[i].getRoom().getRoomId() === currentRoomId) {
@@ -170,7 +174,7 @@ module.exports = class ServerController {
                     });
 
                     //At this point kind of useless, maybe usefull when multiple rooms exist (P)
-                    this.#rooms[currentRoomId - 1].getRoom().enterParticipant(ppant);
+                    currentRoom.enterParticipant(ppant);
                     var ppantCont = new ParticipantController(ppant);
                     this.#ppants.set(ppant.getId(), ppant);
 
@@ -178,9 +182,25 @@ module.exports = class ServerController {
                     this.#ppantControllers.set(socket.id, ppantCont);
 
 
+                    //Get MapElements of starting room
+                    let mapElements = currentRoom.getListOfMapElements();
+                    let mapElementsData = [];
+
+                    mapElements.forEach(mapElement => {
+                        mapElementsData.push({
+                            id: mapElement.getId(),
+                            type: mapElement.getGameObjectType(),
+                            name: mapElement.getName(),
+                            width: mapElement.getWidth(),
+                            length: mapElement.getLength(),
+                            cordX: mapElement.getPosition().getCordX(),
+                            cordY: mapElement.getPosition().getCordY(),
+                            isSolid: mapElement.getSolid()
+                        });
+                    });
 
                     //Get GameObjects of starting room
-                    let gameObjects = this.#rooms[currentRoomId - 1].getRoom().getListOfGameObjects();
+                    let gameObjects = currentRoom.getListOfGameObjects();
                     let gameObjectData = [];
 
                     //needed to send all gameObjects of starting room to client
@@ -188,6 +208,7 @@ module.exports = class ServerController {
                     gameObjects.forEach(gameObject => {
                         gameObjectData.push({
                             id: gameObject.getId(),
+                            type: gameObject.getGameObjectType(),
                             name: gameObject.getName(),
                             width: gameObject.getWidth(),
                             length: gameObject.getLength(),
@@ -198,7 +219,7 @@ module.exports = class ServerController {
                     });
 
                     //Get all NPCs from starting room
-                    let npcs = this.#rooms[currentRoomId - 1].getRoom().getListOfNPCs();
+                    let npcs = currentRoom.getListOfNPCs();
                     let npcData = [];
 
                     //needed to init all NPCs in clients game view
@@ -212,7 +233,7 @@ module.exports = class ServerController {
                     });
 
                     //Get all Doors from starting room
-                    let doors = this.#rooms[currentRoomId - 1].getRoom().getListOfDoors();
+                    let doors = currentRoom.getListOfDoors();
                     let doorData = [];
 
                     //needed to init all Doors in clients game view
@@ -241,14 +262,14 @@ module.exports = class ServerController {
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom,
-                        gameObjectData, npcData, doorData, this.#rooms[currentRoomId - 1].getRoom().getWidth(), this.#rooms[currentRoomId - 1].getRoom().getLength());
+                            mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength());
 
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
 
                     // Initialize Allchat
-                    this.#io.to(socket.id).emit('initAllchat', this.#rooms[currentRoomId - 1].getRoom().getMessages());
+                    this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
 
                     this.#ppants.forEach((participant, id, map) => {
 
@@ -413,9 +434,10 @@ module.exports = class ServerController {
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
+                let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
 
                 //get door from current room to target room
-                let door = this.#rooms[currentRoomId - 1].getRoom().getDoorTo(targetRoomId);
+                let door = currentRoom.getDoorTo(targetRoomId);
 
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
@@ -437,11 +459,28 @@ module.exports = class ServerController {
                 /Reception has ID 3 and is this.#rooms[2]
                 */
 
-                this.#rooms[targetRoomId - 1].getRoom().enterParticipant(this.#ppants.get(ppantID));
-                this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
+               currentRoom.enterParticipant(this.#ppants.get(ppantID));
+               currentRoom.exitParticipant(ppantID);
+
+                //Get MapElements of starting room
+                let mapElements = currentRoom.getListOfMapElements();
+                let mapElementsData = [];
+
+                mapElements.forEach(mapElement => {
+                    mapElementsData.push({
+                        id: mapElement.getId(),
+                        type: mapElement.getGameObjectType(),
+                        name: mapElement.getName(),
+                        width: mapElement.getWidth(),
+                        length: mapElement.getLength(),
+                        cordX: mapElement.getPosition().getCordX(),
+                        cordY: mapElement.getPosition().getCordY(),
+                        isSolid: mapElement.getSolid()
+                    });
+                });
 
                 //get all GameObjects from target room
-                let gameObjects = this.#rooms[targetRoomId - 1].getRoom().getListOfGameObjects();
+                let gameObjects = currentRoom.getListOfGameObjects();
                 let gameObjectData = [];
 
                 //needed to send all gameObjects of starting room to client
@@ -449,6 +488,7 @@ module.exports = class ServerController {
                 gameObjects.forEach(gameObject => {
                     gameObjectData.push({
                         id: gameObject.getId(),
+                        type: gameObject.getGameObjectType(),
                         name: gameObject.getName(),
                         width: gameObject.getWidth(),
                         length: gameObject.getLength(),
@@ -458,7 +498,7 @@ module.exports = class ServerController {
                     });
                 });
 
-                let npcs = this.#rooms[targetRoomId - 1].getRoom().getListOfNPCs();
+                let npcs = currentRoom.getListOfNPCs();
                 let npcData = [];
 
                 //needed to init all NPCs in clients game view
@@ -472,7 +512,7 @@ module.exports = class ServerController {
                 });
 
                 //Get all Doors from starting room
-                let doors = this.#rooms[targetRoomId - 1].getRoom().getListOfDoors();
+                let doors = currentRoom.getListOfDoors();
                 let doorData = [];
 
                 //needed to init all Doors in clients game view
@@ -485,8 +525,8 @@ module.exports = class ServerController {
                 });
 
                 //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, gameObjectData, npcData, doorData,
-                    this.#rooms[targetRoomId - 1].getRoom().getWidth(), this.#rooms[targetRoomId - 1].getRoom().getLength());
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, mapElementsData, gameObjectData, npcData, doorData,
+                        currentRoom.getWidth(), currentRoom.getLength());
 
                 //set new position in server model
                 this.#ppants.get(ppantID).setPosition(newPos);

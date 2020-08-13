@@ -217,7 +217,7 @@ class GameView {
     }
 
     //Is called when participant enters Room
-    initRoomView(map, listOfNPCs, typeOfRoom) {
+    initRoomView(map, objectMap, listOfNPCs, typeOfRoom) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
@@ -226,7 +226,7 @@ class GameView {
             this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), typeOfRoom));
         });
 
-        this.#currentMap = new RoomView(map);
+        this.#currentMap = new RoomView(map, objectMap);
     }
 
     /**

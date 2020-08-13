@@ -36,7 +36,12 @@ const Settings = Object.freeze({
     TIME_UNTIL_LEAVE: 60,
 
     /* Moderator-Settings */
-    CMDSTARTCHAR: "\\" // moved the actual commands into a seperate file for easier handling
+    CMDSTARTCHAR: "\\", // moved the actual commands into a seperate file for easier handling
+
+    /* Map constants */
+    MAP_BLANK_TILES_WIDTH: 3,
+    MAP_BLANK_TILES_LENGTH: 3,
+    WALL_OFFSET: 1,
 
 });
 

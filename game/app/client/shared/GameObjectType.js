@@ -1,4 +1,4 @@
-const GameObjectTypeClient = Object.freeze({
+const GameObjectType = Object.freeze({
     SELECTED_TILE: -1,
     BLANK: 0,
     TILE: 1,
@@ -11,8 +11,9 @@ const GameObjectTypeClient = Object.freeze({
     LEFTTILE: 8,
     RIGHTTILE: 9,
     FOYERDOOR: 10,
+    SCHEDULE: 11,
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = GameObjectTypeClient;
+    module.exports = GameObjectType;
 }

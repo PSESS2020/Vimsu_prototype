@@ -40,7 +40,7 @@ class GameObjectViewFactory {
 
         switch (gameObjectType) {
 
-            case GameObjectTypeClient.SELECTED_TILE:
+            case GameObjectType.SELECTED_TILE:
 
                 screenPos = new PositionClient(screenX, screenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[0]);
@@ -51,7 +51,7 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.TILE:
+            case GameObjectType.TILE:
 
                 screenPos = new PositionClient(screenX, screenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
@@ -62,7 +62,7 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.LEFTWALL:
+            case GameObjectType.LEFTWALL:
 
                 screenPos = new PositionClient(screenX, screenY + doorOffsetY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[2]);
@@ -73,7 +73,7 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.RIGHTWALL:
+            case GameObjectType.RIGHTWALL:
 
                 screenPos = new PositionClient(screenX - this.#tileColumnOffset, screenY + doorOffsetY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[3]);
@@ -84,51 +84,51 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.LECTUREDOOR:
+            case TypeOfDoor.LECTURE_DOOR:
 
                 screenPos = new PositionClient(leftDoorScreenX, leftDoorScreenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[4]);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.LECTUREDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.LECTURE_DOOR);
                 else throw new Error("The image for the lecture door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
-            case GameObjectTypeClient.FOODCOURTDOOR:
+            case TypeOfDoor.FOODCOURT_DOOR:
 
                 screenPos = new PositionClient(rightDoorScreenX, rightDoorScreenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[5]);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.FOODCOURTDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.FOODCOURT_DOOR);
                 else throw new Error("The image for the foodcourt door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
-            case GameObjectTypeClient.RECEPTIONDOOR:
+            case TypeOfDoor.RECEPTION_DOOR:
 
                 screenPos = new PositionClient(rightDoorScreenX, rightDoorScreenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[6]);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.RECEPTIONDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.RECEPTION_DOOR);
                 else throw new Error("The image for the reception door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
-            case GameObjectTypeClient.FOYERDOOR:
+            case TypeOfDoor.FOYER_DOOR:
 
                 screenPos = new PositionClient(leftDoorScreenX, leftDoorScreenY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[7]);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new DoorView(gameObjectImage, screenPos, GameObjectTypeClient.FOYERDOOR);
+                    gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.FOYER_DOOR);
                 else throw new Error("The image for the foyer door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
-            case GameObjectTypeClient.TABLE:
+            case GameObjectType.TABLE:
 
                 screenPos = new PositionClient(screenX, screenY + tableOffsetY);
                 gameObjectImage = CacheImages.getImage(this.#tilePaths[8]);
@@ -139,7 +139,7 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.LEFTTILE:
+            case GameObjectType.LEFTTILE:
 
                 screenX = pos.getCordX() * this.#tileColumnOffset / 2 + (pos.getCordY() + 1) * this.#tileColumnOffset / 2 + originXY.x;
                 screenY = (pos.getCordY() + 1) * this.#tileRowOffset / 2 - pos.getCordX() * this.#tileRowOffset / 2 + originXY.y;
@@ -152,7 +152,7 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectTypeClient.RIGHTTILE:
+            case GameObjectType.RIGHTTILE:
 
                 screenX = (pos.getCordX() - 1) * this.#tileColumnOffset / 2 + pos.getCordY() * this.#tileColumnOffset / 2 + originXY.x;
                 screenY = pos.getCordY() * this.#tileRowOffset / 2 - (pos.getCordX() - 1) * this.#tileRowOffset / 2 + originXY.y;

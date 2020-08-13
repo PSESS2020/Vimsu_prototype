@@ -4,8 +4,8 @@ class RoomView extends MapView {
     #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_lecturehall.png", "client/assets/door_foodcourt.png", "client/assets/door_reception.png", "client/assets/door_foyer.png", "client/assets/table.png"];
 
 
-    constructor(map) {
-        super(map);
+    constructor(map, objectMap) {
+        super(map, objectMap);
 
         this.#loader = new LoadingView();
         this.loadImages();
@@ -60,9 +60,13 @@ class RoomView extends MapView {
     draw() {
 
         let tiles = super.getTiles();
+        let objects = super.getObjects();
 
         if (tiles.length != 0) {
             tiles.forEach(object => object.draw());
+        }
+        if (objects.length != 0) {
+            objects.forEach(object => object.draw());
         }
     }
 

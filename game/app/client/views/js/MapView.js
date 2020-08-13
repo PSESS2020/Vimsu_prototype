@@ -2,8 +2,10 @@
 
 module.exports = */class MapView extends Views {
     #map;
+    #objectMap;
     #clickableTiles;
     #tiles;
+    #objects;
     #xNumTiles;
     #yNumTiles;
     #selectedTile;
@@ -12,18 +14,26 @@ module.exports = */class MapView extends Views {
 
     //For calculation the right positions of sprites on the map.
     #offset;
+    #gameObjectViewFactory;
+
     selectionOnMap = false;
 
-    constructor(map) {
+    constructor(map, objectMap) {
         super();
 
         this.#map = map;
+        this.#objectMap = objectMap;
 
         //map components that are drawn on screen
         this.#tiles = new Array();
 
+        //map objects that are drawn on screen
+        this.#objects = new Array();
+
         //map components that can be clicked
         this.#clickableTiles = new Array();
+
+        this.#gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
 
         this.#originX = 0;
         this.#originY = 0;
@@ -40,10 +50,18 @@ module.exports = */class MapView extends Views {
 
     }
 
+    getObjectMap() {
+        return this.#objectMap;
+    }
+
     getTiles() {
 
         return this.#tiles;
 
+    }
+
+    getObjects() {
+        return this.#objects;
     }
 
     initProperties(tileColumnOffset) {
@@ -54,7 +72,7 @@ module.exports = */class MapView extends Views {
         //origin that indicates where to start drawing the map assets.
         this.#originX = ctx_map.canvas.width / 2 - this.#xNumTiles * tileColumnOffset / 2;
         this.#originY = ctx_map.canvas.height / 2;
-
+        console.log("origin " + this.#originX + " " + this.#originY);
     }
 
     //Creates a map of gameobjects to draw on screen.
@@ -63,29 +81,47 @@ module.exports = */class MapView extends Views {
         this.tileColumnOffset = offset.tileColumnOffset;
         this.tileRowOffset = offset.tileRowOffset;
 
-        var gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
         var originXY = {
             x: this.#originX,
             y: this.#originY
         };
 
-        this.#selectedTile = gameObjectViewFactory.createGameObjectView(GameObjectTypeClient.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
+        this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
 
         for (var row = (this.#xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.#yNumTiles; col++) {
 
                 var position = new PositionClient(row, col);
-                var tileType = this.#map[row][col];
 
-                var tile = gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
+                var mapObject = this.#map[row][col];
+                if (mapObject !== null) 
+                {
+                    var tileType;
+                    if (mapObject instanceof DoorClient) {
+                        tileType = mapObject.getTypeOfDoor();
+                    } else
+                        tileType = mapObject.getGameObjectType();
 
-                if (tile != null) {
+                    var tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
+                
+                    if (tile != null) 
+                    {
+                        this.#tiles.push(tile);
 
-                    this.#tiles.push(tile);
+                        if (tile instanceof DoorView)
+                            this.addToClickableTiles(tile);
 
-                    if (tile instanceof DoorView)
-                        this.addToClickableTiles(tile);
+                    }
 
+                }
+                
+                if (this.#objectMap[row][col] !== null) {
+                    var objectType = this.#objectMap[row][col].getGameObjectType();
+                    var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, originXY, offset);
+                    
+                    if (object != null) {
+                        this.#objects.push(object);
+                    }
                 }
 
             };
@@ -103,7 +139,8 @@ module.exports = */class MapView extends Views {
 
     findClickedTile(selectedTileCords) {
         this.#clickableTiles.forEach(object => {
-            if (this.#map[selectedTileCords.x][selectedTileCords.y] === object.getDoorType())
+            if (this.#map[selectedTileCords.x][selectedTileCords.y] instanceof DoorClient && 
+                this.#map[selectedTileCords.x][selectedTileCords.y].getTypeOfDoor() === object.getDoorType())
                 object.onclick();
         });
 
@@ -128,13 +165,20 @@ module.exports = */class MapView extends Views {
 
     isCursorOnMap(cordX, cordY) {
 
-        //Room walls
-        if (cordX >= 0 && cordY >= 1 && cordX < this.#xNumTiles - 1 && cordY < this.#yNumTiles &&
-            this.#map[cordX][cordY] !== GameObjectTypeClient.LEFTWALL && this.#map[cordX][cordY] !== GameObjectTypeClient.RIGHTWALL &&
-            this.#map[cordX][cordY] !== GameObjectTypeClient.BLANK)
+        if (cordX >= 0 && cordY >= 1 && cordX < (this.#xNumTiles - 1) && cordY < this.#yNumTiles) {
+        let mapObject = this.#map[cordX][cordY];
+            
+        if (mapObject instanceof DoorClient) {
             return true;
-        else
+
+        //Room walls
+        } else if (mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL && 
+                    mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
+            return true;
+        } else 
             return false;
+
+        }
 
     }
 

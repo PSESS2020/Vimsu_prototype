@@ -24,6 +24,7 @@ module.exports = class Room {
     //listOfDoors;
     #listOfDoors; //TODO: Get right doors from service
     #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
+    #listOfMapElements;
 
     /**
      * Erstellt Rauminstanz
@@ -46,6 +47,7 @@ module.exports = class Room {
         this.#listOfNPCs = [];
         this.#listOfGameObjects = [];
         this.#listOfDoors = [];
+        this.#listOfMapElements = [];
 
         this.#length = length;
         this.#width = width;
@@ -55,6 +57,15 @@ module.exports = class Room {
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
         }
+    }
+
+    setMapElements(lisOfMapElements) {
+        TypeChecker.isInstanceOf(lisOfMapElements, Array);
+        lisOfMapElements.forEach(mapElement => {
+            TypeChecker.isInstanceOf(mapElement, GameObject);
+        });
+
+        this.#listOfMapElements = lisOfMapElements;
     }
 
     setGameObjects(listOfGameObjects) {
@@ -112,6 +123,10 @@ module.exports = class Room {
 
     getListOfPPants() {
         return this.#listOfPPants;
+    }
+
+    getListOfMapElements() {
+        return this.#listOfMapElements;
     }
 
     getListOfGameObjects() {
