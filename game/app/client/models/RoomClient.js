@@ -263,8 +263,8 @@ class RoomClient {
         this.#objectMap = new Array(mapLength);
 
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i] = new Array(this.#length + 3).fill(null);
-            this.#objectMap[i] = new Array(this.#length + 3).fill(null);
+            this.#map[i] = new Array(this.#length + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
+            this.#objectMap[i] = new Array(this.#length + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
         }
 
         this.#listOfMapElements.forEach(mapElement => {
