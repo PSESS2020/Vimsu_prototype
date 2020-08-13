@@ -165,7 +165,7 @@ module.exports = */class MapView extends Views {
 
     isCursorOnMap(cordX, cordY) {
 
-        if (cordX >= 0 && cordY >= 1 && cordX < (this.#xNumTiles - 1) && cordY < this.#yNumTiles) {
+        if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
         let mapObject = this.#map[cordX][cordY];
             
         if (mapObject instanceof DoorClient) {
