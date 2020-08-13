@@ -88,12 +88,10 @@ database.connectDB().then(res => {
         })
         
         it('test getRank', function() {
-            console.log("getRank")
             expect(globalResults[0]).to.eql(1);
         });
 
         it('test getRank Error', async () => {
-            console.log("getRank error")
             let error = null;
             try {
                 await RankListService.getRank(participantId_broken, conferenceId, database);
@@ -106,7 +104,6 @@ database.connectDB().then(res => {
         })
 
         it('test getRankListWithUsername', function() {
-            console.log("getranklistwithusername")
             expect(globalResults[1]).to.be.an('array').and.to.have.lengthOf.above(1);
         });
 

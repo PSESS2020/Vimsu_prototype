@@ -98,7 +98,6 @@ module.exports = class RouteController {
             var oratorId = request.session.accountId;
 
             var video = request.files.video
-            console.log(video)
             var videoName = video.name;
             var videoSize = video.size;
 
@@ -193,9 +192,7 @@ module.exports = class RouteController {
                 if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
-                    console.log(username)
                     request.session.username = username;
-                    console.log(request.session.username);
                     request.session.title = user.getTitle();
                     request.session.surname = user.getSurname();
                     request.session.forename = user.getForename();

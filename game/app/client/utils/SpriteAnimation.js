@@ -27,9 +27,7 @@ class SpriteAnimation {
     draw(x, y) {
         var row = Math.floor(this.animationSequence[this.currentFrame] / this.spritesheetBody.framesPerRow);
         var col = Math.floor(this.animationSequence[this.currentFrame] % this.spritesheetBody.framesPerRow);
-        console.log();
         if (!this.spritesheetBody.framesPerRow) {
-            console.log("can not draw because spritesheetBody is not loaded")
             return;
         }
 

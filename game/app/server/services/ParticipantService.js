@@ -18,7 +18,6 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
         var accountId = account.getAccountID();
-        console.log('test');
 
         return this.getParticipant(accountId, conferenceId, vimsudb).then(par => {
             var participant;
@@ -26,7 +25,6 @@ module.exports = class ParticipantService {
             if (par) {
                 //Get Chats
                 return ChatService.loadChatList(par.chatIDList, conferenceId, vimsudb).then(async chatList => {
-                    console.log(chatList[0]);
                     let friendList = [];
                     let friendRequestListReceived = [];
                     let friendRequestListSent = [];
@@ -189,7 +187,6 @@ module.exports = class ParticipantService {
                     })
 
                     return this.storeAchievements(par.participantId, conferenceId, achievementsData, vimsudb).then(res => {
-                        console.log('all achievements stored');
                         return participant;
                     }).catch(err => {
                         console.error(err);

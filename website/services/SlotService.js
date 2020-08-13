@@ -44,10 +44,9 @@ module.exports = class SlotService {
             isAccepted: false
         }
 
-        return vimsudb.insertOneToCollection("lectures", lecture).then(res => {
-            console.log("lecture saved")
+        return vimsudb.insertOneToCollection("lectures", lecture)
 
-        }).catch(err => {
+        .catch(err => {
             console.error(err)
         })
 

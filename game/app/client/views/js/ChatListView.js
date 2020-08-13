@@ -25,10 +25,7 @@ class ChatListView extends WindowView {
         this.#chats = chats.sort((chatA, chatB) => chatB.timestamp - chatA.timestamp);
 
         this.#chats.forEach(chat => {
-            console.log("chatId client: " + chat.chatId);
             var timestamp, previewMessage;
-
-            console.log(chat)
 
             if (chat.timestamp && chat.timestamp instanceof Date) {
                 timestamp = new DateParser(chat.timestamp).parse();
@@ -95,7 +92,6 @@ class ChatListView extends WindowView {
     addNewMessage(chatID, message) {
         this.#chats.forEach(chat => {
             if (chat.chatId === chatID) {
-                console.log(message.msgText);
                 if (message.msgText.length > 36) {
                     var msgText = message.msgText.slice(0, 36) + "...";
                 } else {
@@ -103,7 +99,6 @@ class ChatListView extends WindowView {
                 }
                 chat.timestamp = message.timestamp;
                 chat.previewUsername = message.senderUsername;
-                console.log(msgText);
                 chat.previewMessage = msgText;
                 this.draw(this.#chats);
             }

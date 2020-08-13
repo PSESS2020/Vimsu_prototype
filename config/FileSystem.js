@@ -12,7 +12,7 @@ module.exports = class FileSystem {
             if (err) {
                 throw err;
             }
-            console.log(`${dir} is deleted!`);
+            console.log(`${dir} directory is deleted`);
         });
     }
 

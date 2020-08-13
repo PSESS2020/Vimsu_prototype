@@ -788,18 +788,13 @@ module.exports = class ServerController {
                     if (chatId) {
                         var chatPartnerIDList = ppant.getChat(chatId).getParticipantList();
                         var chatPartnerLength = chatPartnerIDList.length;
-                        console.log("chat participants: " + chatPartnerIDList)
                         var friendIds = [];
 
                         friendList.getAllBusinessCards().forEach(businessCard => {
                             friendIds.push(businessCard.getParticipantId())
                         })
 
-                        console.log("friends: " + friendIds);
-
                         friendIds = friendIds.filter((friend) => !chatPartnerIDList.includes(friend));
-
-                        console.log("friends without chat participants: " + friendIds);
 
                         var businessCards = [];
 
@@ -2204,9 +2199,8 @@ module.exports = class ServerController {
         newAchievements.forEach(ach => {
             this.#io.to(socketId).emit('newAchievement', ach);
 
-            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db).then(res => {
-                console.log('level of ' + ach.id + ' updated')
-            }).catch(err => {
+            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, ach.color, this.#db)
+            .catch(err => {
                 console.error(err);
             })
         });

@@ -81,7 +81,6 @@ class ChatThreadView extends WindowView {
     }
 
     draw(chat) {
-        //console.log(JSON.stringify(chat));
         this.#chat = chat;
         this.#messages = chat.messages;
         $('#chatThreadModalTitle').empty();

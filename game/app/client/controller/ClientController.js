@@ -748,7 +748,6 @@ class ClientController {
         this.socketReady;
 
         var participantId = businessCard.participantId;
-        console.log(participantId);
         TypeChecker.isString(participantId);
 
         //Tells server to accept this request
