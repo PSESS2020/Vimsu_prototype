@@ -2207,7 +2207,8 @@ module.exports = class ServerController {
                 ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
 
                 ParticipantService.getTaskCount(participantId, Settings.CONFERENCE_ID, taskType, this.#db).then(count => {
-                    ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, count + 1, this.#db)
+                    var newTaskCount = count + 1;
+                    ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, newTaskCount, this.#db)
 
                     var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
                     var levels = achievementDefinition.getLevels();
@@ -2217,7 +2218,7 @@ module.exports = class ServerController {
                         var levelsCount = level.count;
                         var awardPoints = level.points;
 
-                        if(levelsCount <= count + 1) {
+                        if(levelsCount <= newTaskCount) {
                             var achievements = await ParticipantService.getAchievements(participantId, Settings.CONFERENCE_ID, this.#db);
                             var currentLevel;
                             achievements.forEach(achievement => {
