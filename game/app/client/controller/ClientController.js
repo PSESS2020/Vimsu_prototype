@@ -8,13 +8,14 @@ class ClientController {
 
     #port;
     socket;
-    #gameView;
     #currentRoom;
     #participantId;
     #ownParticipant;
     #roomClient;
     #ownBusinessCard;
     #connectionStatus;
+
+    #gameView;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -81,7 +82,7 @@ class ClientController {
 
     /*Initializes the initial view for the player*/
     initGameView() {
-
+        var assetPaths = this.#currentRoom.getAssetPaths();
         var map = this.#currentRoom.getMap();
         var objectMap = this.#currentRoom.getObjectMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
@@ -89,7 +90,7 @@ class ClientController {
 
         if (map !== null) {
             this.#gameView.drawStatusBar();
-            this.#gameView.initRoomView(map, objectMap, listOfNPCs, typeOfRoom);
+            this.#gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
         }
 
         this.#gameView.drawProfileBox(this.#ownParticipant.getUsername())
@@ -109,13 +110,14 @@ class ClientController {
         //disables update of gameview
         this.#gameView.setGameViewInit(false);
 
+        var assetPaths = this.#currentRoom.getAssetPaths();
         var map = this.#currentRoom.getMap();
         var objectMap = this.#currentRoom.getObjectMap();
         var typeOfRoom = this.#currentRoom.getTypeOfRoom();
         var listOfNPCs = this.#currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.#gameView.initRoomView(map, objectMap, listOfNPCs, typeOfRoom);
+            this.#gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
         }
 
         this.#gameView.resetAnotherAvatarViews();
@@ -331,20 +333,20 @@ class ClientController {
     }*/
 
     //Third message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length) {
+    handleFromServerUpdateRoom(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length) {
 
         //tranform MapElements to GameObjectClients
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
-            listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isSolid))
+            listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isSolid, false))
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
-            listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isSolid));
+            listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
+                new PositionClient(element.cordX, element.cordY), element.isSolid, false));
         });
 
         //transform NPCs to NPCClients
@@ -357,16 +359,16 @@ class ClientController {
         //transform Doors to DoorClients
         var listOfDoors = [];
         doorData.forEach(door => {
-            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, new PositionClient(door.cordX, door.cordY)));
+            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), true));
         });
 
         //First room? 
         if (!this.#currentRoom) {
-            this.#currentRoom = new RoomClient(roomId, typeOfRoom, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+            this.#currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
 
             //If not, only swap the room
         } else {
-            this.#currentRoom.swapRoom(roomId, typeOfRoom, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+            this.#currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
             this.switchRoomGameView();
         }

@@ -3,29 +3,33 @@ class GameObjectViewFactory {
     #tileRowOffset;
     #wallColumnOffset;
     #tableRowOffset;
-    #tilePaths = ["client/assets/tile_selected.png", "client/assets/tile_normal.png", "client/assets/wall1.png", "client/assets/wall2.png", "client/assets/door_lecturehall.png", "client/assets/door_foodcourt.png", "client/assets/door_reception.png", "client/assets/door_foyer.png", "client/assets/table.png",];
+    #gameEngine;
 
-
-    constructor() {
-
-    }
-
-    /*
-    *calculates the screenpostition of an game object and creates it.
-    */
-    createGameObjectView(gameObjectType, pos, originXY, offset) {
-        var gameObjectView;
-        var gameObjectImage;
-        var screenPos;
-
+    constructor(offset, gameEngine) {
         this.#tileColumnOffset = offset.tileColumnOffset;
         this.#tileRowOffset = offset.tileRowOffset;
         this.#wallColumnOffset = offset.wallColumnOffset;
         this.#tableRowOffset = offset.tableRowOffset;
 
+        this.#gameEngine = gameEngine;
+    }
+
+    /*
+    * calculates the screenpostition of an game object and creates it.
+    */
+    createGameObjectView(gameObjectType, pos, objectName) {
+        //TypeChecker.isEnumOf(gameObjectType, GameObjectType);
+        TypeChecker.isInstanceOf(pos, PositionClient);
+        TypeChecker.isString(objectName);
+
+        var gameObjectView;
+        var gameObjectImage;
+        var screenPos;
+
         //calculates the screen position where to draw the tile
-        var screenX = pos.getCordX() * this.#tileColumnOffset / 2 + pos.getCordY() * this.#tileColumnOffset / 2 + originXY.x;
-        var screenY = pos.getCordY() * this.#tileRowOffset / 2 - pos.getCordX() * this.#tileRowOffset / 2 + originXY.y;
+        var screenX = this.#gameEngine.calculateScreenPosX(pos.getCordX(), pos.getCordY());
+        var screenY = this.#gameEngine.calculateScreenPosY(pos.getCordX(), pos.getCordY());
+
 
         //because the door image has a different size.
         var doorOffsetY = this.#tileRowOffset / 2 - this.#wallColumnOffset + 1;
@@ -35,7 +39,7 @@ class GameObjectViewFactory {
 
         var leftDoorScreenX = screenX;
         var leftDoorScreenY = screenY + doorOffsetY;
-        var rightDoorScreenX = screenX - this.#tileColumnOffset
+        var rightDoorScreenX = screenX - this.#tileColumnOffset;
         var rightDoorScreenY = screenY + doorOffsetY;
 
         switch (gameObjectType) {
@@ -43,18 +47,15 @@ class GameObjectViewFactory {
             case GameObjectType.SELECTED_TILE:
 
                 screenPos = new PositionClient(screenX, screenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[0]);
-
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new SelectedTileView(gameObjectImage, screenPos);
-                else throw new Error("The image for the selected tile view could not be found in the cache for images. Did you reload the images after cache clear?");
+                gameObjectImage = CacheImages.getImage(objectName);
+                gameObjectView = new SelectedTileView(gameObjectImage, screenPos);
 
                 break;
 
             case GameObjectType.TILE:
 
                 screenPos = new PositionClient(screenX, screenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TileView(gameObjectImage, screenPos);
@@ -65,7 +66,7 @@ class GameObjectViewFactory {
             case GameObjectType.LEFTWALL:
 
                 screenPos = new PositionClient(screenX, screenY + doorOffsetY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[2]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new WallView(gameObjectImage, screenPos);
@@ -76,7 +77,7 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTWALL:
 
                 screenPos = new PositionClient(screenX - this.#tileColumnOffset, screenY + doorOffsetY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[3]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new WallView(gameObjectImage, screenPos);
@@ -87,7 +88,7 @@ class GameObjectViewFactory {
             case TypeOfDoor.LECTURE_DOOR:
 
                 screenPos = new PositionClient(leftDoorScreenX, leftDoorScreenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[4]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.LECTURE_DOOR);
@@ -98,7 +99,7 @@ class GameObjectViewFactory {
             case TypeOfDoor.FOODCOURT_DOOR:
 
                 screenPos = new PositionClient(rightDoorScreenX, rightDoorScreenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[5]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.FOODCOURT_DOOR);
@@ -109,7 +110,7 @@ class GameObjectViewFactory {
             case TypeOfDoor.RECEPTION_DOOR:
 
                 screenPos = new PositionClient(rightDoorScreenX, rightDoorScreenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[6]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.RECEPTION_DOOR);
@@ -120,7 +121,7 @@ class GameObjectViewFactory {
             case TypeOfDoor.FOYER_DOOR:
 
                 screenPos = new PositionClient(leftDoorScreenX, leftDoorScreenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[7]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new DoorView(gameObjectImage, screenPos, TypeOfDoor.FOYER_DOOR);
@@ -131,7 +132,7 @@ class GameObjectViewFactory {
             case GameObjectType.TABLE:
 
                 screenPos = new PositionClient(screenX, screenY + tableOffsetY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[8]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TableView(gameObjectImage, screenPos);
@@ -141,10 +142,11 @@ class GameObjectViewFactory {
 
             case GameObjectType.LEFTTILE:
 
-                screenX = pos.getCordX() * this.#tileColumnOffset / 2 + (pos.getCordY() + 1) * this.#tileColumnOffset / 2 + originXY.x;
-                screenY = (pos.getCordY() + 1) * this.#tileRowOffset / 2 - pos.getCordX() * this.#tileRowOffset / 2 + originXY.y;
+                screenX = this.#gameEngine.calculateScreenPosX( pos.getCordX(), (pos.getCordY() + 1) );
+                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordY() + 1), pos.getCordX() );
+
                 screenPos = new PositionClient(screenX, screenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TileView(gameObjectImage, screenPos);
@@ -154,10 +156,11 @@ class GameObjectViewFactory {
 
             case GameObjectType.RIGHTTILE:
 
-                screenX = (pos.getCordX() - 1) * this.#tileColumnOffset / 2 + pos.getCordY() * this.#tileColumnOffset / 2 + originXY.x;
-                screenY = pos.getCordY() * this.#tileRowOffset / 2 - (pos.getCordX() - 1) * this.#tileRowOffset / 2 + originXY.y;
+                screenX = this.#gameEngine.calculateScreenPosX( (pos.getCordX() - 1), pos.getCordY() );
+                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordX() - 1),  pos.getCordY());
+                
                 screenPos = new PositionClient(screenX, screenY);
-                gameObjectImage = CacheImages.getImage(this.#tilePaths[1]);
+                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TileView(gameObjectImage, screenPos);

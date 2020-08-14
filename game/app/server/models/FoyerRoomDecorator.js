@@ -5,10 +5,25 @@ const Direction = require('../../client/shared/Direction.js');
 const Settings = require('../../client/shared/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
+const { FOYER_ID } = require('../../client/shared/Settings.js');
 
 
 module.exports = class FoyerRoomDecorator extends RoomDecorator {
     #room;
+
+    #assetPaths = {
+        "tile_default": "client/assets/tile_default.png",
+        "leftwall_default": "client/assets/wall1.png",
+        "rightwall_default": "client/assets/wall2.png",
+        "leftlecturedoor_default": "client/assets/door_lecturehall.png",
+        "rightfoodcourtdoor_default": "client/assets/door_foodcourt.png",
+        "rightreceptiondoor_default": "client/assets/door_reception.png",
+        "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "leftschedule_default0": "client/assets/schedule1.png",
+        "leftschedule_default1": "client/assets/schedule2.png",
+        "leftschedule_default2": "client/assets/schedule3.png",
+        "table_default": "client/assets/table.png"
+    }
 
     constructor(room) {
         super();
@@ -28,7 +43,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             }
 
         }
-
+        
         //Get left walls
         for (var i = 0; i < this.#room.getLength(); i++) {
             listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOYER_ID, 1, 1, i, -1, false));
@@ -53,6 +68,13 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         for (var i = 4; i < 9; i++)
             listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, i, 0, true));
 
+        //Get schedule elements
+        let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1,false);
+        schedules.forEach(schedule => {
+
+            listOfGameObjects.push(schedule);
+
+        });
 
         //Get all npcs from service
         let npcService = new NPCService();
@@ -65,33 +87,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        //enter positions for LectureDoor
-        let lectureDoorEnterPositions = [];
-        for (var i = 0; i <= 4; i++) {
-            for (var j = 0; j <= 2; j++) {
-                lectureDoorEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        //enter positions for FoodCourtDoor 
-        let foyerFoodCourtEnterPositions = [];
-        for (var i = 22; i <= 24; i++) {
-            for (var j = 0; j <= 4; j++) {
-                foyerFoodCourtEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        //enter positions for ReceptionDoor
-        let foyerReceptionEnterPositions = [];
-        for (var i = 22; i <= 24; i++) {
-            for (var j = 20; j <= 24; j++) {
-                foyerReceptionEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), lectureDoorEnterPositions),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
-            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
+        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
         
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID,  2, -2, false),
@@ -108,5 +106,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
     getRoom() {
         return this.#room;
+    }
+
+    getAssetPaths() {
+        return this.#assetPaths;
     }
 }

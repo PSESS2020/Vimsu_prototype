@@ -9,9 +9,7 @@ class SelectedTileView extends GameObjectView {
     }
 
     draw() {
-
         ctx_avatar.drawImage(this.#tileImage, this.#position.getCordX(), this.#position.getCordY());
-
     }
 
     updatePos(position) {

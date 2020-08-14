@@ -10,6 +10,14 @@ const Position = require('./Position.js');
 module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
     #room;
 
+    #assetPaths = {
+        "tile_default": "client/assets/tile_default.png",
+        "leftwall_default": "client/assets/wall1.png",
+        "rightwall_default": "client/assets/wall2.png",
+        "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "table_default": "client/assets/table.png"
+    }
+
     constructor(room) {
         super();
         this.#room = room;
@@ -61,15 +69,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        //enter positions for FoyerDoor
-        let foodCourtFoyerEnterPositions = [];
-        for (var i = 0; i <= 4; i++) {
-            for (var j = 0; j <= 2; j++) {
-                foodCourtFoyerEnterPositions.push(new Position(Settings.FOODCOURT_ID, i, j));
-            }
-        }
-
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map
@@ -82,5 +82,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
     getRoom() {
         return this.#room;
+    }
+
+    getAssetPaths() {
+        return this.#assetPaths;
     }
 }

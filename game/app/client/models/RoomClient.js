@@ -15,6 +15,7 @@ class RoomClient {
 
     #roomId;
     #typeOfRoom;
+    #assetPaths;
     #listOfMapElements;
     #listOfGameObjects;
     #listOfNPCs;
@@ -35,6 +36,7 @@ class RoomClient {
      * 
      * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom
+     * @param {Object} assetPaths
      * @param {Array of GameObjectClient} listOfMapElements
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
@@ -42,9 +44,14 @@ class RoomClient {
      * @param {int} length 
      * @param {int} width 
      */
-    constructor(roomId, typeOfRoom, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
+    constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
+        TypeChecker.isInstanceOf(assetPaths, Object);
+        for (var key in assetPaths) {
+            //TypeChecker.isInstanceOf(key, String);
+            TypeChecker.isString(assetPaths[key]);
+        }
         TypeChecker.isInstanceOf(listOfMapElements, Array);
         listOfGameObjects.forEach(mapElement => {
             TypeChecker.isInstanceOf(mapElement, GameObjectClient);
@@ -73,6 +80,7 @@ class RoomClient {
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
+        this.#assetPaths = assetPaths;
         this.#listOfMapElements = listOfMapElements;
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;
@@ -102,6 +110,10 @@ class RoomClient {
         return this.#typeOfRoom;
     }
 
+    getAssetPaths() {
+        return this.#assetPaths;
+    }
+    
     getWidth() {
         return this.#width;
     }
@@ -214,7 +226,7 @@ class RoomClient {
      * @param {int} length 
      * @param {int} width 
      */
-    swapRoom(roomId, typeOfRoom, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
+    swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(listOfMapElements, Array);
@@ -239,6 +251,7 @@ class RoomClient {
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
         //reset list of game objects, participants, occMap
+        this.#assetPaths = assetPaths;
         this.#listOfMapElements = listOfMapElements;
         this.#listOfGameObjects = listOfGameObjects;
         this.#listOfNPCs = listOfNPCs;

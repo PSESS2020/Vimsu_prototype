@@ -58,12 +58,16 @@ textarea {
   text-align: center;
   color: antiquewhite;
 }
+
 #mapCanvas {
 position: absolute;
 width: 1280px;
 height: 640px;
 top: 0;
+bottom: 0;
 left: 0;
+right: 0;
+margin: auto;
 pointer-events: none;
 z-index: 0;
 }
@@ -78,7 +82,10 @@ position: absolute;
 width: 1280px;
 height: 640px;
 top: 0;
+bottom: 0;
 left: 0;
+right: 0;
+margin: auto;
 z-index: 1;
 }
 
@@ -87,8 +94,11 @@ position: absolute;
 width: 1280px;
 height: 640px;
 top: 0;
-pointer-events: none;
+bottom: 0;
 left: 0;
+right: 0;
+margin: auto;
+pointer-events: none;
 z-index: 2;
 }
 
