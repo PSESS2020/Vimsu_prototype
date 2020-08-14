@@ -111,7 +111,6 @@ class EventManager {
     }
 
     handleInviteFriendsClicked(groupName, chatId) {
-        console.log("myChatId" + chatId)
         this.#clientController.handleFromViewShowInviteFriends(groupName, chatId);
     }
      

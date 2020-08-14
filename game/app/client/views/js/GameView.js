@@ -458,7 +458,6 @@ class GameView {
 
     addFriend(businessCard) {
         if (this.#friendListView) {
-            console.log("addFriend")
             this.#friendListView.addToFriendList(businessCard);
         }
     }
