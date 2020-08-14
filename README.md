@@ -37,4 +37,15 @@ If the installation was successful, you should be able to run the following comm
 ## Running the project
 
     $ cd path/to/Vimsu_prototype/
+    $ npm install
     $ npm start
+    
+## Running the test
+
+To run the unit tests with Mocha and Chai, use the following command.
+
+    $ npm test
+    
+To print the test coverage with Istanbul, use the following command.
+
+    $ npm run coverage
