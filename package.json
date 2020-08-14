@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --max-old-space-size=102400 server.js",
     "test": "mocha --file ./test/teardown.js test/**/*.js || true",
     "coverage": "nyc --reporter html --reporter text npm test"
   },
