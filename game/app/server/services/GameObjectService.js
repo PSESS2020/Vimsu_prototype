@@ -90,20 +90,24 @@ module.exports = class GameObjectService {
     }
 
     //Schedules
-    createSchedule(roomId, width, length, xPos, yPos, solidity) {
+    createLeftSchedule(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
-        let schedules = {};
+        let schedules = [];
         if(length > 1) {
             for (let i = 0; i < length; i++) {
-                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.SCHEDULE, "schedule_default" + i, width, length, new Position(roomId, xPos, yPos), solidity));
+                console.log("leftschedule_default" + i)
+                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
             }
+            return schedules;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.SCHEDULE, "schedule_default" + i, width, length, new Position(roomId, xPos, yPos), solidity));
-            }
-        }
+                console.log("leftschedule_default" + i)
 
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SCHEDULE, "schedule_default", width, length, new Position(roomId, xPos, yPos), solidity);
+                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
+            }
+            return schedules;
+        } else
+            return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default", width, length, new Position(roomId, xPos, yPos), solidity);
     }
 
 }
