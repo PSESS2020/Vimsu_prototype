@@ -158,6 +158,11 @@ module.exports = */class MapView extends Views {
 
     updateSelectedTile(selectedTileCords) {
 
+        //selectedTileCords not loaded yet
+        if (!selectedTileCords) {
+            return;
+        }
+
         //Calculate new screen Position of tile indicator.
         var screenXY = this.#gameEngine.calculateScreenPosXY(selectedTileCords.x, selectedTileCords.y);
 
