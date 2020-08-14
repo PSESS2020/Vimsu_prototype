@@ -216,6 +216,8 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         TypeChecker.isString(fileName);
 
+        console.log("upload file begin");
+
         const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
             chunkSizeBytes: 1024 * 1024,
             bucketName: collectionName,
@@ -226,11 +228,10 @@ module.exports = class db {
                 return false;
             } else {
                 var uploadStream = bucket.openUploadStream(fileName.slice(0, -4) + "_" + new Date().getTime() + ".mp4");
-
                 var fileId = uploadStream.id.toString();
 
                 return new Promise((resolve, reject) => {
-                    FileSystem.createReadStream(dir + fileName).pipe(uploadStream)
+                    FileSystem.createReadStream(dir + fileName, {highWaterMark : 1024 * 1024, allowVolatile: true}).pipe(uploadStream)
                         .on('finish', function () {
                             console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
                             resolve({ fileId, duration });
