@@ -104,7 +104,7 @@ class IsometricEngine {
     }
 
     calculateScreenPosXY(xPos, yPos) {
-        if (this.#assetOffsets !== null && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined) {
+        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined) {
             return {
                 x: xPos * this.#assetOffsets.tileColumnOffset / 2 + yPos * this.#assetOffsets.tileColumnOffset / 2 + this.#mapOriginX,
                 y: yPos * this.#assetOffsets.tileRowOffset / 2 - xPos * this.#assetOffsets.tileRowOffset / 2 + this.#mapOriginY
@@ -113,12 +113,12 @@ class IsometricEngine {
     }
 
     calculateScreenPosX(xPos, yPos) {
-        if (this.#assetOffsets !== null && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
+        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
             return xPos * this.#assetOffsets.tileColumnOffset / 2 + yPos * this.#assetOffsets.tileColumnOffset / 2 + this.#mapOriginX;
     }
 
     calculateScreenPosY(xPos, yPos) {
-        if (this.#assetOffsets !== null && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
+        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
             return yPos * this.#assetOffsets.tileRowOffset / 2 - xPos * this.#assetOffsets.tileRowOffset / 2 + this.#mapOriginY;
     }
 
@@ -138,7 +138,7 @@ class IsometricEngine {
     }
 
     translateMouseToTileCord(newPosition) {
-        if (this.#assetOffsets !== null && this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
+        if (this.#assetOffsets !== undefined && this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
             && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined) {
 
         //Adjusts mouse position to the tile position. 

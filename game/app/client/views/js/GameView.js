@@ -61,7 +61,7 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
 
                 /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
                 
