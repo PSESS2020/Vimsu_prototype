@@ -69,15 +69,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        //enter positions for FoyerDoor
-        let foodCourtFoyerEnterPositions = [];
-        for (var i = 0; i <= 4; i++) {
-            for (var j = 0; j <= 2; j++) {
-                foodCourtFoyerEnterPositions.push(new Position(Settings.FOODCOURT_ID, i, j));
-            }
-        }
-
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), foodCourtFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map

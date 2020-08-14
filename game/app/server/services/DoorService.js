@@ -34,75 +34,85 @@ module.exports = class DoorService {
         }
     }
 
+    #generateEnterPositionsLeftWall = function(doorPosition) {
+        TypeChecker.isInstanceOf(doorPosition, Position);
+
+        let enterPositions = [];
+        let roomId = doorPosition.getRoomId();
+        for (var i = doorPosition.getCordX() - 2; i <= doorPosition.getCordX() + 2; i++) {
+            for (var j = doorPosition.getCordY() + 1; j <= doorPosition.getCordY() + 3; j++) {
+                enterPositions.push(new Position(roomId, i, j));
+            }
+        }
+        return enterPositions;
+    }
+
+    #generateEnterPositionsRightWall = function(doorPosition) {
+        TypeChecker.isInstanceOf(doorPosition, Position);
+
+        let enterPositions = [];
+        let roomId = doorPosition.getRoomId();
+        for (var i = doorPosition.getCordX() - 3; i <= doorPosition.getCordX() - 1; i++) {
+            for (var j = doorPosition.getCordY() - 2; j <= doorPosition.getCordY() + 2; j++) {
+                enterPositions.push(new Position(roomId, i, j));
+            }
+        }
+        return enterPositions;
+    }
+
     /**
      * 
      * @param {Position} mapPosition 
-     * @param {Array of Positions} enterPositions 
      */
-    createLectureDoor(mapPosition, enterPositions) {
+    createLectureDoor(mapPosition) {
         TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(enterPositions, Array);
-        enterPositions.forEach(position => {
-            TypeChecker.isInstanceOf(position, Position);
-        });
 
+        let enterPositions = this.#generateEnterPositionsLeftWall(mapPosition);
         return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositions, undefined, undefined);
     }
 
     /**
      * 
      * @param {Position} mapPosition 
-     * @param {Array of Positions} enterPositions 
      * @param {Position} targetPosition 
      * @param {Direction} direction 
      */
-    createFoyerDoor(mapPosition, enterPositions, targetPosition, direction) {
+    createFoyerDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(enterPositions, Array);
-        enterPositions.forEach(position => {
-            TypeChecker.isInstanceOf(position, Position);
-        });
-        TypeChecker.isInstanceOf(mapPosition, Position);
+        TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
+        let enterPositions = this.#generateEnterPositionsLeftWall(mapPosition);
         return new Door(this.#generateDoorID(), TypeOfDoor.FOYER_DOOR, "leftfoyerdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
      * 
      * @param {Position} mapPosition 
-     * @param {Array of Positions} enterPositions 
      * @param {Position} targetPosition 
      * @param {Direction} direction 
      */
-    createFoodCourtDoor(mapPosition, enterPositions, targetPosition, direction) {
+    createFoodCourtDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(enterPositions, Array);
-        enterPositions.forEach(position => {
-            TypeChecker.isInstanceOf(position, Position);
-        });
-        TypeChecker.isInstanceOf(mapPosition, Position);
+        TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
+        let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
         return new Door(this.#generateDoorID(), TypeOfDoor.FOODCOURT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
      * 
      * @param {Position} mapPosition 
-     * @param {Array of Positions} enterPositions 
      * @param {Position} targetPosition 
      * @param {Direction} direction 
      */
-    createReceptionDoor(mapPosition, enterPositions, targetPosition, direction) {
+    createReceptionDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(enterPositions, Array);
-        enterPositions.forEach(position => {
-            TypeChecker.isInstanceOf(position, Position);
-        });
-        TypeChecker.isInstanceOf(mapPosition, Position);
+        TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
+        let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
         return new Door(this.#generateDoorID(), TypeOfDoor.RECEPTION_DOOR, "rightreceptiondoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 } 

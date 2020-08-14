@@ -70,15 +70,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        //enter positions for FoyerDoor
-        let receptionFoyerEnterPositions = [];
-        for (var i = 0; i <= 4; i++) {
-            for (var j = 0; j <= 2; j++) {
-                receptionFoyerEnterPositions.push(new Position(Settings.RECEPTION_ID, i, j));
-            }
-        }
-
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), receptionFoyerEnterPositions, new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID,  2, -2, false));
 
         //Assign lists to room and build occupation map

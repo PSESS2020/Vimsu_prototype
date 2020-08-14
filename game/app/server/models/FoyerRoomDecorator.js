@@ -87,33 +87,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        //enter positions for LectureDoor
-        let lectureDoorEnterPositions = [];
-        for (var i = 0; i <= 4; i++) {
-            for (var j = 0; j <= 2; j++) {
-                lectureDoorEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        //enter positions for FoodCourtDoor 
-        let foyerFoodCourtEnterPositions = [];
-        for (var i = 22; i <= 24; i++) {
-            for (var j = 0; j <= 4; j++) {
-                foyerFoodCourtEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        //enter positions for ReceptionDoor
-        let foyerReceptionEnterPositions = [];
-        for (var i = 22; i <= 24; i++) {
-            for (var j = 20; j <= 24; j++) {
-                foyerReceptionEnterPositions.push(new Position(Settings.FOYER_ID, i, j));
-            }
-        }
-
-        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), lectureDoorEnterPositions),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), foyerFoodCourtEnterPositions, new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
-            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), foyerReceptionEnterPositions, new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
+        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
         
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID,  2, -2, false),
