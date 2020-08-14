@@ -2,7 +2,6 @@
 
 Welcome to the GitHub repository of Vimsu. The project Vimsu is developed as part of the software engineering practice module in summer 2020 at the Karlsruhe Institute of Technology on the topic 'Virtual conference simulator with telepresence'.
 
----
 ## Requirements
 
 For development, you will only need Node.js installed in your environement.
