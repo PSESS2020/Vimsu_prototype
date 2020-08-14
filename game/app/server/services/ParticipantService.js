@@ -55,12 +55,6 @@ module.exports = class ParticipantService {
 
                     var achievements = [];
 
-                    /*par.achievements.forEach(ach => {
-                        achievements.push(new Achievement(ach.id, ach.title, ach.icon,
-                            ach.description, ach.currentLevel, ach.color,
-                            ach.awardPoints, ach.maxLevel, ach.taskType))
-                    })*/
-
                     participant = new Participant(par.participantId,
                         accountId,
                         new BusinessCard(par.participantId,
@@ -79,7 +73,7 @@ module.exports = class ParticipantService {
                         new FriendList(par.participantId, friendRequestListReceived),
                         new FriendList(par.participantId, friendRequestListSent),
                         [],
-                        new TaskService().getAllTasks(),
+                        par.taskCount,
                         par.isModerator,
                         par.points,
                         chatList);
@@ -92,15 +86,10 @@ module.exports = class ParticipantService {
                         let idx = ppantAchievements.findIndex(ach => ach.id === achievement.id);
 
                         if (idx > -1) {
-                            achievements.push(new Achievement(achievement.id,
-                                ppantAchievements[idx].title,
-                                ppantAchievements[idx].icon,
-                                ppantAchievements[idx].description,
-                                achievement.currentLevel,
-                                achievement.color,
-                                ppantAchievements[idx].awardPoints,
-                                ppantAchievements[idx].maxLevel,
-                                ppantAchievements[idx].getTaskType()));
+                            var taskType = ppantAchievements[idx].getTaskType();
+                            var achievementDefinition = achievementService.getAchievementDefinitionByTypeOfTask(taskType);
+                            var achievement = achievementDefinition.computeAchievement(achievement.currentLevel);
+                            achievements.push(achievement);
                         }
                     })
 
@@ -115,7 +104,6 @@ module.exports = class ParticipantService {
                                 [{
                                     id: achievement.id,
                                     currentLevel: achievement.currentLevel,
-                                    color: achievement.color,
                                 }]
                             const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
@@ -126,6 +114,11 @@ module.exports = class ParticipantService {
             }
 
             else {
+                var emptyTaskCount = {};
+                new TaskService().getAllTasks().forEach(x => {
+                    emptyTaskCount[x.getTaskType()] = 0;
+                })
+
                 var par = {
                     participantId: new ObjectId().toString(),
                     accountId: accountId,
@@ -143,7 +136,8 @@ module.exports = class ParticipantService {
                     achievements: [],
                     isModerator: false,
                     points: 0,
-                    chatIDList: []
+                    chatIDList: [],
+                    taskCount: emptyTaskCount
                 }
 
                 //Write new ppant in DB
@@ -168,7 +162,7 @@ module.exports = class ParticipantService {
                         new FriendList(par.participantId, []),
                         new FriendList(par.participantId, []),
                         [],
-                        new TaskService().getAllTasks(),
+                        par.taskCount,
                         par.isModerator,
                         par.points,
                         []);
@@ -181,7 +175,6 @@ module.exports = class ParticipantService {
                             {
                                 id: ach.id,
                                 currentLevel: ach.currentLevel,
-                                color: ach.color,
                             },
                         )
                     })
@@ -306,6 +299,24 @@ module.exports = class ParticipantService {
 
     }
 
+    static getPoints(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { points: 1 }).then(par => {
+            if (par) {
+                return par.points;
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
     static updatePoints(participantId, conferenceId, points, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
@@ -314,6 +325,9 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { points: points }).then(res => {
             return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
         })
 
     }
@@ -348,7 +362,24 @@ module.exports = class ParticipantService {
 
     }
 
-    static updateAchievementLevel(participantId, conferenceId, achievementId, level, color, vimsudb) {
+    static getAchievements(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: 1 }).then(par => {
+            if (par) {
+                return par.achievements;
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
+    static updateAchievementLevel(participantId, conferenceId, achievementId, level, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
@@ -356,14 +387,52 @@ module.exports = class ParticipantService {
 
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId, 'achievements.id': achievementId },
-            { 'achievements.$.currentLevel': level, 'achievements.$.color': color }).then(res => {
+            { 'achievements.$.currentLevel': level }).then(res => {
 
                 return true;
             }).catch(err => {
                 console.error(err);
                 return false;
             })
+    }
 
+    static updateTaskCounts(participantId, conferenceId, taskCount, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: taskCount }).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
+    static getTaskCount(participantId, conferenceId, taskType, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: 1 }).then(par => {
+            if (par) {
+                return par.taskCount[taskType];
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
+    static updateTaskCount(participantId, conferenceId, taskType, count, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { ['taskCount.' + taskType]: count }).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
     }
 
     //Method to add a chatID in DB

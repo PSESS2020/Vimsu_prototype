@@ -31,21 +31,13 @@ module.exports = class AchievementService {
         }
 
         return this.#achievementDefinitions[index];
-    }
-
-    getAchievementDefinitionByTypeOfTask(achievmentTaskType) {
-        TypeChecker.isString(achievmentTaskType);
-
-        // could be done easier now that we use a dict
-        let index = this.#achievementDefinitions.findIndex(ach => ach.getTask() === achievmentTaskType);
-
-        if (index < 0) 
-        {
-            throw new Error(achievmentTaskType + " is not in list of achievement definitions.")
-        }
-
-        return this.#achievementDefinitions[index];
     }*/
+
+    getAchievementDefinitionByTypeOfTask(achievementTaskType) {
+        TypeChecker.isString(achievementTaskType);
+
+        return this.#achievementDefinitions[achievementTaskType];
+    }
 
     initAllAchievements() {
         var id = 0;

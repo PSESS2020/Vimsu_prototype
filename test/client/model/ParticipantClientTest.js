@@ -4,7 +4,6 @@ const Direction = require('../../../game/app/client/shared/Direction.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 const ParticipantClient = require('../../../game/app/client/models/ParticipantClient.js');
 
-
 //test data
 var id = TestUtil.randomString();
 var username = TestUtil.randomString();
