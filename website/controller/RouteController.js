@@ -83,20 +83,20 @@ module.exports = class RouteController {
 
         this.#app.post('/upload', (request, response) => {
             if (!request.files || Object.keys(request.files).length === 0) {
-                return response.render('upload', { noFilesUploaded: true });
+                return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             }
 
             var maxParticipants = parseInt(request.body.maxParticipants);
             if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                return response.render('upload', { notInt: true });
+                return response.render('upload', { notInt: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             }
 
             var startingTime = new Date(request.body.startingTime);
             if (startingTime == "Invalid Date") {
-                return response.render('upload', { notDate: true });
+                return response.render('upload', { notDate: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             }
 
-            var title = request.body.title;
+            var lectureTitle = request.body.title;
             var remarks = request.body.remarks;
             var oratorId = request.session.accountId;
 
@@ -107,28 +107,24 @@ module.exports = class RouteController {
 
             if (videoName.includes(".mp4")) {
                 if (videoSize > 500*1024*1024) {
-                    return response.render('upload', { fileSizeExceeded: true });
+                    return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
                 else {
+                    response.render('upload', {uploading:true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname})
                     return SlotService.storeVideo(video, this.#db).then(videoData => {
                         if (videoData) {
-                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, title, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
-                                response.redirect('/');
+                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                 response.end();
                             }).catch(err => {
                                 console.error(err);
-                                return response.render('upload', { createSlotFailed: true });
                             })
-                        } else {
-                            return response.render('upload', { uploadFailed: true });
                         }
                     }).catch(err => {
                         console.error(err);
-                        return response.render('upload', { uploadFailed: true });
                     })
                 }
             } else {
-                return response.render('upload', { unsupportedFileType: true });
+                return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             }
         });
 
@@ -360,7 +356,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('editAccount', { invalidTitle: true });
+                return response.render('editAccount', { invalidTitle: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
             }
 
             surname = request.body.surname;
@@ -383,7 +379,7 @@ module.exports = class RouteController {
                 response.redirect('/account');
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', { editAccountFailed: true });
+                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
             })
         })
     }

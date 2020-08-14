@@ -3,6 +3,7 @@
 
 <head>
     <%- include('partials/head') %>
+    <script src="https://kit.fontawesome.com/f6c8522501.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -55,6 +56,8 @@
                 <% } else if (locals.createSlotFailed === true) { %>
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
                     error while creating the slot. Please try again.</p>
+                <% } else if (locals.uploading === true) { %>
+                    <p style="font-size: small;"><i class="fas fa-spinner fa-pulse"></i> Lecture slot is being created. You may exit this page.</p>
                 <% } else { %>
                 <% } %>
             </div>
