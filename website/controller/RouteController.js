@@ -98,6 +98,7 @@ module.exports = class RouteController {
             var oratorId = request.session.accountId;
 
             var video = request.files.video
+            console.log(video);
             var videoName = video.name;
             var videoSize = video.size;
 
