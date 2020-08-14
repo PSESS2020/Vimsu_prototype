@@ -3,6 +3,7 @@ class GameObjectViewFactory {
     #tileRowOffset;
     #wallColumnOffset;
     #tableRowOffset;
+    #plantRowOffset;
     #gameEngine;
 
     constructor(offset, gameEngine) {
@@ -10,6 +11,7 @@ class GameObjectViewFactory {
         this.#tileRowOffset = offset.tileRowOffset;
         this.#wallColumnOffset = offset.wallColumnOffset;
         this.#tableRowOffset = offset.tableRowOffset;
+        this.#plantRowOffset = offset.plantRowOffset;
 
         this.#gameEngine = gameEngine;
     }
@@ -36,6 +38,7 @@ class GameObjectViewFactory {
 
         //because the table image has a different size.
         var tableOffsetY = this.#tileRowOffset - this.#tableRowOffset + 7;
+        var plantOffsetY = this.#tileRowOffset - this.#plantRowOffset;
 
         var leftDoorScreenX = screenX;
         var leftDoorScreenY = screenY + doorOffsetY;
@@ -137,6 +140,17 @@ class GameObjectViewFactory {
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TableView(gameObjectImage, screenPos);
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.PLANT:
+
+                screenPos = new PositionClient(screenX, screenY + plantOffsetY);
+                gameObjectImage = CacheImages.getImage(objectName);
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new TableView(gameObjectImage, screenPos);
+                else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 

@@ -20,8 +20,8 @@ describe('GameObjectService test', function () {
         expect(table.getPosition().getCordY()).to.equal(cordY);
         expect(table.getSolid()).to.equal(solidity);
         expect(table.getId()).to.be.a('number');
-        expect(table.getWidth()).to.equal(Settings.TABLE_WIDTH);
-        expect(table.getLength()).to.equal(Settings.TABLE_LENGTH);
+        expect(table.getWidth()).to.equal(Settings.SMALL_OBJECT_WIDTH);
+        expect(table.getLength()).to.equal(Settings.SMALL_OBJECT_LENGTH);
     });
 
     it('test create ScheduleBoard', function() {

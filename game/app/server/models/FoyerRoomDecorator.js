@@ -22,7 +22,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/schedule1.png",
         "leftschedule_default1": "client/assets/schedule2.png",
         "leftschedule_default2": "client/assets/schedule3.png",
-        "table_default": "client/assets/table.png"
+        "table_default": "client/assets/table.png",
+        "plant_default": "client/assets/plant.png"
     }
 
     constructor(room) {
@@ -75,6 +76,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             listOfGameObjects.push(schedule);
 
         });
+
+        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getWidth() - 1, 0, true));
 
         //Get all npcs from service
         let npcService = new NPCService();

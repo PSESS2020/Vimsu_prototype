@@ -26,8 +26,8 @@ const Settings = Object.freeze({
     MAXGROUPPARTICIPANTS: 255,
 
     /* Object Constants */
-    TABLE_WIDTH: 1,
-    TABLE_LENGTH: 1,
+    SMALL_OBJECT_WIDTH: 1,
+    SMALL_OBJECT_LENGTH: 1,
 
     /* Conference Constants */
     CONFERENCE_ID: '1',

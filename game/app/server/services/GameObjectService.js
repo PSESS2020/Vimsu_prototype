@@ -82,10 +82,19 @@ module.exports = class GameObjectService {
 
     //Tables
     createTable(roomId, xPos, yPos, solidity) {
-        this.checkParamTypes(roomId, Settings.TABLE_WIDTH, Settings.TABLE_LENGTH, xPos, yPos, solidity);
+        this.checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity);
 
 
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.TABLE_WIDTH, Settings.TABLE_LENGTH, new Position(roomId, xPos, yPos), solidity);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity);
+
+    }
+
+    //Plants
+    createPlant(roomId, xPos, yPos, solidity) {
+        this.checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity);
+
+
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "plant_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity);
 
     }
 
