@@ -38,7 +38,10 @@ module.exports = class RouteController {
 
         this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
-        this.#app.use(fileUpload());
+        this.#app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
 
         var sessionMiddleware = expressSession({
             secret: 'secret',
@@ -103,7 +106,7 @@ module.exports = class RouteController {
             var videoSize = video.size;
 
             if (videoName.includes(".mp4")) {
-                if (videoSize > 524288000) {
+                if (videoSize > 500*1024*1024) {
                     return response.render('upload', { fileSizeExceeded: true });
                 }
                 else {
