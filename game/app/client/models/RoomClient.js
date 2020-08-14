@@ -3,12 +3,13 @@
 if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
-    GameObjectClient = require('./GameObject.js');
+    GameObjectClient = require('./GameObjectClient.js');
     NPCClient = require('./NPCClient.js');
     DoorClient = require('./DoorClient.js');
     ParticipantClient = require('./ParticipantClient.js');
     TypeOfRoom = require('../shared/TypeOfRoom');
     GameObjectType = require('../shared/GameObjectType.js');
+    Settings = require('../shared/Settings.js');
 }
 
 class RoomClient {

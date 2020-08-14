@@ -2,33 +2,33 @@ const chai = require('chai');
 const assert = chai.assert;
 const DoorView = require('../../../game/app/client/views/js/DoorView')
 const PositionClient = require('../../../game/app/client/models/PositionClient')
-const GameObjectTypeClient = require('../../../game/app/client/utils/GameObjectTypeClient');
+const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
 
 var lectureHall = {
     doorImage: "../../../game/app/client/assets/door_lecturehall.png",
     position: new PositionClient(1, 1),
-    doorType: GameObjectTypeClient.LECTUREDOOR
+    doorType: TypeOfDoor.LECTUREDOOR
 }
 var doorLectureHall = new DoorView(lectureHall.doorImage, lectureHall.position, lectureHall.doorType)
 
 var foodCourt = {
     doorImage: "../../../game/app/client/assets/door_foodcourt.png",
     position: new PositionClient(2, 2),
-    doorType: GameObjectTypeClient.FOODCOURTDOOR
+    doorType: TypeOfDoor.FOODCOURTDOOR
 }
 var doorFoodCourt = new DoorView(foodCourt.doorImage, foodCourt.position, foodCourt.doorType)
 
 var reception = {
     doorImage: "../../../game/app/client/assets/door_reception.png",
     position: new PositionClient(3, 3),
-    doorType: GameObjectTypeClient.RECEPTIONDOOR
+    doorType: TypeOfDoor.RECEPTIONDOOR
 }
 var doorReception = new DoorView(reception.doorImage, reception.position, reception.doorType)
 
 var foyer = {
     doorImage: "../../../game/app/client/assets/door_foyer.png",
     position: new PositionClient(4, 4),
-    doorType: GameObjectTypeClient.FOYERDOOR
+    doorType: TypeOfDoor.FOYERDOOR
 }
 var doorFoyer = new DoorView(foyer.doorImage, foyer.position, foyer.doorType)
 
