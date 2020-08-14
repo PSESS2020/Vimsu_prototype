@@ -365,6 +365,23 @@ module.exports = class ParticipantService {
 
     }
 
+    static getAchievements(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: 1 }).then(par => {
+            if (par) {
+                return par.achievements;
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
     static updateAchievementLevel(participantId, conferenceId, achievementId, level, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
@@ -384,8 +401,36 @@ module.exports = class ParticipantService {
 
     static updateTaskCounts(participantId, conferenceId, taskCount, vimsudb) {
         TypeChecker.isString(participantId);
-        
+
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: taskCount }).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
+    static getTaskCount(participantId, conferenceId, taskType, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: 1 }).then(par => {
+            if (par) {
+                return par.taskCount[taskType];
+            }
+            else {
+                console.log("participant not found");
+                return false;
+            }
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
+
+    static updateTaskCount(participantId, conferenceId, taskType, count, vimsudb) {
+        TypeChecker.isString(participantId);
+
+        return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { ['taskCount.' + taskType]: count }).then(res => {
             return true;
         }).catch(err => {
             console.error(err);

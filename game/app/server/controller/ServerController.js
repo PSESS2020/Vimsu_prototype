@@ -2165,7 +2165,7 @@ module.exports = class ServerController {
     };
 
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client
-    applyTaskAndAchievement(participantId, taskType) {
+    async applyTaskAndAchievement(participantId, taskType) {
         var participant = this.#ppants.get(participantId);
 
         var task = new TaskService().getTaskByType(taskType)
@@ -2203,36 +2203,44 @@ module.exports = class ServerController {
         } else {
             ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db).then(points => {
                 var awardPoints = task.getAwardPoints();
-                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, points + awardPoints, this.#db)
-            })
+                var currentPoints = points + awardPoints;
+                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
 
-            if (taskType == TypeOfTask.BEFRIENDOTHER) {
-                FriendListService.getFriendList(participantId, Settings.CONFERENCE_ID, this.#db).then(friends => {
+                ParticipantService.getTaskCount(participantId, Settings.CONFERENCE_ID, taskType, this.#db).then(count => {
+                    ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, count + 1, this.#db)
+
                     var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
                     var levels = achievementDefinition.getLevels();
 
-                    for(var i = 0; i < levels.length; i++) {
-                        var count = levels[i].count;
-                        var awardPoints = levels[i].points;
+                    var counter = 0;
+                    Promise.all(levels.map(async level => {
+                        var levelsCount = level.count;
+                        var awardPoints = level.points;
 
-                        if(friends.length == count) {
-                            ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), i + 1, this.#db).then(res => {
-                                console.log('level of ' + achievementDefinition.getId() + ' updated');
-                            });
-                                
-                            ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db).then(points => {
-                                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, points + awardPoints, this.#db).then(res => {
+                        if(levelsCount <= count + 1) {
+                            var achievements = await ParticipantService.getAchievements(participantId, Settings.CONFERENCE_ID, this.#db);
+                            var currentLevel;
+                            achievements.forEach(achievement => {
+                                if(achievement.id == achievementDefinition.getId()) {
+                                    currentLevel = achievement.currentLevel;
+                                }
+                            })
+                            counter++;
+                            if(currentLevel < counter) {
+                                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), counter, this.#db);
+                                currentPoints += awardPoints;
+                                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db).then(res => {
                                     Promise.all([...this.#ppants.keys()].map(async ppantId => {
                                         RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
                                             this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
                                         });
                                     }))
                                 })
-                            })
+                            }
                         }
-                    }
+                    }))
                 })
-            }
+            })
         }
     }
 }
