@@ -402,13 +402,10 @@ module.exports = class ServerController {
                 var targetRoomId;
                 if (targetRoomType === TypeOfRoom.FOYER) {
                     targetRoomId = Settings.FOYER_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
                 } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
                     targetRoomId = Settings.FOODCOURT_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
                 } else if (targetRoomType === TypeOfRoom.RECEPTION) {
                     targetRoomId = Settings.RECEPTION_ID;
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
                 }
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
@@ -522,6 +519,13 @@ module.exports = class ServerController {
                 socket.join(targetRoomId.toString());
                 this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
 
+                if (targetRoomId === Settings.FOYER_ID) {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
+                } else if (targetRoomId === Settings.FOODCOURT_ID) {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
+                } else if (targetRoomId === Settings.RECEPTION_ID) {
+                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
+                }
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
