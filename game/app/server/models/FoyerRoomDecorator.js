@@ -10,6 +10,17 @@ const Position = require('./Position.js');
 module.exports = class FoyerRoomDecorator extends RoomDecorator {
     #room;
 
+    #assetPaths = {
+        "tile_default": "client/assets/tile_default.png",
+        "leftwall_default": "client/assets/wall1.png",
+        "rightwall_default": "client/assets/wall2.png",
+        "leftlecturedoor_default": "client/assets/door_lecturehall.png",
+        "rightfoodcourtdoor_default": "client/assets/door_foodcourt.png",
+        "rightreceptiondoor_default": "client/assets/door_reception.png",
+        "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "table_default": "client/assets/table.png"
+    }
+    
     constructor(room) {
         super();
         this.#room = room;
@@ -108,5 +119,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
     getRoom() {
         return this.#room;
+    }
+
+    getAssetPaths() {
+        return this.#assetPaths;
     }
 }

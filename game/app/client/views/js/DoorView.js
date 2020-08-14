@@ -15,6 +15,10 @@ class DoorView extends GameObjectView {
         this.#DOORTYPE = doorType;
     }
 
+    getPosition() {
+        return this.#position;
+    }
+
     getDoorType() {
         return this.#DOORTYPE;
     }

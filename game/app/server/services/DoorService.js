@@ -46,7 +46,7 @@ module.exports = class DoorService {
             TypeChecker.isInstanceOf(position, Position);
         });
 
-        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, mapPosition, enterPositions, undefined, undefined);
+        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositions, undefined, undefined);
     }
 
     /**
@@ -65,7 +65,7 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new Door(this.#generateDoorID(), TypeOfDoor.FOYER_DOOR, mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.FOYER_DOOR, "leftfoyerdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -84,7 +84,7 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new Door(this.#generateDoorID(), TypeOfDoor.FOODCOURT_DOOR, mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.FOODCOURT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -103,6 +103,6 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new Door(this.#generateDoorID(), TypeOfDoor.RECEPTION_DOOR, mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.RECEPTION_DOOR, "rightreceptiondoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 } 

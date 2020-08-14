@@ -7,6 +7,7 @@ module.exports = class Door {
 
     #id;
     #typeOfDoor;
+    #name;
     #mapPosition;
     #enterPositions;
     #targetPosition;
@@ -16,15 +17,17 @@ module.exports = class Door {
      * @author Philipp
      * 
      * @param {int} id 
+     * @param {String} name
      * @param {TypeOfDoor} typeOfDoor
      * @param {Position} mapPosition
      * @param {Array of Position} enterPositions
      * @param {Position} targetPosition 
      * @param {Direction} direction
      */
-    constructor(id, typeOfDoor, mapPosition, enterPositions, targetPosition, direction) {
+    constructor(id, typeOfDoor, name, mapPosition, enterPositions, targetPosition, direction) {
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
+        TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isInstanceOf(enterPositions, Array);
         enterPositions.forEach(enterPosition => {
@@ -39,6 +42,7 @@ module.exports = class Door {
 
         this.#id = id;
         this.#typeOfDoor = typeOfDoor;
+        this.#name = name;
         this.#mapPosition = mapPosition;
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
@@ -63,6 +67,10 @@ module.exports = class Door {
 
     getTypeOfDoor() {
         return this.#typeOfDoor;
+    }
+
+    getName() {
+        return this.#name;
     }
 
     getMapPosition() {

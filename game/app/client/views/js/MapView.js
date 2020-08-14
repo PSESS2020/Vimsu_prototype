@@ -9,16 +9,13 @@ module.exports = */class MapView extends Views {
     #xNumTiles;
     #yNumTiles;
     #selectedTile;
-    #originX;
-    #originY;
 
-    //For calculation the right positions of sprites on the map.
-    #offset;
     #gameObjectViewFactory;
+    #gameEngine;
 
     selectionOnMap = false;
 
-    constructor(map, objectMap) {
+    constructor(assetPaths, map, objectMap) {
         super();
 
         this.#map = map;
@@ -33,15 +30,12 @@ module.exports = */class MapView extends Views {
         //map components that can be clicked
         this.#clickableTiles = new Array();
 
-        this.#gameObjectViewFactory = new GameObjectViewFactory(this.tileImages);
+        this.#gameEngine = new IsometricEngine();
 
-        this.#originX = 0;
-        this.#originY = 0;
-        this.#offset = {};
-
-        if (new.target === MapView) {
+        /*if (new.target === MapView) {
             throw new Error("Cannot construct abstract MapView instances directly");
-        }
+        }*/
+        this.initProperties(assetPaths);
     }
 
     getMap() {
@@ -64,29 +58,22 @@ module.exports = */class MapView extends Views {
         return this.#objects;
     }
 
-    initProperties(tileColumnOffset) {
-
+    async initProperties(assetPaths) {
         this.#xNumTiles = this.#map.length;
         this.#yNumTiles = this.#map[0].length;
+        
+        assetPaths.tileselected_default =  "client/assets/tile_selected.png";
+        var offset = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
 
-        //origin that indicates where to start drawing the map assets.
-        this.#originX = ctx_map.canvas.width / 2 - this.#xNumTiles * tileColumnOffset / 2;
-        this.#originY = ctx_map.canvas.height / 2;
-        console.log("origin " + this.#originX + " " + this.#originY);
+        this.#gameObjectViewFactory = new GameObjectViewFactory(offset, this.#gameEngine);
+
+        this.buildMap();
     }
 
     //Creates a map of gameobjects to draw on screen.
-    buildMap(offset) {
-        this.#offset = offset;
-        this.tileColumnOffset = offset.tileColumnOffset;
-        this.tileRowOffset = offset.tileRowOffset;
+    buildMap() {
 
-        var originXY = {
-            x: this.#originX,
-            y: this.#originY
-        };
-
-        this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), originXY, offset);
+        this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default");
 
         for (var row = (this.#xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.#yNumTiles; col++) {
@@ -101,8 +88,7 @@ module.exports = */class MapView extends Views {
                         tileType = mapObject.getTypeOfDoor();
                     } else
                         tileType = mapObject.getGameObjectType();
-
-                    var tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, originXY, offset);
+                    var tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, mapObject.getName());
                 
                     if (tile != null) 
                     {
@@ -117,7 +103,7 @@ module.exports = */class MapView extends Views {
                 
                 if (this.#objectMap[row][col] !== null) {
                     var objectType = this.#objectMap[row][col].getGameObjectType();
-                    var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, originXY, offset);
+                    var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, this.#objectMap[row][col].getName());
                     
                     if (object != null) {
                         this.#objects.push(object);
@@ -138,33 +124,21 @@ module.exports = */class MapView extends Views {
     }
 
     findClickedTile(selectedTileCords) {
-        this.#clickableTiles.forEach(object => {
-            if (this.#map[selectedTileCords.x][selectedTileCords.y] instanceof DoorClient && 
-                this.#map[selectedTileCords.x][selectedTileCords.y].getTypeOfDoor() === object.getDoorType())
-                object.onclick();
+        
+        let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
+
+        if (clickedTile !== null && clickedTile.isClickable()) {
+            this.#clickableTiles.forEach(object => {
+                if (clickedTile instanceof DoorClient && clickedTile.getTypeOfDoor() === object.getDoorType())
+                    object.onclick();
+                else if (clickedTile instanceof GameObjectClient && clickedTile.getGameObjectType === object.getGameObjectType())
+                    object.onclick();
         });
-
-    }
-
-    translateMouseToTileCord(newPosition) {
-
-        //Adjusts mouse position to the tile position. 
-        var newPosX = newPosition.x - this.#offset.tileColumnOffset / 2 - this.#originX;
-        var newPosY = newPosition.y - this.#offset.tileRowOffset / 2 - this.#originY;
-
-        //Calculate the tile at which the current mouse cursor points.
-        var selectedTileX = Math.round(newPosX / this.#offset.tileColumnOffset - newPosY / this.#offset.tileRowOffset);
-        var selectedTileY = Math.round(newPosX / this.#offset.tileColumnOffset + newPosY / this.#offset.tileRowOffset);
-
-        return {
-            x: selectedTileX,
-            y: selectedTileY,
         }
 
     }
 
     isCursorOnMap(cordX, cordY) {
-
         if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
         let mapObject = this.#map[cordX][cordY];
             
@@ -182,14 +156,12 @@ module.exports = */class MapView extends Views {
 
     }
 
-
     updateSelectedTile(selectedTileCords) {
 
         //Calculate new screen Position of tile indicator.
-        var screenX = selectedTileCords.x * this.#offset.tileColumnOffset / 2 + selectedTileCords.y * this.#offset.tileColumnOffset / 2 + this.#originX;
-        var screenY = selectedTileCords.y * this.#offset.tileRowOffset / 2 - selectedTileCords.x * this.#offset.tileRowOffset / 2 + this.#originY;
+        var screenXY = this.#gameEngine.calculateScreenPosXY(selectedTileCords.x, selectedTileCords.y);
 
-        var position = new PositionClient(screenX, screenY);
+        var position = new PositionClient(screenXY.x, screenXY.y);
 
         if (this.#selectedTile !== undefined)
             this.#selectedTile.updatePos(position);
@@ -203,10 +175,15 @@ module.exports = */class MapView extends Views {
 
     }
     draw() {
-        throw new Error('draw() has to be implemented!');
-    }
+        //throw new Error('draw() has to be implemented!');
+        //let tiles = super.getTiles();
+        //let objects = super.getObjects();
 
-    #drawGameObjects = function (objectType) {
-        throw new Error('drawGameObjects() has to be implemented!');
+        if (this.#tiles.length != 0) {
+            this.#tiles.forEach(object => object.draw());
+        }
+        if (this.#objects.length != 0) {
+            this.#objects.forEach(object => object.draw());
+        }
     }
 }

@@ -6,7 +6,6 @@ module.exports = */class NPCAvatarView extends AvatarView {
 
     #npcId;
     #name;
-    #typeOfRoom;
     #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
@@ -16,6 +15,9 @@ module.exports = */class NPCAvatarView extends AvatarView {
     #standingDownLeftAnimation;
     #standingDownRightAnimation;
     #currentAnimation;
+    #typeOfRoom;
+
+    #gameEngine;
 
     constructor(npcId, name, position, direction, typeOfRoom) {
         super(position, direction);
@@ -29,6 +31,8 @@ module.exports = */class NPCAvatarView extends AvatarView {
         this.#npcId = npcId;
         this.#name = name;
         this.#typeOfRoom = typeOfRoom;
+
+        this.#gameEngine = new IsometricEngine();
 
         if (direction === 'UPLEFT') {
             this.#currentAnimation = this.#standingUpLeftAnimation;
@@ -44,20 +48,9 @@ module.exports = */class NPCAvatarView extends AvatarView {
     draw() {
         let cordX = super.getPosition().getCordX();
         let cordY = super.getPosition().getCordY();
-
-        //should be done somewhere else, 150 and 419 are room dependent
-        if (this.#typeOfRoom === 'FOYER') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-        }
-        else if (this.#typeOfRoom === 'FOODCOURT') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-        }
-        else if (this.#typeOfRoom === 'RECEPTION') {
-            var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-            var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-        }
+        
+        var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
+        var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
 
         ctx_map.font = "1em sans-serif";
         ctx_map.textBaseline = 'top';

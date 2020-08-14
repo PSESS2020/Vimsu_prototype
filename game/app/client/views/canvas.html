@@ -304,10 +304,12 @@
                 requirejs(['client/views/js/Views',
                     'client/shared/Settings'], () => {
 
-                        requirejs(['client/utils/ImageLoader',
+                        requirejs([
+                            'client/utils/ImageLoader',
                             'client/utils/CacheImages',
+                            'client/utils/IsometricEngine',
                             'client/utils/SpriteAnimation',
-                            'client/utils/SpriteSheet'], () => {
+                            'client/utils/SpriteSheet',], () => {
 
                                 requirejs(['client/views/js/WindowView',
                                     'client/views/js/MapView',
@@ -335,7 +337,6 @@
                                             'client/views/js/NewAchievementView',
                                             'client/views/js/CurrentLecturesView',
                                             'client/views/js/LectureView',
-                                            'client/views/js/RoomView',
                                             'client/views/js/NPCAvatarView',
                                             'client/views/js/ParticipantAvatarView',
                                             'client/views/js/TileView',

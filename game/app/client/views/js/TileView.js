@@ -7,6 +7,9 @@ class TileView extends GameObjectView {
         this.#tileImage = tileImage;
         this.#position = position;
     }
+    getPosition() {
+        return this.#position;
+    }
 
     draw() {
         ctx_map.drawImage(this.#tileImage, this.#position.getCordX(), this.#position.getCordY());

@@ -7,6 +7,10 @@ module.exports = */
 const AVATAR_WIDTH = 64;
 const AVATAR_HEIGHT = 128;
 
+//Needed for calculating because avatar asset gets shrinked when drawn. 
+const AVATAR_SCALE_WIDTH = 1.5;
+const AVATAR_SCALE_HEIGHT = 0.3125;
+
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
@@ -25,8 +29,10 @@ class ParticipantAvatarView extends AvatarView {
     #currentAnimation;
     #walking = false;
     #isVisible = true;
-    #typeOfRoom;
     #username;
+    #typeOfRoom;
+
+    #gameEngine;
 
     constructor(position, direction, participantId, typeOfRoom, username) {
         super(position, direction);
@@ -45,6 +51,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#typeOfRoom = typeOfRoom;
         this.#username = username;
 
+        this.#gameEngine = new IsometricEngine();
     }
 
     // changed the name here for test-purposes
@@ -118,22 +125,10 @@ class ParticipantAvatarView extends AvatarView {
             let cordX = super.getPosition().getCordX();
             let cordY = super.getPosition().getCordY();
             this.updateCurrentAnimation();
-
-            //should be done somewhere else, 150 and 419 are room dependent
-            if (this.#typeOfRoom === 'FOYER') {
-                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 150;
-                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-            }
-            else if (this.#typeOfRoom === 'FOODCOURT') {
-                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-            }
-            else if (this.#typeOfRoom === 'RECEPTION') {
-                var screenX = cordX * 64 / 2 + cordY * 64 / 2 + 534;
-                var screenY = cordY * 32 / 2 - cordX * 32 / 2 + 435;
-            }
-
-
+            
+            var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
+            var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
+            
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
             ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";

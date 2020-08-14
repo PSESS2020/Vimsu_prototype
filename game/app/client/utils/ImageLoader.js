@@ -2,9 +2,9 @@ class ImageLoader {
 
     constructor() { }
 
-    async loadImage(path) {
+    async loadImage(key, path) {
 
-        const cached = CacheImages.getImage(path);
+        const cached = CacheImages.getImage(key);
 
         if (cached !== undefined) {
             return cached;
@@ -14,7 +14,7 @@ class ImageLoader {
             const image = new Image();
 
             image.onload = () => {
-                CacheImages.addImage(path, image);
+                CacheImages.addImage(key, image);
                 resolve(image);
             }
 

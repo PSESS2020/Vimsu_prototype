@@ -21,12 +21,16 @@ class GameView {
     #npcAvatarViews = [];
     #notifBar;
 
+    #gameEngine;
+    
+
     constructor() {
         this.#statusBar = new StatusBar();
         this.#notifBar = new NotificationBar();
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
+        this.#gameEngine = new IsometricEngine();
     }
 
     getOwnAvatarView() {
@@ -49,17 +53,15 @@ class GameView {
 
         var canvas = document.getElementById('avatarCanvas');
 
-        var self = this;
-
         //Handle mouse movement on canvas
-        $('#avatarCanvas').on('mousemove', function (e) {
-
+        $('#avatarCanvas').on('mousemove', (e) => {
+            //console.log("mousemov: " + e.pageX + " " + e.pageY)
             //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = self.getMousePos(canvas, e);
+            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
 
-            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+            if (this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
 
                 /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
                 
@@ -68,29 +70,29 @@ class GameView {
                 else
                     canvas.style.cursor = "default";*/
 
-                self.#currentMap.selectionOnMap = true;
+                this.#currentMap.selectionOnMap = true;
             } else
-                self.#currentMap.selectionOnMap = false;
+                this.#currentMap.selectionOnMap = false;
 
-            self.#currentMap.updateSelectedTile(selectedTileCords);
+            this.#currentMap.updateSelectedTile(selectedTileCords);
 
         });
 
         //Handles mouse click on canvas
-        $('#avatarCanvas').on('click', function (e) {
+        $('#avatarCanvas').on('click', (e) => {
 
             //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = self.getMousePos(canvas, e);
+            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
 
-            var selectedTileCords = self.#currentMap.translateMouseToTileCord(newPosition);
+            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (self.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+            if (this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                self.#currentMap.findClickedTile(selectedTileCords);
+                this.#currentMap.findClickedTile(selectedTileCords);
 
                 //then, check if there is an avatar at this position
-                self.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                this.getAnotherParticipantAvatarViews().forEach(ppantView => {
 
                     /*
                     console.log("avatar screen x: " + ppantView.getScreenX());
@@ -111,7 +113,7 @@ class GameView {
                 });
 
                 //then, check if there is an NPC at this position
-                self.#npcAvatarViews.forEach(npcView => {
+                this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getPosition().getCordX() === selectedTileCords.x
                         && npcView.getPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
                         npcView.onClick();
@@ -120,21 +122,6 @@ class GameView {
 
             }
         });
-    }
-
-    getMousePos(canvas, e) {
-
-        //gets the absolute size of canvas and calculates the scaling factor
-        var rect = canvas.getBoundingClientRect();
-        var scaleX = canvas.width / rect.width;
-        var scaleY = canvas.height / rect.height;
-
-        //Apply scaling factor to cursor position
-        return {
-            x: (e.pageX - rect.left) * scaleX,
-            y: (e.pageY - rect.top) * scaleY,
-
-        }
     }
 
     addToUpdateList(viewInstance) {
@@ -217,7 +204,7 @@ class GameView {
     }
 
     //Is called when participant enters Room
-    initRoomView(map, objectMap, listOfNPCs, typeOfRoom) {
+    initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom) {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
@@ -226,7 +213,7 @@ class GameView {
             this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), typeOfRoom));
         });
 
-        this.#currentMap = new RoomView(map, objectMap);
+        this.#currentMap = new MapView(assetPaths, map, objectMap);
     }
 
     /**
@@ -251,7 +238,7 @@ class GameView {
                 participant.getDirection(),
                 participant.getId(),
                 typeOfRoom,
-                participant.getUsername()
+                participant.getUsername(),
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
