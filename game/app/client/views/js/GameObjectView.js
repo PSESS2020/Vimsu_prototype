@@ -4,24 +4,32 @@ if (typeof module === 'object' && typeof exports === 'object') {
 
 class GameObjectView extends Views {
 
-    #tileImage;
+    #objectImage;
     #position;
     #name;
 
-    constructor(tileImage, position) {
+    constructor(objectImage, position, name) {
         super();
-        this.#tileImage = tileImage;
+        this.#objectImage = objectImage;
         TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
-        //this.#name = name
+        this.#name = name
 
-        if (new.target === GameObjectView) {
+        /*if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
-        }
+        }*/
+    }
+
+    getObjectImage() {
+        return this.#objectImage;
     }
 
     getPosition() {
         return this.#position;
+    }
+
+    getName() {
+        return this.#name;
     }
 
     updatePos(position) {
@@ -31,7 +39,7 @@ class GameObjectView extends Views {
     }
 
     draw() {
-        throw new Error('draw() has to be implemented!');
+        ctx_avatar.drawImage(this.#objectImage, this.#position.getCordX(), this.#position.getCordY());
     }
 
     onclick() {
