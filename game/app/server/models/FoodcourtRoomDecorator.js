@@ -15,6 +15,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/wall1.png",
         "rightwall_default": "client/assets/wall2.png",
         "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
+        "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
+        "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
+        "leftconferencelogo_default3": "client/assets/conferencelogo4.png",
+        "leftconferencelogo_default4": "client/assets/conferencelogo5.png",
         "table_default": "client/assets/table.png"
     }
 
@@ -58,6 +63,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
                 objService.createTable(Settings.FOODCOURT_ID, 4, i, true),
                 objService.createTable(Settings.FOODCOURT_ID, 2, i, true));
         }
+
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false);
+        conferenceLogos.forEach(conferenceLogo => {
+            listOfGameObjects.push(conferenceLogo);
+        });
 
         //Get all npcs from service
         let npcService = new NPCService();
