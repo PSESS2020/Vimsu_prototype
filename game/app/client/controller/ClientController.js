@@ -190,6 +190,7 @@ class ClientController {
         this.socket.on('update token', this.handleFromServerUpdateToken.bind(this));
         this.socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('New global announcement', this.handleFromServerNewGlobalAnnouncement.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
@@ -602,14 +603,14 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewGlobalMessage(messageHeader, messageText, messageTimestamp) {
-        if(messageTimestamp) {
-            var timestamp = new DateParser(new Date(messageTimestamp)).parseOnlyTime();
-            var moderatorUsername = messageHeader;
-            var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
-        }
-
+    handleFromServerNewGlobalMessage(messageHeader, messageText) {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
+
+    handleFromServerNewGlobalAnnouncement(moderatorUsername, message) {
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
+        this.#gameView.initGlobalChatView(messageHeader, message.text);
     }
 
     handleFromServerHideAvatar(participantId) {

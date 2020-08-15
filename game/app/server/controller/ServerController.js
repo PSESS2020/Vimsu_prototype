@@ -1770,14 +1770,18 @@ module.exports = class ServerController {
                  *
                  * - (E) */
                 if (commandArgs.length > 1) {
-                    var messageText = input.substr(input.indexOf(" "));
+                    var currentDate = new Date();
+                    var message = {
+                        timestamp: currentDate,
+                        text: input.substr(input.indexOf(" "))
+                    }
 
                     /* Sending the global message to all the users.
                      * Furthermore, we might alter the handling to not send
                      * any global messages to any other moderators.
                      *
                      * - (E) */
-                    this.#io.emit('New global message', moderator.getBusinessCard().getUsername(), messageText, new Date()); // This might be altered to not
+                    this.#io.emit('New global announcement', moderator.getBusinessCard().getUsername(), message); // This might be altered to not
                     // include moderators
                 }
                 break;
@@ -1794,7 +1798,7 @@ module.exports = class ServerController {
                     messageBody.splice(0, 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
                         ") has messageId: " + msg[i].messageID);
                 }
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody, undefined);
+                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.HELP:
                 // TODO: maybe move all these strings into a util-file?
@@ -1822,7 +1826,7 @@ module.exports = class ServerController {
                 "\\unmute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
                 "seperated from the next by a whitespace-character, and unmutes them, meaning they " +
                 "will be able to post messages into the allchat again if they were previously muted."];
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody, undefined);
+                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.REMOVEPLAYER:
                 // removes player(s) from conference
@@ -1944,7 +1948,7 @@ module.exports = class ServerController {
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText, undefined);
+                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageText);
                 break;
         }
     };
@@ -2059,7 +2063,7 @@ module.exports = class ServerController {
                     "\\close -- Closes the lecture and makes it inaccessible. Every current participant " +
                     "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
                     "WARNING: this command can NOT be reversed."];
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody, undefined);
+                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.LOGMESSAGES:
                 var messageHeader = "List of messages posted in " + lecture.getTitle();
@@ -2068,7 +2072,7 @@ module.exports = class ServerController {
                     messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] (senderId: " + lectureChat[i].senderID +
                         ") has messageId: " + lectureChat[i].messageID);
                 }
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody, undefined);
+                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.CLOSE:
                 var ppantsInLecture = lecture.getActiveParticipants();
@@ -2087,7 +2091,7 @@ module.exports = class ServerController {
             default:
                 var messageHeader = "Unrecognized command."
                 var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageText, undefined);
+                this.#io.to(socket.id).emit('New global message', messageHeader, messageText);
                 break;
         }
 
@@ -2146,43 +2150,43 @@ module.exports = class ServerController {
     // TODO: merge all these into a single function
     sendWarning(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.WARNING.header, Messages.WARNING.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.WARNING.header, Messages.WARNING.body);
         }
     };
 
     sendRemoval(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.REMOVAL.header, Messages.REMOVAL.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.REMOVAL.header, Messages.REMOVAL.body);
         }
     };
 
     sendRevoke(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body);
         }
     };
 
     sendGrant(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.GRANT.header, Messages.GRANT.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.GRANT.header, Messages.GRANT.body);
         }
     };
 
     sendMute(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.MUTE.header, Messages.MUTE.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.MUTE.header, Messages.MUTE.body);
         }
     };
 
     sendUnmute(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.UNMUTE.header, Messages.UNMUTE.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.UNMUTE.header, Messages.UNMUTE.body);
         }
     };
 
     sendClosed(socketid) {
         if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.CLOSED.header, Messages.CLOSED.body, undefined);
+            this.#io.to(socketid).emit("New global message", Messages.CLOSED.header, Messages.CLOSED.body);
         }
     };
 
