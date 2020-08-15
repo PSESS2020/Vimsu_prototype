@@ -96,9 +96,12 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.PLANT:
+                gameObjectImage = this.#assetImages[objectName];    
+
+                //because the table image has a different size.
+                var plantOffsetY = this.#tileRowHeight - gameObjectImage.height - 10;
 
                 screenPos = new PositionClient(screenX, screenY + plantOffsetY);
-                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new TableView(gameObjectImage, screenPos);
