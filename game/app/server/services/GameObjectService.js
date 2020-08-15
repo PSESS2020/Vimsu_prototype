@@ -119,4 +119,25 @@ module.exports = class GameObjectService {
             return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default", width, length, new Position(roomId, xPos, yPos), solidity);
     }
 
+    //Conference Logo
+    createLeftConferenceLogo(roomId, width, length, xPos, yPos, solidity) {
+        this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
+        let conferenceLogos = [];
+        if(length > 1) {
+            for (let i = 0; i < length; i++) {
+                console.log("leftconferencelogo_default" + i)
+                conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
+            }
+            return conferenceLogos;
+        } else if (width > 1) {
+            for (let i = 0; i < width; i++) {
+                console.log("leftconferencelogo_default" + i)
+
+                conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
+            }
+            return conferenceLogos;
+        } else
+            return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default", width, length, new Position(roomId, xPos, yPos), solidity);
+    }
+
 }
