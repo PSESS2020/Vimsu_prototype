@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const GameObjectService = require('../../../game/app/server/services/GameObjectService');
 const GameObject = require('../../../game/app/server/models/GameObject');
-const Settings = require('../../../game/app/client/shared/Settings');
+const Settings = require('../../../game/app/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 
 
@@ -20,8 +20,8 @@ describe('GameObjectService test', function () {
         expect(table.getPosition().getCordY()).to.equal(cordY);
         expect(table.getSolid()).to.equal(solidity);
         expect(table.getId()).to.be.a('number');
-        expect(table.getWidth()).to.equal(Settings.TABLE_WIDTH);
-        expect(table.getLength()).to.equal(Settings.TABLE_LENGTH);
+        expect(table.getWidth()).to.equal(Settings.SMALL_OBJECT_WIDTH);
+        expect(table.getLength()).to.equal(Settings.SMALL_OBJECT_LENGTH);
     });
 
     it('test create ScheduleBoard', function() {

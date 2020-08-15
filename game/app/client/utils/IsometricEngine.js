@@ -86,20 +86,6 @@ class IsometricEngine {
                     return Promise.all(Object.entries(assetImages)).then(() => {
                         this.#loader.doneLoading();
 
-                        /*var offset = {
-                            //tileColumnOffset: this.tileImages[0],
-                            //tileRowOffset: this.tileImages[0] / 2,
-                            tileColumnOffset: 64,
-                            tileRowOffset: 32,
-                            wallColumnOffset: this.tileImages[1].width,
-                            tableRowOffset: this.tileImages[totalImages - 2].height,
-                        };*/
-
-                        
-
-                        //this.#tileWidth = offset.tileColumnOffset;
-                        //this.#tileHeight = offset.tileRowOffset;
-                        //this.#assetOffsets = offset;
                         return assetImages;
                     });
 

@@ -3,7 +3,7 @@ const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
-const Settings = require('../../client/shared/Settings.js');
+const Settings = require('../../utils/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 
@@ -16,7 +16,13 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/wall1.png",
         "rightwall_default": "client/assets/wall2.png",
         "leftfoyerdoor_default": "client/assets/door_foyer.png",
-        "table_default": "client/assets/table.png"
+        "rightwindow_default": "client/assets/window.png",
+        "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
+        "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
+        "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
+        "leftconferencelogo_default3": "client/assets/conferencelogo4.png",
+        "leftconferencelogo_default4": "client/assets/conferencelogo5.png",
+        "table_default": "client/assets/table.png",
     }
 
     constructor(room) {
@@ -59,6 +65,15 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
             objService.createTable(Settings.RECEPTION_ID, 12, 9, true),
             objService.createTable(Settings.RECEPTION_ID, 11, 3, true),
             objService.createTable(Settings.RECEPTION_ID, 12, 3, true));
+
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.RECEPTION_ID, 1, 5, 5, -1, false);
+        conferenceLogos.forEach(conferenceLogo => {
+            listOfGameObjects.push(conferenceLogo);
+        });
+
+        for (i = 5; i < this.#room.getWidth() - 5; i++) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }
 
         //Get all npcs from service
         let npcService = new NPCService();

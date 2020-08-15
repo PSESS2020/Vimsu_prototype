@@ -32,7 +32,7 @@
                 <label for="video">Video:</label>
                 <input type="file" name="video" id="file" accept="video/mp4" />
             </div>
-            <label style="margin-top: 0px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 500 MB</label>
+            <label style="margin-top: 0px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 50 MB</label>
             <hr />
             <div class="row justify-content-left m-0 p-0">
                 <% if(locals.noFilesUploaded === true) { %>
@@ -40,7 +40,7 @@
                     uploaded. Please upload a video.</p>
                 <% } else if (locals.fileSizeExceeded === true) { %>
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>File size
-                    exceeded 500 MB. Please try again.</p>
+                    exceeded 50 MB. Please try again.</p>
                 <% } else if (locals.unsupportedFileType === true) { %>
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Unsupported
                     file type. Please upload only .mp4 file.</p>
@@ -57,7 +57,7 @@
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
                     error while creating the slot. Please try again.</p>
                 <% } else if (locals.uploading === true) { %>
-                    <p style="font-size: small;"><i class="fas fa-spinner fa-pulse"></i> Lecture slot is being created. You may exit this page.</p>
+                    <p style="font-size: small;"><i class="fas fa-spinner fa-spin"></i> Lecture slot is being created. You may exit this page.</p>
                 <% } else { %>
                 <% } %>
             </div>

@@ -5,7 +5,7 @@ const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
 const fs = require('fs');
-const Settings = require('../../game/app/client/shared/Settings')
+const Settings = require('../../game/app/utils/Settings')
 
 module.exports = class RouteController {
 
@@ -106,7 +106,7 @@ module.exports = class RouteController {
             var videoSize = video.size;
 
             if (videoName.includes(".mp4")) {
-                if (videoSize > 500*1024*1024) {
+                if (videoSize > 50*1024*1024) {
                     return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
                 else {

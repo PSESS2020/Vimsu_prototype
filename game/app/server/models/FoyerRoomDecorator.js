@@ -2,11 +2,9 @@ const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
-const Settings = require('../../client/shared/Settings.js');
+const Settings = require('../../utils/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
-const { FOYER_ID } = require('../../client/shared/Settings.js');
-
 
 module.exports = class FoyerRoomDecorator extends RoomDecorator {
     #room;
@@ -22,7 +20,18 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/schedule1.png",
         "leftschedule_default1": "client/assets/schedule2.png",
         "leftschedule_default2": "client/assets/schedule3.png",
-        "table_default": "client/assets/table.png"
+        "rightwindow_default": "client/assets/window.png",
+        "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
+        "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
+        "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
+        "leftconferencelogo_default3": "client/assets/conferencelogo4.png",
+        "leftconferencelogo_default4": "client/assets/conferencelogo5.png",
+        "rightwallframe_default0": "client/assets/wallframe1.png",
+        "rightwallframe_default1": "client/assets/wallframe2.png",
+        "rightwallframe_default2": "client/assets/wallframe3.png",
+        "plant_default": "client/assets/plant.png",
+        "table_default": "client/assets/table.png",
+        
     }
 
     constructor(room) {
@@ -76,6 +85,22 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         });
 
+        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getWidth() - 1, 0, true));
+
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 14, -1, false);
+        conferenceLogos.forEach(conferenceLogo => {
+            listOfGameObjects.push(conferenceLogo);
+        });
+
+        for (i = 0; i <= 1; i++) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }
+
+        let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 9, false);
+        wallFrames.forEach(wallFrame => {
+            listOfGameObjects.push(wallFrame);
+        });
+        
         //Get all npcs from service
         let npcService = new NPCService();
         let listOfNPCs = [];

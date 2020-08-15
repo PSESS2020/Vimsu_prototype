@@ -7,7 +7,9 @@ const GameObjectType = Object.freeze({
     TABLE: 'TABLE',
     LEFTTILE: 'LEFTTILE',
     RIGHTTILE: 'RIGHTTILE',
-    SCHEDULE: 'SCHEDULE'
+    SCHEDULE: 'SCHEDULE',
+    PLANT: 'PLANT',
+    CONFERENCELOGO: 'CONFERENCELOGO'
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

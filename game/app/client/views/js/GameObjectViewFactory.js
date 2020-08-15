@@ -95,6 +95,17 @@ class GameObjectViewFactory {
 
                 break;
 
+            case GameObjectType.PLANT:
+
+                screenPos = new PositionClient(screenX, screenY + plantOffsetY);
+                gameObjectImage = CacheImages.getImage(objectName);
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new TableView(gameObjectImage, screenPos);
+                else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
             case GameObjectType.LEFTTILE:
                 gameObjectImage = this.#assetImages[objectName];
 

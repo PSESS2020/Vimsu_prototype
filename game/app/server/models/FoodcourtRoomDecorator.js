@@ -2,7 +2,7 @@ const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
-const Settings = require('../../client/shared/Settings.js');
+const Settings = require('../../utils/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 
@@ -15,6 +15,12 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/wall1.png",
         "rightwall_default": "client/assets/wall2.png",
         "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "rightwindow_default": "client/assets/window.png",
+        "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
+        "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
+        "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
+        "leftconferencelogo_default3": "client/assets/conferencelogo4.png",
+        "leftconferencelogo_default4": "client/assets/conferencelogo5.png",
         "table_default": "client/assets/table.png"
     }
 
@@ -58,6 +64,19 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
                 objService.createTable(Settings.FOODCOURT_ID, 4, i, true),
                 objService.createTable(Settings.FOODCOURT_ID, 2, i, true));
         }
+
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false);
+        conferenceLogos.forEach(conferenceLogo => {
+            listOfGameObjects.push(conferenceLogo);
+        });
+
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 3, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 4, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 8, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 9, false))
+        /*for (i = 4; i < this.#room.getWidth() - 4; i+=4) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }*/
 
         //Get all npcs from service
         let npcService = new NPCService();

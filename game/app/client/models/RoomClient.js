@@ -1,5 +1,3 @@
-//const Settings = require('../shared/Settings.js');
-
 if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
@@ -9,7 +7,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     ParticipantClient = require('./ParticipantClient.js');
     TypeOfRoom = require('../shared/TypeOfRoom');
     GameObjectType = require('../shared/GameObjectType.js');
-    Settings = require('../shared/Settings.js');
+    Settings = require('../utils/Settings.js');
 }
 
 class RoomClient {
