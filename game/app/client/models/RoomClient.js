@@ -309,34 +309,6 @@ class RoomClient {
             this.#map[positionX][positionY + Settings.MAP_BLANK_TILES_WIDTH] = door;
 
         });
-
-        console.log("map: " + this.#map.length + " " + this.#map[0].length);
-        console.log("map: " + this.#objectMap.length + " " + this.#objectMap[0].length);
-        /*for (var i = 0; i < this.#listOfDoors.length; i++) {
-            
-            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.FOYER_DOOR) {
-
-                this.#map[positionX][positionY - 1] = GameObjectType.LEFTTILE;
-                this.#map[positionX][positionY] = GameObjectType.FOYERDOOR;
-
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.RECEPTION_DOOR) {
-
-                this.#map[positionX + 1][positionY] = GameObjectType.RIGHTTILE;
-                this.#map[positionX][positionY] = GameObjectType.RECEPTIONDOOR;
-
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.FOODCOURT_DOOR) {
-
-                this.#map[positionX + 1][positionY] = GameObjectType.RIGHTTILE;
-                this.#map[positionX][positionY] = GameObjectType.FOODCOURTDOOR;
-
-
-            } else if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
-                this.#map[positionX][positionY - 1] = GameObjectType.LEFTTILE;
-                this.#map[positionX][positionY] = GameObjectType.LECTUREDOOR;
-
-            }
-
-        }*/
     }
 
 

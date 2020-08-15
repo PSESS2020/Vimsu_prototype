@@ -3,11 +3,9 @@ class IsometricEngine {
     #yNumTiles;
     #mapOriginX;
     #mapOriginY;
-    #tileWidth;
-    #tileHeight;
+    #tileColumnWidth = 64;
+    #tileRowHeight = 32;
 
-    //For calculation the right positions of sprites on the map.
-    #assetOffsets;
     #loader;
 
     constructor() {
@@ -29,8 +27,8 @@ class IsometricEngine {
         this.#yNumTiles = yNumTiles;
         
         //origin that indicates where to start drawing the map assets.
-        this.#mapOriginX = 0;
-        this.#mapOriginY = 0;
+        this.#mapOriginX = ctx_map.canvas.width / 2 - this.#xNumTiles * this.#tileRowHeight;
+        this.#mapOriginY = ctx_map.canvas.height / 2;
 
         return await this.loadImages(assetPaths);
     }
@@ -43,6 +41,14 @@ class IsometricEngine {
     setMapOriginXY(mapOriginX, mapOriginY) {
         this.#mapOriginX = mapOriginX;
         this.#mapOriginY = mapOriginY;
+    }
+    
+    getTileColumnWidth() {
+        return this.#tileColumnWidth;
+    }
+    
+    getTileRowHeight() {
+        return this.#tileRowHeight;
     }
 
     getNumMapTilesXY() {
@@ -64,38 +70,37 @@ class IsometricEngine {
         var imageLoader = new ImageLoader();
         var totalImages = Object.keys(assetPaths).length;
 
-        this.tileImages = new Array(totalImages).fill(0);
+        var assetImages = {};
         var loadedImages = 0;
         //console.log(assetPaths);
 
             // Load all the images before we run the app
             for (var key in assetPaths) {
-                this.tileImages[loadedImages] = await imageLoader.loadImage(key, assetPaths[key]);
+                assetImages[key] = await imageLoader.loadImage(key, assetPaths[key]);
 
                 loadedImages++;
+
                 this.#loader.contentLoaded(totalImages, loadedImages);
 
                 if (loadedImages >= totalImages) {
-                    return Promise.all(this.tileImages).then(() => {
+                    return Promise.all(Object.entries(assetImages)).then(() => {
                         this.#loader.doneLoading();
 
-                        var offset = {
+                        /*var offset = {
                             //tileColumnOffset: this.tileImages[0],
                             //tileRowOffset: this.tileImages[0] / 2,
                             tileColumnOffset: 64,
                             tileRowOffset: 32,
                             wallColumnOffset: this.tileImages[1].width,
                             tableRowOffset: this.tileImages[totalImages - 2].height,
-                        };
+                        };*/
 
-                        this.#mapOriginX = ctx_map.canvas.width / 2 - this.#xNumTiles * offset.tileRowOffset;
-                        this.#mapOriginY = ctx_map.canvas.height / 2;
-
-                        this.#tileWidth = offset.tileColumnOffset;
-                        this.#tileHeight = offset.tileRowOffset;
                         
-                        this.#assetOffsets = offset;
-                        return offset;
+
+                        //this.#tileWidth = offset.tileColumnOffset;
+                        //this.#tileHeight = offset.tileRowOffset;
+                        //this.#assetOffsets = offset;
+                        return assetImages;
                     });
 
                 }
@@ -104,22 +109,22 @@ class IsometricEngine {
     }
 
     calculateScreenPosXY(xPos, yPos) {
-        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined) {
+        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
             return {
-                x: xPos * this.#assetOffsets.tileColumnOffset / 2 + yPos * this.#assetOffsets.tileColumnOffset / 2 + this.#mapOriginX,
-                y: yPos * this.#assetOffsets.tileRowOffset / 2 - xPos * this.#assetOffsets.tileRowOffset / 2 + this.#mapOriginY
+                x: xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX,
+                y: yPos * this.#tileRowHeight / 2 - xPos * this.#tileRowHeight / 2 + this.#mapOriginY
             }
         }
     }
 
     calculateScreenPosX(xPos, yPos) {
-        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
-            return xPos * this.#assetOffsets.tileColumnOffset / 2 + yPos * this.#assetOffsets.tileColumnOffset / 2 + this.#mapOriginX;
+        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
+            return xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX;
     }
 
     calculateScreenPosY(xPos, yPos) {
-        if (this.#assetOffsets !== undefined && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined)
-            return yPos * this.#assetOffsets.tileRowOffset / 2 - xPos * this.#assetOffsets.tileRowOffset / 2 + this.#mapOriginY;
+        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
+            return yPos * this.#tileRowHeight / 2 - xPos * this.#tileRowHeight / 2 + this.#mapOriginY;
     }
 
     translateMouseToCanvasPos(canvas, e) {
@@ -138,16 +143,16 @@ class IsometricEngine {
     }
 
     translateMouseToTileCord(newPosition) {
-        if (this.#assetOffsets !== undefined && this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
-            && this.#assetOffsets.tileColumnOffset !== undefined && this.#assetOffsets.tileRowOffset !== undefined) {
+        if (this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
+            && this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
 
         //Adjusts mouse position to the tile position. 
-        var newPosX = newPosition.x - this.#assetOffsets.tileColumnOffset / 2 - this.#mapOriginX;
-        var newPosY = newPosition.y - this.#assetOffsets.tileRowOffset / 2 - this.#mapOriginY;
+        var newPosX = newPosition.x - this.#tileColumnWidth / 2 - this.#mapOriginX;
+        var newPosY = newPosition.y - this.#tileRowHeight / 2 - this.#mapOriginY;
 
         //Calculate the tile at which the current mouse cursor points.
-        var selectedTileX = Math.round(newPosX / this.#assetOffsets.tileColumnOffset - newPosY / this.#assetOffsets.tileRowOffset);
-        var selectedTileY = Math.round(newPosX / this.#assetOffsets.tileColumnOffset + newPosY / this.#assetOffsets.tileRowOffset);
+        var selectedTileX = Math.round(newPosX / this.#tileColumnWidth - newPosY / this.#tileRowHeight);
+        var selectedTileY = Math.round(newPosX / this.#tileColumnWidth + newPosY / this.#tileRowHeight);
 
         return {
             x: selectedTileX,

@@ -1,19 +1,13 @@
 class WallView extends GameObjectView {
     #wallImage;
-    #position;
 
     constructor(wallImage, position) {
         super(wallImage, position);
         this.#wallImage = wallImage;
-        this.#position = position;
-    }
-
-    getPosition() {
-        return this.#position;
     }
 
     draw() {
-        ctx_map.drawImage(this.#wallImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#wallImage, super.getPosition().getCordX(), super.getPosition().getCordY());
     }
 
     onclick() {

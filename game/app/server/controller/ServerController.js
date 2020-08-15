@@ -241,12 +241,15 @@ module.exports = class ServerController {
 
                     //needed to init all Doors in clients game view
                     doors.forEach(door => {
+                        console.log( door.getTargetRoomId())
+
                         doorData.push({
                             id: door.getId(), 
                             typeOfDoor: door.getTypeOfDoor(),
                             name: door.getName(),
                             cordX: door.getMapPosition().getCordX(),
-                            cordY: door.getMapPosition().getCordY()
+                            cordY: door.getMapPosition().getCordY(),
+                            targetRoomId: door.getTargetRoomId()
                         });
                     });
 
@@ -414,6 +417,7 @@ module.exports = class ServerController {
                 }
             });
 
+
             //Handle movement stop
             socket.on('requestMovementStop', (ppantID) => {
                 var roomId = this.#ppants.get(ppantID).getPosition().getRoomId();
@@ -421,27 +425,19 @@ module.exports = class ServerController {
                 socket.to(roomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
             });
 
-            //Event to handle click on food court door tile
-            socket.on('enterRoom', (ppantID, targetRoomType) => {
 
-                //get right target room id
-                var targetRoomId;
-                if (targetRoomType === TypeOfRoom.FOYER) {
-                    targetRoomId = Settings.FOYER_ID;
-                } else if (targetRoomType === TypeOfRoom.FOODCOURT) {
-                    targetRoomId = Settings.FOODCOURT_ID;
-                } else if (targetRoomType === TypeOfRoom.RECEPTION) {
-                    targetRoomId = Settings.RECEPTION_ID;
-                }
+            //Event to handle click on door tile
+            socket.on('enterRoom', (ppantID, targetRoomId) => {
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
                 let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
                 let targetRoom = this.#rooms[targetRoomId - 1].getRoom();
+                let targetRoomType = targetRoom.getTypeOfRoom();
 
                 //get door from current room to target room
                 let door = currentRoom.getDoorTo(targetRoomId);
-
+                //console.log("curr room " + currentRoomId + " target room " + targetRoomId + " target type " + targetRoomType + " target id" + door.getTargetRoomId());
                 //check if participant is in right position to enter room
                 //this.#ppants.get(ppantID).getPosition() !== door.getStartPosition() did not work for some reason
                 if (!door.isValidEnterPosition(enterPosition)) {
@@ -529,7 +525,8 @@ module.exports = class ServerController {
                         typeOfDoor: door.getTypeOfDoor(),
                         name: door.getName(),
                         cordX: door.getMapPosition().getCordX(),
-                        cordY: door.getMapPosition().getCordY()
+                        cordY: door.getMapPosition().getCordY(),
+                        targetRoomId: door.getTargetRoomId()
                     });
                 });
 
@@ -1644,11 +1641,12 @@ module.exports = class ServerController {
                 /* This still needs error-Handling for when no such ppantCont exists - (E) */
                 var ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
 
+                var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
                 // gameRoomController.removeParticipantController(this.#ppantControllers.get(socket.id);
                 // The next line can probably be just handled inside the previous one
                 //io.sockets.emit('remove player', ppantID);
                 console.log(ppantID);
-                socket.broadcast.emit('remove player', ppantID);
+                socket.to(currentRoomId.toString()).emit('remove player', ppantID);
                 console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
 
                 //write position and direction from disconnecting participant in DB
@@ -1658,7 +1656,6 @@ module.exports = class ServerController {
                 ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
-                var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
                 this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
 
                 console.log("delete participant from ppantController: " + socket.id);

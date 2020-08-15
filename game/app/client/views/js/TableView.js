@@ -1,19 +1,13 @@
 class TableView extends GameObjectView {
     #tableImage;
-    #position;
 
     constructor(tableImage, position) {
         super(tableImage, position);
         this.#tableImage = tableImage;
-        this.#position = position;
-    }
-    
-    getPosition() {
-        return this.#position;
     }
 
     draw() {
-        ctx_map.drawImage(this.#tableImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_map.drawImage(this.#tableImage, super.getPosition().getCordX(), super.getPosition().getCordY());
     }
 
     onclick() {

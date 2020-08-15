@@ -13,7 +13,6 @@ class ClientController {
     #ownParticipant;
     #roomClient;
     #ownBusinessCard;
-    #connectionStatus;
 
     #gameView;
 
@@ -359,7 +358,7 @@ class ClientController {
         //transform Doors to DoorClients
         var listOfDoors = [];
         doorData.forEach(door => {
-            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), true));
+            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), true, door.targetRoomId));
         });
 
         //First room? 
@@ -668,25 +667,9 @@ class ClientController {
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
 
-    handleFromViewEnterReception() {
+    handleFromViewEnterNewRoom(targetRoomId) {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.RECEPTION);
-        //update currentRoom;
-        //update View
-    }
-
-    handleFromViewEnterFoodCourt() {
-        this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.FOODCOURT);
-        //update currentRoom;
-        //update View
-    }
-
-    handleFromViewEnterFoyer() {
-        this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), TypeOfRoom.FOYER);
-        //update currentRoom;
-        //update View
+        this.socket.emit('enterRoom', this.#ownParticipant.getId(), targetRoomId);
     }
 
     handleFromViewEnterLecture(lectureId) {

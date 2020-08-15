@@ -43,8 +43,9 @@ module.exports = class GameObjectService {
     /* ##################################################################### */
 
     /**
-     * Type of game object needs to be unique to the asset names in the asset folder. 
-     * Otherwise the wrong asset for the object will be loaded in the client.
+     * The game object names needs to be unique äquivalent to the asset keys in the room decorators. 
+     * If a new object with an unknown object type is added, then the new ObjectType has to be added to GameObjectType.js.
+     * Further a new ObjectView.js needs to be implemented in the client and added to the GameObjectViewFactory.js.
      */
 
     //Tiles

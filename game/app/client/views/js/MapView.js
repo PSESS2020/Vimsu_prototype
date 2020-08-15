@@ -63,9 +63,9 @@ module.exports = */class MapView extends Views {
         this.#yNumTiles = this.#map[0].length;
         
         assetPaths.tileselected_default =  "client/assets/tile_selected.png";
-        var offset = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
+        var assetImages = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
 
-        this.#gameObjectViewFactory = new GameObjectViewFactory(offset, this.#gameEngine);
+        this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine);
 
         this.buildMap();
     }
@@ -84,11 +84,14 @@ module.exports = */class MapView extends Views {
                 if (mapObject !== null) 
                 {
                     var tileType;
+                    var tile;
                     if (mapObject instanceof DoorClient) {
                         tileType = mapObject.getTypeOfDoor();
-                    } else
+                        tile = this.#gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
+                    } else {
                         tileType = mapObject.getGameObjectType();
-                    var tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, mapObject.getName());
+                        tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, mapObject.getName());
+                    }
                 
                     if (tile != null) 
                     {
@@ -128,11 +131,12 @@ module.exports = */class MapView extends Views {
         let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
 
         if (clickedTile !== null && clickedTile.isClickable()) {
-            this.#clickableTiles.forEach(object => {
-                if (clickedTile instanceof DoorClient && clickedTile.getTypeOfDoor() === object.getDoorType())
-                    object.onclick();
-                else if (clickedTile instanceof GameObjectClient && clickedTile.getGameObjectType === object.getGameObjectType())
-                    object.onclick();
+            this.#clickableTiles.forEach(viewObject => {
+               
+                if (clickedTile instanceof DoorClient && clickedTile.getName() === viewObject.getName())
+                    viewObject.onclick(clickedTile.getTargetRoomId());
+                else if (clickedTile instanceof GameObjectClient && clickedTile.getName() === viewObject.getName())
+                    viewObject.onclick();
         });
         }
 

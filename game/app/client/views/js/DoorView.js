@@ -5,41 +5,39 @@ if (typeof module === 'object' && typeof exports === 'object') {
 
 class DoorView extends GameObjectView {
     #doorImage;
-    #position;
+    //#position;
     #DOORTYPE;
+    #name;
 
-    constructor(doorImage, position, doorType) {
+    constructor(doorImage, position, doorType, name) {
         super(doorImage, position);
         this.#doorImage = doorImage;
-        this.#position = position;
+        //this.#position = position;
         this.#DOORTYPE = doorType;
+        this.#name = name;
     }
 
-    getPosition() {
-        return this.#position;
-    }
+    
 
     getDoorType() {
         return this.#DOORTYPE;
     }
 
-    draw() {
-        ctx_map.drawImage(this.#doorImage, this.#position.getCordX(), this.#position.getCordY());
+    getName() {
+        return this.#name;
     }
 
-    onclick() {
+    draw() {
+        ctx_map.drawImage(this.#doorImage, super.getPosition().getCordX(), super.getPosition().getCordY());
+    }
+
+    onclick(targetRoomId) {
         let eventManager = new EventManager();
+        
         if (this.#DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
             eventManager.handleLectureDoorClick();
-        }
-        else if (this.#DOORTYPE === TypeOfDoor.FOODCOURT_DOOR) {
-            eventManager.handleFoodCourtDoorClick();
-        }
-        else if (this.#DOORTYPE === TypeOfDoor.RECEPTION_DOOR) {
-            eventManager.handleReceptionDoorClick();
-        }
-        else if (this.#DOORTYPE === TypeOfDoor.FOYER_DOOR) {
-            eventManager.handleFoyerDoorClick();
+        } else {
+            eventManager.handleDoorClick(targetRoomId);
         }
     }
 }

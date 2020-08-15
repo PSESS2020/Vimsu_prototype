@@ -24,36 +24,18 @@ class EventManager {
      *
      */
     handleLectureDoorClick() {
+        
         this.#clientController.handleFromViewGetCurrentLectures();
-    }
 
-       /**
-     * called from View when lecture door tile is clicked
-     *
-     */
-    handleFoodCourtDoorClick() {
-        
-        this.#clientController.handleFromViewEnterFoodCourt();
-        
-    }
-
-       /**
-     * called from View when lecture door tile is clicked
-     *
-     */
-    handleReceptionDoorClick() {
-        
-        this.#clientController.handleFromViewEnterReception();
-        
     }
 
     /**
-     * called from View when lecture door tile is clicked
+     * called from View when door tile is clicked
      *
      */
-    handleFoyerDoorClick() {
+    handleDoorClick(roomId) {
         
-        this.#clientController.handleFromViewEnterFoyer();
+        this.#clientController.handleFromViewEnterNewRoom(roomId);
         
     }
 

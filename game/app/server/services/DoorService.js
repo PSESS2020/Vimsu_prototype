@@ -83,7 +83,7 @@ module.exports = class DoorService {
         TypeChecker.isEnumOf(direction, Direction);
 
         let enterPositions = this.#generateEnterPositionsLeftWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.FOYER_DOOR, "leftfoyerdoor_default", mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -98,7 +98,7 @@ module.exports = class DoorService {
         TypeChecker.isEnumOf(direction, Direction);
 
         let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.FOODCOURT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -113,6 +113,6 @@ module.exports = class DoorService {
         TypeChecker.isEnumOf(direction, Direction);
 
         let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.RECEPTION_DOOR, "rightreceptiondoor_default", mapPosition, enterPositions, targetPosition, direction);
+        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositions, targetPosition, direction);
     }
 } 
