@@ -13,7 +13,6 @@ const TypeOfRoom = require('../../../game/app/client/shared/TypeOfRoom.js');
 const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
 const Settings = require('../../../game/app/utils/Settings.js');
 const SettingsClient = require('../../../game/app/client/utils/Settings.js');
-const { Test } = require('mocha');
 
 //test data
 var roomId = TestUtil.randomInt();
