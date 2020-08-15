@@ -602,9 +602,9 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewGlobalMessage(moderatorId, message) {
+    handleFromServerNewGlobalMessage(moderatorUsername, message) {
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
-        var messageHeader = "On " + timestamp + " moderator " + moderatorId + " announced:"; //TODO: replace id with username
+        var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:"; //TODO: replace id with username
         this.#gameView.initGlobalChatView(messageHeader, message.text);
     }
 

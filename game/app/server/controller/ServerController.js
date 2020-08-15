@@ -1781,7 +1781,7 @@ module.exports = class ServerController {
                      * any global messages to any other moderators.
                      *
                      * - (E) */
-                    this.#io.emit('New global message', moderator.getId(), message); // This might be altered to not
+                    this.#io.emit('New global message', moderator.getBusinessCard().getUsername(), message); // This might be altered to not
                     // include moderators
                 }
                 break;
