@@ -1,34 +1,19 @@
 if (typeof module === 'object' && typeof exports === 'object') {
-    GameObjectView = require('./GameObjectView');
-    EventManager = require('../../utils/EventManager')
+    GameMapElementView = require('../GameMapElementView');
+    EventManager = require('../../../utils/EventManager')
 }
 
-class DoorView extends GameObjectView {
-    #doorImage;
-    //#position;
+class DoorView extends GameMapElementView {
     #DOORTYPE;
-    #name;
 
     constructor(doorImage, position, doorType, name) {
-        super(doorImage, position);
-        this.#doorImage = doorImage;
-        //this.#position = position;
-        this.#DOORTYPE = doorType;
-        this.#name = name;
-    }
+        super(doorImage, position, name);
 
-    
+        this.#DOORTYPE = doorType;
+    }
 
     getDoorType() {
         return this.#DOORTYPE;
-    }
-
-    getName() {
-        return this.#name;
-    }
-
-    draw() {
-        ctx_map.drawImage(this.#doorImage, super.getPosition().getCordX(), super.getPosition().getCordY());
     }
 
     onclick(targetRoomId) {

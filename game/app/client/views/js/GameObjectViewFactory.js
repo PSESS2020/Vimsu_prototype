@@ -39,7 +39,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new SelectedTileView(gameObjectImage, screenPos);
+                    gameObjectView = new GameObjectView(gameObjectImage, screenPos);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -50,7 +50,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new TileView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -63,7 +63,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY + wallOffsetY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new WallView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -76,7 +76,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX - this.#tileColumnWidth, screenY + wallOffsetY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new WallView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -90,18 +90,20 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY + tableOffsetY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new TableView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
             case GameObjectType.PLANT:
+                gameObjectImage = this.#assetImages[objectName];
 
+                //because the plant image has a different size.
+                var plantOffsetY = this.#tileRowHeight - gameObjectImage.height - 10;
                 screenPos = new PositionClient(screenX, screenY + plantOffsetY);
-                gameObjectImage = CacheImages.getImage(objectName);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new TableView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -115,7 +117,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new TileView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -129,7 +131,7 @@ class GameObjectViewFactory {
                 screenPos = new PositionClient(screenX, screenY);
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new TileView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
