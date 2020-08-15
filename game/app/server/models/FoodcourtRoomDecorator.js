@@ -15,6 +15,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/wall1.png",
         "rightwall_default": "client/assets/wall2.png",
         "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "rightwindow_default": "client/assets/window.png",
         "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
@@ -68,6 +69,14 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         conferenceLogos.forEach(conferenceLogo => {
             listOfGameObjects.push(conferenceLogo);
         });
+
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 3, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 4, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 8, false))
+        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 9, false))
+        /*for (i = 4; i < this.#room.getWidth() - 4; i+=4) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }*/
 
         //Get all npcs from service
         let npcService = new NPCService();

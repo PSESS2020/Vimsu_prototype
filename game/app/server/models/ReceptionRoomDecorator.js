@@ -16,6 +16,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/wall1.png",
         "rightwall_default": "client/assets/wall2.png",
         "leftfoyerdoor_default": "client/assets/door_foyer.png",
+        "rightwindow_default": "client/assets/window.png",
         "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
@@ -69,6 +70,10 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         conferenceLogos.forEach(conferenceLogo => {
             listOfGameObjects.push(conferenceLogo);
         });
+
+        for (i = 5; i < this.#room.getWidth() - 5; i++) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }
 
         //Get all npcs from service
         let npcService = new NPCService();
