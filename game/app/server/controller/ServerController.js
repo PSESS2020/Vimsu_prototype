@@ -366,12 +366,10 @@ module.exports = class ServerController {
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
-                    var currentTime = (currentDate.getHours() < 10 ? '0' : '') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes() < 10 ? '0' : '') + currentDate.getMinutes().toString();
-                    console.log("<" + currentTime + "> " + ppantID + " says " + text);
-                    this.#rooms[roomID - 1].getRoom().addMessage(ppantID, username, currentTime, text);
+                    this.#rooms[roomID - 1].getRoom().addMessage(ppantID, username, currentDate, text);
 
                     // Getting the roomID from the ppant seems to not work?
-                    this.#io.in(roomID.toString()).emit('newAllchatMessage', { username: username, timestamp: currentTime, text: text });
+                    this.#io.in(roomID.toString()).emit('newAllchatMessage', { username: username, timestamp: currentDate, text: text });
 
                     //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
                 }
@@ -611,10 +609,9 @@ module.exports = class ServerController {
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
-                    var currentTime = (currentDate.getHours() < 10 ? '0' : '') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes() < 10 ? '0' : '') + currentDate.getMinutes().toString();
-                    var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentTime, messageText: text }
+                    var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, messageText: text }
                     lectureChat.appendMessage(message);
-                    console.log("<" + currentTime + "> " + ppantID + " says " + text + " in lecture.");
+                    console.log("<" + currentDate + "> " + ppantID + " says " + text + " in lecture.");
                     // Getting the roomID from the ppant seems to not work?
 
                     this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);

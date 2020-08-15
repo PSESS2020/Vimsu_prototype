@@ -10,29 +10,34 @@ const DoorClient = require('../../../game/app/client/models/DoorClient.js');
 const Direction = require('../../../game/app/client/shared/Direction.js');
 const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
 const TypeOfRoom = require('../../../game/app/client/shared/TypeOfRoom.js');
+const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
+const Settings = require('../../../game/app/utils/Settings.js');
+const SettingsClient = require('../../../game/app/client/utils/Settings.js');
 
 //test data
 var roomId = TestUtil.randomInt();
 var typeOfRoom = TypeOfRoom.FOODCOURT;
 var width = TestUtil.randomIntWithMaxAndMin(1000, 1);
 var length = TestUtil.randomIntWithMaxAndMin(1000, 1);
-var listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), 'table', TestUtil.randomIntWithMaxAndMin(5, 1), 
+var listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', TestUtil.randomIntWithMaxAndMin(5, 1), 
                         TestUtil.randomIntWithMaxAndMin(5, 1), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), 
-                        TestUtil.randomBool()), 
-                        new GameObjectClient(TestUtil.randomInt(), 'ball', TestUtil.randomIntWithMaxAndMin(5, 1), 
+                        TestUtil.randomBool(), TestUtil.randomBool()), 
+                        new GameObjectClient(TestUtil.randomInt(), GameObjectType.SCHEDULE, 'schedule', TestUtil.randomIntWithMaxAndMin(5, 1), 
                         TestUtil.randomIntWithMaxAndMin(5, 1), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), 
-                        TestUtil.randomBool())];
+                        TestUtil.randomBool(), TestUtil.randomBool())];
+var listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false, false)];
 var listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)),
                   Direction.DOWNLEFT),
                   new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)),
                   Direction.DOWNLEFT)];
-var listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LECTURE_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOYER_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOODCOURT_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1))),
-                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.RECEPTION_DOOR, new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)))];
+var listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LECTURE_DOOR, 'lecture_door', new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), TestUtil.randomBool(), TestUtil.randomInt()),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), TestUtil.randomBool(), TestUtil.randomInt()),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.RIGHT_DOOR, 'foodcourt_door', new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), TestUtil.randomBool(), TestUtil.randomInt()),
+                   new DoorClient(TestUtil.randomInt(), TypeOfDoor.RIGHT_DOOR, 'reception_door', new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1)), TestUtil.randomBool(), TestUtil.randomInt())];
+var assetPaths = {"tile_default": "client/assets/tile_default.png"};
 
-var room = new RoomClient(roomId, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
-//called twice to cover singleton constructor
+var room = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+
 
 //tests
 describe('RoomClient test', function() {
@@ -40,12 +45,15 @@ describe('RoomClient test', function() {
         expect(room.getRoomId()).to.equal(roomId);
         expect(room.getTypeOfRoom()).to.equal(typeOfRoom);
         expect(room.getListOfGameObjects()).to.equal(listOfGameObjects);
+        expect(room.getListOfMapElements()).to.equal(listOfMapElements);
+        expect(room.getAssetPaths()).to.equal(assetPaths);
         expect(room.getListOfNPCs()).to.equal(listOfNPCs);
         expect(room.getListOfDoors()).to.equal(listOfDoors);
         expect(room.getListOfPPants()).to.be.an('array').and.to.have.lengthOf(0);
         expect(room.getWidth()).to.equal(width);
         expect(room.getLength()).to.equal(length);
-        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(width + 2);
+        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(width + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(width + SettingsClient.MAP_BLANK_TILES_LENGTH);
 
         //sometimes works, sometimes not, some sort of race condition maybe? (P)
         /*
@@ -56,7 +64,7 @@ describe('RoomClient test', function() {
     });
 
     it('test singleton constructor', function() {
-        let newRoom = new RoomClient(roomId + 1, typeOfRoom, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
+        let newRoom = new RoomClient(roomId + 1, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length);
         //room has still the oldID
         expect(newRoom.getRoomId()).to.equal(roomId);
     });
@@ -98,15 +106,17 @@ describe('RoomClient test', function() {
         
     });
 
-    it('swap room', function() {
+    it('swap room and check for collision', function() {
         let newRoomID = TestUtil.randomInt();
         let newTypeOfRoom = TypeOfRoom.FOYER;
         let newWidth = TestUtil.randomIntWithMaxAndMin(1000, 5);
         let newLength = TestUtil.randomIntWithMaxAndMin(1000, 5);
-        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), 'table', 1, 1, new PositionClient(0, 1), true)];
+        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new PositionClient(0, 1), true, false)];
         let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 1), Direction.DOWNRIGHT)];
-        let newListOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.FOODCOURT_DOOR, new PositionClient(4, 4))];
-        room.swapRoom(newRoomID, newTypeOfRoom, newListOfGameObjects, newListOfNPCs, newListOfDoors, newWidth, newLength);
+        let newListOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomBool(), TestUtil.randomInt())];
+        let newAssetPaths = {"tile_default": "client/assets/tile_default.png"};
+        let newListOfMapElements = [];
+        room.swapRoom(newRoomID, newTypeOfRoom, newAssetPaths, newListOfMapElements, newListOfGameObjects, newListOfNPCs, newListOfDoors, newWidth, newLength);
 
         expect(room.getRoomId()).to.equal(newRoomID);
         expect(room.getTypeOfRoom()).to.equal(newTypeOfRoom);
@@ -116,10 +126,11 @@ describe('RoomClient test', function() {
         expect(room.getListOfPPants()).to.be.an('array').and.to.have.lengthOf(0);
         expect(room.getWidth()).to.equal(newWidth);
         expect(room.getLength()).to.equal(newLength);
-        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newWidth + 2);
-    });
+        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_WIDTH);
+        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getAssetPaths()).to.equal(newAssetPaths);
+        expect(room.getListOfMapElements()).to.equal(newListOfMapElements);
 
-    it('test collision check', function() {
         //position where Test NPC is
         assert.equal(room.checkForCollision(new PositionClient(1, 1)), true);
 
