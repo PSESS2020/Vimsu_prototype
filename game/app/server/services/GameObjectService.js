@@ -98,26 +98,31 @@ module.exports = class GameObjectService {
 
     }
 
-    //Windows
-
+    //Window
     createRightWindow(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
-        let windows = [];
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default", width, length, new Position(roomId, xPos, yPos), solidity);
+    }
+
+    //Wall Frames
+    createRightWallFrame(roomId, width, length, xPos, yPos, solidity) {
+        this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
+        let wallFrames = [];
         if(length > 1) {
             for (let i = 0; i < length; i++) {
-                console.log("rightwindow_default" + i)
-                windows.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
+                console.log("rightwallframe_default" + i)
+                wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity));
             }
-            return windows;
+            return wallFrames;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-                console.log("rightwindow_default" + i)
+                console.log("rightwallframe_default" + i)
 
-                windows.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
+                wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity));
             }
-            return windows;
+            return wallFrames;
         } else
-            return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default", width, length, new Position(roomId, xPos, yPos), solidity);
+            return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default", width, length, new Position(roomId, xPos, yPos), solidity);
     }
 
     //Schedules
