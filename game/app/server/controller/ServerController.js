@@ -1771,16 +1771,17 @@ module.exports = class ServerController {
                  * - (E) */
                 if (commandArgs.length > 1) {
                     var currentDate = new Date();
-                    var currentTime = (currentDate.getHours() < 10 ? '0' : '') + currentDate.getHours().toString() + ":" + (currentDate.getMinutes() < 10 ? '0' : '') + currentDate.getMinutes().toString();
-                    var messageHeader = "On " + currentTime + " moderator " + moderator.getId() + " announced:"; //TODO: replace id with username
-                    var messageText = input.substr(input.indexOf(" "));
+                    var message = {
+                        timestamp: currentDate,
+                        text: input.substr(input.indexOf(" "))
+                    }
 
                     /* Sending the global message to all the users.
                      * Furthermore, we might alter the handling to not send
                      * any global messages to any other moderators.
                      *
                      * - (E) */
-                    this.#io.emit('New global message', messageHeader, messageText); // This might be altered to not
+                    this.#io.emit('New global message', moderator.getId(), message); // This might be altered to not
                     // include moderators
                 }
                 break;

@@ -596,13 +596,16 @@ class ClientController {
     handleFromServerInitAllchat(messages) {
         $('#allchatMessages').empty();
         messages.forEach((message) => {
-            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + message.username + ": " + message.text));
+            var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+            $('#allchatMessages').prepend($('<div>').text("[" + timestamp + "] " + message.username + ": " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewGlobalMessage(messageHeader, messageText) {
-        this.#gameView.initGlobalChatView(messageHeader, messageText);
+    handleFromServerNewGlobalMessage(moderatorId, message) {
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var messageHeader = "On " + timestamp + " moderator " + moderatorId + " announced:"; //TODO: replace id with username
+        this.#gameView.initGlobalChatView(messageHeader, message.text);
     }
 
     handleFromServerHideAvatar(participantId) {
