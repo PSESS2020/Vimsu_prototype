@@ -292,7 +292,7 @@ class GameView {
         var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
-            throw new Error(participantsId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants")
         }
 
         //Removes disconnected Avatar from participant avatar views
