@@ -85,8 +85,8 @@ class IsometricEngine {
                             tileColumnOffset: 64,
                             tileRowOffset: 32,
                             wallColumnOffset: this.tileImages[1].width,
-                            tableRowOffset: this.tileImages[totalImages - 3].height,
-                            plantRowOffset: this.tileImages[totalImages - 2].height
+                            tableRowOffset: this.tileImages[totalImages - 2].height,
+                            plantRowOffset: this.tileImages[totalImages - 1].height
                         };
 
                         this.#mapOriginX = ctx_map.canvas.width / 2 - this.#xNumTiles * offset.tileRowOffset;

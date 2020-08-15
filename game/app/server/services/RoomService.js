@@ -5,7 +5,7 @@ const RoomDimensions = require('../../utils/RoomDimensions.js');
 const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
 const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
-const Settings = require('../../client/shared/Settings.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class RoomService {
     #rooms;

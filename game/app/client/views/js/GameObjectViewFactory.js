@@ -38,7 +38,7 @@ class GameObjectViewFactory {
 
         //because the table image has a different size.
         var tableOffsetY = this.#tileRowOffset - this.#tableRowOffset + 7;
-        var plantOffsetY = this.#tileRowOffset - this.#plantRowOffset;
+        var plantOffsetY = this.#tileRowOffset - this.#plantRowOffset ;
 
         var leftDoorScreenX = screenX;
         var leftDoorScreenY = screenY + doorOffsetY;

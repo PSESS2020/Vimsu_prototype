@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const LectureChat = require('./LectureChat.js');
-const Settings = require('../../client/shared/Settings.js');
+const Settings = require('../../utils/Settings.js');
 
 module.exports = class Lecture {
 

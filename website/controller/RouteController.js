@@ -5,7 +5,7 @@ const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
 const fs = require('fs');
-const Settings = require('../../game/app/client/shared/Settings')
+const Settings = require('../../game/app/utils/Settings')
 
 module.exports = class RouteController {
 

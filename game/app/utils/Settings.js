@@ -1,12 +1,6 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    Direction = require('./Direction');
-}
+const Direction = require('../client/shared/Direction');
 
-const Settings = Object.freeze({
-
-    /* Movement-Speed Constants */
-    MOVEMENTSPEED_X: 1,
-    MOVEMENTSPEED_Y: 1,
+module.exports = Object.freeze({
 
     /* Start-Position Constants */
     FOYER_ID: 1,
@@ -36,19 +30,7 @@ const Settings = Object.freeze({
     SHOWLECTURE: 10 * 60 * 1000, //lecture is shown 10 minutes before lecture start 
     TOKENCOUNTERSTART: 5 * 60 * 1000,
 
-    /* StatusBar Constants */
-    TIME_UNTIL_LEAVE: 60,
-
     /* Moderator-Settings */
     CMDSTARTCHAR: "\\", // moved the actual commands into a seperate file for easier handling
 
-    /* Map constants */
-    MAP_BLANK_TILES_WIDTH: 3,
-    MAP_BLANK_TILES_LENGTH: 3,
-    WALL_OFFSET: 1,
-
 });
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = Settings;
-}
