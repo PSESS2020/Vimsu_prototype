@@ -305,7 +305,7 @@ module.exports = class Participant {
     }
 
     removeAchievement(achievementId) {
-        let index = this.#achievements.findIndex(ach => ach.id === achievementId);
+        let index = this.#achievements.findIndex(ach => ach.getId() === achievementId);
 
         if (index < 0) {
             throw new Error(achievementId + " not found in list of achievements")

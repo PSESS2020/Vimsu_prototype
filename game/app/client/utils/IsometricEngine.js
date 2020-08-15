@@ -9,7 +9,7 @@ class IsometricEngine {
     #loader;
 
     constructor() {
-        if(!!IsometricEngine.instance) {
+        if (!!IsometricEngine.instance) {
             return IsometricEngine.instance;
         }
         IsometricEngine.instance = this;
@@ -25,7 +25,7 @@ class IsometricEngine {
     async initGameEngine(assetPaths, xNumTiles, yNumTiles) {
         this.#xNumTiles = xNumTiles;
         this.#yNumTiles = yNumTiles;
-        
+
         //origin that indicates where to start drawing the map assets.
         this.#mapOriginX = ctx_map.canvas.width / 2 - this.#xNumTiles * this.#tileRowHeight;
         this.#mapOriginY = ctx_map.canvas.height / 2;
@@ -42,11 +42,11 @@ class IsometricEngine {
         this.#mapOriginX = mapOriginX;
         this.#mapOriginY = mapOriginY;
     }
-    
+
     getTileColumnWidth() {
         return this.#tileColumnWidth;
     }
-    
+
     getTileRowHeight() {
         return this.#tileRowHeight;
     }
@@ -74,22 +74,22 @@ class IsometricEngine {
         var loadedImages = 0;
         //console.log(assetPaths);
 
-            // Load all the images before we run the app
-            for (var key in assetPaths) {
-                assetImages[key] = await imageLoader.loadImage(key, assetPaths[key]);
+        // Load all the images before we run the app
+        for (var key in assetPaths) {
+            assetImages[key] = await imageLoader.loadImage(key, assetPaths[key]);
 
-                loadedImages++;
+            loadedImages++;
 
-                this.#loader.contentLoaded(totalImages, loadedImages);
+            this.#loader.contentLoaded(totalImages, loadedImages);
 
-                if (loadedImages >= totalImages) {
-                    return Promise.all(Object.entries(assetImages)).then(() => {
-                        this.#loader.doneLoading();
+            if (loadedImages >= totalImages) {
+                return Promise.all(Object.entries(assetImages)).then(() => {
+                    this.#loader.doneLoading();
 
-                        return assetImages;
-                    });
+                    return assetImages;
+                });
 
-                }
+            }
 
         }
     }
@@ -132,18 +132,18 @@ class IsometricEngine {
         if (this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
             && this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
 
-        //Adjusts mouse position to the tile position. 
-        var newPosX = newPosition.x - this.#tileColumnWidth / 2 - this.#mapOriginX;
-        var newPosY = newPosition.y - this.#tileRowHeight / 2 - this.#mapOriginY;
+            //Adjusts mouse position to the tile position. 
+            var newPosX = newPosition.x - this.#tileColumnWidth / 2 - this.#mapOriginX;
+            var newPosY = newPosition.y - this.#tileRowHeight / 2 - this.#mapOriginY;
 
-        //Calculate the tile at which the current mouse cursor points.
-        var selectedTileX = Math.round(newPosX / this.#tileColumnWidth - newPosY / this.#tileRowHeight);
-        var selectedTileY = Math.round(newPosX / this.#tileColumnWidth + newPosY / this.#tileRowHeight);
+            //Calculate the tile at which the current mouse cursor points.
+            var selectedTileX = Math.round(newPosX / this.#tileColumnWidth - newPosY / this.#tileRowHeight);
+            var selectedTileY = Math.round(newPosX / this.#tileColumnWidth + newPosY / this.#tileRowHeight);
 
-        return {
-            x: selectedTileX,
-            y: selectedTileY,
-        }
+            return {
+                x: selectedTileX,
+                y: selectedTileY,
+            }
 
         }
     }

@@ -8,8 +8,7 @@ class AchievementView extends WindowView {
     draw(achievements) {
         $('#achievementModalContent').empty();
 
-        Object.keys(achievements).forEach(x => {
-            var achievement = achievements[x];
+        achievements.forEach(achievement => {
             var level = achievement.currentLevel;
             var maxLevel = achievement.maxLevel;
             var color = achievement.color;

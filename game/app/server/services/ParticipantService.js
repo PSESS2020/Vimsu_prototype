@@ -83,27 +83,26 @@ module.exports = class ParticipantService {
                     var ppantAchievements = achievementService.getAllAchievements(participant);
 
                     par.achievements.forEach(achievement => {
-                        let idx = ppantAchievements.findIndex(ach => ach.id === achievement.id);
+                        let idx = ppantAchievements.findIndex(ach => ach.getId() === achievement.id);
 
                         if (idx > -1) {
                             var taskType = ppantAchievements[idx].getTaskType();
                             var achievementDefinition = achievementService.getAchievementDefinitionByTypeOfTask(taskType);
-                            var achievement = achievementDefinition.computeAchievement(achievement.currentLevel);
-                            achievements.push(achievement);
+                            var ach = achievementDefinition.computeAchievement(achievement.currentLevel);
+                            achievements.push(ach);
                         }
                     })
 
                     participant.setAchievements(achievements);
 
                     return Promise.all(ppantAchievements.map(async achievement => {
-                        let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
-
+                        let index = participant.getAchievements().findIndex(ach => ach.getId() === achievement.getId());
                         if (index < 0) {
                             participant.addAchievement(achievement);
                             var achievementData =
                                 [{
-                                    id: achievement.id,
-                                    currentLevel: achievement.currentLevel,
+                                    id: achievement.getId(),
+                                    currentLevel: achievement.getCurrentLevel(),
                                 }]
                             const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
@@ -173,8 +172,8 @@ module.exports = class ParticipantService {
                     participant.getAchievements().forEach(ach => {
                         achievementsData.push(
                             {
-                                id: ach.id,
-                                currentLevel: ach.currentLevel,
+                                id: ach.getId(),
+                                currentLevel: ach.getCurrentLevel(),
                             },
                         )
                     })

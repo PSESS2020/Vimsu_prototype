@@ -17,6 +17,21 @@ var taskType = TypeOfTask.RECEPTIONVISIT;
 achievement = new Achievement(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType);
 
 describe('Achievement getter functions', function() {
+    it('test getId', function() {
+        assert.equal(achievement.getId(), id);
+    })  
+    it('test getTitle', function() {
+        assert.equal(achievement.getTitlte(), title);
+    })  
+    it('test getIcon', function() {
+        assert.equal(achievement.getIcon(), icon);
+    })  
+    it('test getDescription', function() {
+        assert.equal(achievement.getDescription(), description);
+    })  
+    it('test getColor', function() {
+        assert.equal(achievement.getColor(), color);
+    })  
     it('test getTaskType', function() {
         assert.equal(achievement.getTaskType(), taskType);
     })  
@@ -28,6 +43,9 @@ describe('Achievement getter functions', function() {
     it('test getAwardPoints', function() {
         assert.equal(achievement.getAwardPoints(), awardPoints);
     })
+    it('test getMaxLevel', function() {
+        assert.equal(achievement.getMaxLevel(), maxLevel);
+    })  
 })
 
 describe('Achievement setter functions', function() {

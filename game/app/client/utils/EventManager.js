@@ -24,7 +24,7 @@ class EventManager {
      *
      */
     handleLectureDoorClick() {
-        
+
         this.#clientController.handleFromViewGetCurrentLectures();
 
     }
@@ -34,9 +34,9 @@ class EventManager {
      *
      */
     handleDoorClick(roomId) {
-        
+
         this.#clientController.handleFromViewEnterNewRoom(roomId);
-        
+
     }
 
 
@@ -63,29 +63,29 @@ class EventManager {
     handleFriendListClicked() {
         this.#clientController.handleFromViewShowFriendList();
     }
-    
+
     /* One function to display the list of all chats.
      * - (E) */
     handleChatListClicked() {
         this.#clientController.handleFromViewShowChatList();
     };
-    
+
     /* One function to display the messages in a chat.
      * - (E) */
-     handleChatThreadClicked(chatId) {
-         this.#clientController.handleFromViewShowChatThread(chatId);
-     };
+    handleChatThreadClicked(chatId) {
+        this.#clientController.handleFromViewShowChatThread(chatId);
+    };
 
-     handleShowChatParticipantList(chatId) {
-         this.#clientController.handleFromViewShowChatParticipantList(chatId);
-     }
-     
+    handleShowChatParticipantList(chatId) {
+        this.#clientController.handleFromViewShowChatParticipantList(chatId);
+    }
+
     /* One function to create a new chat.
      * - (E) */
     handleChatNowClicked(participantId, username) {
         this.#clientController.handleFromViewCreateNewChat(participantId, username);
     }
-    
+
     /* One function to create a new group chat
      * - (E) */
     handleCreateGroupChat(chatName, participantIdList, limit, chatId) {
@@ -95,12 +95,12 @@ class EventManager {
     handleInviteFriendsClicked(groupName, chatId) {
         this.#clientController.handleFromViewShowInviteFriends(groupName, chatId);
     }
-     
+
     /* One function to send a new message in a chat.
      * - (E) */
-     handleChatMessageInput(chatId, message) {
-         this.#clientController.handleFromViewSendNewMessage(chatId, message);
-     };
+    handleChatMessageInput(chatId, message) {
+        this.#clientController.handleFromViewSendNewMessage(chatId, message);
+    };
 
     handleFriendRequestListClicked() {
         this.#clientController.handleFromViewShowFriendRequestList();
@@ -113,11 +113,11 @@ class EventManager {
     handleRankListClicked() {
         this.#clientController.handleFromViewShowRankList();
     }
-    
+
     handleSendFriendRequest(chatId) {
         this.#clientController.handleSendFriendRequest();
     };
-    
+
     handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
         var businessCard = {
             participantId: participantId,
@@ -126,10 +126,10 @@ class EventManager {
             surname: surname,
             forename: forename,
             job: job,
-            company: company, 
+            company: company,
             email: email
         }
-        
+
         this.#clientController.handleFromViewAcceptRequest(businessCard);
     }
 

@@ -29,8 +29,8 @@ class DoorClient {
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, PositionClient);
         TypeChecker.isBoolean(isClickable);
-        
-        if(targetRoomId !== undefined)
+
+        if (targetRoomId !== undefined)
             TypeChecker.isNumber(targetRoomId);
 
         this.#id = id;

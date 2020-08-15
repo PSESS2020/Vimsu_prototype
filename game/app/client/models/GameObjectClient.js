@@ -8,13 +8,10 @@ class GameObjectClient {
 
     #id;
     #name;
-    //creationDate;
     #width;
     #length;
-    //height;
     #position;
     #isSolid;
-    //isStatic;
     #gameObjectType;
     #isClickable;
 

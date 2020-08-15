@@ -9,7 +9,7 @@ class GameObjectViewFactory {
         this.#assetImages = assetImages;
 
         this.#gameEngine = gameEngine;
-       
+
         //gets map tile size
         this.#tileColumnWidth = this.#gameEngine.getTileColumnWidth();
         this.#tileRowHeight = this.#gameEngine.getTileRowHeight();
@@ -59,7 +59,7 @@ class GameObjectViewFactory {
                 gameObjectImage = this.#assetImages[objectName];
 
                 var wallOffsetY = this.#tileRowHeight / 2 - gameObjectImage.width + 1;
-                
+
                 screenPos = new PositionClient(screenX, screenY + wallOffsetY);
 
                 if (gameObjectImage !== undefined)
@@ -72,7 +72,7 @@ class GameObjectViewFactory {
                 gameObjectImage = this.#assetImages[objectName];
 
                 var wallOffsetY = this.#tileRowHeight / 2 - gameObjectImage.width + 1;
-                
+
                 screenPos = new PositionClient(screenX - this.#tileColumnWidth, screenY + wallOffsetY);
 
                 if (gameObjectImage !== undefined)
@@ -111,8 +111,8 @@ class GameObjectViewFactory {
             case GameObjectType.LEFTTILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenX = this.#gameEngine.calculateScreenPosX( pos.getCordX(), (pos.getCordY() + 1) );
-                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordY() + 1), pos.getCordX() );
+                screenX = this.#gameEngine.calculateScreenPosX(pos.getCordX(), (pos.getCordY() + 1));
+                screenY = this.#gameEngine.calculateScreenPosY((pos.getCordY() + 1), pos.getCordX());
 
                 screenPos = new PositionClient(screenX, screenY);
 
@@ -125,9 +125,9 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTTILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenX = this.#gameEngine.calculateScreenPosX( (pos.getCordX() - 1), pos.getCordY() );
-                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordX() - 1),  pos.getCordY());
-                
+                screenX = this.#gameEngine.calculateScreenPosX((pos.getCordX() - 1), pos.getCordY());
+                screenY = this.#gameEngine.calculateScreenPosY((pos.getCordX() - 1), pos.getCordY());
+
                 screenPos = new PositionClient(screenX, screenY);
 
                 if (gameObjectImage !== undefined)
@@ -152,7 +152,7 @@ class GameObjectViewFactory {
         var screenX = this.#gameEngine.calculateScreenPosX(pos.getCordX(), pos.getCordY());
         var screenY = this.#gameEngine.calculateScreenPosY(pos.getCordX(), pos.getCordY());
 
-        switch(typeOfDoor) {
+        switch (typeOfDoor) {
 
             case TypeOfDoor.LECTURE_DOOR:
             case TypeOfDoor.LEFT_DOOR:
@@ -185,8 +185,8 @@ class GameObjectViewFactory {
 
                 break;
 
-                default:
-                    doorView = null; 
+            default:
+                doorView = null;
         }
         return doorView;
     }

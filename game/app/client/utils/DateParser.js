@@ -25,7 +25,7 @@ class DateParser {
 
     parseOnlyTime() {
         var parsedDate = (this.#date.getHours() < 10 ? '0' : '') + this.#date.getHours() +
-        ":" + (this.#date.getMinutes() < 10 ? '0' : '') + this.#date.getMinutes();
+            ":" + (this.#date.getMinutes() < 10 ? '0' : '') + this.#date.getMinutes();
 
         return parsedDate;
     }

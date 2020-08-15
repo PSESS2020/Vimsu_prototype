@@ -22,7 +22,7 @@ class GameView {
     #notifBar;
 
     #gameEngine;
-    
+
 
     constructor() {
         this.#statusBar = new StatusBar();

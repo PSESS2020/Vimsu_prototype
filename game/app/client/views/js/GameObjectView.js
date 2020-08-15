@@ -14,10 +14,6 @@ class GameObjectView extends Views {
         TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
         this.#name = name
-
-        /*if (new.target === GameObjectView) {
-            throw new Error("Cannot construct abstract GameObjectView instances directly");
-        }*/
     }
 
     getObjectImage() {

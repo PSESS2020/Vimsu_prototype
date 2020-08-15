@@ -19,20 +19,6 @@ module.exports = class AchievementService {
         return this.#achievementDefinitions;
     }
 
-    /* 
-    getAchievementDefinition(achievementDefinitionId) {
-        TypeChecker.isInt(achievementDefinitionId);
-
-        let index = this.#achievementDefinitions.findIndex(ach => ach.getId() === achievementDefinitionId);
-
-        if (index < 0) 
-        {
-            throw new Error(achievementDefinitionId + " is not in list of achievement definitions.")
-        }
-
-        return this.#achievementDefinitions[index];
-    }*/
-
     getAchievementDefinitionByTypeOfTask(achievementTaskType) {
         TypeChecker.isString(achievementTaskType);
 
@@ -122,15 +108,15 @@ module.exports = class AchievementService {
         } else {
             if (newAchievements.length > 0) {
                 newAchievements.forEach(achievement => {
-                    let index = participant.getAchievements().findIndex(ach => ach.id === achievement.id);
+                    let index = participant.getAchievements().findIndex(ach => ach.getId() === achievement.getId());
 
                     if (index < 0) {
-                        throw new Error(achievement.id + " is not found in list of achievements!")
+                        throw new Error(achievement.getId() + " is not found in list of achievements!")
                     }
 
-                    participant.getAchievements()[index].setCurrentLevel(achievement.currentLevel);
-                    participant.getAchievements()[index].setAwardPoints(achievement.awardPoints);
-                    participant.getAchievements()[index].setColor(achievement.color);
+                    participant.getAchievements()[index].setCurrentLevel(achievement.getCurrentLevel());
+                    participant.getAchievements()[index].setAwardPoints(achievement.getAwardPoints());
+                    participant.getAchievements()[index].setColor(achievement.getColor());
                 })
 
             }

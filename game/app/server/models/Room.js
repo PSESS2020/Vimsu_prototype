@@ -11,15 +11,12 @@ module.exports = class Room {
 
     #roomId;
     #typeOfRoom;
-    //roomChat
     #length;
     #width;
     #listOfPPants;
     #occupationMap;
-    //listOfNPCs
     #listOfGameObjects;
     #listOfNPCs;
-    //listOfDoors;
     #listOfDoors; //TODO: Get right doors from service
     #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
     #listOfMapElements;

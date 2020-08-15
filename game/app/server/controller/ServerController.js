@@ -227,7 +227,7 @@ module.exports = class ServerController {
                     //needed to init all NPCs in clients game view
                     npcs.forEach(npc => {
                         npcData.push({
-                            id: npc.getId(), 
+                            id: npc.getId(),
                             name: npc.getName(),
                             cordX: npc.getPosition().getCordX(),
                             cordY: npc.getPosition().getCordY(),
@@ -241,10 +241,10 @@ module.exports = class ServerController {
 
                     //needed to init all Doors in clients game view
                     doors.forEach(door => {
-                        console.log( door.getTargetRoomId())
+                        console.log(door.getTargetRoomId())
 
                         doorData.push({
-                            id: door.getId(), 
+                            id: door.getId(),
                             typeOfDoor: door.getTypeOfDoor(),
                             name: door.getName(),
                             cordX: door.getMapPosition().getCordX(),
@@ -270,7 +270,7 @@ module.exports = class ServerController {
 
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom,
-                            assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength());
+                        assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength());
 
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -456,11 +456,11 @@ module.exports = class ServerController {
                 /Reception has ID 3 and is this.#rooms[2]
                 */
 
-               targetRoom.enterParticipant(this.#ppants.get(ppantID));
-               currentRoom.exitParticipant(ppantID);
+                targetRoom.enterParticipant(this.#ppants.get(ppantID));
+                currentRoom.exitParticipant(ppantID);
 
-               //Get asset paths of target room
-               let assetPaths = this.#rooms[targetRoomId - 1].getAssetPaths();
+                //Get asset paths of target room
+                let assetPaths = this.#rooms[targetRoomId - 1].getAssetPaths();
 
                 //Get MapElements of target room
                 let mapElements = targetRoom.getListOfMapElements();
@@ -504,7 +504,7 @@ module.exports = class ServerController {
                 //needed to init all NPCs in clients game view
                 npcs.forEach(npc => {
                     npcData.push({
-                        id: npc.getId(), 
+                        id: npc.getId(),
                         name: npc.getName(),
                         cordX: npc.getPosition().getCordX(),
                         cordY: npc.getPosition().getCordY(),
@@ -519,7 +519,7 @@ module.exports = class ServerController {
                 //needed to init all Doors in clients game view
                 doors.forEach(door => {
                     doorData.push({
-                        id: door.getId(), 
+                        id: door.getId(),
                         typeOfDoor: door.getTypeOfDoor(),
                         name: door.getName(),
                         cordX: door.getMapPosition().getCordX(),
@@ -529,8 +529,8 @@ module.exports = class ServerController {
                 });
 
                 //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType, 
-                            assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength());
+                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
+                    assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength());
 
                 //set new position in server model
                 this.#ppants.get(ppantID).setPosition(newPos);
@@ -758,7 +758,22 @@ module.exports = class ServerController {
             });
 
             socket.on('getAchievements', (ppantID) => {
-                socket.emit('achievements', this.#ppants.get(ppantID).getAchievements());
+
+                var achData = [];
+
+                this.#ppants.get(ppantID).getAchievements().forEach(ach => {
+                    achData.push(
+                        {
+                            currentLevel: ach.getCurrentLevel(),
+                            maxLevel: ach.getMaxLevel(),
+                            color: ach.getColor(),
+                            icon: ach.getIcon(),
+                            title: ach.getTitle(),
+                            description: ach.getDescription()
+                        }
+                    )
+                });
+                socket.emit('achievements', achData);
             });
 
             socket.on('getRankList', () => {
@@ -2221,13 +2236,17 @@ module.exports = class ServerController {
             var newAchievements = new AchievementService().computeAchievements(participant);
 
             newAchievements.forEach(ach => {
-                this.#io.to(this.getSocketId(participantId)).emit('newAchievement', ach);
+                var achData = {
+                    currentLevel: ach.getCurrentLevel(),
+                    color: ach.getColor(),
+                    icon: ach.getIcon(),
+                    title: ach.getTitle(),
+                    description: ach.getDescription()
+                }
 
-                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.id, ach.currentLevel, this.#db).then(res => {
-                    console.log('level of ' + ach.id + ' updated')
-                }).catch(err => {
-                    console.error(err);
-                })
+                this.#io.to(this.getSocketId(participantId)).emit('newAchievement', achData);
+
+                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
             ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
@@ -2259,16 +2278,16 @@ module.exports = class ServerController {
                         var levelsCount = level.count;
                         var awardPoints = level.points;
 
-                        if(levelsCount <= newTaskCount) {
+                        if (levelsCount <= newTaskCount) {
                             var achievements = await ParticipantService.getAchievements(participantId, Settings.CONFERENCE_ID, this.#db);
                             var currentLevel;
                             achievements.forEach(achievement => {
-                                if(achievement.id == achievementDefinition.getId()) {
+                                if (achievement.id == achievementDefinition.getId()) {
                                     currentLevel = achievement.currentLevel;
                                 }
                             })
                             counter++;
-                            if(currentLevel < counter) {
+                            if (currentLevel < counter) {
                                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), counter, this.#db);
                                 currentPoints += awardPoints;
                                 ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db).then(res => {

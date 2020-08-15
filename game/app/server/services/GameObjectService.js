@@ -39,7 +39,7 @@ module.exports = class GameObjectService {
     }
 
     /* ##################################################################### */
-    /* ###################### GameObject Informations ###################### */
+    /* ###################### GAMEOBJECT INFORMATIONS ###################### */
     /* ##################################################################### */
 
     /**
@@ -54,14 +54,14 @@ module.exports = class GameObjectService {
 
         return new GameObject(this.#generateGameObjectID(), GameObjectType.TILE, "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity);
     }
-    
+
     //This two tiles below are special therefor they have the same name as default tile
     createDefaultLeftTile(roomId, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, 1, 1, xPos, yPos, solidity);
 
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTTILE , "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTTILE, "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity);
     }
-    
+
     createDefaultRightTile(roomId, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, 1, 1, xPos, yPos, solidity);
 
@@ -109,7 +109,7 @@ module.exports = class GameObjectService {
     createRightWallFrame(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
         let wallFrames = [];
-        if(length > 1) {
+        if (length > 1) {
             for (let i = 0; i < length; i++) {
                 console.log("rightwallframe_default" + i)
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity));
@@ -130,7 +130,7 @@ module.exports = class GameObjectService {
     createLeftSchedule(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
         let schedules = [];
-        if(length > 1) {
+        if (length > 1) {
             for (let i = 0; i < length; i++) {
                 console.log("leftschedule_default" + i)
                 schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
@@ -151,7 +151,7 @@ module.exports = class GameObjectService {
     createLeftConferenceLogo(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
         let conferenceLogos = [];
-        if(length > 1) {
+        if (length > 1) {
             for (let i = 0; i < length; i++) {
                 console.log("leftconferencelogo_default" + i)
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));

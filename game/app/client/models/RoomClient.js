@@ -21,10 +21,10 @@ class RoomClient {
     #listOfDoors;
     #width;
     #length;
-    
+
     #listOfPPants;
     #occupationMap;
-    
+
     #map;
     #objectMap;
 
@@ -112,7 +112,7 @@ class RoomClient {
     getAssetPaths() {
         return this.#assetPaths;
     }
-    
+
     getWidth() {
         return this.#width;
     }
@@ -287,7 +287,7 @@ class RoomClient {
                 this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapElement;
             else
                 throw Error();
-            
+
         });
 
         this.#listOfGameObjects.forEach(object => {
@@ -295,7 +295,7 @@ class RoomClient {
             let yPos = object.getPosition().getCordY();
 
             this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = object;
-            
+
         });
 
         //set door positions in map

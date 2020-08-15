@@ -1,5 +1,3 @@
-//const GameObjectClient = require('../models/GameObjectClient');
-
 if (typeof module === 'object' && typeof exports === 'object') {
     GameView = require('../views/js/GameView')
 }
@@ -9,9 +7,7 @@ class ClientController {
     #port;
     socket;
     #currentRoom;
-    #participantId;
     #ownParticipant;
-    #roomClient;
     #ownBusinessCard;
 
     #gameView;
@@ -352,7 +348,7 @@ class ClientController {
         //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
-            console.log("npc: " + npc.cordX + " " +  npc.cordY)
+            console.log("npc: " + npc.cordX + " " + npc.cordY)
             listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
         });
 

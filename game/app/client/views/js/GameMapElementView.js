@@ -14,7 +14,7 @@ class GameMapElementView extends GameObjectView {
     }
 
     onclick() {
-       
+
     }
 }
 
