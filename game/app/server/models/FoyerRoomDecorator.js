@@ -20,6 +20,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/schedule1.png",
         "leftschedule_default1": "client/assets/schedule2.png",
         "leftschedule_default2": "client/assets/schedule3.png",
+        "rightwindow_default": "client/assets/window.png",
         "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
@@ -83,11 +84,15 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getWidth() - 1, 0, true));
 
-        let conferenceLogos = objService.createLeftConferenceLogo(Settings.RECEPTION_ID, 1, 5, 14, -1, false);
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 14, -1, false);
         conferenceLogos.forEach(conferenceLogo => {
             listOfGameObjects.push(conferenceLogo);
         });
 
+        for (i = 0; i <= 1; i++) {
+            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+        }
+        
         //Get all npcs from service
         let npcService = new NPCService();
         let listOfNPCs = [];
