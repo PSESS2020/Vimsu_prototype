@@ -548,13 +548,15 @@ class ClientController {
 
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
-        var msgText = "[" + message.timestamp + "] " + message.username + ": " + message.text;
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var msgText = "[" + timestamp + "] " + message.username + ": " + message.text;
         $('#allchatMessages').prepend($('<div>').text(msgText));
         $('#allchatMessages').scrollTop(0);
     }
 
     handleFromServerNewLectureChatMessage(message) {
-        var messageHeader = message.username + ", " + message.timestamp + ":";
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var messageHeader = message.username + ", " + timestamp + ":";
         var $newMessageHeader = $("<div style='font-size: small;'></div>");
         var $newMessageBody = $("<div style='font-size: medium;'></div>");
         $newMessageHeader.text(messageHeader);

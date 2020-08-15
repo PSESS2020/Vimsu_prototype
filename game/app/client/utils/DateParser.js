@@ -22,4 +22,11 @@ class DateParser {
         var parsedDate = this.parse() + ":" + (this.#date.getSeconds() < 10 ? '0' : '') + this.#date.getSeconds();
         return parsedDate;
     }
+
+    parseOnlyTime() {
+        var parsedDate = (this.#date.getHours() < 10 ? '0' : '') + this.#date.getHours() +
+        ":" + (this.#date.getMinutes() < 10 ? '0' : '') + this.#date.getMinutes();
+
+        return parsedDate;
+    }
 }
