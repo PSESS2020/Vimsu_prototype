@@ -92,21 +92,29 @@ document.body.onkeydown = function (event) {
    * - (E) */
   switch (event.code) {
     case "KeyW":
+      clientController.handleUpArrowDown();
+      break;
     case "ArrowUp":
       event.preventDefault();
       clientController.handleUpArrowDown();
       break;
     case "KeyS":
+      clientController.handleDownArrowDown();
+      break;
     case "ArrowDown":
       event.preventDefault();
       clientController.handleDownArrowDown();
       break;
     case "KeyD":
+      clientController.handleRightArrowDown();
+      break;
     case "ArrowRight":
       event.preventDefault();
       clientController.handleRightArrowDown();
       break;
     case "KeyA":
+      clientController.handleLeftArrowDown();
+      break;
     case "ArrowLeft":
       event.preventDefault();
       clientController.handleLeftArrowDown();
