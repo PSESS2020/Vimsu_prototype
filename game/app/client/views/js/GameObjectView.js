@@ -14,7 +14,6 @@ class GameObjectView extends Views {
     constructor(objectImage, gridPosition, screenPositionOffset, name) {
         super();
         this.#objectImage = objectImage;
-<<<<<<< HEAD
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
         this.#gridPosition = gridPosition;
         this.#screenPositionOffset = screenPositionOffset;
@@ -23,11 +22,6 @@ class GameObjectView extends Views {
         /*if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
         }*/
-=======
-        TypeChecker.isInstanceOf(position, PositionClient);
-        this.#position = position;
-        this.#name = name
->>>>>>> d49a018231bb727c1c57ae120f5c9a657814ff5a
     }
 
     getObjectImage() {
