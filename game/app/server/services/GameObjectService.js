@@ -137,13 +137,14 @@ module.exports = class GameObjectService {
         let wallFrames = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                console.log("rightwallframe_default" + i)
+         
+                
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity));
             }
             return wallFrames;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-                console.log("rightwallframe_default" + i)
+              
 
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity));
             }
@@ -158,13 +159,12 @@ module.exports = class GameObjectService {
         let schedules = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                console.log("leftschedule_default" + i)
+
                 schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
             }
             return schedules;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-                console.log("leftschedule_default" + i)
 
                 schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
             }
@@ -179,13 +179,12 @@ module.exports = class GameObjectService {
         let conferenceLogos = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                console.log("leftconferencelogo_default" + i)
+             
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
             }
             return conferenceLogos;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-                console.log("leftconferencelogo_default" + i)
 
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity));
             }
