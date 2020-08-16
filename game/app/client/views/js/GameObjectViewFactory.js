@@ -2,6 +2,7 @@ class GameObjectViewFactory {
     #tileColumnWidth;
     #tileRowHeight;
     #assetImages;
+    #defaultOffset;
 
     #gameEngine;
 
@@ -13,6 +14,8 @@ class GameObjectViewFactory {
         //gets map tile size
         this.#tileColumnWidth = this.#gameEngine.getTileColumnWidth();
         this.#tileRowHeight = this.#gameEngine.getTileRowHeight();
+
+        this.#defaultOffset = { x: 0, y: 0 };
     }
 
     getClickMap(image) {
@@ -32,6 +35,77 @@ class GameObjectViewFactory {
     }
 
     /*
+    * calculates the position of a game map element and creates it.
+    */
+   createGameMapElementView(gameObjectType, pos, objectName) {
+        TypeChecker.isInstanceOf(pos, PositionClient);
+        TypeChecker.isString(objectName);
+
+        var gameMapElementView;
+        var gameMapElementImage;
+
+        switch (gameObjectType) {
+
+            case GameObjectType.TILE:
+                gameMapElementImage = this.#assetImages[objectName];
+
+                if (gameMapElementImage !== undefined)
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.LEFTWALL:
+                gameMapElementImage = this.#assetImages[objectName];
+
+                var wallOffset = {x: 0, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1};
+                
+                if (gameMapElementImage !== undefined)
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
+                else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.RIGHTWALL:
+                gameMapElementImage = this.#assetImages[objectName];
+
+                var wallOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1};
+                
+                if (gameMapElementImage !== undefined)
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
+                else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.LEFTTILE:
+                gameMapElementImage = this.#assetImages[objectName];
+
+                pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
+                
+                if (gameMapElementImage !== undefined)
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.RIGHTTILE:
+                gameMapElementImage = this.#assetImages[objectName];
+
+                pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
+
+                if (gameMapElementImage !== undefined)
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+            default:
+                gameMapElementView = null;
+        }
+
+        return     gameMapElementView;
+   }    
+
+    /*
     * calculates the position of a game object and creates it.
     */
     createGameObjectView(gameObjectType, pos, objectName) {
@@ -42,25 +116,14 @@ class GameObjectViewFactory {
         var gameObjectView;
         var gameObjectImage;
 
-        var defaultOffset = { x: 0, y: 0 };
-
         switch (gameObjectType) {
 
             case GameObjectType.SELECTED_TILE:
                 gameObjectImage = this.#assetImages[objectName];
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, defaultOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.TILE:
-                gameObjectImage = this.#assetImages[objectName];
-
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
-                else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
@@ -70,7 +133,7 @@ class GameObjectViewFactory {
                 var wallOffset = {x: 0, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
                 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, pos, wallOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, wallOffset, objectName);
                 else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -81,7 +144,7 @@ class GameObjectViewFactory {
                 var wallOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
                 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, pos, wallOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, wallOffset, objectName);
                 else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -110,27 +173,6 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectType.LEFTTILE:
-                gameObjectImage = this.#assetImages[objectName];
-
-                pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
-                
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
-                else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.RIGHTTILE:
-                gameObjectImage = this.#assetImages[objectName];
-
-                pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
-
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
-                else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
             default:
                 gameObjectView = null;
         }
