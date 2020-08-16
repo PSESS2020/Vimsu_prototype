@@ -77,36 +77,15 @@ module.exports = class ServerController {
 
     init() {
 
-        //JUST FOR TESTING PURPOSES
-        //#ppants.set('22abc', new Participant('22abc', '', new BusinessCard('22abc', 'MaxFriend', 'Dr', 'Mustermann', 'Max', 'racer', 'Mercedes', 'max.mustermann@gmail.com'), new Position(500, 0, 0), Direction.DOWNLEFT));  
-        //#ppants.set('22abcd', new Participant('22abcd', '', new BusinessCard('22abcd', 'MaxFReq', 'Dr', 'Mustermann', 'Hans', 'racer', 'Ferrari', 'hans.mustermann@gmail.com'), new Position(501, 0, 0), Direction.DOWNLEFT)) 
+        LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
+            var schedule = new Schedule(lectures);
+            var conference = new Conference(schedule);
+            this.#conference = conference;
+        }).catch(err => {
+            console.error(err);
+        });
 
-        /*
-        FOYER: this.#rooms[Settings.FOYER_ID - 1];
-        FOODCOURT: this.#rooms[Settings.FOODCOURT_ID - 1];
-        RECEPTION: this.#rooms[Settings.RECEPTION_ID - 1];
-        */
-
-        /*var foyerRoom = this.#rooms[0];
-        var foodCourtRoom = this.#rooms[1];
-        var receptionRoom = this.#rooms[2];*/
-
-        //RoomController not needed at this point (P)
-        //const gameRoomController = new RoomController(foyerRoom);
-
-        /* This is the program logic handling new connections.
-         * This may late be moved into the server or conference-controller?
-         * - (E) */
         this.#io.on('connection', (socket) => {
-
-            LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
-                var schedule = new Schedule(lectures);
-                var conference = new Conference(schedule);
-                this.#conference = conference;
-            }).catch(err => {
-                console.error(err);
-            })
-
 
             /* When a new player connects, we create a participant instance, initialize it to
              * the right position (whatever that is) and the emit that to all the other players,
@@ -576,7 +555,6 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (ppantID, username, text) => {
-                this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
                 var lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 var lecture = this.#conference.getSchedule().getLecture(lectureID);
@@ -612,10 +590,9 @@ module.exports = class ServerController {
                     var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, messageText: text }
                     lectureChat.appendMessage(message);
                     console.log("<" + currentDate + "> " + ppantID + " says " + text + " in lecture.");
-                    // Getting the roomID from the ppant seems to not work?
 
                     this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
-                    //this.#io.sockets.in(roomID.toString()).emit('newAllchatMessage', ppantID, currentTime, text);
+                    
 
                 }
             });
@@ -2126,7 +2103,6 @@ module.exports = class ServerController {
         this.#ppantControllers.forEach((ppantCont, socketId) => {
             if (ppantCont.getParticipant().getId() == ppantID) {
                 id = socketId;
-                console.log("server socket id: " + id);
             }
         });
         return id;
