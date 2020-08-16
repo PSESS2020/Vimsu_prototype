@@ -19,6 +19,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/walls/schedule1.png",
         "leftschedule_default1": "client/assets/walls/schedule2.png",
         "leftschedule_default2": "client/assets/walls/schedule3.png",
+        "leftwindow_default0": "client/assets/windows/left_small_window_default0.png",
         "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
         "rightwindow_default1": "client/assets/windows/right_small_window_default1.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
@@ -29,6 +30,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "rightwallframe_default0": "client/assets/frames/wallframe1.png",
         "rightwallframe_default1": "client/assets/frames/wallframe2.png",
         "rightwallframe_default2": "client/assets/frames/wallframe3.png",
+        "leftsofa_default": "client/assets/chairs/sofa_left.png",
+        "rightsofa_default": "client/assets/chairs/sofa_right.png",
         "plant_default": "client/assets/plants/plant.png",
         "table_default": "client/assets/tables/table.png",
 
@@ -87,18 +90,27 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getLength() - 1, 0, true));
 
-        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 14, -1, false);
+        for (var i = this.#room.getLength() - 3; i < this.#room.getLength() - 1; i++) {
+            listOfGameObjects.push(objService.createLeftSofa(Settings.FOYER_ID, i, 0, true));
+            listOfGameObjects.push(objService.createLeftWindowDefault0(Settings.FOYER_ID, 1, 1, i, -1, false))
+        }
+
+        listOfGameObjects.push(objService.createLeftWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength() - 1, -1, false))
+        listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 0, false))
+
+        for (var j = 1; j < 6; j++) {
+            listOfGameObjects.push(objService.createRightSofa(Settings.FOYER_ID, this.#room.getWidth() - 1, j, true));
+            listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false));
+        }
+
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 13, -1, false);
         conferenceLogos.forEach(conferenceLogo => {
             listOfGameObjects.push(conferenceLogo);
         });
 
-        for (i = 0; i <= 1; i++) {
-            listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
-        }
-
         listOfGameObjects.push(objService.createRightWindowDefault1(Settings.FOYER_ID, 1, 1, this.#room.getLength(), this.#room.getWidth() - 2, false))
  
-        let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 9, false);
+        let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 14, false);
         wallFrames.forEach(wallFrame => {
             listOfGameObjects.push(wallFrame);
         });
@@ -115,12 +127,12 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
             doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
 
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID, 2, -2, false),
-            objService.createDefaultRightTile(Settings.FOYER_ID, 26, 2, false),
+            objService.createDefaultRightTile(Settings.FOYER_ID, 26, 9, false),
             objService.createDefaultRightTile(Settings.FOYER_ID, 26, 21, false));
 
         //Assign lists to room and build occupation map
