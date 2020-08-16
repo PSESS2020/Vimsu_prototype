@@ -319,7 +319,9 @@
                                     'client/views/js/AvatarView',
                                     'client/views/js/LoadingView'], () => {
 
-                                        requirejs(['client/views/js/ProfileView',
+                                        requirejs([
+                                            'client/views/js/GameMapElementView',
+                                            'client/views/js/ProfileView',
                                             'client/views/js/NotificationBar',
                                             'client/views/js/ChatParticipantListView',
                                             'client/views/js/ChatListView',
@@ -340,7 +342,6 @@
                                             'client/views/js/LectureView',
                                             'client/views/js/NPCAvatarView',
                                             'client/views/js/ParticipantAvatarView',
-                                            'client/views/js/GameMapElementView',
                                             'client/views/js/GameMapElements/DoorView'], () => {
 
                                                 requirejs(['client/views/js/GameView',

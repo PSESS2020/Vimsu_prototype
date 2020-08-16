@@ -46,8 +46,8 @@ module.exports = */class NPCAvatarView extends AvatarView {
     }
 
     draw() {
-        let cordX = super.getPosition().getCordX();
-        let cordY = super.getPosition().getCordY();
+        let cordX = super.getGridPosition().getCordX();
+        let cordY = super.getGridPosition().getCordY();
         
         var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
         var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;

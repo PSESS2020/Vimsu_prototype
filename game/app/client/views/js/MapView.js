@@ -5,7 +5,7 @@ module.exports = */class MapView extends Views {
     #objectMap;
     #clickableTiles;
     #tiles;
-    #objects;
+    #gameObjects;
     #xNumTiles;
     #yNumTiles;
     #selectedTile;
@@ -22,13 +22,13 @@ module.exports = */class MapView extends Views {
         this.#objectMap = objectMap;
 
         //map components that are drawn on screen
-        this.#tiles = new Array();
+        this.#tiles = [];
 
-        //map objects that are drawn on screen
-        this.#objects = new Array();
+        //map gameObjects that are drawn on screen
+        this.#gameObjects = [];
 
         //map components that can be clicked
-        this.#clickableTiles = new Array();
+        this.#clickableTiles = [];
 
         this.#gameEngine = new IsometricEngine();
 
@@ -54,8 +54,12 @@ module.exports = */class MapView extends Views {
 
     }
 
-    getObjects() {
-        return this.#objects;
+    getSelectedTile() {
+        return this.#selectedTile;
+    }
+
+    getGameObjects() {
+        return this.#gameObjects;
     }
 
     async initProperties(assetPaths) {
@@ -70,7 +74,7 @@ module.exports = */class MapView extends Views {
         this.buildMap();
     }
 
-    //Creates a map of gameobjects to draw on screen.
+    //Creates a map of gamegameObjects to draw on screen.
     buildMap() {
 
         this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default");
@@ -109,14 +113,17 @@ module.exports = */class MapView extends Views {
                     var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, this.#objectMap[row][col].getName());
                     
                     if (object != null) {
-                        this.#objects.push(object);
+                        this.#gameObjects.push(object);
                     }
                 }
 
             };
         };
 
-        this.draw();
+        this.updateMapElements();
+        this.update();
+        this.drawMapElements();
+        //this.draw();
 
     }
 
@@ -168,31 +175,52 @@ module.exports = */class MapView extends Views {
         }
 
         //Calculate new screen Position of tile indicator.
-        var screenXY = this.#gameEngine.calculateScreenPosXY(selectedTileCords.x, selectedTileCords.y);
+        let screenXY = this.#gameEngine.calculateScreenPosXY(selectedTileCords.x, selectedTileCords.y);
 
-        var position = new PositionClient(screenXY.x, screenXY.y);
+        let position = new PositionClient(screenXY.x, screenXY.y);
 
         if (this.#selectedTile !== undefined)
-            this.#selectedTile.updatePos(position);
+            this.#selectedTile.updateScreenPos(position);
 
     }
 
-    drawSelectedTile() {
+    updateMapElements() {
+        if (this.#tiles.length !== 0) {
+            this.#tiles.forEach(object => {
+                let gridPos = object.getGridPosition();
+        
+                //calculates the screen position where to draw the game object
+                let screenPosXY = this.#gameEngine.calculateScreenPosXY(gridPos.getCordX(), gridPos.getCordY());
+                let screenPos = new PositionClient(screenPosXY.x, screenPosXY.y);
 
-        this.#selectedTile.draw();
-
-
+                object.updateScreenPos(screenPos);
+            })
+        }
     }
-    draw() {
-        //throw new Error('draw() has to be implemented!');
-        //let tiles = super.getTiles();
-        //let objects = super.getObjects();
 
-        if (this.#tiles.length != 0) {
+    update() {
+        if (this.#gameObjects.length !== 0) {
+            this.#gameObjects.forEach(object => {
+                let gridPos = object.getGridPosition();
+        
+                //calculates the screen position where to draw the game object
+                let screenPosXY = this.#gameEngine.calculateScreenPosXY(gridPos.getCordX(), gridPos.getCordY());
+                let screenPos = new PositionClient(screenPosXY.x, screenPosXY.y);
+
+                object.updateScreenPos(screenPos);
+            })
+        }
+    }
+
+    drawMapElements() {
+        if (this.#tiles.length !== 0) {
             this.#tiles.forEach(object => object.draw());
         }
-        if (this.#objects.length != 0) {
-            this.#objects.forEach(object => object.draw());
-        }
     }
+
+    /*draw() {
+        if (this.#gameObjects.length !== 0) {
+            this.#gameObjects.forEach(object => object.draw());
+        }
+    }*/
 }

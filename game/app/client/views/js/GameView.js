@@ -106,16 +106,16 @@ class GameView {
                    ppantView.onclick(newPosition);
                    */
 
-                    if (ppantView.getPosition().getCordX() === selectedTileCords.x
-                        && ppantView.getPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                    if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
+                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
                         ppantView.onClick();
                     }
                 });
 
                 //then, check if there is an NPC at this position
                 this.#npcAvatarViews.forEach(npcView => {
-                    if (npcView.getPosition().getCordX() === selectedTileCords.x
-                        && npcView.getPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x
+                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
                         npcView.onClick();
                     }
                 })
@@ -165,21 +165,26 @@ class GameView {
         //check if game view is already initalized
         if (this.#gameViewInit) {
             if (this.#currentMap.selectionOnMap) {
-                this.#currentMap.drawSelectedTile();
+                let selectedTile = this.#currentMap.getSelectedTile();
+                if (selectedTile !== undefined) selectedTile.draw();
             }
 
-            //put all AvatarViews in one list
-            var allAvatars = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews).concat(this.#npcAvatarViews);
+            var gameObjects = this.#currentMap.getGameObjects();
+
+            //put all AvatarViews and all GameObjects in one list
+            var allDrawElements = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews
+                                                 ).concat(this.#npcAvatarViews
+                                                 ).concat((gameObjects === undefined) ? "" : gameObjects);
 
 
             //sort all Avatars in CordX
-            allAvatars.sort(function (a, b) {
-                return b.getPosition().getCordX() - a.getPosition().getCordX();
+            allDrawElements.sort(function (a, b) {
+                return b.getGridPosition().getCordX() - a.getGridPosition().getCordX();
             });
 
             //draw all avatars
-            for (var i = 0; i < allAvatars.length; i++) {
-                allAvatars[i].draw();
+            for (var i = 0; i < allDrawElements.length; i++) {
+                allDrawElements[i].draw();
             }
         }
     }
@@ -234,7 +239,7 @@ class GameView {
         if (participant !== this.#ownAvatarView) {
             console.log("other avatarView init: " + participant.getId());
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
-                participant.getPosition(),
+                participant.getGridPosition(),
                 participant.getDirection(),
                 participant.getId(),
                 typeOfRoom,

@@ -5,15 +5,19 @@ if (typeof module === 'object' && typeof exports === 'object') {
 class GameObjectView extends Views {
 
     #objectImage;
-    #position;
+    #gridPosition;
+    #screenPositionOffset;
     #name;
 
-    constructor(objectImage, position, name) {
+    #screenPosition;
+
+    constructor(objectImage, gridPosition, screenPositionOffset, name) {
         super();
         this.#objectImage = objectImage;
-        TypeChecker.isInstanceOf(position, PositionClient);
-        this.#position = position;
-        this.#name = name
+        TypeChecker.isInstanceOf(gridPosition, PositionClient);
+        this.#gridPosition = gridPosition;
+        this.#screenPositionOffset = screenPositionOffset;
+        this.#name = name;
 
         /*if (new.target === GameObjectView) {
             throw new Error("Cannot construct abstract GameObjectView instances directly");
@@ -24,22 +28,35 @@ class GameObjectView extends Views {
         return this.#objectImage;
     }
 
-    getPosition() {
-        return this.#position;
+    getGridPosition() {
+        return this.#gridPosition;
+    }
+
+    getScreenPosition() {
+        return this.#screenPosition;
+    }
+
+    getScreenPositionOffset() {
+        return this.#screenPositionOffset;
     }
 
     getName() {
         return this.#name;
     }
 
-    updatePos(position) {
+    updateGridPos(gridPosition) {
 
-        this.#position = position;
+        this.#gridPosition = gridPosition;
 
     }
 
+    updateScreenPos(screenPosition) {
+        this.#screenPosition = screenPosition;
+    }
+
     draw() {
-        ctx_avatar.drawImage(this.#objectImage, this.#position.getCordX(), this.#position.getCordY());
+        ctx_avatar.drawImage(this.#objectImage, this.#screenPosition.getCordX() + this.#screenPositionOffset.x, 
+                                                this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
     }
 
     onclick() {

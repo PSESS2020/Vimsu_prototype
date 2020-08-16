@@ -6,8 +6,8 @@ if (typeof module === 'object' && typeof exports === 'object') {
 class DoorView extends GameMapElementView {
     #DOORTYPE;
 
-    constructor(doorImage, position, doorType, name) {
-        super(doorImage, position, name);
+    constructor(doorImage, position, doorType, doorScreenPositionOffset, name) {
+        super(doorImage, position, doorScreenPositionOffset, name);
 
         this.#DOORTYPE = doorType;
     }

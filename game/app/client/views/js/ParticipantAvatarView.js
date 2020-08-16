@@ -83,7 +83,7 @@ class ParticipantAvatarView extends AvatarView {
 
     updateCurrentAnimation() {
         var direction = super.getDirection();
-        var currPos = super.getPosition();
+        var currPos = super.getGridPosition();
         if (this.#walking === true) {
             if (direction === 'UPLEFT') {
                 this.#currentAnimation = this.#walkingUpLeftAnimation;
@@ -110,8 +110,8 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     //only there for testing, TODO: remove
-    getPosition() {
-        return super.getPosition();
+    getGridPosition() {
+        return super.getGridPosition();
     }
 
     updateWalking(isMoving) {
@@ -121,8 +121,8 @@ class ParticipantAvatarView extends AvatarView {
     draw() {
         if (this.#isVisible) {
 
-            let cordX = super.getPosition().getCordX();
-            let cordY = super.getPosition().getCordY();
+            let cordX = super.getGridPosition().getCordX();
+            let cordY = super.getGridPosition().getCordY();
             this.updateCurrentAnimation();
             
             var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;

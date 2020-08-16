@@ -26,7 +26,7 @@ class AvatarView extends Views {
         this.#position = position;
     }
 
-    getPosition() {
+    getGridPosition() {
         return this.#position;
     }
 

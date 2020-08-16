@@ -15,8 +15,24 @@ class GameObjectViewFactory {
         this.#tileRowHeight = this.#gameEngine.getTileRowHeight();
     }
 
+    getClickMap(image) {
+        var clickMap = [];
+        ctx_avatar.drawImage(image, 0, 0);
+            var imageData = ctx_avatar.getImageData(0, 0, image.width, image.height).data;
+        
+            for ( var i = 0, n = imageData.length; i < n; i += 4) {
+                var row = Math.floor((i / 4) / image.width);
+                var col = (i / 4) - (row * image.width);
+
+                if(!this.clickMap[row]) this.clickMap[row] = [];
+                
+                this.clickMap[row][col] = imageData[i+3] === 0 ? 0 : 1;
+            }
+        return clickMap;
+    }
+
     /*
-    * calculates the screenposition of a game object and creates it.
+    * calculates the position of a game object and creates it.
     */
     createGameObjectView(gameObjectType, pos, objectName) {
         //TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -25,21 +41,16 @@ class GameObjectViewFactory {
 
         var gameObjectView;
         var gameObjectImage;
-        var screenPos;
 
-        //calculates the screen position where to draw the tile
-        var screenX = this.#gameEngine.calculateScreenPosX(pos.getCordX(), pos.getCordY());
-        var screenY = this.#gameEngine.calculateScreenPosY(pos.getCordX(), pos.getCordY());
+        var defaultOffset = { x: 0, y: 0 };
 
         switch (gameObjectType) {
 
             case GameObjectType.SELECTED_TILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenPos = new PositionClient(screenX, screenY);
-
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, screenPos);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, defaultOffset, objectName);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -47,10 +58,8 @@ class GameObjectViewFactory {
             case GameObjectType.TILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenPos = new PositionClient(screenX, screenY);
-
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
                 else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -58,12 +67,10 @@ class GameObjectViewFactory {
             case GameObjectType.LEFTWALL:
                 gameObjectImage = this.#assetImages[objectName];
 
-                var wallOffsetY = this.#tileRowHeight / 2 - gameObjectImage.width + 1;
+                var wallOffset = {x: 0, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
                 
-                screenPos = new PositionClient(screenX, screenY + wallOffsetY);
-
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, pos, wallOffset, objectName);
                 else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -71,12 +78,10 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTWALL:
                 gameObjectImage = this.#assetImages[objectName];
 
-                var wallOffsetY = this.#tileRowHeight / 2 - gameObjectImage.width + 1;
+                var wallOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
                 
-                screenPos = new PositionClient(screenX - this.#tileColumnWidth, screenY + wallOffsetY);
-
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, pos, wallOffset, objectName);
                 else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -84,13 +89,11 @@ class GameObjectViewFactory {
             case GameObjectType.TABLE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                //because the table image has a different size.
-                var tableOffsetY = this.#tileRowHeight - gameObjectImage.height + 7;
-
-                screenPos = new PositionClient(screenX, screenY + tableOffsetY);
+                //because the tble image has a different size.
+                var tableOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height + 7};
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -99,11 +102,10 @@ class GameObjectViewFactory {
                 gameObjectImage = this.#assetImages[objectName];
 
                 //because the plant image has a different size.
-                var plantOffsetY = this.#tileRowHeight - gameObjectImage.height - 10;
-                screenPos = new PositionClient(screenX, screenY + plantOffsetY);
+                var plantOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height - 10};
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, plantOffset, objectName);
                 else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -111,13 +113,10 @@ class GameObjectViewFactory {
             case GameObjectType.LEFTTILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenX = this.#gameEngine.calculateScreenPosX( pos.getCordX(), (pos.getCordY() + 1) );
-                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordY() + 1), pos.getCordX() );
-
-                screenPos = new PositionClient(screenX, screenY);
-
+                pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
+                
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
                 else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -125,13 +124,10 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTTILE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                screenX = this.#gameEngine.calculateScreenPosX( (pos.getCordX() - 1), pos.getCordY() );
-                screenY = this.#gameEngine.calculateScreenPosY( (pos.getCordX() - 1),  pos.getCordY());
-                
-                screenPos = new PositionClient(screenX, screenY);
+                pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameMapElementView(gameObjectImage, screenPos);
+                    gameObjectView = new GameMapElementView(gameObjectImage, pos, defaultOffset, objectName);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -146,11 +142,6 @@ class GameObjectViewFactory {
 
         var doorView;
         var doorImage;
-        var screenPos;
-
-        //calculates the screen position where to draw the tile
-        var screenX = this.#gameEngine.calculateScreenPosX(pos.getCordX(), pos.getCordY());
-        var screenY = this.#gameEngine.calculateScreenPosY(pos.getCordX(), pos.getCordY());
 
         switch(typeOfDoor) {
 
@@ -159,13 +150,10 @@ class GameObjectViewFactory {
 
                 doorImage = this.#assetImages[objectName];
 
-                var leftDoorScreenX = screenX;
-                var leftDoorScreenY = screenY + this.#tileRowHeight / 2 - doorImage.width + 1;
-
-                screenPos = new PositionClient(leftDoorScreenX, leftDoorScreenY);
+                var leftDoorOffset = {x: 0, y: this.#tileRowHeight / 2 - doorImage.width + 1};
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, screenPos, typeOfDoor, objectName);
+                    doorView = new DoorView(doorImage, pos, typeOfDoor, leftDoorOffset, objectName);
                 else throw new Error("The image for lefthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -174,13 +162,10 @@ class GameObjectViewFactory {
 
                 doorImage = this.#assetImages[objectName];
 
-                var rightDoorScreenX = screenX - this.#tileColumnWidth;
-                var rightDoorScreenY = screenY + this.#tileRowHeight / 2 - doorImage.width + 1;
-
-                screenPos = new PositionClient(rightDoorScreenX, rightDoorScreenY);
+                var rightDoorOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - doorImage.width + 1} ;
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, screenPos, typeOfDoor, objectName);
+                    doorView = new DoorView(doorImage, pos, typeOfDoor, rightDoorOffset, objectName);
                 else throw new Error("The image for righthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
