@@ -65,8 +65,8 @@ module.exports = */class MapView extends Views {
     async initProperties(assetPaths) {
         this.#xNumTiles = this.#map.length;
         this.#yNumTiles = this.#map[0].length;
-        
-        assetPaths.tileselected_default =  "client/assets/tile_selected.png";
+
+        assetPaths.tileselected_default = "client/assets/tile_selected.png";
         var assetImages = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
 
         this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine);
@@ -85,8 +85,7 @@ module.exports = */class MapView extends Views {
                 var position = new PositionClient(row, col);
 
                 var mapObject = this.#map[row][col];
-                if (mapObject !== null) 
-                {
+                if (mapObject !== null) {
                     var tileType;
                     var tile;
                     if (mapObject instanceof DoorClient) {
@@ -96,9 +95,8 @@ module.exports = */class MapView extends Views {
                         tileType = mapObject.getGameObjectType();
                         tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, mapObject.getName());
                     }
-                
-                    if (tile != null) 
-                    {
+
+                    if (tile != null) {
                         this.#tiles.push(tile);
 
                         if (tile instanceof DoorView)
@@ -107,11 +105,11 @@ module.exports = */class MapView extends Views {
                     }
 
                 }
-                
+
                 if (this.#objectMap[row][col] !== null) {
                     var objectType = this.#objectMap[row][col].getGameObjectType();
                     var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, this.#objectMap[row][col].getName());
-                    
+
                     if (object != null) {
                         this.#gameObjects.push(object);
                     }
@@ -134,34 +132,34 @@ module.exports = */class MapView extends Views {
     }
 
     findClickedTile(selectedTileCords) {
-        
+
         let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
 
         if (clickedTile !== null && clickedTile.isClickable()) {
             this.#clickableTiles.forEach(viewObject => {
-               
+
                 if (clickedTile instanceof DoorClient && clickedTile.getName() === viewObject.getName())
                     viewObject.onclick(clickedTile.getTargetRoomId());
                 else if (clickedTile instanceof GameObjectClient && clickedTile.getName() === viewObject.getName())
                     viewObject.onclick();
-        });
+            });
         }
 
     }
 
     isCursorOnMap(cordX, cordY) {
         if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
-        let mapObject = this.#map[cordX][cordY];
-            
-        if (mapObject instanceof DoorClient) {
-            return true;
+            let mapObject = this.#map[cordX][cordY];
 
-        //Room walls
-        } else if (mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL && 
-                    mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
-            return true;
-        } else 
-            return false;
+            if (mapObject instanceof DoorClient) {
+                return true;
+
+                //Room walls
+            } else if (mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
+                mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
+                return true;
+            } else
+                return false;
 
         }
 

@@ -34,7 +34,7 @@ module.exports = class DoorService {
         }
     }
 
-    #generateEnterPositionsLeftWall = function(doorPosition) {
+    #generateEnterPositionsLeftWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
         let enterPositions = [];
@@ -47,7 +47,7 @@ module.exports = class DoorService {
         return enterPositions;
     }
 
-    #generateEnterPositionsRightWall = function(doorPosition) {
+    #generateEnterPositionsRightWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
         let enterPositions = [];

@@ -31,7 +31,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "rightwallframe_default2": "client/assets/wallframe3.png",
         "plant_default": "client/assets/plant.png",
         "table_default": "client/assets/table.png",
-        
+
     }
 
     constructor(room) {
@@ -47,19 +47,19 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         for (var i = 0; i < this.#room.getLength(); i++) {
 
-            for(var j = 0; j < this.#room.getWidth(); j++) {
+            for (var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.FOYER_ID, i, j, false));
             }
 
         }
-        
+
         //Get left walls
         for (var i = 0; i < this.#room.getLength(); i++) {
             listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOYER_ID, 1, 1, i, -1, false));
         }
 
         //Get right walls
-        for(var j = 0; j < this.#room.getWidth(); j++) {
+        for (var j = 0; j < this.#room.getWidth(); j++) {
             listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false));
         }
 
@@ -78,7 +78,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, i, 0, true));
 
         //Get schedule elements
-        let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1,false);
+        let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1, false);
         schedules.forEach(schedule => {
 
             listOfGameObjects.push(schedule);
@@ -100,7 +100,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         wallFrames.forEach(wallFrame => {
             listOfGameObjects.push(wallFrame);
         });
-        
+
         //Get all npcs from service
         let npcService = new NPCService();
         let listOfNPCs = [];
@@ -115,11 +115,11 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
             doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
             doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
-        
+
         //Get door tiles
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID,  2, -2, false),
-                               objService.createDefaultRightTile(Settings.FOYER_ID, 26, 2, false),
-                               objService.createDefaultRightTile(Settings.FOYER_ID, 26, 21, false));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID, 2, -2, false),
+            objService.createDefaultRightTile(Settings.FOYER_ID, 26, 2, false),
+            objService.createDefaultRightTile(Settings.FOYER_ID, 26, 21, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

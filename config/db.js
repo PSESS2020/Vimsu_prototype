@@ -231,7 +231,7 @@ module.exports = class db {
                 var fileId = uploadStream.id.toString();
 
                 return new Promise((resolve, reject) => {
-                    FileSystem.createReadStream(dir + fileName, {highWaterMark : 1024 * 1024, allowVolatile: true}).pipe(uploadStream)
+                    FileSystem.createReadStream(dir + fileName, { highWaterMark: 1024 * 1024, allowVolatile: true }).pipe(uploadStream)
                         .on('finish', function () {
                             console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
                             resolve({ fileId, duration });

@@ -18,7 +18,7 @@ class DoorView extends GameMapElementView {
 
     onclick(targetRoomId) {
         let eventManager = new EventManager();
-        
+
         if (this.#DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
             eventManager.handleLectureDoorClick();
         } else {

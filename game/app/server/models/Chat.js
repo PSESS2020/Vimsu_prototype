@@ -57,21 +57,8 @@ module.exports = class Chat {
         this.#maxNumMessages = maxNumMsg;
     }
 
-    /*
-    *Multiple constructors are not allowed.
-    constructor(idChat, idOwner, participantList, messageList) {
-        this.#idChat = idChat;
-        this.#idOwner = idOwner;
-        this.#participantList = participantList;
-        this.#messageList = messageList;
-    }*/
-
     addMessage(msg) {
-        // Intentionally left blank - to implement in child classes
-    }
-
-    addParticipant(ppantId) {
-        // Intentionally left blank - to implement in child classes
+        throw new Error('addMessage(msg) has to be implemented!');
     }
 
     generateNewMsgId(senderId) {

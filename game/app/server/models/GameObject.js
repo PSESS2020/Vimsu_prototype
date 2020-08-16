@@ -6,15 +6,11 @@ module.exports = class GameObject {
 
     #id;
     #name;
-    //creationDate;
     #width;
     #length;
-    //height;
     #position;
     #isSolid;
     #gameObjectType;
-    //isStatic;
-
 
     /**
      * Erstellt GameObject-Instanz
@@ -77,12 +73,4 @@ module.exports = class GameObject {
     getSolid() {
         return this.#isSolid;
     }
-
-    /*
-    getDistance(otherPosition) {
-        TypeChecker.isInstanceOf(otherPosition, Position);
-
-
-    }
-    */
 }

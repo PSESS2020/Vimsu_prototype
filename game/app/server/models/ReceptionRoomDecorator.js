@@ -38,7 +38,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
 
         for (var i = 0; i < this.#room.getLength(); i++) {
 
-            for(var j = 0; j < this.#room.getWidth(); j++) {
+            for (var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.RECEPTION_ID, i, j, false));
             }
 
@@ -50,7 +50,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         }
 
         //Get right walls
-        for(var j = 0; j < this.#room.getWidth(); j++) {
+        for (var j = 0; j < this.#room.getWidth(); j++) {
             listOfMapElements.push(objService.createDefaultRightWall(Settings.RECEPTION_ID, 1, 1, this.#room.getLength(), j, false));
         }
 
@@ -86,7 +86,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT));
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID,  2, -2, false));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID, 2, -2, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

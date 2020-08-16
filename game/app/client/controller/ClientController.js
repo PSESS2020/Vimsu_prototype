@@ -1,5 +1,3 @@
-//const GameObjectClient = require('../models/GameObjectClient');
-
 if (typeof module === 'object' && typeof exports === 'object') {
     GameView = require('../views/js/GameView')
 }
@@ -9,9 +7,7 @@ class ClientController {
     #port;
     socket;
     #currentRoom;
-    #participantId;
     #ownParticipant;
-    #roomClient;
     #ownBusinessCard;
 
     #gameView;
@@ -190,6 +186,7 @@ class ClientController {
         this.socket.on('update token', this.handleFromServerUpdateToken.bind(this));
         this.socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('New global announcement', this.handleFromServerNewGlobalAnnouncement.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
@@ -351,7 +348,7 @@ class ClientController {
         //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
-            console.log("npc: " + npc.cordX + " " +  npc.cordY)
+            console.log("npc: " + npc.cordX + " " + npc.cordY)
             listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
         });
 
@@ -596,13 +593,20 @@ class ClientController {
     handleFromServerInitAllchat(messages) {
         $('#allchatMessages').empty();
         messages.forEach((message) => {
-            $('#allchatMessages').prepend($('<div>').text("[" + message.timestamp + "] " + message.username + ": " + message.text));
+            var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+            $('#allchatMessages').prepend($('<div>').text("[" + timestamp + "] " + message.username + ": " + message.text));
         });
         $('#allchatMessages').scrollTop(0);
     }
 
     handleFromServerNewGlobalMessage(messageHeader, messageText) {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
+
+    handleFromServerNewGlobalAnnouncement(moderatorUsername, message) {
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
+        this.#gameView.initGlobalChatView(messageHeader, message.text);
     }
 
     handleFromServerHideAvatar(participantId) {

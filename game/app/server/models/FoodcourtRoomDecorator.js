@@ -37,7 +37,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (var i = 0; i < this.#room.getLength(); i++) {
 
-            for(var j = 0; j < this.#room.getWidth(); j++) {
+            for (var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.FOODCOURT_ID, i, j, false));
             }
 
@@ -49,10 +49,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         }
 
         //Get right walls
-        for(var j = 0; j < this.#room.getWidth(); j++) {
+        for (var j = 0; j < this.#room.getWidth(); j++) {
             listOfMapElements.push(objService.createDefaultRightWall(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength(), j, false));
         }
-
 
         //Get all gameObjects from service
         let listOfGameObjects = [];
@@ -70,13 +69,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
             listOfGameObjects.push(conferenceLogo);
         });
 
-        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 3, false))
-        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 4, false))
-        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 8, false))
-        listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 9, false))
-        /*for (i = 4; i < this.#room.getWidth() - 4; i+=4) {
-            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
-        }*/
+        for (i = 3; i <= 4; i++) {
+            for (j = 0; j <= 5; j += 5) {
+                listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false))
+            }
+        }
 
         //Get all npcs from service
         let npcService = new NPCService();
@@ -89,7 +86,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID,  2, -2, false));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

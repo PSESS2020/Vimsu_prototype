@@ -9,7 +9,7 @@ class GameObjectViewFactory {
         this.#assetImages = assetImages;
 
         this.#gameEngine = gameEngine;
-       
+
         //gets map tile size
         this.#tileColumnWidth = this.#gameEngine.getTileColumnWidth();
         this.#tileRowHeight = this.#gameEngine.getTileRowHeight();
@@ -143,7 +143,7 @@ class GameObjectViewFactory {
         var doorView;
         var doorImage;
 
-        switch(typeOfDoor) {
+        switch (typeOfDoor) {
 
             case TypeOfDoor.LECTURE_DOOR:
             case TypeOfDoor.LEFT_DOOR:
@@ -170,8 +170,8 @@ class GameObjectViewFactory {
 
                 break;
 
-                default:
-                    doorView = null; 
+            default:
+                doorView = null;
         }
         return doorView;
     }

@@ -243,7 +243,8 @@ class LectureView extends WindowView {
             for (var i = 0; i < lectureChat.length; i++) {
                 console.log("drawing message " + i);
                 var message = lectureChat[i];
-                var messageHeader = message.username + ", " + message.timestamp + ":";
+                var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+                var messageHeader = message.username + ", " + timestamp + ":";
                 var $newMessageHeader = $("<div style='font-size: small;'></div>");
                 var $newMessageBody = $("<div style='font-size: medium;'></div>");
                 $newMessageHeader.text(messageHeader);
