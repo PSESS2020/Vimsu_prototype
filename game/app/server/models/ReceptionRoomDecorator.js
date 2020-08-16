@@ -12,17 +12,17 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
     #room;
 
     #assetPaths = {
-        "tile_default": "client/assets/tile_default.png",
-        "leftwall_default": "client/assets/wall1.png",
-        "rightwall_default": "client/assets/wall2.png",
-        "leftfoyerdoor_default": "client/assets/door_foyer.png",
-        "rightwindow_default": "client/assets/window.png",
-        "leftconferencelogo_default0": "client/assets/conferencelogo1.png",
-        "leftconferencelogo_default1": "client/assets/conferencelogo2.png",
-        "leftconferencelogo_default2": "client/assets/conferencelogo3.png",
-        "leftconferencelogo_default3": "client/assets/conferencelogo4.png",
-        "leftconferencelogo_default4": "client/assets/conferencelogo5.png",
-        "table_default": "client/assets/table.png",
+        "tile_default": "client/assets/tiles/tile_default.png",
+        "leftwall_default": "client/assets/walls/wall1.png",
+        "rightwall_default": "client/assets/walls/wall2.png",
+        "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
+        "rightwindow_default": "client/assets/windows/right_small_window_default.png",
+        "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
+        "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
+        "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
+        "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
+        "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
+        "table_default": "client/assets/tables/table.png",
     }
 
     constructor(room) {

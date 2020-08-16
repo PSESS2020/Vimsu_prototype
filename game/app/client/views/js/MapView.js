@@ -66,7 +66,7 @@ module.exports = */class MapView extends Views {
         this.#xNumTiles = this.#map.length;
         this.#yNumTiles = this.#map[0].length;
 
-        assetPaths.tileselected_default = "client/assets/tile_selected.png";
+        assetPaths.tileselected_default = "client/assets/tiles/tile_selected.png";
         var assetImages = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
 
         this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine);

@@ -14,10 +14,10 @@ const AVATAR_SCALE_HEIGHT = 0.3125;
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('client/assets/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #topClothing = new SpriteSheet('client/assets/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #bottomClothing = new SpriteSheet('client/assets/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #shoes = new SpriteSheet('client/assets/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
