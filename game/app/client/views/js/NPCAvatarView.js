@@ -52,14 +52,14 @@ module.exports = */class NPCAvatarView extends AvatarView {
         var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
         var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
 
-        ctx_map.font = "1em sans-serif";
-        ctx_map.textBaseline = 'top';
-        ctx_map.fillStyle = "firebrick";
-        ctx_map.textAlign = "center";
-        ctx_map.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_map.font, 10));
+        ctx_avatar.font = "1em sans-serif";
+        ctx_avatar.textBaseline = 'top';
+        ctx_avatar.fillStyle = "firebrick";
+        ctx_avatar.textAlign = "center";
+        ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
-        ctx_map.fillStyle = "white";
-        ctx_map.fillText(this.#name, screenX + AVATAR_WIDTH / 2, screenY);
+        ctx_avatar.fillStyle = "white";
+        ctx_avatar.fillText(this.#name, screenX + AVATAR_WIDTH / 2, screenY);
 
         this.#currentAnimation.draw(screenX, screenY);
     }
