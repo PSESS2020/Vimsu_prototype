@@ -1,6 +1,6 @@
 const chai = require('chai');
 const assert = chai.assert;
-const DoorView = require('../../../game/app/client/views/js/DoorView')
+const DoorView = require('../../../game/app/client/views/js/GameMapElements/DoorView.js');
 const PositionClient = require('../../../game/app/client/models/PositionClient')
 const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
 
