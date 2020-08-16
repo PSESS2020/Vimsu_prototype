@@ -38,8 +38,8 @@ class FriendListView extends WindowView {
                                     <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px; margin-right: 15px; margin-top: -10px" aria-labelledby="dropdownFriendOption">
-                                    <button class="dropdown-item btn btn-lecture" id="${"chatfriend" + businessCard.getParticipantId()}" type="button">Chat</button>
-                                    <button class="dropdown-item btn btn-reject" style=" width: auto" id="${"delete" + businessCard.getParticipantId()}" type="button">Delete</button>
+                                    <button class="dropdown-item btn btn-lecture" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
+                                    <button class="dropdown-item btn btn-reject" style=" width: auto" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
                                 </div>
                         </div>    
                     </div>
