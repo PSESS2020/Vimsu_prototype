@@ -19,7 +19,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/walls/schedule1.png",
         "leftschedule_default1": "client/assets/walls/schedule2.png",
         "leftschedule_default2": "client/assets/walls/schedule3.png",
-        "rightwindow_default": "client/assets/windows/right_small_window_default.png",
+        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
+        "rightwindow_default1": "client/assets/windows/right_small_window_default1.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
@@ -84,7 +85,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         });
 
-        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getWidth() - 1, 0, true));
+        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getLength() - 1, 0, true));
 
         let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 14, -1, false);
         conferenceLogos.forEach(conferenceLogo => {
@@ -92,9 +93,11 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         });
 
         for (i = 0; i <= 1; i++) {
-            listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+            listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
         }
 
+        listOfGameObjects.push(objService.createRightWindowDefault1(Settings.FOYER_ID, 1, 1, this.#room.getLength(), this.#room.getWidth() - 2, false))
+ 
         let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 9, false);
         wallFrames.forEach(wallFrame => {
             listOfGameObjects.push(wallFrame);

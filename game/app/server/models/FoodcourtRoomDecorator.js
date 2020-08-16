@@ -15,7 +15,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/walls/wall1.png",
         "rightwall_default": "client/assets/walls/wall2.png",
         "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
-        "rightwindow_default": "client/assets/windows/right_small_window_default.png",
+        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
@@ -71,7 +71,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 5; j += 5) {
-                listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false))
+                listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false))
             }
         }
 

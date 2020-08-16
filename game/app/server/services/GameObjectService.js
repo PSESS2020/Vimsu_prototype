@@ -100,9 +100,14 @@ module.exports = class GameObjectService {
     }
 
     //Window
-    createRightWindow(roomId, width, length, xPos, yPos, solidity) {
+    createRightWindowDefault0(roomId, width, length, xPos, yPos, solidity) {
         this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default", width, length, new Position(roomId, xPos, yPos), solidity);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default0", width, length, new Position(roomId, xPos, yPos), solidity);
+    }
+
+    createRightWindowDefault1(roomId, width, length, xPos, yPos, solidity) {
+        this.checkParamTypes(roomId, width, length, xPos, yPos, solidity);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default1", width, length, new Position(roomId, xPos, yPos), solidity);
     }
 
     //Wall Frames
