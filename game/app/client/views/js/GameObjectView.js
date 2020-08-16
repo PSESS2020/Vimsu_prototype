@@ -55,6 +55,11 @@ class GameObjectView extends Views {
     }
 
     draw() {
+        //screen position is not set yet
+        if (!this.#screenPosition) {
+            return;
+        }
+
         ctx_avatar.drawImage(this.#objectImage, this.#screenPosition.getCordX() + this.#screenPositionOffset.x, 
                                                 this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
     }
