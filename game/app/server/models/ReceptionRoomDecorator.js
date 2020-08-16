@@ -22,6 +22,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
         "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
         "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
+        "plant_default": "client/assets/plants/plant.png",
         "table_default": "client/assets/tables/table.png",
     }
 
@@ -70,6 +71,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         conferenceLogos.forEach(conferenceLogo => {
             listOfGameObjects.push(conferenceLogo);
         });
+
+        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, 0, true));
+        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, this.#room.getWidth() -1, true));
 
         for (i = 5; i < this.#room.getWidth() - 5; i++) {
             listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
