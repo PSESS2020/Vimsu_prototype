@@ -93,7 +93,7 @@ module.exports = */class MapView extends Views {
                         tile = this.#gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
                     } else {
                         tileType = mapObject.getGameObjectType();
-                        tile = this.#gameObjectViewFactory.createGameObjectView(tileType, position, mapObject.getName());
+                        tile = this.#gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName());
                     }
 
                     if (tile != null) {
