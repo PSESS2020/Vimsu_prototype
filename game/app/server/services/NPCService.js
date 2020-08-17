@@ -19,7 +19,7 @@ module.exports = class NPCService {
 
     #STORYS = {
         foyerHelperStory: ['Hey! Welcome to our Foyer!',
-            'The door to my left leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
+            'The door to my right leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
             'Enjoy your stay!'],
         basicTutorialStory: ['Hello and welcome to this conference hosted by VIMSU!',
             'I would like to give you a short introduction with some basic tips.',
