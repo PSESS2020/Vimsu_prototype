@@ -12,8 +12,9 @@ module.exports = class RouteController {
     #app;
     #io;
     #db;
+    #blob;
 
-    constructor(app, io, db) {
+    constructor(app, io, db, blob) {
         if (!!RouteController.instance) {
             return RouteController.instance;
         }
@@ -23,6 +24,7 @@ module.exports = class RouteController {
         this.#app = app;
         this.#io = io;
         this.#db = db;
+        this.#blob = blob;
         this.init();
     }
 
@@ -111,7 +113,7 @@ module.exports = class RouteController {
                 }
                 else {
                     response.render('upload', {uploading:true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname})
-                    return SlotService.storeVideo(video, this.#db).then(videoData => {
+                    return SlotService.storeVideo(video, this.#blob).then(videoData => {
                         if (videoData) {
                             return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                 response.end();
@@ -140,7 +142,7 @@ module.exports = class RouteController {
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
                 const ServerController = require('../../game/app/server/controller/ServerController');
-                new ServerController(this.#io, this.#db);
+                new ServerController(this.#io, this.#db, this.#blob);
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
             } else {
                 response.redirect('/');

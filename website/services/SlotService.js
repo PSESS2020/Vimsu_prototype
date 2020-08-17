@@ -4,11 +4,11 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 const Slot = require('../models/Slot')
 
 module.exports = class SlotService {
-    static storeVideo(video, vimsudb) {
+    static storeVideo(video, blob) {
         var dir = __dirname + "/upload/";
 
         return FileSystem.moveFile(video, dir).then(res => {
-            return vimsudb.uploadFile("lectures", video.name, dir).then(videoData => {
+            return blob.uploadFile("lectures", video.name, dir).then(videoData => {
                 FileSystem.deleteDirectory(dir);
                 if (videoData) {
                     return videoData;

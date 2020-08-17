@@ -17,6 +17,11 @@ module.exports = class db {
 
     connectDB() {
         const connectionString = process.env.MONGODB_CONNECTION_STRING;
+        if(!connectionString) {
+            console.log("Cannot connect to database. Please ask the owner of this project for the connection string.");
+            return;
+        }
+
         return mongodb.MongoClient.connect(connectionString, {
             useUnifiedTopology: true,
             poolSize: 1
@@ -210,39 +215,6 @@ module.exports = class db {
             .catch(err => {
                 console.error(err)
             })
-    }
-
-    uploadFile(collectionName, fileName, dir) {
-        TypeChecker.isString(collectionName);
-        TypeChecker.isString(fileName);
-
-        console.log("upload file begin");
-
-        const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
-            chunkSizeBytes: 1024 * 1024,
-            bucketName: collectionName,
-        });
-
-        return getVideoDurationInSeconds(FileSystem.createReadStream(dir + fileName)).then(duration => {
-            if (duration < 1) {
-                return false;
-            } else {
-                var uploadStream = bucket.openUploadStream(fileName.slice(0, -4) + "_" + new Date().getTime() + ".mp4");
-                var fileId = uploadStream.id.toString();
-
-                return new Promise((resolve, reject) => {
-                    FileSystem.createReadStream(dir + fileName, { highWaterMark: 1024 * 1024, allowVolatile: true }).pipe(uploadStream)
-                        .on('finish', function () {
-                            console.log(fileName + ' with id ' + fileId + ' and duration ' + duration + ' uploaded');
-                            resolve({ fileId, duration });
-                        })
-                        .on('error', function (error) {
-                            console.error(error);
-                            reject();
-                        });
-                });
-            }
-        })
     }
 
     downloadFile(collectionName, fileId) {
