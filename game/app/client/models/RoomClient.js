@@ -270,7 +270,7 @@ class RoomClient {
 
     buildMapArray() {
 
-        var mapLength = this.#width + 3;
+        var mapLength = this.#width + Settings.MAP_BLANK_TILES_LENGTH;
         this.#map = new Array(mapLength);
         this.#objectMap = new Array(mapLength);
 
@@ -282,20 +282,31 @@ class RoomClient {
         this.#listOfMapElements.forEach(mapElement => {
             let xPos = mapElement.getPosition().getCordX();
             let yPos = mapElement.getPosition().getCordY();
+            let mapEntry = this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
-            if (this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] !== undefined)
-                this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapElement;
-            else
-                throw Error();
+            if (mapEntry !== null) {
+                mapEntry = [ mapEntry, mapElement ];
+            } else if (mapEntry instanceof Array) {
+                mapEntry.push(mapElement);
+            } else
+                mapEntry = mapElement;
 
+            this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
 
-        this.#listOfGameObjects.forEach(object => {
-            let xPos = object.getPosition().getCordX();
-            let yPos = object.getPosition().getCordY();
+        this.#listOfGameObjects.forEach(gameObject => {
+            let xPos = gameObject.getPosition().getCordX();
+            let yPos = gameObject.getPosition().getCordY();
+            let mapEntry = this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
-            this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = object;
-
+            if (mapEntry !== null) {
+                mapEntry = [ mapEntry, gameObject ];
+            } else if (mapEntry instanceof Array) {
+                mapEntry.push(gameObject);
+            } else
+                mapEntry = gameObject;
+                
+            this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
 
         //set door positions in map

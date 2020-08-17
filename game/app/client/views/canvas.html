@@ -316,11 +316,12 @@
                                 requirejs(['client/views/js/WindowView',
                                     'client/views/js/MapView',
                                     'client/views/js/GameMapElementView',
-                                    'client/views/js/GameObjectViewFactory',
                                     'client/views/js/AvatarView',
+                                    'client/views/js/GameMapElements/ScheduleView',
                                     'client/views/js/LoadingView'], () => {
 
                                         requirejs([
+                                            'client/views/js/GameObjectViewFactory',
                                             'client/views/js/ProfileView',
                                             'client/views/js/NotificationBar',
                                             'client/views/js/ChatParticipantListView',
