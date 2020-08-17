@@ -93,7 +93,6 @@ module.exports = class blob {
         TypeChecker.isNumber(accessTimeInMinutes);
         var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
         const url = this.#blobService.getUrl(containerName, fileName, sasToken);
-        console.log("Video url: " + url);
         return url;
     }
 }
