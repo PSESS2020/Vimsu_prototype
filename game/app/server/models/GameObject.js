@@ -11,6 +11,7 @@ module.exports = class GameObject {
     #position;
     #isSolid;
     #gameObjectType;
+    #isClickable;
 
     /**
      * Erstellt GameObject-Instanz
@@ -23,9 +24,10 @@ module.exports = class GameObject {
      * @param {int} width 
      * @param {int} length 
      * @param {Position} position 
-     * @param {boolean} isSolid 
+     * @param {boolean} isSolid
+     * @param {boolean} isClickable
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -34,6 +36,7 @@ module.exports = class GameObject {
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isBoolean(isSolid);
+        TypeChecker.isBoolean(isClickable);
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -44,6 +47,7 @@ module.exports = class GameObject {
         //Position der linken, unteren Objektecke
         this.#position = position;
         this.#isSolid = isSolid;
+        this.#isClickable = isClickable;
     }
 
     getId() {
@@ -72,5 +76,9 @@ module.exports = class GameObject {
 
     getSolid() {
         return this.#isSolid;
+    }
+
+    getClickable() {
+        return this.#isClickable;
     }
 }
