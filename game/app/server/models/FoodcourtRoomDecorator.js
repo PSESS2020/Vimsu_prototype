@@ -56,7 +56,6 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
-        //Get tables
         for (var i = 2; i <= 10; i++) {
             listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 10, i, true, false),
                 objService.createTable(Settings.FOODCOURT_ID, 8, i, true, false),
@@ -65,16 +64,14 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
                 objService.createTable(Settings.FOODCOURT_ID, 2, i, true, false));
         }
 
-        //Get logos
         let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false, false);
         conferenceLogos.forEach(conferenceLogo => {
-            listOfGameObjects.push(conferenceLogo);
+            listOfMapElements.push(conferenceLogo);
         });
 
-        //Get windows
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 5; j += 5) {
-                listOfGameObjects.push(objService.createRightWindow(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
+                listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
             }
         }
 
@@ -88,7 +85,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 2), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map
