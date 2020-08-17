@@ -1,8 +1,7 @@
 const mongodb = require('mongodb');
-const connectionString = "mongodb+srv://klaudialeo:klaudialeovimsu@vimsu.qwx3k.mongodb.net/vimsudb?retryWrites=true&w=majority"
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 const FileSystem = require('./FileSystem');
-const { getVideoDurationInSeconds } = require('get-video-duration')
+const { getVideoDurationInSeconds } = require('get-video-duration');
 
 module.exports = class db {
     #vimsudb;
@@ -17,6 +16,7 @@ module.exports = class db {
     }
 
     connectDB() {
+        const connectionString = process.env.MONGODB_CONNECTION_STRING;
         return mongodb.MongoClient.connect(connectionString, {
             useUnifiedTopology: true,
             poolSize: 1
