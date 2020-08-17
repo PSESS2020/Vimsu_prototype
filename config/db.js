@@ -68,7 +68,6 @@ module.exports = class db {
 
         return collection.find().toArray()
             .then(results => {
-                console.log(results);
                 return results;
             })
             .catch(err => {
@@ -82,7 +81,6 @@ module.exports = class db {
 
         return collection.find(query, { projection: projection }).toArray()
             .then(results => {
-                console.log(results);
                 return results;
             })
             .catch(err => {
@@ -96,7 +94,6 @@ module.exports = class db {
 
         return collection.findOne(query, { projection: projection })
             .then(result => {
-                console.log(result);
                 return result;
             })
             .catch(err => {
