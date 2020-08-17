@@ -5,6 +5,7 @@ const Lecture = require('../models/Lecture');
 module.exports = class Schedule {
 
     #lectureList = [];
+    #currentLectures = [];
 
 
     /**
@@ -17,6 +18,7 @@ module.exports = class Schedule {
             TypeChecker.isInstanceOf(lecture, Lecture);
         })
         this.#lectureList = lectureList;
+        this.#currentLectures = lectureList;
     }
 
     getLecture(lectureId) {
@@ -33,21 +35,28 @@ module.exports = class Schedule {
     //returns the lectures that start soon or have started already.
     //TODO: maybe move Timedeltas in global constants file
     getCurrentLectures() {
-        var currentLectures = [];
-
-        for (var i = 0; i < this.#lectureList.length; i++) {
-            var lecture = this.#lectureList[i];
+        for (var i = 0; i < this.#currentLectures.length; i++) {
+            var lecture = this.#currentLectures[i];
             var startingTime = lecture.getStartingTime().getTime();
             var now = new Date().getTime();
             var startToShow = (startingTime - Settings.SHOWLECTURE);
-            var stopToShow = (startingTime + lecture.getDuration() * 1000);
-            var withinMargin = startToShow <= now && now <= stopToShow;
+            var withinMargin = startToShow <= now;
 
-            if (withinMargin && !lecture.isHidden()) {
-                currentLectures.push(lecture);
+            if (!withinMargin || lecture.isHidden()) {
+                this.#currentLectures.splice(i, 1);
             }
         }
-        return currentLectures;
+        
+        return this.#currentLectures;
+    }
+
+    stopShowingLecture(lectureId) {
+        for (var i = 0; i < this.#currentLectures.length; i++) {
+            var lecture = this.#currentLectures[i];
+            if (lecture.getId() === lectureId) {
+                this.#currentLectures.splice(i, 1);
+            }
+        }
     }
 
     getAllLectures() {

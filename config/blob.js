@@ -80,19 +80,20 @@ module.exports = class blob {
             AccessPolicy: {
                 Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
                 Start: startDate,
-                Expiry: expiryDate
             },
         };
         return sharedAccessPolicy;
     }
+
+    
 
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
-        var blobSAS = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
-        const url = this.#blobService.getUrl(containerName, fileName, blobSAS);
+        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
+        const url = this.#blobService.getUrl(containerName, fileName, sasToken);
         console.log("Video url: " + url);
         return url;
     }
