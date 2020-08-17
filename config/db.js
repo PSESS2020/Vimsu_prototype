@@ -215,38 +215,4 @@ module.exports = class db {
                 console.error(err)
             })
     }
-
-    downloadFile(collectionName, fileId) {
-        TypeChecker.isString(collectionName);
-        TypeChecker.isString(fileId);
-
-        const bucket = new mongodb.GridFSBucket(this.#vimsudb, {
-            chunkSizeBytes: 1024 * 1024,
-            bucketName: collectionName
-        });
-
-        var dir = __dirname + "/download/";
-        FileSystem.createDirectory(dir);
-
-        var id = new mongodb.ObjectID(fileId)
-
-        var downloadStream = bucket.openDownloadStream(id);
-
-        return this.findOneInCollection(collectionName + '.files', { _id: id }, { filename: 1 }).then(file => {
-            var writeStream = FileSystem.createWriteStream(dir + file.filename)
-
-            return new Promise((resolve, reject) => {
-                downloadStream.pipe(writeStream)
-                    .on('finish', function () {
-                        console.log(file.filename + ' downloaded')
-                        resolve(file.filename);
-                    })
-                    .on('error', function (error) {
-                        console.error(error);
-                        reject();
-                    });
-            });
-        })
-
-    }
 }

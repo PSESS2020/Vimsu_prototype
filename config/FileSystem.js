@@ -27,10 +27,6 @@ module.exports = class FileSystem {
         })
     }
 
-    static createWriteStream(filePath) {
-        return fs.createWriteStream(filePath);
-    }
-
     static createReadStream(filePath) {
         return fs.createReadStream(filePath);
     }
