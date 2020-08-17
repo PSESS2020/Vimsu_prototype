@@ -61,13 +61,21 @@ module.exports = class blob {
         })
     }
 
+    deleteFile(containerName, fileName) {
+        this.#blobService.deleteBlobIfExists(containerName, fileName, { deleteSnapshots: 'include' }, function(err, result, response) {
+            if(!err) {
+                console.log(fileName + " deleted")
+            }
+        })
+    }
+
     getSharedAccessPolicy(startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
         var expiryDate = new Date(startDate);
         expiryDate.setMinutes(startDate.getMinutes() + accessTimeInMinutes);
         startDate.setMinutes(startDate.getMinutes() - accessTimeInMinutes);
-    
+
         var sharedAccessPolicy = {
             AccessPolicy: {
                 Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
@@ -77,7 +85,7 @@ module.exports = class blob {
         };
         return sharedAccessPolicy;
     }
-    
+
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);

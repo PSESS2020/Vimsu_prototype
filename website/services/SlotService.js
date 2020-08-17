@@ -51,36 +51,9 @@ module.exports = class SlotService {
 
     }
 
-    static deleteAllVideos(vimsudb) {
-
-        return vimsudb.deleteAllFromCollection("lectures.chunks").then(res => {
-            return vimsudb.deleteAllFromCollection("lectures.files").then(res => {
-                console.log("all videos deleted");
-
-            }).catch(err => {
-                console.error(err)
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    }
-
-    static deleteVideo(videoId, vimsudb) {
+    static deleteVideo(videoId, blob) {
         TypeChecker.isString(videoId);
-
-
-        return vimsudb.deleteOneFromCollection("lectures.chunks", { videoId: videoId }).then(res => {
-            return vimsudb.deleteOneFromCollection("lectures.files", { _id: new ObjectId(videoId) }).then(res => {
-                console.log("video with videoId " + videoId + " deleted");
-
-            }).catch(err => {
-                console.error(err)
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
+        return blob.deleteFile("lectures", videoId);
     }
 
     static deleteAllSlots(vimsudb) {
