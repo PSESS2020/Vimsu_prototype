@@ -1,6 +1,5 @@
 const mongodb = require('mongodb');
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
-const FileSystem = require('./FileSystem');
 
 module.exports = class db {
     #vimsudb;
