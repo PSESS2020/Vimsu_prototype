@@ -131,7 +131,7 @@ class ParticipantAvatarView extends AvatarView {
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
-            ctx_avatar.fillStyle = "rgba(255, 255, 255, 0.5)";
+            ctx_avatar.fillStyle = "antiquewhite";
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
