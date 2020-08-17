@@ -293,6 +293,20 @@ module.exports = class ServerController {
                     // - (E)
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), visible: ppant.getIsVisible() });
 
+                    
+                    /*
+                    * Check if this is the first conference visit of this ppant 
+                    * if so, remind him to click the BasicTutorial NPC
+                    */
+                    if(ppant.getTaskTypeMappingCount(TypeOfTask.RECEPTIONVISIT) === 0) {
+                        let messageHeader = 'Welcome to VIMSU!';
+                        let messageBody = 'Please talk to our BasicTutorial NPC by clicking' +
+                                          ' the tile he is standing on. He will give you a' +
+                                          ' short introduction that will help you to learn the basics of using VIMSU.';
+
+                        this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);       
+                    }
+
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
                         this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
                     } else if (typeOfCurrentRoom === TypeOfRoom.FOODCOURT) {
@@ -425,6 +439,23 @@ module.exports = class ServerController {
                 if (!door.isValidEnterPosition(enterPosition)) {
                     console.log('wrong position');
                     return;
+                }
+
+                /*
+                * Check if ppant clicked BasicTutorial before leaving reception at his first visit
+                * He should read it before he is allowed to visit other rooms
+                */
+                if(currentRoomId === Settings.RECEPTION_ID && targetRoomId === Settings.FOYER_ID
+                   && this.#ppants.get(ppantID).getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
+
+                       let messageHeader = 'Welcome to VIMSU!';
+                       let messageBody = 'Before you can start exploring this conference,' +
+                                         ' please talk to our BasicTutorial NPC by clicking' +
+                                         ' the tile he is standing on. He will give you a' +
+                                         ' short introduction that will help you to learn the basics of using VIMSU.';
+
+                       this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
+                       return;
                 }
 
                 let newPos = door.getTargetPosition();
