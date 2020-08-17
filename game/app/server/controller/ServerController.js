@@ -743,8 +743,9 @@ module.exports = class ServerController {
             socket.on('getAchievements', (ppantID) => {
 
                 var achData = [];
+                var ppant = this.#ppants.get(ppantID);
 
-                this.#ppants.get(ppantID).getAchievements().forEach(ach => {
+                ppant.getAchievements().forEach(ach => {
                     achData.push(
                         {
                             currentLevel: ach.getCurrentLevel(),
@@ -752,7 +753,9 @@ module.exports = class ServerController {
                             color: ach.getColor(),
                             icon: ach.getIcon(),
                             title: ach.getTitle(),
-                            description: ach.getDescription()
+                            description: ach.getDescription(),
+                            currentCount: ppant.getTaskTypeMappingCount(ach.getTaskType()),
+                            nextTarget: ach.getNextCount()
                         }
                     )
                 });

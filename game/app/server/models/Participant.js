@@ -272,6 +272,9 @@ module.exports = class Participant {
         return this.#taskTypeMapping;
     }
 
+    getTaskTypeMappingCount(taskType) {
+        return this.#taskTypeMapping[taskType];
+    }
 
     addTask(task) {
         TypeChecker.isInstanceOf(task, Task);

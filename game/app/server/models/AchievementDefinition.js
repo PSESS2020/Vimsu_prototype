@@ -53,6 +53,7 @@ module.exports = class AchievementDefinition {
     computeAchievement(currentLevel) {
         var color = (currentLevel != 0) ? this.#levels[currentLevel - 1].color : 'darkslategray';
         var awardPoints = (currentLevel != 0) ? this.#levels[currentLevel - 1].points : 0;
-        return new Achievement(this.#id, this.#title, this.#icon, this.#description, currentLevel, color, awardPoints, this.#levels.length, this.#taskType);
+        var nextCount = (currentLevel != this.#levels.length) ? this.#levels[currentLevel].count : undefined;
+        return new Achievement(this.#id, this.#title, this.#icon, this.#description, currentLevel, color, awardPoints, this.#levels.length, this.#taskType, nextCount);
     }
 }
