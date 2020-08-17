@@ -86,15 +86,13 @@ module.exports = class blob {
         return sharedAccessPolicy;
     }
 
-    
-
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
-        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
-        const url = this.#blobService.getUrl(containerName, fileName, sasToken);
+        var blobSAS = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
+        const url = this.#blobService.getUrl(containerName, fileName, blobSAS);
         console.log("Video url: " + url);
         return url;
     }

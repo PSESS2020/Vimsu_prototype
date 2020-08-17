@@ -2014,8 +2014,6 @@ module.exports = class ServerController {
                         lecture.revokeToken(ppantId);
                         lecture.ban(socket.request.session.accountId);
                         socketClient.leave(socketClient.currentLecture);
-                        var schedule = this.#conference.getSchedule();
-                        schedule.stopShowingLecture(lecture.getId());
                         socketClient.currentLecture = undefined;
                         socketClient.broadcast.emit('showAvatar', ppantId);
                         this.#io.to(socketClient.id).emit('force close lecture');
@@ -2078,11 +2076,8 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
                 break;
             case Commands.CLOSE:
-                console.log("closing lecture");
                 var ppantsInLecture = lecture.getActiveParticipants();
                 lecture.hide();
-                var schedule = this.#conference.getSchedule();
-                schedule.stopShowingLecture(lecture.getId());
                 this.#io.in(socket.currentLecture).emit('force close lecture');
                 ppantsInLecture.forEach((ppantId) => {
                     // Get the necessary data to use the socket-connection
