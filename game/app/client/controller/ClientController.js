@@ -427,7 +427,7 @@ class ClientController {
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         console.log("init info id" + initInfo.id);
-        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir);
+        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.visible);
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method

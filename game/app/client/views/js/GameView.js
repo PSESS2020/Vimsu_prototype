@@ -248,6 +248,7 @@ class GameView {
                 participant.getId(),
                 typeOfRoom,
                 participant.getUsername(),
+                participant.getIsVisible()
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -324,7 +325,7 @@ class GameView {
         let username = ownParticipant.getUsername();
         this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true);
         this.addToUpdateList(this.#ownAvatarView);
 
 

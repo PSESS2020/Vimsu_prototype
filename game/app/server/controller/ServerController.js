@@ -272,8 +272,9 @@ module.exports = class ServerController {
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
                             var tempDir = participant.getDirection();
+                            var visible = participant.getIsVisible();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
@@ -290,7 +291,7 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), visible: ppant.getIsVisible() });
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
                         this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
@@ -622,10 +623,12 @@ module.exports = class ServerController {
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
+                    var participant = this.#ppants.get(ppantID);
                     var token = lecture.hasToken(ppantID);
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
                     var messages = lecture.getLectureChat().getMessages();
+                    participant.setIsVisible(false);
                     console.log(messages);
 
                     currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
@@ -640,6 +643,8 @@ module.exports = class ServerController {
             socket.on('leaveLecture', (participantId, lectureId, lectureEnded) => {
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+                var participant = this.#ppants.get(participantId);
+                participant.setIsVisible(true);
                 lecture.leave(participantId);
                 console.log(participantId + " leaves " + lectureId)
                 socket.leave(lectureId);
@@ -1788,7 +1793,7 @@ module.exports = class ServerController {
                 var messageBody = [];
                 var msg = room.getRoom().getMessages();
                 for (var i = 0; i < msg.length; i++) {
-                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
+                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
                         ") has messageId: " + msg[i].messageID);
                 }
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
@@ -1805,7 +1810,7 @@ module.exports = class ServerController {
                 "seperated from the next by a whitespace-character, and removes all of them from " +
                 "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                 "not yet possible to unban a banned user!",
-                "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs, each one separated from the next " +
+                "\\rmmsg <list of msgIDs>  -- Takes a list of messageIDs, each one separated from the next " +
                 "one by a whitespace character, and removes the corresponding messages - " +
                 "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
                 "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2038,7 +2043,7 @@ module.exports = class ServerController {
                     "seperated from the next by a whitespace-character, and removes all of them from " +
                     "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
                     "not yet possible to revert this!",
-                    "\\rmmsg <list of msgIDs  --  Takes a list of messageIDs, each one seperated from the " +
+                    "\\rmmsg <list of msgIDs>  --  Takes a list of messageIDs, each one seperated from the " +
                     "next one by a whitespace character, and removes the corresponding messages - " +
                     "if they exist - from the lecture chat. Will also send a warning to " +
                     "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2062,7 +2067,7 @@ module.exports = class ServerController {
                 var messageHeader = "List of messages posted in " + lecture.getTitle();
                 var messageBody = [];
                 for (var i = 0; i < lectureChat.length; i++) {
-                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] (senderId: " + lectureChat[i].senderID +
+                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] SenderUsername: " + lectureChat[i].username + " (senderId :" +  lectureChat[i].senderID +
                         ") has messageId: " + lectureChat[i].messageID);
                 }
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
