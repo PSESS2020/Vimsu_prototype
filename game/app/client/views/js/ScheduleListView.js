@@ -1,7 +1,6 @@
 class ScheduleListView extends WindowView {
 
     #lectures = [];
-    #interval;
 
     constructor() {
         super();
@@ -20,9 +19,13 @@ class ScheduleListView extends WindowView {
             const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
             this.#lectures = sortedLectures;
 
-            this.#interval = setInterval(() => {
+            var interval = setInterval(() => {
                 this.drawSchedule();
             }, 1000);
+
+            $('#scheduleModal').on('hidden.bs.modal', function (e) {
+                clearInterval(interval);
+            })
         }
     }
 
@@ -65,10 +68,6 @@ class ScheduleListView extends WindowView {
             } else if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
                 $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
-        })
-
-        $('#scheduleModal').on('hidden.bs.modal', function (e) {
-            clearInterval(this.#interval);
         })
     }
 
