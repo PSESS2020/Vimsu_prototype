@@ -628,11 +628,10 @@ module.exports = class ServerController {
                     var messages = lecture.getLectureChat().getMessages();
                     console.log(messages);
 
-                    LectureService.getVideo(currentLecturesData[idx].videoId, this.#db).then(videoName => {
-                        currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                        socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
-                        socket.broadcast.emit('hideAvatar', ppantID);
-                    })
+                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
+                        this.#blob, new Date(currentLecturesData[idx].startingTime), Math.floor(currentLecturesData[idx].duration / 60));
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
+                    socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', currentLecturesData[idx].id);
                 }

@@ -37,7 +37,7 @@ class CurrentLecturesView extends WindowView {
     }
 
     drawLectureFull(lectureId) {
-        $('#waitforlectureload').hide();
+        $('#waitforlectureload' + lectureId).hide();
         $('#show' + lectureId).hide();
         $('#full' + lectureId).show()
     }

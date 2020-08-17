@@ -13,6 +13,12 @@ module.exports = class LectureService {
 
     }
 
+    static getVideoUrl(videoId, blob, startingTime, duration) {
+        TypeChecker.isString(videoId);
+
+        return blob.getWriteSAS("lectures", videoId, startingTime, duration);
+    }
+
 
     static createAllLectures(conferenceId, vimsudb) {
         return this.getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
