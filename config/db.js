@@ -1,7 +1,6 @@
 const mongodb = require('mongodb');
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 const FileSystem = require('./FileSystem');
-const { getVideoDurationInSeconds } = require('get-video-duration');
 
 module.exports = class db {
     #vimsudb;
