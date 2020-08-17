@@ -2,17 +2,6 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Lecture = require('../models/Lecture')
 
 module.exports = class LectureService {
-    static getVideo(videoId, vimsudb) {
-        TypeChecker.isString(videoId);
-
-        return vimsudb.downloadFile("lectures", videoId).then(res => {
-            return res;
-        }).catch(err => {
-            console.error(err)
-        });
-
-    }
-
     static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
 
