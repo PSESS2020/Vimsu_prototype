@@ -6,5 +6,6 @@ module.exports = Object.freeze
     duration: 10.5,
     remarks: "Math is fun",
     oratorName: "Prof. Max Mustermann",
+    oratorUsername: 'maxmustermann',
     maxParticipants: 1000,
 })
