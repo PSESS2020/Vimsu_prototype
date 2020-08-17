@@ -80,6 +80,7 @@ module.exports = class blob {
             AccessPolicy: {
                 Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
                 Start: startDate,
+                Expiry: expiryDate
             },
         };
         return sharedAccessPolicy;
