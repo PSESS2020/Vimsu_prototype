@@ -16,9 +16,14 @@ module.exports = class blob {
     }
 
     connectBlob() {
-        const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
-        this.#blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
-        console.log("connected to blob storage");
+        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+        if(!connectionString) {
+            console.log("Cannot connect to blob storage. Please ask the owner of this project for the connection string.");
+            return;
+        }
+
+        this.#blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        console.log("Connected to blob storage");
     }
 
     async uploadFile(containerName, fileName, dir) {
@@ -40,8 +45,11 @@ module.exports = class blob {
             } else {
                 let bufferSize = 1024 * 1024;
                 return blockBlobClient.uploadStream(FileSystem.createReadStream(dir + fileName, { highWaterMark: bufferSize, allowVolatile: true }), bufferSize).then(res => {
-                    console.log(fileName + ' with id ' + ' and duration ' + duration + ' uploaded');
-                    return {uploadFileName, duration};
+                    console.log(fileName + ' with id ' + uploadFileName + ' and duration ' + duration + ' uploaded');
+                    return {
+                        fileId: uploadFileName,
+                        duration: duration
+                    };
                 }).catch(err => {
                     console.error(err);
                 })

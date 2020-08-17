@@ -27,6 +27,7 @@ module.exports = class ServerController {
 
     #io;
     #db;
+    #blob;
     #conference;
     #listOfConfCont;
     #DEBUGMODE;
@@ -40,7 +41,7 @@ module.exports = class ServerController {
     #ppants;
     #roomService;
 
-    constructor(socket, db) {
+    constructor(socket, db, blob) {
         if (!!ServerController.instance) {
             return ServerController.instance;
         }
@@ -49,6 +50,7 @@ module.exports = class ServerController {
 
         this.#io = socket;
         this.#db = db;
+        this.#blob = blob;
 
         //Should be turned off if the product gets released.
         this.#DEBUGMODE = false;
