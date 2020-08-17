@@ -59,7 +59,33 @@ module.exports = class blob {
                 });
             }
         })
+    }
 
-
+    getSharedAccessPolicy(startDate, accessTimeInMinutes) {
+        TypeChecker.isDate(startDate);
+        TypeChecker.isNumber(accessTimeInMinutes);
+        var expiryDate = new Date(startDate);
+        expiryDate.setMinutes(startDate.getMinutes() + accessTimeInMinutes);
+        startDate.setMinutes(startDate.getMinutes() - accessTimeInMinutes);
+    
+        var sharedAccessPolicy = {
+            AccessPolicy: {
+                Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+                Start: startDate,
+                Expiry: expiryDate
+            },
+        };
+        return sharedAccessPolicy;
+    }
+    
+    getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
+        TypeChecker.isString(containerName);
+        TypeChecker.isString(fileName);
+        TypeChecker.isDate(startDate);
+        TypeChecker.isNumber(accessTimeInMinutes);
+        var blobSAS = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
+        const url = this.#blobService.getUrl(containerName, fileName, blobSAS);
+        console.log("Video url: " + url);
+        return url;
     }
 }
