@@ -19,7 +19,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default0": "client/assets/walls/schedule1.png",
         "leftschedule_default1": "client/assets/walls/schedule2.png",
         "leftschedule_default2": "client/assets/walls/schedule3.png",
-        "rightwindow_default": "client/assets/windows/right_small_window_default.png",
+        "leftwindow_default0": "client/assets/windows/left_small_window_default0.png",
+        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
+        "rightwindow_default1": "client/assets/windows/right_small_window_default1.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
@@ -28,6 +30,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "rightwallframe_default0": "client/assets/frames/wallframe1.png",
         "rightwallframe_default1": "client/assets/frames/wallframe2.png",
         "rightwallframe_default2": "client/assets/frames/wallframe3.png",
+        "leftsofa_default": "client/assets/chairs/sofa_left.png",
+        "rightsofa_default": "client/assets/chairs/sofa_right.png",
         "plant_default": "client/assets/plants/plant.png",
         "table_default": "client/assets/tables/table.png",
 
@@ -119,7 +123,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 2), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
             doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
 
         //Get door tiles

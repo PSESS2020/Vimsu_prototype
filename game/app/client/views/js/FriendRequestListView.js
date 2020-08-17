@@ -31,8 +31,8 @@ class FriendRequestListView extends WindowView {
                             <br>
                         </div>
                         <div class="col-12 col-sm-2 col-md-2")>
-                            <button id="${"accept" + businessCard.getParticipantId()}" class="btn btn-lecture ">Accept</button>
-                            <button id="${"reject" + businessCard.getParticipantId()}" class="btn btn-reject" style="margin-top: 10px">Reject</button>
+                            <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-lecture ">Accept</button>
+                            <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-reject" style="margin-top: 10px">Reject</button>
                             <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
                             <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-reject" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
                             <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-lecture" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>

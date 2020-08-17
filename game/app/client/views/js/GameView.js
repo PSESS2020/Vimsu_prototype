@@ -243,7 +243,7 @@ class GameView {
         if (participant !== this.#ownAvatarView) {
             console.log("other avatarView init: " + participant.getId());
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
-                participant.getGridPosition(),
+                participant.getPosition(),
                 participant.getDirection(),
                 participant.getId(),
                 typeOfRoom,

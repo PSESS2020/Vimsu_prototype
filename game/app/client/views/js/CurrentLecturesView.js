@@ -18,7 +18,7 @@ class CurrentLecturesView extends WindowView {
                     <h5 style="display:inline">${lecture.title} </h5>
                     <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
                     <div>${lecture.remarks}</div>
-                    <span id="waitforlectureload" style="color: antiquewhite; display:none" class="align-self-end mt-1 p-2"><i class="fas fa-spinner fa-spin navbarIcons"></i> Please wait...</span>
+                    <span id="${"waitforlectureload" + lecture.id} style="color: antiquewhite; display:none" class="align-self-end mt-1 p-2"><i class="fas fa-spinner fa-spin navbarIcons"></i> Please wait...</span>
                     <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full.</span>
                     <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto">Show</button>
                 </div>
@@ -26,7 +26,7 @@ class CurrentLecturesView extends WindowView {
                 <script> 
                     $('#show' + '${lecture.id}').on('click', function (event) {
                         $('#show' + '${lecture.id}').hide();
-                        $('#waitforlectureload').show(); 
+                        $('#waitforlectureload' + '${lecture.id}').show(); 
                         new EventManager().handleLectureClicked("${lecture.id}");
                     })
                 </script>

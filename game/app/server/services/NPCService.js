@@ -29,6 +29,7 @@ module.exports = class NPCService {
             'Keep in mind: you can interact with other participants by clicking the tile they are standing on.',
             'Earn points by visiting lectures, interacting with others or by reaching achievements!',
             'You can see the current points standings by clicking the Ranklist Button.',
+            "Almost all buttons have a description. If you don't understand what a button does, just hover your mouse over the button and wait for the description to appear.",
             'There are other NPCs at this conference who would like to help you. You can recognize them by the red bar above them.',
             "That's it for now! Have fun and enjoy your stay!"],
         chefStory: ['Hello mate. Are you hungry?',

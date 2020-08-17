@@ -148,7 +148,6 @@ class GameObjectViewFactory {
             case GameObjectType.TABLE:
                 gameObjectImage = this.#assetImages[objectName];
 
-                //because the tble image has a different size.
                 var tableOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height + 7};
 
                 if (gameObjectImage !== undefined)
@@ -157,10 +156,31 @@ class GameObjectViewFactory {
 
                 break;
 
+            case GameObjectType.LEFTSOFA:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var leftSofaOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4};
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, leftSofaOffset, objectName);
+                else throw new Error("The image for the left sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
+            case GameObjectType.RIGHTSOFA:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var rightSofaOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4};
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, rightSofaOffset, objectName);
+                else throw new Error("The image for the right sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
             case GameObjectType.PLANT:
                 gameObjectImage = this.#assetImages[objectName];
 
-                //because the plant image has a different size.
                 var plantOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height - 10};
 
                 if (gameObjectImage !== undefined)

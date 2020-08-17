@@ -23,7 +23,6 @@ class InviteFriendsView extends WindowView {
             $('#noinvitedfriends').hide();
             $('#toomanyinvitedfriends').hide();
             $('#toomanyinvitedfriends').empty();
-            $('#toomanyinvitedfriends').text("You may only invite " + limit + " friends!");
 
             this.#businessCards.forEach(businessCard => {
                 $('#inviteFriendsModal .modal-body .list-group').append(`
@@ -78,6 +77,8 @@ class InviteFriendsView extends WindowView {
                             } else if (invitedFriends.length < 1) {
                                 $('#noinvitedfriends').show();
                             } else {
+                                var diff = invitedFriends.length - ${limit};
+                                $('#toomanyinvitedfriends').text("You may only invite " + ${limit} + " friend(s)! Please unselect " + diff + " friend(s).");
                                 $('#toomanyinvitedfriends').show()
                             }
 

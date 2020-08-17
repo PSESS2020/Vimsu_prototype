@@ -53,7 +53,7 @@
             <div class="d-flex flex-column">
                 <form id="allchat" action="">
                     <input id="allchatMessageInput" autocomplete="off"
-                        placeholder="Enter message ..." /><button>>></button>
+                        placeholder="Enter room chat message ..." /><button>>></button>
                 </form>
                 <div id="allchatMessages" class="messageBar">
 
@@ -79,7 +79,7 @@
             <div class="d-flex flex-column ml-5">
                 <div class="profileBox"
                     style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
-                    <a class="action_button nav-item nav-link" href="" onclick="(new ProfileView()).onclick()"
+                    <a class="action_button nav-item nav-link" title="Profile" href="" onclick="(new ProfileView()).onclick()"
                         data-toggle="modal" data-target="#profileModal">
                         <i class="fa fa-user navbarIcons" style="transform: scale(2)"></i>
                         <p class="navbarIconsText ml-3" style="display:inline-block;" id="profilePlaceholder"></p>
@@ -105,7 +105,7 @@
         style="position: absolute; bottom: -5; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" onclick="(new RankListView()).onclick()"
+                <a class="action_button nav-item nav-link" title="Rank list of conference participants" href="" onclick="(new RankListView()).onclick()"
                     data-toggle="modal" data-target="#rankListModal">
                     <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText">Ranklist</p>
@@ -113,7 +113,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="" onclick="(new ScheduleListView()).onclick()" class="action_button nav-item nav-link"
+                <a href="" onclick="(new ScheduleListView()).onclick()" title="Presentation schedule" class="action_button nav-item nav-link"
                     data-toggle="modal" data-target="#scheduleModal">
                     <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
@@ -121,7 +121,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" onclick="(new AchievementView()).onclick()"
+                <a class="action_button nav-item nav-link" href="" title="Achievement list" onclick="(new AchievementView()).onclick()"
                     data-toggle="modal" data-target="#achievementsModal">
                     <i class="fa fa-star fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: -17px;">Achievements</p>
@@ -135,21 +135,21 @@
 
         <ul class="navbar nav ml-auto">
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" onclick="(new FriendListView()).onclick()"
+                <a class="action_button nav-item nav-link" href="" title="Friend list and received friend request list" onclick="(new FriendListView()).onclick()"
                     data-toggle="modal" data-target="#friendListModal">
-                    <i class="fas fa-user-friends fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: 10px;">Friendlist</p>
+                    <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
+                    <p class="navbarIconsText" style="margin-left: -4px;">Friendlist</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" onclick="(new ChatListView()).onclick()"
+                <a class="action_button nav-item nav-link" href="" title="Chat list" onclick="(new ChatListView()).onclick()"
                     data-toggle="modal" data-target="#chatListModal">
                     <i class="fa fa-comments-o fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a id="nav_leave_button" class="action_button nav-item nav-link" href="/"
+                <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" title="Leave conference"
                     onclick="return confirm('Are you sure you want to leave?')">
                     <i class="fa fa-sign-out fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: 7px;">Leave</p>

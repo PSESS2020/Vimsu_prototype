@@ -15,7 +15,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/walls/wall1.png",
         "rightwall_default": "client/assets/walls/wall2.png",
         "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
-        "rightwindow_default": "client/assets/windows/right_small_window_default.png",
+        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",

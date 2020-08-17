@@ -30,17 +30,15 @@ describe('GameObjectService test', function () {
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
         let solidity = TestUtil.randomBool();
-        let width = TestUtil.randomIntWithMin(1);
-        let length = TestUtil.randomIntWithMin(1);
-        let scheduleBoard = gameObjectService.createSchedule(roomId, width, length, cordX, cordY, solidity);
+        let width = 1;
+        let length = 4;
+        let scheduleBoard = gameObjectService.createLeftSchedule(roomId, width, length, cordX, cordY, solidity);
         
-        expect(scheduleBoard).to.be.instanceOf(GameObject);
-        expect(scheduleBoard.getPosition().getRoomId()).to.equal(roomId);
-        expect(scheduleBoard.getPosition().getCordX()).to.equal(cordX);
-        expect(scheduleBoard.getPosition().getCordY()).to.equal(cordY);
-        expect(scheduleBoard.getSolid()).to.equal(solidity);
-        expect(scheduleBoard.getId()).to.be.a('number');
-        expect(scheduleBoard.getWidth()).to.equal(width);
-        expect(scheduleBoard.getLength()).to.equal(length);
+        expect(scheduleBoard).to.be.instanceOf(Array).to.have.lengthOf(4);
+        expect(scheduleBoard[0].getPosition().getRoomId()).to.equal(roomId);
+        expect(scheduleBoard[0].getPosition().getCordX()).to.equal(cordX);
+        expect(scheduleBoard[0].getPosition().getCordY()).to.equal(cordY);
+        expect(scheduleBoard[0].getSolid()).to.equal(solidity);
+        expect(scheduleBoard[0].getId()).to.be.a('number');
     });  
 });

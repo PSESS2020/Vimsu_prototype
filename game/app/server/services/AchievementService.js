@@ -64,7 +64,7 @@ module.exports = class AchievementService {
             { count: 1, color: '#C9B037', points: 10 },
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "cutlery", "Click on the NPC in the food court room to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "utensils", "Click on the NPC in the food court room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
         ]);
 

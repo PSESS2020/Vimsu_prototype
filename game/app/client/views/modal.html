@@ -81,7 +81,7 @@
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
                     <a class="action_button nav-item nav-link d-flex flex-column" href="#friendRequestListModal"
                         style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList"
-                        data-toggle="modal">
+                        data-toggle="modal" title="Received friend requests">
                         <i class="fa fa-user-plus friendRequestListButton navbarIcons"
                             style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
                         <small style="color: antiquewhite; font-size: 10px;">Requests</small>
@@ -194,7 +194,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
-                    <a class="action_button nav-item nav-link" href="#inputGroupNameModal"
+                    <a class="action_button nav-item nav-link" title="Create group chat" href="#inputGroupNameModal"
                         style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat"
                         data-toggle="modal">
                         <i class="fa fa-users navbarIcons" style="transform: scale(0.8);"></i>
@@ -219,10 +219,10 @@
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatThreadModalTitle"></h5>
-                    <button id="chatLeaveButton" class="close mr-2 btn">
+                    <button id="chatLeaveButton" class="close mr-2 btn" title="Leave chat">
                         <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
                     </button>
-                    <button id="chatFriendRequestButton" class="close mr-5 btn">
+                    <button id="chatFriendRequestButton" class="close mr-5 btn" title="Send friend request">
                         <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px; margin-right: -12px"
                             aria-hidden="true"></i>
                     </button>
@@ -230,12 +230,12 @@
                         <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;"
                             aria-hidden="true"></i>
                     </div>
-                    <a class="action_button nav-item nav-link mr-5 close btn" href="#chatParticipantListModal"
+                    <a class="action_button nav-item nav-link mr-5 close btn" title="Show chat participant list" href="#chatParticipantListModal"
                         role="button" id="chatParticipantListBtn" data-toggle="modal">
                         <i class="fa fa-info-circle navbarIcons"
                             style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
                     </a>
-                    <a class="action_button nav-item nav-link close btn" href="#inviteFriendsModal" role="button"
+                    <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat" href="#inviteFriendsModal" role="button"
                         id="inviteFriendsBtn" data-toggle="modal">
                         <i class="fa fa-plus-square navbarIcons"
                             style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
@@ -279,7 +279,7 @@
                         <input id="groupNameInput" autocomplete="off"
                             style="width: 100%; background-color: #1b1e24; color: antiquewhite"
                             placeholder="Enter group name" maxlength="20" required />
-                        <button class="btn btn-lecture mt-3" style=" width: auto;">Invite Friends</button>
+                        <button class="btn btn-lecture mt-3" title="Invite friends to group chat with the input group name" style=" width: auto;">Invite Friends</button>
                     </form>
                 </div>
             </div>
