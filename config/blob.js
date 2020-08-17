@@ -1,11 +1,11 @@
-const { BlobServiceClient } = require("@azure/storage-blob");
+const azure = require("azure-storage");
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 const FileSystem = require('./FileSystem');
 const { getVideoDurationInSeconds } = require('get-video-duration');
 
 module.exports = class blob {
 
-    #blobServiceClient;
+    #blobService;
 
     constructor() {
         if (!!blob.instance) {
@@ -17,12 +17,12 @@ module.exports = class blob {
 
     connectBlob() {
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-        if(!connectionString) {
+        if (!connectionString) {
             console.log("Cannot connect to blob storage. Please ask the owner of this project for the connection string.");
             return;
         }
+        this.#blobService = azure.createBlobService(connectionString);
 
-        this.#blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         console.log("Connected to blob storage");
     }
 
@@ -31,12 +31,9 @@ module.exports = class blob {
         TypeChecker.isString(fileName);
         TypeChecker.isString(dir);
 
-        const containerClient = this.#blobServiceClient.getContainerClient(containerName);
-        await containerClient.createIfNotExists();
-
         const fileNameWithUnderscore = fileName.replace(/ /g, "_");
         const uploadFileName = fileNameWithUnderscore.slice(0, -4) + "_" + new Date().getTime() + ".mp4";
-        const blockBlobClient = containerClient.getBlockBlobClient(uploadFileName);
+
         console.log('\nUploading to Azure storage as blob:\n\t', uploadFileName);
 
         return getVideoDurationInSeconds(FileSystem.createReadStream(dir + fileName)).then(duration => {
@@ -44,16 +41,25 @@ module.exports = class blob {
                 return false;
             } else {
                 let bufferSize = 1024 * 1024;
-                return blockBlobClient.uploadStream(FileSystem.createReadStream(dir + fileName, { highWaterMark: bufferSize, allowVolatile: true }), bufferSize).then(res => {
-                    console.log(fileName + ' with id ' + uploadFileName + ' and duration ' + duration + ' uploaded');
-                    return {
-                        fileId: uploadFileName,
-                        duration: duration
-                    };
-                }).catch(err => {
-                    console.error(err);
-                })
+                let writeStream = this.#blobService.createWriteStreamToBlockBlob(containerName, uploadFileName, { contentSettings: { contentType: 'video/mp4' } });
+
+                return new Promise((resolve, reject) => {
+                    FileSystem.createReadStream(dir + fileName, { highWaterMark: bufferSize, allowVolatile: true }).pipe(writeStream)
+                        .on('finish', function () {
+                            console.log(fileName + ' with id ' + uploadFileName + ' and duration ' + duration + ' uploaded');
+                            resolve({
+                                fileId: uploadFileName,
+                                duration: duration
+                            });
+                        })
+                        .on('error', function (error) {
+                            console.error(error);
+                            reject();
+                        });
+                });
             }
         })
+
+
     }
 }
