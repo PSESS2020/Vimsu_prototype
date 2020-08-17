@@ -42,6 +42,7 @@
     "password-hash": "^1.2.2",
     "popper.js": "^1.16.1",
     "requirejs": "^2.3.6",
+    "rimraf": "^3.0.2",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
