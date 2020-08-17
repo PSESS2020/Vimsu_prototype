@@ -566,15 +566,12 @@ module.exports = class ServerController {
                 var lectureChat = lecture.getLectureChat();
                 var participant = this.#ppants.get(ppantID);
 
-                /* We want to check if the ppant "owns" the lecture here.
-                 * As the orator-class seems not be actually used yet, we just use
-                 * the orator-name from the lecture class and compare it to the username
-                 * of the aprticipant. And since I'm not sure if that will work, we just allow
-                 * every moderator to use commands in the lecture-chat (for testing purposes).
-                 * 
-                 * - (E) */
-                if (/* (participant.getBusinessCard().getUsername() == lecture.getOratorName() || */
-                    participant.isModerator() /*)*/ && text.charAt(0) == Settings.CMDSTARTCHAR) {
+                /* 
+                 * Check if this ppant is a moderator or the orator of this lecture
+                 * Only moderators and the orator can use commands
+                 * */
+                if ((participant.getBusinessCard().getUsername() === lecture.getOratorUsername() ||
+                     participant.isModerator()) && text.charAt(0) === Settings.CMDSTARTCHAR) {
                     /* Now, we check if the message contains any command
                      * known by the server and handle this appropriately.
                      * We move this to another method for better readability.
@@ -585,10 +582,11 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
-                } else if (lecture.hasToken(ppantID)) {
+
+                //User can only chat when he has a token or is the orator of this lecture
+                } else if (lecture.hasToken(ppantID) || participant.getBusinessCard().getUsername() === lecture.getOratorUsername()) {
 
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
-                    //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
@@ -598,7 +596,6 @@ module.exports = class ServerController {
 
                     this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
                     
-
                 }
             });
 
