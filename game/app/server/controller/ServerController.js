@@ -704,7 +704,8 @@ module.exports = class ServerController {
                             remarks: lecture.getRemarks(),
                             oratorName: lecture.getOratorName(),
                             startingTime: lecture.getStartingTime(),
-                            maxParticipants: lecture.getMaxParticipants()
+                            maxParticipants: lecture.getMaxParticipants(),
+                            duration: lecture.getDuration()
                         }
                     )
                 })

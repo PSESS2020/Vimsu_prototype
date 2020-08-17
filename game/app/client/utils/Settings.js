@@ -12,6 +12,8 @@ const Settings = Object.freeze({
     MAP_BLANK_TILES_LENGTH: 3,
     WALL_OFFSET: 1,
 
+    SHOWLECTURE: 10 * 60 * 1000
+
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
