@@ -17,12 +17,13 @@ duration = LectureTestData.duration;
 remarks = LectureTestData.remarks;
 startingTime = new Date();
 oratorName = LectureTestData.oratorName;
+oratorUsername = LectureTestData.oratorUsername;
 maxParticipants = LectureTestData.maxParticipants;
 
 //Conference Test Data
 var lectureList = [];
-lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants);
-lectureList.push( new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants) );
+lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+lectureList.push( new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants) );
 
 schedule = new Schedule( lectureList );
 conference = new Conference( schedule );

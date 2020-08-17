@@ -13,10 +13,11 @@ var duration = LectureTestData.duration;
 var remarks = LectureTestData.remarks;
 var startingTime = new Date(now.setMinutes(now.getMinutes() + 10));
 var oratorName = LectureTestData.oratorName;
+var oratorUsername = LectureTestData.oratorUsername;
 var maxParticipants = LectureTestData.maxParticipants;
-var lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants);
-var lecture2 = new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", 1000)
-lectureList.push(new Lecture("53d", "Computer Science", "123c", 13, "Computer science is fun", new Date("Tue Aug 03 2020 10:42:24 GMT+0200"), "Prof. Max Mustermann", 1000))
+var lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+var lecture2 = new Lecture("53g", "Physic", "123a", 300, "Physic is fun", new Date(now.setMinutes(now.getMinutes() - 3)), "Prof. Max Mustermann", oratorUsername, 1000)
+lectureList.push(new Lecture("53d", "Computer Science", "123c", 13, "Computer science is fun", new Date("Tue Aug 03 2020 10:42:24 GMT+0200"), "Prof. Max Mustermann", oratorUsername, 1000))
 lectureList.push(lecture);
 lectureList.push(lecture2);
 var schedule = new Schedule(lectureList);

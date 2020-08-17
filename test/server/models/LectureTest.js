@@ -14,29 +14,30 @@ var duration = 300000;
 var remarks = 'linear algebra';
 var startingTime = new Date();
 var oratorName = 'Max Mustermann';
+var oratorUsername = 'maxmustermann';
 var lectureChat = new LectureChat(id);
 var maxParticipants = 3;
 var participantId1 = '1';
 var participantId2 = '2';
 var tokenList = [['1', undefined, 300000]];
 
-lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, maxParticipants);
+var lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
 
 describe('Lecture constructor error', function() {
     it('test id error', function() {
-        expect(() => new Lecture(1, 2, 3, "4", 5, 6, 7, "8")).to.throw(TypeError, "not a string");
+        expect(() => new Lecture(1, 2, 3, "4", 5, 6, 7, 8, "9")).to.throw(TypeError, "not a string");
     })
 
     it('test duration error', function() {
-        expect(() => new Lecture("1", "2", "3", "4", 5, 6, 7, "8")).to.throw(TypeError, "not a number");
+        expect(() => new Lecture("1", "2", "3", "4", 5, 6, 7, 8, "9")).to.throw(TypeError, "not a number");
     })
 
     it('test startingTime error', function() {
-        expect(() => new Lecture("1", "2", "3", 4, "5", 6, 7, "8")).to.throw(TypeError, "not a Date");
+        expect(() => new Lecture("1", "2", "3", 4, "5", 6, 7, 8, "9")).to.throw(TypeError, "not a Date");
     })
 
     it('test maxParticipants', function() {
-        expect(() => new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8")).to.throw(TypeError, "not an int");
+        expect(() => new Lecture("1", "2", "3", 4, "5", new Date(), "7", "8", "9")).to.throw(TypeError, "not an int");
     })  
 })
 
@@ -71,6 +72,10 @@ describe('Lecture getter functions', function() {
 
     it('test getOratorName', function() {
         expect(lecture.getOratorName()).to.be.a('string').and.equal(oratorName);
+    })
+
+    it('test getOratorUsername', function() {
+        expect(lecture.getOratorUsername()).to.be.a('string').and.equal(oratorUsername);
     })
 
     it('test getMaxParticipants', function() {
