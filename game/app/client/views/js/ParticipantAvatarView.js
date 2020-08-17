@@ -28,13 +28,13 @@ class ParticipantAvatarView extends AvatarView {
     #standingDownRightAnimation;
     #currentAnimation;
     #walking = false;
-    #isVisible = true;
+    #isVisible;
     #username;
     #typeOfRoom;
 
     #gameEngine;
 
-    constructor(position, direction, participantId, typeOfRoom, username) {
+    constructor(position, direction, participantId, typeOfRoom, username, isVisible) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -49,6 +49,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#currentAnimation = this.#standingDownRightAnimation;
         this.#typeOfRoom = typeOfRoom;
         this.#username = username;
+        this.#isVisible = isVisible;
 
         this.#gameEngine = new IsometricEngine();
     }

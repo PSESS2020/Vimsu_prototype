@@ -272,8 +272,9 @@ module.exports = class ServerController {
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
                             var tempDir = participant.getDirection();
+                            var visible = participant.getIsVisible();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
@@ -290,7 +291,7 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), visible: ppant.getIsVisible() });
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
                         this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
@@ -622,10 +623,12 @@ module.exports = class ServerController {
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
+                    var participant = this.#ppants.get(ppantID);
                     var token = lecture.hasToken(ppantID);
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
                     var messages = lecture.getLectureChat().getMessages();
+                    participant.setIsVisible(false);
                     console.log(messages);
 
                     currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
@@ -640,6 +643,8 @@ module.exports = class ServerController {
             socket.on('leaveLecture', (participantId, lectureId, lectureEnded) => {
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+                var participant = this.#ppants.get(participantId);
+                participant.setIsVisible(true);
                 lecture.leave(participantId);
                 console.log(participantId + " leaves " + lectureId)
                 socket.leave(lectureId);
