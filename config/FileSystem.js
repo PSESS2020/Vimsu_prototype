@@ -1,5 +1,6 @@
 const fs = require('fs');
-const mkdirp = require('mkdirp')
+const mkdirp = require('mkdirp');
+const rimraf = require('rimraf');
 
 module.exports = class FileSystem {
 
@@ -8,11 +9,8 @@ module.exports = class FileSystem {
     }
 
     static deleteDirectory(dir) {
-        fs.rmdir(dir, { recursive: true }, (err) => {
-            if (err) {
-                throw err;
-            }
-            console.log(`${dir} directory is deleted`);
+        rimraf(dir, function () { 
+            console.log(`${dir} directory is deleted`); 
         });
     }
 

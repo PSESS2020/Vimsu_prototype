@@ -1793,7 +1793,7 @@ module.exports = class ServerController {
                 var messageBody = [];
                 var msg = room.getRoom().getMessages();
                 for (var i = 0; i < msg.length; i++) {
-                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
+                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
                         ") has messageId: " + msg[i].messageID);
                 }
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
@@ -1810,7 +1810,7 @@ module.exports = class ServerController {
                 "seperated from the next by a whitespace-character, and removes all of them from " +
                 "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                 "not yet possible to unban a banned user!",
-                "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs, each one separated from the next " +
+                "\\rmmsg <list of msgIDs>  -- Takes a list of messageIDs, each one separated from the next " +
                 "one by a whitespace character, and removes the corresponding messages - " +
                 "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
                 "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2043,7 +2043,7 @@ module.exports = class ServerController {
                     "seperated from the next by a whitespace-character, and removes all of them from " +
                     "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
                     "not yet possible to revert this!",
-                    "\\rmmsg <list of msgIDs  --  Takes a list of messageIDs, each one seperated from the " +
+                    "\\rmmsg <list of msgIDs>  --  Takes a list of messageIDs, each one seperated from the " +
                     "next one by a whitespace character, and removes the corresponding messages - " +
                     "if they exist - from the lecture chat. Will also send a warning to " +
                     "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2067,7 +2067,7 @@ module.exports = class ServerController {
                 var messageHeader = "List of messages posted in " + lecture.getTitle();
                 var messageBody = [];
                 for (var i = 0; i < lectureChat.length; i++) {
-                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] (senderId: " + lectureChat[i].senderID +
+                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] SenderUsername: " + lectureChat[i].username + " (senderId :" +  lectureChat[i].senderID +
                         ") has messageId: " + lectureChat[i].messageID);
                 }
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
