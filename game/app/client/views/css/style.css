@@ -137,7 +137,8 @@ margin: 0;
 padding: 0;
 z-index: 1;
 height: 125px;
-max-width: 250px;
+min-width: 250px;
+max-width: 16vw;
 }
 
 #allchatMessageInput {
