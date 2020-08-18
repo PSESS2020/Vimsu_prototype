@@ -183,7 +183,6 @@ module.exports = */class MapView extends Views {
 
     //finds the clicked element in the list of clickable tiles
     findClickedElementOutsideMap(canvasMousePos) {
-        console.log("canvas mousepos " +canvasMousePos.x + " " + canvasMousePos.y)
         this.#clickableTiles.forEach(elem => {
             let screenPos = elem.getScreenPosition();
             let screenPosOffset = elem.getScreenPositionOffset();

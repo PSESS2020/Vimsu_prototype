@@ -34,7 +34,6 @@ class ClientController {
         this.#gameView = new GameView();
 
         //TODO: add Participant List from Server
-        console.log("fully init cc");
         return this;
     }
 
@@ -143,7 +142,6 @@ class ClientController {
             });
             this.socket.on('connect', (socket) => {
                 this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
-                console.log("test connect");
             });
 
             this.socket.on('disconnect', () => {
@@ -161,7 +159,6 @@ class ClientController {
     }
 
     setUpSocket() {
-        console.log("test set up socket");
         this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
         //this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
@@ -241,7 +238,6 @@ class ClientController {
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
             let participantId = this.#ownParticipant.getId();
-            //console.log("request mov start " + this.#ownParticipant.getId());
             this.socket.emit('requestMovementStart', participantId, direction, currPosX, currPosY);
         }
     }
@@ -317,18 +313,6 @@ class ClientController {
         this.initGameView();
 
     }
-    /**
-     * Not used.
-     *  
-     */
-    //First Message from Server, gives you your ID
-    /*handleFromServerUpdateID(id) {
-        console.log("test update id");
-        
-
-        this.#participantId = id;
-        console.log(this.#participantId);
-    }*/
 
     //Third message from Server, gives you information of starting room
     handleFromServerUpdateRoom(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length) {
@@ -350,7 +334,6 @@ class ClientController {
         //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
-            console.log("npc: " + npc.cordX + " " + npc.cordY)
             listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
         });
 
@@ -381,8 +364,6 @@ class ClientController {
         this.#ownParticipant.setDirection(dirUpdate);
         this.#gameView.updateOwnAvatarPosition(posUpdate);
         this.#gameView.updateOwnAvatarDirection(dirUpdate);
-
-        console.log("test finish update pos");
     }
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
@@ -394,7 +375,6 @@ class ClientController {
         TypeChecker.isInt(newCordY);
 
         let newPos = new PositionClient(newCordX, newCordY);
-        console.log("mov other: " + ppantID);
 
         this.#gameView.updateAnotherAvatarDirection(ppantID, direction);
         this.#gameView.updateAnotherAvatarPosition(ppantID, newPos);
@@ -423,14 +403,11 @@ class ClientController {
      * - (E) */
     handleFromServerRoomEnteredByParticipant(initInfo) {
 
-        console.log("test enter new ppant");
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        console.log("init info id" + initInfo.id);
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
-        console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
         this.#gameView.initAnotherAvatarViews(participant, this.#currentRoom.getTypeOfRoom());
@@ -565,7 +542,6 @@ class ClientController {
     }
 
     handleFromServerUpdateLectureChat(messages) {
-        console.log("update message test 0");
         this.#gameView.updateLectureChat(messages);
     };
 
@@ -636,7 +612,6 @@ class ClientController {
     };
 
     handleFromServerShowChatThread(chat) {
-        //console.log(JSON.stringify(chat));
         this.#gameView.initChatThreadView(chat, true);
     };
 
