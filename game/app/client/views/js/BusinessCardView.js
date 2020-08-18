@@ -6,12 +6,14 @@ class BusinessCardView extends WindowView {
     #businessCard;
     #isFriend;
     #rank;
+    #isModerator;
 
-    constructor(businessCard, isFriend, rank) {
+    constructor(businessCard, isFriend, rank, isModerator) {
         super()
         this.#businessCard = businessCard;
         this.#isFriend = isFriend;
         this.#rank = rank;
+        this.#isModerator = isModerator;
     }
 
     draw() {
@@ -41,6 +43,22 @@ class BusinessCardView extends WindowView {
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Rank</td>
                     <td style="padding: 15px">${this.#rank}</td>
+                </tr>
+            `)
+        }
+
+        if (this.#isModerator) {
+            $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                    <td style="padding: 15px">Moderator</td>
+                </tr>
+            `)
+        } else {
+            $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                    <td style="padding: 15px">Participant</td>
                 </tr>
             `)
         }

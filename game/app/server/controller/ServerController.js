@@ -780,7 +780,8 @@ module.exports = class ServerController {
             });
 
             socket.on('getBusinessCard', (ppantID, targetID) => {
-                let businessCard = this.#ppants.get(targetID).getBusinessCard();
+                let target = this.#ppants.get(targetID);
+                let businessCard = target.getBusinessCard();
                 let businessCardObject = {
                     id: businessCard.getParticipantId(),
                     username: businessCard.getUsername(),
@@ -798,11 +799,11 @@ module.exports = class ServerController {
                 //if so, emit the email. if not, emit the rank
                 if (this.#ppants.get(ppantID).getFriendList().includes(targetID)) {
                     businessCardObject.email = businessCard.getEmail();
-                    socket.emit('businessCard', businessCardObject, targetRank);
+                    socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                 } else {
                     RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
                         targetRank = rank;
-                        socket.emit('businessCard', businessCardObject, targetRank);
+                        socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                     })
                 }
             });

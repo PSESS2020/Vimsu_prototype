@@ -381,12 +381,12 @@ class GameView {
         new GlobalChatView().draw(messageHeader, messageText);
     };
 
-    initProfileView(businessCard, rank) {
-        new ProfileView().draw(businessCard, rank);
+    initProfileView(businessCard, rank, isModerator) {
+        new ProfileView().draw(businessCard, rank, isModerator);
     }
 
-    initBusinessCardView(businessCard, isFriend, rank) {
-        new BusinessCardView(businessCard, isFriend, rank).draw();
+    initBusinessCardView(businessCard, isFriend, rank, isModerator) {
+        new BusinessCardView(businessCard, isFriend, rank, isModerator).draw();
     }
 
     initFriendListView(businessCards) {

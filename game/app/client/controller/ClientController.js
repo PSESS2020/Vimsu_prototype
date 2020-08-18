@@ -451,16 +451,16 @@ class ClientController {
     }
 
     //Is called after server send the answer of avatarclick
-    handleFromServerBusinessCard(businessCardObject, rank) {
+    handleFromServerBusinessCard(businessCardObject, rank, isModerator) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
 
         //check if ppant is a friend or not
         if (businessCard.getEmail() === undefined) {
-            this.#gameView.initBusinessCardView(businessCard, false, rank);
+            this.#gameView.initBusinessCardView(businessCard, false, rank, isModerator);
         } else {
-            this.#gameView.initBusinessCardView(businessCard, true, rank);
+            this.#gameView.initBusinessCardView(businessCard, true, rank, isModerator);
         }
     }
 
@@ -763,7 +763,7 @@ class ClientController {
     }
 
     handleFromViewShowProfile() {
-        this.#gameView.initProfileView(this.#ownBusinessCard);
+        this.#gameView.initProfileView(this.#ownBusinessCard, this.#ownParticipant.getIsModerator());
     }
 
     handleFromViewGetNPCStory(npcId) {
