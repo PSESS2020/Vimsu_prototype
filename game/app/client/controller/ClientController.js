@@ -843,6 +843,11 @@ class ClientController {
         this.socket.emit('newChatMessage', this.#ownParticipant.getId(), this.#ownBusinessCard.getUsername(), chatId, messageText);
     }
 
+    handleFromViewClearInterval() {
+        this.socketReady
+        this.socket.emit('clearInterval');
+    }
+
     // Can we maybe merge these four functions into one?
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(Direction.UPLEFT);

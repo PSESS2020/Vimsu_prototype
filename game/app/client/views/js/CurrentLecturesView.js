@@ -2,6 +2,14 @@ class CurrentLecturesView extends WindowView {
 
     constructor() {
         super();
+
+        $(document).ready(() => {
+            $('#closeCurrentLecturesButton').off();
+            $('#closeCurrentLecturesButton').click(() => {
+                new EventManager().handleClearInterval();
+                $('#currentLectures').hide();
+            })
+        })
     }
 
     draw(lectures) {

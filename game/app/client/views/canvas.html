@@ -318,7 +318,6 @@
                                     'client/views/js/MapView',
                                     'client/views/js/GameMapElementView',
                                     'client/views/js/AvatarView',
-                                    'client/views/js/GameMapElements/ScheduleView',
                                     'client/views/js/LoadingView'], () => {
 
                                         requirejs([
@@ -344,6 +343,7 @@
                                             'client/views/js/LectureView',
                                             'client/views/js/NPCAvatarView',
                                             'client/views/js/ParticipantAvatarView',
+                                            'client/views/js/GameMapElements/ScheduleView',
                                             'client/views/js/GameMapElements/DoorView'], () => {
 
                                                 requirejs(['client/views/js/GameView',
@@ -358,19 +358,6 @@
                             });
                     });
             });
-    </script>
-    <script>
-        $(document).ready(() => {
-            $('#closeCurrentLecturesButton').click(() => {
-                $('#currentLectures').hide();
-            })
-        })
-
-        $(document).ready(() => {
-            $('#closeGlobalChatButton').click(() => {
-                $('#globalChat').hide();
-            })
-        })
     </script>
 </body>
 

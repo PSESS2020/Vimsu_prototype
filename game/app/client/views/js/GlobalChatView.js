@@ -2,6 +2,13 @@ class GlobalChatView extends WindowView {
 
     constructor() {
         super();
+
+        $(document).ready(() => {
+            $('#closeGlobalChatButton').off();
+            $('#closeGlobalChatButton').click(() => {
+                $('#globalChat').hide();
+            })
+        })
     }
 
     draw(messageHeader, messageText) {

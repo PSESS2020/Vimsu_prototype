@@ -674,8 +674,11 @@ module.exports = class ServerController {
                     participant.setIsVisible(false);
                     console.log(messages);
 
+                    var startingTime = currentLecturesData[idx].startingTime.getTime() - Settings.SHOWLECTURE;
+                    var duration = Math.ceil(currentLecturesData[idx].duration / 60) + Settings.SHOWLECTURE / 60 / 1000;
+
                     currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
-                        this.#blob, new Date(currentLecturesData[idx].startingTime), Math.floor(currentLecturesData[idx].duration / 60));
+                        this.#blob, new Date(startingTime), duration);
                     socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
@@ -699,6 +702,8 @@ module.exports = class ServerController {
                 }
             });
 
+            var interval;
+
             socket.on('getCurrentLectures', (ppantID) => {
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
@@ -713,26 +718,33 @@ module.exports = class ServerController {
                 }
 
                 var schedule = this.#conference.getSchedule();
-                var currentLectures = schedule.getCurrentLectures();
 
-                currentLecturesData = [];
-                currentLectures.forEach(lecture => {
-                    currentLecturesData.push(
-                        {
-                            id: lecture.getId(),
-                            title: lecture.getTitle(),
-                            videoId: lecture.getVideoId(),
-                            duration: lecture.getDuration(),
-                            remarks: lecture.getRemarks(),
-                            oratorName: lecture.getOratorName(),
-                            startingTime: lecture.getStartingTime(),
-                            maxParticipants: lecture.getMaxParticipants()
-                        }
-                    )
-                })
+                interval = setInterval(() => {
+                    var currentLectures = schedule.getCurrentLectures();
 
-                socket.emit('currentLectures', currentLecturesData);
+                    currentLecturesData = [];
+                    currentLectures.forEach(lecture => {
+                        currentLecturesData.push(
+                            {
+                                id: lecture.getId(),
+                                title: lecture.getTitle(),
+                                videoId: lecture.getVideoId(),
+                                duration: lecture.getDuration(),
+                                remarks: lecture.getRemarks(),
+                                oratorName: lecture.getOratorName(),
+                                startingTime: lecture.getStartingTime(),
+                                maxParticipants: lecture.getMaxParticipants()
+                            }
+                        )
+                    })
+
+                    socket.emit('currentLectures', currentLecturesData);
+                }, 1000);
             });
+
+            socket.on('clearInterval', () => {
+                clearInterval(interval);
+            })
 
             socket.on('getSchedule', () => {
                 var schedule = this.#conference.getSchedule();
