@@ -38,10 +38,17 @@ module.exports = Object.freeze({
     GRANTTOKEN: {
         string: "grant",
         method: "unmuteUser"
-    }
-    UNBANPLAYER: "unban",
-    CLOSE: "close",
+    },
+    UNBANPLAYER: {
+        string: "unban",
+        method: "unbanUser"
+    },
+    CLOSE: {
+        string: "close",
+        method: "close"
+    },
     HELP: {
         string: "help",
-        
+        method: "printHelp"
+    }
 });

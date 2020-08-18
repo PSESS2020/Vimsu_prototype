@@ -332,6 +332,8 @@ module.exports = class ServerController {
             socket.on('sendMessage', (ppantID, text) => {
 
                 var participant = this.#ppants.get(ppantID);
+                var roomID = participant.getPosition().getRoomId();
+                var room = this.#rooms[roomID - 1].getRoom();
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -353,11 +355,10 @@ module.exports = class ServerController {
                      * need it.
                      *
                      * - (E) */
-                    var input = text.substr(1).split(" ");
-                    new CommandHandler(this).handleCommand(input[0].toLowerCase(),
-                                                            socket,
-                                                            new AllchatContext(/* TODO */),
-                                                            /* TODO */);
+                    var input = text.substring(1).split(" ");
+                    new CommandHandler(this).handleCommand(socket,
+                                                        new AllchatContext(this, room),
+                                                        input);
                 } else { // If the message contains a command, we don't want to be handled like a regular message
 
                     if (this.#muteList.includes(socket.request.session.accountId)) {
@@ -365,12 +366,11 @@ module.exports = class ServerController {
                         return; // muted ppants can't post messages into any allchat
                     }
 
-                    var roomID = participant.getPosition().getRoomId();
                     var username = participant.getBusinessCard().getUsername();
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
-                    this.#rooms[roomID - 1].getRoom().addMessage(ppantID, username, currentDate, text);
+                    room.addMessage(ppantID, username, currentDate, text);
 
                     // Getting the roomID from the ppant seems to not work?
                     this.#io.in(roomID.toString()).emit('newAllchatMessage', { username: username, timestamp: currentDate, text: text });
@@ -619,7 +619,11 @@ module.exports = class ServerController {
                      * need it.
                      *
                      * - (E) */
-                    this.commandHandlerLecture(socket, lecture, text.substr(1));
+                    var input = text.substring(1).split(" ");
+                    new CommandHandler(this).handleCommand(socket,
+                                                        new LectureContext(this, lecture),
+                                                        input);
+                    
 
                 //User can only chat when he has a token or is the orator of this lecture
                 } else if (lecture.hasToken(ppantID) || participant.getBusinessCard().getUsername() === lecture.getOratorUsername()) {
@@ -1814,7 +1818,13 @@ module.exports = class ServerController {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
     };
-
+    
+    ban(accountId) {
+        if (!this.#banList.includes(accountId)) {
+            this.#banList.push(accountId);
+        };
+    };
+    
     /* Can't actually be used yet, as it requires accountIds as arguments,
      * but nothing (no user or method) knows enough to properly use this.
      * - (E) */
@@ -1833,6 +1843,18 @@ module.exports = class ServerController {
             }
         }
         return false;
+    };
+    
+    isMuted(accountID) {
+        return this.#muteList.includes(accountID);
+    };
+    
+    mute(accountID) {
+        this.#muteList.push(accountID);
+    };
+    
+    unmute(accountID) {
+        this.#muteList.splice(this.#muteList.indexOf(accountID), 1);
     };
 
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client

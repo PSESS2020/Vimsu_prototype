@@ -125,10 +125,6 @@ module.exports = class Lecture {
         }
     };
 
-    getActiveParticipants() {
-        return this.#activeParticipants;
-    }
-
     getTokenList() {
         return this.#tokenList;
     }
