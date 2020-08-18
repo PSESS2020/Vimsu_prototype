@@ -54,25 +54,6 @@ class LectureView extends WindowView {
         // hide the overview of current lectures
         $('#currentLectures').hide();
 
-        /*
-        //chat box is emptied to prevent messages from showing in the wrong lecture chat
-        $('#lectureChatMessages').empty();
-        
-        
-        //chat box is filled with the lecture chat
-        if (lectureChat.length > 0) {
-            for(var i = 0; i < lectureChat.length; i++) {
-                var message = lectureChat[i];
-                var messageHeader = message.username + ", " + message.timestamp + ":";
-                var $newMessageHeader = $( "<div style='font-size: small;'></div>" );
-                var $newMessageBody = $( "<div style='font-size: medium;'></div>" );
-                $newMessageHeader.text(messageHeader);
-                $newMessageBody.text(message.messageText);
-                $('#lectureChatMessages').append($newMessageHeader);
-                $('#lectureChatMessages').append($newMessageBody);
-            }
-        } */
-
         this.drawChat(lectureChat);
 
         //empties chat input to disable lecture chat
@@ -255,57 +236,4 @@ class LectureView extends WindowView {
 
         }
     }
-
-    /* No longer needed
-    updateToken(hasToken) {
-        this.#setToken(hasToken);
-        this.#drawToken(NoTokenMessage.REVOKED);
-    };
-    * */
-
-    /* No longer needed
-    #drawToken = function(message) {
-        if(this.#hasToken) {
-            if ($('#lectureChatInputGroup').is(':empty')) {   
-            $('#lectureChatInputGroup').append(`
-            <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
-            <div class="input-group-append">
-                <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
-            </div>
-            `)
-            }
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-question-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append('You obtained a question token!')
-
-        // the input field is emptied if the user does not have a valid token
-        } else {
-            $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
-            $('#tokenIcon').append(`
-            <i class="fa fa-times-circle fa-4x"></i>
-            `)
-            $('#tokenLabel').empty();
-            $('#tokenLabel').append(message);
-        }
-    };
-    * */
-
-    /* No longer needed
-    #setToken = function(newToken) {
-        this.#hasToken = newToken;
-    };
-    * */
-
 }
-
-/* No longer needed.
-const NoTokenMessage = Object.freeze({
-    LEFTTOOLONG: "You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.",
-    REVOKED: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
-            "Please remember to follow chat etiquette."
-})
-*/
