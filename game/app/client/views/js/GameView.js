@@ -89,7 +89,7 @@ class GameView {
             if (this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findClickedTile(selectedTileCords);
+                this.#currentMap.findClickedTileOrObject(selectedTileCords);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -205,6 +205,14 @@ class GameView {
                 this.#updateList[i].update();
             }
         }
+    }
+
+    updatePing(ms) {
+        this.#statusBar.updatePing(ms);
+    }
+
+    updateFPS(timeStamp) {
+        this.#statusBar.updateFPS(timeStamp);
     }
 
     updateConnectionStatus(status) {

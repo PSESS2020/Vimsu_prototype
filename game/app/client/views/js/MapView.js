@@ -4,6 +4,7 @@ module.exports = */class MapView extends Views {
     #map;
     #objectMap;
     #clickableTiles;
+    #clickableObjects;
     #tiles;
     #gameObjects;
     #xNumTiles;
@@ -29,6 +30,7 @@ module.exports = */class MapView extends Views {
 
         //map components that can be clicked
         this.#clickableTiles = [];
+        this.#clickableObjects = [];
 
         this.#gameEngine = new IsometricEngine();
 
@@ -77,7 +79,7 @@ module.exports = */class MapView extends Views {
     //Creates a map of gamegameObjects to draw on screen.
     buildMap() {
 
-        this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default");
+        this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false);
 
         for (var row = (this.#xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.#yNumTiles; col++) {
@@ -126,14 +128,14 @@ module.exports = */class MapView extends Views {
             tile = this.#gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
         } else {
             tileType = mapObject.getGameObjectType();
-            tile = this.#gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName());
+            tile = this.#gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName(), mapObject.isClickable());
         }
 
         if (tile != null) {
             this.#tiles.push(tile);
 
             if (mapObject instanceof DoorClient || mapObject.isClickable())
-                this.addToClickableTiles(tile);
+                this.#clickableTiles.push(tile);
 
         }
     }
@@ -141,32 +143,37 @@ module.exports = */class MapView extends Views {
     //HELPER FUNCTION: creates game objects that are shown on the screen.
     createObjectView(gameObject, position) {
         var objectType = gameObject.getGameObjectType();
-        var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName());
+        var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.isClickable());
 
         if (object != null) {
             this.#gameObjects.push(object);
+
+            if (gameObject.isClickable())
+                this.#clickableObjects.push(object);
         }
     }
 
-    //adds a tile to the list of clickable tiles of the map.
-    addToClickableTiles(tile) {
-
-        this.#clickableTiles.push(tile);
-    }
-
     //finds the clicked tile in the list of clickable tiles
-    findClickedTile(selectedTileCords) {
-
+    findClickedTileOrObject(selectedTileCords) {
         let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
+        let clickedObject = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
+
         if (clickedTile instanceof Array) {
             clickedTile.forEach(tile => {
                 this.findAndClickTile(tile);
             });
         } else 
             this.findAndClickTile(clickedTile);
+
+        if (clickedObject instanceof Array) {
+            clickedObject.forEach(obj => {
+                this.findAndClickObject(obj);
+            });
+        } else
+            this.findAndClickObject(clickedObject);
     }
 
-    //HELPER FUNCTION: determines if the clicked tile is clickable and clicks it it is the case.
+    //HELPER FUNCTION: determines if the clicked tile is clickable and clicks it in that case.
     findAndClickTile(clickedTile) {
         if (clickedTile !== null && (clickedTile instanceof DoorClient || clickedTile.isClickable())) {
             this.#clickableTiles.forEach(viewObject => {
@@ -176,6 +183,19 @@ module.exports = */class MapView extends Views {
                 if (clickedTile instanceof DoorClient && clickedTileName === viewObjectName)
                     viewObject.onclick(clickedTile.getTargetRoomId());
                 else if (clickedTile instanceof GameObjectClient && clickedTileName === viewObjectName)
+                    viewObject.onclick();
+            });
+        }
+    }
+
+    //HELPER FUNCTION: determines if the clicked tile is clickable and clicks it in that case.
+    findAndClickObject(clickedObject) {
+        if (clickedObject !== null && clickedObject.isClickable()) {
+            this.#clickableObjects.forEach(viewObject => {
+                let clickedObjectName = clickedObject.getName();
+                let viewObjectName = viewObject.getName();
+
+                if (clickedObject instanceof GameObjectClient && clickedObjectName === viewObjectName)
                     viewObject.onclick();
             });
         }

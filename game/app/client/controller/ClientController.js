@@ -144,6 +144,10 @@ class ClientController {
                 this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
             });
 
+            this.socket.on('pong', (ms) => {
+                this.#gameView.updatePing(ms);
+            });
+
             this.socket.on('disconnect', () => {
                 this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
                 this.socket.close();
@@ -214,10 +218,11 @@ class ClientController {
     /* #################### EDIT VIEW ##################### */
     /* #################################################### */
 
-    updateGame() {
+    updateGame(timeStamp) {
 
         this.#gameView.update()
         this.#gameView.draw();
+        this.#gameView.updateFPS(timeStamp);
     }
 
     /* #################################################### */

@@ -31,31 +31,14 @@ function init() {
   window.requestAnimationFrame(gameLoop);
 }
 
-let secondsPassed;
-let oldTimeStamp;
-let fps;
 
 function gameLoop(timeStamp) {
-  
-    // Calculate the number of seconds passed since the last frame
-    secondsPassed = (timeStamp - oldTimeStamp) / 1000;
-    oldTimeStamp = timeStamp;
-
-    // Calculate fps
-    fps = Math.round(1 / secondsPassed);
-
     //Clear canvas
     ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     
     // Perform the drawing operation
-    clientController.updateGame();
+    clientController.updateGame(timeStamp);
 
-    // Draw number to the screen
-    ctx_avatar.fillStyle = 'white';
-    ctx_avatar.fillRect(GAME_WIDTH - 50, 0, 50, 50);
-    ctx_avatar.font = '25px Arial';
-    ctx_avatar.fillStyle = 'black';
-    ctx_avatar.fillText("FPS: " + fps, GAME_WIDTH - 50, 0);
     // The loop function has reached it's end. Keep requesting new frames
     window.requestAnimationFrame(gameLoop);
 }
