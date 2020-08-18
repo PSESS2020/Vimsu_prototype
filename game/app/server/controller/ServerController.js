@@ -259,7 +259,7 @@ module.exports = class ServerController {
 
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isModerator: ppant.isModerator() });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.isModerator() });
 
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
@@ -277,7 +277,7 @@ module.exports = class ServerController {
                             var visible = participant.getIsVisible();
                             var isModerator = participant.isModerator();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible, isModerator: isModerator});
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: visible, isModerator: isModerator});
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
@@ -294,7 +294,7 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), visible: ppant.getIsVisible() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.isModerator() });
 
                     
                     /*
@@ -335,6 +335,7 @@ module.exports = class ServerController {
                 var participant = this.#ppants.get(ppantID);
                 var roomID = participant.getPosition().getRoomId();
                 var room = this.#rooms[roomID - 1].getRoom();
+                var username = participant.getBusinessCard().getUsername();
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -357,8 +358,6 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     var input = text.substring(1).split(" ");
-                    var username = participant.getBusinessCard().getUsername();
-                    console.log(username);
                     new CommandHandler(this).handleCommand(socket,
                                                         new AllchatContext(this, room),
                                                         input, username);
@@ -369,7 +368,6 @@ module.exports = class ServerController {
                         return; // muted ppants can't post messages into any allchat
                     }
 
-                    var username = participant.getBusinessCard().getUsername();
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
@@ -562,8 +560,10 @@ module.exports = class ServerController {
                 this.#ppants.get(ppantID).setPosition(newPos);
                 this.#ppants.get(ppantID).setDirection(d);
 
-                //Get username
+                //Get username, isModerator, isVisible
                 let username = this.#ppants.get(ppantID).getBusinessCard().getUsername();
+                let isModerator = this.#ppants.get(ppantID).isModerator();
+                let isVisible = this.#ppants.get(ppantID).getIsVisible();
 
                 //Emit new position to participant
                 this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
@@ -572,7 +572,7 @@ module.exports = class ServerController {
                 socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
                 //Emit to all participants in new room, that participant is joining
-                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d });
+                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d, isVisible: isVisible, isModerator: isModerator});
 
                 //Emit to participant all participant positions, that were in new room before him
                 this.#ppants.forEach((ppant, id, map) => {
@@ -582,7 +582,9 @@ module.exports = class ServerController {
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = ppant.getDirection();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
+                        var tempIsVisible = ppant.getIsVisible();
+                        var tempIsModerator = ppant.isModerator();
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: tempIsVisible, isModerator: tempIsModerator });
                         console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }
                 });

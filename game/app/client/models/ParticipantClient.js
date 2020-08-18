@@ -22,12 +22,16 @@ class ParticipantClient {
      * @param {String} username
      * @param {PositionClient} position
      * @param {Direction} direction
+     * @param {boolean} isVisible
+     * @param {boolean} isModerator
      */
     constructor(id, username, position, direction, isVisible, isModerator) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isString(username);
+        TypeChecker.isBoolean(isVisible);
+        TypeChecker.isBoolean(isModerator);
 
         this.#id = id;
         this.#position = position;
