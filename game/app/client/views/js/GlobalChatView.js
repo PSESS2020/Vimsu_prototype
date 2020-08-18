@@ -16,7 +16,6 @@ class GlobalChatView extends WindowView {
         $('#globalChatMessage').empty();
         //$newMessageHeader.text(messageHeader);
         $('#globalChatWindowHeaderText').text(messageHeader);
-        console.log("test start");
         if (messageText instanceof Array) {
             for (var i = 0; i < messageText.length; i++) {
                 this.addMessage(messageText[i]);

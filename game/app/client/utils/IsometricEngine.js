@@ -72,7 +72,6 @@ class IsometricEngine {
 
         var assetImages = {};
         var loadedImages = 0;
-        //console.log(assetPaths);
 
         // Load all the images before we run the app
         for (var key in assetPaths) {

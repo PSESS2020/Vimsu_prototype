@@ -55,7 +55,6 @@ class GameView {
 
         //Handle mouse movement on canvas
         $('#avatarCanvas').on('mousemove', (e) => {
-            //console.log("mousemov: " + e.pageX + " " + e.pageY)
             //Translates the current mouse position to the mouse position on the canvas.
             var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
 
@@ -249,7 +248,6 @@ class GameView {
         }
 
         if (participant !== this.#ownAvatarView) {
-            //console.log("other avatarView init: " + participant.getId());
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
@@ -536,7 +534,6 @@ class GameView {
     hideAvatar(participantId) {
         for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
             var avatar = this.#anotherParticipantAvatarViews[i];
-            //console.log(avatar.getId());
             if (avatar.getId() === participantId) {
                 avatar.setVisibility(false);
             }
