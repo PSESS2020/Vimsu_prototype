@@ -259,7 +259,7 @@ module.exports = class ServerController {
 
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.isModerator() });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
 
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
@@ -274,10 +274,10 @@ module.exports = class ServerController {
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
                             var tempDir = participant.getDirection();
-                            var visible = participant.getIsVisible();
-                            var isModerator = participant.isModerator();
+                            var isVisible = participant.getIsVisible();
+                            var isModerator = participant.getIsModerator();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: visible, isModerator: isModerator});
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator});
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
@@ -294,7 +294,7 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.isModerator() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
 
                     
                     /*
@@ -347,7 +347,7 @@ module.exports = class ServerController {
                  * hundred percent sure, so I didn't for now.
                  *
                  *  - (E) */
-                if (participant.isModerator() && text.charAt(0) == Settings.CMDSTARTCHAR) {
+                if (participant.getIsModerator() && text.charAt(0) == Settings.CMDSTARTCHAR) {
                     /* Now, we check if the message contains any command
                      * known by the server and handle this appropriately.
                      * We move this to another method for better readability.
@@ -562,7 +562,7 @@ module.exports = class ServerController {
 
                 //Get username, isModerator, isVisible
                 let username = this.#ppants.get(ppantID).getBusinessCard().getUsername();
-                let isModerator = this.#ppants.get(ppantID).isModerator();
+                let isModerator = this.#ppants.get(ppantID).getIsModerator();
                 let isVisible = this.#ppants.get(ppantID).getIsVisible();
 
                 //Emit new position to participant
@@ -582,9 +582,9 @@ module.exports = class ServerController {
                         var tempX = tempPos.getCordX();
                         var tempY = tempPos.getCordY();
                         var tempDir = ppant.getDirection();
-                        var tempIsVisible = ppant.getIsVisible();
-                        var tempIsModerator = ppant.isModerator();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: tempIsVisible, isModerator: tempIsModerator });
+                        var isVisible = ppant.getIsVisible();
+                        var isModerator = ppant.getIsModerator();
+                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
                         console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }
                 });
@@ -614,7 +614,7 @@ module.exports = class ServerController {
                  * Only moderators and the orator can use commands
                  * */
                 if ((participant.getBusinessCard().getUsername() === lecture.getOratorUsername() ||
-                     participant.isModerator()) && text.charAt(0) === Settings.CMDSTARTCHAR) {
+                     participant.getIsModerator()) && text.charAt(0) === Settings.CMDSTARTCHAR) {
                     /* Now, we check if the message contains any command
                      * known by the server and handle this appropriately.
                      * We move this to another method for better readability.

@@ -128,7 +128,7 @@ module.exports = class Participant {
         return this.#isVisible;
     }
 
-    isModerator() {
+    getIsModerator() {
         return this.#isMod;
     }
 

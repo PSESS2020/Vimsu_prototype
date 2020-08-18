@@ -133,7 +133,7 @@ module.exports = class CommandHandler {
         for (var i = 0; i < msg.length; i++) {
             if(commandArgs.includes(msg[i].username.toString())) {
                 messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
-                        ") has messageId: " + msg[i].messageID);
+                ") has text: " + msg[i].text + " (messageID: " + msg[i].messageID + ")");
             }
         }
         this.#serverController.sendNotification(socket.id, { header: messageHeader, body: messageBody });
