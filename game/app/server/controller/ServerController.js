@@ -707,7 +707,7 @@ module.exports = class ServerController {
             var interval;
 
             socket.on('getCurrentLectures', (ppantID) => {
-
+                
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
                 let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
@@ -721,6 +721,8 @@ module.exports = class ServerController {
 
                 var schedule = this.#conference.getSchedule();
 
+                clearInterval(interval);
+                
                 interval = setInterval(() => {
                     var currentLectures = schedule.getCurrentLectures();
 
