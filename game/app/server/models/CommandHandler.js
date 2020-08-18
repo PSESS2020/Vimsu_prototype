@@ -126,7 +126,7 @@ module.exports = class CommandHandler {
         var messageHeader = "List of messages posted in " + context.getTitle();
         var messageBody = [];
         for (var i = 0; i < msg.length; i++) {
-            if(commandArgs.includes(msg[i].senderID.toString())) {
+            if(commandArgs.includes(msg[i].username.toString())) {
                 messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
                         ") has messageId: " + msg[i].messageID);
             }
