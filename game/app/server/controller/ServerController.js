@@ -357,9 +357,11 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     var input = text.substring(1).split(" ");
+                    var username = participant.getBusinessCard().getUsername();
+                    console.log(username);
                     new CommandHandler(this).handleCommand(socket,
                                                         new AllchatContext(this, room),
-                                                        input);
+                                                        input, username);
                 } else { // If the message contains a command, we don't want to be handled like a regular message
 
                     if (this.#muteList.includes(socket.request.session.accountId)) {
@@ -1820,8 +1822,8 @@ module.exports = class ServerController {
         }
     };
 
-    sendGlobalMessage(message) {
-        this.#io.emit('New global message', message.header, message.text);
+    sendGlobalAnnouncement(username, text) {
+        this.#io.emit('New global announcement', username, text);
     }
     
     isBanned(accountId) {

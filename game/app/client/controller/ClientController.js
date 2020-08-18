@@ -610,10 +610,10 @@ class ClientController {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
-    handleFromServerNewGlobalAnnouncement(moderatorUsername, message) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+    handleFromServerNewGlobalAnnouncement(moderatorUsername, messageText) {
+        var timestamp = new DateParser(new Date()).parseOnlyTime();
         var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
-        this.#gameView.initGlobalChatView(messageHeader, message.text);
+        this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
     handleFromServerHideAvatar(participantId) {
