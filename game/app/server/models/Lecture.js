@@ -129,7 +129,6 @@ module.exports = class Lecture {
         return this.#tokenList;
     }
 
-
     /**
      * Is called when a participant with this ID joins a lecture
      * 
@@ -142,16 +141,14 @@ module.exports = class Lecture {
     enter(participantId) {
 
         TypeChecker.isString(participantId);
-        let currDate = new Date();
 
-
-        //lecture is full
-        if (this.#activeParticipants.length >= this.#maxParticipants) {
+        //lecture is full, already ended, or not yet opened
+        if (this.#activeParticipants.length >= this.#maxParticipants || this.isEnded() || !this.isOpened()) {
 
             return false;
         }
 
-        //lecture is not full and started not longer than 5 minutes ago
+        //lecture is not full and opened and not ended
         else {
             this.#activeParticipants.push(participantId);
             this.#checkToken(participantId);
@@ -194,6 +191,24 @@ module.exports = class Lecture {
                 }
             }
         });
+    }
+
+    isOpened() {
+        var now = new Date().getTime();
+        var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
+        return (startingTime <= now)
+    }
+
+    isEnded() {
+        var now = new Date().getTime();
+        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
+        return (now >= endTime);
+    }
+    
+    isAccessible() {
+        var now = new Date().getTime();
+        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
+        return (this.isOpened() && now <= endTime);
     }
 
     hasPPant(participantId) {

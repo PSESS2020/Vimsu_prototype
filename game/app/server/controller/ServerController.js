@@ -678,15 +678,15 @@ module.exports = class ServerController {
                     participant.setIsVisible(false);
                     console.log(messages);
 
-                    var startingTime = currentLecturesData[idx].startingTime.getTime() - Settings.SHOWLECTURE;
-                    var duration = Math.ceil(currentLecturesData[idx].duration / 60) + Settings.SHOWLECTURE / 60 / 1000;
+                    var startingTime = lecture.getStartingTime().getTime() - Settings.SHOWLECTURE;
+                    var duration = Math.ceil(lecture.getDuration() / 60) + Settings.SHOWLECTURE / 60 / 1000;
 
-                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
+                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(lecture.getVideoId(), 
                         this.#blob, new Date(startingTime), duration);
                     socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
-                    socket.emit('lectureFull', currentLecturesData[idx].id);
+                    socket.emit('lectureFull', lectureId);
                 }
             })
 
@@ -700,8 +700,7 @@ module.exports = class ServerController {
                 socket.leave(lectureId);
                 socket.currentLecture = undefined;
                 socket.broadcast.emit('showAvatar', participantId);
-                console.log(lectureEnded);
-                if (lectureEnded) {
+                if (lectureEnded && lecture.isEnded() && lecture.hasToken(participantId)) {
                     this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT);
                 }
             });
