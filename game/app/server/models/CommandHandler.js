@@ -50,12 +50,11 @@ module.exports = class CommandHandler {
     globalMsg(socket, context, commandArgs) {
         // maybe make sure context is allchat?
         if (commandArgs.length > 0) {
-            var currentDate = new Date();
             var text = commandArgs[0];
             for(var i = 1; i < commandArgs.length; i++) {
                 text += " " + commandArgs[i];
             }
-            socket.broadcast.emit("New global message", currentDate.toString(), text); //sender can't see global message
+            this.#serverController.emitEventIn('/', "New global message", text);
         }
     };
     

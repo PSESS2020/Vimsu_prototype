@@ -4,7 +4,10 @@ module.exports = Object.freeze({
         body: ["\\help  --  This command. Displays a list of all commands and how to use them.",
                     "\\log --  Will show a log of all messages send into the lecture chat" +
                     ", including the messageID and senderID of each message.",
-                    "\\rmuser <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                    "\\showallby <list of usernames> -- Takes a list of usernames, each one " +
+                    "seperated from the next by a whitespace-character, and displays all messages " +
+                    "send into the chat by these users.", 
+                    "\\rmuser <list of usernames>  --  Takes a list of usernames, each one " +
                     "seperated from the next by a whitespace-character, and removes all of them from " +
                     "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
                     "not yet possible to revert this!",
@@ -12,14 +15,14 @@ module.exports = Object.freeze({
                     "next one by a whitespace character, and removes the corresponding messages - " +
                     "if they exist - from the lecture chat. Will also send a warning to " +
                     "the senders of the messages, reminding them to follow chat etiquette.",
-                    "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                    "\\rmallby <list of usernames>  --  Takes a list of usernames, each one " +
                     "seperated from the next by a whitespace-character, and removes all messages posted " +
                     "by them into the lecture chat. Will also send a warning " +
                     "to these participants, reminding them to follow chat-etiquette.",
-                    "\\revoke <list of participantIDs> --  Takes a list of participantIDs, each one " +
+                    "\\revoke <list of usernames> --  Takes a list of usernames, each one " +
                     "seperated from the next by a whitespace-character, and revokes their lecture tokens " +
                     "(if they own one). They will no longer be able to post messages into the lecture chat.",
-                    "\\grant <list of participantIDs> --  Takes a list of participantIDs, each one " +
+                    "\\grant <list of usernames> --  Takes a list of usernames, each one " +
                     "seperated from the next by a whitespace-character, and grants them lecture tokens " +
                     "(if they are currently listening to the lecture and do not own one). They will " +
                     "be able to post messages into the lecture chat.",
@@ -30,11 +33,14 @@ module.exports = Object.freeze({
     HELPALLCHAT: {
         header: "List of Commands.",
         body: ["\\global <message>  --  Post a message into the global chat. " +
-                    "It will display in every participants game-view as a pop-up.",
-                    "\\help  --  This command. Displays a list of all commands and how to use them.",
+                "It will display in every participants game-view as a pop-up.",
+                "\\help  --  This command. Displays a list of all commands and how to use them.",
                 "\\log --  Will show a log of all messages send into the allchat of the room you're " +
                 "currently in, including the messageID and senderID of each message.",
-                "\\rmuser <list of participantIDs>  -- Takes a list of participantIDs, each one " +
+                "\\showallby <list of usernames> -- Takes a list of usernames, each one " +
+                "seperated from the next by a whitespace-character, and displays all messages " +
+                "send into the chat by these users.", 
+                "\\rmuser <list of usernames>  -- Takes a list of usernames, each one " +
                 "seperated from the next by a whitespace-character, and removes all of them from " +
                 "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                 "not yet possible to unban a banned user!",
@@ -42,14 +48,14 @@ module.exports = Object.freeze({
                 "one by a whitespace character, and removes the corresponding messages - " +
                 "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
                 "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                "\\rmallby <list of usernames>  --  Takes a list of usernames, each one " +
                 "seperated from the next by a whitespace-character, and removes all messages posted " +
                 "by them into the allchat of the room you're currently in. Will also send a warning " +
                 "to these participants, reminding them to follow chat-etiquette.",
-                "\\mute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                "\\mute <list of usernames>  --  Takes a list of usernames, each one " +
                 "seperated from the next by a whitespace-character, and mutes them, meaning they " +
                 "will no longer be able to post messages into the allchat.",
-                "\\unmute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
+                "\\unmute <list of usernames>  --  Takes a list of usernames, each one " +
                 "seperated from the next by a whitespace-character, and unmutes them, meaning they " +
                 "will be able to post messages into the allchat again if they were previously muted."]
     },
