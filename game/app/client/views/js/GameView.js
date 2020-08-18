@@ -609,12 +609,12 @@ class GameView {
     };
 
     closeLectureView() {
-        /*
+        
         // see above
-        //if(this.#lectureView) {
+        if(this.#lectureView) {
             this.#lectureView.close();
-        //}
-        * */
+        }
+        
     };
 }
 
