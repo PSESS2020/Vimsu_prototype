@@ -31,10 +31,11 @@ class ParticipantAvatarView extends AvatarView {
     #isVisible;
     #username;
     #typeOfRoom;
+    #isModerator;
 
     #gameEngine;
 
-    constructor(position, direction, participantId, typeOfRoom, username, isVisible) {
+    constructor(position, direction, participantId, typeOfRoom, username, isVisible, isModerator) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -50,6 +51,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#typeOfRoom = typeOfRoom;
         this.#username = username;
         this.#isVisible = isVisible;
+        this.#isModerator = isModerator;
 
         this.#gameEngine = new IsometricEngine();
     }
@@ -131,7 +133,12 @@ class ParticipantAvatarView extends AvatarView {
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
-            ctx_avatar.fillStyle = "antiquewhite";
+            if(this.#isModerator) {
+                ctx_avatar.fillStyle = "gold";
+            } else {
+                ctx_avatar.fillStyle = "antiquewhite";
+            }
+            
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 

@@ -248,7 +248,8 @@ class GameView {
                 participant.getId(),
                 typeOfRoom,
                 participant.getUsername(),
-                participant.getIsVisible()
+                participant.getIsVisible(),
+                participant.getIsModerator()
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -323,9 +324,10 @@ class GameView {
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
         let username = ownParticipant.getUsername();
+        let isModerator = ownParticipant.getIsModerator();
         this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true, isModerator);
         this.addToUpdateList(this.#ownAvatarView);
 
 

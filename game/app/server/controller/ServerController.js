@@ -257,7 +257,7 @@ module.exports = class ServerController {
 
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isModerator: ppant.isModerator() });
 
                     // Initialize Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
@@ -273,8 +273,9 @@ module.exports = class ServerController {
                             var tempY = tempPos.getCordY();
                             var tempDir = participant.getDirection();
                             var visible = participant.getIsVisible();
+                            var isModerator = participant.isModerator();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible, isModerator: isModerator});
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
