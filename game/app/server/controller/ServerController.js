@@ -335,6 +335,7 @@ module.exports = class ServerController {
                 var participant = this.#ppants.get(ppantID);
                 var roomID = participant.getPosition().getRoomId();
                 var room = this.#rooms[roomID - 1].getRoom();
+                var username = participant.getBusinessCard().getUsername();
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -357,8 +358,6 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     var input = text.substring(1).split(" ");
-                    var username = participant.getBusinessCard().getUsername();
-                    console.log(username);
                     new CommandHandler(this).handleCommand(socket,
                                                         new AllchatContext(this, room),
                                                         input, username);
@@ -369,7 +368,6 @@ module.exports = class ServerController {
                         return; // muted ppants can't post messages into any allchat
                     }
 
-                    var username = participant.getBusinessCard().getUsername();
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
