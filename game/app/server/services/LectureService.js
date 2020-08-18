@@ -2,15 +2,10 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Lecture = require('../models/Lecture')
 
 module.exports = class LectureService {
-    static getVideo(videoId, vimsudb) {
+    static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
 
-        return vimsudb.downloadFile("lectures", videoId).then(res => {
-            return res;
-        }).catch(err => {
-            console.error(err)
-        });
-
+        return blob.getWriteSAS("lectures", videoId, startingTime, duration);
     }
 
 
@@ -22,7 +17,7 @@ module.exports = class LectureService {
                 for (var i = 0; i < lectures.length; i++) {
                     var orator = lectures[i].accountsData[0];
                     lectureLists.push(new Lecture(lectures[i].lectureId, lectures[i].title, lectures[i].videoId, lectures[i].duration,
-                        lectures[i].remarks, lectures[i].startingTime, orator.title + " " + orator.forename + " " + orator.surname, lectures[i].maxParticipants));
+                        lectures[i].remarks, lectures[i].startingTime, orator.title + " " + orator.forename + " " + orator.surname, orator.username, lectures[i].maxParticipants));
                 }
             }
             return lectureLists;

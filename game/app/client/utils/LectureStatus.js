@@ -1,5 +1,6 @@
 const LectureStatus = Object.freeze({
-    PENDING: "PENDING",
-    RUNNING: "RUNNING",
-    OVER: "OVER"
+    PENDING: "Coming soon",
+    OPENED: "Opened",
+    RUNNING: "Running",
+    OVER: "Expired",
 });

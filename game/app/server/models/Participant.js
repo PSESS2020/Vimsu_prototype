@@ -23,6 +23,7 @@ module.exports = class Participant {
     #achievements;
     #awardPoints;
     #chatList;
+    #isVisible;
 
     /**
      * 
@@ -84,6 +85,7 @@ module.exports = class Participant {
         this.#isMod = isMod; //this.#isMod = true;  //TESTING
         this.#awardPoints = awardPoints; //this.#points = 0;
         this.#chatList = chatList; //this.#chatList = [];
+        this.#isVisible = true;
     }
 
     getId() {
@@ -122,6 +124,10 @@ module.exports = class Participant {
         return this.#achievements;
     }
 
+    getIsVisible() {
+        return this.#isVisible;
+    }
+
     isModerator() {
         return this.#isMod;
     }
@@ -145,6 +151,10 @@ module.exports = class Participant {
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
+    }
+
+    setIsVisible(isVisible) {
+        this.#isVisible = isVisible;
     }
 
     /**
@@ -262,6 +272,9 @@ module.exports = class Participant {
         return this.#taskTypeMapping;
     }
 
+    getTaskTypeMappingCount(taskType) {
+        return this.#taskTypeMapping[taskType];
+    }
 
     addTask(task) {
         TypeChecker.isInstanceOf(task, Task);

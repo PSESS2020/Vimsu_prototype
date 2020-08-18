@@ -10,7 +10,6 @@ class DoorClient {
     #typeOfDoor;
     #name;
     #mapPosition;
-    #isClickable;
     #targetRoomId;
 
     /**
@@ -20,15 +19,13 @@ class DoorClient {
      * @param {TypeOfDoor} typeOfDoor
      * @param {String} name
      * @param {PositionClient} mapPosition
-     * @param {boolean} isClickable
      * @param {Number} targetRoomId
      */
-    constructor(id, typeOfDoor, name, mapPosition, isClickable, targetRoomId) {
+    constructor(id, typeOfDoor, name, mapPosition, targetRoomId) {
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, PositionClient);
-        TypeChecker.isBoolean(isClickable);
 
         if (targetRoomId !== undefined)
             TypeChecker.isNumber(targetRoomId);
@@ -37,9 +34,7 @@ class DoorClient {
         this.#typeOfDoor = typeOfDoor;
         this.#name = name;
         this.#mapPosition = mapPosition;
-        this.#isClickable = isClickable;
         this.#targetRoomId = targetRoomId;
-
     }
 
     getId() {
@@ -56,10 +51,6 @@ class DoorClient {
 
     getMapPosition() {
         return this.#mapPosition;
-    }
-
-    isClickable() {
-        return this.#isClickable;
     }
 
     getTargetRoomId() {

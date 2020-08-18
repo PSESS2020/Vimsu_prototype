@@ -61,7 +61,7 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
                 
@@ -71,7 +71,7 @@ class GameView {
                     canvas.style.cursor = "default";*/
 
                 this.#currentMap.selectionOnMap = true;
-            } else
+            } else 
                 this.#currentMap.selectionOnMap = false;
 
             this.#currentMap.updateSelectedTile(selectedTileCords);
@@ -86,7 +86,8 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (this.#currentMap.isCursorOnMap(selectedTileCords.x, selectedTileCords.y)) {
+            //check if clicked tile is a valid walkable tile
+            if (this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
                 this.#currentMap.findClickedTile(selectedTileCords);
@@ -119,7 +120,9 @@ class GameView {
                         npcView.onClick();
                     }
                 })
-
+                    //check if clicked tile is outside the walkable area
+            } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMap.findClickedElementOutsideMap(newPosition);
             }
         });
     }
@@ -172,10 +175,11 @@ class GameView {
             var gameObjects = this.#currentMap.getGameObjects();
 
             //put all AvatarViews and all GameObjects in one list
-            var allDrawElements = [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews
-                                                 ).concat(this.#npcAvatarViews
-                                                 ).concat((gameObjects === undefined) ? "" : gameObjects);
-
+            var allDrawElements = (gameObjects !== undefined) ? gameObjects.concat(this.#ownAvatarView)
+                                                                             .concat(this.#anotherParticipantAvatarViews)
+                                                                             .concat(this.#npcAvatarViews)
+                                                              : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
+                                                                                     .concat(this.#npcAvatarViews);
 
             //sort all Avatars in CordX
             allDrawElements.sort(function (a, b) {
@@ -244,6 +248,7 @@ class GameView {
                 participant.getId(),
                 typeOfRoom,
                 participant.getUsername(),
+                participant.getIsVisible()
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -320,7 +325,7 @@ class GameView {
         let username = ownParticipant.getUsername();
         this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true);
         this.addToUpdateList(this.#ownAvatarView);
 
 

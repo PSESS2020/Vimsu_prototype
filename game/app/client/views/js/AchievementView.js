@@ -11,6 +11,15 @@ class AchievementView extends WindowView {
         achievements.forEach(achievement => {
             var level = achievement.currentLevel;
             var maxLevel = achievement.maxLevel;
+            var currentCount = achievement.currentCount;
+            var nextTarget = achievement.nextTarget;
+
+            if(nextTarget) {
+                var next = "Next target: [" + currentCount + " / " + nextTarget + "]";
+            } else {
+                var next = "Completed";
+            }
+
             var color = achievement.color;
             var blur = (level === 0) ? 'achievement-blur' : '';
 
@@ -18,8 +27,12 @@ class AchievementView extends WindowView {
                 <div class="col-4 d-flex flex-column align-items-center text-center">
                     <i style="color: ${color} !important; text-shadow: 4px 4px 25px ${color};" class="fas fa-${achievement.icon} achievement-icon ${blur} mb-5 mt-4"></i>
                     
-                    <b>${achievement.title} [${level} / ${maxLevel}]</b>
+                    <small style="opacity: 0.5"><b>${next}</b></small>
+                    <small style="opacity: 0.5">Level: [${level} / ${maxLevel}]</small>
+                    <br>
+                    <b>${achievement.title}</b>
                     <small>${achievement.description}</small>
+                    <br><br>
                 </div>
             `)
         })

@@ -9,8 +9,9 @@ module.exports = class Achievement {
     #color;
     #awardPoints;
     #taskType;
+    #nextCount;
 
-    constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType) {
+    constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
         this.#id = id;
         this.#title = title;
         this.#icon = icon;
@@ -20,6 +21,7 @@ module.exports = class Achievement {
         this.#awardPoints = awardPoints;
         this.#maxLevel = maxLevel;
         this.#taskType = taskType;
+        this.#nextCount = nextCount;
     }
 
     getId() {
@@ -56,6 +58,10 @@ module.exports = class Achievement {
 
     getMaxLevel() {
         return this.#maxLevel;
+    }
+
+    getNextCount() {
+        return this.#nextCount;
     }
 
     setCurrentLevel(currentLevel) {

@@ -1,3 +1,4 @@
+
 if (typeof module === 'object' && typeof exports === 'object') {
     Views = require('./Views');
 }
@@ -13,8 +14,13 @@ class GameObjectView extends Views {
 
     constructor(objectImage, gridPosition, screenPositionOffset, name) {
         super();
-        this.#objectImage = objectImage;
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
+        TypeChecker.isInstanceOf(objectImage, Image);
+        TypeChecker.isInstanceOf(screenPositionOffset, Object);
+        TypeChecker.isString(name);
+
+
+        this.#objectImage = objectImage;
         this.#gridPosition = gridPosition;
         this.#screenPositionOffset = screenPositionOffset;
         this.#name = name;
@@ -45,12 +51,14 @@ class GameObjectView extends Views {
     }
 
     updateGridPos(gridPosition) {
+        TypeChecker.isInstanceOf(gridPosition, PositionClient);
 
         this.#gridPosition = gridPosition;
-
     }
 
     updateScreenPos(screenPosition) {
+        TypeChecker.isInstanceOf(screenPosition, PositionClient);
+
         this.#screenPosition = screenPosition;
     }
 
@@ -64,8 +72,8 @@ class GameObjectView extends Views {
                                                 this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
     }
 
-    onclick() {
-        throw new Error('onClick() has to be implemented!');
+    onclick(){
+        throw new Error('onclick() has to be implemented!');
     }
 }
 

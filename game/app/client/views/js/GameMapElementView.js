@@ -15,7 +15,7 @@ class GameMapElementView extends GameObjectView {
     }
 
     onclick() {
-
+        throw new Error('onclick() has to be implemented!');
     }
 }
 

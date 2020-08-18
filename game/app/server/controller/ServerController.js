@@ -27,6 +27,7 @@ module.exports = class ServerController {
 
     #io;
     #db;
+    #blob;
     #conference;
     #listOfConfCont;
     #DEBUGMODE;
@@ -40,7 +41,7 @@ module.exports = class ServerController {
     #ppants;
     #roomService;
 
-    constructor(socket, db) {
+    constructor(socket, db, blob) {
         if (!!ServerController.instance) {
             return ServerController.instance;
         }
@@ -49,6 +50,7 @@ module.exports = class ServerController {
 
         this.#io = socket;
         this.#db = db;
+        this.#blob = blob;
 
         //Should be turned off if the product gets released.
         this.#DEBUGMODE = false;
@@ -176,7 +178,8 @@ module.exports = class ServerController {
                             length: mapElement.getLength(),
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
-                            isSolid: mapElement.getSolid()
+                            isSolid: mapElement.getSolid(),
+                            isClickable: mapElement.getClickable()
                         });
                     });
 
@@ -195,7 +198,8 @@ module.exports = class ServerController {
                             length: gameObject.getLength(),
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
-                            isSolid: gameObject.getSolid()
+                            isSolid: gameObject.getSolid(),
+                            isClickable: gameObject.getClickable()
                         });
                     });
 
@@ -268,8 +272,9 @@ module.exports = class ServerController {
                             var tempX = tempPos.getCordX();
                             var tempY = tempPos.getCordY();
                             var tempDir = participant.getDirection();
+                            var visible = participant.getIsVisible();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, visible: visible });
                             console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
@@ -286,7 +291,21 @@ module.exports = class ServerController {
                     // It might be nicer to move this into the ppantController-Class
                     // later on
                     // - (E)
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), visible: ppant.getIsVisible() });
+
+                    
+                    /*
+                    * Check if this is the first conference visit of this ppant 
+                    * if so, remind him to click the BasicTutorial NPC
+                    */
+                    if(ppant.getTaskTypeMappingCount(TypeOfTask.RECEPTIONVISIT) === 0) {
+                        let messageHeader = 'Welcome to VIMSU!';
+                        let messageBody = 'Please talk to our BasicTutorial NPC by clicking' +
+                                          ' the tile he is standing on. He will give you a' +
+                                          ' short introduction that will help you to learn the basics of using VIMSU.';
+
+                        this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);       
+                    }
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
                         this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
@@ -422,6 +441,23 @@ module.exports = class ServerController {
                     return;
                 }
 
+                /*
+                * Check if ppant clicked BasicTutorial before leaving reception at his first visit
+                * He should read it before he is allowed to visit other rooms
+                */
+                if(currentRoomId === Settings.RECEPTION_ID && targetRoomId === Settings.FOYER_ID
+                   && this.#ppants.get(ppantID).getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
+
+                       let messageHeader = 'Welcome to VIMSU!';
+                       let messageBody = 'Before you can start exploring this conference,' +
+                                         ' please talk to our BasicTutorial NPC by clicking' +
+                                         ' the tile he is standing on. He will give you a' +
+                                         ' short introduction that will help you to learn the basics of using VIMSU.';
+
+                       this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
+                       return;
+                }
+
                 let newPos = door.getTargetPosition();
                 let x = newPos.getCordX();
                 let y = newPos.getCordY();
@@ -454,7 +490,8 @@ module.exports = class ServerController {
                         length: mapElement.getLength(),
                         cordX: mapElement.getPosition().getCordX(),
                         cordY: mapElement.getPosition().getCordY(),
-                        isSolid: mapElement.getSolid()
+                        isSolid: mapElement.getSolid(),
+                        isClickable: mapElement.getClickable()
                     });
                 });
 
@@ -473,7 +510,8 @@ module.exports = class ServerController {
                         length: gameObject.getLength(),
                         cordX: gameObject.getPosition().getCordX(),
                         cordY: gameObject.getPosition().getCordY(),
-                        isSolid: gameObject.getSolid()
+                        isSolid: gameObject.getSolid(),
+                        isClickable: gameObject.getClickable()
                     });
                 });
 
@@ -560,15 +598,12 @@ module.exports = class ServerController {
                 var lectureChat = lecture.getLectureChat();
                 var participant = this.#ppants.get(ppantID);
 
-                /* We want to check if the ppant "owns" the lecture here.
-                 * As the orator-class seems not be actually used yet, we just use
-                 * the orator-name from the lecture class and compare it to the username
-                 * of the aprticipant. And since I'm not sure if that will work, we just allow
-                 * every moderator to use commands in the lecture-chat (for testing purposes).
-                 * 
-                 * - (E) */
-                if (/* (participant.getBusinessCard().getUsername() == lecture.getOratorName() || */
-                    participant.isModerator() /*)*/ && text.charAt(0) == Settings.CMDSTARTCHAR) {
+                /* 
+                 * Check if this ppant is a moderator or the orator of this lecture
+                 * Only moderators and the orator can use commands
+                 * */
+                if ((participant.getBusinessCard().getUsername() === lecture.getOratorUsername() ||
+                     participant.isModerator()) && text.charAt(0) === Settings.CMDSTARTCHAR) {
                     /* Now, we check if the message contains any command
                      * known by the server and handle this appropriately.
                      * We move this to another method for better readability.
@@ -579,10 +614,11 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     this.commandHandlerLecture(socket, lecture, text.substr(1));
-                } else if (lecture.hasToken(ppantID)) {
+
+                //User can only chat when he has a token or is the orator of this lecture
+                } else if (lecture.hasToken(ppantID) || participant.getBusinessCard().getUsername() === lecture.getOratorUsername()) {
 
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
-                    //participant.increaseAchievementCount('messagesSent');
 
                     // timestamping the message - (E)
                     var currentDate = new Date();
@@ -592,7 +628,6 @@ module.exports = class ServerController {
 
                     this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
                     
-
                 }
             });
 
@@ -619,17 +654,18 @@ module.exports = class ServerController {
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
+                    var participant = this.#ppants.get(ppantID);
                     var token = lecture.hasToken(ppantID);
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
                     var messages = lecture.getLectureChat().getMessages();
+                    participant.setIsVisible(false);
                     console.log(messages);
 
-                    LectureService.getVideo(currentLecturesData[idx].videoId, this.#db).then(videoName => {
-                        currentLecturesData[idx].videoUrl = "./game/video/" + videoName;
-                        socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
-                        socket.broadcast.emit('hideAvatar', ppantID);
-                    })
+                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(currentLecturesData[idx].videoId, 
+                        this.#blob, new Date(currentLecturesData[idx].startingTime), Math.floor(currentLecturesData[idx].duration / 60));
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
+                    socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', currentLecturesData[idx].id);
                 }
@@ -638,6 +674,8 @@ module.exports = class ServerController {
             socket.on('leaveLecture', (participantId, lectureId, lectureEnded) => {
                 var schedule = this.#conference.getSchedule();
                 var lecture = schedule.getLecture(lectureId);
+                var participant = this.#ppants.get(participantId);
+                participant.setIsVisible(true);
                 lecture.leave(participantId);
                 console.log(participantId + " leaves " + lectureId)
                 socket.leave(lectureId);
@@ -697,7 +735,8 @@ module.exports = class ServerController {
                             remarks: lecture.getRemarks(),
                             oratorName: lecture.getOratorName(),
                             startingTime: lecture.getStartingTime(),
-                            maxParticipants: lecture.getMaxParticipants()
+                            maxParticipants: lecture.getMaxParticipants(),
+                            duration: lecture.getDuration()
                         }
                     )
                 })
@@ -736,8 +775,9 @@ module.exports = class ServerController {
             socket.on('getAchievements', (ppantID) => {
 
                 var achData = [];
+                var ppant = this.#ppants.get(ppantID);
 
-                this.#ppants.get(ppantID).getAchievements().forEach(ach => {
+                ppant.getAchievements().forEach(ach => {
                     achData.push(
                         {
                             currentLevel: ach.getCurrentLevel(),
@@ -745,7 +785,9 @@ module.exports = class ServerController {
                             color: ach.getColor(),
                             icon: ach.getIcon(),
                             title: ach.getTitle(),
-                            description: ach.getDescription()
+                            description: ach.getDescription(),
+                            currentCount: ppant.getTaskTypeMappingCount(ach.getTaskType()),
+                            nextTarget: ach.getNextCount()
                         }
                     )
                 });
@@ -1786,7 +1828,7 @@ module.exports = class ServerController {
                 var messageBody = [];
                 var msg = room.getRoom().getMessages();
                 for (var i = 0; i < msg.length; i++) {
-                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] (senderId: " + msg[i].senderID +
+                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
                         ") has messageId: " + msg[i].messageID);
                 }
                 this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
@@ -1803,7 +1845,7 @@ module.exports = class ServerController {
                 "seperated from the next by a whitespace-character, and removes all of them from " +
                 "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
                 "not yet possible to unban a banned user!",
-                "\\rmmsg <list of msgIDs  -- Takes a list of messageIDs, each one separated from the next " +
+                "\\rmmsg <list of msgIDs>  -- Takes a list of messageIDs, each one separated from the next " +
                 "one by a whitespace character, and removes the corresponding messages - " +
                 "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
                 "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2036,7 +2078,7 @@ module.exports = class ServerController {
                     "seperated from the next by a whitespace-character, and removes all of them from " +
                     "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
                     "not yet possible to revert this!",
-                    "\\rmmsg <list of msgIDs  --  Takes a list of messageIDs, each one seperated from the " +
+                    "\\rmmsg <list of msgIDs>  --  Takes a list of messageIDs, each one seperated from the " +
                     "next one by a whitespace character, and removes the corresponding messages - " +
                     "if they exist - from the lecture chat. Will also send a warning to " +
                     "the senders of the messages, reminding them to follow chat etiquette.",
@@ -2060,7 +2102,7 @@ module.exports = class ServerController {
                 var messageHeader = "List of messages posted in " + lecture.getTitle();
                 var messageBody = [];
                 for (var i = 0; i < lectureChat.length; i++) {
-                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] (senderId: " + lectureChat[i].senderID +
+                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] SenderUsername: " + lectureChat[i].username + " (senderId :" +  lectureChat[i].senderID +
                         ") has messageId: " + lectureChat[i].messageID);
                 }
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);

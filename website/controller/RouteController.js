@@ -12,8 +12,9 @@ module.exports = class RouteController {
     #app;
     #io;
     #db;
+    #blob;
 
-    constructor(app, io, db) {
+    constructor(app, io, db, blob) {
         if (!!RouteController.instance) {
             return RouteController.instance;
         }
@@ -23,6 +24,7 @@ module.exports = class RouteController {
         this.#app = app;
         this.#io = io;
         this.#db = db;
+        this.#blob = blob;
         this.init();
     }
 
@@ -111,7 +113,7 @@ module.exports = class RouteController {
                 }
                 else {
                     response.render('upload', {uploading:true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname})
-                    return SlotService.storeVideo(video, this.#db).then(videoData => {
+                    return SlotService.storeVideo(video, this.#blob).then(videoData => {
                         if (videoData) {
                             return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                 response.end();
@@ -140,44 +142,8 @@ module.exports = class RouteController {
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
                 const ServerController = require('../../game/app/server/controller/ServerController');
-                new ServerController(this.#io, this.#db);
+                new ServerController(this.#io, this.#db, this.#blob);
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
-            } else {
-                response.redirect('/');
-            }
-        })
-
-        this.#app.get('/game/video/:videoName', (request, response) => {
-            if (request.session.loggedin === true) {
-                var videoPath = path.join(__dirname + '../../../config/download/' + request.params.videoName);
-                const stat = fs.statSync(videoPath);
-                const fileSize = stat.size;
-                const range = request.headers.range;
-
-                if (range) {
-                    const parts = range.replace(/bytes=/, "").split("-")
-                    const start = parseInt(parts[0], 10)
-                    const end = parts[1]
-                        ? parseInt(parts[1], 10)
-                        : fileSize - 1
-                    const chunksize = (end - start) + 1
-                    const file = fs.createReadStream(videoPath, { start, end })
-                    const head = {
-                        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-                        'Accept-Ranges': 'bytes',
-                        'Content-Length': chunksize,
-                        'Content-Type': 'video/mp4',
-                    }
-                    response.writeHead(206, head);
-                    file.pipe(response);
-                } else {
-                    const head = {
-                        'Content-Length': fileSize,
-                        'Content-Type': 'video/mp4',
-                    }
-                    response.writeHead(200, head)
-                    fs.createReadStream(videoPath).pipe(response)
-                }
             } else {
                 response.redirect('/');
             }

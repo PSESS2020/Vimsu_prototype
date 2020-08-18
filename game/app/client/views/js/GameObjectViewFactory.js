@@ -18,21 +18,36 @@ class GameObjectViewFactory {
         this.#defaultOffset = { x: 0, y: 0 };
     }
 
-    getClickMap(image) {
+    getClickMap(image, pos, offset) {
         var clickMap = [];
-        ctx_avatar.drawImage(image, 0, 0);
-            var imageData = ctx_avatar.getImageData(0, 0, image.width, image.height).data;
+        let screenPosXY = this.#gameEngine.calculateScreenPosXY(pos.getCordX(), pos.getCordY());
+        let screenPosWithOffsetX = screenPosXY.x + offset.x;
+        let screenPosWithOffsetY = screenPosXY.y + offset.y;
+
+        ctx_avatar.drawImage(image, screenPosWithOffsetX, screenPosWithOffsetY);
+            var imageData = ctx_avatar.getImageData(screenPosWithOffsetX, screenPosWithOffsetY, image.width, image.height).data;
         
             for ( var i = 0, n = imageData.length; i < n; i += 4) {
                 var row = Math.floor((i / 4) / image.width);
                 var col = (i / 4) - (row * image.width);
 
-                if(!this.clickMap[row]) this.clickMap[row] = [];
+                if(!clickMap[row]) clickMap[row] = [];
                 
-                this.clickMap[row][col] = imageData[i+3] === 0 ? 0 : 1;
+                clickMap[row][col] = imageData[i+3] === 0 ? 0 : 1;
             }
         return clickMap;
     }
+
+    /* ##################################################################### */
+    /* ###################### GAMEOBJECT CREATION INFORMATIONS ############# */
+    /* ##################################################################### */
+
+    /**
+     * Im order to make an Object nut tile clickable but pixel clickable a new object type and class needs to be added to 
+     * one of the creation methods and also an if statement to declare on what condition this 
+     * new object should be created. Also a click map should be generated with the method getClickMap()
+     * and passed to the new clickable Object.
+     */
 
     /*
     * calculates the position of a game map element and creates it.
@@ -54,15 +69,18 @@ class GameObjectViewFactory {
                 else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
-
+            case GameObjectType.LEFTSCHEDULE:
             case GameObjectType.LEFTWALL:
                 gameMapElementImage = this.#assetImages[objectName];
 
                 var wallOffset = {x: 0, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1};
                 
-                if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
-                else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
+                if (gameMapElementImage !== undefined) {
+                    if (gameObjectType === GameObjectType.LEFTSCHEDULE)
+                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset));
+                    else
+                        gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
+                } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
@@ -124,28 +142,6 @@ class GameObjectViewFactory {
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.LEFTWALL:
-                gameObjectImage = this.#assetImages[objectName];
-
-                var wallOffset = {x: 0, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
-                
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, wallOffset, objectName);
-                else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.RIGHTWALL:
-                gameObjectImage = this.#assetImages[objectName];
-
-                var wallOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameObjectImage.width + 1};
-                
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, wallOffset, objectName);
-                else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 

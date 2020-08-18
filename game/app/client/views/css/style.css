@@ -310,6 +310,10 @@ body::-webkit-scrollbar {
   color: antiquewhite;
 }
 
+#lectureChatMessages::-webkit-scrollbar {
+  display: none;
+}
+
 .globalChatWindow {
   background-color:rgba(34, 43, 46, 0.8) !important;
   color: antiquewhite;

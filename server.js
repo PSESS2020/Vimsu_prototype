@@ -57,12 +57,16 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
 
+require('dotenv').config();
 const db = require('./config/db');
+const blob = require('./config/blob')
 const database = new db();
+const blobClient = new blob();
+blobClient.connectBlob();
 
 database.connectDB().then(result => {
     const RouteController = require('./website/controller/RouteController');
-    new RouteController(app, io, database);
+    new RouteController(app, io, database, blobClient);
 })
 
 

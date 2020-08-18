@@ -1,4 +1,3 @@
-
 const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
@@ -40,19 +39,19 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         for (var i = 0; i < this.#room.getLength(); i++) {
 
             for (var j = 0; j < this.#room.getWidth(); j++) {
-                listOfMapElements.push(objService.createDefaultTile(Settings.RECEPTION_ID, i, j, false));
+                listOfMapElements.push(objService.createDefaultTile(Settings.RECEPTION_ID, i, j, false, false));
             }
 
         }
 
         //Get left walls
         for (var i = 0; i < this.#room.getLength(); i++) {
-            listOfMapElements.push(objService.createDefaultLeftWall(Settings.RECEPTION_ID, 1, 1, i, -1, false));
+            listOfMapElements.push(objService.createDefaultLeftWall(Settings.RECEPTION_ID, 1, 1, i, -1, false, false));
         }
 
         //Get right walls
         for (var j = 0; j < this.#room.getWidth(); j++) {
-            listOfMapElements.push(objService.createDefaultRightWall(Settings.RECEPTION_ID, 1, 1, this.#room.getLength(), j, false));
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.RECEPTION_ID, 1, 1, this.#room.getLength(), j, false, false));
         }
 
 
@@ -60,23 +59,23 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let listOfGameObjects = [];
 
         for (var i = 3; i <= 9; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 10, i, true));
+            listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 10, i, true, false));
         }
-        listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 11, 9, true),
-            objService.createTable(Settings.RECEPTION_ID, 12, 9, true),
-            objService.createTable(Settings.RECEPTION_ID, 11, 3, true),
-            objService.createTable(Settings.RECEPTION_ID, 12, 3, true));
+        listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 11, 9, true, false),
+            objService.createTable(Settings.RECEPTION_ID, 12, 9, true, false),
+            objService.createTable(Settings.RECEPTION_ID, 11, 3, true, false),
+            objService.createTable(Settings.RECEPTION_ID, 12, 3, true, false));
 
-        let conferenceLogos = objService.createLeftConferenceLogo(Settings.RECEPTION_ID, 1, 5, 5, -1, false);
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.RECEPTION_ID, 1, 5, 5, -1, false, false);
         conferenceLogos.forEach(conferenceLogo => {
-            listOfGameObjects.push(conferenceLogo);
+            listOfMapElements.push(conferenceLogo);
         });
 
-        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, 0, true));
-        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, this.#room.getWidth() -1, true));
+        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, 0, true, false));
+        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, this.#room.getWidth() -1, true, false));
 
         for (i = 5; i < this.#room.getWidth() - 5; i++) {
-            listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false))
+            listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false, false))
         }
 
         //Get all npcs from service
@@ -90,7 +89,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT));
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID, 2, -2, false));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

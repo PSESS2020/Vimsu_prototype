@@ -86,33 +86,24 @@ module.exports = */class MapView extends Views {
 
                 var mapObject = this.#map[row][col];
                 if (mapObject !== null) {
-                    var tileType;
-                    var tile;
-                    if (mapObject instanceof DoorClient) {
-                        tileType = mapObject.getTypeOfDoor();
-                        tile = this.#gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
+                   
+                    if (mapObject instanceof Array) {
+                        mapObject.forEach(object => {
+                            this.createMapElementView(object, position);
+                        });
                     } else {
-                        tileType = mapObject.getGameObjectType();
-                        tile = this.#gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName());
+                        this.createMapElementView(mapObject, position);
                     }
-
-                    if (tile != null) {
-                        this.#tiles.push(tile);
-
-                        if (tile instanceof DoorView)
-                            this.addToClickableTiles(tile);
-
-                    }
-
                 }
 
-                if (this.#objectMap[row][col] !== null) {
-                    var objectType = this.#objectMap[row][col].getGameObjectType();
-                    var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, this.#objectMap[row][col].getName());
-
-                    if (object != null) {
-                        this.#gameObjects.push(object);
+                var gameObject = this.#objectMap[row][col];
+                if (gameObject !== null) {
+                    if (gameObject instanceof Array) {
+                        gameObject.forEach(object => {
+                            this.createObjectView(object, position);
+                        });
                     }
+                    this.createObjectView(gameObject, position);
                 }
 
             };
@@ -125,44 +116,128 @@ module.exports = */class MapView extends Views {
 
     }
 
+    //HELPER FUNCTION: creates map elements that build the map terrain.
+    createMapElementView(mapObject, position) {
+        var tileType;
+        var tile;
+
+        if (mapObject instanceof DoorClient) {
+            tileType = mapObject.getTypeOfDoor();
+            tile = this.#gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
+        } else {
+            tileType = mapObject.getGameObjectType();
+            tile = this.#gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName());
+        }
+
+        if (tile != null) {
+            this.#tiles.push(tile);
+
+            if (mapObject instanceof DoorClient || mapObject.isClickable())
+                this.addToClickableTiles(tile);
+
+        }
+    }
+
+    //HELPER FUNCTION: creates game objects that are shown on the screen.
+    createObjectView(gameObject, position) {
+        var objectType = gameObject.getGameObjectType();
+        var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName());
+
+        if (object != null) {
+            this.#gameObjects.push(object);
+        }
+    }
+
     //adds a tile to the list of clickable tiles of the map.
     addToClickableTiles(tile) {
 
         this.#clickableTiles.push(tile);
     }
 
+    //finds the clicked tile in the list of clickable tiles
     findClickedTile(selectedTileCords) {
 
         let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
+        if (clickedTile instanceof Array) {
+            clickedTile.forEach(tile => {
+                this.findAndClickTile(tile);
+            });
+        } else 
+            this.findAndClickTile(clickedTile);
+    }
 
-        if (clickedTile !== null && clickedTile.isClickable()) {
+    //HELPER FUNCTION: determines if the clicked tile is clickable and clicks it it is the case.
+    findAndClickTile(clickedTile) {
+        if (clickedTile !== null && (clickedTile instanceof DoorClient || clickedTile.isClickable())) {
             this.#clickableTiles.forEach(viewObject => {
+                let clickedTileName = clickedTile.getName();
+                let viewObjectName = viewObject.getName();
 
-                if (clickedTile instanceof DoorClient && clickedTile.getName() === viewObject.getName())
+                if (clickedTile instanceof DoorClient && clickedTileName === viewObjectName)
                     viewObject.onclick(clickedTile.getTargetRoomId());
-                else if (clickedTile instanceof GameObjectClient && clickedTile.getName() === viewObject.getName())
+                else if (clickedTile instanceof GameObjectClient && clickedTileName === viewObjectName)
                     viewObject.onclick();
             });
+        }
+    }
+
+    //finds the clicked element in the list of clickable tiles
+    findClickedElementOutsideMap(canvasMousePos) {
+        console.log("canvas mousepos " +canvasMousePos.x + " " + canvasMousePos.y)
+        this.#clickableTiles.forEach(elem => {
+            let screenPos = elem.getScreenPosition();
+            let screenPosOffset = elem.getScreenPositionOffset();
+            let image = elem.getObjectImage();
+            //console.log("screen pos" + screenPos.getCordX() + " " + screenPos.getCordY())
+            //console.log("image size" + image.width + " " + image.height)
+            //determines if mouse position on canvas is inside the asset image.
+            if (!(elem instanceof DoorView) && canvasMousePos.x > screenPos.getCordX() + screenPosOffset.x 
+                                            && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width 
+                                            && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
+                                            && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height) {
+                //console.log("hi" + elem.getName())
+                //let withoffsetx = screenPos.getCordX() + screenPosOffset.x;
+                //let withoffsety = screenPos.getCordY() + screenPosOffset.y
+                //console.log("screenposBefore: " + withoffsetx + " " + withoffsety)
+
+                   elem.onclick(canvasMousePos);
+            }
+        });
+    }
+
+    //Checks if the mouse cursor is in bounds of the game map.
+    isCursorOnPLayGround(cordX, cordY) {
+        if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
+            let mapObject = this.#map[cordX][cordY];
+            let result = true;
+
+           //Room walls
+           if (mapObject instanceof Array) {
+
+                for(let i = 0, n = mapObject.length; i < n; i++) {
+
+                    if (mapObject[i] === null || mapObject[i].getGameObjectType() === GameObjectType.LEFTWALL ||
+                        mapObject[i].getGameObjectType() === GameObjectType.RIGHTWALL || mapObject[i].getGameObjectType() === GameObjectType.BLANK) {
+                        result = false;
+                        break;
+                    }
+                
+                };
+            } else if (mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
+                       mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
+            } else
+                result = false;
+
+            return result;
         }
 
     }
 
-    isCursorOnMap(cordX, cordY) {
-        if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
-            let mapObject = this.#map[cordX][cordY];
-
-            if (mapObject instanceof DoorClient) {
-                return true;
-
-                //Room walls
-            } else if (mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
-                mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
-                return true;
-            } else
-                return false;
-
-        }
-
+    isCursorOutsidePlayGround(cordX, cordY) {
+        if ( ( cordY >= -1 && cordX <= this.#xNumTiles && ( (cordY <= 2 &&  cordX >= 0) || (cordY < this.#yNumTiles && cordX >= (this.#xNumTiles - 3)) ) ) ) 
+            return true;
+        else
+            return false;
     }
 
     updateSelectedTile(selectedTileCords) {

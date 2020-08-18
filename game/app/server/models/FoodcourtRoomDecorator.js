@@ -38,40 +38,40 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         for (var i = 0; i < this.#room.getLength(); i++) {
 
             for (var j = 0; j < this.#room.getWidth(); j++) {
-                listOfMapElements.push(objService.createDefaultTile(Settings.FOODCOURT_ID, i, j, false));
+                listOfMapElements.push(objService.createDefaultTile(Settings.FOODCOURT_ID, i, j, false, false));
             }
 
         }
 
         //Get left walls
         for (var i = 0; i < this.#room.getLength(); i++) {
-            listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOODCOURT_ID, 1, 1, i, -1, false));
+            listOfMapElements.push(objService.createDefaultLeftWall(Settings.FOODCOURT_ID, 1, 1, i, -1, false, false));
         }
 
         //Get right walls
         for (var j = 0; j < this.#room.getWidth(); j++) {
-            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength(), j, false));
+            listOfMapElements.push(objService.createDefaultRightWall(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength(), j, false, false));
         }
 
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
         for (var i = 2; i <= 10; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 10, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 8, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 6, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 4, i, true),
-                objService.createTable(Settings.FOODCOURT_ID, 2, i, true));
+            listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 10, i, true, false),
+                objService.createTable(Settings.FOODCOURT_ID, 8, i, true, false),
+                objService.createTable(Settings.FOODCOURT_ID, 6, i, true, false),
+                objService.createTable(Settings.FOODCOURT_ID, 4, i, true, false),
+                objService.createTable(Settings.FOODCOURT_ID, 2, i, true, false));
         }
 
-        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false);
+        let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false, false);
         conferenceLogos.forEach(conferenceLogo => {
-            listOfGameObjects.push(conferenceLogo);
+            listOfMapElements.push(conferenceLogo);
         });
 
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 5; j += 5) {
-                listOfGameObjects.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false))
+                listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
             }
         }
 
@@ -86,7 +86,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let listOfDoors = [];
 
         listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT));
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false));
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

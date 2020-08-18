@@ -241,7 +241,7 @@ class ClientController {
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
             let participantId = this.#ownParticipant.getId();
-            console.log("request mov start " + this.#ownParticipant.getId());
+            //console.log("request mov start " + this.#ownParticipant.getId());
             this.socket.emit('requestMovementStart', participantId, direction, currPosX, currPosY);
         }
     }
@@ -335,14 +335,14 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isSolid, false))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isSolid, mapElement.isClickable))
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isSolid, false));
+                new PositionClient(element.cordX, element.cordY), element.isSolid, element.isClickable));
         });
 
         //transform NPCs to NPCClients
@@ -355,7 +355,7 @@ class ClientController {
         //transform Doors to DoorClients
         var listOfDoors = [];
         doorData.forEach(door => {
-            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), true, door.targetRoomId));
+            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), door.targetRoomId));
         });
 
         //First room? 
@@ -427,7 +427,7 @@ class ClientController {
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         console.log("init info id" + initInfo.id);
-        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir);
+        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.visible);
         console.log(" get id " + participant.getId());
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method

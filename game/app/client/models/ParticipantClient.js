@@ -10,6 +10,7 @@ class ParticipantClient {
     #position;
     #direction;
     #username;
+    #isVisble;
 
     /**
      * Erstellt ParticipantClient Instanz
@@ -21,7 +22,7 @@ class ParticipantClient {
      * @param {PositionClient} position
      * @param {Direction} direction
      */
-    constructor(id, username, position, direction) {
+    constructor(id, username, position, direction, isVisble) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
@@ -31,6 +32,7 @@ class ParticipantClient {
         this.#position = position;
         this.#direction = direction;
         this.#username = username;
+        this.#isVisble = isVisble;
     }
 
     getId() {
@@ -59,6 +61,13 @@ class ParticipantClient {
         return this.#username;
     }
 
+    getIsVisible() {
+        return this.#isVisble;
+    }
+
+    setisVisible(isVisible) {
+        this.#isVisble = isVisible;
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

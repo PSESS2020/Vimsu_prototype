@@ -4,11 +4,11 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 const Slot = require('../models/Slot')
 
 module.exports = class SlotService {
-    static storeVideo(video, vimsudb) {
+    static storeVideo(video, blob) {
         var dir = __dirname + "/upload/";
 
         return FileSystem.moveFile(video, dir).then(res => {
-            return vimsudb.uploadFile("lectures", video.name, dir).then(videoData => {
+            return blob.uploadFile("lectures", video.name, dir).then(videoData => {
                 FileSystem.deleteDirectory(dir);
                 if (videoData) {
                     return videoData;
@@ -51,36 +51,9 @@ module.exports = class SlotService {
 
     }
 
-    static deleteAllVideos(vimsudb) {
-
-        return vimsudb.deleteAllFromCollection("lectures.chunks").then(res => {
-            return vimsudb.deleteAllFromCollection("lectures.files").then(res => {
-                console.log("all videos deleted");
-
-            }).catch(err => {
-                console.error(err)
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    }
-
-    static deleteVideo(videoId, vimsudb) {
+    static deleteVideo(videoId, blob) {
         TypeChecker.isString(videoId);
-
-
-        return vimsudb.deleteOneFromCollection("lectures.chunks", { videoId: videoId }).then(res => {
-            return vimsudb.deleteOneFromCollection("lectures.files", { _id: new ObjectId(videoId) }).then(res => {
-                console.log("video with videoId " + videoId + " deleted");
-
-            }).catch(err => {
-                console.error(err)
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
+        return blob.deleteFile("lectures", videoId);
     }
 
     static deleteAllSlots(vimsudb) {

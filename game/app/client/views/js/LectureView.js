@@ -52,7 +52,6 @@ class LectureView extends WindowView {
         this.#hasToken = hasToken;
         this.#lectureId = lecture.id;
         // hide the overview of current lectures
-        $('#waitforlectureload').hide();
         $('#currentLectures').hide();
 
         /*

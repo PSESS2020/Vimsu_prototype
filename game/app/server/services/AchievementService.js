@@ -26,14 +26,12 @@ module.exports = class AchievementService {
     }
 
     initAllAchievements() {
-        var id = 0;
-
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 15 },
             { count: 10, color: '#C9B037', points: 15 }
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(2, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend other participants to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(2, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend others to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 100 },
             { count: 10, color: '#C9B037', points: 100 }
         ]);
@@ -46,7 +44,7 @@ module.exports = class AchievementService {
             { count: 1, color: '#C9B037', points: 10 },
         ]);
 
-        this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(5, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Interact with other participants to gain this achievement.", [
+        this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(5, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Start a private conversation with others to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 50 },
             { count: 10, color: '#C9B037', points: 50 }
         ]);

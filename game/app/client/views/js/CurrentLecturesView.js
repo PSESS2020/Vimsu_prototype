@@ -12,13 +12,15 @@ class CurrentLecturesView extends WindowView {
             $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
         }
         lectures.forEach(lecture => {
-            // this is really messy i know, should move it somewhere else
+            var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
+
             $('#currentLecturesContainer').append(`
                 <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-5 pt-3">
                     <h5 style="display:inline">${lecture.title} </h5>
-                    <div class="small">${lecture.oratorName + " || " + lecture.maxParticipants + " seats"}</div>
                     <div>${lecture.remarks}</div>
-                    <span id="${"waitforlectureload" + lecture.id} style="color: antiquewhite; display:none" class="align-self-end mt-1 p-2"><i class="fas fa-spinner fa-spin navbarIcons"></i> Please wait...</span>
+                    <div class="small">${"By " + lecture.oratorName}</div>
+                    <br>
+                    <div class="small">${"Start: " + startingTime + " || Duration: " + Math.floor(lecture.duration / 60) + " minutes" + " || Seat: " + lecture.maxParticipants + " participants"}</div>
                     <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full.</span>
                     <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto">Show</button>
                 </div>
@@ -26,7 +28,6 @@ class CurrentLecturesView extends WindowView {
                 <script> 
                     $('#show' + '${lecture.id}').on('click', function (event) {
                         $('#show' + '${lecture.id}').hide();
-                        $('#waitforlectureload' + '${lecture.id}').show(); 
                         new EventManager().handleLectureClicked("${lecture.id}");
                     })
                 </script>
@@ -37,7 +38,6 @@ class CurrentLecturesView extends WindowView {
     }
 
     drawLectureFull(lectureId) {
-        $('#waitforlectureload').hide();
         $('#show' + lectureId).hide();
         $('#full' + lectureId).show()
     }
