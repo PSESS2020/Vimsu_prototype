@@ -11,6 +11,10 @@ module.exports = Object.freeze({
         string: "log",
         method: "logMessages"
     },
+    LOGBYPLAYER: {
+        string: "showallby",
+        method: "showAllBy"
+    },
     REMOVEPLAYER: {
         string: "rmuser",
         method: "removeUser"
@@ -21,7 +25,7 @@ module.exports = Object.freeze({
     },
     REMOVEMESSAGESBYPLAYER: { 
         string: "rmallby",
-        method: "removeMessage"
+        method: "removeAllBy"
     },
     MUTE: {
         string: "mute",

@@ -1792,17 +1792,17 @@ module.exports = class ServerController {
         return id;
     };
     
-    emitEventIn(idOfSocketRoomToEmitIn, eventName, eventarguments) {
-        if(eventArguments != undefined) {
-            this.#io.in(idOfSocketRoomToEmitTo).emit(eventName, eventArguments);
+    emitEventIn(idOfSocketRoomToEmitIn, eventName, eventArguments) {
+        if(eventArguments) {
+            this.#io.in(idOfSocketRoomToEmitIn).emit(eventName, eventArguments);
         } else {
-            this.#io.in(idOfSocketRoomToEmitTo).emit(eventName);
+            this.#io.in(idOfSocketRoomToEmitIn).emit(eventName);
         }
     };
     
     // probably duplicate code that is not actually needed due to above method
     emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
-        if(eventArguments != undefined) {
+        if(eventArguments) {
             if (this.socketIsConnected(idOfSocketToEmitTo)) {
                 this.#io.to(idOfSocketToEmitTo).emit(eventName, eventArguments);
             };
@@ -1817,6 +1817,10 @@ module.exports = class ServerController {
         if (this.socketIsConnected(socketid)) {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
+    };
+    
+    isBanned(accountId) {
+        return this.#banList.includes(accountId);
     };
     
     ban(accountId) {
@@ -1838,7 +1842,7 @@ module.exports = class ServerController {
         var mainNamespace = this.#io.of('/');
         var socketKeys = Object.keys(mainNamespace.connected);
         for (var i = 0; i < socketKeys.length; i++) {
-            if (socketKeys[i] == socketId) {
+            if (socketKeys[i] == socketid) {
                 return true;
             }
         }
