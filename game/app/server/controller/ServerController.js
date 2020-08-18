@@ -633,7 +633,7 @@ module.exports = class ServerController {
                     // timestamping the message - (E)
                     // replace with Message-object?
                     var currentDate = new Date();
-                    var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, messageText: text }
+                    var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, text: text }
                     lectureChat.appendMessage(message);
                     console.log("<" + currentDate + "> " + ppantID + " says " + text + " in lecture.");
 
