@@ -1818,49 +1818,6 @@ module.exports = class ServerController {
                     // include moderators
                 }
                 break;
-            case Commands.LOGMESSAGES:
-                /* Display msgIDs and the senderIDs of the messages to mod.
-                 * This can be used to identify the senderIDs of messages send into the allchat,
-                 * so that the moderator can remove the right user from a conference.
-                 * - (E) */
-                var room = this.#rooms[moderator.getPosition().getRoomId() - 1];
-                var messageHeader = "List of messages posted in " + room.getRoom().getTypeOfRoom();
-                var messageBody = [];
-                var msg = room.getRoom().getMessages();
-                for (var i = 0; i < msg.length; i++) {
-                    messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
-                        ") has messageId: " + msg[i].messageID);
-                }
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
-                break;
-            case Commands.HELP:
-                // TODO: maybe move all these strings into a util-file?
-                var messageHeader = "List of Commands."
-                var messageBody = ["\\global <message>  --  Post a message into the global chat. " +
-                    "It will display in every participants game-view as a pop-up.",
-                    "\\help  --  This command. Displays a list of all commands and how to use them.",
-                "\\log --  Will show a log of all messages send into the allchat of the room you're " +
-                "currently in, including the messageID and senderID of each message.",
-                "\\rmuser <list of participantIDs>  -- Takes a list of participantIDs, each one " +
-                "seperated from the next by a whitespace-character, and removes all of them from " +
-                "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
-                "not yet possible to unban a banned user!",
-                "\\rmmsg <list of msgIDs>  -- Takes a list of messageIDs, each one separated from the next " +
-                "one by a whitespace character, and removes the corresponding messages - " +
-                "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
-                "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
-                "seperated from the next by a whitespace-character, and removes all messages posted " +
-                "by them into the allchat of the room you're currently in. Will also send a warning " +
-                "to these participants, reminding them to follow chat-etiquette.",
-                "\\mute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
-                "seperated from the next by a whitespace-character, and mutes them, meaning they " +
-                "will no longer be able to post messages into the allchat.",
-                "\\unmute <list of participantIDs>  --  Takes a list of participantIDs, each one " +
-                "seperated from the next by a whitespace-character, and unmutes them, meaning they " +
-                "will be able to post messages into the allchat again if they were previously muted."];
-                this.#io.to(this.getSocketId(moderator.getId())).emit('New global message', messageHeader, messageBody);
-                break;
             case Commands.REMOVEPLAYER:
                 // removes player(s) from conference
                 // Maybe instead of being able to remove several players be able
@@ -2069,44 +2026,6 @@ module.exports = class ServerController {
                     this.#io.to(socketid).emit('update token', true);
                 }
                 break;
-            case Commands.HELP:
-                var messageHeader = "List of Commands."
-                var messageBody = ["\\help  --  This command. Displays a list of all commands and how to use them.",
-                    "\\log --  Will show a log of all messages send into the lecture chat" +
-                    ", including the messageID and senderID of each message.",
-                    "\\rmuser <list of participantIDs>  --  Takes a list of participantIDs, each one " +
-                    "seperated from the next by a whitespace-character, and removes all of them from " +
-                    "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
-                    "not yet possible to revert this!",
-                    "\\rmmsg <list of msgIDs>  --  Takes a list of messageIDs, each one seperated from the " +
-                    "next one by a whitespace character, and removes the corresponding messages - " +
-                    "if they exist - from the lecture chat. Will also send a warning to " +
-                    "the senders of the messages, reminding them to follow chat etiquette.",
-                    "\\rmallby <list of participantIDs>  --  Takes a list of participantIDs, each one " +
-                    "seperated from the next by a whitespace-character, and removes all messages posted " +
-                    "by them into the lecture chat. Will also send a warning " +
-                    "to these participants, reminding them to follow chat-etiquette.",
-                    "\\revoke <list of participantIDs> --  Takes a list of participantIDs, each one " +
-                    "seperated from the next by a whitespace-character, and revokes their lecture tokens " +
-                    "(if they own one). They will no longer be able to post messages into the lecture chat.",
-                    "\\grant <list of participantIDs> --  Takes a list of participantIDs, each one " +
-                    "seperated from the next by a whitespace-character, and grants them lecture tokens " +
-                    "(if they are currently listening to the lecture and do not own one). They will " +
-                    "be able to post messages into the lecture chat.",
-                    "\\close -- Closes the lecture and makes it inaccessible. Every current participant " +
-                    "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
-                    "WARNING: this command can NOT be reversed."];
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
-                break;
-            case Commands.LOGMESSAGES:
-                var messageHeader = "List of messages posted in " + lecture.getTitle();
-                var messageBody = [];
-                for (var i = 0; i < lectureChat.length; i++) {
-                    messageBody.splice(0, 0, "[" + lectureChat[i].timestamp + "] SenderUsername: " + lectureChat[i].username + " (senderId :" +  lectureChat[i].senderID +
-                        ") has messageId: " + lectureChat[i].messageID);
-                }
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
-                break;
             case Commands.CLOSE:
                 var ppantsInLecture = lecture.getActiveParticipants();
                 lecture.hide();
@@ -2122,8 +2041,8 @@ module.exports = class ServerController {
                     this.sendClosed(socketClient.id);
                 });
             default:
-                var messageHeader = "Unrecognized command."
-                var messageText = "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+                var messageHeader = 
+                var messageText = 
                 this.#io.to(socket.id).emit('New global message', messageHeader, messageText);
                 break;
         }
@@ -2176,64 +2095,12 @@ module.exports = class ServerController {
         return id;
     };
     
+    // replaces all the singular "sendXY"-methods
     sendNotification(socketid, message) {
         //TypeChecker.isEnumOf(message, Messages);
-        if (socketid != undefined) {
+        if (this.socketIsConnected(socketid)) {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
-    };
-
-    /* Sends a warning to the user who is connected to the socket with the passed Id.
-     * If the id is undefined, this will do nothing.
-     * - (E) */
-    // TODO: merge all these into a single function
-    sendWarning(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.WARNING.header, Messages.WARNING.body);
-        }
-    };
-
-    sendRemoval(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.REMOVAL.header, Messages.REMOVAL.body);
-        }
-    };
-
-    sendRevoke(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.REVOKE.header, Messages.REVOKE.body);
-        }
-    };
-
-    sendGrant(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.GRANT.header, Messages.GRANT.body);
-        }
-    };
-
-    sendMute(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.MUTE.header, Messages.MUTE.body);
-        }
-    };
-
-    sendUnmute(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.UNMUTE.header, Messages.UNMUTE.body);
-        }
-    };
-
-    sendClosed(socketid) {
-        if (socketid != undefined) {
-            this.#io.to(socketid).emit("New global message", Messages.CLOSED.header, Messages.CLOSED.body);
-        }
-    };
-
-    isBanned(accountId) {
-        if (this.#banList.includes(accountId)) {
-            return true;
-        };
-        return false;
     };
 
     /* Can't actually be used yet, as it requires accountIds as arguments,
@@ -2243,6 +2110,17 @@ module.exports = class ServerController {
         if (this.#banList.includes(accountId)) {
             this.#banList.splice(this.#banList.indexOf(accountId), 1);
         };
+    };
+    
+    socketIsConnected(socketid) {
+        var mainNamespace = this.#io.of('/');
+        var socketKeys = Object.keys(mainNamespace.connected);
+        for (var i = 0; i < socketKeys.length; i++) {
+            if (socketKeys[i] == socketId) {
+                return true;
+            }
+        }
+        return false;
     };
 
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client

@@ -186,6 +186,7 @@ class ClientController {
         this.socket.on('update token', this.handleFromServerUpdateToken.bind(this));
         this.socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
         this.socket.on('New global message', this.handleFromServerNewGlobalMessage.bind(this));
+        this.socket.on('New notification', this.handleFromServerNewNotification.bind(this));
         this.socket.on('New global announcement', this.handleFromServerNewGlobalAnnouncement.bind(this));
         this.socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
