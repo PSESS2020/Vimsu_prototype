@@ -24,14 +24,6 @@ class StatusBar extends Views {
         $('#time').text(now);
     }
 
-    drawFPS() {
-        
-    }
-
-    drawPing() {
-
-    }
-
     drawConnectionStatus() {
         /* draw connection status */
         if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
@@ -56,13 +48,11 @@ class StatusBar extends Views {
 
     draw() {
         this.drawClock();
-        this.drawFPS();
         this.drawConnectionStatus();
 
         var interval = setInterval(() => {
 
             this.drawClock();
-            this.drawFPS();
             this.drawConnectionStatus();
 
         }, 1000);
