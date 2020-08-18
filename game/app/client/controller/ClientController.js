@@ -600,9 +600,7 @@ class ClientController {
         $('#allchatMessages').scrollTop(0);
     }
 
-    handleFromServerNewGlobalMessage(messageText) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
-        var messageHeader = "[" + timestamp + "] ANNOUNCEMENT:";
+    handleFromServerNewGlobalMessage(messageHeader, messageText) {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
     
