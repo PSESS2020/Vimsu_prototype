@@ -307,7 +307,7 @@ module.exports = class ServerController {
                                           ' the tile he is standing on. He will give you a' +
                                           ' short introduction that will help you to learn the basics of using VIMSU.';
 
-                        this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);       
+                        this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);       
                     }
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
@@ -357,9 +357,11 @@ module.exports = class ServerController {
                      *
                      * - (E) */
                     var input = text.substring(1).split(" ");
+                    var username = participant.getBusinessCard().getUsername();
+                    console.log(username);
                     new CommandHandler(this).handleCommand(socket,
                                                         new AllchatContext(this, room),
-                                                        input);
+                                                        input, username);
                 } else { // If the message contains a command, we don't want to be handled like a regular message
 
                     if (this.#muteList.includes(socket.request.session.accountId)) {
@@ -461,7 +463,7 @@ module.exports = class ServerController {
                                          ' the tile he is standing on. He will give you a' +
                                          ' short introduction that will help you to learn the basics of using VIMSU.';
 
-                       this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
+                       this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
                        return;
                 }
 
@@ -1831,6 +1833,10 @@ module.exports = class ServerController {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
     };
+
+    sendGlobalAnnouncement(username, text) {
+        this.#io.emit('New global announcement', username, text);
+    }
     
     isBanned(accountId) {
         return this.#banList.includes(accountId);
