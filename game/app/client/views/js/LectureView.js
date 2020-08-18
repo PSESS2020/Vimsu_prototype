@@ -127,35 +127,11 @@ class LectureView extends WindowView {
                     clearInterval(this.#timerIntervalId);
                     $('#lecturePending').hide();
                     $('#pendingLectureChatMessage').empty();
-                    this.#lectureStatus = LectureStatus.OVER;
+                    this.#lectureStatus = LectureStatus.OVER
+                    this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
                     video.controlsList.remove('nodownload');
                     video.pause();
-                    if (this.#hasToken) {
-                        if ($('#lectureChatInputGroup').is(':empty')) {
-                            $('#lectureChatInputGroup').append(`
-                        <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
-                        <div class="input-group-append">
-                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
-                        </div>
-                        `)
-                        }
-                        $('#tokenIcon').empty();
-                        $('#tokenIcon').append(`
-                        <i class="fa fa-question-circle fa-4x"></i>
-                        `)
-                        $('#tokenLabel').empty();
-                        $('#tokenLabel').append('You obtained a question token!')
-
-                        // the input field is emptied if the user does not have a valid token
-                    } else {
-                        $('#lectureChatInputGroup').empty();
-                        $('#tokenIcon').empty();
-                        $('#tokenIcon').append(`
-                        <i class="fa fa-times-circle fa-4x"></i>
-                        `)
-                        $('#tokenLabel').empty();
-                        $('#tokenLabel').append('You left the lecture for too long. Therefore, you are not able to ask questions in the lecture chat.')
-                    }
+                    
                 }
             }, 1000); // check lecture status every 1s
 
@@ -236,4 +212,32 @@ class LectureView extends WindowView {
 
         }
     }
+    
+    drawToken(hasToken, message) {
+        if (hasToken) {
+            if ($('#lectureChatInputGroup').is(':empty')) {
+                $('#lectureChatInputGroup').append(`
+                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                    <div class="input-group-append">
+                        <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                    </div>
+                `)
+            }
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+                <i class="fa fa-question-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append('You obtained a question token!');
+        // the input field is emptied if the user does not have a valid token
+        } else {
+            $('#lectureChatInputGroup').empty();
+            $('#tokenIcon').empty();
+            $('#tokenIcon').append(`
+                <i class="fa fa-times-circle fa-4x"></i>
+            `)
+            $('#tokenLabel').empty();
+            $('#tokenLabel').append(message)
+        }
+    };
 }
