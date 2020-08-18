@@ -34,7 +34,7 @@ class ClientController {
         this.#gameView = new GameView();
 
         //TODO: add Participant List from Server
-        console.log("fully init cc");
+        //console.log("fully init cc");
         return this;
     }
 
@@ -143,7 +143,11 @@ class ClientController {
             });
             this.socket.on('connect', (socket) => {
                 this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
-                console.log("test connect");
+                //console.log("test connect");
+            });
+
+            this.socket.on('pong', (ms) => {
+                this.#gameView.updatePing(ms);
             });
 
             this.socket.on('disconnect', () => {
@@ -161,7 +165,7 @@ class ClientController {
     }
 
     setUpSocket() {
-        console.log("test set up socket");
+        //console.log("test set up socket");
         this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
         //this.socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
@@ -217,10 +221,11 @@ class ClientController {
     /* #################### EDIT VIEW ##################### */
     /* #################################################### */
 
-    updateGame() {
+    updateGame(timeStamp) {
 
         this.#gameView.update()
         this.#gameView.draw();
+        this.#gameView.updateFPS(timeStamp);
     }
 
     /* #################################################### */

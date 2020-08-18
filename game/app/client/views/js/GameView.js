@@ -90,7 +90,7 @@ class GameView {
             if (this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findClickedTile(selectedTileCords);
+                this.#currentMap.findClickedTileOrObject(selectedTileCords);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -208,6 +208,14 @@ class GameView {
         }
     }
 
+    updatePing(ms) {
+        this.#statusBar.updatePing(ms);
+    }
+
+    updateFPS(timeStamp) {
+        this.#statusBar.updateFPS(timeStamp);
+    }
+
     updateConnectionStatus(status) {
         this.#statusBar.updateConnectionStatus(status);
     }
@@ -241,7 +249,7 @@ class GameView {
         }
 
         if (participant !== this.#ownAvatarView) {
-            console.log("other avatarView init: " + participant.getId());
+            //console.log("other avatarView init: " + participant.getId());
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
@@ -528,7 +536,7 @@ class GameView {
     hideAvatar(participantId) {
         for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
             var avatar = this.#anotherParticipantAvatarViews[i];
-            console.log(avatar.getId());
+            //console.log(avatar.getId());
             if (avatar.getId() === participantId) {
                 avatar.setVisibility(false);
             }

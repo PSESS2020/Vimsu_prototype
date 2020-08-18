@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 5000;
  * - (E) */
 const app = express();
 const httpServer = http.createServer(app);
-const io = socketio(httpServer);
+const io = socketio(httpServer, {pingInterval: 2000, pingTimeout: 10000});
 
 app.set('port', PORT);
 

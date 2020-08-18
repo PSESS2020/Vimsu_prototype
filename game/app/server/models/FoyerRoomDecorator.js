@@ -86,7 +86,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         });
 
-        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getLength() - 1, 0, true, false));
+        //Get Plants
+        listOfGameObjects.push(objService.createPlant(Settings.FOYER_ID, this.#room.getLength() - 1, 0, true, true));
 
         for (var i = this.#room.getLength() - 3; i < this.#room.getLength() - 1; i++) {
             listOfGameObjects.push(objService.createLeftSofa(Settings.FOYER_ID, i, 0, true, false));
