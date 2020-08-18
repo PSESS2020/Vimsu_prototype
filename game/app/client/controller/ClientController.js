@@ -628,16 +628,16 @@ class ClientController {
         this.#gameView.addNewChat(chat, openNow);
     };
 
-    handleFromServerGotNewChat(senderUsername) {
-        this.#gameView.drawNewChat(senderUsername);
+    handleFromServerGotNewChat(senderUsername, chatId) {
+        this.#gameView.drawNewChat(senderUsername, chatId);
     }
 
-    handleFromServerGotNewGroupChat(groupName, creatorUsername) {
-        this.#gameView.drawNewGroupChat(groupName, creatorUsername);
+    handleFromServerGotNewGroupChat(groupName, creatorUsername, chatId) {
+        this.#gameView.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
-    handleFromServerGotNewChatMessage(senderUsername) {
-        this.#gameView.drawNewMessage(senderUsername);
+    handleFromServerGotNewChatMessage(senderUsername, chatId) {
+        this.#gameView.drawNewMessage(senderUsername, chatId);
     }
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.

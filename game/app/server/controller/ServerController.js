@@ -1010,7 +1010,7 @@ module.exports = class ServerController {
                                 let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
                                 socketPartner.join(loadedChat.getId());
                                 this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
-                                this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewChat', creatorUsername);
+                                this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewChat', creatorUsername, chatData.chatId);
                             }
 
                         })
@@ -1131,7 +1131,7 @@ module.exports = class ServerController {
                                                 }
 
                                                 this.#io.to(this.getSocketId(newChatPartner.getId())).emit('newChat', chatData, false);
-                                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername);
+                                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername, chatData.chatId);
                                             }
 
                                             let existingChatPartnerIDList = chat.getParticipantList();
@@ -1247,7 +1247,7 @@ module.exports = class ServerController {
                                         socketPartner.join(loadedChat.getId());
 
                                         this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
-                                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername);
+                                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername, loadedChat.getId());
 
                                     });
                                 }
@@ -1436,7 +1436,7 @@ module.exports = class ServerController {
 
                         // readded this line because it is required to distribute chat messages after joining the 1to1 chat 
                         this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-                        socket.broadcast.to(chatId).emit('gotNewChatMessage', msg.getUsername());
+                        socket.broadcast.to(chatId).emit('gotNewChatMessage', msg.getUsername(), chatId);
                     });
                 }
             });

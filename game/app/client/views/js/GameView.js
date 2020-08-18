@@ -488,12 +488,12 @@ class GameView {
         this.#notifBar.drawNewChat(senderUsername);
     }
 
-    drawNewGroupChat(groupName, creatorUsername) {
-        this.#notifBar.drawNewGroupChat(groupName, creatorUsername);
+    drawNewGroupChat(groupName, creatorUsername, chatId) {
+        this.#notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
-    drawNewMessage(senderUsername) {
-        this.#notifBar.drawNewMessage(senderUsername);
+    drawNewMessage(senderUsername, chatId) {
+        this.#notifBar.drawNewMessage(senderUsername, chatId);
     }
 
     drawNewFriendRequest(senderUsername) {
