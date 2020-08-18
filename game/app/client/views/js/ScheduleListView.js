@@ -19,6 +19,8 @@ class ScheduleListView extends WindowView {
             const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
             this.#lectures = sortedLectures;
 
+            this.drawSchedule();
+            
             var interval = setInterval(() => {
                 this.drawSchedule();
             }, 1000);

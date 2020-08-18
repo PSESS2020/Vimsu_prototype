@@ -50,7 +50,7 @@ class StatusBar extends Views {
         this.drawClock();
         this.drawConnectionStatus();
 
-        var interval = setInterval(() => {
+        setInterval(() => {
 
             this.drawClock();
             this.drawConnectionStatus();

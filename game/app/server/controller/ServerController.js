@@ -722,9 +722,7 @@ module.exports = class ServerController {
 
                 var schedule = this.#conference.getSchedule();
 
-                clearInterval(interval);
-                
-                interval = setInterval(() => {
+                function emitCurrentLectures() {
                     var currentLectures = schedule.getCurrentLectures();
 
                     currentLecturesData = [];
@@ -744,6 +742,14 @@ module.exports = class ServerController {
                     })
 
                     socket.emit('currentLectures', currentLecturesData);
+                }
+
+                emitCurrentLectures();
+                
+                clearInterval(interval);
+                
+                interval = setInterval(() => {
+                    emitCurrentLectures();
                 }, 1000);
             });
 
