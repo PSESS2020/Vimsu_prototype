@@ -307,7 +307,7 @@ module.exports = class ServerController {
                                           ' the tile he is standing on. He will give you a' +
                                           ' short introduction that will help you to learn the basics of using VIMSU.';
 
-                        this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);       
+                        this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);       
                     }
 
                     if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
@@ -463,7 +463,7 @@ module.exports = class ServerController {
                                          ' the tile he is standing on. He will give you a' +
                                          ' short introduction that will help you to learn the basics of using VIMSU.';
 
-                       this.#io.to(socket.id).emit('New global message', messageHeader, messageBody);
+                       this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
                        return;
                 }
 
