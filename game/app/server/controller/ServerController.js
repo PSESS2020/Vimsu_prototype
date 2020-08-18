@@ -1819,6 +1819,10 @@ module.exports = class ServerController {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
     };
+
+    sendGlobalMessage(message) {
+        this.#io.emit('New global message', message.header, message.text);
+    }
     
     isBanned(accountId) {
         return this.#banList.includes(accountId);

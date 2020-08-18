@@ -56,7 +56,7 @@ module.exports = class CommandHandler {
             for(var i = 1; i < commandArgs.length; i++) {
                 text += " " + commandArgs[i];
             }
-            this.#serverController.emitEventIn('/', "New global message", header, text);
+            this.#serverController.sendGlobalMessage({header, text});
         }
     };
     
