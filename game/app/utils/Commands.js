@@ -1,5 +1,6 @@
 module.exports = Object.freeze({
     GLOBAL: "global",
+    GLOBALNOTE: "glbnote",
     LOGMESSAGES: "log",
     REMOVEPLAYER: "rmuser",
     REMOVEMESSAGE: "rmmsg",

@@ -602,6 +602,10 @@ class ClientController {
     handleFromServerNewGlobalMessage(messageHeader, messageText) {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
+    
+    handleFromServerNewNotification(messageHeader, messageText) {
+        this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
 
     handleFromServerNewGlobalAnnouncement(moderatorUsername, message) {
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();

@@ -2133,6 +2133,13 @@ module.exports = class ServerController {
         });
         return id;
     };
+    
+    sendNotification(socketid, message) {
+        //TypeChecker.isEnumOf(message, Messages);
+        if (socketid != undefined) {
+            this.#io.to(socketid).emit("New notification", message.header, message.body);
+        }
+    };
 
     /* Sends a warning to the user who is connected to the socket with the passed Id.
      * If the id is undefined, this will do nothing.
