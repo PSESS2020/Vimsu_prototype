@@ -259,9 +259,10 @@ module.exports = class Lecture {
         // If the participant already has a token, we don't need to do anything
         // We can not grant a token to a participant not yet in the lecture
         if (this.hasToken(participantID) || !this.#activeParticipants.includes(participantID)) {
-            return;
+            return false;
         }
         this.#tokenList[this.#getTokenIndex(participantID)][2] = 30000;
+        return true;
     };
 
     #checkToken = function (participantId) {

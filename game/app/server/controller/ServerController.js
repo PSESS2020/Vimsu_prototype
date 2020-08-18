@@ -7,7 +7,8 @@ const ParticipantController = require('./ParticipantController.js');
 const RoomService = require('../services/RoomService.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
-const Commands = require('../../utils/Commands.js');
+const CommandHandler = require('../models/CommandHandler.js');
+const CommandContext = require('../models/CommandContext.js');
 const LectureService = require('../services/LectureService');
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
@@ -351,11 +352,15 @@ module.exports = class ServerController {
                      * need it.
                      *
                      * - (E) */
-                    this.commandHandler(participant, text.substr(1));
+                    var input = text.substr(1).split(" ");
+                    new CommandHandler(this).handleCommand(input[0].toLowerCase(),
+                                                            socket,
+                                                            new RoomContext(/* TODO */),
+                                                            /* TODO */);
                 } else { // If the message contains a command, we don't want to be handled like a regular message
 
                     if (this.#muteList.includes(socket.request.session.accountId)) {
-                        this.sendMute(socket.id);
+                        this.sendNotification(socket.id, Messages.MUTE);
                         return; // muted ppants can't post messages into any allchat
                     }
 
@@ -621,6 +626,7 @@ module.exports = class ServerController {
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
                     // timestamping the message - (E)
+                    // replace with Message-object?
                     var currentDate = new Date();
                     var message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, messageText: text }
                     lectureChat.appendMessage(message);
@@ -1944,88 +1950,6 @@ module.exports = class ServerController {
     };
 
     commandHandlerLecture(socket, lecture, input) {
-        // TODO
-        // TO IMPLEMENT
-        // - revoke user token
-        // - grant user token
-
-        /* commands need to be delimited by a space. So we first split
-         * the input at each occurence of a whitespace character.
-         * - (E) */
-        var commandArgs = input.split(" ");
-
-        /* Get the chat of the lecture we're currently in for message operations */
-        var lectureChat = lecture.getLectureChat().getMessages();
-
-        /* Now we extract the command from the input.
-         * 
-         * The command can only occur at the very beginning of an input, so
-         * we just take the substring of the input up to (but obviously not
-         * including) the first whitespace-character.
-         *
-         * We also covert the string to lower case, so that we can easily compare
-         * it to our constants. This means that the moderator does not need to
-         * worry about capitalization when inputting a command, which may be
-         * undesirable behaviour.
-         *
-         * - (E) */
-        var command = commandArgs[0].toLowerCase();
-
-        switch (command) {
-            case Commands.REMOVEMESSAGE:
-                for (var i = 0; i < lectureChat.length; i++) {
-                    if (commandArgs.includes(lectureChat[i].messageID.toString())) {
-                        this.sendWarning(this.getSocketId(lectureChat[i].senderID));
-                        lectureChat.splice(i, 1);
-                        i--; // This is important, as without it, we could not remove
-                        // two subsequent messages
-                    }
-                }
-                this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
-                break;
-            case Commands.REMOVEMESSAGESBYPLAYER:
-                for (var i = 0; i < lectureChat.length; i++) {
-                    if (commandArgs.includes(lectureChat[i].senderID.toString())) {
-                        this.sendWarning(this.getSocketId(lectureChat[i].senderID));
-                        lectureChat.splice(i, 1);
-                        i--; // This is important, as without it, we could not remove
-                        // two subsequent messages
-                    }
-                }
-                this.#io.in(socket.currentLecture).emit('updateLectureChat', lectureChat);
-                break;
-            case Commands.REMOVEPLAYER:
-                for (var i = 1; i < commandArgs.length; i++) {
-                    var ppantId = commandArgs[i];
-                    if (lecture.hasPPant(ppantId)) {
-                        var socketClient = this.getSocketObject(this.getSocketId(ppantId));
-                        lecture.leave(ppantId);
-                        lecture.revokeToken(ppantId);
-                        lecture.ban(socket.request.session.accountId);
-                        socketClient.leave(socketClient.currentLecture);
-                        socketClient.currentLecture = undefined;
-                        socketClient.broadcast.emit('showAvatar', ppantId);
-                        this.#io.to(socketClient.id).emit('force close lecture');
-                        this.sendRemoval(socketClient.id);
-                    }
-                }
-                break;
-            case Commands.REVOKETOKEN:
-                for (var i = 1; i < commandArgs.length; i++) {
-                    lecture.revokeToken(commandArgs[i]);
-                    var socketid = this.getSocketId(commandArgs[i]);
-                    this.sendRevoke(socketid);
-                    this.#io.to(socketid).emit('update token', false);
-                }
-                break;
-            case Commands.GRANTTOKEN:
-                for (var i = 1; i < commandArgs.length; i++) {
-                    lecture.grantToken(commandArgs[i]);
-                    var socketid = this.getSocketId(commandArgs[i]);
-                    this.sendGrant(socketid);
-                    this.#io.to(socketid).emit('update token', true);
-                }
-                break;
             case Commands.CLOSE:
                 var ppantsInLecture = lecture.getActiveParticipants();
                 lecture.hide();
@@ -2040,11 +1964,6 @@ module.exports = class ServerController {
                     socketClient.broadcast.emit('showAvatar', ppantId);
                     this.sendClosed(socketClient.id);
                 });
-            default:
-                var messageHeader = 
-                var messageText = 
-                this.#io.to(socket.id).emit('New global message', messageHeader, messageText);
-                break;
         }
 
     };
@@ -2093,6 +2012,23 @@ module.exports = class ServerController {
             }
         });
         return id;
+    };
+    
+    emitEventIn(idOfSocketRoomToEmitIn, eventName, eventarguments) {
+        if(eventArguments != undefined) {
+            this.#io.in(idOfSocketRoomToEmitTo).emit(eventName, eventArguments);
+        } else {
+            this.#io.in(idOfSocketRoomToEmitTo).emit(eventName);
+        }
+    };
+    
+    // probably duplicate code that is not actually needed due to above method
+    emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
+        if(eventArguments != undefined) {
+            this.#io.to(idOfSocketToEmitTo).emit(eventName, eventArguments);
+        } else {
+            this.#io.to(idOfSocketToEmitTo).emit(eventName);
+        }
     };
     
     // replaces all the singular "sendXY"-methods
