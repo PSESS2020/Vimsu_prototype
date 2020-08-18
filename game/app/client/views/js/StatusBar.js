@@ -94,7 +94,7 @@ class StatusBar extends Views {
         this.#fps = Math.round(1 / this.#secondsPassed);
 
         // Draw number to the screen
-        $('#fps').text('FPS: ' + this.#fps);
+        $('#fps').text('FPS: ' + this.#fps + ', ');
     }
 
     updatePing(ms) {
