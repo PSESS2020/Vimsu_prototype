@@ -64,7 +64,7 @@ module.exports = class CommandHandler {
         
     globalNote(socket, context, commandArgs) {
         var arg = Number.parseInt(commandArgs[0], 10);
-        this.#serverController.sendGlobalAnnouncement("Admin", Messages.TESTMESSAGES.body[arg]);
+        this.#serverController.sendGlobalAnnouncement("VIMSU", Messages.TESTMESSAGES.body[arg]);
     };
     
     printHelp(socket, context, commandArgs) {
