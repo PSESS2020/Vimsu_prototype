@@ -278,7 +278,6 @@ module.exports = class ServerController {
                             var isModerator = participant.getIsModerator();
 
                             this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator});
-                            console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
 
@@ -577,7 +576,6 @@ module.exports = class ServerController {
                         var isVisible = ppant.getIsVisible();
                         var isModerator = ppant.getIsModerator();
                         this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
-                        console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }
                 });
 
