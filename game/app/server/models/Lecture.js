@@ -14,6 +14,7 @@ module.exports = class Lecture {
     #oratorUsername;
     #lectureChat;
     #maxParticipants;
+    #numberOfActiveListeners;
     #activeParticipants;
     #removedParticipants;
     #tokenList;
@@ -53,6 +54,11 @@ module.exports = class Lecture {
         this.#oratorName = oratorName;
         this.#oratorUsername = oratorUsername;
         this.#maxParticipants = maxParticipants;
+
+        //includes every ppant except orator
+        this.#numberOfActiveListeners = 0;
+
+        //incluedes every ppant including orator
         this.#activeParticipants = [];
         this.#removedParticipants = [];
 
@@ -129,34 +135,41 @@ module.exports = class Lecture {
         return this.#tokenList;
     }
 
-
     /**
      * Is called when a participant with this ID joins a lecture
      * 
      * @author Philipp
      * 
-     * @param {String} participantId 
+     * @param {String} participantId  
+     * @param {String} ppantUsername
      * @returns true, if the joining was successful
      *          false, otherwise
      */
-    enter(participantId) {
+    enter(participantId, ppantUsername) {
 
         TypeChecker.isString(participantId);
-        let currDate = new Date();
+        TypeChecker.isString(ppantUsername);
 
+        //orator can join every time if lecture is opened and not ended
+        if(ppantUsername === this.#oratorUsername && !this.isEnded() && this.isOpened()) {
 
-        //lecture is full
-        if (this.#activeParticipants.length >= this.#maxParticipants) {
-
-            return false;
+            this.#activeParticipants.push(participantId);
+            return true;
         }
 
-        //lecture is not full and started not longer than 5 minutes ago
-        else {
+        //listeners can join if lecture is not full and opened and not ended
+        if (this.#numberOfActiveListeners < this.#maxParticipants && !this.isEnded() && this.isOpened()) {
+
+            this.#numberOfActiveListeners++;
             this.#activeParticipants.push(participantId);
             this.#checkToken(participantId);
             console.log('check token');
             return true;
+        }
+
+        //listeners can't join if lecture is full, already ended, or not yet opened
+        else {
+            return false;
         }
     }
 
@@ -180,6 +193,10 @@ module.exports = class Lecture {
 
             //check if there is an element with this ID
             if (element[0] === participantId) {
+
+                //orator has no entry in token list, so active participants only get decremented for listeners
+                this.#numberOfActiveListeners--;
+
                 let leaveDate = new Date();
 
                 //check if ppant left before lecture started
@@ -194,6 +211,24 @@ module.exports = class Lecture {
                 }
             }
         });
+    }
+
+    isOpened() {
+        var now = new Date().getTime();
+        var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
+        return (startingTime <= now)
+    }
+
+    isEnded() {
+        var now = new Date().getTime();
+        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
+        return (now >= endTime);
+    }
+    
+    isAccessible() {
+        var now = new Date().getTime();
+        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
+        return (this.isOpened() && now <= endTime);
     }
 
     hasPPant(participantId) {
@@ -214,12 +249,20 @@ module.exports = class Lecture {
      * @author Philipp
      * 
      * @param {String} participantId 
+     * @param {String} ppantUsername
      * @returns true, if so
      *          false, otherwise
      */
-    hasToken(participantId) {
+    hasToken(participantId, ppantUsername) {
         TypeChecker.isString(participantId);
+        TypeChecker.isString(ppantUsername);
 
+        //orator has token of his own lecture in every case
+        if(ppantUsername === this.#oratorUsername) {
+            return true;
+        }
+
+        //check for listeners
         for (var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if (element[0] === participantId) {
@@ -240,9 +283,10 @@ module.exports = class Lecture {
     revokeToken(participantId) {
         TypeChecker.isString(participantId);
 
+        //it's not possible to revoke a token from the orator
         for (var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
-            if (element[0] === participantId && this.hasToken(participantId)) {
+            if (element[0] === participantId && element[2] >= 0) {
                 element[2] = -100; // needs to be negative as setting it to zero won't
                 // change behaviour of hasToken
             }
@@ -252,9 +296,9 @@ module.exports = class Lecture {
     grantToken(participantID) {
         TypeChecker.isString(participantID);
 
-        // If the participant already has a token, we don't need to do anything
+        // If the participant is the orator or already has a token, we don't need to do anything
         // We can not grant a token to a participant not yet in the lecture
-        if (this.hasToken(participantID) || !this.#activeParticipants.includes(participantID)) {
+        if (this.#tokenList[this.#getTokenIndex(participantID)] === undefined || this.#tokenList[this.#getTokenIndex(participantID)][2] >= 0 || !this.#activeParticipants.includes(participantID)) {
             return false;
         }
         this.#tokenList[this.#getTokenIndex(participantID)][2] = 30000;

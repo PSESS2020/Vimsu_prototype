@@ -27,7 +27,7 @@ module.exports = class CommandHandler {
     
     // handles a command, where context is the room or lecture in which it was send
     // and socket the socket from which it was send
-    handleCommand(socket, context, commandArgs) {
+    handleCommand(socket, context, commandArgs, username) {
         
         // commandArgs will be an array containing the command-string in first place
         var commandType = commandArgs[0];
@@ -35,7 +35,12 @@ module.exports = class CommandHandler {
         
         if(this.#knowsCommand(commandType)) {
             var commandToExecute = this.#getMethodString(commandType);
-            this[commandToExecute](socket, context, commandArgs); // we need to check commandArgs for undefined
+            if(commandToExecute === Commands.GLOBAL.method) {
+                this.globalMsg(socket, context, commandArgs, username); //moderatorUsername is only needed for global Msg
+            }
+            else {
+                this[commandToExecute](socket, context, commandArgs); // we need to check commandArgs for undefined
+            }
         } else {
             this['unknownCommand'](socket);
         }
@@ -47,17 +52,14 @@ module.exports = class CommandHandler {
     
     /* Sends a global message to all connected participants.
      * Ignores context in which it was send. */
-    globalMsg(socket, context, commandArgs) {
+    globalMsg(socket, context, commandArgs, username) {
         // maybe make sure context is allchat?
         if (commandArgs.length > 0) {
-            var currentDate = new Date();
-            var header = "[" + currentDate.toString() + "] ANNOUNCEMENT:";
             var text = commandArgs[0];
             for(var i = 1; i < commandArgs.length; i++) {
                 text += " " + commandArgs[i];
             }
-            // TODO FIX
-            this.#serverController.emitEventIn('/', "New global message", header, text);
+            this.#serverController.sendGlobalAnnouncement(username, text);
         }
     };
     
@@ -84,7 +86,7 @@ module.exports = class CommandHandler {
         this.#serverController.sendNotification(socket.id, { header: messageHeader, body: messageBody });
     };
     
-    removeUser(socket, context, commandArgs) {
+    removeUser(socket, context, commandArgs, username) {
         commandArgs.forEach( (username) => {
             context.removeUser(username);
         });
@@ -132,7 +134,7 @@ module.exports = class CommandHandler {
         for (var i = 0; i < msg.length; i++) {
             if(commandArgs.includes(msg[i].username.toString())) {
                 messageBody.splice(0, 0, "[" + msg[i].timestamp + "] SenderUsername: " + msg[i].username + " (senderId: " + msg[i].senderID +
-                        ") has messageId: " + msg[i].messageID);
+                ") has text: " + msg[i].text + " (messageID: " + msg[i].messageID + ")");
             }
         }
         this.#serverController.sendNotification(socket.id, { header: messageHeader, body: messageBody });

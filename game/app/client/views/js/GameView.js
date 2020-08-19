@@ -55,7 +55,6 @@ class GameView {
 
         //Handle mouse movement on canvas
         $('#avatarCanvas').on('mousemove', (e) => {
-            //console.log("mousemov: " + e.pageX + " " + e.pageY)
             //Translates the current mouse position to the mouse position on the canvas.
             var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
 
@@ -90,7 +89,7 @@ class GameView {
             if (this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findClickedTile(selectedTileCords);
+                this.#currentMap.findClickedTileOrObject(selectedTileCords);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -208,6 +207,14 @@ class GameView {
         }
     }
 
+    updatePing(ms) {
+        this.#statusBar.updatePing(ms);
+    }
+
+    updateFPS(timeStamp) {
+        this.#statusBar.updateFPS(timeStamp);
+    }
+
     updateConnectionStatus(status) {
         this.#statusBar.updateConnectionStatus(status);
     }
@@ -241,14 +248,14 @@ class GameView {
         }
 
         if (participant !== this.#ownAvatarView) {
-            console.log("other avatarView init: " + participant.getId());
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
                 participant.getId(),
                 typeOfRoom,
                 participant.getUsername(),
-                participant.getIsVisible()
+                participant.getIsVisible(),
+                participant.getIsModerator()
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -323,9 +330,10 @@ class GameView {
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
         let username = ownParticipant.getUsername();
+        let isModerator = ownParticipant.getIsModerator();
         this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true, isModerator);
         this.addToUpdateList(this.#ownAvatarView);
 
 
@@ -373,12 +381,12 @@ class GameView {
         new GlobalChatView().draw(messageHeader, messageText);
     };
 
-    initProfileView(businessCard, rank) {
-        new ProfileView().draw(businessCard, rank);
+    initProfileView(businessCard, rank, isModerator) {
+        new ProfileView().draw(businessCard, rank, isModerator);
     }
 
-    initBusinessCardView(businessCard, isFriend, rank) {
-        new BusinessCardView(businessCard, isFriend, rank).draw();
+    initBusinessCardView(businessCard, isFriend, rank, isModerator) {
+        new BusinessCardView(businessCard, isFriend, rank, isModerator).draw();
     }
 
     initFriendListView(businessCards) {
@@ -444,10 +452,10 @@ class GameView {
     addNewChatMessage(chatId, message) {
 
         if (this.#chatListView) {
-            this.#chatListView.addNewMessage(chatId, message); // TODO
+            this.#chatListView.addNewMessage(chatId, message);
         }
 
-        if (this.#chatThreadView) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
     };
@@ -467,7 +475,7 @@ class GameView {
     }
 
     addFriend(businessCard) {
-        if (this.#friendListView) {
+        if ($('#friendListModal').is(':visible') && this.#friendListView) {
             this.#friendListView.addToFriendList(businessCard);
         }
     }
@@ -476,16 +484,20 @@ class GameView {
         new ChatParticipantListView().draw(usernames);
     }
 
-    drawNewChat(senderUsername) {
-        this.#notifBar.drawNewChat(senderUsername);
+    drawNewChat(senderUsername, chatId) {
+        this.#notifBar.drawNewChat(senderUsername, chatId);
     }
 
-    drawNewGroupChat(groupName, creatorUsername) {
-        this.#notifBar.drawNewGroupChat(groupName, creatorUsername);
+    drawNewGroupChat(groupName, creatorUsername, chatId) {
+        this.#notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
-    drawNewMessage(senderUsername) {
-        this.#notifBar.drawNewMessage(senderUsername);
+    drawNewMessage(senderUsername, chatId) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView.getChatId() === chatId) {
+            return;
+        }
+
+        this.#notifBar.drawNewMessage(senderUsername, chatId);
     }
 
     drawNewFriendRequest(senderUsername) {
@@ -526,7 +538,6 @@ class GameView {
     hideAvatar(participantId) {
         for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
             var avatar = this.#anotherParticipantAvatarViews[i];
-            console.log(avatar.getId());
             if (avatar.getId() === participantId) {
                 avatar.setVisibility(false);
             }

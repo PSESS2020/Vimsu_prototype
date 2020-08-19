@@ -88,6 +88,12 @@ class ChatThreadView extends WindowView {
 
         $('#chatThreadModal .modal-body .list-group').empty()
 
+        if ($('#notifChatDiv' + this.#chat.chatId).length)
+            $('#notifChatDiv' + this.#chat.chatId).hide();
+
+        if ($('#notifGroupChatDiv' + this.#chat.chatId).length)
+            $('#notifGroupChatDiv' + this.#chat.chatId).hide();
+
         this.#messages.forEach((message) => {
             this.#appendMessage(message);
         })
@@ -124,11 +130,20 @@ class ChatThreadView extends WindowView {
         if (this.#chat.chatId != chatId) {
             return;
         }
+
         this.#messages.push(message);
         this.#appendMessage(message);
     };
 
+    getChatId() {
+        return this.#chat.chatId;
+    }
+
     #appendMessage = (message) => {
+        if ($('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).length) {
+            $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).hide();
+        }
+
         var timestamp = new DateParser(new Date(message.timestamp)).parse();
         var senderUsername;
         if (message.senderUsername) {

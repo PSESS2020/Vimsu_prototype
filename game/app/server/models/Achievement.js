@@ -76,6 +76,10 @@ module.exports = class Achievement {
         this.#awardPoints = awardPoints;
     }
 
+    setNextCount(nextCount) {
+        this.#nextCount = nextCount;
+    }
+
     equals(achievement) {
         return this.#taskType === achievement.getTaskType() && this.#currentLevel === achievement.getCurrentLevel();
     }

@@ -31,17 +31,18 @@ class ParticipantAvatarView extends AvatarView {
     #isVisible;
     #username;
     #typeOfRoom;
+    #isModerator;
 
     #gameEngine;
 
-    constructor(position, direction, participantId, typeOfRoom, username, isVisible) {
+    constructor(position, direction, participantId, typeOfRoom, username, isVisible, isModerator) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
-        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 1, 4);
-        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 11, 14);
-        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 6, 9);
-        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 3, 16, 19);
+        this.#walkingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 9, 1, 4);
+        this.#walkingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 9, 11, 14);
+        this.#walkingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 9, 6, 9);
+        this.#walkingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 9, 16, 19);
         this.#standingUpLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 15, 15);
         this.#standingUpRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 10, 10);
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
@@ -50,6 +51,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#typeOfRoom = typeOfRoom;
         this.#username = username;
         this.#isVisible = isVisible;
+        this.#isModerator = isModerator;
 
         this.#gameEngine = new IsometricEngine();
     }
@@ -131,7 +133,12 @@ class ParticipantAvatarView extends AvatarView {
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
-            ctx_avatar.fillStyle = "antiquewhite";
+            if(this.#isModerator) {
+                ctx_avatar.fillStyle = "gold";
+            } else {
+                ctx_avatar.fillStyle = "antiquewhite";
+            }
+            
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 

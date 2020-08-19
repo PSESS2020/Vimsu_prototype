@@ -10,7 +10,8 @@ class ParticipantClient {
     #position;
     #direction;
     #username;
-    #isVisble;
+    #isVisible;
+    #isModerator;
 
     /**
      * Erstellt ParticipantClient Instanz
@@ -21,18 +22,23 @@ class ParticipantClient {
      * @param {String} username
      * @param {PositionClient} position
      * @param {Direction} direction
+     * @param {boolean} isVisible
+     * @param {boolean} isModerator
      */
-    constructor(id, username, position, direction, isVisble) {
+    constructor(id, username, position, direction, isVisible, isModerator) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isString(username);
+        TypeChecker.isBoolean(isVisible);
+        TypeChecker.isBoolean(isModerator);
 
         this.#id = id;
         this.#position = position;
         this.#direction = direction;
         this.#username = username;
-        this.#isVisble = isVisble;
+        this.#isVisible = isVisible;
+        this.#isModerator = isModerator;
     }
 
     getId() {
@@ -41,6 +47,10 @@ class ParticipantClient {
 
     getPosition() {
         return this.#position;
+    }
+
+    getIsModerator() {
+        return this.#isModerator;
     }
 
     setPosition(position) {
@@ -62,11 +72,11 @@ class ParticipantClient {
     }
 
     getIsVisible() {
-        return this.#isVisble;
+        return this.#isVisible;
     }
 
     setisVisible(isVisible) {
-        this.#isVisble = isVisible;
+        this.#isVisible = isVisible;
     }
 }
 

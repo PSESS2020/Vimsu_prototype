@@ -152,6 +152,10 @@ class EventManager {
     handleSendFriendRequest(participantRecipientId, chatId) {
         this.#clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
     }
+
+    handleClearInterval() {
+        this.#clientController.handleFromViewClearInterval();
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

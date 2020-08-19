@@ -115,6 +115,7 @@ module.exports = class AchievementService {
                     participant.getAchievements()[index].setCurrentLevel(achievement.getCurrentLevel());
                     participant.getAchievements()[index].setAwardPoints(achievement.getAwardPoints());
                     participant.getAchievements()[index].setColor(achievement.getColor());
+                    participant.getAchievements()[index].setNextCount(achievement.getNextCount());
                 })
 
             }

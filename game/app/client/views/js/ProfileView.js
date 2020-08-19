@@ -1,12 +1,14 @@
 class ProfileView extends WindowView {
     #businessCard;
+    #isModerator;
 
     constructor() {
         super()
     }
 
-    draw(businessCard) {
+    draw(businessCard, isModerator) {
         this.#businessCard = businessCard;
+        this.#isModerator = isModerator;
 
         $('#profileModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="profileModalTitle">
@@ -16,6 +18,7 @@ class ProfileView extends WindowView {
                     <span aria-hidden="true">&times;</span>
             </button>
         `)
+
         $('#profileModal .modal-body').append(`
             <table id="profile" style = "color: antiquewhite; width:100%; margin-left: 0">
                 <tr>
@@ -26,8 +29,28 @@ class ProfileView extends WindowView {
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
                     <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
                 </tr>
+        `)
+
+        if(this.#isModerator) {
+            $('#profileModal .modal-body #profile').append(`
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                    <td style="padding: 15px">Moderator</td>
+                </tr>
+            `)
+        } else {
+            $('#profileModal .modal-body #profile').append(`
+                <tr>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                    <td style="padding: 15px">Participant</td>
+                </tr>
+            `)
+        }
+
+        $('#profileModal .modal-body').append(`
             </table>
         `)
+
 
         $('#profileModal').on('hidden.bs.modal', function (e) {
             $('#profileModal .modal-header').empty()

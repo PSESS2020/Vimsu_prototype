@@ -52,9 +52,10 @@ class GameObjectViewFactory {
     /*
     * calculates the position of a game map element and creates it.
     */
-   createGameMapElementView(gameObjectType, pos, objectName) {
+   createGameMapElementView(gameObjectType, pos, objectName, isClickable) {
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
+        TypeChecker.isBoolean(isClickable);
 
         var gameMapElementView;
         var gameMapElementImage;
@@ -126,10 +127,11 @@ class GameObjectViewFactory {
     /*
     * calculates the position of a game object and creates it.
     */
-    createGameObjectView(gameObjectType, pos, objectName) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable) {
         //TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
+        TypeChecker.isBoolean(isClickable);
 
         var gameObjectView;
         var gameObjectImage;
@@ -181,10 +183,15 @@ class GameObjectViewFactory {
             case GameObjectType.PLANT:
                 gameObjectImage = this.#assetImages[objectName];
 
-                var plantOffset = {x: 0, y: this.#tileRowHeight - gameObjectImage.height - 10};
+                var plantOffset = {x: -5, y: this.#tileRowHeight - gameObjectImage.height - 10};
+                if (gameObjectImage !== undefined) {
+                    
+                    if (isClickable) {
+                        gameObjectView = new PlantView(gameObjectImage, pos, plantOffset, objectName);
+                    } else 
+                        gameObjectView = new GameObjectView(gameObjectImage, pos, plantOffset, objectName);
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, plantOffset, objectName);
+                }
                 else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;

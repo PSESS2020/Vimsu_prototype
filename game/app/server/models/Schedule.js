@@ -1,4 +1,3 @@
-const Settings = require('../../utils/Settings');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Lecture = require('../models/Lecture');
 
@@ -37,13 +36,8 @@ module.exports = class Schedule {
 
         for (var i = 0; i < this.#lectureList.length; i++) {
             var lecture = this.#lectureList[i];
-            var startingTime = lecture.getStartingTime().getTime();
-            var now = new Date().getTime();
-            var startToShow = (startingTime - Settings.SHOWLECTURE);
-            var stopToShow = (startingTime + lecture.getDuration() * 1000);
-            var withinMargin = startToShow <= now && now <= stopToShow;
 
-            if (withinMargin && !lecture.isHidden()) {
+            if (lecture.isAccessible() && !lecture.isHidden()) {
                 currentLectures.push(lecture);
             }
         }

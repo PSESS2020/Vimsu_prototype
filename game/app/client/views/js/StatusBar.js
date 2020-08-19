@@ -7,6 +7,11 @@ class StatusBar extends Views {
     #timeLeft;
     #connectionStatus;
 
+    //FPS vars
+    #secondsPassed;
+    #oldTimeStamp;
+    #fps;
+
     constructor() {
         super();
 
@@ -45,7 +50,7 @@ class StatusBar extends Views {
         this.drawClock();
         this.drawConnectionStatus();
 
-        var interval = setInterval(() => {
+        setInterval(() => {
 
             this.drawClock();
             this.drawConnectionStatus();
@@ -66,6 +71,25 @@ class StatusBar extends Views {
         TypeChecker.isString(location);
         $('#location').empty();
         $('#location').text("Location: " + location);
+    }
+
+    updateFPS(timeStamp) {
+        $('#fps').empty();
+
+        // Calculate the number of seconds passed since the last frame
+        this.#secondsPassed = (timeStamp - this.#oldTimeStamp) / 1000;
+        this.#oldTimeStamp = timeStamp;
+
+        // Calculate fps
+        this.#fps = Math.round(1 / this.#secondsPassed);
+
+        // Draw number to the screen
+        $('#fps').text('FPS: ' + this.#fps + ', ');
+    }
+
+    updatePing(ms) {
+        $('#ping').empty();
+        $('#ping').text('Ping: ' + ms + 'ms');
     }
 
     updateConnectionStatus(status) {

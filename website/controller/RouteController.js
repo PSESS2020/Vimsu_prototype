@@ -41,8 +41,8 @@ module.exports = class RouteController {
         this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
         this.#app.use(fileUpload({
-            useTempFiles : true,
-            tempFileDir : '/tmp/'
+            useTempFiles: true,
+            tempFileDir: '/tmp/'
         }));
 
         var sessionMiddleware = expressSession({
@@ -108,11 +108,11 @@ module.exports = class RouteController {
             var videoSize = video.size;
 
             if (videoName.includes(".mp4")) {
-                if (videoSize > 50*1024*1024) {
+                if (videoSize > 50 * 1024 * 1024) {
                     return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
                 else {
-                    response.render('upload', {uploading:true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname})
+                    response.render('upload', { uploading: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname })
                     return SlotService.storeVideo(video, this.#blob).then(videoData => {
                         if (videoData) {
                             return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
@@ -192,18 +192,17 @@ module.exports = class RouteController {
         });
 
         this.#app.post('/register', (request, response) => {
+            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
-            if (request.body.username.length > 10) {
-                return response.render('register', { invalidUsername: true });
+            if (!usernameRegex.test(request.body.username)) {
+                return response.render('register', { invalidUsernameString: true });
             }
 
             username = request.body.username;
             email = request.body.email;
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (emailRegex.test(String(email).toLowerCase())) {
-
-            } else {
+            if (!emailRegex.test(String(email).toLowerCase())) {
                 return response.render('register', { invalidEmail: true });
             }
 

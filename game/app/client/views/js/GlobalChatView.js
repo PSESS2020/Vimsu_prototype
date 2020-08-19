@@ -2,6 +2,13 @@ class GlobalChatView extends WindowView {
 
     constructor() {
         super();
+
+        $(document).ready(() => {
+            $('#closeGlobalChatButton').off();
+            $('#closeGlobalChatButton').click(() => {
+                $('#globalChat').hide();
+            })
+        })
     }
 
     draw(messageHeader, messageText) {
@@ -9,7 +16,6 @@ class GlobalChatView extends WindowView {
         $('#globalChatMessage').empty();
         //$newMessageHeader.text(messageHeader);
         $('#globalChatWindowHeaderText').text(messageHeader);
-        console.log("test start");
         if (messageText instanceof Array) {
             for (var i = 0; i < messageText.length; i++) {
                 this.addMessage(messageText[i]);

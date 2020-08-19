@@ -63,6 +63,11 @@
             <div class="d-flex flex-column ml-3" style="text-align: center;">
                 <div id="time" style="color: antiquewhite"></div>
                 <div id="location" style="color: antiquewhite"></div>
+                <div>
+                    <small id="fps" style="color: antiquewhite; opacity: 0.5"></small>
+                    <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
+                </div>
+                
             </div>
             <div class="d-flex flex-column ml-auto">
                 <div class="achievementBox p-1 align-items-center text-center">
@@ -102,7 +107,7 @@
     </div>
 
     <nav class="navbar navbar-expand-md navbar-light"
-        style="position: absolute; bottom: -5; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+        style="position: absolute; bottom: 0; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href="" onclick="(new RankListView()).onclick()"
@@ -131,7 +136,7 @@
     </nav>
 
     <nav class="navbar navbar-expand-md navbar-light"
-        style="position: absolute; bottom: -5; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+        style="position: absolute; bottom: 0; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
 
         <ul class="navbar nav ml-auto">
             <li class="nav-item">
@@ -318,7 +323,6 @@
                                     'client/views/js/MapView',
                                     'client/views/js/GameMapElementView',
                                     'client/views/js/AvatarView',
-                                    'client/views/js/GameMapElements/ScheduleView',
                                     'client/views/js/LoadingView'], () => {
 
                                         requirejs([
@@ -344,7 +348,9 @@
                                             'client/views/js/LectureView',
                                             'client/views/js/NPCAvatarView',
                                             'client/views/js/ParticipantAvatarView',
-                                            'client/views/js/GameMapElements/DoorView'], () => {
+                                            'client/views/js/GameMapElements/ScheduleView',
+                                            'client/views/js/GameMapElements/DoorView',
+                                            'client/views/js/GameObjects/PlantView'], () => {
 
                                                 requirejs(['client/views/js/GameView',
                                                     'client/controller/ClientController',
@@ -358,19 +364,6 @@
                             });
                     });
             });
-    </script>
-    <script>
-        $(document).ready(() => {
-            $('#closeCurrentLecturesButton').click(() => {
-                $('#currentLectures').hide();
-            })
-        })
-
-        $(document).ready(() => {
-            $('#closeGlobalChatButton').click(() => {
-                $('#globalChat').hide();
-            })
-        })
     </script>
 </body>
 
