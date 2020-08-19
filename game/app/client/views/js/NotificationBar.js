@@ -8,15 +8,13 @@ class NotificationBar extends Views {
     }
 
     drawNewMessage(senderUsername, chatId) {
-        var parsedSenderUsername = new StringParser(senderUsername).replaceSpaceWithUnderscore();
-
-        if ($('#notifMessageDiv' + parsedSenderUsername + chatId).length) {
-            $('#notifMessageDiv' + parsedSenderUsername + chatId).show();
+        if ($('#notifMessageDiv' + senderUsername + chatId).length) {
+            $('#notifMessageDiv' + senderUsername + chatId).show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${"notifMessageDiv" + parsedSenderUsername + chatId}" style="display:flex">
-                    <button class="self-align-end closeBtn" id="${"closeNotifMessage" + parsedSenderUsername + chatId}" type="button"><i class="fa fa-close"></i></button>
-                    <a id="${"notifMessage" + parsedSenderUsername + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                <div id="${"notifMessageDiv" + senderUsername + chatId}" style="display:flex">
+                    <button class="self-align-end closeBtn" id="${"closeNotifMessage" + senderUsername + chatId}" type="button"><i class="fa fa-close"></i></button>
+                    <a id="${"notifMessage" + senderUsername + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
                         <div class="notifBarDiv">
                             <small>New message from ${senderUsername}.</small>
                         </div>
@@ -25,12 +23,12 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifMessage' + parsedSenderUsername + chatId).on('click', function (event) {
-            $('#notifMessageDiv' + parsedSenderUsername + chatId).hide();
+        $('#closeNotifMessage' + senderUsername + chatId).on('click', function (event) {
+            $('#notifMessageDiv' + senderUsername + chatId).hide();
         })
 
-        $('#notifMessage' + parsedSenderUsername + chatId).on('click', function (event) {
-            $('#notifMessageDiv' + parsedSenderUsername + chatId).hide();
+        $('#notifMessage' + senderUsername + chatId).on('click', function (event) {
+            $('#notifMessageDiv' + senderUsername + chatId).hide();
             return new EventManager().handleChatThreadClicked(chatId);
         })
     }
@@ -88,15 +86,13 @@ class NotificationBar extends Views {
     }
 
     drawNewFriendRequest(senderUsername) {
-        var parsedSenderUsername = new StringParser(senderUsername).replaceSpaceWithUnderscore();
-
-        if ($('#notifFriendRequestDiv' + parsedSenderUsername).length) {
-            $('#notifFriendRequestDiv' + parsedSenderUsername).show();
+        if ($('#notifFriendRequestDiv' + senderUsername).length) {
+            $('#notifFriendRequestDiv' + senderUsername).show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${"notifFriendRequestDiv" + parsedSenderUsername}" style="display:flex">
-                    <button class="self-align-end closeBtn" id="${"closeNotifFriendRequest" + parsedSenderUsername}" type="button"><i class="fa fa-close"></i></button>
-                    <a id="${"notifFriendRequest" + parsedSenderUsername}" role="button" data-toggle="modal" href="#friendRequestListModal">
+                <div id="${"notifFriendRequestDiv" + senderUsername}" style="display:flex">
+                    <button class="self-align-end closeBtn" id="${"closeNotifFriendRequest" + senderUsername}" type="button"><i class="fa fa-close"></i></button>
+                    <a id="${"notifFriendRequest" + senderUsername}" role="button" data-toggle="modal" href="#friendRequestListModal">
                         <div class="notifBarDiv">
                             <small>New friend request from ${senderUsername}.</small>
                         </div>
@@ -105,26 +101,24 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifFriendRequest' + parsedSenderUsername).on('click', function (event) {
-            $('#notifFriendRequestDiv' + parsedSenderUsername).hide();
+        $('#closeNotifFriendRequest' + senderUsername).on('click', function (event) {
+            $('#notifFriendRequestDiv' + senderUsername).hide();
         })
 
-        $('#notifFriendRequest' + parsedSenderUsername).on('click', function (event) {
-            $('#notifFriendRequestDiv' + parsedSenderUsername).hide();
+        $('#notifFriendRequest' + senderUsername).on('click', function (event) {
+            $('#notifFriendRequestDiv' + senderUsername).hide();
             return new EventManager().handleFriendRequestListClicked();
         })
     }
 
     drawNewFriend(friendUsername) {
-        var parsedFriendUsername = new StringParser(friendUsername).replaceSpaceWithUnderscore();
-
-        if ($('#notifFriendDiv' + parsedFriendUsername).length) {
-            $('#notifFriendDiv' + parsedFriendUsername).show();
+        if ($('#notifFriendDiv' + friendUsername).length) {
+            $('#notifFriendDiv' + friendUsername).show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${"notifFriendDiv" + parsedFriendUsername}" style="display:flex">
-                    <button class="self-align-end closeBtn" id="${"closeNotifFriend" + parsedFriendUsername}" type="button"><i class="fa fa-close"></i></button>
-                    <a id="${"notifFriend" + parsedFriendUsername}" role="button" data-toggle="modal" href="#friendListModal">
+                <div id="${"notifFriendDiv" + friendUsername}" style="display:flex">
+                    <button class="self-align-end closeBtn" id="${"closeNotifFriend" + friendUsername}" type="button"><i class="fa fa-close"></i></button>
+                    <a id="${"notifFriend" + friendUsername}" role="button" data-toggle="modal" href="#friendListModal">
                         <div class="notifBarDiv">
                             <small>${friendUsername} accepted your friend request.</small>
                         </div>
@@ -134,11 +128,11 @@ class NotificationBar extends Views {
         }
         $('#notifBar').scrollTop(0);
 
-        $('#closeNotifFriend' + parsedFriendUsername).on('click', function (event) {
-            $('#notifFriendDiv' + parsedFriendUsername).hide();
+        $('#closeNotifFriend' + friendUsername).on('click', function (event) {
+            $('#notifFriendDiv' + friendUsername).hide();
         })
-        $('#notifFriend' + parsedFriendUsername).on('click', function (event) {
-            $('#notifFriendDiv' + parsedFriendUsername).hide();
+        $('#notifFriend' + friendUsername).on('click', function (event) {
+            $('#notifFriendDiv' + friendUsername).hide();
             return new EventManager().handleFriendListClicked();
         })
     }

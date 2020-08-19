@@ -501,18 +501,10 @@ class GameView {
     }
 
     drawNewFriendRequest(senderUsername) {
-        if ($('#friendRequestListModal').is(':visible')) {
-            return;
-        }
-
         this.#notifBar.drawNewFriendRequest(senderUsername);
     }
 
     drawNewFriend(friendUsername) {
-        if ($('#friendListModal').is(':visible')) {
-            return;
-        }
-
         this.#notifBar.drawNewFriend(friendUsername);
     }
 

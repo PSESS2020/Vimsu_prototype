@@ -140,10 +140,8 @@ class ChatThreadView extends WindowView {
     }
 
     #appendMessage = (message) => {
-
-        var parsedSenderUsername = new StringParser(message.senderUsername).replaceSpaceWithUnderscore();
-        if ($('#notifMessageDiv' + parsedSenderUsername + this.#chat.chatId).length) {
-            $('#notifMessageDiv' + parsedSenderUsername + this.#chat.chatId).hide();
+        if ($('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).length) {
+            $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).hide();
         }
 
         var timestamp = new DateParser(new Date(message.timestamp)).parse();
