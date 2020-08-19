@@ -219,7 +219,7 @@ module.exports = */class MapView extends Views {
                 //let withoffsety = screenPos.getCordY() + screenPosOffset.y
                 //console.log("screenposBefore: " + withoffsetx + " " + withoffsety)
 
-                   elem.onclick(canvasMousePos);
+                   //elem.onclick(canvasMousePos);
             }
         });
     }

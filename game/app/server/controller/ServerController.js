@@ -278,7 +278,6 @@ module.exports = class ServerController {
                             var isModerator = participant.getIsModerator();
 
                             this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator});
-                            console.log("Participant " + id + " is being initialized at the view of participant ");
                         }
                     });
 
@@ -301,7 +300,7 @@ module.exports = class ServerController {
                     * Check if this is the first conference visit of this ppant 
                     * if so, remind him to click the BasicTutorial NPC
                     */
-                    if(ppant.getTaskTypeMappingCount(TypeOfTask.RECEPTIONVISIT) === 0) {
+                    if(ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
                         let messageHeader = 'Welcome to VIMSU!';
                         let messageBody = 'Please talk to our BasicTutorial NPC by clicking' +
                                           ' the tile he is standing on. He will give you a' +
@@ -577,7 +576,6 @@ module.exports = class ServerController {
                         var isVisible = ppant.getIsVisible();
                         var isModerator = ppant.getIsModerator();
                         this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
-                        console.log("Participant " + id + " is being initialized at the view of participant " + ppantID);
                     }
                 });
 

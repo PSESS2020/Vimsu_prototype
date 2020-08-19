@@ -102,7 +102,7 @@ module.exports = Object.freeze({
         header: ["Welcome", "NPC Test", "Friend Requests and Chat Messages", "Group Chats", "Allchat", "Room Switch",
                     "Lecture Join", "Lecture Chat", "Tile Clicking", "Monkey Testing", ],
         body: ["Welcome to and thank your for participating in this stresstest of our app VIMSU. Throughout the test, you will receive messages like this one, instructing you on which feature to try out next. Please follow them as closely as possible, but do also please feel free to explore the app. Thank you for your cooperation!",
-            "Please take a short amount of time to talk to the NPC in the reception area. You will receive some important information on how to use the app. You can talk to the NPC by getting close to it and clicking it.",
+            "Please take a short amount of time to talk to the NPC in the reception area. You will receive some important information on how to use the app. You can talk to the NPC by clicking it.",
             "We will start out this test by testing the 'Friend Request' and 'Chat Messages' features. Please send out as many friend requests and private chat messages to other participants as possible.",
             "The next feature being tested is the 'Group Chat' feature. Please create new group chats and post messages into them.",
             "We will proceed by testing the 'Allchat' feature. Please feel free to spam messages into the allchat to your heart's content.",
