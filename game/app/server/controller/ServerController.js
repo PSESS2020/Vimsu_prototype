@@ -673,7 +673,7 @@ module.exports = class ServerController {
                     socket.currentLecture = lectureId;
 
                     var participant = this.#ppants.get(ppantID);
-                    var token = lecture.hasToken(ppantID, participant.getBusinessCard().getUsername());
+                    var token = lecture.hasToken(ppantID, ppantUsername);
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
                     var messages = lecture.getLectureChat().getMessages();
