@@ -52,17 +52,22 @@ module.exports = class LectureContext extends CommandContext {
     };
     
     muteUser(userToMute) {
-        var ppantID = this.#serverController.getIdOf(userToMute);
-        this.#contextObject.revokeToken(ppantID);
-        var socketid = this.#serverController.getSocketId(ppantID);
-        this.#serverController.sendNotification(socketid, Messages.REVOKE);
-        this.#serverController.emitEventTo(socketid, 'update token', false);
+        //it is not possible to mute the orator
+        if (userToMute !== this.#contextObject.getOratorUsername()) {
+            var ppantID = this.#serverController.getIdOf(userToMute);
+            if (ppantID !== undefined) {
+                this.#contextObject.revokeToken(ppantID);
+                var socketid = this.#serverController.getSocketId(ppantID);
+                this.#serverController.sendNotification(socketid, Messages.REVOKE);
+                this.#serverController.emitEventTo(socketid, 'update token', false);
+            }
+        }
     };
     
     unmuteUser(userToUnmute) {
         var ppantID = this.#serverController.getIdOf(userToUnmute);
         // If the uses did not previously posess a token, we need to inform him he now does
-        if(this.#contextObject.grantToken(ppantID)) {
+        if(ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
             var socketid = this.#serverController.getSocketId(ppantID);
             this.#serverController.sendNotification(socketid, Messages.GRANT);
             this.#serverController.emitEventTo(socketid, 'update token', true);
