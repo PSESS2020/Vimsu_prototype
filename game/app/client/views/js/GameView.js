@@ -553,6 +553,12 @@ class GameView {
         }
     }
 
+    appendLectureChatMessage(message) {
+        if(this.#lectureView) {
+            this.#lectureView.appendMessage(message);
+        }
+    }
+
     updateLectureChat(lectureChat) {
         if(this.#lectureView) {
             this.#lectureView.drawChat(lectureChat);

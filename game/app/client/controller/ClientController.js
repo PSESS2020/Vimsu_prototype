@@ -536,14 +536,7 @@ class ClientController {
     }
 
     handleFromServerNewLectureChatMessage(message) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
-        var messageHeader = message.username + ", " + timestamp + ":";
-        var $newMessageHeader = $("<div style='font-size: small;'></div>");
-        var $newMessageBody = $("<div style='font-size: medium;'></div>");
-        $newMessageHeader.text(messageHeader);
-        $newMessageBody.text(message.text);
-        $('#lectureChatMessages').append($newMessageHeader);
-        $('#lectureChatMessages').append($newMessageBody);
+        this.#gameView.appendLectureChatMessage(message);
     }
 
     handleFromServerUpdateLectureChat(messages) {
