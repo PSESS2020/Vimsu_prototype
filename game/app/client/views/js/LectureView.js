@@ -202,7 +202,7 @@ class LectureView extends WindowView {
                 var $newMessageHeader = $("<div style='font-size: small;'></div>");
                 var $newMessageBody = $("<div style='font-size: medium;'></div>");
                 $newMessageHeader.text(messageHeader);
-                $newMessageBody.text(message.messageText);
+                $newMessageBody.text(message.text);
                 $('#lectureChatMessages').append($newMessageHeader);
                 $('#lectureChatMessages').append($newMessageBody);
             }
