@@ -17,6 +17,10 @@ class FriendRequestListView extends WindowView {
 
         this.#businessCards = businessCards;
         this.#businessCards.forEach(businessCard => {
+            var parsedSenderUsername = new StringParser(businessCard.getUsername()).replaceSpaceWithUnderscore();
+            if ($('#notifFriendRequestDiv' + parsedSenderUsername).length)
+                $('#notifFriendRequestDiv' + parsedSenderUsername).hide();
+
             $('#friendRequestListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent">
                     <div class="row w-100">

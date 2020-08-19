@@ -18,6 +18,10 @@ class FriendListView extends WindowView {
         this.#businessCards = sortedBusinessCards;
 
         this.#businessCards.forEach(businessCard => {
+            var parsedFriendUsername = new StringParser(businessCard.getUsername()).replaceSpaceWithUnderscore();
+            if ($('#notifFriendDiv' + parsedFriendUsername).length)
+                $('#notifFriendDiv' + parsedFriendUsername).hide();
+                
             $('#friendListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent chatthread" >
                     <div class="row w-100">

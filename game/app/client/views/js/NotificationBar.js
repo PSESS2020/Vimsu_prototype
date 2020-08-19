@@ -8,7 +8,7 @@ class NotificationBar extends Views {
     }
 
     drawNewMessage(senderUsername, chatId) {
-        var parsedSenderUsername = this.#replaceSpaceWithUnderscore(senderUsername);
+        var parsedSenderUsername = new StringParser(senderUsername).replaceSpaceWithUnderscore();
 
         if ($('#notifMessageDiv' + parsedSenderUsername + chatId).length) {
             $('#notifMessageDiv' + parsedSenderUsername + chatId).show();
@@ -36,15 +36,13 @@ class NotificationBar extends Views {
     }
 
     drawNewChat(senderUsername, chatId) {
-        var parsedSenderUsername = this.#replaceSpaceWithUnderscore(senderUsername);
-
-        if ($('#notifChatDiv' + parsedSenderUsername + chatId).length) {
-            $('#notifChatDiv' + parsedSenderUsername + chatId).show();
+        if ($('#notifChatDiv' + chatId).length) {
+            $('#notifChatDiv' + chatId).show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${"notifChatDiv" + parsedSenderUsername + chatId}" style="display:flex">
-                    <button class="self-align-end closeBtn" id="${"closeNotifChat" + parsedSenderUsername + chatId}" type="button"><i class="fa fa-close"></i></button>
-                    <a id="${"notifChat" + parsedSenderUsername + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                <div id="${"notifChatDiv" + chatId}" style="display:flex">
+                    <button class="self-align-end closeBtn" id="${"closeNotifChat" + chatId}" type="button"><i class="fa fa-close"></i></button>
+                    <a id="${"notifChat" + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
                         <div class="notifBarDiv">
                             <small>${senderUsername} init chat with you.</small>
                         </div>
@@ -53,27 +51,24 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifChat' + parsedSenderUsername + chatId).on('click', function (event) {
-            $('#notifChatDiv' + parsedSenderUsername + chatId).hide();
+        $('#closeNotifChat' + chatId).on('click', function (event) {
+            $('#notifChatDiv' + chatId).hide();
         })
 
-        $('#notifChat' + parsedSenderUsername + chatId).on('click', function (event) {
-            $('#notifChatDiv' + parsedSenderUsername + chatId).hide();
+        $('#notifChat' + chatId).on('click', function (event) {
+            $('#notifChatDiv' + chatId).hide();
             return new EventManager().handleChatThreadClicked(chatId);
         })
     }
 
     drawNewGroupChat(groupName, creatorUsername, chatId) {
-        var parsedGroupName = this.#replaceSpaceWithUnderscore(groupName);
-        var parsedCreatorUsername = this.#replaceSpaceWithUnderscore(creatorUsername);
-
-        if ($('#notifGroupChatDiv' + parsedGroupName + parsedCreatorUsername + chatId).length) {
-            $('#notifGroupChatDiv' + parsedGroupName + parsedCreatorUsername + chatId).show()
+        if ($('#notifGroupChatDiv' + chatId).length) {
+            $('#notifGroupChatDiv' + chatId).show()
         } else {
             $('#notifBar').prepend(`
-                <div id="${"notifGroupChatDiv" + parsedGroupName + parsedCreatorUsername + chatId}" style="display:flex">
-                    <button class="self-align-end closeBtn" id="${"closeNotifGroupChat" + parsedGroupName + parsedCreatorUsername + chatId}" type="button"><i class="fa fa-close"></i></button>
-                    <a id="${"notifGroupChat" + parsedGroupName + parsedCreatorUsername + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                <div id="${"notifGroupChatDiv" + chatId}" style="display:flex">
+                    <button class="self-align-end closeBtn" id="${"closeNotifGroupChat" + chatId}" type="button"><i class="fa fa-close"></i></button>
+                    <a id="${"notifGroupChat" + chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
                         <div class="notifBarDiv">
                             <small>${creatorUsername} invited you to the group chat '${groupName}'.</small>
                         </div>
@@ -82,18 +77,18 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifGroupChat' + parsedGroupName + parsedCreatorUsername + chatId).on('click', function (event) {
-            $('#notifGroupChatDiv' + parsedGroupName + parsedCreatorUsername + chatId).hide();
+        $('#closeNotifGroupChat' + chatId).on('click', function (event) {
+            $('#notifGroupChatDiv' + chatId).hide();
         })
 
-        $('#notifGroupChat' + parsedGroupName + parsedCreatorUsername + chatId).on('click', function (event) {
-            $('#notifGroupChatDiv' + parsedGroupName + parsedCreatorUsername + chatId).hide();
+        $('#notifGroupChat' + chatId).on('click', function (event) {
+            $('#notifGroupChatDiv' + chatId).hide();
             return new EventManager().handleChatThreadClicked(chatId);
         })
     }
 
     drawNewFriendRequest(senderUsername) {
-        var parsedSenderUsername = this.#replaceSpaceWithUnderscore(senderUsername);
+        var parsedSenderUsername = new StringParser(senderUsername).replaceSpaceWithUnderscore();
 
         if ($('#notifFriendRequestDiv' + parsedSenderUsername).length) {
             $('#notifFriendRequestDiv' + parsedSenderUsername).show();
@@ -121,7 +116,7 @@ class NotificationBar extends Views {
     }
 
     drawNewFriend(friendUsername) {
-        var parsedFriendUsername = this.#replaceSpaceWithUnderscore(friendUsername);
+        var parsedFriendUsername = new StringParser(friendUsername).replaceSpaceWithUnderscore();
 
         if ($('#notifFriendDiv' + parsedFriendUsername).length) {
             $('#notifFriendDiv' + parsedFriendUsername).show();
@@ -146,11 +141,6 @@ class NotificationBar extends Views {
             $('#notifFriendDiv' + parsedFriendUsername).hide();
             return new EventManager().handleFriendListClicked();
         })
-    }
-
-    #replaceSpaceWithUnderscore = function (string) {
-        string = string.replace(/ /g, "_");
-        return string;
     }
 }
 

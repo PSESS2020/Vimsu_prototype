@@ -452,10 +452,10 @@ class GameView {
     addNewChatMessage(chatId, message) {
 
         if (this.#chatListView) {
-            this.#chatListView.addNewMessage(chatId, message); // TODO
+            this.#chatListView.addNewMessage(chatId, message);
         }
 
-        if (this.#chatThreadView) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
     };
@@ -475,7 +475,7 @@ class GameView {
     }
 
     addFriend(businessCard) {
-        if (this.#friendListView) {
+        if ($('#friendListModal').is(':visible') && this.#friendListView) {
             this.#friendListView.addToFriendList(businessCard);
         }
     }
@@ -484,8 +484,8 @@ class GameView {
         new ChatParticipantListView().draw(usernames);
     }
 
-    drawNewChat(senderUsername) {
-        this.#notifBar.drawNewChat(senderUsername);
+    drawNewChat(senderUsername, chatId) {
+        this.#notifBar.drawNewChat(senderUsername, chatId);
     }
 
     drawNewGroupChat(groupName, creatorUsername, chatId) {
@@ -493,14 +493,26 @@ class GameView {
     }
 
     drawNewMessage(senderUsername, chatId) {
+        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView.getChatId() === chatId) {
+            return;
+        }
+
         this.#notifBar.drawNewMessage(senderUsername, chatId);
     }
 
     drawNewFriendRequest(senderUsername) {
+        if ($('#friendRequestListModal').is(':visible')) {
+            return;
+        }
+
         this.#notifBar.drawNewFriendRequest(senderUsername);
     }
 
     drawNewFriend(friendUsername) {
+        if ($('#friendListModal').is(':visible')) {
+            return;
+        }
+
         this.#notifBar.drawNewFriend(friendUsername);
     }
 
