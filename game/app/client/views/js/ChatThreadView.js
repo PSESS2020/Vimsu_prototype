@@ -160,12 +160,11 @@ class ChatThreadView extends WindowView {
         <div>
             <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
             <small><b>${senderUsername}</b></small>
-            <small id="asdf" class="wrapword">${message.msgText}</small>
+            <small class="wrapword">${message.msgText}</small>
         </div>
         `;
 
         $('#chatThreadModalList').append(messageDiv);
-        $('#asdf').text();
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     }
 
