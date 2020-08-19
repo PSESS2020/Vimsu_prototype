@@ -98,7 +98,7 @@
             <hr />
             <div class="form-group">
                 <input type="text" class="form-control" id="usernameInput" name="username"
-                    placeholder="Username (max. 10 chars)" maxlength="10" required>
+                    placeholder="Username (2-10 chars)" maxlength="10" required>
             </div>
             <div class="form-group">
 
@@ -117,7 +117,7 @@
                     error while verifying the input data. Please try again.</p>
                 <% } else if (locals.invalidUsernameString === true) { %>
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The username
-                    you entered doesn't match our criteria. Please try again.</p>
+                    you entered doesn't match our criteria. <br> It may only contains numbers, letters, and characters such as dash, underscore, or dot. <br> It may not contain 2 characters in a row or any characters at the start or at the end.</p>
                 <% } else if (locals.invalidEmail === true) { %>
                 <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The email you
                     entered is invalid. Please try again.</p>
