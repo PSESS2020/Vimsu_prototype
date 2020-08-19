@@ -550,7 +550,7 @@ class GameView {
 
     updateLectureToken(hasToken) {
         if(this.#lectureView) {
-            this.#lectureView.drawChat(hasToken, TokenMessages.REVOKE);
+            this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }
     };
 

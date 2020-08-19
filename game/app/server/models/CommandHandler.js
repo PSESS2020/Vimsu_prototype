@@ -56,13 +56,15 @@ module.exports = class CommandHandler {
             for(var i = 1; i < commandArgs.length; i++) {
                 text += " " + commandArgs[i];
             }
+            // TODO FIX
             this.#serverController.emitEventIn('/', "New global message", header, text);
         }
     };
     
     globalNote(socket, context, commandArgs) {
         var message = Object.values(Notes)[commandArgs];
-        this.#serverController.sendNotification(socket.id, message);
+        // TODO FIX
+        this.#serverController.emitEventIn('/', "New global message", "Announcement", message);
     };
     
     printHelp(socket, context, commandArgs) {
