@@ -97,6 +97,18 @@ module.exports = Object.freeze({
     UNKNOWNCOMMAND: {
         header: "Unrecognized command.",
         body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+    },
+    TESTMESSAGES: {
+        header: ["Welcome", "NPC Test", "Friend Requests and Chat Messages", "Group Chats", "Allchat", "Room Switch",
+                    "Lecture Join", "Lecture Chat", "Tile Clicking", "Monkey Testing", ],
+        body: ["Welcome to and thank your for participating in this stresstest of our app VIMSU. Throughout the test, you will receive messages like this one, instructing you on which feature to try out next. Please follow them as closely as possible, but do also please feel free to explore the app. Thank you for your cooperation!",
+            "Please take a short amount of time to talk to the NPC in the reception area. You will receive some important information on how to use the app. You can talk to the NPC by getting close to it and clicking it.",
+            "We will start out this test by testing the 'Friend Request' and 'Chat Messages' features. Please send out as many friend requests and private chat messages to other participants as possible.",
+            "The next feature being tested is the 'Group Chat' feature. Please create new group chats and post messages into them.",
+            "We will proceed by testing the 'Allchat' feature. Please feel free to spam messages into the allchat to your heart's content.",
+            "Next up is the 'Room Switch' feature. Please start to switch rooms as rapidly as you can. Try to visit each of the rooms the app offers!",
+            "Finally, we will test the 'Lecture' feature. Please proceed to the lecture door, pick out a lecture to watch and enter it. Once the lecture has concluded, please take a short while to spam messages into the lecture chat.",
+            "To conclude the test, we would like to ask you to just wildly spam clicks all over the graphical interface for the next minute.",
+            "Thank you for participating in this test! Please take a couple of minutes to fill out the survey and share your user experience with us."]
     }
-
 });
