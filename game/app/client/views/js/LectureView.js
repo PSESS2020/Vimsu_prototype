@@ -30,10 +30,8 @@ class LectureView extends WindowView {
                 sendMessage(event);
             });
 
-            $('#lectureChatInput').keydown((e) => {
-                e.stopPropagation();
-                //enables sending messages with enter key
-                if (e.keyCode === 13) {
+            $(document).on('keydown', function(e) {
+                if(document.activeElement === $("#lectureChatInput")[0] && e.keyCode === 13) {
                     sendMessage(event);
                 }
             });
