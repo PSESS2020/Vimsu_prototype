@@ -20,7 +20,7 @@ class LectureView extends WindowView {
 
                 let messageVal = $('#lectureChatInput').val();
                 if (messageVal !== '') {
-                    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+                    new EventManager().handleLectureChatMessageInput(messageVal);
                     $('#lectureChatInput').val('');
                     $('#lectureChatInput').focus();
                 }
@@ -30,10 +30,8 @@ class LectureView extends WindowView {
                 sendMessage(event);
             });
 
-            $('#lectureChatInput').keydown((e) => {
-                e.stopPropagation();
-                //enables sending messages with enter key
-                if (e.keyCode === 13) {
+            $(document).on('keydown', function(e) {
+                if(document.activeElement === $("#lectureChatInput")[0] && e.keyCode === 13) {
                     sendMessage(event);
                 }
             });
@@ -192,21 +190,27 @@ class LectureView extends WindowView {
         }
     }
 
+    appendMessage(message) {
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+
+        var messageDiv = `
+            <div>
+                <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
+                <small><b>${message.username}</b></small>
+                <small class="wrapword">${message.text}</small>
+            </div>
+        `;
+
+        $('#lectureChatMessages').append(messageDiv);
+        $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
+    }
+
     drawChat(lectureChat) {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for (var i = 0; i < lectureChat.length; i++) {
-                var message = lectureChat[i];
-                var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
-                var messageHeader = message.username + ", " + timestamp + ":";
-                var $newMessageHeader = $("<div style='font-size: small;'></div>");
-                var $newMessageBody = $("<div style='font-size: medium;'></div>");
-                $newMessageHeader.text(messageHeader);
-                $newMessageBody.text(message.text);
-                $('#lectureChatMessages').append($newMessageHeader);
-                $('#lectureChatMessages').append($newMessageBody);
+                this.appendMessage(lectureChat[i])
             }
-
         }
     }
     

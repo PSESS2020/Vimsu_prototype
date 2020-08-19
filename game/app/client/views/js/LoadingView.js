@@ -13,7 +13,7 @@ class LoadingView extends Views {
     contentLoaded(totalContents, loadedContents) {
         var percentage = ((100 / totalContents * loadedContents) << 0) + "%";
         this.#bar[0].style.width = percentage;
-        this.#status[0].innerHTML = "Loading Game " + percentage + " . . .";
+        this.#status[0].innerHTML = "Loading Conference " + percentage + " . . .";
     }
 
     doneLoading() {

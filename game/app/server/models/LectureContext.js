@@ -36,7 +36,7 @@ module.exports = class LectureContext extends CommandContext {
     
     removeUser(userToRemove) {
         var ppantId = this.#serverController.getIdOf(userToRemove);
-        if (this.#contextObject.hasPPant(ppantId)) {
+        if (ppantId !== undefined && this.#contextObject.hasPPant(ppantId)) {
             this.#removeByID(ppantId, Messages.REMOVAL);
         }
     };

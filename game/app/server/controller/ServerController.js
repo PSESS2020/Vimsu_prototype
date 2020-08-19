@@ -310,14 +310,6 @@ module.exports = class ServerController {
                         this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);       
                     }
 
-                    if (typeOfCurrentRoom === TypeOfRoom.FOYER) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOYERVISIT);
-                    } else if (typeOfCurrentRoom === TypeOfRoom.FOODCOURT) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.FOODCOURTVISIT);
-                    } else if (typeOfCurrentRoom === TypeOfRoom.RECEPTION) {
-                        this.applyTaskAndAchievement(ppant.getId(), TypeOfTask.RECEPTIONVISIT);
-                    }
-
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
                         socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank);
                     }).catch(err => {

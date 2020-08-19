@@ -39,6 +39,9 @@ class EventManager {
 
     }
 
+    handleLectureChatMessageInput(messageVal) {
+        this.#clientController.sendToServerLectureChatMessage(messageVal);
+    }
 
     handleLectureClicked(lectureId) {
         this.#clientController.handleFromViewEnterLecture(lectureId);
