@@ -20,7 +20,7 @@ class LectureView extends WindowView {
 
                 let messageVal = $('#lectureChatInput').val();
                 if (messageVal !== '') {
-                    clientController.sendToServerLectureChatMessage($('#lectureChatInput').val());
+                    new EventManager().handleLectureChatMessageInput(messageVal);
                     $('#lectureChatInput').val('');
                     $('#lectureChatInput').focus();
                 }
