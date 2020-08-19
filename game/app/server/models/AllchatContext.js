@@ -37,35 +37,37 @@ module.exports = class AllchatContext extends CommandContext {
         // removes player(s) from conference
         
         var ppantID = this.#serverController.getIdOf(userToRemove);
-        var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
-        var accountId = socket.request.session.accountId;
+        if (ppantID !== undefined) {
+            var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
+            var accountId = socket.request.session.accountId;
 
 
-        /* First, it gets the socket object corresponding to player that
-         * is supposed to be removed from the game. 
-         * - (E) */
+            /* First, it gets the socket object corresponding to player that
+            * is supposed to be removed from the game. 
+            * - (E) */
 
-        if (socket != undefined) {
+            if (socket != undefined) {
             
-            if(socket.currentLecture) {
-                this.#serverController.emitEventTo(socket.id, 'force close lecture');
+                if(socket.currentLecture) {
+                    this.#serverController.emitEventTo(socket.id, 'force close lecture');
+                }
+            
+                /* Tells the clientController to remove itself from the game
+                 * (meaning to return to the homepage). Since the handling of
+                * this can be altered client-side, we also need to remove the socket
+                 * from all the rooms (see below).
+                * - (E) */
+                this.#serverController.emitEventTo(socket.id, 'remove yourself');
+                this.#serverController.ban(socket.request.session.accountId);
+
+                /* Get all the socketIO-rooms the socket belonging to the participant that
+                 * is to be removed is currently in and remove the socket from all those rooms
+                 * - (E) */
+                Object.keys(socket.rooms).forEach( (room) => {
+                    socket.leave(room);
+                    this.#serverController.emitEventIn(room, "remove player", ppantID);
+                });
             }
-            
-            /* Tells the clientController to remove itself from the game
-             * (meaning to return to the homepage). Since the handling of
-             * this can be altered client-side, we also need to remove the socket
-             * from all the rooms (see below).
-             * - (E) */
-             this.#serverController.emitEventTo(socket.id, 'remove yourself');
-             this.#serverController.ban(socket.request.session.accountId);
-
-            /* Get all the socketIO-rooms the socket belonging to the participant that
-             * is to be removed is currently in and remove the socket from all those rooms
-             * - (E) */
-            Object.keys(socket.rooms).forEach( (room) => {
-                socket.leave(room);
-                this.#serverController.emitEventIn(room, "remove player", ppantID);
-            });
             
         }
 
@@ -77,22 +79,26 @@ module.exports = class AllchatContext extends CommandContext {
     
     muteUser(userToMute) {
         var ppantID = this.#serverController.getIdOf(userToMute);
-        var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
-        var accountId = socket.request.session.accountId;
-        if (socket != undefined && !this.#serverController.isMuted(accountId)) {
-            this.#serverController.mute(accountId);
-            this.#serverController.sendNotification(socket.id, Messages.MUTE);
+        if (ppantID !== undefined) {
+            var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
+            var accountId = socket.request.session.accountId;
+            if (socket != undefined && !this.#serverController.isMuted(accountId)) {
+                this.#serverController.mute(accountId);
+                this.#serverController.sendNotification(socket.id, Messages.MUTE);
+            }
         }
     };
     
     unmuteUser(userToUnmute) {        
         var ppantID = this.#serverController.getIdOf(userToUnmute);
-        var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
-        var accountId = socket.request.session.accountId;
-        if (socket != undefined && this.#serverController.isMuted(accountId)) {
-            this.#serverController.unmute(accountId);
-            this.#serverController.sendNotification(socket.id, Messages.UNMUTE);
-        }
-    };
+        if (ppantID !== undefined) {
+            var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
+            var accountId = socket.request.session.accountId;
+            if (socket != undefined && this.#serverController.isMuted(accountId)) {
+                this.#serverController.unmute(accountId);
+                this.#serverController.sendNotification(socket.id, Messages.UNMUTE);
+            }
+        };
+    }
     
 }
