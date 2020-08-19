@@ -197,6 +197,10 @@ module.exports = class RouteController {
                 return response.render('register', { invalidUsername: true });
             }
 
+            if(/\s/.test(request.body.username)) {
+                return response.render('register', { invalidUsernameString: true });
+            }
+
             username = request.body.username;
             email = request.body.email;
 
