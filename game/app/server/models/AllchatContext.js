@@ -47,6 +47,10 @@ module.exports = class AllchatContext extends CommandContext {
 
         if (socket != undefined) {
             
+            if(socket.currentLecture) {
+                this.#serverController.emitEventTo(socket.id, 'force close lecture');
+            }
+            
             /* Tells the clientController to remove itself from the game
              * (meaning to return to the homepage). Since the handling of
              * this can be altered client-side, we also need to remove the socket

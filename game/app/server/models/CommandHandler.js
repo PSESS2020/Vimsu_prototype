@@ -65,7 +65,8 @@ module.exports = class CommandHandler {
     
     globalNote(socket, context, commandArgs) {
         var message = Object.values(Notes)[commandArgs];
-        this.#serverController.sendNotification(socket.id, message);
+        // TODO FIX
+        this.#serverController.emitEventIn('/', "New global message", "Announcement", message);
     };
     
     printHelp(socket, context, commandArgs) {
