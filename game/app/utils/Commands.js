@@ -4,7 +4,7 @@ module.exports = Object.freeze({
         method: "globalMsg"
     },
     GLOBALNOTE: {
-        string: "glbnote",
+        string: "testmsg",
         method: "globalNote"
     },
     LOGMESSAGES: {

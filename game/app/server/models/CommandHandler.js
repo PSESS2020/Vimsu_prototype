@@ -2,7 +2,6 @@ const ServerController = require('../controller/ServerController.js');
 const CommandContext = require('./CommandContext.js')
 const Commands = require('../../utils/Commands.js');
 const Messages = require('../../utils/Messages.js');
-const Notes = require('../../utils/PremadeMessages.js');
 
 // this can probably be chucked out again and all it's functionality be moved into the context classes?
 module.exports = class CommandHandler {
@@ -62,11 +61,10 @@ module.exports = class CommandHandler {
             this.#serverController.sendGlobalAnnouncement(username, text);
         }
     };
-    
+        
     globalNote(socket, context, commandArgs) {
-        var message = Object.values(Notes)[commandArgs];
-        // TODO FIX
-        this.#serverController.emitEventIn('/', "New global message", "Announcement", message);
+        var arg = Number.parseInt(commandArgs[0], 10);
+        this.#serverController.sendGlobalAnnouncement("VIMSU", Messages.TESTMESSAGES.body[arg]);
     };
     
     printHelp(socket, context, commandArgs) {

@@ -102,7 +102,6 @@ module.exports = class ServerController {
                     return;
                 }
 
-                // TODO: make tis not display ban-message on double-log-in
                 var accountId = socket.request.session.accountId;
                 if (this.isBanned(accountId)) {
                     this.#io.to(socket.id).emit('remove yourself');
@@ -146,6 +145,7 @@ module.exports = class ServerController {
                     console.log("roomId:" + currentRoomId)
 
                     socket.ppantId = ppant.getId();
+                    //socket.username = ppant.getBusinesscard().getUsername();
 
                     //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
