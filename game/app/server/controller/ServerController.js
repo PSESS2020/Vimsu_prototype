@@ -631,7 +631,7 @@ module.exports = class ServerController {
                     
 
                 //User can only chat when he has a token or is the orator of this lecture
-                } else if (lecture.hasToken(ppantID) || participant.getBusinessCard().getUsername() === lecture.getOratorUsername()) {
+                } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
 
                     this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
@@ -652,6 +652,8 @@ module.exports = class ServerController {
             socket.on('enterLecture', (ppantID, lectureId) => {
 
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+                let ppant = this.#ppants.get(ppantID);
+                let ppantUsername = ppant.getBusinessCard().getUsername();
 
                 if (idx < 0) {
                     throw new Error(lectureId + " is not in list of current lectures")
@@ -665,13 +667,13 @@ module.exports = class ServerController {
                     return;
                 }
 
-                if (lecture.enter(ppantID)) {
-                    console.log(ppantID + " joins " + lectureId);
+                if (lecture.enter(ppantID, ppantUsername)) {
+                    console.log(ppantUsername + " joins " + lectureId);
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
                     var participant = this.#ppants.get(ppantID);
-                    var token = lecture.hasToken(ppantID);
+                    var token = lecture.hasToken(ppantID, participant.getBusinessCard().getUsername());
                     var lectureChat = lecture.getLectureChat();
                     console.log(lectureChat);
                     var messages = lecture.getLectureChat().getMessages();
@@ -700,7 +702,7 @@ module.exports = class ServerController {
                 socket.leave(lectureId);
                 socket.currentLecture = undefined;
                 socket.broadcast.emit('showAvatar', participantId);
-                if (lectureEnded && lecture.isEnded() && lecture.hasToken(participantId)) {
+                if (lectureEnded && lecture.isEnded() && lecture.hasToken(participantId, participant.getBusinessCard().getUsername())) {
                     this.applyTaskAndAchievement(participantId, TypeOfTask.LECTUREVISIT);
                 }
             });
