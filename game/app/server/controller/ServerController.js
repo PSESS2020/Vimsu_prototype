@@ -301,7 +301,7 @@ module.exports = class ServerController {
                     * Check if this is the first conference visit of this ppant 
                     * if so, remind him to click the BasicTutorial NPC
                     */
-                    if(ppant.getTaskTypeMappingCount(TypeOfTask.RECEPTIONVISIT) === 0) {
+                    if(ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
                         let messageHeader = 'Welcome to VIMSU!';
                         let messageBody = 'Please talk to our BasicTutorial NPC by clicking' +
                                           ' the tile he is standing on. He will give you a' +
