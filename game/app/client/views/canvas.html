@@ -50,25 +50,52 @@
     </canvas>
     <div class="row mt-2">
         <div class="d-flex flex-row col-12">
-            <div class="d-flex flex-column">
-                <form id="allchat" action="">
-                    <input id="allchatMessageInput" autocomplete="off"
-                        placeholder="Enter room chat message ..." /><button>>></button>
-                </form>
-                <div id="allchatMessages" class="messageBar">
-
-                </div>
-
-            </div>
-            <div class="d-flex flex-column ml-3" style="text-align: center;">
+            <div class="d-flex flex-column" style="text-align: left;">
                 <div id="time" style="color: antiquewhite"></div>
                 <div id="location" style="color: antiquewhite"></div>
                 <div>
                     <small id="fps" style="color: antiquewhite; opacity: 0.5"></small>
                     <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
                 </div>
+                <br>
+                <div id="allchatMessages" class="allChatBar">
+
+                </div>
                 
             </div>
+            <div class="d-flex flex-column ml-4">
+                <form id="allchat" action="">
+                    <input id="allchatMessageInput" autocomplete="off"
+                        placeholder="Enter room chat message ..." /><button style="background-color: transparent">>></button> 
+                </form>
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" title="Show Room Chat Messages" onclick="" href=""
+                    style="z-index: 300">
+                    <small>Show Room Chat Messages</small>
+                </a>
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" title="Hide Room Chat Messages" href="" onclick=""
+                    style="z-index: 300">
+                    <small>Hide Room Chat Messages</small>
+                </a>
+
+                <script>
+                    $('#showRoomChat').hide();
+
+                    $('#showRoomChat').on('click', function (event) {
+                        event.preventDefault();
+                            $('#allchatMessages')[0].style.visibility = "visible";
+                            $('#showRoomChat').hide();
+                            $('#hideRoomChat').show();
+                    })
+                    $('#hideRoomChat').on('click', function (event) {
+                        event.preventDefault();
+                            $('#allchatMessages')[0].style.visibility = "hidden";
+                            $('#hideRoomChat').hide();
+                            $('#showRoomChat').show();
+                    })
+
+                </script>
+            </div>
+            
             <div class="d-flex flex-column ml-auto">
                 <div class="achievementBox p-1 align-items-center text-center">
                     <i class="fa fa-product-hunt navbarIcons"></i>
@@ -95,13 +122,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -180px;">
+        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -65vw;">
             <div id="connectionStatus"
                 style="background-color: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 10px; color: firebrick; z-index: 1000; display: none">
             </div>
 
         </div>
-        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -85px;">
+        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -33vw;">
 
         </div>
     </div>
@@ -227,7 +254,7 @@
                     <div class="currentLecturesHeader p-3 mb-3 d-flex">
                         <h5>Current Lectures</h5>
                         <button class="ml-auto pl-1 pr-1"
-                            style="background-color: transparent !important; border-color: transparent !important; color: white; box-shadow: 0px 0px 0px transparent;"
+                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
                             id="closeCurrentLecturesButton" type="button"><i class="fa fa-close"></i></button>
                     </div>
                 </div>
@@ -274,10 +301,10 @@
             <div class="row">
                 <div class="col-12 p-0">
                     <div class="globalChatWindowHeader p-3 mb-3 d-flex" id="globalChatMessageHeader">
-                        <div style="background-color: transparent !important; border-color: transparent !important; color: white; box-shadow: 0px 0px 0px transparent; font-size: large;"
+                        <div style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent; font-size: large;"
                             id="globalChatWindowHeaderText"></div>
                         <button class="ml-auto pl-1 pr-1"
-                            style="background-color: transparent !important; border-color: transparent !important; color: white; box-shadow: 0px 0px 0px transparent;"
+                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
                             id="closeGlobalChatButton" type="button"><i class="fa fa-close"></i></button>
                     </div>
                 </div>

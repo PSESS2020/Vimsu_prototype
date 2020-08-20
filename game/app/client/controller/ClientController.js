@@ -529,10 +529,18 @@ class ClientController {
 
     // Adds a new message to the all-chat
     handleFromServerNewAllchatMessage(message) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
-        var msgText = "[" + timestamp + "] " + message.username + ": " + message.text;
-        $('#allchatMessages').prepend($('<div>').text(msgText));
-        $('#allchatMessages').scrollTop(0);
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+
+        var messageDiv = `
+            <div>
+                <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
+                <small><b>${message.username}</b></small>
+                <small class="wrapword">${message.text}</small>
+            </div>
+        `;
+
+        $('#allchatMessages').prepend(messageDiv);
+        $('#lectureChatMessages').scrollTop(0);
     }
 
     handleFromServerNewLectureChatMessage(message) {
@@ -569,9 +577,18 @@ class ClientController {
     handleFromServerInitAllchat(messages) {
         $('#allchatMessages').empty();
         messages.forEach((message) => {
-            var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
-            $('#allchatMessages').prepend($('<div>').text("[" + timestamp + "] " + message.username + ": " + message.text));
-        });
+            var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+
+            var messageDiv = `
+                <div>
+                    <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
+                    <small><b>${message.username}</b></small>
+                    <small class="wrapword">${message.text}</small>
+                </div>
+            `;
+
+            $('#allchatMessages').prepend(messageDiv);
+        })
         $('#allchatMessages').scrollTop(0);
     }
 

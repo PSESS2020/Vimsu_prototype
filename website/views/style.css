@@ -43,14 +43,14 @@ margin: 0;
     background-color: #028090;
     border: none;
     border-radius: 3px;
-    color: white;
+    color: antiquewhite;
     text-align: center;
     text-decoration: none;
     border: 2px solid #028090;
 }
 
   .btn-submit:hover {
-    background-color: white;
+    background-color: antiquewhite;
     border: 2px solid #028090;
     color: #028090;
 }

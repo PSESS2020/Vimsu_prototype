@@ -140,6 +140,18 @@ height: 125px;
 max-width: 16vw;
 }
 
+.allChatBar {
+  font-size: 15px;
+  background:rgb(221, 221, 221, 0.8);
+  overflow-y: scroll;
+  border-radius: 0px 5px 5px 0px;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  height: 32vw;
+  max-width: 20vw;
+}
+
 #allchatMessageInput {
   outline: none;
   background-color: rgb(15, 15, 15); 
@@ -148,12 +160,9 @@ max-width: 16vw;
 
 #allchatMessages div {
 background: none;
-color: antiquewhite;
-border-radius: 5px;
-border: 1px solid antiquewhite;
+color: rgb(15, 15, 15);
 padding: 5px 10px;
 overflow-wrap: break-word;
-
 }
 
 .notifBarDiv {
@@ -464,6 +473,15 @@ body::-webkit-scrollbar {
   color: antiquewhite; 
   opacity: .5 !important;
   box-shadow: 0px 0px 0px transparent;
+}
+
+.showRoomChat {
+  color: antiquewhite;
+}
+
+.showRoomChat:hover {
+  opacity: .5;
+  color: antiquewhite;
 }
 
 .table {
