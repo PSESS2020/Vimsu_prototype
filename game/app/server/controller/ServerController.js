@@ -3,7 +3,6 @@
 /* ############################################################################### */
 
 const Position = require('../models/Position.js');
-const ParticipantController = require('./ParticipantController.js');
 const RoomService = require('../services/RoomService.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
@@ -35,13 +34,14 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     #muteList;
-    #ppantControllers;
-
-
-    //TODO: Muss noch ausgelagert werden in RoomController oder ConferenceController
     #rooms;
-    #ppants;
     #roomService;
+
+    //map from socket-id to ppant-id
+    #socketMap;
+
+    //map from ppant-id to ppant-instance
+    #ppants;
 
     constructor(socket, db, blob) {
         if (!!ServerController.instance) {
@@ -57,8 +57,8 @@ module.exports = class ServerController {
         //Should be turned off if the product gets released.
         this.#DEBUGMODE = false;
 
-        //Should be initialized here, otherwise the controllers are reset every time a user joins.
-        this.#ppantControllers = new Map();
+        //Should be initialized here, otherwise the sockets are reset every time a user joins.
+        this.#socketMap = new Map();
 
         //Init all rooms
         this.#roomService = new RoomService();
@@ -98,7 +98,7 @@ module.exports = class ServerController {
             socket.on('new participant', () => {
                 /* If we already have a ppant connected on this socket, we do nothing
                 /* - (E) */
-                if (this.#ppantControllers.has(socket.id) || !socket.request.session.loggedin) {
+                if (this.#socketMap.has(socket.id) || !socket.request.session.loggedin) {
                     return;
                 }
 
@@ -144,9 +144,8 @@ module.exports = class ServerController {
 
                     console.log("roomId:" + currentRoomId)
 
-                    socket.ppantId = ppant.getId();
-                    //socket.username = ppant.getBusinesscard().getUsername();
-
+                    socket.ppantID = ppant.getId();
+                    
                     //Join Room Channel (P)
                     socket.join(currentRoomId.toString());
 
@@ -156,14 +155,13 @@ module.exports = class ServerController {
                         socket.join(chat.getId());
                     });
 
-                    //At this point kind of useless, maybe usefull when multiple rooms exist (P)
+                    //put ppant in right room
                     currentRoom.enterParticipant(ppant);
-                    var ppantCont = new ParticipantController(ppant);
+
+                    //add ppant data to maps
+                    this.#socketMap.set(socket.id, ppant.getId());
                     this.#ppants.set(ppant.getId(), ppant);
-
-                    //console.log("add participant to ppantcontroller: " + socket.id + " " + ppantCont.getParticipant().getId());
-                    this.#ppantControllers.set(socket.id, ppantCont);
-
+                    
                     //Get asset paths of starting room
                     let assetPaths = this.#rooms[currentRoomId - 1].getAssetPaths();
 
@@ -238,8 +236,6 @@ module.exports = class ServerController {
                         });
                     });
 
-
-
                     //Needed for emiting this business card to other participants in room
                     let businessCardObject = {
                         id: ppant.getId(),
@@ -252,11 +248,9 @@ module.exports = class ServerController {
                         email: email
                     };
 
-
                     //Server sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom,
                         assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength());
-
 
                     // Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
@@ -323,7 +317,7 @@ module.exports = class ServerController {
 
             socket.on('sendMessage', (text) => {
 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 let roomID = participant.getPosition().getRoomId();
                 let room = this.#rooms[roomID - 1].getRoom();
@@ -382,7 +376,7 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('requestMovementStart', (direction, newCordX, newCordY) => {
 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let roomId = this.#ppants.get(ppantID).getPosition().getRoomId();
 
                 let oldDir = this.#ppants.get(ppantID).getDirection();
@@ -416,7 +410,7 @@ module.exports = class ServerController {
 
             //Handle movement stop
             socket.on('requestMovementStop', () => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let roomId = this.#ppants.get(ppantID).getPosition().getRoomId();
 
                 socket.to(roomId.toString()).emit('movementOfAnotherPPantStop', ppantID);
@@ -426,7 +420,7 @@ module.exports = class ServerController {
             //Event to handle click on door tile
             socket.on('enterRoom', (targetRoomId) => {
 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
 
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
@@ -606,7 +600,7 @@ module.exports = class ServerController {
             });
 
             socket.on('lectureMessage', (text) => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let username = this.#ppants.get(ppantID).getBusinessCard().getUsername();
 
                 let lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
@@ -656,7 +650,7 @@ module.exports = class ServerController {
 
             socket.on('enterLecture', (lectureId) => {
 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
                 let ppant = this.#ppants.get(ppantID);
                 let ppantUsername = ppant.getBusinessCard().getUsername();
@@ -701,7 +695,7 @@ module.exports = class ServerController {
             })
 
             socket.on('leaveLecture', (lectureId, lectureEnded) => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let schedule = this.#conference.getSchedule();
                 let lecture = schedule.getLecture(lectureId);
 
@@ -727,7 +721,7 @@ module.exports = class ServerController {
 
             socket.on('getCurrentLectures', () => {
                 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let enterPosition = this.#ppants.get(ppantID).getPosition();
                 let currentRoomId = enterPosition.getRoomId();
                 let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
@@ -799,7 +793,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getBusinessCard', (targetID) => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
 
                 //prevents the server to crash when a ppant emits a non existing targetID
@@ -837,7 +831,7 @@ module.exports = class ServerController {
 
             socket.on('getAchievements', () => {
 
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let achData = [];
                 let ppant = this.#ppants.get(ppantID);
 
@@ -865,7 +859,7 @@ module.exports = class ServerController {
             })
 
             socket.on('getFriendList', () => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let friendList = this.#ppants.get(ppantID).getFriendList();
 
                 let friendListData = [];
@@ -890,7 +884,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getInviteFriends', (groupName, chatId) => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
 
                 if (!groupName || groupName.length > 20) {
                     socket.emit('inviteFriends', undefined, groupName, undefined);
@@ -943,7 +937,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getFriendRequestList', () => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let friendRequestList = this.#ppants.get(ppantID).getReceivedRequestList();
 
                 let friendRequestListData = [];
@@ -971,7 +965,7 @@ module.exports = class ServerController {
 
             //Called whenever a ppant creates a new 1:1 chat (P)
             socket.on('createNewChat', (chatPartnerID, chatPartnerUsername) => {
-                let creatorID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 let chatPartner = this.#ppants.get(chatPartnerID);
 
@@ -1075,7 +1069,7 @@ module.exports = class ServerController {
 
             //Called whenever a participant creates a new group chat (N)
             socket.on('createNewGroupChat', (chatName, chatPartnerIDList, limit, chatId) => {
-                let creatorID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let creatorID = socket.ppantID;
 
                 if (chatPartnerIDList.length > limit || chatPartnerIDList.length < 1) {
                     return false;
@@ -1247,20 +1241,6 @@ module.exports = class ServerController {
                             * - (E) */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
 
-
-                        /*chatPartnerIDList.forEach(chatPartnerID => {
-                            this.#ppantControllers.forEach( (ppantCont, socketId) => {
-                                console.log("ppantController socket ids: " + socketId + " " + ppantCont.getParticipant().getId());
-                            });
-
-                            let chatPartner = this.#ppants.get(chatPartnerID);
-                            console.log("server partner id group: " + chatPartner.getId() + " " + chatPartnerID)
-                            let socketid = this.getSocketId(chatPartner.getId());
-
-                            console.log("server socket id group: " + socketid)
-    
-                        })*/
-
                         return chat.getId();
 
                     }).then(chatId => {
@@ -1309,7 +1289,7 @@ module.exports = class ServerController {
              * the timestamp, sender-username and a preview of the last message for display purposes. 
              * - (E) */
             socket.on('getChatList', () => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let ppantUsername = this.#ppants.get(ppantID).getBusinessCard().getUsername();
 
                 let chatList = this.#ppants.get(ppantID).getChatList();
@@ -1381,7 +1361,7 @@ module.exports = class ServerController {
              * - (E) */
             socket.on('getChatThread', (chatID) => {
 
-                let requesterId = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let requesterId = socket.ppantID;
                 let participant = this.#ppants.get(requesterId);
 
                 console.log("CHAT THREAD PARTICIPANT: " + participant.getId());
@@ -1447,7 +1427,7 @@ module.exports = class ServerController {
              * - (E) */
 
             socket.on('newChatMessage', (chatId, msgText) => {
-                let senderId = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let senderId = socket.ppantID;
                 let sender = this.#ppants.get(senderId);
                 let senderUsername = sender.getBusinessCard().getUsername();
 
@@ -1489,7 +1469,7 @@ module.exports = class ServerController {
             });
 
             socket.on('getChatParticipantList', (chatId) => {
-                let requesterId = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let requesterId = socket.ppantID;
                 let requester = this.#ppants.get(requesterId);
 
                 if (requester.isMemberOfChat(chatId)) {
@@ -1512,7 +1492,7 @@ module.exports = class ServerController {
             socket.on('newFriendRequest', (targetID, chatID) => {
                 console.log(`Received friend request from ${requesterID} for ${targetID}.`);
 
-                let requesterID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let requesterID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
 
@@ -1579,7 +1559,7 @@ module.exports = class ServerController {
 
             //handles a friendrequest, either accepted or declined
             socket.on('handleFriendRequest', (requesterID, acceptRequest) => {
-                let targetID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let targetID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
 
@@ -1644,7 +1624,7 @@ module.exports = class ServerController {
 
             //handles removing a friend in both friend lists
             socket.on('removeFriend', (removedFriendID) => {
-                let removerID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let removerID = socket.ppantID;
                 let remover = this.#ppants.get(removerID);
                 let removedFriend = this.#ppants.get(removedFriendID);
 
@@ -1670,7 +1650,7 @@ module.exports = class ServerController {
 
 
             socket.on('removeParticipantFromChat', (chatId) => {
-                let removerId = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let removerId = socket.ppantID;
                 let remover = this.#ppants.get(removerId);
                 let removerUsername = remover.getBusinessCard().getUsername();
 
@@ -1723,7 +1703,7 @@ module.exports = class ServerController {
 
 
             socket.on('getNPCStory', (npcID) => {
-                let ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
                 let currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
                 let npc = this.#rooms[currentRoomId - 1].getRoom().getNPC(npcID);
                 
@@ -1750,19 +1730,14 @@ module.exports = class ServerController {
             // as of now, this is completely broken
             socket.on('disconnect', (reason) => {
                 //Prevents server crash because client sends sometimes disconnect" event on connection to server.
-                if (!this.#ppantControllers.has(socket.id)) {
+                if (!this.#socketMap.has(socket.id)) {
                     console.log("disconnect");
                     return;
                 }
 
-                /* This still needs error-Handling for when no such ppantCont exists - (E) */
-                var ppantID = this.#ppantControllers.get(socket.id).getParticipant().getId();
+                let ppantID = socket.ppantID;
 
-                var currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
-                // gameRoomController.removeParticipantController(this.#ppantControllers.get(socket.id);
-                // The next line can probably be just handled inside the previous one
-                //io.sockets.emit('remove player', ppantID);
-                console.log(ppantID);
+                let currentRoomId = this.#ppants.get(ppantID).getPosition().getRoomId();
                 socket.to(currentRoomId.toString()).emit('remove player', ppantID);
                 console.log('Participant with Participant_ID: ' + ppantID + ' has disconnected from the game . . .');
 
@@ -1775,8 +1750,7 @@ module.exports = class ServerController {
                 //remove participant from room
                 this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
 
-                console.log("delete participant from ppantController: " + socket.id);
-                this.#ppantControllers.delete(socket.id);
+                this.#socketMap.delete(socket.id);
                 this.#ppants.delete(ppantID);
 
                 if (socket.currentLecture) {
@@ -1833,8 +1807,8 @@ module.exports = class ServerController {
          * solution.
          * - (E) */
         var id;
-        this.#ppantControllers.forEach((ppantCont, socketId) => {
-            if (ppantCont.getParticipant().getId() == ppantID) {
+        this.#socketMap.forEach((participantID, socketId) => {
+            if (participantID == ppantID) {
                 id = socketId;
             }
         });
@@ -1860,9 +1834,9 @@ module.exports = class ServerController {
          * the id of last logged-in participant of a user.
          * - (E) */
         var id;
-        this.#ppantControllers.forEach((ppantCont, socketId) => {
-            if (ppantCont.getParticipant().getBusinessCard().getUsername() == username) {
-                id = ppantCont.getParticipant().getId();
+        this.#ppants.forEach((participant, ppantID) => {
+            if (participant.getBusinessCard().getUsername() === username) {
+                id = ppantID;
             }
         });
         return id;
