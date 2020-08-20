@@ -1,6 +1,6 @@
 module.exports = Object.freeze({
     HELPLECTURECHAT: {
-        header: "List of Commands.",
+        header: "List of Commands",
         body: ["\\help  --  This command. Displays a list of all commands and how to use them.",
                     "\\log --  Will show a log of all messages send into the lecture chat" +
                     ", including the messageID and senderID of each message.",
@@ -31,7 +31,7 @@ module.exports = Object.freeze({
                     "WARNING: this command can NOT be reversed."]
     },
     HELPALLCHAT: {
-        header: "List of Commands.",
+        header: "List of Commands",
         body: ["\\global <message>  --  Post a message into the global chat. " +
                 "It will display in every participants game-view as a pop-up.",
                 "\\help  --  This command. Displays a list of all commands and how to use them.",
@@ -95,7 +95,7 @@ module.exports = Object.freeze({
         body: "The orator has closed this lecture. It is no longer accessible."
     },
     UNKNOWNCOMMAND: {
-        header: "Unrecognized command.",
+        header: "Unrecognized command",
         body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
     },
     TESTMESSAGES: {
