@@ -736,9 +736,9 @@ module.exports = class ServerController {
                     socket.emit('currentLectures', currentLecturesData);
                 }
 
-                emitCurrentLectures();
-                
                 clearInterval(interval);
+                
+                emitCurrentLectures();
                 
                 interval = setInterval(() => {
                     emitCurrentLectures();
