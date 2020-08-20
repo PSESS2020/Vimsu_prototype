@@ -142,13 +142,13 @@ max-width: 16vw;
 
 .allChatBar {
   font-size: 15px;
-  background:rgb(221, 221, 221, 0.8);
+  background:rgba(34, 43, 46, 0.8);
   overflow-y: scroll;
   border-radius: 0px 0px 5px 0px;
   margin: 0;
   padding: 0;
   z-index: 1;
-  height: 30vw;
+  height: 29vw;
   max-width: 20vw;
 }
 
@@ -160,7 +160,7 @@ max-width: 16vw;
 
 #allchatMessages div {
 background: none;
-color: rgb(15, 15, 15);
+color: antiquewhite;
 padding: 5px 10px;
 overflow-wrap: break-word;
 }
