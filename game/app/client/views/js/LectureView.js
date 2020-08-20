@@ -74,6 +74,9 @@ class LectureView extends WindowView {
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
 
+        $('#tokenIcon').empty();
+        $('#tokenLabel').empty();
+
         //empties video div to prevent showing the wrong video
         $('#lectureVideo').empty();
 
