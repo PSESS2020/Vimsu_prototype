@@ -1,8 +1,3 @@
-const NORMAL = '#A9A9A9';
-const FIRST = 'gold';
-const SECOND = 'antiquewhite';
-const THIRD = '#f79736'
-
 class RankListView extends WindowView {
 
     #rankList;
@@ -19,15 +14,15 @@ class RankListView extends WindowView {
 
             var color;
 
-            if (ppant.rank == 1) {
-                color = FIRST;           
-            } else if (ppant.rank == 2) {
-                color = SECOND;
-            } else if (ppant.rank == 3) {
-                color = THIRD;
-            } else {
-                color = NORMAL;
-            }
+            if (ppant.rank == 1)
+                color = 'gold';           
+            else if (ppant.rank == 2)
+                color = 'antiquewhite';
+            else if (ppant.rank == 3)
+                color = '#f79736';
+            else
+                color = '#A9A9A9';
+            
 
             $('#rankListModal .modal-body .card-columns').append(`
                 <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: ${color}; color: ${color}; border-style: groove;">
