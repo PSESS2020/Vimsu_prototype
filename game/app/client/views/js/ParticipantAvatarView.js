@@ -12,9 +12,9 @@ const AVATAR_SCALE_WIDTH = 1.5;
 const AVATAR_SCALE_HEIGHT = 0.3125;
 
 //constants for arrow drawn above own Avatar
-const ARROW_LENGTH = 30;
-const ARROW_WIDTH = 10;
-const ARROW_COLOR = 'red';
+const ARROW_LENGTH = 20;
+const ARROW_WIDTH = 7;
+const ARROW_COLOR = 'antiquewhite';
 
 class ParticipantAvatarView extends AvatarView {
 
@@ -194,11 +194,13 @@ class ParticipantAvatarView extends AvatarView {
     //draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
     #drawArrow = function(ctx, fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
         //variables to be used when creating the arrow
-        var headlen = 10;
+        var headlen = 5;
         var angle = Math.atan2(toCordY-fromCordY,toCordX-fromCordX);
      
         ctx.save();
         ctx.strokeStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 15;
      
         //starting path of the arrow from the start square to the end square
         //and drawing the stroke
