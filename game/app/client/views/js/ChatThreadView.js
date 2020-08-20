@@ -5,20 +5,24 @@ class ChatThreadView extends WindowView {
 
     constructor() {
         super();
+        $('#chatMessageInput').off();
+        $('#chatMessageInputGroup').off();
 
-        $('#chatMessageButton').off();
-        $('#chatMessageButton').on('click', (event) => {
+        $('#chatMessageInputGroup').on('keydown', (event) => {
+            event.stopPropagation();
+        });
+
+        $('#chatMessageInputGroup').submit((event) => {
             event.preventDefault();
             this.sendMessage();
         });
 
-        $('#chatMessageInput').off();
-        $('#chatMessageInput').on('keydown', (event) => {
-            if (event.keyCode === 13) {
-                this.sendMessage();
-            }
+        $('#chatMessageButton').off();
+        $('#chatMessageButton').click((event) => {
+            event.preventDefault();
+            this.sendMessage();
         });
-
+        
         $('#chatLeaveButton').off();
         $('#chatLeaveButton').click((event) => {
             event.preventDefault();
@@ -71,7 +75,7 @@ class ChatThreadView extends WindowView {
     }
 
     sendMessage() {
-        let messageVal = $('#chatMessageInput').val();
+        let messageVal = $('#chatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (messageVal !== '') {
             new EventManager().handleChatMessageInput(this.#chat.chatId, messageVal);
@@ -161,7 +165,6 @@ class ChatThreadView extends WindowView {
         `;
 
         $('#chatThreadModalList').append(messageDiv);
-
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     }
 

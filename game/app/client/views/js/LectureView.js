@@ -18,7 +18,7 @@ class LectureView extends WindowView {
             function sendMessage(event) {
                 event.preventDefault();
 
-                let messageVal = $('#lectureChatInput').val();
+                let messageVal = $('#lectureChatInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 if (messageVal !== '') {
                     new EventManager().handleLectureChatMessageInput(messageVal);
                     $('#lectureChatInput').val('');
