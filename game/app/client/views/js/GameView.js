@@ -255,7 +255,8 @@ class GameView {
                 typeOfRoom,
                 participant.getUsername(),
                 participant.getIsVisible(),
-                participant.getIsModerator()
+                participant.getIsModerator(),
+                false
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -333,7 +334,7 @@ class GameView {
         let isModerator = ownParticipant.getIsModerator();
         this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true, isModerator);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true, isModerator, true);
         this.addToUpdateList(this.#ownAvatarView);
 
 

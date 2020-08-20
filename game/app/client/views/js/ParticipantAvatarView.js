@@ -11,6 +11,11 @@ const AVATAR_HEIGHT = 128;
 const AVATAR_SCALE_WIDTH = 1.5;
 const AVATAR_SCALE_HEIGHT = 0.3125;
 
+//constants for arrow drawn above own Avatar
+const ARROW_LENGTH = 30;
+const ARROW_WIDTH = 10;
+const ARROW_COLOR = 'red';
+
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
@@ -32,10 +37,11 @@ class ParticipantAvatarView extends AvatarView {
     #username;
     #typeOfRoom;
     #isModerator;
+    #isOwnAvatar;
 
     #gameEngine;
 
-    constructor(position, direction, participantId, typeOfRoom, username, isVisible, isModerator) {
+    constructor(position, direction, participantId, typeOfRoom, username, isVisible, isModerator, isOwnAvatar) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -52,6 +58,7 @@ class ParticipantAvatarView extends AvatarView {
         this.#username = username;
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
+        this.#isOwnAvatar = isOwnAvatar;
 
         this.#gameEngine = new IsometricEngine();
     }
@@ -130,9 +137,14 @@ class ParticipantAvatarView extends AvatarView {
             
             var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
             var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
+
+            if(this.#isOwnAvatar) {
+                this.#drawArrow(ctx_avatar, screenX + AVATAR_WIDTH / 2, screenY - 15 - ARROW_LENGTH, screenX + AVATAR_WIDTH / 2, screenY - 15, ARROW_WIDTH, ARROW_COLOR);
+            }
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
+
             if(this.#isModerator) {
                 ctx_avatar.fillStyle = "gold";
             } else {
@@ -177,5 +189,44 @@ class ParticipantAvatarView extends AvatarView {
             eventManager.handleAvatarClick(this.#participantId);
         }
         //}
+    }
+
+    //draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
+    #drawArrow = function(ctx, fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
+        //variables to be used when creating the arrow
+        var headlen = 10;
+        var angle = Math.atan2(toCordY-fromCordY,toCordX-fromCordX);
+     
+        ctx.save();
+        ctx.strokeStyle = color;
+     
+        //starting path of the arrow from the start square to the end square
+        //and drawing the stroke
+        ctx.beginPath();
+        ctx.moveTo(fromCordX, fromCordY);
+        ctx.lineTo(toCordX, toCordY);
+        ctx.lineWidth = arrowWidth;
+        ctx.stroke();
+     
+        //starting a new path from the head of the arrow to one of the sides of
+        //the point
+        ctx.beginPath();
+        ctx.moveTo(toCordX, toCordY);
+        ctx.lineTo(toCordX-headlen*Math.cos(angle-Math.PI/7),
+                   toCordY-headlen*Math.sin(angle-Math.PI/7));
+     
+        //path from the side point of the arrow, to the other side point
+        ctx.lineTo(toCordX-headlen*Math.cos(angle+Math.PI/7),
+                   toCordY-headlen*Math.sin(angle+Math.PI/7));
+     
+        //path from the side point back to the tip of the arrow, and then
+        //again to the opposite side point
+        ctx.lineTo(toCordX, toCordY);
+        ctx.lineTo(toCordX-headlen*Math.cos(angle-Math.PI/7),
+                   toCordY-headlen*Math.sin(angle-Math.PI/7));
+     
+        //draws the paths created above
+        ctx.stroke();
+        ctx.restore();
     }
 }
