@@ -63,11 +63,13 @@ class LectureView extends WindowView {
         <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
-        $('#lectureChatMessages').append(`
-            <div id="pendingLectureChatMessage">
-            <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
-            </div>
-        `);
+        if(hasToken) {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+                </div>
+            `);
+        }
 
         $('#lectureTitleLabel').text(lecture.title);
         $('#lectureSpeakerLabel').text(lecture.oratorName);
@@ -125,11 +127,10 @@ class LectureView extends WindowView {
                     clearInterval(this.#timerIntervalId);
                     $('#lecturePending').hide();
                     $('#pendingLectureChatMessage').empty();
-                    this.#lectureStatus = LectureStatus.OVER
+                    this.#lectureStatus = LectureStatus.OVER;
                     this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
                     video.controlsList.remove('nodownload');
                     video.pause();
-                    
                 }
             }, 1000); // check lecture status every 1s
 
@@ -229,7 +230,7 @@ class LectureView extends WindowView {
                 <i class="fa fa-question-circle fa-4x"></i>
             `)
             $('#tokenLabel').empty();
-            $('#tokenLabel').append('You obtained a question token!');
+            $('#tokenLabel').append(TokenMessages.HASTOKEN);
         // the input field is emptied if the user does not have a valid token
         } else {
             $('#lectureChatInputGroup').empty();
@@ -238,7 +239,7 @@ class LectureView extends WindowView {
                 <i class="fa fa-times-circle fa-4x"></i>
             `)
             $('#tokenLabel').empty();
-            $('#tokenLabel').append(message)
+            $('#tokenLabel').append(message);
         }
     };
 }
