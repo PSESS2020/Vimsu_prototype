@@ -1,3 +1,8 @@
+const NORMAL = '#A9A9A9';
+const FIRST = 'gold';
+const SECOND = 'antiquewhite';
+const THIRD = '#f79736'
+
 class RankListView extends WindowView {
 
     #rankList;
@@ -11,8 +16,21 @@ class RankListView extends WindowView {
         this.#rankList = rankList;
 
         this.#rankList.forEach(ppant => {
+
+            var color;
+
+            if (ppant.rank == 1) {
+                color = FIRST;           
+            } else if (ppant.rank == 2) {
+                color = SECOND;
+            } else if (ppant.rank == 3) {
+                color = THIRD;
+            } else {
+                color = NORMAL;
+            }
+
             $('#rankListModal .modal-body .card-columns').append(`
-                <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: #A9A9A9; color: #A9A9A9; border-style: groove;">
+                <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: ${color}; color: ${color}; border-style: groove;">
                     <div class="card-body">
                         <div class="row card-text" id="${"cardtext" + ppant.participantId}">
                             <div class="col-lg">${ppant.rank}</div>
@@ -23,22 +41,11 @@ class RankListView extends WindowView {
                 </div>
             `)
 
-            if (ppant.rank == 1) {
-                $('#rank' + ppant.participantId)[0].style.borderColor = "gold";
+            if (ppant.rank == 1 || ppant.rank == 2 || ppant.rank == 3) 
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
-                $('#cardtext' + ppant.participantId)[0].style.color = "gold";
-            } else if (ppant.rank == 2) {
-                $('#rank' + ppant.participantId)[0].style.borderColor = "antiquewhite";
-                $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
-                $('#cardtext' + ppant.participantId)[0].style.color = "antiquewhite";
-            } else if (ppant.rank == 3) {
-                $('#rank' + ppant.participantId)[0].style.borderColor = "#f79736";
-                $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
-                $('#cardtext' + ppant.participantId)[0].style.color = "#f79736";
-            }
 
             if (ppant.self) {
-                $('#rank' + ppant.participantId)[0].style.backgroundColor = 'rgba(' + 39 + ',' + 81 + ',' + 94 + ',' + 0.699 + ')';
+                $('#rank' + ppant.participantId)[0].style.boxShadow = '0 0 4px 4px ' + color;
             }
         })
     }
