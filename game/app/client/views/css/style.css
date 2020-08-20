@@ -142,7 +142,7 @@ max-width: 16vw;
 
 .allChatBar {
   font-size: 15px;
-  background:rgba(34, 43, 46, 0.8);
+  background:rgba(15, 15, 15, 0.8);
   overflow-y: scroll;
   border-radius: 0px 0px 5px 0px;
   margin: 0;
