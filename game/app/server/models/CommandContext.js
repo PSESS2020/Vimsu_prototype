@@ -9,27 +9,27 @@ module.exports = class CommandContext {
     }
     
     getMessages() {
-        // abstract method stump to be implemented in child classes
+        throw new Error('getMessages() has to be implemented!');
     };
     
     getTitle() {
-        // abstract method stump to be implemented in child classes
+        throw new Error('getTitle() has to be implemented!');
     };
     
     updateMessages() {
-        // abstract method stump to be implemented in child classes
+        throw new Error('updateMessages() has to be implemented!');
     };
     
-    removerUser() {
-        // abstract method stump to be implemented in child classes
+    removeUser(userToRemove) {
+        throw new Error('removeUser() has to be implemented!');
     };
     
-    muteUser() {
-        // abstract method stump to be implemented in child classes
+    muteUser(userToMute) {
+        throw new Error('muteUser() has to be implemented!');
     };
     
-    unmuteUser() {
-        // abstract method stump to be implemented in child classes
+    unmuteUser(userToUnmute) {
+        throw new Error('unmuteUser() has to be implemented!');
     };
     
 }

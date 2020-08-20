@@ -353,7 +353,7 @@ body::-webkit-scrollbar {
   background-color:rgba(15, 15, 15, 1) !important;
   color: antiquewhite;
   padding: 0px !important;
-  overflow: scroll;
+  overflow: hidden;
   display: none; 
   position: fixed; 
   top: 0px; 
@@ -362,10 +362,6 @@ body::-webkit-scrollbar {
   z-index: 2000; 
   width: 100%; 
   height: 100%;
-}
-
-.viewBlockerWindow::webkit-scrollbar {
-  display:none
 }
 
 .btn-lecture {
