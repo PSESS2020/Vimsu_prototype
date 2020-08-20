@@ -146,7 +146,7 @@ module.exports = class Room {
         let index = this.#listOfNPCs.findIndex(npc => npc.getId() === id);
 
         if (index < 0) {
-            throw new Error(id + " is not in list of npcs")
+            return undefined;
         }
 
         return this.#listOfNPCs[index];
