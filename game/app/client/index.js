@@ -57,7 +57,8 @@ setInterval(function () {
 $('#allchat').submit(function (event) {
 
   event.preventDefault();
-  let messageVal = $('#allchatMessageInput').val();
+  //Replace needed to replace html tags.
+  let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   if (messageVal !== '') {
 
@@ -74,7 +75,7 @@ $('#allchat').submit(function (event) {
 
 $('#groupName').submit(function (event) {
   event.preventDefault();
-  let groupName = $('#groupNameInput').val();
+  let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
   if (groupName.length > 20) {
     return false;
   }
