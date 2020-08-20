@@ -36,7 +36,7 @@ textarea {
   bottom: 0;
   pointer-events: none;
   background-color: rgb(15,15,15);
-  z-index: 3;
+  z-index: 2000;
   transition: 1s 0.4s;
 }
 
