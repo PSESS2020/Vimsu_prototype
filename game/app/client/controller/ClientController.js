@@ -243,7 +243,7 @@ class ClientController {
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
             let participantId = this.#ownParticipant.getId();
-            this.socket.emit('requestMovementStart', participantId, direction, currPosX, currPosY);
+            this.socket.emit('requestMovementStart', direction, currPosX, currPosY);
         }
     }
 
@@ -252,7 +252,7 @@ class ClientController {
         this.socketReady;
         let participantId = this.#ownParticipant.getId();
 
-        this.socket.emit('requestMovementStop', participantId);
+        this.socket.emit('requestMovementStop');
 
     }
 
@@ -260,7 +260,7 @@ class ClientController {
 
         this.socketReady;
         if (this.socket.connected)
-            this.socket.emit('sendMessage', this.#ownParticipant.getId(), text);
+            this.socket.emit('sendMessage', text);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
 
@@ -276,10 +276,10 @@ class ClientController {
 
     }
 
-    sendToServerLectureChatMessage(text, lectureId) {
+    sendToServerLectureChatMessage(text) {
         this.socketReady;
         if (this.socket.connected)
-            this.socket.emit('lectureMessage', this.#ownParticipant.getId(), this.#ownParticipant.getUsername(), text, lectureId);
+            this.socket.emit('lectureMessage', text);
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
 
@@ -667,17 +667,17 @@ class ClientController {
 
     handleFromViewEnterNewRoom(targetRoomId) {
         this.socketReady;
-        this.socket.emit('enterRoom', this.#ownParticipant.getId(), targetRoomId);
+        this.socket.emit('enterRoom', targetRoomId);
     }
 
     handleFromViewEnterLecture(lectureId) {
         this.socketReady;
-        this.socket.emit('enterLecture', this.#ownParticipant.getId(), lectureId);
+        this.socket.emit('enterLecture', lectureId);
     }
 
     handleFromViewLectureLeft(lectureId, lectureEnded) {
         this.socketReady;
-        this.socket.emit('leaveLecture', this.#ownParticipant.getId(), lectureId, lectureEnded);
+        this.socket.emit('leaveLecture', lectureId, lectureEnded);
     }
 
     handleFromViewLectureDownload(lectureId) {
@@ -687,7 +687,7 @@ class ClientController {
 
     handleFromViewGetCurrentLectures() {
         this.socketReady
-        this.socket.emit('getCurrentLectures', this.#ownParticipant.getId());
+        this.socket.emit('getCurrentLectures');
     }
 
     handleFromViewShowSchedule() {
@@ -698,32 +698,32 @@ class ClientController {
     // called after clicking on achievement list
     handleFromViewShowAchievements() {
         this.socketReady
-        this.socket.emit('getAchievements', this.#ownParticipant.getId());
+        this.socket.emit('getAchievements');
 
     }
 
     //called after click on friendlist button
     handleFromViewShowFriendList() {
         this.socketReady;
-        this.socket.emit('getFriendList', this.#ownParticipant.getId());
+        this.socket.emit('getFriendList');
     }
 
     handleFromViewShowInviteFriends(groupName, chatId) {
         this.socketReady;
-        this.socket.emit('getInviteFriends', this.#ownParticipant.getId(), groupName, chatId);
+        this.socket.emit('getInviteFriends', groupName, chatId);
     }
 
     //called after click on friendrequestlist button
     handleFromViewShowFriendRequestList() {
         this.socketReady;
-        this.socket.emit('getFriendRequestList', this.#ownParticipant.getId());
+        this.socket.emit('getFriendRequestList');
 
     }
 
     //called after 'Add Friend' Button
     handleFromViewNewFriendRequest(participantRepicientId, chatId) {
         this.socketReady;
-        this.socket.emit('newFriendRequest', this.#ownParticipant.getId(), participantRepicientId, chatId);
+        this.socket.emit('newFriendRequest', participantRepicientId, chatId);
     }
 
     //called when a friend request is accepted
@@ -734,7 +734,7 @@ class ClientController {
         TypeChecker.isString(participantId);
 
         //Tells server to accept this request
-        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, true);
+        this.socket.emit('handleFriendRequest', participantId, true);
         this.#gameView.updateFriendRequestListView(participantId, true);
         this.#gameView.addFriend(new BusinessCardClient(participantId, businessCard.username, businessCard.title,
             businessCard.surname, businessCard.forename, businessCard.job, businessCard.company, businessCard.email))
@@ -745,20 +745,20 @@ class ClientController {
         this.socketReady;
 
         //Tells server to reject this request
-        this.socket.emit('handleFriendRequest', this.#ownParticipant.getId(), participantId, false);
+        this.socket.emit('handleFriendRequest', participantId, false);
         this.#gameView.updateFriendRequestListView(participantId, false);
     }
 
     //called when this participants removes another from his friendlist
     handleFromViewRemoveFriend(friendId) {
         this.socketReady;
-        this.socket.emit('removeFriend', this.#ownParticipant.getId(), friendId);
+        this.socket.emit('removeFriend', friendId);
         this.#gameView.removeFriend(friendId);
     }
 
     handleFromViewLeaveChat(chatId) {
         this.socketReady;
-        this.socket.emit('removeParticipantFromChat', this.#ownParticipant.getId(), chatId);
+        this.socket.emit('removeParticipantFromChat', chatId);
         this.#gameView.removeChat(chatId);
     }
 
@@ -768,8 +768,8 @@ class ClientController {
             throw new Error('Ppant with ' + participantId + ' is not in room');
         }
         this.socketReady;
-        //Emits to server own ID and target ID
-        this.socket.emit('getBusinessCard', this.#ownParticipant.getId(), participantId);
+        //Emits to server target ID
+        this.socket.emit('getBusinessCard', participantId);
     }
 
     handleFromViewShowProfile() {
@@ -778,7 +778,7 @@ class ClientController {
 
     handleFromViewGetNPCStory(npcId) {
         this.socketReady;
-        this.socket.emit('getNPCStory', this.#ownParticipant.getId(), npcId);
+        this.socket.emit('getNPCStory', npcId);
     }
 
     handleFromServerAchievements(achievements) {
@@ -794,38 +794,35 @@ class ClientController {
      * response from the server.
      * - (E) */
     handleFromViewShowChatList() {
-        let participantID = this.#ownParticipant.getId();
-        this.socket.emit('getChatList', participantID, this.#ownBusinessCard.getUsername());
+        this.socket.emit('getChatList');
     };
 
     handleFromViewShowChatThread(chatID) {
-        this.socket.emit('getChatThread', this.#ownParticipant.getId(), chatID);
+        this.socket.emit('getChatThread', chatID);
     };
 
     handleFromViewShowChatParticipantList(chatId) {
-        this.socket.emit('getChatParticipantList', this.#ownParticipant.getId(), chatId);
+        this.socket.emit('getChatParticipantList', chatId);
     }
 
-    /*Triggers the createNewChat event and emits the id of the participant that created the chat and 
+    /*Triggers the createNewChat event and emits  
     the id of the other chat participant to the server.*/
     handleFromViewCreateNewChat(participantId, username) {
         //if isFriend is undefined, checking isFriend is necessary  
         //isFriend not necessary, because server knows all friendLists
-        this.socketReady
-        var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewChat', creatorId, participantId, username);
+        this.socketReady;
+        this.socket.emit('createNewChat', participantId, username);
     }
 
     handleFromViewCreateNewGroupChat(chatName, participantIdList, limit, chatId) {
         this.socketReady
-        var creatorId = this.#ownParticipant.getId();
-        this.socket.emit('createNewGroupChat', creatorId, chatName, participantIdList, limit, chatId);
+        this.socket.emit('createNewGroupChat', chatName, participantIdList, limit, chatId);
     }
 
     handleFromViewSendNewMessage(chatId, messageText) {
         this.socketReady
 
-        this.socket.emit('newChatMessage', this.#ownParticipant.getId(), this.#ownBusinessCard.getUsername(), chatId, messageText);
+        this.socket.emit('newChatMessage', chatId, messageText);
     }
 
     handleFromViewClearInterval() {
