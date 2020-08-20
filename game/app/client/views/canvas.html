@@ -58,9 +58,11 @@
                     <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
                 </div>
                 <br>
-                <div id="allchatMessages" class="allChatBar">
-
+                <div id="allchatWindow" style="z-index: 300">
+                    <div class="p-2" style="width: 20vw; background-color: rgb(221, 221, 221, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 2px solid rgb(15,15,15); color: rgb(15, 15, 15); font-size: medium;"><b>Room Chat</b></div>
+                    <div id="allchatMessages" class="allChatBar"></div>
                 </div>
+                
                 
             </div>
             <div class="d-flex flex-column ml-4">
@@ -82,13 +84,13 @@
 
                     $('#showRoomChat').on('click', function (event) {
                         event.preventDefault();
-                            $('#allchatMessages')[0].style.visibility = "visible";
+                            $('#allchatWindow')[0].style.visibility = "visible";
                             $('#showRoomChat').hide();
                             $('#hideRoomChat').show();
                     })
                     $('#hideRoomChat').on('click', function (event) {
                         event.preventDefault();
-                            $('#allchatMessages')[0].style.visibility = "hidden";
+                            $('#allchatWindow')[0].style.visibility = "hidden";
                             $('#hideRoomChat').hide();
                             $('#showRoomChat').show();
                     })
@@ -122,13 +124,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -65vw;">
+        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -66vw;">
             <div id="connectionStatus"
                 style="background-color: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 10px; color: firebrick; z-index: 1000; display: none">
             </div>
 
         </div>
-        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -33vw;">
+        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -34vw;">
 
         </div>
     </div>

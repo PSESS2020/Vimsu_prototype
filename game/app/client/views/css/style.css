@@ -144,11 +144,11 @@ max-width: 16vw;
   font-size: 15px;
   background:rgb(221, 221, 221, 0.8);
   overflow-y: scroll;
-  border-radius: 0px 5px 5px 0px;
+  border-radius: 0px 0px 5px 0px;
   margin: 0;
   padding: 0;
   z-index: 1;
-  height: 32vw;
+  height: 30vw;
   max-width: 20vw;
 }
 
