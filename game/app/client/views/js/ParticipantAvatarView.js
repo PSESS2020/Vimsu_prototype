@@ -11,10 +11,12 @@ const AVATAR_HEIGHT = 128;
 const AVATAR_SCALE_WIDTH = 1.5;
 const AVATAR_SCALE_HEIGHT = 0.3125;
 
+const PARTICIPANT_COLOR = 'antiquewhite';
+const MODERATOR_COLOR = 'gold';
+
 //constants for arrow drawn above own Avatar
 const ARROW_LENGTH = 20;
 const ARROW_WIDTH = 7;
-const ARROW_COLOR = 'antiquewhite';
 
 class ParticipantAvatarView extends AvatarView {
 
@@ -137,18 +139,19 @@ class ParticipantAvatarView extends AvatarView {
             
             var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
             var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
-
-            if(this.#isOwnAvatar) {
-                this.#drawArrow(ctx_avatar, screenX + AVATAR_WIDTH / 2, screenY - 15 - ARROW_LENGTH, screenX + AVATAR_WIDTH / 2, screenY - 15, ARROW_WIDTH, ARROW_COLOR);
-            }
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
 
+            var arrowColor;
             if(this.#isModerator) {
-                ctx_avatar.fillStyle = "gold";
+                ctx_avatar.fillStyle = arrowColor = MODERATOR_COLOR;
             } else {
-                ctx_avatar.fillStyle = "antiquewhite";
+                ctx_avatar.fillStyle = arrowColor = PARTICIPANT_COLOR;
+            }
+
+            if(this.#isOwnAvatar) {
+                this.#drawArrow(ctx_avatar, screenX + AVATAR_WIDTH / 2, screenY - 15 - ARROW_LENGTH, screenX + AVATAR_WIDTH / 2, screenY - 15, ARROW_WIDTH, arrowColor);
             }
             
             ctx_avatar.textAlign = "center";
@@ -198,6 +201,7 @@ class ParticipantAvatarView extends AvatarView {
         var angle = Math.atan2(toCordY-fromCordY,toCordX-fromCordX);
      
         ctx.save();
+    
         ctx.strokeStyle = color;
         ctx.shadowColor = color;
         ctx.shadowBlur = 15;
