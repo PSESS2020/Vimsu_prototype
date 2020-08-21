@@ -76,6 +76,7 @@ class ParticipantClient {
     }
 
     setisVisible(isVisible) {
+        TypeChecker.isBoolean(isVisible);
         this.#isVisible = isVisible;
     }
 }
