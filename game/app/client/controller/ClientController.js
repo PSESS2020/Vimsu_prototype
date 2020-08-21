@@ -814,9 +814,9 @@ class ClientController {
         this.socket.emit('createNewChat', participantId);
     }
 
-    handleFromViewCreateNewGroupChat(chatName, participantIdList, limit, chatId) {
+    handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId) {
         this.socketReady
-        this.socket.emit('createNewGroupChat', chatName, participantIdList, limit, chatId);
+        this.socket.emit('createNewGroupChat', chatName, participantIdList, chatId);
     }
 
     handleFromViewSendNewMessage(chatId, messageText) {
