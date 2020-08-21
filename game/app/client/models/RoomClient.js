@@ -42,8 +42,9 @@ class RoomClient {
      * @param {Array of DoorClient} listOfDoors
      * @param {int} length 
      * @param {int} width 
+     * @param {Array of Array of int} occupationMap
      */
-    constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
+    constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(assetPaths, Object);
@@ -69,6 +70,13 @@ class RoomClient {
         });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
+        TypeChecker.isInstanceOf(occupationMap, Array);
+        occupationMap.forEach(line => {
+            TypeChecker.isInstanceOf(line, Array);
+            line.forEach(element => {
+                TypeChecker.isInt(element);
+            });
+        });
 
         //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
         if (!!RoomClient.instance) {
@@ -87,18 +95,9 @@ class RoomClient {
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
+        this.#occupationMap = occupationMap;
 
-
-        //TODO: add other room types
-
-        //Initialisiert width*length Feld gefüllt mit 0
-        this.#occupationMap = new Array(this.#width);
-        for (var i = 0; i < this.#width; i++) {
-            this.#occupationMap[i] = new Array(this.#length).fill(0);
-        }
-
-        this.#buildOccMap();
-        this.buildMapArray();
+        this.#buildMapArray();
     }
 
     getRoomId() {
@@ -217,17 +216,25 @@ class RoomClient {
      * 
      * @author Philipp
      * 
-     ** @param {int} roomId 
+     * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom
+     * @param {Object} assetPaths
+     * @param {Array of GameObjectClient} listOfMapElements
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
      * @param {Array of DoorClient} listOfDoors
      * @param {int} length 
-     * @param {int} width 
+     * @param {int} width  
+     * @param {Array of Array of int} occupationMap
      */
-    swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length) {
+    swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
+        TypeChecker.isInstanceOf(assetPaths, Object);
+        for (var key in assetPaths) {
+            //TypeChecker.isInstanceOf(key, String);
+            TypeChecker.isString(assetPaths[key]);
+        }
         TypeChecker.isInstanceOf(listOfMapElements, Array);
         listOfGameObjects.forEach(mapElement => {
             TypeChecker.isInstanceOf(mapElement, GameObjectClient);
@@ -246,10 +253,15 @@ class RoomClient {
         });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
+        occupationMap.forEach(line => {
+            TypeChecker.isInstanceOf(line, Array);
+            line.forEach(element => {
+                TypeChecker.isInt(element);
+            });
+        });
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
-        //reset list of game objects, participants, occMap
         this.#assetPaths = assetPaths;
         this.#listOfMapElements = listOfMapElements;
         this.#listOfGameObjects = listOfGameObjects;
@@ -258,17 +270,12 @@ class RoomClient {
         this.#listOfPPants = [];
         this.#width = width;
         this.#length = length;
+        this.#occupationMap = occupationMap;
 
-        this.#occupationMap = new Array(this.#width);
-        for (var i = 0; i < this.#width; i++) {
-            this.#occupationMap[i] = new Array(this.#length).fill(0);
-        }
-
-        this.#buildOccMap();
-        this.buildMapArray();
+        this.#buildMapArray();
     }
 
-    buildMapArray() {
+    #buildMapArray = function() {
 
         var mapLength = this.#width + Settings.MAP_BLANK_TILES_LENGTH;
         this.#map = new Array(mapLength);
@@ -327,38 +334,6 @@ class RoomClient {
 
     getObjectMap() {
         return this.#objectMap;
-    }
-
-
-    #buildOccMap = function () {
-        //Geht jedes Objekt in der Objektliste durch
-        for (var i = 0; i < this.#listOfGameObjects.length; i++) {
-
-            //Check ob Objekt fest ist oder nicht
-            if (this.#listOfGameObjects[i].getSolid()) {
-
-                let objectPosition = this.#listOfGameObjects[i].getPosition();
-                let objectWidth = this.#listOfGameObjects[i].getWidth();
-                let objectLength = this.#listOfGameObjects[i].getLength();
-
-                //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
-                for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
-
-                    for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;
-                    }
-                }
-            }
-        }
-
-        //NPC collision
-        for (var i = 0; i < this.#listOfNPCs.length; i++) {
-            let cordX = this.#listOfNPCs[i].getPosition().getCordX();
-            let cordY = this.#listOfNPCs[i].getPosition().getCordY();
-
-            this.#occupationMap[cordX][cordY] = 1;
-
-        }
     }
 }
 
