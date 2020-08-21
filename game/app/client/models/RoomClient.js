@@ -29,7 +29,6 @@ class RoomClient {
     #objectMap;
 
     /**
-     * Erzeugt RoomClient Instanz
      * 
      * @author Philipp
      * 
@@ -78,7 +77,7 @@ class RoomClient {
             });
         });
 
-        //Es existiert nur RoomClientInstanz des Raumes, in dem sich der Teilnehmer gerade befindet
+        //Singleton
         if (!!RoomClient.instance) {
             return RoomClient.instance;
         }
@@ -141,7 +140,7 @@ class RoomClient {
     }
 
     /**
-     * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
+     * Adds ppant into room
      * 
      * @author Philipp
      * 
@@ -155,7 +154,7 @@ class RoomClient {
     }
 
     /**
-     * Entfernt Participant aus Raumliste, falls dieser darin ist
+     * Deletes ppant from room
      * 
      * @author Philipp
      * 
@@ -184,13 +183,13 @@ class RoomClient {
     }
 
     /**
-     * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
+     * Checks, if there is a collision at this position
      * 
      * @author Philipp
      * 
      * @param {PositionClient} position 
-     * @returns true, bei Kollision
-     * @returns false, sonst
+     * @returns true, when collision
+     * @returns false, otherwise
      */
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
@@ -212,7 +211,7 @@ class RoomClient {
     }
 
     /**
-     * Wird bei Raumwechsel aufgerufen
+     * Called when a user enters a new room
      * 
      * @author Philipp
      * 

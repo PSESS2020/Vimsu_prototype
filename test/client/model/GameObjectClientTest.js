@@ -6,17 +6,29 @@ const GameObjectClient = require('../../../game/app/client/models/GameObjectClie
 const PositionClient = require('../../../game/app/client/models/PositionClient.js');
 const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
 
-//test data
-var id = TestUtil.randomInt();
-var gameObjectType = GameObjectType.TABLE;
-var name = TestUtil.randomString();
-var width = TestUtil.randomInt();
-var length = TestUtil.randomInt();
-var position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
-var isSolid = TestUtil.randomBool();
-var isClickable = TestUtil.randomBool();
+var id;
+var gameObjectType;
+var name;
+var width;
+var length;
+var position;
+var isSolid;
+var isClickable;
 
 describe('GameObjectClient test', function() {
+    
+    //test data
+    beforeEach( function () {
+        id = TestUtil.randomInt();
+        gameObjectType = GameObjectType.TABLE;
+        name = TestUtil.randomString();
+        width = TestUtil.randomInt();
+        length = TestUtil.randomInt();
+        position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
+        isSolid = TestUtil.randomBool();
+        isClickable = TestUtil.randomBool();
+    });
+
     it('test constructor and getters', function() {
         let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isSolid, isClickable);
 

@@ -17,12 +17,11 @@ module.exports = class Room {
     #occupationMap;
     #listOfGameObjects;
     #listOfNPCs;
-    #listOfDoors; //TODO: Get right doors from service
+    #listOfDoors; 
     #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
     #listOfMapElements;
 
     /**
-     * Erstellt Rauminstanz
      * 
      * @author Philipp
      * 
@@ -47,7 +46,7 @@ module.exports = class Room {
         this.#length = length;
         this.#width = width;
 
-        //Initialisiert width*length Feld gefüllt mit 0
+        //Initialized with width*length Array full of 0
         this.#occupationMap = new Array(this.#width);
         for (var i = 0; i < this.#width; i++) {
             this.#occupationMap[i] = new Array(this.#length).fill(0);
@@ -102,12 +101,6 @@ module.exports = class Room {
         return this.#listOfMessages;
     }
 
-    /*
-    getRoomController() {
-        return this.#roomController;
-    }
-    */
-
     getWidth() {
         return this.#width;
     }
@@ -153,7 +146,7 @@ module.exports = class Room {
     }
 
     /**
-     * Fügt Participant in Raumliste ein, falls dieser noch nicht darin ist
+     * Adds ppant into room
      * 
      * @author Philipp
      * 
@@ -164,12 +157,10 @@ module.exports = class Room {
         if (!this.#listOfPPants.includes(participant)) {
             this.#listOfPPants.push(participant);
         }
-
-        //TODO: Einfügen in Allchat
     }
 
     /**
-    * Entfernt Participant aus Raumliste, falls dieser darin ist
+    * Deletes ppant from room
     * 
     * @author Philipp
     * 
@@ -211,13 +202,13 @@ module.exports = class Room {
     }
 
     /**
-     * Checkt, ob es auf der gelieferten Position zu einer Kollision kommt. 
+     * Checks, if there is a collision at this position
      * 
      * @author Philipp
      * 
      * @param {Position} position 
-     * @returns true, bei Kollision
-     * @returns false, sonst
+     * @returns true, when collision
+     * @returns false, otherwise
      */
 
 
@@ -252,17 +243,17 @@ module.exports = class Room {
 
 
     buildOccMap() {
-        //Geht jedes Objekt in der Objektliste durch
+        //Goes through each gameObject
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
 
-            //Check ob Objekt fest ist oder nicht
+            //Check if object is solid or not
             if (this.#listOfGameObjects[i].getSolid()) {
 
                 let objectPosition = this.#listOfGameObjects[i].getPosition();
                 let objectWidth = this.#listOfGameObjects[i].getWidth();
                 let objectLength = this.#listOfGameObjects[i].getLength();
 
-                //Jedes Feld, das festes Objekt bedeckt, auf 1 setzen
+                //Sets each field 1 with solid gameObject
                 for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
 
                     for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
