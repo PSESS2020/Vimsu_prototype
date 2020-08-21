@@ -1100,7 +1100,7 @@ module.exports = class ServerController {
 
                             ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
 
-                            ChatService.storeParticipant(chatId, Settings.CONFERENCE_ID, newChatPartnerID, this.#db).then(res => {
+                            ChatService.storeParticipant(chatId, newChatPartnerID, Settings.CONFERENCE_ID, this.#db).then(res => {
 
                                 ParticipantService.getUsername(newChatPartnerID, Settings.CONFERENCE_ID, this.#db).then(newChatPartnerUsername => {
                                     let msgText = newChatPartnerUsername + " has joined the chat";
