@@ -85,8 +85,8 @@ class EventManager {
 
     /* One function to create a new chat.
      * - (E) */
-    handleChatNowClicked(participantId, username) {
-        this.#clientController.handleFromViewCreateNewChat(participantId, username);
+    handleChatNowClicked(participantId) {
+        this.#clientController.handleFromViewCreateNewChat(participantId);
     }
 
     /* One function to create a new group chat

@@ -50,7 +50,7 @@ class FriendListView extends WindowView {
                     $('#chatfriend' + '${businessCard.getParticipantId()}').on('click', function (event) {
                         if ($('#notifFriendDiv' + "${businessCard.getUsername()}").length)
                             $('#notifFriendDiv' + "${businessCard.getUsername()}").hide();
-                        new EventManager().handleChatNowClicked("${businessCard.getParticipantId()}", "${businessCard.getUsername()}");
+                        new EventManager().handleChatNowClicked("${businessCard.getParticipantId()}");
                     })
 
                     $('#delete' + '${businessCard.getParticipantId()}').off();

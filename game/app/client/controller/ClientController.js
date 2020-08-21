@@ -807,11 +807,11 @@ class ClientController {
 
     /*Triggers the createNewChat event and emits  
     the id of the other chat participant to the server.*/
-    handleFromViewCreateNewChat(participantId, username) {
+    handleFromViewCreateNewChat(participantId) {
         //if isFriend is undefined, checking isFriend is necessary  
         //isFriend not necessary, because server knows all friendLists
         this.socketReady;
-        this.socket.emit('createNewChat', participantId, username);
+        this.socket.emit('createNewChat', participantId);
     }
 
     handleFromViewCreateNewGroupChat(chatName, participantIdList, limit, chatId) {
