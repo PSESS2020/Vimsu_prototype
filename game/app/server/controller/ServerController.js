@@ -322,6 +322,7 @@ module.exports = class ServerController {
                 let roomID = participant.getPosition().getRoomId();
                 let room = this.#rooms[roomID - 1].getRoom();
                 let username = participant.getBusinessCard().getUsername();
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -607,6 +608,7 @@ module.exports = class ServerController {
                 let lecture = this.#conference.getSchedule().getLecture(lectureID);
                 let lectureChat = lecture.getLectureChat();
                 let participant = this.#ppants.get(ppantID);
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
                 /* 
                  * Check if this ppant is a moderator or the orator of this lecture
@@ -885,6 +887,7 @@ module.exports = class ServerController {
 
             socket.on('getInviteFriends', (groupName, chatId) => {
                 let ppantID = socket.ppantID;
+                groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
                 if (!groupName || groupName.length > 20) {
                     socket.emit('inviteFriends', undefined, groupName, undefined);
@@ -1444,6 +1447,7 @@ module.exports = class ServerController {
                 let senderId = socket.ppantID;
                 let sender = this.#ppants.get(senderId);
                 let senderUsername = sender.getBusinessCard().getUsername();
+                msgText = msgText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
                 //console.log('from server 1 ' + msgText);
                 if (sender.isMemberOfChat(chatId)) {
@@ -1883,6 +1887,7 @@ module.exports = class ServerController {
     };
 
     sendGlobalAnnouncement(username, text) {
+        text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         this.#io.emit('New global announcement', username, text);
     }
     
