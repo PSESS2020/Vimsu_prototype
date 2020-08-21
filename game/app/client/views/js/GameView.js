@@ -424,9 +424,9 @@ class GameView {
 
     initChatThreadView(chat, openNow) {
         this.#chatThreadView = new ChatThreadView();
-        this.#chatThreadView.draw(chat);
-
+    
         if (openNow) {
+            this.#chatThreadView.draw(chat);
             if (!$('#chatThreadModal').is(':visible')) {
                 $('#chatThreadModal').modal('show');
             }
