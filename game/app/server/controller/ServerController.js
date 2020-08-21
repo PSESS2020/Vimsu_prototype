@@ -1490,9 +1490,8 @@ module.exports = class ServerController {
 
             //adds a new Friend Request to the system
             socket.on('newFriendRequest', (targetID, chatID) => {
-                console.log(`Received friend request from ${requesterID} for ${targetID}.`);
-
                 let requesterID = socket.ppantID;
+                console.log(`Received friend request from ${requesterID} for ${targetID}.`);
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
 
