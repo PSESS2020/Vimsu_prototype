@@ -61,6 +61,21 @@ class GameView {
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
             if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMap.findClickableTileOrObject(selectedTileCords, canvas);
+                
+                this.#npcAvatarViews.forEach(npcView => {
+                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x
+                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                        canvas.style.cursor = "pointer";
+                    }
+                });
+
+                this.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                    if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
+                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                        canvas.style.cursor = "pointer";
+                    }
+                });
 
                 /*let alpha = ctx_avatar.getImageData(newPosition.x, newPosition.y, 1, 1).data[3];
                 
@@ -70,9 +85,11 @@ class GameView {
                     canvas.style.cursor = "default";*/
 
                 this.#currentMap.selectionOnMap = true;
-            } else 
+            } else {
                 this.#currentMap.selectionOnMap = false;
-
+                canvas.style.cursor = "default"
+            }
+            
             this.#currentMap.updateSelectedTile(selectedTileCords);
 
         });

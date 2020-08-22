@@ -153,6 +153,25 @@ module.exports = */class MapView extends Views {
         }
     }
 
+    findClickableTileOrObject(selectedTileCords, canvas) {
+        let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
+        let clickedObject = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
+
+        if (clickedTile instanceof Array) {
+            clickedTile.forEach(tile => {
+                this.findAndHoverTile(tile, canvas);
+            });
+        } else 
+            this.findAndHoverTile(clickedTile, canvas);
+
+        if (clickedObject instanceof Array) {
+            clickedObject.forEach(obj => {
+                this.findAndHoverObject(obj, canvas);
+            });
+        } else
+            this.findAndHoverObject(clickedObject, canvas);
+    }
+
     //finds the clicked tile in the list of clickable tiles
     findClickedTileOrObject(selectedTileCords) {
         let clickedTile = this.#map[selectedTileCords.x][selectedTileCords.y];
@@ -171,6 +190,34 @@ module.exports = */class MapView extends Views {
             });
         } else
             this.findAndClickObject(clickedObject);
+    }
+
+    findAndHoverTile(clickedTile, canvas) {
+        if (clickedTile !== null && (clickedTile instanceof DoorClient || clickedTile.isClickable())) {
+            this.#clickableTiles.forEach(viewObject => {
+                let clickedTileName = clickedTile.getName();
+                let viewObjectName = viewObject.getName();
+
+                if (clickedTile instanceof DoorClient && clickedTileName === viewObjectName)
+                    canvas.style.cursor = "pointer";
+                else if (clickedTile instanceof GameObjectClient && clickedTileName === viewObjectName)
+                    canvas.style.cursor = "pointer";
+            });
+        } else {
+            canvas.style.cursor = "default"
+        }
+    }
+
+    findAndHoverObject(clickedObject, canvas) {
+        if (clickedObject !== null && clickedObject.isClickable()) {
+            this.#clickableObjects.forEach(viewObject => {
+                let clickedObjectName = clickedObject.getName();
+                let viewObjectName = viewObject.getName();
+
+                if (clickedObject instanceof GameObjectClient && clickedObjectName === viewObjectName)
+                    canvas.style.cursor = "pointer";
+            });
+        }
     }
 
     //HELPER FUNCTION: determines if the clicked tile is clickable and clicks it in that case.
