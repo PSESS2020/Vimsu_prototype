@@ -12,8 +12,7 @@ class DateParser {
 
         var parsedDate = days[this.#date.getDay()] + ", " + (this.#date.getDate() < 10 ? '0' : '') + this.#date.getDate() + " "
             + months[this.#date.getMonth()] + " " + this.#date.getFullYear()
-            + " " + (this.#date.getHours() < 10 ? '0' : '') + this.#date.getHours() +
-            ":" + (this.#date.getMinutes() < 10 ? '0' : '') + this.#date.getMinutes();
+            + " " + this.parseOnlyTime();
 
         return parsedDate;
     }
