@@ -1,6 +1,7 @@
 class DateParser {
 
     #date;
+    
     constructor(date) {
         TypeChecker.isDate(date);
         this.#date = date;
@@ -10,22 +11,23 @@ class DateParser {
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-        var parsedDate = days[this.#date.getDay()] + ", " + (this.#date.getDate() < 10 ? '0' : '') + this.#date.getDate() + " "
-            + months[this.#date.getMonth()] + " " + this.#date.getFullYear()
-            + " " + this.parseOnlyTime();
+        var parsedDate = days[this.#date.getDay()] + ", " + this.#printTwoDigitsNumber(this.#date.getDate()) + " "
+            + months[this.#date.getMonth()] + " " + this.#date.getFullYear() + " " + this.parseOnlyTime();
 
         return parsedDate;
     }
 
     parseWithSeconds() {
-        var parsedDate = this.parse() + ":" + (this.#date.getSeconds() < 10 ? '0' : '') + this.#date.getSeconds();
+        var parsedDate = this.parse() + ":" + this.#printTwoDigitsNumber(this.#date.getSeconds());
         return parsedDate;
     }
 
     parseOnlyTime() {
-        var parsedDate = (this.#date.getHours() < 10 ? '0' : '') + this.#date.getHours() +
-            ":" + (this.#date.getMinutes() < 10 ? '0' : '') + this.#date.getMinutes();
-
+        var parsedDate = this.#printTwoDigitsNumber(this.#date.getHours()) + ":" + this.#printTwoDigitsNumber(this.#date.getMinutes());
         return parsedDate;
+    }
+
+    #printTwoDigitsNumber = function(number) {
+        return (number < 10 ? '0' : '') + number;
     }
 }
