@@ -40,29 +40,25 @@ class FriendRequestListView extends WindowView {
                         </div>
                     </div>
                 </li>
-    
-                <script> 
-                    $('#accept' + '${businessCard.getParticipantId()}').off();
-                    $('#accept' + '${businessCard.getParticipantId()}').on('click', function (event) {
-                        if ($('#notifFriendRequestDiv' + '${businessCard.getUsername()}').length)
-                            $('#notifFriendRequestDiv' + '${businessCard.getUsername()}').hide();
-
-                        event.stopPropagation();
-                        new EventManager().handleAcceptRequestClicked('${businessCard.getParticipantId()}', '${businessCard.getUsername()}',
-                        '${businessCard.getTitle()}', '${businessCard.getSurname()}', '${businessCard.getForename()}', 
-                        '${businessCard.getJob()}', '${businessCard.getCompany()}', '${businessCard.getEmail()}');
-                    })
-    
-                    $('#reject' + '${businessCard.getParticipantId()}').off();
-                    $('#reject' + '${businessCard.getParticipantId()}').on('click', function (event) {
-                        if ($('#notifFriendRequestDiv' + '${businessCard.getUsername()}').length)
-                            $('#notifFriendRequestDiv' + '${businessCard.getUsername()}').hide();
-
-                        event.stopPropagation();
-                        new EventManager().handleRejectRequestClicked('${businessCard.getParticipantId()}');
-                })
-                </script>
             `)
+
+            $('#accept' + businessCard.getParticipantId()).off();
+            $('#accept' + businessCard.getParticipantId()).click((event) => {
+                if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
+                    $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
+
+                event.stopPropagation();
+                new EventManager().handleAcceptRequestClicked(businessCard);
+            })
+
+            $('#reject' + businessCard.getParticipantId()).off();
+            $('#reject' + businessCard.getParticipantId()).click((event) => {
+                if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
+                    $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
+
+                event.stopPropagation();
+                new EventManager().handleRejectRequestClicked(businessCard.getParticipantId());
+            })
         })
     }
 

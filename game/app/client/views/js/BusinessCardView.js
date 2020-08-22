@@ -14,6 +14,10 @@ class BusinessCardView extends WindowView {
         this.#isFriend = isFriend;
         this.#rank = rank;
         this.#isModerator = isModerator;
+
+        $('#businessCardModal').on('hidden.bs.modal', function (e) {
+            $('#businessCardModal .modal-body').empty()
+        })
     }
 
     draw() {
@@ -68,19 +72,14 @@ class BusinessCardView extends WindowView {
             </br>
             <button id="${"chatnow" + this.#businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-lecture mx-auto d-block">Chat</button>
             </br>
-            <script> 
-                $('#chatnow' + '${this.#businessCard.getParticipantId()}').off();
-                $('#chatnow' + '${this.#businessCard.getParticipantId()}').on('click', function (event) {
-                    $('#businessCardModal').modal('hide');
-                    new EventManager().handleChatNowClicked('${this.#businessCard.getParticipantId()}');
-                })
-            </script>
-
         `)
 
-        $('#businessCardModal').on('hidden.bs.modal', function (e) {
-            $('#businessCardModal .modal-body').empty()
+        $('#chatnow' + this.#businessCard.getParticipantId()).off();
+        $('#chatnow' + this.#businessCard.getParticipantId()).click((event) => {
+            $('#businessCardModal').modal('hide');
+            new EventManager().handleChatNowClicked(this.#businessCard.getParticipantId());
         })
+
     }
 }
 

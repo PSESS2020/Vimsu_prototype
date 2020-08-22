@@ -44,30 +44,26 @@ class FriendListView extends WindowView {
                         </div>    
                     </div>
                 </li>
-
-                <script> 
-                    $('#chatfriend' + '${businessCard.getParticipantId()}').off();
-                    $('#chatfriend' + '${businessCard.getParticipantId()}').on('click', function (event) {
-                        if ($('#notifFriendDiv' + "${businessCard.getUsername()}").length)
-                            $('#notifFriendDiv' + "${businessCard.getUsername()}").hide();
-                        new EventManager().handleChatNowClicked("${businessCard.getParticipantId()}");
-                    })
-
-                    $('#delete' + '${businessCard.getParticipantId()}').off();
-                    $('#delete' + '${businessCard.getParticipantId()}').on('click', function (event) {
-                        if ($('#notifFriendDiv' + "${businessCard.getUsername()}").length)
-                            $('#notifFriendDiv' + "${businessCard.getUsername()}").hide();
-
-                        var result = confirm('Are you sure you want to remove ' + '${businessCard.getUsername()}' + ' from friend list?');
-                        if(result) {
-                            new EventManager().handleRemoveFriend("${businessCard.getParticipantId()}");
-                        } else {
-                            event.stopImmediatePropagation();
-                        }
-                    })
-
-                </script>
             `)
+
+            $('#chatfriend' + businessCard.getParticipantId()).off();
+            $('#chatfriend' + businessCard.getParticipantId()).click((event) => {
+                if ($('#notifFriendDiv' + businessCard.getUsername()).length)
+                    $('#notifFriendDiv' + businessCard.getUsername()).hide();
+                new EventManager().handleChatNowClicked(businessCard.getParticipantId());
+            })
+
+            $('#delete' + businessCard.getParticipantId()).off();
+            $('#delete' + businessCard.getParticipantId()).click((event) => {
+                if ($('#notifFriendDiv' + businessCard.getUsername()).length)
+                    $('#notifFriendDiv' + businessCard.getUsername()).hide();
+
+                var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
+                if(result)
+                    new EventManager().handleRemoveFriend(businessCard.getParticipantId());
+                else
+                    event.stopImmediatePropagation();
+            })
         })
     }
 

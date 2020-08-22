@@ -32,14 +32,12 @@ class CurrentLecturesView extends WindowView {
                     <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full.</span>
                     <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto">Show</button>
                 </div>
-
-                <script> 
-                    $('#show' + '${lecture.id}').on('click', function (event) {
-                        $('#show' + '${lecture.id}').hide();
-                        new EventManager().handleLectureClicked("${lecture.id}");
-                    })
-                </script>
             `)
+
+            $('#show' + lecture.id).click((event) => {
+                $('#show' + lecture.id).hide();
+                new EventManager().handleLectureClicked(lecture.id);
+            })
         });
 
         $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it

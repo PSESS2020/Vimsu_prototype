@@ -730,14 +730,13 @@ class ClientController {
     handleFromViewAcceptRequest(businessCard) {
         this.socketReady;
 
-        var participantId = businessCard.participantId;
+        var participantId = businessCard.getParticipantId();
         TypeChecker.isString(participantId);
 
         //Tells server to accept this request
         this.socket.emit('handleFriendRequest', participantId, true);
         this.#gameView.updateFriendRequestListView(participantId, true);
-        this.#gameView.addFriend(new BusinessCardClient(participantId, businessCard.username, businessCard.title,
-            businessCard.surname, businessCard.forename, businessCard.job, businessCard.company, businessCard.email))
+        this.#gameView.addFriend(businessCard);
     }
 
     //called when a friend request is declined

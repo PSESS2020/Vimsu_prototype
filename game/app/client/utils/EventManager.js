@@ -121,18 +121,7 @@ class EventManager {
         this.#clientController.handleSendFriendRequest();
     };
 
-    handleAcceptRequestClicked(participantId, username, title, surname, forename, job, company, email) {
-        var businessCard = {
-            participantId: participantId,
-            username: username,
-            title: title,
-            surname: surname,
-            forename: forename,
-            job: job,
-            company: company,
-            email: email
-        }
-
+    handleAcceptRequestClicked(businessCard) {
         this.#clientController.handleFromViewAcceptRequest(businessCard);
     }
 
