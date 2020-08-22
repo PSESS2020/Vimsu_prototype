@@ -22,6 +22,7 @@ const TaskService = require('../services/TaskService.js');
 const FriendListService = require('../services/FriendListService.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
 const OneToOneChat = require('../models/OneToOneChat.js');
+const GroupChat = require('../models/GroupChat');
 
 module.exports = class ServerController {
 
@@ -1187,6 +1188,13 @@ module.exports = class ServerController {
                                                         let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
                                                         existingChatParticipantChat.addParticipant(newChatPartnerID);
                                                         existingChatParticipantChat.addMessage(msg);
+
+                                                        if (existingChatParticipantChat instanceof GroupChat) {
+                                                            this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
+
+                                                            if(existingChatParticipant.hasFriend(newChatPartnerID))
+                                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
+                                                        }
                                                     }
                                                 })
 
@@ -1199,9 +1207,6 @@ module.exports = class ServerController {
                                                 };
 
                                                 this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-                                                this.#io.in(chatId).emit('addToChatParticipantList', newChatPartnerUsername);
-                                                this.#io.in(chatId).emit('removeFromInviteFriends', newChatPartnerID, true);
-
                                             })
                                         })
                                     })
@@ -1694,7 +1699,27 @@ module.exports = class ServerController {
                                 chatPartnerChat.removeParticipant(removerId);
                                 console.log("chatpartner " + chatPartnerChat.getParticipantList());
                                 chatPartnerChat.addMessage(msg);
-                            }
+
+                                if (chatPartnerChat instanceof GroupChat) {
+                                    this.#io.in(chatId).emit('removeFromChatParticipantList', removerUsername);
+                                    
+                                    if (chatPartner.hasFriend(removerId)) {
+                                        var removerBusinessCardData = {
+                                            friendId: removerBusinessCard.getParticipantId(),
+                                            username: removerUsername,
+                                            title: removerBusinessCard.getTitle(),
+                                            surname: removerBusinessCard.getSurname(),
+                                            forename: removerBusinessCard.getForename(),
+                                            surname: removerBusinessCard.getSurname(),
+                                            job: removerBusinessCard.getJob(),
+                                            company: removerBusinessCard.getCompany(),
+                                            email: removerBusinessCard.getEmail()
+                                        }
+    
+                                        this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', removerBusinessCardData, true)
+                                    }
+                                }
+                            }                            
                         })
 
                         var msgToEmit = {
@@ -1707,21 +1732,7 @@ module.exports = class ServerController {
 
                         // readded this line because it is required to distribute chat messages after leaving chat
                         this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-                        this.#io.in(chatId).emit('removeFromChatParticipantList', removerUsername);
-
-                        var removerBusinessCardData = {
-                            friendId: removerBusinessCard.getParticipantId(),
-                            username: removerUsername,
-                            title: removerBusinessCard.getTitle(),
-                            surname: removerBusinessCard.getSurname(),
-                            forename: removerBusinessCard.getForename(),
-                            surname: removerBusinessCard.getSurname(),
-                            job: removerBusinessCard.getJob(),
-                            company: removerBusinessCard.getCompany(),
-                            email: removerBusinessCard.getEmail()
-                        }
-
-                        this.#io.in(chatId).emit('addToInviteFriends', removerBusinessCardData, true)
+                        
                     })
 
                     remover.removeChat(chatId);
