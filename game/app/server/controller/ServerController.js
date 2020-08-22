@@ -1670,7 +1670,7 @@ module.exports = class ServerController {
                 let removerId = socket.ppantID;
                 let remover = this.#ppants.get(removerId);
                 let removerBusinessCard = remover.getBusinessCard();
-                let removerUsername = remover.getBusinessCard().getUsername();
+                let removerUsername = removerBusinessCard.getUsername();
 
                 if (remover !== undefined && remover.isMemberOfChat(chatId)) {
                     //console.log('from server 2 ' + msgText);
