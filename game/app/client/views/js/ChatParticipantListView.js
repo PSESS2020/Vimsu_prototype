@@ -4,13 +4,11 @@ class ChatParticipantListView extends Views {
 
     constructor() {
         super();
-
-        $('#chatParticipantListModal').on('hidden.bs.modal', function (e) {
-            $('#chatParticipantListModal .modal-body .list-group').empty()
-        })
     }
 
     draw(usernames) {
+        $('#chatParticipantListModal .modal-body .list-group').empty()
+
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
         this.#usernames = sortedUsernames;
 
@@ -31,6 +29,22 @@ class ChatParticipantListView extends Views {
         })
 
         $('#chatParticipantListModal').modal('show');
+    }
+
+    addToChatParticipantList(username) {
+        this.#usernames.push(username);
+        this.draw(this.#usernames);
+    }
+
+    removeFromChatParticipantList(username) {
+        this.#usernames.forEach(parUsername => {
+            if (parUsername === username) {
+                let index = this.#usernames.indexOf(parUsername);
+                this.#usernames.splice(index, 1);
+            }
+        });
+
+        this.draw(this.#usernames);
     }
 
 }

@@ -1,17 +1,18 @@
 class InviteFriendsView extends WindowView {
 
     #businessCards;
+    #groupName;
+    #limit;
+    #chatId;
+    #invitedFriends = [];
 
     constructor() {
         super();
-
-        $('#inviteFriendsModal').on('hidden.bs.modal', function (e) {
-            $('#inviteFriendsModal .modal-body .list-group').empty();
-            $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
-        })
     }
 
     draw(businessCards, groupName, limit, chatId) {
+        $('#inviteFriendsModal .modal-body .list-group').empty();
+        $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
         $('#createGroupChat').show();
 
         if (businessCards) {
@@ -22,6 +23,9 @@ class InviteFriendsView extends WindowView {
 
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
             this.#businessCards = sortedBusinessCards;
+            this.#groupName = groupName;
+            this.#limit = limit;
+            this.#chatId = chatId;
 
             $('#noinvitedfriends').hide();
             $('#toomanyinvitedfriends').hide();
@@ -56,36 +60,35 @@ class InviteFriendsView extends WindowView {
                         </li>
                     </ul>
                 `)
-                var invitedFriends = [];
 
                 $('#invite' + businessCard.getParticipantId()).click((event) => {
-                    invitedFriends.push(businessCard.getParticipantId());
+                    this.#invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
                 })
 
                 $('#selected' + businessCard.getParticipantId()).click((event) => {
-                    let index = invitedFriends.indexOf(businessCard.getParticipantId());
-                    invitedFriends.splice(index, 1);
+                    let index = this.#invitedFriends.indexOf(businessCard.getParticipantId());
+                    this.#invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
                     $('#invite' + businessCard.getParticipantId()).show();
                 })
 
                 $('#createGroupChat').off();
                 $('#createGroupChat').click((event) => {
-                    if(invitedFriends.length > 0 && invitedFriends.length < limit + 1) {
+                    if(this.#invitedFriends.length > 0 && this.#invitedFriends.length < this.#limit + 1) {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
-                        new EventManager().handleCreateGroupChat(groupName, invitedFriends, chatId);
-                    } else if (invitedFriends.length < 1) {
+                        new EventManager().handleCreateGroupChat(this.#groupName, this.#invitedFriends, this.#chatId);
+                    } else if (this.#invitedFriends.length < 1) {
                         $('#toomanyinvitedfriends').hide();
                         $('#noinvitedfriends').show();
                     } else {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').empty();
-                        var diff = invitedFriends.length - limit;
-                        $('#toomanyinvitedfriends').text("You may only invite " + limit + " friend(s)! Please unselect " + diff + " friend(s).");
+                        var diff = this.#invitedFriends.length - this.#limit;
+                        $('#toomanyinvitedfriends').text("You may only invite " + this.#limit + " friend(s)! Please unselect " + diff + " friend(s).");
                         $('#toomanyinvitedfriends').show();
                     }
 
@@ -98,7 +101,34 @@ class InviteFriendsView extends WindowView {
         }
         
         $('#inviteFriendsModal').modal('show');
+    }
 
+    addToInviteFriends(businessCard, hasLeftChat) {
+        this.#businessCards.push(businessCard);
+
+        if (hasLeftChat) {
+            this.#limit = this.#limit + 1;
+        }
+
+        this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+    }
+
+    removeFromInviteFriends(participantId, isMemberOfChat) {
+        var found = false;
+        this.#businessCards.forEach(businessCard => {
+            if (businessCard.getParticipantId() === participantId) {
+                let index = this.#businessCards.indexOf(businessCard);
+                this.#businessCards.splice(index, 1);
+                found = true;
+            }
+        });
+
+        if(found) {
+            if (isMemberOfChat) {
+                this.#limit = this.#limit - 1;
+            }
+            this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+        }
     }
 }
 

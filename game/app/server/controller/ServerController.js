@@ -1199,6 +1199,8 @@ module.exports = class ServerController {
                                                 };
 
                                                 this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                                                this.#io.in(chatId).emit('addToChatParticipantList', newChatPartnerUsername);
+                                                this.#io.in(chatId).emit('removeFromInviteFriends', newChatPartnerID, true);
 
                                             })
                                         })
@@ -1667,8 +1669,8 @@ module.exports = class ServerController {
             socket.on('removeParticipantFromChat', (chatId) => {
                 let removerId = socket.ppantID;
                 let remover = this.#ppants.get(removerId);
+                let removerBusinessCard = remover.getBusinessCard();
                 let removerUsername = remover.getBusinessCard().getUsername();
-
 
                 if (remover !== undefined && remover.isMemberOfChat(chatId)) {
                     //console.log('from server 2 ' + msgText);
@@ -1705,10 +1707,24 @@ module.exports = class ServerController {
 
                         // readded this line because it is required to distribute chat messages after leaving chat
                         this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
+                        this.#io.in(chatId).emit('removeFromChatParticipantList', removerUsername);
+
+                        var removerBusinessCardData = {
+                            friendId: removerBusinessCard.getParticipantId(),
+                            username: removerUsername,
+                            title: removerBusinessCard.getTitle(),
+                            surname: removerBusinessCard.getSurname(),
+                            forename: removerBusinessCard.getForename(),
+                            surname: removerBusinessCard.getSurname(),
+                            job: removerBusinessCard.getJob(),
+                            company: removerBusinessCard.getCompany(),
+                            email: removerBusinessCard.getEmail()
+                        }
+
+                        this.#io.in(chatId).emit('addToInviteFriends', removerBusinessCardData, true)
                     })
 
                     remover.removeChat(chatId);
-                    console.log("after " + remover.getChatList());
                     socket.leave(chatId);
                 }
 

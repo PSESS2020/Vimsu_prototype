@@ -14,6 +14,7 @@ class GameView {
     #friendListView;
     #inviteFriendsView;
     #friendRequestListView;
+    #chatParticipantListView
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -480,9 +481,11 @@ class GameView {
     }
 
     removeFriend(participantId) {
-        if (this.#friendListView) {
-            this.#friendListView.deleteFriend(participantId)
+        if ($('#friendListModal').is(':visible') && this.#friendListView) {
+            this.#friendListView.deleteFriend(participantId);
         }
+
+        this.removeFromInviteFriends(participantId, false);
     }
 
     removeChat(chatId) {
@@ -493,10 +496,37 @@ class GameView {
         if ($('#friendListModal').is(':visible') && this.#friendListView) {
             this.#friendListView.addToFriendList(businessCard);
         }
+
+        this.addToInviteFriends(businessCard, false);
+    }
+
+    addToInviteFriends(businessCard, hasLeftChat) {
+        if($('#inviteFriendsModal').is(':visible') && this.#inviteFriendsView) {
+            this.#inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
+        }
+    }
+
+    addToChatParticipantList(username) {
+        if($('#chatParticipantListModal').is(':visible') && this.#chatParticipantListView) {
+            this.#chatParticipantListView.addToChatParticipantList(username);
+        }
+    }
+
+    removeFromChatParticipantList(username) {
+        if($('#chatParticipantListModal').is(':visible') && this.#chatParticipantListView) {
+            this.#chatParticipantListView.removeFromChatParticipantList(username);
+        }
+    }
+
+    removeFromInviteFriends(participantId, isMemberOfChat) {
+        if($('#inviteFriendsModal').is(':visible') && this.#inviteFriendsView) {
+            this.#inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
+        }
     }
 
     drawChatParticipantList(usernames) {
-        new ChatParticipantListView().draw(usernames);
+        this.#chatParticipantListView = new ChatParticipantListView();
+        this.#chatParticipantListView.draw(usernames);
     }
 
     drawNewChat(senderUsername, chatId) {

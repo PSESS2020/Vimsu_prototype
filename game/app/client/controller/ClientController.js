@@ -192,9 +192,13 @@ class ClientController {
         this.socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
         this.socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
         this.socket.on('achievements', this.handleFromServerAchievements.bind(this));
+        this.socket.on('removeFromChatParticipantList', this.handleFromServerRemoveFromChatParticipantList.bind(this));
+        this.socket.on('addToInviteFriends', this.handleFromServerAddToInviteFriends.bind(this));
+        this.socket.on('removeFromInviteFriends', this.handleFromServerRemoveFromInviteFriends.bind(this));
         this.socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
         this.socket.on('acceptedFriendRequest', this.handleFromServerAcceptedFriendRequest.bind(this));
         this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
+        this.socket.on('addToChatParticipantList', this.handleFromServerAddToChatParticipantList.bind(this));
         this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('chatParticipantList', this.handleFromServerChatParticipantList.bind(this))
@@ -525,6 +529,22 @@ class ClientController {
 
     handleFromServerChatParticipantList(usernames) {
         this.#gameView.drawChatParticipantList(usernames);
+    }
+
+    handleFromServerAddToChatParticipantList(username) {
+        this.#gameView.addToChatParticipantList(username);
+    }
+
+    handleFromServerRemoveFromChatParticipantList(username) {
+        this.#gameView.removeFromChatParticipantList(username);
+    }
+
+    handleFromServerAddToInviteFriends(data, hasLeftChat) {
+        this.#gameView.addToInviteFriends(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email), hasLeftChat);
+    }
+
+    handleFromServerRemoveFromInviteFriends(participantId, isMemberOfChat) {
+        this.#gameView.removeFromInviteFriends(participantId, isMemberOfChat);
     }
 
     // Adds a new message to the all-chat
