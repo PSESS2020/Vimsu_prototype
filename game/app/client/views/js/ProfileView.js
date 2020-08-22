@@ -3,7 +3,12 @@ class ProfileView extends WindowView {
     #isModerator;
 
     constructor() {
-        super()
+        super();
+
+        $('#profileModal').on('hidden.bs.modal', function (e) {
+            $('#profileModal .modal-header').empty()
+            $('#profileModal .modal-body').empty()
+        })
     }
 
     draw(businessCard, isModerator) {
@@ -51,11 +56,7 @@ class ProfileView extends WindowView {
             </table>
         `)
 
-
-        $('#profileModal').on('hidden.bs.modal', function (e) {
-            $('#profileModal .modal-header').empty()
-            $('#profileModal .modal-body').empty()
-        })
+        $('#profileModal').modal('show');
     }
 
     onclick() {

@@ -7,7 +7,6 @@ class PlantView extends GameObjectView {
     }
 
     onclick() {
-        $('#npcStoryModal').modal('toggle');
         new NPCStoryView().draw("Beautiful Plant", this.#story);
     }
 }

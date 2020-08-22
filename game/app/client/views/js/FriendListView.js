@@ -3,17 +3,20 @@ class FriendListView extends WindowView {
     #businessCards;
 
     constructor() {
-        super()
+        super();
+
+        $('#friendListModal').on('hidden.bs.modal', function (e) {
+            $('#friendListModal .modal-body #nofriend').empty();
+            $('#friendListModal .modal-body .list-group').empty();
+        })
     }
 
     draw(businessCards) {
-        $('#friendListModal .modal-body #nofriend').empty();
 
         if (businessCards.length < 1) {
             $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")
         }
 
-        $('#friendListModal .modal-body .list-group').empty()
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.#businessCards = sortedBusinessCards;
 
@@ -65,6 +68,8 @@ class FriendListView extends WindowView {
                     event.stopImmediatePropagation();
             })
         })
+
+        $('#friendListModal').modal('show');
     }
 
     deleteFriend(participantId) {

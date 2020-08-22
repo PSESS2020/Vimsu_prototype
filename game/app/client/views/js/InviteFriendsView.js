@@ -3,12 +3,15 @@ class InviteFriendsView extends WindowView {
     #businessCards;
 
     constructor() {
-        super()
+        super();
+
+        $('#inviteFriendsModal').on('hidden.bs.modal', function (e) {
+            $('#inviteFriendsModal .modal-body .list-group').empty();
+            $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
+        })
     }
 
     draw(businessCards, groupName, limit, chatId) {
-        $('#inviteFriendsModal .modal-body .list-group').empty()
-        $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty()
         $('#createGroupChat').show();
 
         if (businessCards) {
@@ -71,14 +74,19 @@ class InviteFriendsView extends WindowView {
                 $('#createGroupChat').off();
                 $('#createGroupChat').click((event) => {
                     if(invitedFriends.length > 0 && invitedFriends.length < limit + 1) {
+                        $('#noinvitedfriends').hide();
+                        $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
                         new EventManager().handleCreateGroupChat(groupName, invitedFriends, chatId);
                     } else if (invitedFriends.length < 1) {
+                        $('#toomanyinvitedfriends').hide();
                         $('#noinvitedfriends').show();
                     } else {
+                        $('#noinvitedfriends').hide();
+                        $('#toomanyinvitedfriends').empty();
                         var diff = invitedFriends.length - limit;
                         $('#toomanyinvitedfriends').text("You may only invite " + limit + " friend(s)! Please unselect " + diff + " friend(s).");
-                        $('#toomanyinvitedfriends').show()
+                        $('#toomanyinvitedfriends').show();
                     }
 
                 })
@@ -88,7 +96,8 @@ class InviteFriendsView extends WindowView {
         } else {
             $('#inviteFriendsModal .modal-body').text("Group name was empty!")
         }
-
+        
+        $('#inviteFriendsModal').modal('show');
 
     }
 }

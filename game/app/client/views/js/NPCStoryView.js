@@ -3,6 +3,11 @@ class NPCStoryView extends WindowView {
 
     constructor() {
         super();
+
+        $('#npcStoryModal').on('hidden.bs.modal', function (e) {
+            $('#npcStoryModal .modal-header').empty()
+            $('#npcStoryModal .modal-body').empty();
+        });
     }
 
     draw(name, story) {
@@ -55,10 +60,6 @@ class NPCStoryView extends WindowView {
             };
         }
 
-
-        $('#npcStoryModal').on('hidden.bs.modal', function (e) {
-            $('#npcStoryModal .modal-header').empty()
-            $('#npcStoryModal .modal-body').empty();
-        });
+        $('#npcStoryModal').modal('show');
     }
 }

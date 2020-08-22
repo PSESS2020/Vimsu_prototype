@@ -71,6 +71,8 @@ class ScheduleListView extends WindowView {
                 $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })
+
+        $('#scheduleModal').modal('show');
     }
 
     onclick() {

@@ -3,18 +3,19 @@ class ChatListView extends WindowView {
     #chats;
 
     constructor() {
-        super()
+        super();
+
+        $('#chatListModal').on('hidden.bs.modal', function (e) {
+            $('#chatListModal .modal-body #nochat').empty();
+            $('#chatListModal .modal-body .list-group').empty();
+        })
     }
 
     draw(chats) {
-        $('#chatListModal .modal-body #nochat').empty();
 
         if (chats.length < 1) {
             $('#chatListModal .modal-body #nochat').text("No chats found. Let's connect with others!")
         }
-
-        /* Clear view to make sure we don't draw anything twice */
-        $('#chatListModal .modal-body .list-group').empty();
 
         chats.forEach(chat => {
             if (chat.timestamp) {
@@ -42,7 +43,7 @@ class ChatListView extends WindowView {
             // Now we want to append each chat as a clickable element
             $('#chatListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent chatthread">
-                    <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="#chatThreadModal">
+                    <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
                             <div class="row w-100">
                                 <div class="col-12 col-sm-2 px-0">
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
@@ -64,8 +65,7 @@ class ChatListView extends WindowView {
                 new EventManager().handleChatThreadClicked(chat.chatId);
             })
         })
-
-
+        $('#chatListModal').modal('show');
     }
 
     deleteChat(chatId) {

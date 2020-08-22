@@ -3,17 +3,19 @@ class FriendRequestListView extends WindowView {
     #businessCards;
 
     constructor() {
-        super()
+        super();
+
+        $('#friendRequestListModal').on('hidden.bs.modal', function (e) {
+            $('#friendRequestListModal .modal-body #nofriendrequest').empty();
+            $('#friendRequestListModal .modal-body .list-group').empty()
+        })
     }
 
     draw(businessCards) {
 
-        $('#friendRequestListModal .modal-body #nofriendrequest').empty();
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
-        }
-
-        $('#friendRequestListModal .modal-body .list-group').empty()
+        }  
 
         this.#businessCards = businessCards;
         this.#businessCards.forEach(businessCard => {
@@ -60,6 +62,8 @@ class FriendRequestListView extends WindowView {
                 new EventManager().handleRejectRequestClicked(businessCard.getParticipantId());
             })
         })
+
+        $('#friendRequestListModal').modal('show');
     }
 
     deleteFriendRequest(participantId) {

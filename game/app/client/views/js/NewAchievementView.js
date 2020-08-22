@@ -8,14 +8,12 @@ class NewAchievementView extends WindowView {
         $("#newAchievementModal").on("hidden.bs.modal", () => {
             $('#confettiCanvas').hide();
             this.#confetti.clear();
+            $('#newAchievementModalContent').empty();
         });
     }
 
 
     draw(achievement) {
-
-        $('#newAchievementModalContent').empty();
-
         $('#newAchievementModalContent').append(
             `<div class="col-12 d-flex flex-column align-items-center text-center">
                 <i style="color: ${achievement.color} !important; text-shadow: 4px 4px 25px ${achievement.color}; font-size: 250px;" class="fa fa-${achievement.icon} achievement-icon mb-5 mt-4 animate__animated animate__wobble animate__slow animate__infinite"></i>

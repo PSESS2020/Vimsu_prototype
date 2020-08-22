@@ -72,6 +72,10 @@ class ChatThreadView extends WindowView {
             new EventManager().handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
 
+        $('#chatThreadModal').on('hidden.bs.modal', function (e) {
+            $('#chatThreadModalTitle').empty();
+            $('#chatThreadModal .modal-body .list-group').empty();
+        })
     }
 
     sendMessage() {
@@ -87,10 +91,7 @@ class ChatThreadView extends WindowView {
     draw(chat) {
         this.#chat = chat;
         this.#messages = chat.messages;
-        $('#chatThreadModalTitle').empty();
         $('#chatThreadModalTitle').text(chat.title);
-
-        $('#chatThreadModal .modal-body .list-group').empty()
 
         if ($('#notifChatDiv' + this.#chat.chatId).length)
             $('#notifChatDiv' + this.#chat.chatId).hide();
@@ -111,6 +112,8 @@ class ChatThreadView extends WindowView {
             $('#chatParticipantListBtn').hide();
             $('#inviteFriendsBtn').hide();
         }
+
+        $('#chatThreadModal').modal('show');
     };
 
     updateFriendRequestButton(chatId, areFriends, friendRequestSent) {

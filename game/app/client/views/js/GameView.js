@@ -427,9 +427,6 @@ class GameView {
     
         if (openNow) {
             this.#chatThreadView.draw(chat);
-            if (!$('#chatThreadModal').is(':visible')) {
-                $('#chatThreadModal').modal('show');
-            }
         }
     };
 
