@@ -39,7 +39,6 @@ app.set('port', PORT);
  * - (E) */
 app.use('/website', express.static(path.join(__dirname + '/website')));
 app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
-app.use('/utils', express.static(path.join(__dirname + '/game/app/utils')));
 
 //Sets the server to websockets only.
 io.set("transports", ["websocket"]);
