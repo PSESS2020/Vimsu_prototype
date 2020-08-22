@@ -1107,7 +1107,7 @@ module.exports = class ServerController {
 
                         chatPartnerIDList.forEach(newChatPartnerID => {
 
-                            if (newChatPartnerID !== creatorID) {
+                            if (newChatPartnerID !== creatorID && !existingChatPartnerIDList.includes(newChatPartnerID)) {
 
                                 ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
 
