@@ -81,6 +81,7 @@ class InviteFriendsView extends WindowView {
                         $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
                         new EventManager().handleCreateGroupChat(this.#groupName, this.#invitedFriends, this.#chatId);
+                        this.#invitedFriends = [];
                     } else if (this.#invitedFriends.length < 1) {
                         $('#toomanyinvitedfriends').hide();
                         $('#noinvitedfriends').show();
