@@ -71,11 +71,6 @@ class ChatThreadView extends WindowView {
 
             new EventManager().handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
-
-        $('#chatThreadModal').on('hidden.bs.modal', function (e) {
-            $('#chatThreadModalTitle').empty();
-            $('#chatThreadModal .modal-body .list-group').empty();
-        })
     }
 
     sendMessage() {
@@ -91,6 +86,8 @@ class ChatThreadView extends WindowView {
     draw(chat) {
         this.#chat = chat;
         this.#messages = chat.messages;
+        $('#chatThreadModalTitle').empty();
+        $('#chatThreadModal .modal-body .list-group').empty();
         $('#chatThreadModalTitle').text(chat.title);
 
         if ($('#notifChatDiv' + this.#chat.chatId).length)

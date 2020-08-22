@@ -4,14 +4,11 @@ class FriendRequestListView extends WindowView {
 
     constructor() {
         super();
-
-        $('#friendRequestListModal').on('hidden.bs.modal', function (e) {
-            $('#friendRequestListModal .modal-body #nofriendrequest').empty();
-            $('#friendRequestListModal .modal-body .list-group').empty()
-        })
     }
 
     draw(businessCards) {
+        $('#friendRequestListModal .modal-body #nofriendrequest').empty();
+        $('#friendRequestListModal .modal-body .list-group').empty()
 
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")

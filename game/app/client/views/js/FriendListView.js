@@ -4,14 +4,11 @@ class FriendListView extends WindowView {
 
     constructor() {
         super();
-
-        $('#friendListModal').on('hidden.bs.modal', function (e) {
-            $('#friendListModal .modal-body #nofriend').empty();
-            $('#friendListModal .modal-body .list-group').empty();
-        })
     }
 
     draw(businessCards) {
+        $('#friendListModal .modal-body #nofriend').empty();
+        $('#friendListModal .modal-body .list-group').empty();
 
         if (businessCards.length < 1) {
             $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")

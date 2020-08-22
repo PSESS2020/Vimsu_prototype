@@ -4,14 +4,11 @@ class ChatListView extends WindowView {
 
     constructor() {
         super();
-
-        $('#chatListModal').on('hidden.bs.modal', function (e) {
-            $('#chatListModal .modal-body #nochat').empty();
-            $('#chatListModal .modal-body .list-group').empty();
-        })
     }
 
     draw(chats) {
+        $('#chatListModal .modal-body #nochat').empty();
+        $('#chatListModal .modal-body .list-group').empty();
 
         if (chats.length < 1) {
             $('#chatListModal .modal-body #nochat').text("No chats found. Let's connect with others!")
