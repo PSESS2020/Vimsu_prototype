@@ -60,8 +60,8 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.findClickableTileOrObject(selectedTileCords, canvas);
+            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMap.findClickableTileOrObject(selectedTileCords, false, canvas);
                 
                 this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
@@ -103,10 +103,10 @@ class GameView {
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
             //check if clicked tile is a valid walkable tile
-            if (this.#currentMap.isCursorOnPLayGround(selectedTileCords.x, selectedTileCords.y)) {
+            if (this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findClickedTileOrObject(selectedTileCords);
+                this.#currentMap.findClickableTileOrObject(selectedTileCords, true, canvas);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
