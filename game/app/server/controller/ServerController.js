@@ -4,7 +4,6 @@
 
 const Position = require('../models/Position.js');
 const RoomService = require('../services/RoomService.js');
-const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Settings = require('../../utils/Settings.js');
 const CommandHandler = require('../models/CommandHandler.js');
 const AllchatContext = require('../models/AllchatContext.js');
@@ -30,7 +29,6 @@ module.exports = class ServerController {
     #db;
     #blob;
     #conference;
-    #listOfConfCont;
     #DEBUGMODE;
     #banList;
     #muteList;
