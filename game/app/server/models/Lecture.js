@@ -151,14 +151,14 @@ module.exports = class Lecture {
         TypeChecker.isString(ppantUsername);
 
         //orator can join every time if lecture is opened and not ended
-        if(ppantUsername === this.#oratorUsername && !this.isEnded() && this.isOpened()) {
+        if(ppantUsername === this.#oratorUsername && !this.isEnded() && this.#isOpened()) {
 
             this.#activeParticipants.push(participantId);
             return true;
         }
 
         //listeners can join if lecture is not full and opened and not ended
-        if (this.#numberOfActiveListeners < this.#maxParticipants && !this.isEnded() && this.isOpened()) {
+        if (this.#numberOfActiveListeners < this.#maxParticipants && !this.isEnded() && this.#isOpened()) {
 
             this.#numberOfActiveListeners++;
             this.#activeParticipants.push(participantId);
@@ -213,7 +213,7 @@ module.exports = class Lecture {
         });
     }
 
-    isOpened() {
+    #isOpened = function() {
         var now = new Date().getTime();
         var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
         return (startingTime <= now)
@@ -228,7 +228,7 @@ module.exports = class Lecture {
     isAccessible() {
         var now = new Date().getTime();
         var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
-        return (this.isOpened() && now <= endTime);
+        return (this.#isOpened() && now <= endTime);
     }
 
     hasPPant(participantId) {

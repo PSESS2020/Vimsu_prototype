@@ -102,7 +102,7 @@ module.exports = class ServerController {
                 }
 
                 var accountId = socket.request.session.accountId;
-                if (this.isBanned(accountId)) {
+                if (this.#isBanned(accountId)) {
                     this.#io.to(socket.id).emit('remove yourself');
                     return;
                 }
@@ -591,11 +591,11 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
 
                 if (targetRoomId === Settings.FOYER_ID) {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
                 } else if (targetRoomId === Settings.FOODCOURT_ID) {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
                 } else if (targetRoomId === Settings.RECEPTION_ID) {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
                 }
             });
 
@@ -633,7 +633,7 @@ module.exports = class ServerController {
                 //User can only chat when he has a token or is the orator of this lecture
                 } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
 
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
                     // timestamping the message - (E)
                     // replace with Message-object?
@@ -665,7 +665,7 @@ module.exports = class ServerController {
                 let schedule = this.#conference.getSchedule();
                 let lecture = schedule.getLecture(lectureId);
 
-                if (lecture.isBanned(socket.request.session.accountId)) {
+                if (lecture.#isBanned(socket.request.session.accountId)) {
                     this.sendNotification(socket.id, Messages.REMOVAL);
                     return;
                 }
@@ -714,7 +714,7 @@ module.exports = class ServerController {
                 socket.currentLecture = undefined;
                 socket.broadcast.emit('showAvatar', ppantID);
                 if (lectureEnded && lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.LECTUREVISIT);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.LECTUREVISIT);
                 }
             });
 
@@ -1010,7 +1010,7 @@ module.exports = class ServerController {
 
                                 };
 
-                                this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
+                                this.#applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
 
                                 /* Tell the creator's client to create a new chat. The true tells
                                 * the client to immediately open the chatThreadView of the new chat 
@@ -1255,7 +1255,7 @@ module.exports = class ServerController {
                             messages: []
                         };
 
-                        this.applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
+                        this.#applyTaskAndAchievement(creatorID, TypeOfTask.INITPERSONALCHAT);
 
                         /* Tell the creator's client to create a new chat. The true tells
                             * the client to immediately open the chatThreadView of the new chat 
@@ -1617,8 +1617,8 @@ module.exports = class ServerController {
                     //update DB
                     FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(res => {
                         FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db).then(res => {
-                            this.applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER);
-                            this.applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER);
+                            this.#applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER);
+                            this.#applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER);
                         })
                     })
 
@@ -1758,11 +1758,11 @@ module.exports = class ServerController {
                 let name = npc.getName();
                 let story = npc.getStory();
                 if (name === "BasicTutorial") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.BASICTUTORIALCLICK);
                 } else if (name === "Chef") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.CHEFCLICK);
                 } else if (name === "FoyerHelper") {
-                    this.applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK);
+                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK);
                 }
 
                 socket.emit('showNPCStory', name, story);
@@ -1895,7 +1895,7 @@ module.exports = class ServerController {
     // probably duplicate code that is not actually needed due to above method
     emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
         if(eventArguments) {
-            if (this.socketIsConnected(idOfSocketToEmitTo)) {
+            if (this.#socketIsConnected(idOfSocketToEmitTo)) {
                 this.#io.to(idOfSocketToEmitTo).emit(eventName, eventArguments);
             };
         } else {
@@ -1906,7 +1906,7 @@ module.exports = class ServerController {
     // replaces all the singular "sendXY"-methods
     sendNotification(socketid, message) {
         //TypeChecker.isEnumOf(message, Messages);
-        if (this.socketIsConnected(socketid)) {
+        if (this.#socketIsConnected(socketid)) {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
     };
@@ -1916,7 +1916,7 @@ module.exports = class ServerController {
         this.#io.emit('New global announcement', username, text);
     }
     
-    isBanned(accountId) {
+    #isBanned = function(accountId) {
         return this.#banList.includes(accountId);
     };
     
@@ -1935,7 +1935,7 @@ module.exports = class ServerController {
         };
     };
     
-    socketIsConnected(socketid) {
+    #socketIsConnected = function(socketid) {
         var mainNamespace = this.#io.of('/');
         var socketKeys = Object.keys(mainNamespace.connected);
         for (var i = 0; i < socketKeys.length; i++) {
@@ -1959,7 +1959,7 @@ module.exports = class ServerController {
     };
 
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client
-    async applyTaskAndAchievement(participantId, taskType) {
+    #applyTaskAndAchievement = async(participantId, taskType) => {
         var participant = this.#ppants.get(participantId);
 
         var task = new TaskService().getTaskByType(taskType)

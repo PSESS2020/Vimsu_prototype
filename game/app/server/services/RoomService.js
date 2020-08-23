@@ -16,7 +16,7 @@ module.exports = class RoomService {
         }
 
         this.#rooms = [];
-        this.initAllRooms();
+        this.#initAllRooms();
         RoomService.instance = this;
     }
 
@@ -36,7 +36,7 @@ module.exports = class RoomService {
         return this.#rooms[index];
     }
 
-    initAllRooms() {
+    #initAllRooms = function() {
         this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));
         this.#rooms.push(new FoodcourtRoomDecorator(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)));
         this.#rooms.push(new ReceptionRoomDecorator(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)));

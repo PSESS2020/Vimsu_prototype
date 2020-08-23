@@ -19,10 +19,10 @@ class ScheduleListView extends WindowView {
             const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
             this.#lectures = sortedLectures;
 
-            this.drawSchedule();
+            this.#drawSchedule();
             
             var interval = setInterval(() => {
-                this.drawSchedule();
+                this.#drawSchedule();
             }, 1000);
 
             $('#scheduleModal').on('hidden.bs.modal', function (e) {
@@ -31,7 +31,7 @@ class ScheduleListView extends WindowView {
         }
     }
 
-    drawSchedule() {
+    #drawSchedule = function() {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
 
         var count = 1;

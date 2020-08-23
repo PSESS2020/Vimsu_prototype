@@ -69,7 +69,7 @@ module.exports = class blob {
         })
     }
 
-    getSharedAccessPolicy(startDate, accessTimeInMinutes) {
+    #getSharedAccessPolicy = function(startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
         var expiryDate = new Date(startDate);
@@ -91,7 +91,7 @@ module.exports = class blob {
         TypeChecker.isString(fileName);
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
-        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.getSharedAccessPolicy(startDate, accessTimeInMinutes));
+        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.#getSharedAccessPolicy(startDate, accessTimeInMinutes));
         const url = this.#blobService.getUrl(containerName, fileName, sasToken);
         return url;
     }

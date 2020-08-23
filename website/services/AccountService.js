@@ -77,7 +77,7 @@ module.exports = class AccountService {
 
     }
 
-    static getAccountByUsername(username, vimsudb) {
+    static #getAccountByUsername = function(username, vimsudb) {
         TypeChecker.isString(username);
 
 
@@ -301,7 +301,7 @@ module.exports = class AccountService {
         TypeChecker.isString(username);
         TypeChecker.isString(password);
 
-        return this.getAccountByUsername(username, vimsudb).then(user => {
+        return this.#getAccountByUsername(username, vimsudb).then(user => {
             if (user && passwordHash.verify(password, user.passwordHash)) {
                 var account = new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
                 return account;

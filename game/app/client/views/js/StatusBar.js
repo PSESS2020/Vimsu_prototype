@@ -17,14 +17,15 @@ class StatusBar extends Views {
 
         this.#connectionStatus = ConnectionState.CONNECTED;
     }
-    drawClock() {
+
+    #drawClock = function() {
         /* Draw game clock */
         $('#time').empty()
         let now = new DateParser(new Date()).parseWithSeconds();
         $('#time').text(now);
     }
 
-    drawConnectionStatus() {
+    #drawConnectionStatus = function() {
         /* draw connection status */
         if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
 
@@ -47,16 +48,18 @@ class StatusBar extends Views {
     }
 
     draw() {
-        this.drawClock();
-        this.drawConnectionStatus();
+        this.#drawClock();
+        this.#drawConnectionStatus();
 
         setInterval(() => {
 
-            this.drawClock();
-            this.drawConnectionStatus();
+            this.#drawClock();
+            this.#drawConnectionStatus();
 
         }, 1000);
     }
+
+    /* not used
     // this returns the time till next interval. If late will drop calls.
     getNextCallTime() {
         var nextCallIn = (startTime + interval * (count + 1)) - performance.now();
@@ -65,7 +68,7 @@ class StatusBar extends Views {
             nextCallIn = (startTime + interval * count) - performance.now();
         }
         return nextCallIn;
-    }
+    }*/
 
     updateLocation(location) {
         TypeChecker.isString(location);

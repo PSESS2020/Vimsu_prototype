@@ -14,13 +14,13 @@ class ChatThreadView extends WindowView {
 
         $('#chatMessageInputGroup').submit((event) => {
             event.preventDefault();
-            this.sendMessage();
+            this.#sendMessage();
         });
 
         $('#chatMessageButton').off();
         $('#chatMessageButton').click((event) => {
             event.preventDefault();
-            this.sendMessage();
+            this.#sendMessage();
         });
         
         $('#chatLeaveButton').off();
@@ -73,7 +73,7 @@ class ChatThreadView extends WindowView {
         });
     }
 
-    sendMessage() {
+    #sendMessage = function() {
         let messageVal = $('#chatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (messageVal !== '') {

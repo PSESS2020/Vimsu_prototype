@@ -11,12 +11,8 @@ module.exports = class AchievementService {
         }
 
         this.#achievementDefinitions = {};
-        this.initAllAchievements();
+        this.#initAllAchievements();
         AchievementService.instance = this;
-    }
-
-    getAllAchievementDefinitions() {
-        return this.#achievementDefinitions;
     }
 
     getAchievementDefinitionByTypeOfTask(achievementTaskType) {
@@ -25,7 +21,7 @@ module.exports = class AchievementService {
         return this.#achievementDefinitions[achievementTaskType];
     }
 
-    initAllAchievements() {
+    #initAllAchievements = function() {
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 15 },
             { count: 10, color: '#C9B037', points: 15 }
@@ -80,7 +76,7 @@ module.exports = class AchievementService {
             var achievementDefinition = this.#achievementDefinitions[taskType];
             var count = taskTypeCountMapping[taskType];
 
-            var currentLevel = this.getLevelFromDefinition(count, achievementDefinition.getLevels())
+            var currentLevel = this.#getLevelFromDefinition(count, achievementDefinition.getLevels())
 
             // could move the computation logic to achievementDefinition
 
@@ -95,7 +91,7 @@ module.exports = class AchievementService {
 
         var newAchievements = [];
         for (var i = 0; i < achievements.length; i++) {
-            if (!this.containsAchievement(achievements[i], participant.getAchievements())) {
+            if (!this.#containsAchievement(achievements[i], participant.getAchievements())) {
                 newAchievements.push(achievements[i]);
                 participant.addAwardPoints(achievements[i].getAwardPoints());
             }
@@ -124,7 +120,7 @@ module.exports = class AchievementService {
         return newAchievements;
     }
 
-    getLevelFromDefinition(count, levels) {
+    #getLevelFromDefinition = function(count, levels) {
         var level = 0;
         while (level < levels.length && count >= levels[level].count) {
             level++;
@@ -134,7 +130,7 @@ module.exports = class AchievementService {
 
 
     // required to check if list of latest achievements contains any new achievements
-    containsAchievement(achievement, oldAchievements) {
+    #containsAchievement = function(achievement, oldAchievements) {
         if (achievement.getCurrentLevel() === 0) return true;
 
         var i;

@@ -2,7 +2,8 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const ParticipantService = require('./ParticipantService');
 
 module.exports = class RankListService {
-    static getRankList(conferenceId, vimsudb) {
+
+    static #getRankList = function(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
 
 
@@ -22,14 +23,13 @@ module.exports = class RankListService {
         }).catch(err => {
             console.error(err);
         })
-
     }
 
     static getRankListWithUsername(conferenceId, lastRank, vimsudb) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(lastRank);
 
-        return this.getRankList(conferenceId, vimsudb).then(rankList => {
+        return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             var rankListLength = 1;
             for (var i = rankList.length - 1; i >= 0; i--) {
                 
@@ -55,7 +55,7 @@ module.exports = class RankListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
 
-        return this.getRankList(conferenceId, vimsudb).then(rankList => {
+        return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
             if (idx < 0) {
                 throw new Error(participantId + " is not in ranklist")

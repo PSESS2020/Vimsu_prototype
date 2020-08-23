@@ -1,9 +1,7 @@
 
 const GAME_WIDTH = GameConfig.CTX_WIDTH;
 const GAME_HEIGHT = GameConfig.CTX_HEIGHT;
-let ctx_map;
-let ctx_avatar;
-let ctx_ui;
+let ctx_map, ctx_avatar, ctx_ui;
 
 let clientController;
 

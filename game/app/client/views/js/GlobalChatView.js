@@ -18,16 +18,16 @@ class GlobalChatView extends WindowView {
         $('#globalChatWindowHeaderText').text(messageHeader);
         if (messageText instanceof Array) {
             for (var i = 0; i < messageText.length; i++) {
-                this.addMessage(messageText[i]);
+                this.#addMessage(messageText[i]);
             }
         } else {
-            this.addMessage(messageText);
+            this.#addMessage(messageText);
         }
 
         $('#globalChat').show();
     };
 
-    addMessage(text) {
+    #addMessage = function(text) {
         var $newMessageBody = $("<div style='font-size: medium; overflow-wrap: break-word;'></div><br>");
         $newMessageBody.text(text);
         $('#globalChatMessage').append($newMessageBody);

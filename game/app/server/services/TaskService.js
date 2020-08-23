@@ -11,7 +11,7 @@ module.exports = class TaskService {
         }
 
         this.#tasks = [];
-        this.initAllTasks();
+        this.#initAllTasks();
         TaskService.instance = this;
     }
 
@@ -31,7 +31,7 @@ module.exports = class TaskService {
         return this.#tasks[index];
     }
 
-    initAllTasks() {
+    #initAllTasks = function() {
         var id = 1;
         this.#tasks.push(new Task(id++, TypeOfTask.ASKQUESTIONINLECTURE, 2));
         this.#tasks.push(new Task(id++, TypeOfTask.BASICTUTORIALCLICK, 0));

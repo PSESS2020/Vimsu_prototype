@@ -10,7 +10,7 @@ module.exports = class LectureService {
 
 
     static createAllLectures(conferenceId, vimsudb) {
-        return this.getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
+        return this.#getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
             var lectureLists = [];
 
             if (lectures) {
@@ -40,7 +40,7 @@ module.exports = class LectureService {
         })
     }
 
-    static getAllLecturesWithOratorData(conferenceId, vimsudb) {
+    static #getAllLecturesWithOratorData = function(conferenceId, vimsudb) {
 
         return vimsudb.joinCollection("lectures", "accounts", "oratorId", "accountId").then(allLectures => {
             if (allLectures.length > 0) {

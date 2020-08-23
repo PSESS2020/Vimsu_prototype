@@ -39,7 +39,7 @@ class LectureView extends WindowView {
             $(document).off('click', ".closeButton");
 
             $(document).on('click', ".closeButton", () => {
-                this.leaveLecture();
+                this.#leaveLecture();
             })
 
         });
@@ -151,7 +151,7 @@ class LectureView extends WindowView {
         });
     }
 
-    leaveLecture() {
+    #leaveLecture = function() {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
             if (this.#hasToken) {

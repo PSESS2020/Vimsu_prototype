@@ -95,7 +95,6 @@ class ParticipantAvatarView extends AvatarView {
 
     updateCurrentAnimation() {
         var direction = super.getDirection();
-        var currPos = super.getGridPosition();
         if (this.#walking === true) {
             if (direction === 'UPLEFT') {
                 this.#currentAnimation = this.#walkingUpLeftAnimation;
