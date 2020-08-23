@@ -895,22 +895,25 @@ module.exports = class ServerController {
                     let friendList = ppant.getFriendList();
 
                     if (chatId) {
-                        var chatPartnerIDList = ppant.getChat(chatId).getParticipantList();
-                        var chatPartnerLength = chatPartnerIDList.length;
-                        var friendIds = [];
+                        if (ppant.isMemberOfChat(chatId)) {
+                            var chatPartnerIDList = ppant.getChat(chatId).getParticipantList();
+                            var chatPartnerLength = chatPartnerIDList.length;
+                            var friendIds = [];
 
-                        friendList.getAllBusinessCards().forEach(businessCard => {
-                            friendIds.push(businessCard.getParticipantId())
-                        })
+                            friendList.getAllBusinessCards().forEach(businessCard => {
+                                friendIds.push(businessCard.getParticipantId())
+                            })
 
-                        friendIds = friendIds.filter((friend) => !chatPartnerIDList.includes(friend));
+                            friendIds = friendIds.filter((friend) => !chatPartnerIDList.includes(friend));
 
-                        var businessCards = [];
+                            var businessCards = [];
 
-                        friendIds.forEach(friendId => {
-                            businessCards.push(friendList.getBusinessCard(friendId));
-                        })
-
+                            friendIds.forEach(friendId => {
+                                businessCards.push(friendList.getBusinessCard(friendId));
+                            })
+                        } 
+                        else
+                            return false;
                     } else {
                         var businessCards = friendList.getAllBusinessCards();
                         var chatPartnerLength = 1;
@@ -1213,7 +1216,9 @@ module.exports = class ServerController {
                                 })
                             }
                         })
-                    }
+                    } else
+                        return false
+                        
                 } else {
 
                     //group chat doesn't exist yet
