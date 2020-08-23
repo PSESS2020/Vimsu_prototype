@@ -1,54 +1,55 @@
+
+const { expect } = require('chai');
+const { assert } = require('chai');
+const TestUtil = require('../../server/models/utils/TestUtil.js');
 const GameObject = require('../../../game/app/server/models/GameObject.js');
-const chai = require('chai');
 const Position = require('../../../game/app/server/models/Position.js');
 const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
-const assert = chai.assert;
-const expect = chai.expect;
 
-//create example gameObject 
-var id = 1;
-var gameObjectType = GameObjectType.TABLE;
-var name = 'table';
-var width = 2;
-var length = 3;
-var roomId = 5;
-var cordX = 2;
-var cordY = 4;
-var position = new Position(roomId, cordX, cordY);
-var isSolid = true;
-var isClickable = false;
-var gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid);
+var id;
+var gameObjectType;
+var name;
+var width;
+var length;
+var position;
+var isSolid;
+var isClickable;
 
-describe('GameObjectTest getter functions', function() {
-    it('test getId', function() {
-        assert.equal(gameObject.getId(), id);
+describe('GameObject test', function() {
+    
+    //test data
+    beforeEach( function () {
+        id = TestUtil.randomInt();
+        gameObjectType = GameObjectType.TABLE;
+        name = TestUtil.randomString();
+        width = TestUtil.randomInt();
+        length = TestUtil.randomInt();
+        position = new Position(TestUtil.randomInt(), TestUtil.randomInt(), TestUtil.randomInt());
+        isSolid = TestUtil.randomBool();
+        isClickable = TestUtil.randomBool();
     });
 
-    it('test getGameObjectType', function() {
-        assert.equal(gameObject.getGameObjectType(), gameObjectType);
-    })
+    it('test constructor and getters', function() {
+        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable);
 
-    it('test getName', function() {
-        assert.equal(gameObject.getName(), name);
+        assert.equal(id, gameObject.getId());
+        assert.equal(gameObjectType, gameObject.getGameObjectType());
+        assert.equal(name, gameObject.getName());
+        assert.equal(width, gameObject.getWidth());
+        assert.equal(length, gameObject.getLength());
+        assert.equal(position, gameObject.getPosition());
+        assert.equal(isSolid, gameObject.getSolid());
+        assert.equal(isClickable, gameObject.getClickable());
     });
 
-    it('test getWidth', function() {
-        assert.equal(gameObject.getWidth(), width);
+    it('test constructor invalid input', function() {
+        expect(() => new GameObject('id', gameObjectType, name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, 'gameObjectType', name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, 42, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, 'width', length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, 'length', position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, length, 'position', isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, length, position, 'isSolid', isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, 'isClickable')).to.throw(TypeError);
     });
-
-    it('test getLength', function() {
-        assert.equal(gameObject.getLength(), length);
-    });
-
-    it('test getPosition', function() {
-        assert.equal(gameObject.getPosition(), position);
-    });
-
-    it('test getSolid', function() {
-        assert.equal(gameObject.getSolid(), isSolid);
-    });
-
-    it('test solid type Error', function() {
-        expect(() => new GameObject(id, name, width, length, position, 1)).to.throw(TypeError);
-    })
-});
+})
