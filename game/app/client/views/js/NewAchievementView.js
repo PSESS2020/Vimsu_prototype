@@ -4,11 +4,15 @@ class NewAchievementView extends WindowView {
 
     constructor() {
         super()
+
+        $("#newAchievementModal").on("hidden.bs.modal", () => {
+            $('#confettiCanvas').hide();
+            this.#confetti.clear();
+        });
     }
 
+
     draw(achievement) {
-        $('#confettiCanvas').hide();
-        this.#confetti.clear();
         $('#newAchievementModalContent').empty();
 
         $('#newAchievementModalContent').append(
