@@ -665,7 +665,7 @@ module.exports = class ServerController {
                 let schedule = this.#conference.getSchedule();
                 let lecture = schedule.getLecture(lectureId);
 
-                if (lecture.#isBanned(socket.request.session.accountId)) {
+                if (lecture.isBanned(socket.request.session.accountId)) {
                     this.sendNotification(socket.id, Messages.REMOVAL);
                     return;
                 }
