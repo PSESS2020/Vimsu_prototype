@@ -177,7 +177,6 @@ module.exports = class ServerController {
                             length: mapElement.getLength(),
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
-                            isSolid: mapElement.getSolid(),
                             isClickable: mapElement.getClickable()
                         });
                     });
@@ -197,7 +196,6 @@ module.exports = class ServerController {
                             length: gameObject.getLength(),
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
-                            isSolid: gameObject.getSolid(),
                             isClickable: gameObject.getClickable()
                         });
                     });
@@ -494,7 +492,6 @@ module.exports = class ServerController {
                         length: mapElement.getLength(),
                         cordX: mapElement.getPosition().getCordX(),
                         cordY: mapElement.getPosition().getCordY(),
-                        isSolid: mapElement.getSolid(),
                         isClickable: mapElement.getClickable()
                     });
                 });
@@ -514,7 +511,6 @@ module.exports = class ServerController {
                         length: gameObject.getLength(),
                         cordX: gameObject.getPosition().getCordX(),
                         cordY: gameObject.getPosition().getCordY(),
-                        isSolid: gameObject.getSolid(),
                         isClickable: gameObject.getClickable()
                     });
                 });

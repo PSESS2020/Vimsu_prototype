@@ -330,14 +330,14 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isSolid, mapElement.isClickable))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable))
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isSolid, element.isClickable));
+                new PositionClient(element.cordX, element.cordY), element.isClickable));
         });
 
         //transform NPCs to NPCClients

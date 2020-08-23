@@ -14,7 +14,6 @@ module.exports = class GameObject {
     #isClickable;
 
     /**
-     * Erstellt GameObject-Instanz
      * 
      * @author Philipp
      * 
@@ -44,7 +43,7 @@ module.exports = class GameObject {
         this.#width = width;
         this.#length = length;
 
-        //Position der linken, unteren Objektecke
+        //Position of left down corner of gameObject
         this.#position = position;
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;

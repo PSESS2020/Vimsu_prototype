@@ -11,12 +11,10 @@ class GameObjectClient {
     #width;
     #length;
     #position;
-    #isSolid;
     #gameObjectType;
     #isClickable;
 
     /**
-     * Erstellt GameObject-Instanz
      * 
      * @author Philipp
      * 
@@ -26,10 +24,9 @@ class GameObjectClient {
      * @param {int} width 
      * @param {int} length 
      * @param {Position} position 
-     * @param {boolean} isSolid 
      * @param {boolean} isClickable
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable) {
+    constructor(id, gameObjectType, name, width, length, position, isClickable) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -37,7 +34,6 @@ class GameObjectClient {
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, PositionClient);
-        TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
 
         this.#id = id;
@@ -46,9 +42,8 @@ class GameObjectClient {
         this.#width = width;
         this.#length = length;
 
-        //Position der linken, unteren Objektecke
+        //Position of left down corner of gameObject
         this.#position = position;
-        this.#isSolid = isSolid;
         this.#isClickable = isClickable;
     }
 
@@ -74,10 +69,6 @@ class GameObjectClient {
 
     getPosition() {
         return this.#position;
-    }
-
-    getSolid() {
-        return this.#isSolid;
     }
 
     isClickable() {

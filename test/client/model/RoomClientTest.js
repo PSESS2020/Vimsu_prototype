@@ -38,8 +38,8 @@ describe('RoomClient test', function() {
             "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
             "table_default": "client/assets/tables/table.png"
         }
-        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool(), TestUtil.randomBool())];
-        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false, false)];
+        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool())];
+        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false)];
         listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT)];
         listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
         width = TestUtil.randomIntWithMaxAndMin(1000, 1);
@@ -130,7 +130,7 @@ describe('RoomClient test', function() {
         let newLength = TestUtil.randomIntWithMaxAndMin(100, 5);
 
         //table with width 2 and length 1 at (0,1)
-        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 2, 1, new PositionClient(0, 1), true, false)];
+        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 2, 1, new PositionClient(0, 1), false)];
 
         //npc at (1,1)
         let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT)];

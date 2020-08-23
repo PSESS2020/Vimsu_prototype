@@ -12,7 +12,6 @@ var name;
 var width;
 var length;
 var position;
-var isSolid;
 var isClickable;
 
 describe('GameObjectClient test', function() {
@@ -25,12 +24,11 @@ describe('GameObjectClient test', function() {
         width = TestUtil.randomInt();
         length = TestUtil.randomInt();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
-        isSolid = TestUtil.randomBool();
         isClickable = TestUtil.randomBool();
     });
 
     it('test constructor and getters', function() {
-        let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isSolid, isClickable);
+        let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable);
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -38,18 +36,16 @@ describe('GameObjectClient test', function() {
         assert.equal(width, gameObject.getWidth());
         assert.equal(length, gameObject.getLength());
         assert.equal(position, gameObject.getPosition());
-        assert.equal(isSolid, gameObject.getSolid());
         assert.equal(isClickable, gameObject.isClickable());
     });
 
     it('test constructor invalid input', function() {
-        expect(() => new GameObjectClient('id', gameObjectType, name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, 'gameObjectType', name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, 42, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, 'width', length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, 'length', position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, 'position', isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, 'isSolid', isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, isSolid, 'isClickable')).to.throw(TypeError);
+        expect(() => new GameObjectClient('id', gameObjectType, name, width, length, position, isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, 'gameObjectType', name, width, length, position, isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, 42, width, length, position, isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, 'width', length, position, isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, width, 'length', position, isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, 'position', isClickable)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, 'isClickable')).to.throw(TypeError);
     });
 })
