@@ -153,59 +153,59 @@ class ClientController {
     }
 
     #setUpSocket = function() {
-        this.#socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
+        this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
         //this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
-        this.#socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
-        this.#socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
-        this.#socket.on('roomEnteredByParticipant', this.handleFromServerRoomEnteredByParticipant.bind(this));
+        this.#socket.on('currentGameStateYourRoom', this.#handleFromServerUpdateRoom.bind(this));
+        this.#socket.on('currentGameStateYourPosition', this.#handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
+        this.#socket.on('roomEnteredByParticipant', this.#handleFromServerRoomEnteredByParticipant.bind(this));
         //this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
-        this.#socket.on('movementOfAnotherPPantStart', this.handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
-        this.#socket.on('movementOfAnotherPPantStop', this.handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
-        this.#socket.on('remove player', this.handleFromServerRemovePlayer.bind(this)); // handles remove event
-        this.#socket.on('currentLectures', this.handleFromServerCurrentLectures.bind(this));
-        this.#socket.on('currentSchedule', this.handleFromServerCurrentSchedule.bind(this));
-        this.#socket.on('lectureEntered', this.handleFromServerLectureEntered.bind(this));
-        this.#socket.on('lectureFull', this.handleFromServerLectureFull.bind(this));
-        this.#socket.on('businessCard', this.handleFromServerBusinessCard.bind(this));
-        this.#socket.on('friendList', this.handleFromServerFriendList.bind(this));
-        this.#socket.on('friendRequestList', this.handleFromServerFriendRequestList.bind(this));
-        this.#socket.on('rankList', this.handleFromServerRankList.bind(this));
-        this.#socket.on('newAllchatMessage', this.handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
-        this.#socket.on('initAllchat', this.handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
-        this.#socket.on('lectureMessageFromServer', this.handleFromServerNewLectureChatMessage.bind(this));
-        this.#socket.on('updateLectureChat', this.handleFromServerUpdateLectureChat.bind(this));
-        this.#socket.on('update token', this.handleFromServerUpdateToken.bind(this));
-        this.#socket.on('force close lecture', this.handleFromServerForceCloseLecture.bind(this));
-        this.#socket.on('New notification', this.handleFromServerNewNotification.bind(this));
-        this.#socket.on('New global announcement', this.handleFromServerNewGlobalAnnouncement.bind(this));
-        this.#socket.on('remove yourself', this.handleFromServerRemoved.bind(this));
-        this.#socket.on('hideAvatar', this.handleFromServerHideAvatar.bind(this));
-        this.#socket.on('showAvatar', this.handleFromServerShowAvatar.bind(this));
-        this.#socket.on('achievements', this.handleFromServerAchievements.bind(this));
-        this.#socket.on('removeFromChatParticipantList', this.handleFromServerRemoveFromChatParticipantList.bind(this));
-        this.#socket.on('addToInviteFriends', this.handleFromServerAddToInviteFriends.bind(this));
-        this.#socket.on('removeFromInviteFriends', this.handleFromServerRemoveFromInviteFriends.bind(this));
-        this.#socket.on('updateSuccessesBar', this.handleFromServerUpdateSuccessesBar.bind(this));
-        this.#socket.on('acceptedFriendRequest', this.handleFromServerAcceptedFriendRequest.bind(this));
-        this.#socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
-        this.#socket.on('addToChatParticipantList', this.handleFromServerAddToChatParticipantList.bind(this));
-        this.#socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
-        this.#socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
-        this.#socket.on('chatParticipantList', this.handleFromServerChatParticipantList.bind(this))
-        this.#socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
-        this.#socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
-        this.#socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
-        this.#socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
+        this.#socket.on('movementOfAnotherPPantStart', this.#handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
+        this.#socket.on('movementOfAnotherPPantStop', this.#handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
+        this.#socket.on('remove player', this.#handleFromServerRemovePlayer.bind(this)); // handles remove event
+        this.#socket.on('currentLectures', this.#handleFromServerCurrentLectures.bind(this));
+        this.#socket.on('currentSchedule', this.#handleFromServerCurrentSchedule.bind(this));
+        this.#socket.on('lectureEntered', this.#handleFromServerLectureEntered.bind(this));
+        this.#socket.on('lectureFull', this.#handleFromServerLectureFull.bind(this));
+        this.#socket.on('businessCard', this.#handleFromServerBusinessCard.bind(this));
+        this.#socket.on('friendList', this.#handleFromServerFriendList.bind(this));
+        this.#socket.on('friendRequestList', this.#handleFromServerFriendRequestList.bind(this));
+        this.#socket.on('rankList', this.#handleFromServerRankList.bind(this));
+        this.#socket.on('newAllchatMessage', this.#handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
+        this.#socket.on('initAllchat', this.#handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
+        this.#socket.on('lectureMessageFromServer', this.#handleFromServerNewLectureChatMessage.bind(this));
+        this.#socket.on('updateLectureChat', this.#handleFromServerUpdateLectureChat.bind(this));
+        this.#socket.on('update token', this.#handleFromServerUpdateToken.bind(this));
+        this.#socket.on('force close lecture', this.#handleFromServerForceCloseLecture.bind(this));
+        this.#socket.on('New notification', this.#handleFromServerNewNotification.bind(this));
+        this.#socket.on('New global announcement', this.#handleFromServerNewGlobalAnnouncement.bind(this));
+        this.#socket.on('remove yourself', this.#handleFromServerRemoved.bind(this));
+        this.#socket.on('hideAvatar', this.#handleFromServerHideAvatar.bind(this));
+        this.#socket.on('showAvatar', this.#handleFromServerShowAvatar.bind(this));
+        this.#socket.on('achievements', this.#handleFromServerAchievements.bind(this));
+        this.#socket.on('removeFromChatParticipantList', this.#handleFromServerRemoveFromChatParticipantList.bind(this));
+        this.#socket.on('addToInviteFriends', this.#handleFromServerAddToInviteFriends.bind(this));
+        this.#socket.on('removeFromInviteFriends', this.#handleFromServerRemoveFromInviteFriends.bind(this));
+        this.#socket.on('updateSuccessesBar', this.#handleFromServerUpdateSuccessesBar.bind(this));
+        this.#socket.on('acceptedFriendRequest', this.#handleFromServerAcceptedFriendRequest.bind(this));
+        this.#socket.on('rejectedFriendRequest', this.#handleFromServerRejectedFriendRequest.bind(this));
+        this.#socket.on('addToChatParticipantList', this.#handleFromServerAddToChatParticipantList.bind(this));
+        this.#socket.on('removedFriend', this.#handleFromServerRemovedFriend.bind(this));
+        this.#socket.on('showNPCStory', this.#handleFromServerShowNPCStory.bind(this));
+        this.#socket.on('chatParticipantList', this.#handleFromServerChatParticipantList.bind(this))
+        this.#socket.on('gameEntered', this.#handleFromServerGameEntered.bind(this));
+        this.#socket.on('gotNewChat', this.#handleFromServerGotNewChat.bind(this));
+        this.#socket.on('gotNewGroupChat', this.#handleFromServerGotNewGroupChat.bind(this));
+        this.#socket.on('gotNewChatMessage', this.#handleFromServerGotNewChatMessage.bind(this));
         this.#socket.on('evalAnswer', function (data) {   //Displays evaluated input.
             console.log(data);
         });
-        this.#socket.on('newChat', this.handleFromServerNewChat.bind(this));
-        this.#socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
-        this.#socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
-        this.#socket.on('chatList', this.handleFromServerShowChatList.bind(this));
-        this.#socket.on('chatThread', this.handleFromServerShowChatThread.bind(this));
-        this.#socket.on('newChatMessage', this.handleFromServerNewChatMessage.bind(this));
-        this.#socket.on('inviteFriends', this.handleFromServerInviteFriends.bind(this));
+        this.#socket.on('newChat', this.#handleFromServerNewChat.bind(this));
+        this.#socket.on('newAchievement', this.#handleFromServerNewAchievement.bind(this));
+        this.#socket.on('newFriendRequestReceived', this.#handleFromServerNewFriendRequest.bind(this));
+        this.#socket.on('chatList', this.#handleFromServerShowChatList.bind(this));
+        this.#socket.on('chatThread', this.#handleFromServerShowChatThread.bind(this));
+        this.#socket.on('newChatMessage', this.#handleFromServerNewChatMessage.bind(this));
+        this.#socket.on('inviteFriends', this.#handleFromServerInviteFriends.bind(this));
     }
 
     /* #################################################### */
@@ -276,7 +276,7 @@ class ClientController {
 
     //Second message from server, gives you information of starting position, business card and participant id
     //After that, there is everything to init the game view
-    handleFromServerInitOwnParticipant(initInfo) {
+    #handleFromServerInitOwnParticipant = function(initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         this.#ownBusinessCard = new BusinessCardClient(
@@ -304,7 +304,7 @@ class ClientController {
     }
 
     //Third message from Server, gives you information of starting room
-    handleFromServerUpdateRoom(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+    #handleFromServerUpdateRoom = function(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
 
         //tranform MapElements to GameObjectClients
         var listOfMapElements = [];
@@ -345,7 +345,7 @@ class ClientController {
     }
 
     //updates own avatar position
-    handleFromServerUpdatePosition(posInfo) {
+    #handleFromServerUpdatePosition = function(posInfo) {
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
 
@@ -356,7 +356,7 @@ class ClientController {
     }
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
-    handleFromServerStartMovementOther(ppantID, direction, newCordX, newCordY) {
+    #handleFromServerStartMovementOther = function(ppantID, direction, newCordX, newCordY) {
 
         TypeChecker.isString(ppantID);
         TypeChecker.isEnumOf(direction, Direction);
@@ -371,7 +371,7 @@ class ClientController {
 
     }
 
-    handleFromServerStopMovementOther(ppantID) {
+    #handleFromServerStopMovementOther = function(ppantID) {
         // TODO:
         // Typechecking
         // comparing position with the one saved in the server
@@ -379,18 +379,18 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
 
-    handleFromServerLectureEntered(lecture, hasToken, lectureChat) {
+    #handleFromServerLectureEntered = function(lecture, hasToken, lectureChat) {
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
 
-    handleFromServerLectureFull(lectureId) {
+    #handleFromServerLectureFull = function(lectureId) {
         this.#gameView.updateCurrentLectures(lectureId);
     }
 
     /* TODO
      * Change argument from object into list (nicer to read)
      * - (E) */
-    handleFromServerRoomEnteredByParticipant(initInfo) {
+    #handleFromServerRoomEnteredByParticipant = function(initInfo) {
 
         //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
         //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
@@ -414,7 +414,7 @@ class ClientController {
     */
 
     // Removes disconnected Player from Model and View (P)
-    handleFromServerRemovePlayer(ppantId) {
+    #handleFromServerRemovePlayer = function(ppantId) {
         //TypeChecker.isString(ppantId);
 
         this.#currentRoom.exitParticipant(ppantId);
@@ -426,16 +426,16 @@ class ClientController {
 
 
     // get the current lectures from the server to display in the UI for selection
-    handleFromServerCurrentLectures(lectures) {
+    #handleFromServerCurrentLectures = function(lectures) {
         this.#gameView.initCurrentLectures(lectures);
     }
 
-    handleFromServerCurrentSchedule(lectures) {
+    #handleFromServerCurrentSchedule = function(lectures) {
         this.#gameView.initCurrentSchedule(lectures);
     }
 
     //Is called after server send the answer of avatarclick
-    handleFromServerBusinessCard(businessCardObject, rank, isModerator) {
+    #handleFromServerBusinessCard = function(businessCardObject, rank, isModerator) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
@@ -448,7 +448,7 @@ class ClientController {
         }
     }
 
-    handleFromServerInviteFriends(friendListData, groupName, limit, chatId) {
+    #handleFromServerInviteFriends = function(friendListData, groupName, limit, chatId) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -457,7 +457,7 @@ class ClientController {
     }
 
     //Is called after server send the answer of friendlistclick
-    handleFromServerFriendList(friendListData) {
+    #handleFromServerFriendList = function(friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -466,7 +466,7 @@ class ClientController {
     }
 
     //Is called after server send the answer of friendrequestlistclick
-    handleFromServerFriendRequestList(friendRequestListData) {
+    #handleFromServerFriendRequestList = function(friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
             friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -475,30 +475,30 @@ class ClientController {
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
 
-    handleFromServerNewFriendRequest(data, chatId) {
+    #handleFromServerNewFriendRequest = function(data, chatId) {
         var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriendRequest(friendRequest);
         this.#gameView.updateChatThread(chatId, false, true);
         this.#gameView.drawNewFriendRequest(data.username);
     }
 
-    handleFromServerAcceptedFriendRequest(data, chatId) {
+    #handleFromServerAcceptedFriendRequest = function(data, chatId) {
         var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriend(friend);
         this.#gameView.updateChatThread(chatId, true, false);
         this.#gameView.drawNewFriend(data.username);
     }
 
-    handleFromServerRejectedFriendRequest(chatId) {
+    #handleFromServerRejectedFriendRequest = function(chatId) {
         this.#gameView.updateChatThread(chatId, false, false);
     }
 
-    handleFromServerRemovedFriend(friendId, chatId) {
+    #handleFromServerRemovedFriend = function(friendId, chatId) {
         this.#gameView.removeFriend(friendId);
         this.#gameView.updateChatThread(chatId, false, false);
     }
 
-    handleFromServerRankList(rankList) {
+    #handleFromServerRankList = function(rankList) {
         //remark own participant's ranking
         let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
         if (idx > -1) {
@@ -507,48 +507,48 @@ class ClientController {
         this.#gameView.initRankListView(rankList);
     }
 
-    handleFromServerChatParticipantList(usernames) {
+    #handleFromServerChatParticipantList = function(usernames) {
         this.#gameView.drawChatParticipantList(usernames);
     }
 
-    handleFromServerAddToChatParticipantList(username) {
+    #handleFromServerAddToChatParticipantList = function(username) {
         this.#gameView.addToChatParticipantList(username);
     }
 
-    handleFromServerRemoveFromChatParticipantList(username) {
+    #handleFromServerRemoveFromChatParticipantList = function(username) {
         this.#gameView.removeFromChatParticipantList(username);
     }
 
-    handleFromServerAddToInviteFriends(data, hasLeftChat) {
+    #handleFromServerAddToInviteFriends = function(data, hasLeftChat) {
         this.#gameView.addToInviteFriends(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email), hasLeftChat);
     }
 
-    handleFromServerRemoveFromInviteFriends(participantId, isMemberOfChat) {
+    #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
         this.#gameView.removeFromInviteFriends(participantId, isMemberOfChat);
     }
 
     // Adds a new message to the all-chat
-    handleFromServerNewAllchatMessage(message) {
+    #handleFromServerNewAllchatMessage = function(message) {
         this.#gameView.appendAllchatMessage(message);
     }
 
-    handleFromServerNewLectureChatMessage(message) {
+    #handleFromServerNewLectureChatMessage = function(message) {
         this.#gameView.appendLectureChatMessage(message);
     }
 
-    handleFromServerUpdateLectureChat(messages) {
+    #handleFromServerUpdateLectureChat = function(messages) {
         this.#gameView.updateLectureChat(messages);
     };
 
-    handleFromServerUpdateToken(hasToken) {
+    #handleFromServerUpdateToken = function(hasToken) {
         this.#gameView.updateLectureToken(hasToken);
     };
 
-    handleFromServerForceCloseLecture() {
+    #handleFromServerForceCloseLecture = function() {
         this.#gameView.closeLectureView();
     };
 
-    handleFromServerUpdateSuccessesBar(points, rank) {
+    #handleFromServerUpdateSuccessesBar = function(points, rank) {
         if (points) {
             TypeChecker.isInt(points);
         }
@@ -563,45 +563,49 @@ class ClientController {
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
     // { senderID: <String>, timestamp: <String>, text: <String> }
-    handleFromServerInitAllchat(messages) {
+    #handleFromServerInitAllchat = function(messages) {
         this.#gameView.initAllchatView(this.#currentRoom.getTypeOfRoom(), messages);
     }
 
-    handleFromServerNewNotification(messageHeader, messageText) {
+    #handleFromServerNewNotification = function(messageHeader, messageText) {
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
-    handleFromServerNewGlobalAnnouncement(moderatorUsername, messageText) {
+    #handleFromServerNewGlobalAnnouncement = function(moderatorUsername, messageText) {
         var timestamp = new DateParser(new Date()).parseOnlyTime();
         var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
-    handleFromServerHideAvatar(participantId) {
+    #handleFromServerHideAvatar = function(participantId) {
         this.#gameView.hideAvatar(participantId);
     }
 
-    handleFromServerShowAvatar(participantId) {
+    #handleFromServerShowAvatar = function(participantId) {
         this.#gameView.showAvatar(participantId);
     }
 
-    handleFromServerRemoved() {
+    #handleFromServerRemoved = function() {
         $('#viewBlocker').show();
     };
 
-    handleFromServerShowNPCStory(name, story) {
+    #handleFromServerAchievements = function(achievements) {
+        this.#gameView.initCurrentAchievementsView(achievements);
+    }
+
+    #handleFromServerShowNPCStory = function(name, story) {
         this.#gameView.initNPCStoryView(name, story);
     }
 
-    handleFromServerNewAchievement(achievement) {
+    #handleFromServerNewAchievement = function(achievement) {
         this.#gameView.handleNewAchievement(achievement);
     }
 
-    handleFromServerShowChatList(chats) {
+    #handleFromServerShowChatList = function(chats) {
         this.#gameView.initChatListView(chats);
     };
 
-    handleFromServerShowChatThread(chat) {
+    #handleFromServerShowChatThread = function(chat) {
         this.#gameView.initChatThreadView(chat, true);
     };
 
@@ -609,28 +613,28 @@ class ClientController {
      * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
      * INTO THAT CHAT (or if a friend request has been send).
      * - (E) */
-    handleFromServerNewChat(chat, openNow) {
+    #handleFromServerNewChat = function(chat, openNow) {
         this.#gameView.addNewChat(chat, openNow);
     };
 
-    handleFromServerGotNewChat(senderUsername, chatId) {
+    #handleFromServerGotNewChat = function(senderUsername, chatId) {
         this.#gameView.drawNewChat(senderUsername, chatId);
     }
 
-    handleFromServerGotNewGroupChat(groupName, creatorUsername, chatId) {
+    #handleFromServerGotNewGroupChat = function(groupName, creatorUsername, chatId) {
         this.#gameView.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
-    handleFromServerGotNewChatMessage(senderUsername, chatId) {
+    #handleFromServerGotNewChatMessage = function(senderUsername, chatId) {
         this.#gameView.drawNewMessage(senderUsername, chatId);
     }
 
     //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
-    handleFromServerNewChatMessage(chatId, message) {
+    #handleFromServerNewChatMessage = function(chatId, message) {
         this.#gameView.addNewChatMessage(chatId, message);
     };
 
-    handleFromServerGameEntered() {
+    #handleFromServerGameEntered = function() {
         alert("You have entered the conference with the same account. Redirect to homepage...")
         var redirect = $('#nav_leave_button').attr('href');
         window.location.href = redirect;
@@ -769,10 +773,6 @@ class ClientController {
         if (this.#socketReady()) {
             this.#socket.emit('getNPCStory', npcId);
         }
-    }
-
-    handleFromServerAchievements(achievements) {
-        this.#gameView.initCurrentAchievementsView(achievements);
     }
 
     handleFromViewShowRankList() {
