@@ -246,7 +246,6 @@ class ClientController {
             let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
             let currPosX = currPos.getCordX();
             let currPosY = currPos.getCordY();
-            let participantId = this.#ownParticipant.getId();
             this.socket.emit('requestMovementStart', direction, currPosX, currPosY);
         }
     }
@@ -254,8 +253,6 @@ class ClientController {
     sendToServerRequestMovStop() {
 
         this.socketReady;
-        let participantId = this.#ownParticipant.getId();
-
         this.socket.emit('requestMovementStop');
 
     }
