@@ -59,8 +59,11 @@
                 </div>
                 <br>
                 <div id="allchatWindow" style="z-index: 300">
-                    <div class="p-2" style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;">Room Chat</div>
-                    <div id="allchatMessages" class="allChatBar"></div>
+                    <div class="p-2" id="allchatHeader" style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;"></div>
+                    <div id="allchatBox" class="allChatBar">
+                        <small><div id="noAllchat" class="wrapword" style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div></small>
+                        <div id="allchatMessages"></div>
+                    </div>
                 </div>
                 
                 
@@ -68,15 +71,13 @@
             <div class="d-flex flex-column ml-4">
                 <form id="allchat" action="">
                     <input id="allchatMessageInput" autocomplete="off"
-                        placeholder="Enter room chat message ..." /><button style="background-color: transparent">>></button> 
+                        placeholder="" /><button style="background-color: transparent">>></button> 
                 </form>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" title="Show Room Chat Messages" onclick="" href=""
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick="" href=""
                     style="z-index: 300">
-                    <small>Show Room Chat Messages</small>
                 </a>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" title="Hide Room Chat Messages" href="" onclick=""
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href="" onclick=""
                     style="z-index: 300">
-                    <small>Hide Room Chat Messages</small>
                 </a>
 
                 <script>

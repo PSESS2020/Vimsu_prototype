@@ -177,7 +177,7 @@ padding: 5px 10px;
   display:none;
 }
 
-#allchatMessages::-webkit-scrollbar {
+#allchatBox::-webkit-scrollbar {
   display: none;
 }
 
