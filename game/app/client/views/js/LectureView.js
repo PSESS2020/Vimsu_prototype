@@ -202,7 +202,7 @@ class LectureView extends WindowView {
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
         var messageDiv = `
-            <div>
+            <div style="padding-bottom: 10px">
                 <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
                 <small><b>${message.username}</b></small>
                 <small class="wrapword">${message.text}</small>

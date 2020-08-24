@@ -161,7 +161,7 @@ class ChatThreadView extends WindowView {
         }
 
         var messageDiv = `
-        <div>
+        <div style="padding-bottom: 10px">
             <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
             <small><b>${senderUsername}</b></small>
             <small class="wrapword">${message.msgText}</small>

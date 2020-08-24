@@ -159,9 +159,9 @@ max-width: 16vw;
 }
 
 #allchatMessages div {
-background: none;
-color: antiquewhite;
-padding: 5px 10px;
+  background: none;
+  color: antiquewhite;
+
 }
 
 .notifBarDiv {
