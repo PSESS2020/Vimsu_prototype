@@ -196,9 +196,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
-                    <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat" href="#inputGroupNameModal"
-                        style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat"
-                        data-toggle="modal">
+                    <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat"
+                        href="#inputGroupNameModal" style="position: absolute; top: 0.5rem; right: 2rem;" role="button"
+                        id="newGroupChat" data-toggle="modal">
                         <i class="fa fa-edit friendRequestListButton navbarIcons"
                             style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
                         <small style="color: antiquewhite; font-size: 10px;">Group</small>
@@ -240,8 +240,8 @@
                         <i class="fa fa-info-circle navbarIcons"
                             style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
                     </a>
-                    <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat" role="button"
-                        id="inviteFriendsBtn" data-toggle="modal">
+                    <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
+                        role="button" id="inviteFriendsBtn" data-toggle="modal">
                         <i class="fa fa-plus-square navbarIcons"
                             style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
                     </a>
@@ -284,8 +284,30 @@
                         <input id="groupNameInput" autocomplete="off"
                             style="width: 100%; background-color: #1b1e24; color: antiquewhite"
                             placeholder="Enter group name" maxlength="20" required />
-                        <button class="btn btn-lecture mt-3" title="Invite friends to group chat with the input group name" style=" width: auto;">Invite Friends</button>
+                        <button class="btn btn-lecture mt-3"
+                            title="Invite friends to group chat with the input group name" style=" width: auto;">Invite
+                            Friends</button>
                     </form>
+
+                    <script>
+                        $('#groupName').submit(function (event) {
+                            event.preventDefault();
+                            let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                            if (groupName.length > 20) {
+                                return false;
+                            }
+
+                            if (groupName !== '') {
+                                $('#inputGroupNameModal').modal('hide');
+                                new EventManager().handleInviteFriendsClicked(groupName, "");
+                                $('#groupNameInput').val('');
+                            }
+                        });
+
+                        $('#groupName').onkeydown = function (event) {
+                            event.stopPropagation();
+                        };
+                    </script>
                 </div>
             </div>
         </div>

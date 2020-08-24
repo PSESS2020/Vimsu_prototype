@@ -27,7 +27,6 @@ function init() {
   window.requestAnimationFrame(gameLoop);
 }
 
-
 function gameLoop(timeStamp) {
     //Clear canvas
     ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
@@ -38,63 +37,6 @@ function gameLoop(timeStamp) {
     // The loop function has reached it's end. Keep requesting new frames
     window.requestAnimationFrame(gameLoop);
 }
-/*
-setInterval(function () {
-  //let deltaTime = timestamp - lastTime;
-  //lastTime = timestamp;
-
-  ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-  clientController.updateGame();
-  //gameView.update();
-  //gameView.draw();  
-}, GameConfig.TIME_DELTA);*/
-
-$('#allchat').submit(function (event) {
-
-  event.preventDefault();
-  //Replace needed to replace html tags.
-  let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-  if (messageVal !== '') {
-
-    if (messageVal[0] === '/') {
-      clientController.sendToServerEvalInput(messageVal.slice(1));
-    } else
-      clientController.sendToServerAllchatMessage(messageVal);
-
-    $('#allchatMessageInput').val('');
-    return false;
-  }
-
-});
-
-$('#groupName').submit(function (event) {
-  event.preventDefault();
-  let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  if (groupName.length > 20) {
-    return false;
-  }
-
-  if (groupName !== '') {
-    $('#inputGroupNameModal').modal('hide');
-    clientController.handleFromViewShowInviteFriends(groupName, "");
-    $('#groupNameInput').val('');
-  }
-});
-
-
-document.getElementById("allchat").onkeydown = function (event) {
-  event.stopPropagation();
-};
-
-document.getElementById("groupName").onkeydown = function (event) {
-  event.stopPropagation();
-};
-
-document.getElementById("chatMessageInput").onkeydown = function (event) {
-  event.stopPropagation();
-};
 
 document.body.onkeydown = function (event) {
 
@@ -168,6 +110,4 @@ document.body.onkeyup = function (event) {
       clientController.handleArrowUp();
       break;
   }
-
-  //event.preventDefault();
 }

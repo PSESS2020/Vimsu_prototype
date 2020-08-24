@@ -5,6 +5,11 @@ class ChatThreadView extends WindowView {
 
     constructor() {
         super();
+
+        $('#chatMessageInput').onkeydown = function (event) {
+            event.stopPropagation();
+        };
+
         $('#chatMessageInput').off();
         $('#chatMessageInputGroup').off();
 
@@ -22,7 +27,7 @@ class ChatThreadView extends WindowView {
             event.preventDefault();
             this.#sendMessage();
         });
-        
+
         $('#chatLeaveButton').off();
         $('#chatLeaveButton').click((event) => {
             event.preventDefault();
@@ -73,7 +78,7 @@ class ChatThreadView extends WindowView {
         });
     }
 
-    #sendMessage = function() {
+    #sendMessage = function () {
         let messageVal = $('#chatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (messageVal !== '') {

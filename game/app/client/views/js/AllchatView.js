@@ -2,6 +2,30 @@ class AllchatView extends Views {
 
     constructor() {
         super();
+
+
+        $('#allchat').onkeydown = function (event) {
+            event.stopPropagation();
+        };
+
+        $('#allchat').submit(function (event) {
+
+            event.preventDefault();
+            //Replace needed to replace html tags.
+            let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            if (messageVal !== '') {
+
+                if (messageVal[0] === '/') {
+                    clientController.sendToServerEvalInput(messageVal.slice(1));
+                } else
+                    clientController.sendToServerAllchatMessage(messageVal);
+
+                $('#allchatMessageInput').val('');
+                return false;
+            }
+
+        });
     }
 
     draw(typeOfRoom, messages) {
