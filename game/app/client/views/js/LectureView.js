@@ -33,8 +33,11 @@ class LectureView extends WindowView {
             });
 
             $(document).on('keydown', function(e) {
-                if(document.activeElement === $("#lectureChatInput")[0] && e.keyCode === 13) {
-                    sendMessage(event);
+                if(document.activeElement === $("#lectureChatInput")[0]) {
+                    e.stopPropagation();
+
+                    if(e.keyCode === 13)
+                        sendMessage(event);
                 }
             });
 
