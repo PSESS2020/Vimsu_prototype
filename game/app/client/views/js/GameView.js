@@ -14,7 +14,8 @@ class GameView {
     #friendListView;
     #inviteFriendsView;
     #friendRequestListView;
-    #chatParticipantListView
+    #chatParticipantListView;
+    #allchatView;
     #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -28,6 +29,7 @@ class GameView {
     constructor() {
         this.#statusBar = new StatusBar();
         this.#notifBar = new NotificationBar();
+        this.#allchatView = new AllchatView();
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
@@ -475,6 +477,14 @@ class GameView {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
     };
+
+    appendAllchatMessage(message) {
+        this.#allchatView.appendMessage(message);
+    }
+
+    initAllchatView(typeOfRoom, messages) {
+        this.#allchatView.draw(typeOfRoom, messages);
+    }
 
     updateSuccessesBar(points, rank) {
         new SuccessesBar().update(points, rank);
