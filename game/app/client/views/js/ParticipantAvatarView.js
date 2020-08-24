@@ -1,30 +1,10 @@
-/*const AvatarView = require("./AvatarView.js");
-var TypeChecker = require('../../../utils/TypeChecker.js')
-
-
-module.exports = */
-
-const AVATAR_WIDTH = 64;
-const AVATAR_HEIGHT = 128;
-
-//Needed for calculating because avatar asset gets shrinked when drawn. 
-const AVATAR_SCALE_WIDTH = 1.5;
-const AVATAR_SCALE_HEIGHT = 0.3125;
-
-const PARTICIPANT_COLOR = 'antiquewhite';
-const MODERATOR_COLOR = 'gold';
-
-//constants for arrow drawn above own Avatar
-const ARROW_LENGTH = 20;
-const ARROW_WIDTH = 7;
-
 class ParticipantAvatarView extends AvatarView {
 
     #participantId;
-    #spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
-    #shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', AVATAR_WIDTH, AVATAR_HEIGHT);
+    #spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+    #topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+    #bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+    #shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
     #walkingDownRightAnimation;
     #walkingUpRightAnimation;
     #walkingDownLeftAnimation;
@@ -37,13 +17,12 @@ class ParticipantAvatarView extends AvatarView {
     #walking = false;
     #isVisible;
     #username;
-    #typeOfRoom;
     #isModerator;
     #isOwnAvatar;
 
     #gameEngine;
 
-    constructor(position, direction, participantId, typeOfRoom, username, isVisible, isModerator, isOwnAvatar) {
+    constructor(position, direction, participantId, username, isVisible, isModerator, isOwnAvatar) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -56,7 +35,6 @@ class ParticipantAvatarView extends AvatarView {
         this.#standingDownLeftAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 5, 5);
         this.#standingDownRightAnimation = new SpriteAnimation(this.#spriteSheet, this.#topClothing, this.#bottomClothing, this.#shoes, 15, 0, 0);
         this.#currentAnimation = this.#standingDownRightAnimation;
-        this.#typeOfRoom = typeOfRoom;
         this.#username = username;
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
@@ -74,11 +52,6 @@ class ParticipantAvatarView extends AvatarView {
     //Is called after server sends participantId
     setId(participantId) {
         this.#participantId = participantId;
-    }
-
-    //Is called after room switch
-    setTypeOfRoom(typeOfRoom) {
-        this.#typeOfRoom = typeOfRoom;
     }
 
     getVisibility() {
@@ -136,28 +109,28 @@ class ParticipantAvatarView extends AvatarView {
             let cordY = super.getGridPosition().getCordY();
             this.updateCurrentAnimation();
             
-            var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + AVATAR_SCALE_WIDTH * AVATAR_WIDTH;
-            var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - AVATAR_SCALE_HEIGHT * AVATAR_HEIGHT;
+            var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
+            var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
             
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
 
             var arrowColor;
             if(this.#isModerator) {
-                ctx_avatar.fillStyle = arrowColor = MODERATOR_COLOR;
+                ctx_avatar.fillStyle = arrowColor = Settings.MODERATOR_COLOR;
             } else {
-                ctx_avatar.fillStyle = arrowColor = PARTICIPANT_COLOR;
+                ctx_avatar.fillStyle = arrowColor = Settings.PARTICIPANT_COLOR;
             }
 
             if(this.#isOwnAvatar) {
-                this.#drawArrow(ctx_avatar, screenX + AVATAR_WIDTH / 2, screenY - 15 - ARROW_LENGTH, screenX + AVATAR_WIDTH / 2, screenY - 15, ARROW_WIDTH, arrowColor);
+                this.#drawArrow(ctx_avatar, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15 - Settings.ARROW_LENGTH, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15, Settings.ARROW_WIDTH, arrowColor);
             }
             
             ctx_avatar.textAlign = "center";
-            ctx_avatar.fillRect(screenX - AVATAR_WIDTH / 4, screenY - 1, AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+            ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 1, Settings.AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
             ctx_avatar.fillStyle = "black";
-            ctx_avatar.fillText(this.#username, screenX + AVATAR_WIDTH / 2, screenY);
+            ctx_avatar.fillText(this.#username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
             this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }

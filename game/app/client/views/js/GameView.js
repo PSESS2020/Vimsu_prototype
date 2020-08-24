@@ -175,12 +175,8 @@ class GameView {
         return this.#updateList;
     }
 
-    drawStatusBar() {
-        this.#statusBar.draw();
-    }
-
-    drawProfileBox(username) {
-        this.#statusBar.drawProfile(username);
+    drawStatusBar(username) {
+        this.#statusBar.draw(username);
     }
 
     draw() {
@@ -246,17 +242,18 @@ class GameView {
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), typeOfRoom));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection()));
         });
 
         this.#currentMap = new MapView(assetPaths, map, objectMap);
+        this.#statusBar.updateLocation(typeOfRoom);
     }
 
     /**
      * 
      * @param {ParticipantClient} participant array of another participants / an participant instance excluding the current client
      */
-    initAnotherAvatarViews(participant, typeOfRoom) {
+    initAnotherAvatarViews(participant) {
         if (!(this.#ownAvatarView instanceof ParticipantAvatarView)) {
             throw new Error("Please initialize the current client's avatar view first using initOwnAvatarView(participant)");
         }
@@ -272,7 +269,6 @@ class GameView {
                 participant.getPosition(),
                 participant.getDirection(),
                 participant.getId(),
-                typeOfRoom,
                 participant.getUsername(),
                 participant.getIsVisible(),
                 participant.getIsModerator(),
@@ -343,21 +339,17 @@ class GameView {
     }
 
     //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
-    initOwnAvatarView(ownParticipant, typeOfRoom) {
+    initOwnAvatarView(ownParticipant) {
         TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
 
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
         let username = ownParticipant.getUsername();
         let isModerator = ownParticipant.getIsModerator();
-        this.#statusBar.updateLocation(typeOfRoom);
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, typeOfRoom, username, true, isModerator, true);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true);
         this.addToUpdateList(this.#ownAvatarView);
-
-
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
         //this.#gameViewInit = true;
@@ -578,11 +570,6 @@ class GameView {
         if ($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
             this.#friendRequestListView.addToFriendRequestList(businessCard);
         }
-    }
-
-    updateOwnAvatarRoom(typeOfRoom) {
-        this.#ownAvatarView.setTypeOfRoom(typeOfRoom);
-        this.#statusBar.updateLocation(typeOfRoom);
     }
 
     removeOwnAvatarView() {

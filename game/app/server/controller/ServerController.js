@@ -253,7 +253,7 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
 
                     // Initialize Allchat
-                    this.#io.to(socket.id).emit('initAllchat', typeOfCurrentRoom, currentRoom.getMessages());
+                    this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
 
                     this.#ppants.forEach((participant, id, map) => {
 
@@ -584,7 +584,7 @@ module.exports = class ServerController {
                 //switch socket channel
                 socket.leave(currentRoomId.toString());
                 socket.join(targetRoomId.toString());
-                this.#io.to(socket.id).emit('initAllchat', targetRoomType, this.#rooms[targetRoomId - 1].getRoom().getMessages());
+                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
 
                 if (targetRoomId === Settings.FOYER_ID) {
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);

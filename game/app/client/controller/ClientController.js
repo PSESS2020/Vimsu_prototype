@@ -9,7 +9,6 @@ class ClientController {
     #currentRoom;
     #ownParticipant;
     #ownBusinessCard;
-
     #gameView;
 
     /**
@@ -76,12 +75,11 @@ class ClientController {
         var listOfNPCs = this.#currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.#gameView.drawStatusBar();
             this.#gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
         }
 
-        this.#gameView.drawProfileBox(this.#ownParticipant.getUsername())
-        this.#gameView.initOwnAvatarView(this.#ownParticipant, typeOfRoom);
+        this.#gameView.drawStatusBar(this.#ownParticipant.getUsername());
+        this.#gameView.initOwnAvatarView(this.#ownParticipant);
         this.#gameView.initCanvasEvents();
 
         //this.#gameView.initOwnAvatarView(this.#ownParticipant);
@@ -108,7 +106,6 @@ class ClientController {
         }
 
         this.#gameView.resetAnotherAvatarViews();
-        this.#gameView.updateOwnAvatarRoom(typeOfRoom);
         this.#gameView.initCanvasEvents();
         this.#gameView.setGameViewInit(true);
 
@@ -402,7 +399,7 @@ class ClientController {
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
         // the following line throws the same error as in the above method
-        this.#gameView.initAnotherAvatarViews(participant, this.#currentRoom.getTypeOfRoom());
+        this.#gameView.initAnotherAvatarViews(participant);
     }
 
     /*
@@ -566,8 +563,8 @@ class ClientController {
     // Called when a new room is entered.
     // The argument is an array of objects of the following structure:
     // { senderID: <String>, timestamp: <String>, text: <String> }
-    handleFromServerInitAllchat(typeOfRoom, messages) {
-        this.#gameView.initAllchatView(typeOfRoom, messages);
+    handleFromServerInitAllchat(messages) {
+        this.#gameView.initAllchatView(this.#currentRoom.getTypeOfRoom(), messages);
     }
 
     handleFromServerNewNotification(messageHeader, messageText) {

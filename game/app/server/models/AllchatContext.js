@@ -29,7 +29,7 @@ module.exports = class AllchatContext extends CommandContext {
     };
     
     updateMessages() {
-        this.#serverController.emitEventIn(this.#contextObject.getRoomId(), 'initAllchat', this.#contextObject.getTypeOfRoom(), this.getMessages());
+        this.#serverController.emitEventIn(this.#contextObject.getRoomId(), 'initAllchat', this.getMessages());
     };
     
     removeUser(userToRemove) {
