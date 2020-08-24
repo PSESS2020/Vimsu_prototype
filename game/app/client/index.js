@@ -21,9 +21,7 @@ function init() {
   ctx_ui.canvas.width = GAME_WIDTH;
   ctx_ui.canvas.height = GAME_HEIGHT;
 
-  clientController = new ClientController();
-  clientController.setPort(GameConfig.PORT);
-  clientController.openSocketConnection();
+  clientController = new ClientController(GameConfig.PORT);
 
   // Start the first frame request
   window.requestAnimationFrame(gameLoop);
