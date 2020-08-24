@@ -32,11 +32,4 @@ class GlobalChatView extends WindowView {
         $newMessageBody.text(text);
         $('#globalChatMessage').append($newMessageBody);
     };
-
-    /*
-    onclick() {
-        return new EventManager.handleGlobalChatClicked();
-    };
-    */
-
 }

@@ -160,8 +160,7 @@ class ParticipantAvatarView extends AvatarView {
         if (this.#isVisible) {
 
             $('#businessCardModal').modal('toggle');
-            let eventManager = new EventManager();
-            eventManager.handleAvatarClick(this.#participantId);
+            new EventManager().handleAvatarClick(this.#participantId);
         }
         //}
     }

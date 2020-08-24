@@ -1,9 +1,12 @@
 class FriendRequestListView extends WindowView {
 
     #businessCards;
+    #eventManager;
 
     constructor() {
         super();
+
+        this.#eventManager = new EventManager();
     }
 
     draw(businessCards) {
@@ -47,7 +50,7 @@ class FriendRequestListView extends WindowView {
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 
                 event.stopPropagation();
-                new EventManager().handleAcceptRequestClicked(businessCard);
+                this.#eventManager.handleAcceptRequestClicked(businessCard);
             })
 
             $('#reject' + businessCard.getParticipantId()).off();
@@ -56,7 +59,7 @@ class FriendRequestListView extends WindowView {
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 
                 event.stopPropagation();
-                new EventManager().handleRejectRequestClicked(businessCard.getParticipantId());
+                this.#eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
             })
         })
 
@@ -96,9 +99,5 @@ class FriendRequestListView extends WindowView {
     addToFriendRequestList(businessCard) {
         this.#businessCards.push(businessCard);
         this.draw(this.#businessCards);
-    }
-
-    onclick() {
-        return new EventManager().handleFriendRequestListClicked();
     }
 }

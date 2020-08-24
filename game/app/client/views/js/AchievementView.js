@@ -43,8 +43,4 @@ class AchievementView extends WindowView {
         $('#achievementsModal').modal('show');
 
     }
-
-    onclick() {
-        return new EventManager().handleAchievementsClicked();
-    }
 }

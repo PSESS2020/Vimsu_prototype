@@ -44,9 +44,4 @@ class RankListView extends WindowView {
             }
         })
     }
-
-
-    onclick() {
-        new EventManager().handleRankListClicked();
-    }
 }

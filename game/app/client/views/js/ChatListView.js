@@ -97,8 +97,4 @@ class ChatListView extends WindowView {
             }
         })
     };
-
-    onclick() {
-        return new EventManager().handleChatListClicked();
-    }
 }

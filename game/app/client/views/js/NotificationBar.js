@@ -3,8 +3,12 @@ if (typeof module === 'object' && typeof exports === 'object') {
 }
 
 class NotificationBar extends Views {
+    
+    #eventManager;
+    
     constructor() {
         super();
+        this.#eventManager = new EventManager();
     }
 
     drawNewMessage(senderUsername, chatId) {
@@ -29,7 +33,7 @@ class NotificationBar extends Views {
 
         $('#notifMessage' + senderUsername + chatId).on('click', function (event) {
             $('#notifMessageDiv' + senderUsername + chatId).hide();
-            return new EventManager().handleChatThreadClicked(chatId);
+            return this.#eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -55,7 +59,7 @@ class NotificationBar extends Views {
 
         $('#notifChat' + chatId).on('click', function (event) {
             $('#notifChatDiv' + chatId).hide();
-            return new EventManager().handleChatThreadClicked(chatId);
+            return this.#eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -81,7 +85,7 @@ class NotificationBar extends Views {
 
         $('#notifGroupChat' + chatId).on('click', function (event) {
             $('#notifGroupChatDiv' + chatId).hide();
-            return new EventManager().handleChatThreadClicked(chatId);
+            return this.#eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -107,7 +111,7 @@ class NotificationBar extends Views {
 
         $('#notifFriendRequest' + senderUsername).on('click', function (event) {
             $('#notifFriendRequestDiv' + senderUsername).hide();
-            return new EventManager().handleFriendRequestListClicked();
+            return this.#eventManager.handleFriendRequestListClicked();
         })
     }
 
@@ -133,7 +137,7 @@ class NotificationBar extends Views {
         })
         $('#notifFriend' + friendUsername).on('click', function (event) {
             $('#notifFriendDiv' + friendUsername).hide();
-            return new EventManager().handleFriendListClicked();
+            return this.#eventManager.handleFriendListClicked();
         })
     }
 }

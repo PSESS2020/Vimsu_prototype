@@ -1,14 +1,13 @@
 class ChatThreadView extends WindowView {
 
-    #chat
-    #messages
+    #chat;
+    #messages;
+    #eventManager;
 
     constructor() {
         super();
 
-        $('#chatMessageInput').onkeydown = function (event) {
-            event.stopPropagation();
-        };
+        this.#eventManager = new EventManager();
 
         $('#chatMessageInput').off();
         $('#chatMessageInputGroup').off();
@@ -36,7 +35,7 @@ class ChatThreadView extends WindowView {
 
             if (result) {
                 $('#chatThreadModal').modal('hide');
-                new EventManager().handleLeaveChat(this.#chat.chatId);
+                this.#eventManager.handleLeaveChat(this.#chat.chatId);
             }
 
             event.stopImmediatePropagation();
@@ -52,7 +51,7 @@ class ChatThreadView extends WindowView {
 
             $('#chatFriendRequestButton').hide();
             $('#friendRequestSent').show();
-            new EventManager().handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
+            this.#eventManager.handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
         });
 
         $('#chatParticipantListBtn').off()
@@ -63,7 +62,7 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
-            new EventManager().handleShowChatParticipantList(this.#chat.chatId);
+            this.#eventManager.handleShowChatParticipantList(this.#chat.chatId);
         })
 
         $('#inviteFriendsBtn').off()
@@ -74,7 +73,7 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
-            new EventManager().handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
+            this.#eventManager.handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
     }
 
@@ -82,7 +81,7 @@ class ChatThreadView extends WindowView {
         let messageVal = $('#chatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (messageVal !== '') {
-            new EventManager().handleChatMessageInput(this.#chat.chatId, messageVal);
+            this.#eventManager.handleChatMessageInput(this.#chat.chatId, messageVal);
             $('#chatMessageInput').val('');
             $('#chatMessageInput').focus();
         }

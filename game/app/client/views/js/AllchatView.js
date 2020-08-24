@@ -19,9 +19,9 @@ class AllchatView extends Views {
                 $('#showRoomChat').show();
         })
 
-        $('#allchat').onkeydown = function (event) {
+        $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
-        };
+        });
 
         $('#allchat').submit(function (event) {
 

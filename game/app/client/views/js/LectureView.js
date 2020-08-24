@@ -6,9 +6,11 @@ class LectureView extends WindowView {
     #hasToken;
     #lectureId;
     #timeLeft;
+    #eventManager
 
     constructor() {
         super();
+        this.#eventManager = new EventManager();
 
         this.#lectureStatus = LectureStatus.PENDING;
 
@@ -20,7 +22,7 @@ class LectureView extends WindowView {
 
                 let messageVal = $('#lectureChatInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 if (messageVal !== '') {
-                    new EventManager().handleLectureChatMessageInput(messageVal);
+                    this.#eventManager.handleLectureChatMessageInput(messageVal);
                     $('#lectureChatInput').val('');
                     $('#lectureChatInput').focus();
                 }
@@ -183,11 +185,10 @@ class LectureView extends WindowView {
             $('#lectureVideo').empty();
             $('#lectureVideoWindow').hide();
 
-            var eventManager = new EventManager();
             if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
-                eventManager.handleLectureLeft(this.#lectureId, false);
+                this.#eventManager.handleLectureLeft(this.#lectureId, false);
             } else {
-                eventManager.handleLectureLeft(this.#lectureId, true);
+                this.#eventManager.handleLectureLeft(this.#lectureId, true);
             }
         } else {
             $('#lectureVideoWindow').hide();

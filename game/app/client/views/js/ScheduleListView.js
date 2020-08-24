@@ -74,8 +74,4 @@ class ScheduleListView extends WindowView {
 
         $('#scheduleModal').modal('show');
     }
-
-    onclick() {
-        return new EventManager().handleScheduleClicked();
-    }
 }

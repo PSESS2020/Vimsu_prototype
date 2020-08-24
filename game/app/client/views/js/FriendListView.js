@@ -1,13 +1,15 @@
 class FriendListView extends WindowView {
 
     #businessCards;
+    #eventManager;
 
     constructor() {
         super();
+        this.#eventManager = new EventManager();
 
         $('#friendRequestList').off();
         $('#friendRequestList').on('click', function (event) {
-            new FriendRequestListView().onclick();
+            this.#eventManager.handleFriendRequestListClicked();
         })
     }
 
@@ -55,7 +57,7 @@ class FriendListView extends WindowView {
             $('#chatfriend' + businessCard.getParticipantId()).click((event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
-                new EventManager().handleChatNowClicked(businessCard.getParticipantId());
+                this.#eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })
 
             $('#delete' + businessCard.getParticipantId()).off();
@@ -64,8 +66,8 @@ class FriendListView extends WindowView {
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
 
                 var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
-                if(result)
-                    new EventManager().handleRemoveFriend(businessCard.getParticipantId());
+                if (result)
+                    this.#eventManager.handleRemoveFriend(businessCard.getParticipantId());
                 else
                     event.stopImmediatePropagation();
             })
@@ -89,9 +91,5 @@ class FriendListView extends WindowView {
     addToFriendList(businessCard) {
         this.#businessCards.push(businessCard);
         this.draw(this.#businessCards);
-    }
-
-    onclick() {
-        return new EventManager().handleFriendListClicked();
     }
 }

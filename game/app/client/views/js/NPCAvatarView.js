@@ -58,7 +58,6 @@ class NPCAvatarView extends AvatarView {
     }
 
     onClick() {
-        let eventmanager = new EventManager();
-        eventmanager.handleNPCClick(this.#npcId);
+        new EventManager().handleNPCClick(this.#npcId);
     }
 }

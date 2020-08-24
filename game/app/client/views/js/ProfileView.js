@@ -58,8 +58,4 @@ class ProfileView extends WindowView {
 
         $('#profileModal').modal('show');
     }
-
-    onclick() {
-        return new EventManager().handleProfileClicked();
-    }
 }
