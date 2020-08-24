@@ -3,6 +3,21 @@ class AllchatView extends Views {
     constructor() {
         super();
 
+        $('#hideRoomChat').hide();
+        $('#allchatWindow')[0].style.visibility = "hidden";
+
+        $('#showRoomChat').on('click', function (event) {
+            event.preventDefault();
+                $('#allchatWindow')[0].style.visibility = "visible";
+                $('#showRoomChat').hide();
+                $('#hideRoomChat').show();
+        })
+        $('#hideRoomChat').on('click', function (event) {
+            event.preventDefault();
+                $('#allchatWindow')[0].style.visibility = "hidden";
+                $('#hideRoomChat').hide();
+                $('#showRoomChat').show();
+        })
 
         $('#allchat').onkeydown = function (event) {
             event.stopPropagation();

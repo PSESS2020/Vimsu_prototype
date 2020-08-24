@@ -79,25 +79,6 @@
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href="" onclick=""
                     style="z-index: 300">
                 </a>
-
-                <script>
-                    $('#hideRoomChat').hide();
-                    $('#allchatWindow')[0].style.visibility = "hidden";
-
-                    $('#showRoomChat').on('click', function (event) {
-                        event.preventDefault();
-                            $('#allchatWindow')[0].style.visibility = "visible";
-                            $('#showRoomChat').hide();
-                            $('#hideRoomChat').show();
-                    })
-                    $('#hideRoomChat').on('click', function (event) {
-                        event.preventDefault();
-                            $('#allchatWindow')[0].style.visibility = "hidden";
-                            $('#hideRoomChat').hide();
-                            $('#showRoomChat').show();
-                    })
-
-                </script>
             </div>
             
             <div class="d-flex flex-column ml-auto">

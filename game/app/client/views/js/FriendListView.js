@@ -4,6 +4,11 @@ class FriendListView extends WindowView {
 
     constructor() {
         super();
+
+        $('#friendRequestList').off();
+        $('#friendRequestList').on('click', function (event) {
+            new FriendRequestListView().onclick();
+        })
     }
 
     draw(businessCards) {
