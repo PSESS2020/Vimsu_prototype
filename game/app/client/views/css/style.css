@@ -162,7 +162,6 @@ max-width: 16vw;
 background: none;
 color: antiquewhite;
 padding: 5px 10px;
-overflow-wrap: break-word;
 }
 
 .notifBarDiv {
@@ -253,7 +252,6 @@ vertical-align: middle;
   border-color: antiquewhite;
   border-radius: 10px;
   background-color: rgb(33, 41, 44);
-  overflow-wrap: break-word;
 }
 
 .currentLecturesWindow {
@@ -590,8 +588,7 @@ body::-webkit-scrollbar {
 }
 
 .wrapword {
-  white-space: -webkit-pre-wrap;          /* Chrome & Safari */ 
-  white-space: pre-wrap;                  /* CSS3 */
-  word-break: break-all;
+  overflow-wrap: break-word;
+  word-break: break-word;
   white-space: normal;
 }
