@@ -1190,9 +1190,11 @@ module.exports = class ServerController {
 
                                                         if (existingChatParticipantChat instanceof GroupChat) {
                                                             this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
-
+                                                            
                                                             if(existingChatParticipant.hasFriend(newChatPartnerID))
                                                                 this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
+                                                            else
+                                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
                                                         }
                                                     }
                                                 })
@@ -1718,7 +1720,9 @@ module.exports = class ServerController {
                                         }
     
                                         this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', removerBusinessCardData, true)
-                                    }
+                                    } else
+                                        this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
+                                    
                                 }
                             }                            
                         })

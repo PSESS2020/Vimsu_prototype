@@ -105,30 +105,34 @@ class InviteFriendsView extends WindowView {
     }
 
     addToInviteFriends(businessCard, hasLeftChat) {
-        this.#businessCards.push(businessCard);
-
         if (hasLeftChat) {
             this.#limit = this.#limit + 1;
         }
 
-        this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+        if (businessCard) {
+            this.#businessCards.push(businessCard);
+            this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+        }
     }
 
     removeFromInviteFriends(participantId, isMemberOfChat) {
-        var found = false;
-        this.#businessCards.forEach(businessCard => {
-            if (businessCard.getParticipantId() === participantId) {
-                let index = this.#businessCards.indexOf(businessCard);
-                this.#businessCards.splice(index, 1);
-                found = true;
-            }
-        });
+        if (isMemberOfChat) {
+            this.#limit = this.#limit - 1;
+        }
 
-        if(found) {
-            if (isMemberOfChat) {
-                this.#limit = this.#limit - 1;
+        if (participantId) {
+            var found = false;
+            this.#businessCards.forEach(businessCard => {
+                if (businessCard.getParticipantId() === participantId) {
+                    let index = this.#businessCards.indexOf(businessCard);
+                    this.#businessCards.splice(index, 1);
+                    found = true;
+                }
+            });
+
+            if(found) {
+                this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
             }
-            this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
         }
     }
 }
