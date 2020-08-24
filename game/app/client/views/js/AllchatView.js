@@ -21,8 +21,6 @@ class AllchatView extends Views {
         if (messages.length < 1) {
             $('#noAllchat').text("The " + typeOfRoom.toLowerCase() + " chat is somehow quiet. Send some love here?")
         } else {
-            $('#noAllchat').empty();
-
             messages.forEach((message) => {
                 this.appendMessage(message)
             })
