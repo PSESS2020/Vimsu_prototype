@@ -49,9 +49,6 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(businessCard, BusinessCard);
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isEnumOf(direction, Direction);
-
-        //Currently disable because not included yet
-
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
@@ -75,16 +72,16 @@ module.exports = class Participant {
         this.#businessCard = businessCard;
         this.#position = position;
         this.#direction = direction;
-        this.#friendList = friendList; //this.#friendList = new FriendList(this.#id, []);  //TESTING
-        this.#receivedRequestList = receivedRequestList; //this.#receivedRequestList = new FriendList(this.#id, []); //TESTING
-        this.#sentRequestList = sentRequestList; //this.#sentRequestList = new FriendList(this.#id, []);  //TESTING
+        this.#friendList = friendList; 
+        this.#receivedRequestList = receivedRequestList; 
+        this.#sentRequestList = sentRequestList;
         this.#taskTypeMapping = taskMapping;
 
         this.#achievements = achievements;
 
-        this.#isMod = isMod; //this.#isMod = true;  //TESTING
-        this.#awardPoints = awardPoints; //this.#points = 0;
-        this.#chatList = chatList; //this.#chatList = [];
+        this.#isMod = isMod; 
+        this.#awardPoints = awardPoints; 
+        this.#chatList = chatList; 
         this.#isVisible = true;
     }
 
@@ -154,6 +151,7 @@ module.exports = class Participant {
     }
 
     setIsVisible(isVisible) {
+        TypeChecker.isBoolean(isVisible);
         this.#isVisible = isVisible;
     }
 

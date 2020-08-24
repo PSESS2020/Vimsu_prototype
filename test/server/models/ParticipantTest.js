@@ -13,148 +13,127 @@ const OneToOneChat = require('../../../game/app/server/models/OneToOneChat.js');
 const Task = require('../../../game/app/server/models/Task.js');
 const MessageTestData = require('./TestData/MessageTestData.js');
 const assert = chai.assert;
+const expect = chai.expect;
+const TestUtil = require('./utils/TestUtil.js');
 
-//create example participant
-var id = '1';
-var accountId = '1';
-var businessCard = new BusinessCard(id, 'username', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
-var position = new Position(1, 2, 3);
-var direction = Direction.DOWNLEFT;
-var friendList = new FriendList(id, [new BusinessCard('2', 'friend', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email')]);
-var receivedRequestList = new FriendList(id, [new BusinessCard('3', 'friendRequester', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email')]);
-var sentRequestList = new FriendList(id, [new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email')]);
-var isMod = false;
-var achievements = [new Achievement(1, 'Test', 'Icon', 'Description', 1, 'color', 1, 3, TypeOfTask.ASKQUESTIONINLECTURE)];
-var taskService = new TaskService();
-var tasks = taskService.getAllTasks();
-var awardPoints = 10;
-var chat = new Chat('1', [id, '2'], [new Message(MessageTestData.messageId, id, MessageTestData.senderUsername, new Date(), MessageTestData.messageText)], 10);
-var chatList = [chat];
-var ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, tasks, isMod, awardPoints, chatList);
+var id;
+var accountId;
+var businessCard;
+var position;
+var direction;
+var friendList;
+var receivedRequestList;
+var sentRequestList;
+var achievements;
+var taskMapping = {};
+var isMod;
+var awardPoints;
+var chatList;
+var ppant;
 
-describe('ParticipantTest getter functions', function() {
-    it('test getId', function() {
-        assert.equal(ppant.getId(), id);
-    });
+describe('Participant test', function() {
 
-    it('test getPosition', function() {
-        assert.equal(ppant.getPosition(), position);
-    });
-
-    it('test getDirection', function() {
-        assert.equal(ppant.getDirection(), direction);
-    });
-
-    it('test getAccountId', function() {
-        assert.equal(ppant.getAccountId(), accountId);
-    });
-
-    it('test getBusinessCard', function() {
-        assert.equal(ppant.getBusinessCard(), businessCard);
-    });
-
-    it('test getFriendList', function() {
-        assert.equal(ppant.getFriendList(), friendList);
-    });
-
-    it('test getReceivedRequestList', function() {
-        assert.equal(ppant.getReceivedRequestList(), receivedRequestList);
-    });
-
-    it('test getSentRequestList', function() {
-        assert.equal(ppant.getSentRequestList(), sentRequestList);
-    });
-
-    it('test getAchievements', function() {
-        assert.equal(ppant.getAchievements(), achievements);
-    });
-
-    it('test isModerator', function() {
-        assert.equal(ppant.isModerator(), isMod);
-    });
-
-    it('test getChatList', function() {
-        assert.equal(ppant.getChatList(), chatList);
-    });
-
-    it('test getTaskTypeMappingCounts', function() {
-        let taskTypeMapping = ppant.getTaskTypeMappingCounts();
-        tasks.forEach(task => {
-            assert.equal(taskTypeMapping[task.getTaskType()], 0);
+    //test data
+    beforeEach(function() {
+        id = TestUtil.randomString();
+        accountId = TestUtil.randomString();
+        businessCard = new BusinessCard(id, 'username', 'title', 'surname', 'forename', 'job', 'company', 'email');
+        position = TestUtil.randomPosition();
+        direction = TestUtil.randomObjectValue(Direction);
+        friendList = new FriendList(id, []);
+        receivedRequestList = new FriendList(id, []);
+        sentRequestList = new FriendList(id, []);
+        achievements = [];
+        new TaskService().getAllTasks().forEach(x => {
+            taskMapping[x.getTaskType()] = 0;
         });
+        isMod = TestUtil.randomBool();
+        awardPoints = TestUtil.randomInt();
+        chatList = [new Chat(TestUtil.randomString(), [], [], TestUtil.randomIntWithMin(1))];
+        ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList, 
+                    sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList);
     });
 
-    it('test getAwardPoints', function() {
-        assert.equal(ppant.getAwardPoints(), awardPoints);
-    });
-
-    it('test getChat existing chat', function() {
-        assert.equal(ppant.getChat('1'), chat);
-    });
-
-    it('test getChat non existing chat', function() {
-        assert.equal(ppant.getChat('2'), undefined);
-    });
-});
-
-describe('ParticipantTest chatFunctions', function() {
-    it('test adding a old chat', function() {
-        //status of chat list before adding chat
-        assert.equal(ppant.getChatList().length, 1);
-        assert.equal(ppant.getChat('1'), chat);
-        ppant.addChat(chat);
-        //status of chat list after adding chat
-        assert.equal(ppant.getChat('1'), chat);
-        assert.equal(ppant.getChatList().length, 1);
-    });
-
-    it('test adding a new chat', function() {
-        //status of chat list before adding chat
-        assert.equal(ppant.getChat('2'), undefined);
-        assert.equal(ppant.getChatList().length, 1);
-        let chat2 = new Chat('2', [id, '3'], [new Message('7', id, 'username', new Date(), 'hello')], 10);
-        ppant.addChat(chat2);
-        //status of chat list after adding chat
-        assert.equal(ppant.getChat('2'), chat2);
-        assert.equal(ppant.getChatList().length, 2);
-    });
-
-    it('test isMemberOfChat', function() {
-        assert.equal(ppant.isMemberOfChat('1'), true);
-        assert.equal(ppant.isMemberOfChat('2'), true);
-        assert.equal(ppant.isMemberOfChat('3'), false);
-    });
-
-    it('test hasChatWith', function() {
-        let oneToOneChat = new OneToOneChat('4', id, '42', [], 10, 'username', 'chatPartner');
-        ppant.addChat(oneToOneChat);
-        assert.equal(ppant.hasChatWith('42'), true);
-        assert.equal(ppant.hasChatWith('21'), false);
-    });
-
-    it('test removeChat', function() {
-        assert.equal(ppant.getChat('1'), chat);
-        ppant.removeChat('1');
-        assert.equal(ppant.getChat('1'), undefined);
-    });
-});
-
-describe('ParticipantTest setter', function() {
-    it('test setPosition', function() {
+    it('test getters', function() {
+        assert.equal(ppant.getId(), id);
         assert.equal(ppant.getPosition(), position);
-        let newPosition = new Position(42, 42, 42);
+        assert.equal(ppant.getDirection(), direction);
+        assert.equal(ppant.getAccountId(), accountId);
+        assert.equal(ppant.getBusinessCard(), businessCard);
+        assert.equal(ppant.getFriendList(), friendList);
+        assert.equal(ppant.getReceivedRequestList(), receivedRequestList);
+        assert.equal(ppant.getSentRequestList(), sentRequestList);
+        assert.equal(ppant.getAchievements(), achievements);
+        assert.equal(ppant.getIsModerator(), isMod);
+        assert.equal(ppant.getChatList(), chatList);
+        assert.equal(ppant.getAwardPoints(), awardPoints);
+        assert.equal(ppant.getIsVisible(), true);
+        assert.equal(ppant.getTaskTypeMappingCounts(), taskMapping);
+    });
+
+    it('test adding and removing a chat', function() {
+
+        let newChat = new Chat('chatId', [], [], TestUtil.randomIntWithMin(1));
+        let oldChatListLength = ppant.getChatList().length;
+
+        //chat is not part of chatList at this point
+        assert.equal(ppant.getChat(newChat.getId()), undefined);
+        assert.equal(ppant.isMemberOfChat(newChat.getId()), false);
+
+        //add chat to chat list
+        ppant.addChat(newChat);
+
+        //chat is now part of chatList 
+        assert.equal(ppant.getChat(newChat.getId()), newChat);
+        expect(ppant.getChatList()).to.be.an('array').and.to.have.lengthOf(oldChatListLength + 1);
+        assert.equal(ppant.isMemberOfChat(newChat.getId()), true);
+
+        //add chat again shouldn't increase chatList length
+        ppant.addChat(newChat);
+        expect(ppant.getChatList()).to.be.an('array').and.to.have.lengthOf(oldChatListLength + 1);
+        assert.equal(ppant.isMemberOfChat(newChat.getId()), true);
+
+        //remove chat now
+        ppant.removeChat(newChat.getId());
+
+        assert.equal(ppant.getChat(newChat.getId()), undefined);
+        expect(ppant.getChatList()).to.be.an('array').and.to.have.lengthOf(oldChatListLength);
+        assert.equal(ppant.isMemberOfChat(newChat.getId()), false);
+    });
+    
+    it('test adding a 1:1 chat and hasChatWith', function() {
+        assert.equal(ppant.hasChatWith('chatPartnerID'), false);
+
+        //create 1:1 chat and add it to list
+        let newOneToOneChat = new OneToOneChat('chatID', id, 'chatPartnerID', [], TestUtil.randomIntWithMin(1), businessCard.getUsername(), 'chatPartnerUsername');
+        ppant.addChat(newOneToOneChat);
+
+        assert.equal(ppant.hasChatWith('chatPartnerID'), true);
+    });
+
+    it('test set position', function() {
+        let newPosition = TestUtil.randomPosition();
         ppant.setPosition(newPosition);
         assert.equal(ppant.getPosition(), newPosition);
     });
 
     it('test setDirection', function() {
-        assert.equal(ppant.getDirection(), direction);
-        let newDirection = Direction.DOWNRIGHT;
+        let newDirection = TestUtil.randomObjectValue(Direction);
+        while (newDirection === direction) {
+            newDirection = TestUtil.randomObjectValue(Direction);
+        }
+
         ppant.setDirection(newDirection);
         assert.equal(ppant.getDirection(), newDirection);
     });
 
-    it('test setAchievements', function() {
+    it('test setIsVisible', function() {
+        let newVisibility = !ppant.getIsVisible();
+        ppant.setIsVisible(newVisibility);
+        assert.equal(ppant.getIsVisible(), newVisibility);
+    })
+
+    it('test set achievements', function() {
         let exampleAch = [new Achievement(55, 'achievement', 'icon', 'description', 'currentLevel', 'color', 4444, 3, TypeOfTask.FOODCOURTVISIT)];
         assert.equal(ppant.getAchievements(), achievements);
 
@@ -162,120 +141,118 @@ describe('ParticipantTest setter', function() {
         assert.equal(ppant.getAchievements(), exampleAch);
     });
 
-});
+    it('test add SentFriendRequest and accept it', function() {
+        let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
 
-describe('ParticipantTest friendListHandling', function() {
-    it('test add old SentFriendRequest', function() {
-        assert.equal(ppant.getSentRequestList(), sentRequestList);
-        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, 1);
+        //add new friendRequest
         let busCard = new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
         ppant.addSentFriendRequest(busCard);
-        assert.equal(ppant.getSentRequestList(), sentRequestList);
-        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, 1);
+
+        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
         assert.equal(ppant.getSentRequestList().includes('4'), true);
-    });
 
-    it('test add new SentFriendRequest', function() {
-        assert.equal(ppant.getSentRequestList().includes('42'), false);
-        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, 1);
-        let busCard = new BusinessCard('42', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        //add friendRequest again, no change in behaviour
         ppant.addSentFriendRequest(busCard);
-        assert.equal(ppant.getSentRequestList().includes('42'), true);
-        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, 2);
-    });
+        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
+        assert.equal(ppant.getSentRequestList().includes('4'), true);
 
-    it('test accept sentFriendRequest that is in list', function() {
-        assert.equal(ppant.hasSentFriendRequest('4'), true);
-        assert.equal(ppant.getFriendList().includes('4'), false);
+        //accept friendRequest
         ppant.sentFriendRequestAccepted('4');
         assert.equal(ppant.hasSentFriendRequest('4'), false);
         assert.equal(ppant.getFriendList().includes('4'), true);
+
+        //accept it again, no change in behaviour
+        ppant.sentFriendRequestAccepted('4');
+        assert.equal(ppant.hasSentFriendRequest('4'), false);
+        assert.equal(ppant.getFriendList().includes('4'), true);
+
     });
 
-    it('test accept sentFriendRequest that is not in list', function() {
-        assert.equal(ppant.hasSentFriendRequest('4555'), false);
-        assert.equal(ppant.getFriendList().includes('4555'), false);
-        ppant.sentFriendRequestAccepted('4555');
-        assert.equal(ppant.hasSentFriendRequest('4555'), false);
-        assert.equal(ppant.getFriendList().includes('4555'), false);
+    it('test add SentFriendRequest and decline it', function() {
+        let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
+
+        //add new friendRequest
+        let busCard = new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        ppant.addSentFriendRequest(busCard);
+    
+        assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
+        assert.equal(ppant.getSentRequestList().includes('4'), true);
+        assert.equal(ppant.hasSentFriendRequest('4'), true);
+
+        //decline friendRequest
+        ppant.sentFriendRequestDeclined('4');
+        assert.equal(ppant.hasSentFriendRequest('4'), false);
+        assert.equal(ppant.getFriendList().includes('4'), false);
+
+        //decline it again, no change in behaviour
+        ppant.sentFriendRequestDeclined('4');
+        assert.equal(ppant.hasSentFriendRequest('4'), false);
+        assert.equal(ppant.getFriendList().includes('4'), false);
+
     });
 
-    it('test decline sentFriendRequest that is in list', function() {
-        assert.equal(ppant.hasSentFriendRequest('42'), true);
-        assert.equal(ppant.getFriendList().includes('42'), false);
-        ppant.sentFriendRequestDeclined('42');
-        assert.equal(ppant.hasSentFriendRequest('42'), false);
-        assert.equal(ppant.getFriendList().includes('42'), false);
-    });
+    it('test add ReceivedFriendRequest and accept it', function() {
+        let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
 
-    it('test decline sentFriendRequest that is not in list', function() {
-        assert.equal(ppant.hasSentFriendRequest('4255'), false);
-        assert.equal(ppant.getFriendList().includes('4255'), false);
-        ppant.sentFriendRequestDeclined('4255');
-        assert.equal(ppant.hasSentFriendRequest('4255'), false);
-        assert.equal(ppant.getFriendList().includes('4255'), false);
-    });
+        //add new friendRequest
+        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        ppant.addFriendRequest(busCard);
 
-    it('test add new friendRequest', function() {
+        assert.equal(ppant.getReceivedRequestList().includes('44'), true);
+        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, oldLength + 1);
+
+        //add it again, no change in behaviour
+        ppant.addFriendRequest(busCard);
+
+        assert.equal(ppant.getReceivedRequestList().includes('44'), true);
+        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, oldLength + 1);
+
+        //accept friendRequest
+        ppant.acceptFriendRequest('44');
         assert.equal(ppant.getReceivedRequestList().includes('44'), false);
-        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, 1);
+        assert.equal(ppant.getFriendList().includes('44'), true);
+        assert.equal(ppant.hasFriend('44'), true);
+
+        //accept it again, no change in behaviour
+        ppant.acceptFriendRequest('44');
+        assert.equal(ppant.getReceivedRequestList().includes('44'), false);
+        assert.equal(ppant.getFriendList().includes('44'), true);
+    });
+
+    it('test add ReceivedFriendRequest and decline it', function() {
+        let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
+
+        //add new friendRequest
         let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
         ppant.addFriendRequest(busCard);
-        assert.equal(ppant.getReceivedRequestList().includes('44'), true);
-        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, 2);
-    });
 
-    it('test add old friendRequest', function() {
         assert.equal(ppant.getReceivedRequestList().includes('44'), true);
-        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, 2);
-        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
-        ppant.addFriendRequest(busCard);
-        assert.equal(ppant.getReceivedRequestList().includes('44'), true);
-        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, 2);
-    });
+        assert.equal(ppant.getReceivedRequestList().getAllBusinessCards().length, oldLength + 1);
 
-    it('test accept friendRequest that is in list', function() {
-        assert.equal(ppant.getReceivedRequestList().includes('3'), true);
-        assert.equal(ppant.getFriendList().includes('3'), false);
-        ppant.acceptFriendRequest('3');
-        assert.equal(ppant.getReceivedRequestList().includes('3'), false);
-        assert.equal(ppant.getFriendList().includes('3'), true);
-    });
-
-    it('test accept friendRequest that is not in list', function() {
-        assert.equal(ppant.getReceivedRequestList().includes('355'), false);
-        assert.equal(ppant.getFriendList().includes('355'), false);
-        ppant.acceptFriendRequest('355');
-        assert.equal(ppant.getReceivedRequestList().includes('355'), false);
-        assert.equal(ppant.getFriendList().includes('355'), false);
-    });
-
-    it('test decline friendRequest that is in list', function() {
-        assert.equal(ppant.getReceivedRequestList().includes('44'), true);
+        //decline friendRequest
+        ppant.declineFriendRequest('44');
+        assert.equal(ppant.getReceivedRequestList().includes('44'), false);
         assert.equal(ppant.getFriendList().includes('44'), false);
+
+        //decline it again, no change in behaviour
         ppant.declineFriendRequest('44');
         assert.equal(ppant.getReceivedRequestList().includes('44'), false);
         assert.equal(ppant.getFriendList().includes('44'), false);
     });
 
-    it('test decline friendRequest that is not in list', function() {
-        assert.equal(ppant.getReceivedRequestList().includes('4455'), false);
-        assert.equal(ppant.getFriendList().includes('4455'), false);
-        ppant.declineFriendRequest('4455');
-        assert.equal(ppant.getReceivedRequestList().includes('4455'), false);
-        assert.equal(ppant.getFriendList().includes('4455'), false);
-    });
+    it('test remove friend', function() {
+        //add new friendRequest and accept it 
+        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        ppant.addFriendRequest(busCard);
+        ppant.acceptFriendRequest('44');
 
-    it('test remove friend that is in list', function() {
-        assert.equal(ppant.hasFriend('2'), true);
-        ppant.removeFriend('2');
-        assert.equal(ppant.hasFriend('2'), false);
-    });
+        //remove it 
+        ppant.removeFriend('44');
+        assert.equal(ppant.getReceivedRequestList().includes('44'), false);
 
-    it('test remove friend that is not in list', function() {
-        assert.equal(ppant.hasFriend('2'), false);
-        ppant.removeFriend('2');
-        assert.equal(ppant.hasFriend('2'), false);
+        //remove it again, no change in behaviour
+        ppant.removeFriend('44');
+        assert.equal(ppant.getReceivedRequestList().includes('44'), false);
     });
 
     it('test hasFriend undefined', function() {
@@ -285,20 +262,20 @@ describe('ParticipantTest friendListHandling', function() {
     it('test hasSentFriendRequest undefined', function() {
         assert.equal(ppant.hasSentFriendRequest(undefined), undefined);
     });    
-});
 
-describe('ParticipantTest achievementHandling', function() {
     it('test addTask', function() {
-        let taskTypeMappingBefore = ppant.getTaskTypeMappingCounts();
-        let task = new Task(1, TypeOfTask.ASKQUESTIONINLECTURE, 2);
-        let points = ppant.getAwardPoints();
 
-        assert.equal(taskTypeMappingBefore[task.getTaskType()], 0);
+        let task = new Task(1, TypeOfTask.ASKQUESTIONINLECTURE, 2);
+
+        //taskMappingCount before
+        assert.equal(ppant.getTaskTypeMappingCount(TypeOfTask.ASKQUESTIONINLECTURE), 0);
+
 
         ppant.addTask(task);
-        let taskTypeMappingAfter = ppant.getTaskTypeMappingCounts();
-        assert.equal(ppant.getAwardPoints(), points + 2);
-        assert.equal(taskTypeMappingAfter[task.getTaskType()], 1);
+
+        //taskMapping Count and points after adding task
+        assert.equal(ppant.getAwardPoints(), awardPoints + 2);
+        assert.equal(ppant.getTaskTypeMappingCount(TypeOfTask.ASKQUESTIONINLECTURE), 1);
     });
 
     it('test addPoints', function() {
@@ -306,22 +283,20 @@ describe('ParticipantTest achievementHandling', function() {
         ppant.addAwardPoints(42);
         assert.equal(ppant.getAwardPoints(), points + 42);
     });
-
-    it('test addAchievement', function() {
+    
+    it('test add Achievement and remove Achievement', function() {
+        //add it
         let ach = new Achievement(333, 't', 'i', 'd', 'cl', 'c', 3, 3, TypeOfTask.ASKQUESTIONINLECTURE);
         let lengthBefore = ppant.getAchievements().length;
         ppant.addAchievement(ach);
         assert.equal(ppant.getAchievements().length, lengthBefore + 1);
-    });
 
-    it('test removeAchievement', function() {
-        let lengthBefore = ppant.getAchievements().length;
+        //remove it
         ppant.removeAchievement(333);
-        assert.equal(ppant.getAchievements().length, lengthBefore - 1);
+        assert.equal(ppant.getAchievements().length, lengthBefore);
     });
 
     it('test remove achievement that is not in list', function() {
-        let lengthBefore = ppant.getAchievements().length;
         assert.throws(() => ppant.removeAchievement(333), Error, '333 not found in list of achievements');
-    });
+    }); 
 });
