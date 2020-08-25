@@ -12,7 +12,7 @@ var email = "maxmustermann@kit.edu";
 var businessCard = new BusinessCardClient(participantId, username, title, surname, forename, job, company, email);
 
 
-describe("Test getter", function() {
+describe("BusinessCardClient Test getter", function() {
     it("Test getParticipantId", function() {
         expect(businessCard.getParticipantId()).to.be.a('string').and.equal(participantId);
     })    

@@ -13,7 +13,7 @@ var email = "maxmustermann@kit.edu";
 var account = new Account(accountID, username, title, surname, forename, job, company, email);
 
 
-describe("Test getter", function() {
+describe("Account Test getter", function() {
     it("Test getAccountID", function() {
         expect(account.getAccountID()).to.be.a('string').and.equal(accountID);
     })    

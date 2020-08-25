@@ -1,3 +1,6 @@
+const TypeChecker = require("../../client/shared/TypeChecker");
+const TypeOfTask = require("../utils/TypeOfTask");
+
 module.exports = class Achievement {
 
     #id
@@ -11,7 +14,31 @@ module.exports = class Achievement {
     #taskType;
     #nextCount;
 
+    /**
+     * 
+     * @param {int} id 
+     * @param {String} title 
+     * @param {String} icon 
+     * @param {String} description 
+     * @param {int} currentLevel 
+     * @param {String} color 
+     * @param {int} awardPoints 
+     * @param {int} maxLevel 
+     * @param {TypeOfTask} taskType 
+     * @param {int} nextCount 
+     */
     constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
+        TypeChecker.isInt(id);
+        TypeChecker.isString(title);
+        TypeChecker.isString(icon);
+        TypeChecker.isString(description);
+        TypeChecker.isInt(currentLevel);
+        TypeChecker.isString(color);
+        TypeChecker.isInt(awardPoints);
+        TypeChecker.isInt(maxLevel);
+        TypeChecker.isEnumOf(taskType, TypeOfTask);
+        TypeChecker.isInt(nextCount);
+
         this.#id = id;
         this.#title = title;
         this.#icon = icon;
@@ -64,23 +91,48 @@ module.exports = class Achievement {
         return this.#nextCount;
     }
 
+    /**
+     * 
+     * @param {int} currentLevel 
+     */
     setCurrentLevel(currentLevel) {
+        TypeChecker.isInt(currentLevel);
         this.#currentLevel = currentLevel;
     }
 
+    /**
+     * 
+     * @param {String} color 
+     */
     setColor(color) {
+        TypeChecker.isString(color);
         this.#color = color;
     }
 
+    /**
+     * 
+     * @param {int} awardPoints 
+     */
     setAwardPoints(awardPoints) {
+        TypeChecker.isInt(awardPoints);
         this.#awardPoints = awardPoints;
     }
 
+    /**
+     * 
+     * @param {int} nextCount 
+     */
     setNextCount(nextCount) {
+        TypeChecker.isInt(nextCount);
         this.#nextCount = nextCount;
     }
 
+    /**
+     * 
+     * @param {Achievement} achievement 
+     */
     equals(achievement) {
+        TypeChecker.isInstanceOf(achievement, Achievement);
         return this.#taskType === achievement.getTaskType() && this.#currentLevel === achievement.getCurrentLevel();
     }
 }

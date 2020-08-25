@@ -4,7 +4,7 @@ const Achievement = require('../../../game/app/server/models/Achievement.js');
 const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask.js');
 
 //example achievement
-var id = '1a2b';
+var id = 1;
 var title = 'Achievement collector';
 var icon = 'star';
 var description = 'collect all achievements';
@@ -22,7 +22,7 @@ describe('Achievement getter functions', function() {
         assert.equal(achievement.getId(), id);
     })  
     it('test getTitle', function() {
-        assert.equal(achievement.getTitlte(), title);
+        assert.equal(achievement.getTitle(), title);
     })  
     it('test getIcon', function() {
         assert.equal(achievement.getIcon(), icon);

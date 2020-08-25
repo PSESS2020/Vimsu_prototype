@@ -17,10 +17,10 @@ describe('PositionClient test', function() {
     });
 
     it('test cordX invalid input', function () {
-        expect(() => new PositionClient('fehler', 0)).to.throw(TypeError, 'fehler or 0 is not a number!');
+        expect(() => new PositionClient('fehler', 0)).to.throw(TypeError);
     });
 
     it('test cordY invalid input', function () {
-        expect(() => new PositionClient(0, 'fehler')).to.throw(TypeError, '0 or fehler is not a number!');
+        expect(() => new PositionClient(0, 'fehler')).to.throw(TypeError);
     });
 })
