@@ -4,10 +4,10 @@ class ChatThreadView extends WindowView {
     #messages;
     #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
 
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
 
         $('#chatMessageInput').off();
         $('#chatMessageInputGroup').off();

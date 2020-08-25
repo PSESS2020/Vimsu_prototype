@@ -5,11 +5,13 @@ class GameObjectViewFactory {
     #defaultOffset;
 
     #gameEngine;
+    #eventManager;
 
-    constructor(assetImages, gameEngine) {
+    constructor(assetImages, gameEngine, eventManager) {
         this.#assetImages = assetImages;
 
         this.#gameEngine = gameEngine;
+        this.#eventManager = eventManager;
 
         //gets map tile size
         this.#tileColumnWidth = this.#gameEngine.getTileColumnWidth();
@@ -218,7 +220,7 @@ class GameObjectViewFactory {
                 var leftDoorOffset = {x: 0, y: this.#tileRowHeight / 2 - doorImage.width + 1};
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, pos, typeOfDoor, leftDoorOffset, objectName);
+                    doorView = new DoorView(doorImage, pos, typeOfDoor, leftDoorOffset, objectName, this.#eventManager);
                 else throw new Error("The image for lefthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -230,7 +232,7 @@ class GameObjectViewFactory {
                 var rightDoorOffset = {x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - doorImage.width + 1} ;
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, pos, typeOfDoor, rightDoorOffset, objectName);
+                    doorView = new DoorView(doorImage, pos, typeOfDoor, rightDoorOffset, objectName, this.#eventManager);
                 else throw new Error("The image for righthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;

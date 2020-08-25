@@ -1,15 +1,12 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    GameMapElementView = require('../GameMapElementView');
-    EventManager = require('../../../utils/EventManager')
-}
-
 class DoorView extends GameMapElementView {
     #DOORTYPE;
+    #eventManager;
 
-    constructor(doorImage, position, doorType, doorScreenPositionOffset, name) {
+    constructor(doorImage, position, doorType, doorScreenPositionOffset, name, eventManager) {
         super(doorImage, position, doorScreenPositionOffset, name);
 
         this.#DOORTYPE = doorType;
+        this.#eventManager = eventManager;
     }
 
     getDoorType() {
@@ -17,16 +14,10 @@ class DoorView extends GameMapElementView {
     }
 
     onclick(targetRoomId) {
-        let eventManager = new EventManager();
-
         if (this.#DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
-            eventManager.handleLectureDoorClick();
+            this.#eventManager.handleLectureDoorClick();
         } else {
-            eventManager.handleDoorClick(targetRoomId);
+            this.#eventManager.handleDoorClick(targetRoomId);
         }
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = DoorView;
 }

@@ -1,7 +1,3 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    ClientController = require('../controller/ClientController')
-}
-
 class EventManager {
 
     #clientController;
@@ -28,9 +24,7 @@ class EventManager {
      *
      */
     handleLectureDoorClick() {
-
         this.#clientController.handleFromViewGetCurrentLectures();
-
     }
 
     /**
@@ -38,9 +32,14 @@ class EventManager {
      *
      */
     handleDoorClick(roomId) {
-
         this.#clientController.handleFromViewEnterNewRoom(roomId);
+    }
 
+    handleAllchatMessageInput(messageVal) {
+        if (messageVal[0] === '/') {
+            this.#clientController.sendToServerEvalInput(messageVal.slice(1));
+        } else
+            this.#clientController.sendToServerAllchatMessage(messageVal);
     }
 
     handleLectureChatMessageInput(messageVal) {
@@ -172,8 +171,4 @@ class EventManager {
     handleRightArrowDown() {
         this.#clientController.handleRightArrowDown();
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = EventManager;
 }

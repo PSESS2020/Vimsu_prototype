@@ -5,9 +5,12 @@ class InviteFriendsView extends WindowView {
     #limit;
     #chatId;
     #invitedFriends = [];
+    #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
+
+        this.#eventManager = eventManager;
     }
 
     draw(businessCards, groupName, limit, chatId) {
@@ -80,7 +83,7 @@ class InviteFriendsView extends WindowView {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
-                        new EventManager().handleCreateGroupChat(this.#groupName, this.#invitedFriends, this.#chatId);
+                        this.#eventManager.handleCreateGroupChat(this.#groupName, this.#invitedFriends, this.#chatId);
                         this.#invitedFriends = [];
                     } else if (this.#invitedFriends.length < 1) {
                         $('#toomanyinvitedfriends').hide();

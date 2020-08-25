@@ -1,19 +1,17 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    WindowView = require('./WindowView')
-}
-
 class BusinessCardView extends WindowView {
     #businessCard;
     #isFriend;
     #rank;
     #isModerator;
+    #eventManager;
 
-    constructor(businessCard, isFriend, rank, isModerator) {
+    constructor(businessCard, isFriend, rank, isModerator, eventManager) {
         super()
         this.#businessCard = businessCard;
         this.#isFriend = isFriend;
         this.#rank = rank;
         this.#isModerator = isModerator;
+        this.#eventManager = eventManager;
 
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
             $('#businessCardModal .modal-body').empty()
@@ -77,12 +75,8 @@ class BusinessCardView extends WindowView {
         $('#chatnow' + this.#businessCard.getParticipantId()).off();
         $('#chatnow' + this.#businessCard.getParticipantId()).click((event) => {
             $('#businessCardModal').modal('hide');
-            new EventManager().handleChatNowClicked(this.#businessCard.getParticipantId());
+            this.#eventManager.handleChatNowClicked(this.#businessCard.getParticipantId());
         })
 
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = BusinessCardView;
 }

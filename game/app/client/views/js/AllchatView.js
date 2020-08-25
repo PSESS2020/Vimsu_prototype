@@ -1,6 +1,6 @@
 class AllchatView extends Views {
 
-    constructor() {
+    constructor(eventManager) {
         super();
 
         $('#hideRoomChat').hide();
@@ -30,12 +30,7 @@ class AllchatView extends Views {
             let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             if (messageVal !== '') {
-
-                if (messageVal[0] === '/') {
-                    clientController.sendToServerEvalInput(messageVal.slice(1));
-                } else
-                    clientController.sendToServerAllchatMessage(messageVal);
-
+                eventManager.handleAllchatMessageInput(messageVal)
                 $('#allchatMessageInput').val('');
                 return false;
             }

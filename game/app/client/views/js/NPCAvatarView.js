@@ -9,8 +9,9 @@ class NPCAvatarView extends AvatarView {
     #currentAnimation;
 
     #gameEngine;
+    #eventManager;
 
-    constructor(npcId, name, position, direction) {
+    constructor(npcId, name, position, direction, gameEngine, eventManager) {
         super(position, direction);
         TypeChecker.isInt(npcId);
         TypeChecker.isString(name);
@@ -18,7 +19,8 @@ class NPCAvatarView extends AvatarView {
         this.#npcId = npcId;
         this.#name = name;
 
-        this.#gameEngine = new IsometricEngine();
+        this.#gameEngine = gameEngine;
+        this.#eventManager = eventManager;
 
         if (direction === 'UPLEFT') {
             this.#currentAnimation = this.#standingUpLeftAnimation;
@@ -62,6 +64,6 @@ class NPCAvatarView extends AvatarView {
     }
 
     onClick() {
-        new EventManager().handleNPCClick(this.#npcId);
+        this.#eventManager.handleNPCClick(this.#npcId);
     }
 }

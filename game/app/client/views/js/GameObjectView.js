@@ -1,8 +1,3 @@
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    Views = require('./Views');
-}
-
 class GameObjectView extends Views {
 
     #objectImage;
@@ -75,8 +70,4 @@ class GameObjectView extends Views {
     onclick(){
         throw new Error('onclick() has to be implemented!');
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = GameObjectView;
 }

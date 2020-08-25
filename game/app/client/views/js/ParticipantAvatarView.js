@@ -19,7 +19,7 @@ class ParticipantAvatarView extends AvatarView {
     #gameEngine;
     #eventManager;
 
-    constructor(position, direction, participantId, username, isVisible, isModerator, isOwnAvatar) {
+    constructor(position, direction, participantId, username, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
@@ -30,8 +30,8 @@ class ParticipantAvatarView extends AvatarView {
         this.#isModerator = isModerator;
         this.#isOwnAvatar = isOwnAvatar;
 
-        this.#gameEngine = new IsometricEngine();
-        this.#eventManager = new EventManager();
+        this.#gameEngine = gameEngine;
+        this.#eventManager = eventManager;
         this.#initMovement();
     }
 

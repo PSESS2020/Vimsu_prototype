@@ -3,10 +3,10 @@ class FriendRequestListView extends WindowView {
     #businessCards;
     #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
 
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
     }
 
     draw(businessCards) {

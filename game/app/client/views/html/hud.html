@@ -56,7 +56,7 @@
                 <div class="profileBox"
                     style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
                     <a class="action_button nav-item nav-link" title="Profile" href=""
-                        onclick="new EventManager().handleProfileClicked()" data-toggle="modal">
+                        onclick="" id="profileButton" data-toggle="modal">
                         <i class="fa fa-user navbarIcons" style="transform: scale(2)"></i>
                         <p class="navbarIconsText ml-3" style="display:inline-block;" id="profilePlaceholder"></p>
                     </a>
@@ -82,7 +82,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
-                    onclick="new EventManager().handleRankListClicked()" data-toggle="modal"
+                    onclick="" id="rankListButton" data-toggle="modal"
                     data-target="#rankListModal">
                     <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText" style="margin-left: 3px; ">Ranklist</p>
@@ -90,7 +90,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="" onclick="new EventManager().handleScheduleClicked()" title="Presentation schedule"
+                <a href="" onclick="" id="scheduleListButton" title="Presentation schedule"
                     class="action_button nav-item nav-link" data-toggle="modal">
                     <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText" style="margin-left: -1px;">Schedule</p>
@@ -98,8 +98,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Achievement list"
-                    onclick="new EventManager().handleAchievementsClicked()" data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" id="achievementListButton" title="Achievement list"
+                    onclick="" data-toggle="modal">
                     <i class="fa fa-star fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: -12px;">Achievements</p>
                 </a>
@@ -113,16 +113,16 @@
 
         <ul class="navbar nav ml-auto">
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Friend list and received friend request list"
-                    onclick="new EventManager().handleFriendListClicked()" data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" id="friendListButton" title="Friend list and received friend request list"
+                    onclick="" data-toggle="modal">
                     <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: -4px;">Friendlist</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Chat list"
-                    onclick="new EventManager().handleChatListClicked()" data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" id="chatListButton" title="Chat list"
+                    onclick="" data-toggle="modal">
                     <i class="fa fa-comments-o fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
                 </a>

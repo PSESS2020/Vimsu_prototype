@@ -1,39 +1,45 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    StatusBar = require('./StatusBar');
-    NotificationBar = require('./NotificationBar')
-}
-
 class GameView {
 
     #updateList = [];
+    #gameViewInit;
+
+    #currentMap;
+
     #currentLecturesView;
     #lectureView;
     #chatListView;
     #chatThreadView;
     #statusBar;
+    #hudView;
     #friendListView;
     #inviteFriendsView;
     #friendRequestListView;
     #chatParticipantListView;
     #allchatView;
-    #currentMap;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
-    #gameViewInit;
     #npcAvatarViews = [];
     #notifBar;
 
     #gameEngine;
+    #eventManager;
 
 
     constructor() {
-        this.#statusBar = new StatusBar();
-        this.#notifBar = new NotificationBar();
-        this.#allchatView = new AllchatView();
-
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
         this.#gameEngine = new IsometricEngine();
+        this.#eventManager = new EventManager();
+
+        this.#initViews();
+    }
+
+    #initViews = function() {
+        this.#hudView = new HUDView(this.#eventManager);
+        this.#statusBar = new StatusBar();
+        this.#notifBar = new NotificationBar(this.#eventManager);
+        this.#allchatView = new AllchatView(this.#eventManager);
+        new InputGroupNameView(this.#eventManager);
     }
 
     getOwnAvatarView() {
@@ -175,8 +181,12 @@ class GameView {
         return this.#updateList;
     }
 
-    drawStatusBar(username) {
-        this.#statusBar.draw(username);
+    drawProfile(username) {
+        this.#hudView.drawProfile(username)
+    }
+
+    drawStatusBar() {
+        this.#statusBar.draw();
     }
 
     draw() {
@@ -242,10 +252,10 @@ class GameView {
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection()));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), this.#gameEngine, this.#eventManager));
         });
 
-        this.#currentMap = new MapView(assetPaths, map, objectMap);
+        this.#currentMap = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
         this.#statusBar.updateLocation(typeOfRoom);
     }
 
@@ -272,7 +282,9 @@ class GameView {
                 participant.getUsername(),
                 participant.getIsVisible(),
                 participant.getIsModerator(),
-                false
+                false,
+                this.#gameEngine,
+                this.#eventManager
             ));
         }
         this.addToUpdateList(this.#anotherParticipantAvatarViews);
@@ -348,7 +360,7 @@ class GameView {
         let username = ownParticipant.getUsername();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
         this.addToUpdateList(this.#ownAvatarView);
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
@@ -371,9 +383,8 @@ class GameView {
         this.#ownAvatarView.updateCurrentAnimation();
     }
 
-
     initCurrentLectures(lectures) {
-        this.#currentLecturesView = new CurrentLecturesView()
+        this.#currentLecturesView = new CurrentLecturesView(this.#eventManager)
         this.#currentLecturesView.draw(lectures);
     }
 
@@ -386,7 +397,7 @@ class GameView {
     }
 
     updateCurrentLecture(lecture, hasToken, lectureChat) {
-        this.#lectureView = new LectureView()
+        this.#lectureView = new LectureView(this.#eventManager)
         this.#lectureView.draw(lecture, hasToken, lectureChat);
     }
 
@@ -399,16 +410,16 @@ class GameView {
     }
 
     initBusinessCardView(businessCard, isFriend, rank, isModerator) {
-        new BusinessCardView(businessCard, isFriend, rank, isModerator).draw();
+        new BusinessCardView(businessCard, isFriend, rank, isModerator, this.#eventManager).draw();
     }
 
     initFriendListView(businessCards) {
-        this.#friendListView = new FriendListView();
+        this.#friendListView = new FriendListView(this.#eventManager);
         this.#friendListView.draw(businessCards)
     }
 
     initInviteFriendsView(businessCards, groupName, limit, chatId) {
-        this.#inviteFriendsView = new InviteFriendsView();
+        this.#inviteFriendsView = new InviteFriendsView(this.#eventManager);
         this.#inviteFriendsView.draw(businessCards, groupName, limit, chatId);
     }
 
@@ -430,12 +441,12 @@ class GameView {
 
     initChatListView(chats) {
 
-        this.#chatListView = new ChatListView();
+        this.#chatListView = new ChatListView(this.#eventManager);
         this.#chatListView.draw(chats);
     };
 
     initChatThreadView(chat, openNow) {
-        this.#chatThreadView = new ChatThreadView();
+        this.#chatThreadView = new ChatThreadView(this.#eventManager);
     
         if (openNow) {
             this.#chatThreadView.draw(chat);
@@ -556,7 +567,7 @@ class GameView {
     }
 
     initFriendRequestListView(businessCards) {
-        this.#friendRequestListView = new FriendRequestListView()
+        this.#friendRequestListView = new FriendRequestListView(this.#eventManager)
         this.#friendRequestListView.draw(businessCards);
     }
 
@@ -614,15 +625,8 @@ class GameView {
     };
 
     closeLectureView() {
-        
-        // see above
         if(this.#lectureView) {
             this.#lectureView.close();
         }
-        
     };
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = GameView;
 }

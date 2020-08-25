@@ -1,9 +1,11 @@
 class ChatListView extends WindowView {
 
     #chats;
+    #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
+        this.#eventManager = eventManager;
     }
 
     draw(chats) {
@@ -59,7 +61,7 @@ class ChatListView extends WindowView {
 
             $('#chat' + chat.chatId).off();
             $('#chat' + chat.chatId).click((event) => {
-                new EventManager().handleChatThreadClicked(chat.chatId);
+                this.#eventManager.handleChatThreadClicked(chat.chatId);
             })
         })
         $('#chatListModal').modal('show');

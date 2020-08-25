@@ -2,10 +2,10 @@ class CurrentLecturesView extends WindowView {
 
     #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
 
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
 
         $(document).ready(() => {
             $('#closeCurrentLecturesButton').off();

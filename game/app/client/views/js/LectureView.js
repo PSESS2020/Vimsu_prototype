@@ -8,9 +8,9 @@ class LectureView extends WindowView {
     #timeLeft;
     #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
 
         this.#lectureStatus = LectureStatus.PENDING;
 

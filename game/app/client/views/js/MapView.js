@@ -11,10 +11,11 @@ class MapView extends Views {
 
     #gameObjectViewFactory;
     #gameEngine;
+    #eventManager;
 
     selectionOnMap = false;
 
-    constructor(assetPaths, map, objectMap) {
+    constructor(assetPaths, map, objectMap, gameEngine, eventManager) {
         super();
 
         this.#map = map;
@@ -30,7 +31,8 @@ class MapView extends Views {
         this.#clickableTiles = [];
         this.#clickableObjects = [];
 
-        this.#gameEngine = new IsometricEngine();
+        this.#gameEngine = gameEngine;
+        this.#eventManager = eventManager;
 
         /*if (new.target === MapView) {
             throw new Error("Cannot construct abstract MapView instances directly");
@@ -69,7 +71,7 @@ class MapView extends Views {
         assetPaths.tileselected_default = "client/assets/tiles/tile_selected.png";
         var assetImages = await this.#gameEngine.initGameEngine(assetPaths, this.#xNumTiles, this.#yNumTiles);
 
-        this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine);
+        this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine, this.#eventManager);
 
         this.buildMap();
     }

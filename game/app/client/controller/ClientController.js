@@ -1,7 +1,3 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    GameView = require('../views/js/GameView')
-}
-
 class ClientController {
 
     #port;
@@ -74,7 +70,8 @@ class ClientController {
             this.#gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
         }
 
-        this.#gameView.drawStatusBar(this.#ownParticipant.getUsername());
+        this.#gameView.drawStatusBar();
+        this.#gameView.drawProfile(this.#ownParticipant.getUsername())
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         this.#gameView.initCanvasEvents();
 
@@ -884,8 +881,4 @@ class ClientController {
         this.#gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = ClientController;
 }

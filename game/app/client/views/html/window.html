@@ -280,26 +280,6 @@
                             title="Invite friends to group chat with the input group name" style=" width: auto;">Invite
                             Friends</button>
                     </form>
-
-                    <script>
-                        $('#groupName').submit(function (event) {
-                            event.preventDefault();
-                            let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                            if (groupName.length > 20) {
-                                return false;
-                            }
-
-                            if (groupName !== '') {
-                                $('#inputGroupNameModal').modal('hide');
-                                new EventManager().handleInviteFriendsClicked(groupName, "");
-                                $('#groupNameInput').val('');
-                            }
-                        });
-
-                        $('#groupName').on('keydown', (event) => {
-                            event.stopPropagation();
-                        });
-                    </script>
                 </div>
             </div>
         </div>

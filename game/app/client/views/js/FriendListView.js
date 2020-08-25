@@ -3,9 +3,9 @@ class FriendListView extends WindowView {
     #businessCards;
     #eventManager;
 
-    constructor() {
+    constructor(eventManager) {
         super();
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
 
         $('#friendRequestList').off();
         $('#friendRequestList').click((event) => {

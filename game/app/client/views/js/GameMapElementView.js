@@ -1,8 +1,3 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    GameObjectView = require('./GameObjectView');
-    EventManager = require('../../utils/EventManager')
-}
-
 class GameMapElementView extends GameObjectView {
 
     constructor(mapElementImage, position, screenPositionOffset, name) {
@@ -17,8 +12,4 @@ class GameMapElementView extends GameObjectView {
     onclick() {
         throw new Error('onclick() has to be implemented!');
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = GameMapElementView;
 }

@@ -1,14 +1,10 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    Views = require('./Views')
-}
-
 class NotificationBar extends Views {
     
     #eventManager;
     
-    constructor() {
+    constructor(eventManager) {
         super();
-        this.#eventManager = new EventManager();
+        this.#eventManager = eventManager;
     }
 
     drawNewMessage(senderUsername, chatId) {
@@ -140,8 +136,4 @@ class NotificationBar extends Views {
             return this.#eventManager.handleFriendListClicked();
         })
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = NotificationBar;
 }
