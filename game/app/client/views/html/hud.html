@@ -78,14 +78,14 @@
 
     <!--LOWER HUD BUTTON LEFT-->
     <nav class="navbar navbar-expand-md navbar-light"
-        style="position: absolute; bottom: 0; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+        style="position: absolute; bottom: 0; float: left; left: 10; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
                     onclick="new EventManager().handleRankListClicked()" data-toggle="modal"
                     data-target="#rankListModal">
                     <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
-                    <p class="navbarIconsText">Ranklist</p>
+                    <p class="navbarIconsText" style="margin-left: 3px; ">Ranklist</p>
                 </a>
             </li>
 
@@ -93,7 +93,7 @@
                 <a href="" onclick="new EventManager().handleScheduleClicked()" title="Presentation schedule"
                     class="action_button nav-item nav-link" data-toggle="modal">
                     <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
-                    <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
+                    <p class="navbarIconsText" style="margin-left: -1px;">Schedule</p>
                 </a>
             </li>
 
@@ -101,7 +101,7 @@
                 <a class="action_button nav-item nav-link" href="" title="Achievement list"
                     onclick="new EventManager().handleAchievementsClicked()" data-toggle="modal">
                     <i class="fa fa-star fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: -17px;">Achievements</p>
+                    <p class="navbarIconsText" style="margin-left: -12px;">Achievements</p>
                 </a>
             </li>
         </ul>

@@ -1,6 +1,6 @@
 const Task = require('../../../game/app/server/models/Task');
 const expect = require('chai').expect;
-const TypeOfTask = require('../../../game/app/utils/TypeOfTask')
+const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask')
 
 var id = 1;
 var taskType = TypeOfTask.BASICTUTORIALCLICK;

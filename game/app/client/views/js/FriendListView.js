@@ -8,7 +8,7 @@ class FriendListView extends WindowView {
         this.#eventManager = new EventManager();
 
         $('#friendRequestList').off();
-        $('#friendRequestList').on('click', function (event) {
+        $('#friendRequestList').click((event) => {
             this.#eventManager.handleFriendRequestListClicked();
         })
     }

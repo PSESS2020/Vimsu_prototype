@@ -8,7 +8,7 @@ const RoomController = require('./RoomController.js');
 
 
 /* Import Utils */
-const Settings = require('../game/app/utils/Settings.js');
+const Settings = require('../game/app/server/utils/Settings.js');
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 
 module.exports = class ConferenceController {

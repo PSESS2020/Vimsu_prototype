@@ -1,6 +1,6 @@
 const TaskService = require('../../../game/app/server/services/TaskService');
 const { expect } = require('chai');
-const TypeOfTask = require('../../../game/app/utils/TypeOfTask')
+const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask')
 const Task = require('../../../game/app/server/models/Task')
 
 var taskService = new TaskService();

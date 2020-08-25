@@ -1,11 +1,11 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Room = require('../models/Room.js');
-const RoomDimensions = require('../../utils/RoomDimensions.js');
+const RoomDimensions = require('../utils/RoomDimensions.js');
 const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
 const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
-const Settings = require('../../utils/Settings.js');
+const Settings = require('../utils/Settings.js');
 
 module.exports = class RoomService {
     #rooms;

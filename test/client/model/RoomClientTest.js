@@ -11,7 +11,7 @@ const Direction = require('../../../game/app/client/shared/Direction.js');
 const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
 const TypeOfRoom = require('../../../game/app/client/shared/TypeOfRoom.js');
 const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
-const Settings = require('../../../game/app/utils/Settings.js');
+const Settings = require('../../../game/app/server/utils/Settings.js');
 const SettingsClient = require('../../../game/app/client/utils/Settings.js');
 
 var roomId;

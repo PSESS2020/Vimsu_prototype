@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const GameObjectService = require('../../../game/app/server/services/GameObjectService');
 const GameObject = require('../../../game/app/server/models/GameObject');
-const Settings = require('../../../game/app/utils/Settings');
+const Settings = require('../../../game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 
 var gameObjectService;

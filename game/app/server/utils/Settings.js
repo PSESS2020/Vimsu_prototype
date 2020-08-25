@@ -1,4 +1,4 @@
-const Direction = require('../client/shared/Direction');
+const Direction = require('../../client/shared/Direction');
 
 module.exports = Object.freeze({
 

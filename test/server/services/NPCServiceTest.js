@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const NPCService = require('../../../game/app/server/services/NPCService');
 const NPC = require('../../../game/app/server/models/NPC');
-const Settings = require('../../../game/app/utils/Settings');
+const Settings = require('../../../game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../game/app/client/shared/Direction');
 

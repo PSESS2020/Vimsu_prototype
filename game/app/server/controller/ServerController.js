@@ -4,7 +4,7 @@
 
 const Position = require('../models/Position.js');
 const RoomService = require('../services/RoomService.js');
-const Settings = require('../../utils/Settings.js');
+const Settings = require('../utils/Settings.js');
 const CommandHandler = require('../models/CommandHandler.js');
 const AllchatContext = require('../models/AllchatContext.js');
 const LectureContext = require('../models/LectureContext.js');
@@ -12,8 +12,8 @@ const LectureService = require('../services/LectureService');
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
-const TypeOfTask = require('../../utils/TypeOfTask.js')
-const Messages = require('../../utils/Messages.js');
+const TypeOfTask = require('../utils/TypeOfTask.js')
+const Messages = require('../utils/Messages.js');
 const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 const ParticipantService = require('../services/ParticipantService.js');

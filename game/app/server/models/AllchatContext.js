@@ -1,6 +1,6 @@
 const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Messages = require('../../utils/Messages.js');
+const Messages = require('../utils/Messages.js');
 const Room = require('./Room.js');
 
 module.exports = class AllchatContext extends CommandContext {

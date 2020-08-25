@@ -1,7 +1,6 @@
 const CommandContext = require('./CommandContext.js');
-const ServerController = require('../controller/ServerController.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Messages = require('../../utils/Messages.js');
+const Messages = require('../utils/Messages.js');
 const Lecture = require('./Lecture.js');
 
 module.exports = class LectureContext extends CommandContext {

@@ -2,7 +2,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const Achievement = require('../../../game/app/server/models/Achievement.js');
 const AchievementDefinition = require('../../../game/app/server/models/AchievementDefinition.js');
-const TypeOfTask = require('../../../game/app/utils/TypeOfTask.js');
+const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask.js');
 const { expect } = require('chai');
 
 //example achievement definition

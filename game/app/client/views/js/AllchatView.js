@@ -6,17 +6,17 @@ class AllchatView extends Views {
         $('#hideRoomChat').hide();
         $('#allchatWindow')[0].style.visibility = "hidden";
 
-        $('#showRoomChat').on('click', function (event) {
+        $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-                $('#allchatWindow')[0].style.visibility = "visible";
-                $('#showRoomChat').hide();
-                $('#hideRoomChat').show();
+            $('#allchatWindow')[0].style.visibility = "visible";
+            $('#showRoomChat').hide();
+            $('#hideRoomChat').show();
         })
-        $('#hideRoomChat').on('click', function (event) {
+        $('#hideRoomChat').on('click', (event) => {
             event.preventDefault();
-                $('#allchatWindow')[0].style.visibility = "hidden";
-                $('#hideRoomChat').hide();
-                $('#showRoomChat').show();
+            $('#allchatWindow')[0].style.visibility = "hidden";
+            $('#hideRoomChat').hide();
+            $('#showRoomChat').show();
         })
 
         $('#allchat').on('keydown', (event) => {

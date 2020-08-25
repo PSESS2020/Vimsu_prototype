@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
-const Settings = require('../../game/app/utils/Settings')
+const Settings = require('../../game/app/server/utils/Settings')
 
 module.exports = class RouteController {
 

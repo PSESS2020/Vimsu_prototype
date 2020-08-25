@@ -1,5 +1,5 @@
-const Commands = require('../../utils/Commands.js');
-const Messages = require('../../utils/Messages.js');
+const Commands = require('../utils/Commands.js');
+const Messages = require('../utils/Messages.js');
 
 // this can probably be chucked out again and all it's functionality be moved into the context classes?
 module.exports = class CommandHandler {

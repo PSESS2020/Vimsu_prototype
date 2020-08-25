@@ -1,7 +1,7 @@
 const chai = require('chai');
 const assert = chai.assert;
 const Achievement = require('../../../game/app/server/models/Achievement.js');
-const TypeOfTask = require('../../../game/app/utils/TypeOfTask.js');
+const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask.js');
 
 //example achievement
 var id = '1a2b';

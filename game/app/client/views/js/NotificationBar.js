@@ -27,11 +27,11 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifMessage' + senderUsername + chatId).on('click', function (event) {
+        $('#closeNotifMessage' + senderUsername + chatId).on('click', (e) => {
             $('#notifMessageDiv' + senderUsername + chatId).hide();
         })
 
-        $('#notifMessage' + senderUsername + chatId).on('click', function (event) {
+        $('#notifMessage' + senderUsername + chatId).on('click', (e) => {
             $('#notifMessageDiv' + senderUsername + chatId).hide();
             return this.#eventManager.handleChatThreadClicked(chatId);
         })
@@ -53,11 +53,11 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifChat' + chatId).on('click', function (event) {
+        $('#closeNotifChat' + chatId).on('click', (e) => {
             $('#notifChatDiv' + chatId).hide();
         })
 
-        $('#notifChat' + chatId).on('click', function (event) {
+        $('#notifChat' + chatId).on('click', (e) => {
             $('#notifChatDiv' + chatId).hide();
             return this.#eventManager.handleChatThreadClicked(chatId);
         })
@@ -79,11 +79,11 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifGroupChat' + chatId).on('click', function (event) {
+        $('#closeNotifGroupChat' + chatId).on('click', (e) => {
             $('#notifGroupChatDiv' + chatId).hide();
         })
 
-        $('#notifGroupChat' + chatId).on('click', function (event) {
+        $('#notifGroupChat' + chatId).on('click', (e) => {
             $('#notifGroupChatDiv' + chatId).hide();
             return this.#eventManager.handleChatThreadClicked(chatId);
         })
@@ -105,11 +105,11 @@ class NotificationBar extends Views {
             `)
         }
         $('#notifBar').scrollTop(0);
-        $('#closeNotifFriendRequest' + senderUsername).on('click', function (event) {
+        $('#closeNotifFriendRequest' + senderUsername).on('click', (e) => {
             $('#notifFriendRequestDiv' + senderUsername).hide();
         })
 
-        $('#notifFriendRequest' + senderUsername).on('click', function (event) {
+        $('#notifFriendRequest' + senderUsername).on('click', (e) => {
             $('#notifFriendRequestDiv' + senderUsername).hide();
             return this.#eventManager.handleFriendRequestListClicked();
         })
@@ -132,10 +132,10 @@ class NotificationBar extends Views {
         }
         $('#notifBar').scrollTop(0);
 
-        $('#closeNotifFriend' + friendUsername).on('click', function (event) {
+        $('#closeNotifFriend' + friendUsername).on('click', (e) => {
             $('#notifFriendDiv' + friendUsername).hide();
         })
-        $('#notifFriend' + friendUsername).on('click', function (event) {
+        $('#notifFriend' + friendUsername).on('click', (e) => {
             $('#notifFriendDiv' + friendUsername).hide();
             return this.#eventManager.handleFriendListClicked();
         })
