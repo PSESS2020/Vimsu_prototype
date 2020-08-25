@@ -1675,12 +1675,12 @@ module.exports = class ServerController {
                     }
 
                     //update DB
-                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(res => {
-                        FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db).then(res => {
-                            this.#applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER);
-                            this.#applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER);
-                        })
-                    })
+                    FriendListService.storeFriend(targetID, requesterID, Settings.CONFERENCE_ID, this.#db);
+                    FriendListService.storeFriend(requesterID, targetID, Settings.CONFERENCE_ID, this.#db);
+                    
+                    this.#applyTaskAndAchievement(targetID, TypeOfTask.BEFRIENDOTHER);
+                    this.#applyTaskAndAchievement(requesterID, TypeOfTask.BEFRIENDOTHER);
+
 
                 } else {
                     //check if target is online
