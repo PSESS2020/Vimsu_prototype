@@ -1,0 +1,142 @@
+<html>
+
+<body>
+    <!--UPPER HUD-->
+    <div class="row mt-2">
+        <div class="d-flex flex-row col-12">
+            <div class="d-flex flex-column" style="text-align: left;">
+                <div id="time" style="color: antiquewhite"></div>
+                <div id="location" style="color: antiquewhite"></div>
+                <div>
+                    <small id="fps" style="color: antiquewhite; opacity: 0.5"></small>
+                    <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
+                </div>
+                <br>
+                <div id="allchatWindow" style="z-index: 300">
+                    <div class="p-2" id="allchatHeader"
+                        style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;">
+                    </div>
+                    <div id="allchatBox" class="allChatBar">
+                        <small>
+                            <div id="noAllchat" class="wrapword"
+                                style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div>
+                        </small>
+                        <div id="allchatMessages"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column ml-4">
+                <form id="allchat" action="">
+                    <input id="allchatMessageInput" autocomplete="off" placeholder="" /><button
+                        style="background-color: transparent">>></button>
+                </form>
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick=""
+                    href="" style="z-index: 300">
+                </a>
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href=""
+                    onclick="" style="z-index: 300">
+                </a>
+            </div>
+
+            <div class="d-flex flex-column ml-auto">
+                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" title="Points">
+                    <i class="fa fa-product-hunt navbarIcons"></i>
+                    <p class="navbarIconsText" style="display:inline-block;" id="pointBox" title="Points">0</p>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column">
+                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" title="Rank">
+                    <i class="fas fa-medal navbarIcons"></i>
+                    <p class="navbarIconsText" style="display:inline-block;" id="rankBox">0</p>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column ml-5">
+                <div class="profileBox"
+                    style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
+                    <a class="action_button nav-item nav-link" title="Profile" href=""
+                        onclick="new EventManager().handleProfileClicked()" data-toggle="modal">
+                        <i class="fa fa-user navbarIcons" style="transform: scale(2)"></i>
+                        <p class="navbarIconsText ml-3" style="display:inline-block;" id="profilePlaceholder"></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--NOTIFICATIONS-->
+    <div class="row">
+        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -66vw;">
+            <div id="connectionStatus"
+                style="background-color: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 10px; color: firebrick; z-index: 1000; display: none">
+            </div>
+        </div>
+
+        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -34vw;"></div>
+    </div>
+
+    <!--LOWER HUD BUTTON LEFT-->
+    <nav class="navbar navbar-expand-md navbar-light"
+        style="position: absolute; bottom: 0; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
+                    onclick="new EventManager().handleRankListClicked()" data-toggle="modal"
+                    data-target="#rankListModal">
+                    <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
+                    <p class="navbarIconsText">Ranklist</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="" onclick="new EventManager().handleScheduleClicked()" title="Presentation schedule"
+                    class="action_button nav-item nav-link" data-toggle="modal">
+                    <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
+                    <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="action_button nav-item nav-link" href="" title="Achievement list"
+                    onclick="new EventManager().handleAchievementsClicked()" data-toggle="modal">
+                    <i class="fa fa-star fa-4x navbarIcons"></i>
+                    <p class="navbarIconsText" style="margin-left: -17px;">Achievements</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!--LOWER HUD BUTTON RIGHT-->
+    <nav class="navbar navbar-expand-md navbar-light"
+        style="position: absolute; bottom: 0; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
+
+        <ul class="navbar nav ml-auto">
+            <li class="nav-item">
+                <a class="action_button nav-item nav-link" href="" title="Friend list and received friend request list"
+                    onclick="new EventManager().handleFriendListClicked()" data-toggle="modal">
+                    <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
+                    <p class="navbarIconsText" style="margin-left: -4px;">Friendlist</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="action_button nav-item nav-link" href="" title="Chat list"
+                    onclick="new EventManager().handleChatListClicked()" data-toggle="modal">
+                    <i class="fa fa-comments-o fa-4x navbarIcons"></i>
+                    <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" title="Leave conference"
+                    onclick="return confirm('Are you sure you want to leave?')">
+                    <i class="fa fa-sign-out fa-4x navbarIcons"></i>
+                    <p class="navbarIconsText" style="margin-left: 7px;">Leave</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+
+</html>

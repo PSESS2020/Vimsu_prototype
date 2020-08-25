@@ -60,16 +60,16 @@ textarea {
 }
 
 #mapCanvas {
-position: absolute;
-width: 1280px;
-height: 640px;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-margin: auto;
-pointer-events: none;
-z-index: 0;
+  position: absolute;
+  width: 1280px;
+  height: 640px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  pointer-events: none;
+  z-index: 0;
 }
 
 video::-webkit-media-controls-play-button, video::-webkit-media-controls-pausebutton, 
@@ -78,42 +78,42 @@ video::-webkit-media-controls-timeline {
 }
 
 #avatarCanvas {
-position: absolute;
-width: 1280px;
-height: 640px;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-margin: auto;
-z-index: 1;
+  position: absolute;
+  width: 1280px;
+  height: 640px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 1;
 }
 
 #uiCanvas {
-position: absolute;
-width: 1280px;
-height: 640px;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-margin: auto;
-pointer-events: none;
-z-index: 2;
+  position: absolute;
+  width: 1280px;
+  height: 640px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  pointer-events: none;
+  z-index: 2;
 }
 
 form {
-border-radius: 5px;
-top: 0;
-z-index: 3;
+  border-radius: 5px;
+  top: 0;
+  z-index: 3;
 } 
 
 form input {
-outline: none;
-border: none;
-border-radius: 5px;
-padding: 4px;
-width: 250px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 4px;
+  width: 250px;
 }
 
 form button {
@@ -130,14 +130,14 @@ form button:hover {
 }
 
 .messageBar {
-font-size: 15px;
-background:none;
-overflow-y: scroll;
-margin: 0;
-padding: 0;
-z-index: 1;
-height: 125px;
-max-width: 16vw;
+  font-size: 15px;
+  background:none;
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  height: 125px;
+  max-width: 16vw;
 }
 
 .allChatBar {
@@ -229,7 +229,6 @@ vertical-align: middle;
   border-color: antiquewhite;
   border-radius: 10px;
   background-color: rgba(24, 30, 32, 0.699);
-
 }
 
 .lectureChatInput {
@@ -552,37 +551,44 @@ body::-webkit-scrollbar {
   height: 5px;
 }
 
-
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
+
 ::-webkit-scrollbar-button {
   width: 0px;
   height: 0px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #e1e1e1;
   border: 0px none #ffffff;
   border-radius: 50px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #ffffff;
 }
+
 ::-webkit-scrollbar-thumb:active {
   background: #000000;
 }
+
 ::-webkit-scrollbar-track {
   background: #666666;
   border: 0px none #ffffff;
   border-radius: 51px;
 }
+
 ::-webkit-scrollbar-track:hover {
   background: #666666;
 }
+
 ::-webkit-scrollbar-track:active {
   background: #333333;
 }
+
 ::-webkit-scrollbar-corner {
   background: transparent;
 }

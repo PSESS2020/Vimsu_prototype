@@ -18,22 +18,17 @@
                 </div>
             </div>
             <% if (locals.loggedIn === true) { %>
-            <div class="profileIcon" style="display:inline-block;vertical-align:top;">
-                <i class="fa fa-user fa-4x iconProfile"></i>
-            </div>
-            <div style="display:inline-block; margin-left: 10px">
-                <div><%=title%> <%=forename%> <%=surname%> (@<%=username%>)</div>
-                <div><%=email%></div>
-            </div>
-
-            <% } else { %>
-
-            <% } %>
+                <div class="profileIcon" style="display:inline-block;vertical-align:top;">
+                    <i class="fa fa-user fa-4x iconProfile"></i>
+                </div>
+                <div style="display:inline-block; margin-left: 10px">
+                    <div><%=title%> <%=forename%> <%=surname%> (@<%=username%>)</div>
+                    <div><%=email%></div>
+                </div>
+            <% }
         </div>
     </div>
 </div>
-</div>
-
 
 <nav class="navbar navbar-expand-sm navbar-light bg-custom">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -44,55 +39,50 @@
         <div class="navbar-nav">
             <div class="d-flex justify-content-around flex-row">
                 <% if (locals.loggedIn === true) { %>
-                <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/upload">
-                    <div class="octicons octicon octicon-cloud-upload">
-                        <p id="octicon_text">
-                            Upload
-                        </p>
-                    </div>
-                </a>
-                <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/logout">
-                    <div class="octicons octicon octicon-sign-out">
-                        <p id="octicon_text">
-                            Log out
-                        </p>
-                    </div>
-                </a>
-                <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/account">
-                    <div class="octicons octicon octicon-gear">
-                        <p id="octicon_text">
-                            Account Settings
-                        </p>
-                    </div>
-                </a>
-
+                    <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/upload">
+                        <div class="octicons octicon octicon-cloud-upload">
+                            <p id="octicon_text">
+                                Upload
+                            </p>
+                        </div>
+                    </a>
+                    <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/logout">
+                        <div class="octicons octicon octicon-sign-out">
+                            <p id="octicon_text">
+                                Log out
+                            </p>
+                        </div>
+                    </a>
+                    <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/account">
+                        <div class="octicons octicon octicon-gear">
+                            <p id="octicon_text">
+                                Account Settings
+                            </p>
+                        </div>
+                    </a>
                 <% } else { %>
-                <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/login">
-                    <div class="octicons octicon octicon-sign-in">
-                        <p id="octicon_text">
-                            Log in
-                        </p>
-                    </div>
-                </a>
+                    <a class="p-2 mr-5 action_button nav-item nav-link navbar-brand" href="/login">
+                        <div class="octicons octicon octicon-sign-in">
+                            <p id="octicon_text">
+                                Log in
+                            </p>
+                        </div>
+                    </a>
 
-                <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/register">
-                    <div class="octicons octicon octicon-pencil">
-                        <p id="octicon_text">
-                            Register
-                        </p>
-                    </div>
-                </a>
+                    <a class="p-2 ml-5 mr-5 action_button nav-item nav-link navbar-brand" href="/register">
+                        <div class="octicons octicon octicon-pencil">
+                            <p id="octicon_text">
+                                Register
+                            </p>
+                        </div>
+                    </a>
                 <% } %>
             </div>
         </div>
         <% if (locals.loggedIn === true) { %>
-        <form class="form-inline">
-            <a class="btn btn-outline-warning" type="button" href="/game">Enter Conference >></a>
-        </form>
-
-        <% } else { %>
-
-        <% } %>
+            <form class="form-inline">
+                <a class="btn btn-outline-warning" type="button" href="/game">Enter Conference >></a>
+            </form>
+        <% }
     </div>
 </nav>
-<div>
