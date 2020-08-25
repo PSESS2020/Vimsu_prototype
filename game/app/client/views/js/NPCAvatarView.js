@@ -34,7 +34,7 @@ class NPCAvatarView extends AvatarView {
     draw() {
         let cordX = super.getGridPosition().getCordX();
         let cordY = super.getGridPosition().getCordY();
-        
+
         var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
         var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
 
@@ -50,7 +50,7 @@ class NPCAvatarView extends AvatarView {
         this.#currentAnimation.draw(screenX, screenY);
     }
 
-    #initSpriteAnimation() {
+    #initSpriteAnimation = function () {
         var spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         var topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         var bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
