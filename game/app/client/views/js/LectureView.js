@@ -6,10 +6,11 @@ class LectureView extends WindowView {
     #hasToken;
     #lectureId;
     #timeLeft;
-    
+    #eventManager;
 
     constructor() {
         super();
+        this.#eventManager = new EventManager();
 
         this.#lectureStatus = LectureStatus.PENDING;
 
@@ -188,9 +189,9 @@ class LectureView extends WindowView {
             $('#lectureVideoWindow').hide();
 
             if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
-                new EventManager().handleLectureLeft(this.#lectureId, false);
+                this.#eventManager.handleLectureLeft(this.#lectureId, false);
             } else {
-                new EventManager().handleLectureLeft(this.#lectureId, true);
+                this.#eventManager.handleLectureLeft(this.#lectureId, true);
             }
         } else {
             $('#lectureVideoWindow').hide();
