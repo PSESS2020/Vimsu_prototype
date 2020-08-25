@@ -2042,9 +2042,9 @@ module.exports = class ServerController {
                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
-            ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
-
             this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), undefined);
+
+            await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
 
             Promise.all([...this.#ppants.keys()].map(async ppantId => {
                 var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
