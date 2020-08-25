@@ -18,7 +18,7 @@ var message2 = {senderID: senderid2, username: senderUsername2, timestamp: times
 var messageList1 = [message1];
 var messageList2 = [message1, message2];
 
-var lectureChat = new LectureChat(lectureId);
+var lectureChat = new LectureChat();
 
 describe('LectureChat getter functions', function() {
     it('test getMessages', function() {

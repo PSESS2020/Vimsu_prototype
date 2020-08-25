@@ -15,10 +15,6 @@ class ClientController {
      * creates an instance of ClientController only if there is not an instance already.
      * Otherwise the existing instance will be returned.
      * 
-     * @param {GameView} gameView 
-     * @param {ParticipantClient} participant
-     * @param {currentRoom} currentRoom
-     * @param {WebSocket} socket
      * @param {number} port
      */
 

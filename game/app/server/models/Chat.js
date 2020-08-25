@@ -3,8 +3,6 @@ const Message = require('./Message.js');
 
 module.exports = class Chat {
     #chatId;
-    //#ownerId;
-    //#title
     #participantList;
     #messageList;
     #maxNumMessages;

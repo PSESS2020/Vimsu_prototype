@@ -72,7 +72,7 @@ module.exports = class Lecture {
         */
         this.#tokenList = [];
 
-        this.#lectureChat = new LectureChat(this.#id);
+        this.#lectureChat = new LectureChat();
     }
 
     getId() {

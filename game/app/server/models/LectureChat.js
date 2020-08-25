@@ -1,20 +1,13 @@
 module.exports = class LectureChat {
 
-    #lectureId;
     #listOfMessages;
-    #locked;
-
 
     /**
-     * @author Laura
-     * 
-     * @param {String} lectureId    
+     * @author Laura 
      * 
      */
-    constructor(lectureId) {
-        this.#lectureId = lectureId;
+    constructor() {
         this.#listOfMessages = [];
-        this.#locked = false;
     }
 
     getMessages() {
@@ -24,10 +17,4 @@ module.exports = class LectureChat {
     appendMessage(message) {
         this.#listOfMessages.push(message);
     }
-
-    //for moderators who can delete messages from the lecture chat
-    removeMessage(message) {
-        //TODO
-    }
-
 }
