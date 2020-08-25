@@ -52,10 +52,10 @@ class InviteFriendsView extends WindowView {
                                     <span class="small">${businessCard.getEmail()}</span>
                                 </div>
                                 <div class="col-12 col-md-1">
-                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px" class="btn">
+                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">
                                         <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
                                     </button>
-                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -7px; margin-left: 5px" class="btn">
+                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none" class="btn">
                                         <i class="fa fa-check-circle fa-2x navbarIcons"></i>
                                     </button>
                                 </div>    
