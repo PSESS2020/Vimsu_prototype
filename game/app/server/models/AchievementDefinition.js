@@ -13,7 +13,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {TypeOfTask} taskType 
      * @param {String} title 
      * @param {String} icon 
@@ -68,7 +68,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * 
-     * @param {int} currentLevel 
+     * @param {number} currentLevel 
      */
     computeAchievement(currentLevel) {
         TypeChecker.isInt(currentLevel);

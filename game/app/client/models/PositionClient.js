@@ -9,8 +9,8 @@ class PositionClient {
 
     /**
      * 
-     * @param {int} cordX 
-     * @param {int} cordY 
+     * @param {number} cordX 
+     * @param {number} cordY 
      */
     constructor(cordX, cordY) {
         TypeChecker.isInt(cordX);

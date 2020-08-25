@@ -31,7 +31,7 @@ module.exports = class Lecture {
      * @param {Date} startingTime 
      * @param {String} oratorName
      * @param {String} oratorUsername
-     * @param {int} maxParticipants 
+     * @param {number} maxParticipants 
      */
     constructor(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants) {
         TypeChecker.isString(id);

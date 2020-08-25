@@ -31,15 +31,15 @@ class RoomClient {
     /**
      * 
      * 
-     * @param {int} roomId 
+     * @param {number} roomId 
      * @param {TypeOfRoom} typeOfRoom
      * @param {Object} assetPaths
      * @param {Array of GameObjectClient} listOfMapElements
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
      * @param {Array of DoorClient} listOfDoors
-     * @param {int} length 
-     * @param {int} width 
+     * @param {number} length 
+     * @param {number} width 
      * @param {Array of Array of int} occupationMap
      */
     constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
@@ -154,7 +154,7 @@ class RoomClient {
     /**
      * Deletes ppant from room
      * 
-     * @param {int} participantId 
+     * @param {number} participantId 
      */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -209,15 +209,15 @@ class RoomClient {
      * Called when a user enters a new room
      * 
      * 
-     * @param {int} roomId 
+     * @param {number} roomId 
      * @param {TypeOfRoom} typeOfRoom
      * @param {Object} assetPaths
      * @param {Array of GameObjectClient} listOfMapElements
      * @param {Array of GameObjectClient} listOfGameObjects
      * @param {Array of NPCClient} listOfNPCs
      * @param {Array of DoorClient} listOfDoors
-     * @param {int} length 
-     * @param {int} width  
+     * @param {number} length 
+     * @param {number} width  
      * @param {Array of Array of int} occupationMap
      */
     swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {

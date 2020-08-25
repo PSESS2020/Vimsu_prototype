@@ -10,9 +10,9 @@ module.exports = class Position {
      * Erstellt Positionsinstanz
      * 
      * 
-     * @param {int} roomId 
-     * @param {int} cordX 
-     * @param {int} cordY 
+     * @param {number} roomId 
+     * @param {number} cordX 
+     * @param {number} cordY 
      */
     constructor(roomId, cordX, cordY) {
         TypeChecker.isInt(roomId);

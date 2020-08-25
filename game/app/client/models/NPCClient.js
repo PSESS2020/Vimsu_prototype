@@ -13,7 +13,7 @@ class NPCClient {
 
     /**
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {String} name 
      * @param {Position} position 
      * @param {Direction} direction

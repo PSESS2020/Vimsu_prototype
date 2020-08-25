@@ -14,7 +14,7 @@ class DoorClient {
 
     /**
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {TypeOfDoor} typeOfDoor
      * @param {String} name
      * @param {PositionClient} mapPosition

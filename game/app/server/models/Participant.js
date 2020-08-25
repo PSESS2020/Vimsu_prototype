@@ -38,7 +38,7 @@ module.exports = class Participant {
      * @param {Array of Achievement} achievements 
      * @param {Array of Tasks} tasks
      * @param {boolean} isMod 
-     * @param {int} awardPoints
+     * @param {number} awardPoints
      * @param {Array of Chat} chatList 
      */
     constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList) {

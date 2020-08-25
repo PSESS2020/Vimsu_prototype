@@ -17,11 +17,11 @@ class GameObjectClient {
     /**
      * 
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {GameObjectType} gameObjectType
      * @param {String} name
-     * @param {int} width 
-     * @param {int} length 
+     * @param {number} width 
+     * @param {number} length 
      * @param {Position} position 
      * @param {boolean} isClickable
      */

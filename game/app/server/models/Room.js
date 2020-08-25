@@ -24,10 +24,10 @@ module.exports = class Room {
     /**
      * 
      * 
-     * @param {int} roomId 
+     * @param {number} roomId 
      * @param {TypeOfRoom} typeOfRoom 
-     * @param {int} width
-     * @param {int} length
+     * @param {number} width
+     * @param {number} length
      */
     constructor(roomId, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
@@ -274,7 +274,7 @@ module.exports = class Room {
      * Gets Door to room with roomId if it exists
      * 
      * 
-     * @param {int} targetId 
+     * @param {number} targetId 
      */
     getDoorTo(targetId) {
         TypeChecker.isInt(targetId);

@@ -16,7 +16,7 @@ module.exports = class Door {
     /**
      * @author Philipp
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {String} name
      * @param {TypeOfDoor} typeOfDoor
      * @param {Position} mapPosition

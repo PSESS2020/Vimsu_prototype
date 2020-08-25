@@ -16,11 +16,11 @@ module.exports = class GameObject {
     /**
      * 
      * 
-     * @param {int} id 
+     * @param {number} id 
      * @param {String} name
      * @param {GameObjectType} gameObjectType
-     * @param {int} width 
-     * @param {int} length 
+     * @param {number} width 
+     * @param {number} length 
      * @param {Position} position 
      * @param {boolean} isSolid
      * @param {boolean} isClickable

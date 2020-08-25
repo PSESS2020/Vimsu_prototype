@@ -23,7 +23,7 @@ module.exports = class Slot {
      * @param {String} remarks 
      * @param {Date} startingTime 
      * @param {String} oratorId 
-     * @param {int} maxParticipants 
+     * @param {number} maxParticipants 
      */
     constructor(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants) {
         TypeChecker.isString(id);
