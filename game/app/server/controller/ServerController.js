@@ -612,7 +612,7 @@ module.exports = class ServerController {
             socket.on('lectureMessage', (text) => {
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
-                if (!ppant)
+                if (!participant)
                     return;
 
                 let username = participant.getBusinessCard().getUsername();
