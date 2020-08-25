@@ -7,7 +7,7 @@ var taskType = TypeOfTask.BASICTUTORIALCLICK;
 var awardPoints = 10;
 var task = new Task(id, taskType, awardPoints);
 
-describe("Test getter", function() {
+describe("Task Test getter", function() {
     it("Test getId", function() {
         expect(task.getId()).to.be.a('number').and.equal(id);
     })

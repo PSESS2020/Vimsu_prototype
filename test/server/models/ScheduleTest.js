@@ -23,14 +23,14 @@ lectureList.push(lecture2);
 var schedule = new Schedule(lectureList);
 
 
-describe("Test constructor", function () {
+describe("Schedule Test constructor", function () {
     it("Test schedule constructor", function() {
         var lectureList2 = [1];
         expect(() => new Schedule(lectureList2)).to.throw(TypeError, "an instance of");
     })
 })
 
-describe("Test getter", function() {
+describe("Schedule Test getter", function() {
     
     it("Test getLecture", function() {
         expect(schedule.getLecture(id)).to.eql(lecture);

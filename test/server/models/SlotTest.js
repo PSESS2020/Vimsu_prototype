@@ -16,7 +16,7 @@ var maxParticipants = 3;
 
 var slot = new Slot(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants);
 
-describe('Lecture getter functions', function() {
+describe('Slot getter functions', function() {
     it('test getId', function() {
         expect(slot.getId()).to.be.a('string').and.equal(id);
     })

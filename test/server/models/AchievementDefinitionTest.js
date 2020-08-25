@@ -17,7 +17,7 @@ var levels = [
 ];
 
 var achievementDefinition = new AchievementDefinition(id, taskType, title, icon, description, levels);
-var achievement = new Achievement(id, title, icon, description, 1, '#D7D7D7', 200, 2, taskType);
+var achievement = new Achievement(id, title, icon, description, 1, '#D7D7D7', 200, 2, taskType, 1);
 
 describe('AchievementDefinition getter funtions', function() {
     it('test getId', function() {
