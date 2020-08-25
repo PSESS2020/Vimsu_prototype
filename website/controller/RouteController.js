@@ -35,7 +35,7 @@ module.exports = class RouteController {
         this.#app.set('view engine', 'ejs');
 
         //sets the views directory for rendering the ejs templates
-        this.#app.set('views', path.join(__dirname, '../views/'));
+        this.#app.set('views', path.join(__dirname, '../views/ejs'));
 
         this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
@@ -142,7 +142,7 @@ module.exports = class RouteController {
             if (request.session.loggedin === true) {
                 const ServerController = require('../../game/app/server/controller/ServerController');
                 new ServerController(this.#io, this.#db, this.#blob);
-                response.sendFile(path.join(__dirname + '../../../game/app/client/views/canvas.html'));
+                response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
             } else {
                 response.redirect('/');
             }
