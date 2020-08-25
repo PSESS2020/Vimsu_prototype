@@ -1,31 +1,41 @@
 <html>
 
 <head>
-    <!-- TODO: Meta Tags -->
+
     <meta charset="UTF-8">
+    <title>Vimsu</title>
+
+    <!------------------------------------IMPORTING REQUIREMENTS------------------------------------->
+
+    <!--FONTAWESOME-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/fontawesome.min.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f6c8522501.js" crossorigin="anonymous"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--BOOTSTRAP-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="client/views/css/style.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <!--OTHER REQUIREMENTS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/confetti-js@0.0.18/dist/index.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"></script>
+
+    <!--OTHER FILES-->
     <script>
         $(function () {
-            $("#modalHTML").load("client/views/modal.html");
+            $("#windowHTML").load("client/views/window.html");
+            $('#requireJSHTML').load("client/views/requirejs.html")
         });
     </script>
-
-    <title>Vimsu</title>
+    <link rel="stylesheet" type="text/css" href="client/views/css/style.css">
     <link rel="icon" type="image/png" sizes="16x16" href="../../../../website/assets/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../../../website/assets/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../../../../website/assets/apple-touch-icon.png">
@@ -34,20 +44,23 @@
 </head>
 
 <body>
-    <div id="modalHTML"></div>
+
+    <!--OTHER HTML PAGE-->
+    <div id="windowHTML"></div>
+    <div id="requireJSHTML"></div>
+
+    <!--LOADING OVERLAY-->
     <div id="overlay">
         <div id="progressbar"></div>
         <div id="progressstatus"></div>
     </div>
-    <canvas id="mapCanvas" width="600" height="300">
-        <p>Unfortunately your browser is not supporting this web page.</p>
-    </canvas>
-    <canvas id="avatarCanvas" width="600" height="300">
-        <p>Unfortunately your browser is not supporting this web page.</p>
-    </canvas>
-    <canvas id="uiCanvas" width="600" height="300">
-        <p>Unfortunately your browser is not supporting this web page.</p>
-    </canvas>
+
+    <!--CANVAS-->
+    <canvas id="mapCanvas" width="600" height="300"></canvas>
+    <canvas id="avatarCanvas" width="600" height="300"></canvas>
+    <canvas id="uiCanvas" width="600" height="300"></canvas>
+
+    <!--UPPER HUD-->
     <div class="row mt-2">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="text-align: left;">
@@ -59,87 +72,93 @@
                 </div>
                 <br>
                 <div id="allchatWindow" style="z-index: 300">
-                    <div class="p-2" id="allchatHeader" style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;"></div>
+                    <div class="p-2" id="allchatHeader"
+                        style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;">
+                    </div>
                     <div id="allchatBox" class="allChatBar">
-                        <small><div id="noAllchat" class="wrapword" style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div></small>
+                        <small>
+                            <div id="noAllchat" class="wrapword"
+                                style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div>
+                        </small>
                         <div id="allchatMessages"></div>
                     </div>
                 </div>
-                
-                
             </div>
             <div class="d-flex flex-column ml-4">
                 <form id="allchat" action="">
-                    <input id="allchatMessageInput" autocomplete="off"
-                        placeholder="" /><button style="background-color: transparent">>></button> 
+                    <input id="allchatMessageInput" autocomplete="off" placeholder="" /><button
+                        style="background-color: transparent">>></button>
                 </form>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick="" href=""
-                    style="z-index: 300">
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick=""
+                    href="" style="z-index: 300">
                 </a>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href="" onclick=""
-                    style="z-index: 300">
+                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href=""
+                    onclick="" style="z-index: 300">
                 </a>
             </div>
-            
+
             <div class="d-flex flex-column ml-auto">
-                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300"  title="Points">
+                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" title="Points">
                     <i class="fa fa-product-hunt navbarIcons"></i>
                     <p class="navbarIconsText" style="display:inline-block;" id="pointBox" title="Points">0</p>
                 </div>
             </div>
+
             <div class="d-flex flex-column">
-                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300"  title="Rank">
+                <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" title="Rank">
                     <i class="fas fa-medal navbarIcons"></i>
                     <p class="navbarIconsText" style="display:inline-block;" id="rankBox">0</p>
                 </div>
             </div>
+
             <div class="d-flex flex-column ml-5">
                 <div class="profileBox"
                     style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
-                    <a class="action_button nav-item nav-link" title="Profile" href="" onclick="new EventManager().handleProfileClicked()"
-                        data-toggle="modal">
+                    <a class="action_button nav-item nav-link" title="Profile" href=""
+                        onclick="new EventManager().handleProfileClicked()" data-toggle="modal">
                         <i class="fa fa-user navbarIcons" style="transform: scale(2)"></i>
                         <p class="navbarIconsText ml-3" style="display:inline-block;" id="profilePlaceholder"></p>
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
+
+    <!--NOTIFICATIONS-->
     <div class="row">
         <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -66vw;">
             <div id="connectionStatus"
                 style="background-color: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 10px; color: firebrick; z-index: 1000; display: none">
             </div>
-
         </div>
-        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -34vw;">
 
-        </div>
+        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -34vw;"></div>
     </div>
 
+    <!--LOWER HUD BUTTON LEFT-->
     <nav class="navbar navbar-expand-md navbar-light"
         style="position: absolute; bottom: 0; float: left; left: 15; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" title="Rank list of conference participants" href="" onclick="new EventManager().handleRankListClicked()"
-                    data-toggle="modal" data-target="#rankListModal">
+                <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
+                    onclick="new EventManager().handleRankListClicked()" data-toggle="modal"
+                    data-target="#rankListModal">
                     <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText">Ranklist</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="" onclick="new EventManager().handleScheduleClicked()" title="Presentation schedule" class="action_button nav-item nav-link"
-                    data-toggle="modal">
+                <a href="" onclick="new EventManager().handleScheduleClicked()" title="Presentation schedule"
+                    class="action_button nav-item nav-link" data-toggle="modal">
                     <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
                     <p class="navbarIconsText" style="margin-left: -2px;">Schedule</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Achievement list" onclick="new EventManager().handleAchievementsClicked()"
-                    data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" title="Achievement list"
+                    onclick="new EventManager().handleAchievementsClicked()" data-toggle="modal">
                     <i class="fa fa-star fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: -17px;">Achievements</p>
                 </a>
@@ -147,24 +166,27 @@
         </ul>
     </nav>
 
+    <!--LOWER HUD BUTTON RIGHT-->
     <nav class="navbar navbar-expand-md navbar-light"
         style="position: absolute; bottom: 0; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
 
         <ul class="navbar nav ml-auto">
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Friend list and received friend request list" onclick="new EventManager().handleFriendListClicked()"
-                    data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" title="Friend list and received friend request list"
+                    onclick="new EventManager().handleFriendListClicked()" data-toggle="modal">
                     <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: -4px;">Friendlist</p>
                 </a>
             </li>
+
             <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" title="Chat list" onclick="new EventManager().handleChatListClicked()"
-                    data-toggle="modal">
+                <a class="action_button nav-item nav-link" href="" title="Chat list"
+                    onclick="new EventManager().handleChatListClicked()" data-toggle="modal">
                     <i class="fa fa-comments-o fa-4x navbarIcons"></i>
                     <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
                 </a>
             </li>
+
             <li class="nav-item">
                 <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" title="Leave conference"
                     onclick="return confirm('Are you sure you want to leave?')">
@@ -173,211 +195,7 @@
                 </a>
             </li>
         </ul>
-
     </nav>
-
-    </div>
-
-    <div class="lectureVideoWindow" id="lectureVideoWindow">
-        <div class="container-fluid p-1">
-            <div class="row">
-                <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
-                    <h5 class="ml-2" id="lectureTitleLabel"></h5>
-                    <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel">
-                    </div>
-                    <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
-                </div>
-            </div>
-
-
-            <div class="row pl-0 pr-1 mt-4">
-                <div class="col-7 mr-4 ml-3">
-                    <div id="lectureVideo">
-
-                    </div>
-                    <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">
-
-                        <div id="tokenIcon">
-
-                        </div>
-                        <div>
-                            <p class="ml-2 mt-1" id="tokenLabel"></p>
-                        </div>
-                    </div>
-                </div>
-                <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
-
-
-                    <div class="lectureChatHeader">
-                        <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
-                    </div>
-                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
-                    </div>
-
-                    <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
-                        <input id="lectureChatInput" type="text"
-                            style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
-                            class="form-control" placeholder="Enter message ...">
-                        <div class="input-group-append">
-                            <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-    </div>
-
-    <div class="currentLecturesWindow" id="currentLectures">
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="currentLecturesHeader p-3 mb-3 d-flex">
-                        <h5>Current Lectures</h5>
-                        <button class="ml-auto pl-1 pr-1 close"
-                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="closeCurrentLecturesButton" type="button"><i class="fa fa-close"></i></button>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="nolecture"></div>
-                    <div id="currentLecturesContainer" class="row ml-auto mr-auto">
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="viewBlockerWindow" id="viewBlocker">
-        <div class="container-fluid">
-
-            <div class="row" style="height:100%;">
-                <div class="col-12 p-0" style="position:absolute; height: 10%;">
-                    <div class="removelHeader p-3 mb-3 d-flex" id="removalHeader">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="removalMessage" class="row ml-auto mr-auto">
-                        <div style="font-size: large; position: absolute; top: 30%; width: 100%; text-align:center;">
-                            <h5>You have been removed from this conference.</h5>
-                        </div>
-                        <div style="position: absolute; width:100%; top: 60%;">
-                            <a class="action_button nav-item nav-link" href="/">
-                                <!--<i class="fa fa-sign-out fa-4x navbarIcons" style="position:absolute; left: 40%;"></i>-->
-                                <p class="navbarIconsText" style="margin-left: 7px; width: 100%; text-align: center;">
-                                    Return to Homepage.</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="globalChatWindow" id="globalChat">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="globalChatWindowHeader p-3 mb-3 d-flex" id="globalChatMessageHeader">
-                        <div style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent; font-size: large;"
-                            id="globalChatWindowHeaderText"></div>
-                        <button class="ml-auto pl-1 pr-1 close"
-                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="closeGlobalChatButton" type="button"><i class="fa fa-close"></i></button>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="globalChatMessage" class="mr-2 ml-2">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        requirejs(['client/utils/ConnectionState',
-            'client/shared/TypeChecker',
-            'client/utils/LectureStatus',
-            'client/utils/DateParser',
-            'client/utils/TokenMessages',
-            'client/shared/Direction',
-            'client/config/GameConfig',
-            'client/shared/TypeOfRoom',
-            'client/shared/TypeOfDoor',
-            'client/shared/GameObjectType',
-            'client/models/BusinessCardClient',
-            'client/models/ParticipantClient',
-            'client/models/PositionClient',
-            'client/models/NPCClient',
-            'client/models/GameObjectClient',
-            'client/models/DoorClient',
-            'client/models/RoomClient'], () => {
-
-                requirejs(['client/views/js/Views',
-                    'client/utils/Settings'], () => {
-
-                        requirejs([
-                            'client/utils/ImageLoader',
-                            'client/utils/CacheImages',
-                            'client/utils/IsometricEngine',
-                            'client/utils/SpriteAnimation',
-                            'client/views/js/GameObjectView',
-                            'client/utils/SpriteSheet',], () => {
-
-                                requirejs(['client/views/js/WindowView',
-                                    'client/views/js/MapView',
-                                    'client/views/js/GameMapElementView',
-                                    'client/views/js/AvatarView',
-                                    'client/views/js/LoadingView'], () => {
-
-                                        requirejs([
-                                            'client/views/js/AllchatView',
-                                            'client/views/js/GameObjectViewFactory',
-                                            'client/views/js/ProfileView',
-                                            'client/views/js/NotificationBar',
-                                            'client/views/js/ChatParticipantListView',
-                                            'client/views/js/ChatListView',
-                                            'client/views/js/ChatThreadView',
-                                            'client/views/js/GlobalChatView',
-                                            'client/views/js/StatusBar',
-                                            'client/views/js/SuccessesBar',
-                                            'client/views/js/FriendListView',
-                                            'client/views/js/InviteFriendsView',
-                                            'client/views/js/FriendRequestListView',
-                                            'client/views/js/BusinessCardView',
-                                            'client/views/js/NPCStoryView',
-                                            'client/views/js/ScheduleListView',
-                                            'client/views/js/RankListView',
-                                            'client/views/js/AchievementView',
-                                            'client/views/js/NewAchievementView',
-                                            'client/views/js/CurrentLecturesView',
-                                            'client/views/js/LectureView',
-                                            'client/views/js/NPCAvatarView',
-                                            'client/views/js/ParticipantAvatarView',
-                                            'client/views/js/GameMapElements/ScheduleView',
-                                            'client/views/js/GameMapElements/DoorView',
-                                            'client/views/js/GameObjects/PlantView'], () => {
-
-                                                requirejs(['client/views/js/GameView',
-                                                    'client/controller/ClientController',
-                                                    'client/utils/EventManager'], () => {
-
-                                                        requirejs(['client/index'], () => {
-                                                        });
-                                                    });
-                                            });
-                                    });
-                            });
-                    });
-            });
-    </script>
 </body>
 
 </html>
