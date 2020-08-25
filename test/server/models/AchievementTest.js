@@ -22,7 +22,7 @@ describe('Achievement getter functions', function() {
         assert.equal(achievement.getId(), id);
     })  
     it('test getTitle', function() {
-        assert.equal(achievement.getTitlte(), title);
+        assert.equal(achievement.getTitle(), title);
     })  
     it('test getIcon', function() {
         assert.equal(achievement.getIcon(), icon);
