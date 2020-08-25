@@ -5,12 +5,8 @@ class BusinessCardView extends WindowView {
     #isModerator;
     #eventManager;
 
-    constructor(businessCard, isFriend, rank, isModerator, eventManager) {
+    constructor(eventManager) {
         super()
-        this.#businessCard = businessCard;
-        this.#isFriend = isFriend;
-        this.#rank = rank;
-        this.#isModerator = isModerator;
         this.#eventManager = eventManager;
 
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
@@ -18,7 +14,11 @@ class BusinessCardView extends WindowView {
         })
     }
 
-    draw() {
+    draw(businessCard, isFriend, rank, isModerator) {
+        this.#businessCard = businessCard;
+        this.#isFriend = isFriend;
+        this.#rank = rank;
+        this.#isModerator = isModerator;
 
         $('#businessCardModal .modal-body').append(`
                 

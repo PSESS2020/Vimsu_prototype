@@ -16,10 +16,19 @@ class GameView {
     #friendRequestListView;
     #chatParticipantListView;
     #allchatView;
+    #scheduleListView;
+    #globalChatView;
+    #profileView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
     #npcAvatarViews = [];
     #notifBar;
+    #successesBar;
+    #rankListView;
+    #npcStoryView;
+    #newAchievementView;
+    #achievementView;
+    #businessCardView;
 
     #gameEngine;
     #eventManager;
@@ -40,6 +49,23 @@ class GameView {
         this.#notifBar = new NotificationBar(this.#eventManager);
         this.#allchatView = new AllchatView(this.#eventManager);
         new InputGroupNameView(this.#eventManager);
+        this.#currentLecturesView = new CurrentLecturesView(this.#eventManager);
+        this.#lectureView = new LectureView(this.#eventManager);
+        this.#friendRequestListView = new FriendRequestListView(this.#eventManager);
+        this.#friendListView = new FriendListView(this.#eventManager);
+        this.#inviteFriendsView = new InviteFriendsView(this.#eventManager);
+        this.#chatListView = new ChatListView(this.#eventManager);
+        this.#chatThreadView = new ChatThreadView(this.#eventManager);
+        this.#chatParticipantListView = new ChatParticipantListView();
+        this.#scheduleListView = new ScheduleListView();
+        this.#globalChatView = new GlobalChatView();
+        this.#profileView = new ProfileView();
+        this.#rankListView = new RankListView();
+        this.#npcStoryView = new NPCStoryView();
+        this.#newAchievementView = new NewAchievementView();
+        this.#achievementView = new AchievementView();
+        this.#businessCardView = new BusinessCardView(this.#eventManager);
+        this.#successesBar = new SuccessesBar();
     }
 
     getOwnAvatarView() {
@@ -384,7 +410,6 @@ class GameView {
     }
 
     initCurrentLectures(lectures) {
-        this.#currentLecturesView = new CurrentLecturesView(this.#eventManager)
         this.#currentLecturesView.draw(lectures);
     }
 
@@ -393,61 +418,54 @@ class GameView {
     }
 
     initCurrentSchedule(lectures) {
-        new ScheduleListView().draw(lectures);
+        this.#scheduleListView.draw(lectures);
     }
 
     updateCurrentLecture(lecture, hasToken, lectureChat) {
-        this.#lectureView = new LectureView(this.#eventManager)
         this.#lectureView.draw(lecture, hasToken, lectureChat);
     }
 
     initGlobalChatView(messageHeader, messageText) {
-        new GlobalChatView().draw(messageHeader, messageText);
+        this.#globalChatView.draw(messageHeader, messageText);
     };
 
     initProfileView(businessCard, rank, isModerator) {
-        new ProfileView().draw(businessCard, rank, isModerator);
+        this.#profileView.draw(businessCard, rank, isModerator);
     }
 
     initBusinessCardView(businessCard, isFriend, rank, isModerator) {
-        new BusinessCardView(businessCard, isFriend, rank, isModerator, this.#eventManager).draw();
+        this.#businessCardView.draw(businessCard, isFriend, rank, isModerator);
     }
 
     initFriendListView(businessCards) {
-        this.#friendListView = new FriendListView(this.#eventManager);
         this.#friendListView.draw(businessCards)
     }
 
     initInviteFriendsView(businessCards, groupName, limit, chatId) {
-        this.#inviteFriendsView = new InviteFriendsView(this.#eventManager);
         this.#inviteFriendsView.draw(businessCards, groupName, limit, chatId);
     }
 
     initCurrentAchievementsView(achievements) {
-        new AchievementView().draw(achievements);
+        this.#achievementView.draw(achievements);
     }
 
     handleNewAchievement(achievement) {
-        new NewAchievementView().draw(achievement);
+        this.#newAchievementView.draw(achievement);
     }
 
     initNPCStoryView(name, story) {
-        new NPCStoryView().draw(name, story);
+        this.#npcStoryView.draw(name, story);
     }
 
     initRankListView(rankList) {
-        new RankListView().draw(rankList);
+        this.#rankListView.draw(rankList);
     }
 
     initChatListView(chats) {
-
-        this.#chatListView = new ChatListView(this.#eventManager);
         this.#chatListView.draw(chats);
     };
 
-    initChatThreadView(chat, openNow) {
-        this.#chatThreadView = new ChatThreadView(this.#eventManager);
-    
+    initChatThreadView(chat, openNow) {    
         if (openNow) {
             this.#chatThreadView.draw(chat);
         }
@@ -458,25 +476,24 @@ class GameView {
     }
 
     addNewChat(chat, openNow) {
-        if ($('#chatListModal').is(':visible') && this.#chatListView) {
+        if ($('#chatListModal').is(':visible')) {
             this.#chatListView.addNewChat(chat);
         }
         this.initChatThreadView(chat, openNow);
     };
 
     updateChatThread(chatId, areFriends, friendRequestSent) {
-        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
+        if ($('#chatThreadModal').is(':visible')) {
             this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
         }
     }
 
     addNewChatMessage(chatId, message) {
-
-        if (this.#chatListView) {
+        if ($('#chatListModal').is(':visible')) {
             this.#chatListView.addNewMessage(chatId, message);
         }
 
-        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView) {
+        if ($('#chatThreadModal').is(':visible')) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
     };
@@ -490,11 +507,11 @@ class GameView {
     }
 
     updateSuccessesBar(points, rank) {
-        new SuccessesBar().update(points, rank);
+        this.#successesBar.update(points, rank);
     }
 
     removeFriend(participantId) {
-        if ($('#friendListModal').is(':visible') && this.#friendListView) {
+        if ($('#friendListModal').is(':visible')) {
             this.#friendListView.deleteFriend(participantId);
         }
 
@@ -506,7 +523,7 @@ class GameView {
     }
 
     addFriend(businessCard) {
-        if ($('#friendListModal').is(':visible') && this.#friendListView) {
+        if ($('#friendListModal').is(':visible')) {
             this.#friendListView.addToFriendList(businessCard);
         }
 
@@ -514,31 +531,30 @@ class GameView {
     }
 
     addToInviteFriends(businessCard, hasLeftChat) {
-        if($('#inviteFriendsModal').is(':visible') && this.#inviteFriendsView) {
+        if($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
         }
     }
 
     addToChatParticipantList(username) {
-        if($('#chatParticipantListModal').is(':visible') && this.#chatParticipantListView) {
+        if($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.addToChatParticipantList(username);
         }
     }
 
     removeFromChatParticipantList(username) {
-        if($('#chatParticipantListModal').is(':visible') && this.#chatParticipantListView) {
+        if($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.removeFromChatParticipantList(username);
         }
     }
 
     removeFromInviteFriends(participantId, isMemberOfChat) {
-        if($('#inviteFriendsModal').is(':visible') && this.#inviteFriendsView) {
+        if($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
         }
     }
 
     drawChatParticipantList(usernames) {
-        this.#chatParticipantListView = new ChatParticipantListView();
         this.#chatParticipantListView.draw(usernames);
     }
 
@@ -567,18 +583,17 @@ class GameView {
     }
 
     initFriendRequestListView(businessCards) {
-        this.#friendRequestListView = new FriendRequestListView(this.#eventManager)
         this.#friendRequestListView.draw(businessCards);
     }
 
     updateFriendRequestListView(participantId, isAccepted) {
-        if ($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+        if ($('#friendRequestListModal').is(':visible')) {
             this.#friendRequestListView.update(participantId, isAccepted);
         }
     }
 
     addFriendRequest(businessCard) {
-        if ($('#friendRequestListModal').is(':visible') && this.#friendRequestListView) {
+        if ($('#friendRequestListModal').is(':visible')) {
             this.#friendRequestListView.addToFriendRequestList(businessCard);
         }
     }
@@ -607,25 +622,25 @@ class GameView {
     }
 
     appendLectureChatMessage(message) {
-        if(this.#lectureView) {
+        if($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.appendMessage(message);
         }
     }
 
     updateLectureChat(lectureChat) {
-        if(this.#lectureView) {
+        if($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.drawChat(lectureChat);
         }
     };
 
     updateLectureToken(hasToken) {
-        if(this.#lectureView) {
+        if($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }
     };
 
     closeLectureView() {
-        if(this.#lectureView) {
+        if($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.close();
         }
     };
