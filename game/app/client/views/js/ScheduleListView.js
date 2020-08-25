@@ -43,12 +43,16 @@ class ScheduleListView extends WindowView {
             var stopToShow = startingTime + lecture.duration * 1000;
             if (startToShow <= now && now < startingTime) {
                 var status = LectureStatus.OPENED;
+                var countdown = Math.round((startingTime - now) / 1000) + " secs";
             } else if (stopToShow < now) {
                 var status = LectureStatus.OVER;
+                var countdown = ''
             } else if (now < startToShow) {
                 var status = LectureStatus.PENDING;
+                var countdown = ''
             } else if (now >= startingTime && now <= stopToShow) {
                 var status = LectureStatus.RUNNING;
+                var countdown = ''
             }
 
             var startingTime = new DateParser(lecture.startingTime).parse();
@@ -61,7 +65,7 @@ class ScheduleListView extends WindowView {
                     <td>${Math.floor(lecture.duration / 60)}</td>
                     <td>${lecture.maxParticipants}</td>
                     <td>${(lecture.remarks == '' ? '-' : '' + lecture.remarks)}</td>
-                    <td>${status}</td>
+                    <td>${status}<br><br><small style="opacity: 0.5">${countdown}</small></td>
                 </tr>
             `)
 
