@@ -8,7 +8,6 @@ module.exports = class FriendList {
     /**
      * Creates FriendList Instance. Will be only called by FriendListService, which gets the member list from the DB
      * 
-     * @author Philipp
      * 
      * @param {Array of BusinessCard} memberList 
      */

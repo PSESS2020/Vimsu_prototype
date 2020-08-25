@@ -13,7 +13,6 @@ module.exports = class NPC {
     /**
      * Only is called by the NPCService to create a NPC instance
      * 
-     * @author Philipp
      * @param {int} id 
      * @param {String} name 
      * @param {Position} position 

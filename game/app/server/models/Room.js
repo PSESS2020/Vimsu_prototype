@@ -23,10 +23,11 @@ module.exports = class Room {
 
     /**
      * 
-     * @author Philipp
      * 
      * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom 
+     * @param {int} width
+     * @param {int} length
      */
     constructor(roomId, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
@@ -148,7 +149,6 @@ module.exports = class Room {
     /**
      * Adds ppant into room
      * 
-     * @author Philipp
      * 
      * @param {Participant} participant 
      */
@@ -162,7 +162,6 @@ module.exports = class Room {
     /**
     * Deletes ppant from room
     * 
-    * @author Philipp
     * 
     * @param {Participant} participant 
     */
@@ -204,7 +203,6 @@ module.exports = class Room {
     /**
      * Checks, if there is a collision at this position
      * 
-     * @author Philipp
      * 
      * @param {Position} position 
      * @returns true, when collision
@@ -275,7 +273,6 @@ module.exports = class Room {
     /**
      * Gets Door to room with roomId if it exists
      * 
-     * @author Philipp
      * 
      * @param {int} targetId 
      */

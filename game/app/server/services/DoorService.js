@@ -9,10 +9,6 @@ module.exports = class DoorService {
 
     #doorIDs;
 
-    /**
-     * @author Philipp
-     * 
-     */
     constructor() {
         if (!!DoorService.instance) {
             return DoorService.instance;

@@ -23,7 +23,6 @@ module.exports = class Lecture {
 
 
     /**
-     * @author Philipp
      * 
      * @param {String} id 
      * @param {String} title 
@@ -138,7 +137,6 @@ module.exports = class Lecture {
     /**
      * Is called when a participant with this ID joins a lecture
      * 
-     * @author Philipp
      * 
      * @param {String} participantId  
      * @param {String} ppantUsername
@@ -176,7 +174,6 @@ module.exports = class Lecture {
     /**
      * Is called when a participant with this ID leaves a lecture
      * 
-     * @author Philipp
      * 
      * @param {String} participantId 
      */
@@ -246,7 +243,6 @@ module.exports = class Lecture {
     /**
      * Is called to check, if participant with this ID has an token for this lecture
      * 
-     * @author Philipp
      * 
      * @param {String} participantId 
      * @param {String} ppantUsername

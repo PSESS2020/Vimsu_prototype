@@ -3,7 +3,6 @@ module.exports = class LectureChat {
     #listOfMessages;
 
     /**
-     * @author Laura 
      * 
      */
     constructor() {

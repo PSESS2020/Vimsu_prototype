@@ -30,7 +30,6 @@ class RoomClient {
 
     /**
      * 
-     * @author Philipp
      * 
      * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom
@@ -142,7 +141,6 @@ class RoomClient {
     /**
      * Adds ppant into room
      * 
-     * @author Philipp
      * 
      * @param {ParticipantClient} participant 
      */
@@ -155,8 +153,6 @@ class RoomClient {
 
     /**
      * Deletes ppant from room
-     * 
-     * @author Philipp
      * 
      * @param {int} participantId 
      */
@@ -185,7 +181,6 @@ class RoomClient {
     /**
      * Checks, if there is a collision at this position
      * 
-     * @author Philipp
      * 
      * @param {PositionClient} position 
      * @returns true, when collision
@@ -213,7 +208,6 @@ class RoomClient {
     /**
      * Called when a user enters a new room
      * 
-     * @author Philipp
      * 
      * @param {int} roomId 
      * @param {TypeOfRoom} typeOfRoom

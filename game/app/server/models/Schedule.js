@@ -7,10 +7,9 @@ module.exports = class Schedule {
 
 
     /**
-    * @author Laura
-    * 
-    */
-
+     * 
+     * @param {Array of Lecture} lectureList 
+     */
     constructor(lectureList) {
         lectureList.forEach(lecture => {
             TypeChecker.isInstanceOf(lecture, Lecture);

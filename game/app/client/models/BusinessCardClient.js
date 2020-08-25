@@ -14,6 +14,17 @@ class BusinessCardClient {
     #company;
     #email;
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {String} username 
+     * @param {String} title 
+     * @param {String} surname 
+     * @param {String} forename 
+     * @param {String} job 
+     * @param {String} company 
+     * @param {String} email 
+     */
     constructor(participantId, username, title, surname, forename, job, company, email) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(username);

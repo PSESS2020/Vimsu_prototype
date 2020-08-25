@@ -14,9 +14,6 @@ class ParticipantClient {
     #isModerator;
 
     /**
-     * Erstellt ParticipantClient Instanz
-     * 
-     * @author Klaudia
      * 
      * @param {String} id
      * @param {String} username

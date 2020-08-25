@@ -13,7 +13,6 @@ class DoorClient {
     #targetRoomId;
 
     /**
-     * @author Philipp
      * 
      * @param {int} id 
      * @param {TypeOfDoor} typeOfDoor
