@@ -17,27 +17,16 @@ class LectureView extends WindowView {
         /*sets functions when document is ready, without this it is not possible to assign functions to
           appended buttons*/
         $(document).ready(() => {
-            function sendMessage(event) {
-                event.preventDefault();
-
-                let messageVal = $('#lectureChatInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                if (messageVal !== '') {
-                    this.#eventManager.handleLectureChatMessageInput(messageVal);
-                    $('#lectureChatInput').val('');
-                    $('#lectureChatInput').focus();
-                }
-            }
-
             $(document).on('click', '#lectureChatButton', () => {
-                sendMessage(event);
+                this.#sendMessage(event);
             });
 
-            $(document).on('keydown', function(e) {
+            $(document).on('keydown', (e) => {
                 if(document.activeElement === $("#lectureChatInput")[0]) {
                     e.stopPropagation();
 
                     if(e.keyCode === 13)
-                        sendMessage(event);
+                        this.#sendMessage(event);
                 }
             });
 
@@ -49,6 +38,17 @@ class LectureView extends WindowView {
 
         });
 
+    }
+
+    #sendMessage = function(event) {
+        event.preventDefault();
+
+        let messageVal = $('#lectureChatInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        if (messageVal !== '') {
+            this.#eventManager.handleLectureChatMessageInput(messageVal);
+            $('#lectureChatInput').val('');
+            $('#lectureChatInput').focus();
+        }
     }
 
     draw(lecture, hasToken, lectureChat) {
