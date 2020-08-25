@@ -148,6 +148,26 @@ class EventManager {
     handleClearInterval() {
         this.#clientController.handleFromViewClearInterval();
     }
+
+    handleArrowUp() {
+        this.#clientController.handleArrowUp();
+    }
+
+    handleUpArrowDown() {
+        this.#clientController.handleUpArrowDown();
+    }
+
+    handleDownArrowDown() {
+        this.#clientController.handleDownArrowDown();
+    }
+
+    handleLeftArrowDown() {
+        this.#clientController.handleLeftArrowDown();
+    }
+
+    handleRightArrowDown() {
+        this.#clientController.handleRightArrowDown();
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {
