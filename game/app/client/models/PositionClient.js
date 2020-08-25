@@ -1,3 +1,6 @@
+if (typeof module === 'object' && typeof exports === 'object') {
+    TypeChecker = require('../shared/TypeChecker.js');
+}
 
 class PositionClient {
 
@@ -10,9 +13,8 @@ class PositionClient {
      * @param {int} cordY 
      */
     constructor(cordX, cordY) {
-        if (typeof cordX !== 'number' || typeof cordY !== 'number') {
-            throw new TypeError(cordX + ' or ' + cordY + ' is not a number!');
-        }
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
 
         this.#cordX = cordX;
         this.#cordY = cordY;
