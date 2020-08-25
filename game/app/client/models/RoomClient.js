@@ -40,7 +40,7 @@ class RoomClient {
      * @param {DoorClient[]} listOfDoors
      * @param {number} length 
      * @param {number} width 
-     * @param {number} occupationMap
+     * @param {number[][]} occupationMap
      */
     constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
