@@ -20,7 +20,7 @@ module.exports = class Door {
      * @param {String} name
      * @param {TypeOfDoor} typeOfDoor
      * @param {Position} mapPosition
-     * @param {Array of Position} enterPositions
+     * @param {Position[]} enterPositions
      * @param {Position} targetPosition 
      * @param {Direction} direction
      */

@@ -18,7 +18,7 @@ module.exports = class AchievementDefinition {
      * @param {String} title 
      * @param {String} icon 
      * @param {String} description 
-     * @param {Array of Object (includes count, color, points)} levels 
+     * @param {{count: number, color: String, points: number}[]} levels 
      */
     constructor(id, taskType, title, icon, description, levels) {
         TypeChecker.isInt(id);

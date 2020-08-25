@@ -9,7 +9,7 @@ module.exports = class FriendList {
      * Creates FriendList Instance. Will be only called by FriendListService, which gets the member list from the DB
      * 
      * 
-     * @param {Array of BusinessCard} memberList 
+     * @param {BusinessCard[]} memberList 
      */
     constructor(memberList) {
         TypeChecker.isInstanceOf(memberList, Array);

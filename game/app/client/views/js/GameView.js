@@ -287,7 +287,7 @@ class GameView {
 
     /**
      * 
-     * @param {ParticipantClient} participant array of another participants / an participant instance excluding the current client
+     * @param {ParticipantClient} participant an participant instance excluding the current client
      */
     initAnotherAvatarViews(participant) {
         if (!(this.#ownAvatarView instanceof ParticipantAvatarView)) {
@@ -355,7 +355,7 @@ class GameView {
 
     /**
      * 
-     * @param {ParticipantClient} participants array of another participants / an participant instance excluding the current client
+     * @param {ParticipantClient} participants
      */
     removeAnotherAvatarViews(participantId) {
         TypeChecker.isString(participantId);

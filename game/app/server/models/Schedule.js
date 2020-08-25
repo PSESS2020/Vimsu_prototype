@@ -8,7 +8,7 @@ module.exports = class Schedule {
 
     /**
      * 
-     * @param {Array of Lecture} lectureList 
+     * @param {Lecture[]} lectureList 
      */
     constructor(lectureList) {
         lectureList.forEach(lecture => {

@@ -34,13 +34,13 @@ class RoomClient {
      * @param {number} roomId 
      * @param {TypeOfRoom} typeOfRoom
      * @param {Object} assetPaths
-     * @param {Array of GameObjectClient} listOfMapElements
-     * @param {Array of GameObjectClient} listOfGameObjects
-     * @param {Array of NPCClient} listOfNPCs
-     * @param {Array of DoorClient} listOfDoors
+     * @param {GameObjectClient[]} listOfMapElements
+     * @param {GameObjectClient[]} listOfGameObjects
+     * @param {NPCClient[]} listOfNPCs
+     * @param {DoorClient[]} listOfDoors
      * @param {number} length 
      * @param {number} width 
-     * @param {Array of Array of int} occupationMap
+     * @param {number} occupationMap
      */
     constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
@@ -212,13 +212,13 @@ class RoomClient {
      * @param {number} roomId 
      * @param {TypeOfRoom} typeOfRoom
      * @param {Object} assetPaths
-     * @param {Array of GameObjectClient} listOfMapElements
-     * @param {Array of GameObjectClient} listOfGameObjects
-     * @param {Array of NPCClient} listOfNPCs
-     * @param {Array of DoorClient} listOfDoors
+     * @param {GameObjectClient[]} listOfMapElements
+     * @param {GameObjectClient[]} listOfGameObjects
+     * @param {NPCClient[]} listOfNPCs
+     * @param {DoorClient[]} listOfDoors
      * @param {number} length 
      * @param {number} width  
-     * @param {Array of Array of int} occupationMap
+     * @param {number[][]} occupationMap
      */
     swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);

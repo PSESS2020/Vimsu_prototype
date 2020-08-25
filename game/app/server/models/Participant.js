@@ -35,11 +35,11 @@ module.exports = class Participant {
      * @param {FriendList} friendList 
      * @param {FriendList} receivedRequestList 
      * @param {FriendList} sentRequestList 
-     * @param {Array of Achievement} achievements 
-     * @param {Array of Tasks} tasks
+     * @param {Achievement[]} achievements 
+     * @param {Tasks[]} taskMapping
      * @param {boolean} isMod 
      * @param {number} awardPoints
-     * @param {Array of Chat} chatList 
+     * @param {Chat[]} chatList 
      */
     constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList) {
         //Typechecking
@@ -65,8 +65,6 @@ module.exports = class Participant {
             TypeChecker.isInstanceOf(chat, Chat);
         });
 
-
-
         this.#id = id;
         this.#accountId = accountId;
         this.#businessCard = businessCard;
@@ -76,9 +74,7 @@ module.exports = class Participant {
         this.#receivedRequestList = receivedRequestList; 
         this.#sentRequestList = sentRequestList;
         this.#taskTypeMapping = taskMapping;
-
         this.#achievements = achievements;
-
         this.#isMod = isMod; 
         this.#awardPoints = awardPoints; 
         this.#chatList = chatList; 
