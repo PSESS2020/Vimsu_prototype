@@ -13,10 +13,14 @@ class EventManager {
      * 
      */
     constructor() {
+        if (!!EventManager.instance) {
+            return EventManager.instance;
+        }
+
+        EventManager.instance = this;
 
         //works because ClientController is singleton
         this.#clientController = new ClientController();
-
     }
 
     /**
