@@ -40,9 +40,9 @@ describe('Participant test', function() {
         businessCard = new BusinessCard(id, 'username', 'title', 'surname', 'forename', 'job', 'company', 'email');
         position = TestUtil.randomPosition();
         direction = TestUtil.randomObjectValue(Direction);
-        friendList = new FriendList(id, []);
-        receivedRequestList = new FriendList(id, []);
-        sentRequestList = new FriendList(id, []);
+        friendList = new FriendList([]);
+        receivedRequestList = new FriendList([]);
+        sentRequestList = new FriendList([]);
         achievements = [];
         new TaskService().getAllTasks().forEach(x => {
             taskMapping[x.getTaskType()] = 0;

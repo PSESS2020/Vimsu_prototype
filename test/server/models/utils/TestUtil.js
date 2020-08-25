@@ -108,7 +108,7 @@ class TestUtil {
     };
     
     static randomFriendList() {
-        return (new FriendList(this.randomString(), this.randomBusinessCardList()));
+        return (new FriendList(this.randomBusinessCardList()));
     };
     
     static randomPositionList() {

@@ -844,7 +844,7 @@ module.exports = class ServerController {
 
                 //Check if ppant with targetID is a friend
                 //if so, emit the email. if not, emit the rank
-                if (ppant.getFriendList().includes(targetID)) {
+                if (ppant.hasFriend(targetID)) {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                 } else {

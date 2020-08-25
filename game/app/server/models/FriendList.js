@@ -3,7 +3,6 @@ const BusinessCard = require("./BusinessCard.js");
 
 module.exports = class FriendList {
 
-    #ownerId;
     #memberList;
 
     /**
@@ -11,17 +10,14 @@ module.exports = class FriendList {
      * 
      * @author Philipp
      * 
-     * @param {String} ownerId 
      * @param {Array of BusinessCard} memberList 
      */
-    constructor(ownerId, memberList) {
-        TypeChecker.isString(ownerId);
+    constructor(memberList) {
         TypeChecker.isInstanceOf(memberList, Array);
         memberList.forEach(element => {
             TypeChecker.isInstanceOf(element, BusinessCard);
         });
 
-        this.#ownerId = ownerId;
         this.#memberList = memberList;
     }
 
