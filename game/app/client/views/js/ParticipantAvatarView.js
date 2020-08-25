@@ -222,31 +222,19 @@ class ParticipantAvatarView extends AvatarView {
             }
 
             switch (event.code) {
-                case "KeyW":
-                    this.#eventManager.handleUpArrowDown();
-                    break;
-                case "ArrowUp":
+                case "KeyW": case "ArrowUp":
                     event.preventDefault();
                     this.#eventManager.handleUpArrowDown();
                     break;
-                case "KeyS":
-                    this.#eventManager.handleDownArrowDown();
-                    break;
-                case "ArrowDown":
+                case "KeyS": case "ArrowDown":
                     event.preventDefault();
                     this.#eventManager.handleDownArrowDown();
                     break;
-                case "KeyD":
-                    this.#eventManager.handleRightArrowDown();
-                    break;
-                case "ArrowRight":
+                case "KeyD": case "ArrowRight":
                     event.preventDefault();
                     this.#eventManager.handleRightArrowDown();
                     break;
-                case "KeyA":
-                    this.#eventManager.handleLeftArrowDown();
-                    break;
-                case "ArrowLeft":
+                case "KeyA": case "ArrowLeft":
                     event.preventDefault();
                     this.#eventManager.handleLeftArrowDown();
                     break;
