@@ -16,7 +16,6 @@ class GameObjectClient {
 
     /**
      * 
-     * @author Philipp
      * 
      * @param {int} id 
      * @param {GameObjectType} gameObjectType

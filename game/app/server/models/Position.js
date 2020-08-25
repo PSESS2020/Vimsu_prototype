@@ -9,7 +9,6 @@ module.exports = class Position {
     /**
      * Erstellt Positionsinstanz
      * 
-     * @author Philipp
      * 
      * @param {int} roomId 
      * @param {int} cordX 

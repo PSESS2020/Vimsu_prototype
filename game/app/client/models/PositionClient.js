@@ -5,9 +5,6 @@ class PositionClient {
     #cordY;
 
     /**
-     * Erstellt clientseitige Positionsinstanz
-     * 
-     * @author Philipp
      * 
      * @param {int} cordX 
      * @param {int} cordY 

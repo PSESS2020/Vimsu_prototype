@@ -13,7 +13,6 @@ class NPCClient {
 
     /**
      * 
-     * @author Philipp
      * @param {int} id 
      * @param {String} name 
      * @param {Position} position 
