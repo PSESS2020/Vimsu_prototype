@@ -3,7 +3,6 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 
 module.exports = class db {
     #vimsudb;
-    #client;
 
     constructor() {
         if (!!db.instance) {
@@ -25,7 +24,6 @@ module.exports = class db {
             poolSize: 1
         })
             .then(client => {
-                this.#client = client;
                 this.#vimsudb = client.db('vimsudb');
                 console.log('Connected to Database')
             })
