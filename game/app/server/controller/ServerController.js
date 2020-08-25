@@ -2030,7 +2030,7 @@ module.exports = class ServerController {
     // require to handle the entire logic of applying achievements and points as well as sending updates to the client
     #applyTaskAndAchievement = async(participantId, taskType) => {
         var participant = this.#ppants.get(participantId);
-        var task = new TaskService().getTaskByType(taskType)
+        var task = new TaskService().getTaskByType(taskType);
 
         if (participant) {
             participant.addTask(task);
@@ -2054,59 +2054,52 @@ module.exports = class ServerController {
                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
-            ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db).then(res => {
-                RankListService.getRank(participantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                    this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), rank);
-                })
+            ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
 
-                Promise.all([...this.#ppants.keys()].map(async ppantId => {
-                    RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                        this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
-                    });
-                }))
-            });
+            this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), undefined);
+
+            Promise.all([...this.#ppants.keys()].map(async ppantId => {
+                var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
+                this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+            }))
         } else {
-            ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db).then(points => {
-                var awardPoints = task.getAwardPoints();
-                var currentPoints = points + awardPoints;
-                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
+            var awardPoints = task.getAwardPoints();
+            var points = await ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db);
+            var currentPoints = points + awardPoints;
+            ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
 
-                ParticipantService.getTaskCount(participantId, Settings.CONFERENCE_ID, taskType, this.#db).then(count => {
-                    var newTaskCount = count + 1;
-                    ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, newTaskCount, this.#db)
+            var count = await ParticipantService.getTaskCount(participantId, Settings.CONFERENCE_ID, taskType, this.#db);
+            var newTaskCount = count + 1;
+            ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, newTaskCount, this.#db);
 
-                    var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
-                    var levels = achievementDefinition.getLevels();
+            var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
+            var levels = achievementDefinition.getLevels();
 
-                    var counter = 0;
-                    Promise.all(levels.map(async level => {
-                        var levelsCount = level.count;
-                        var awardPoints = level.points;
+            var counter = 0;
+            Promise.all(levels.map(async level => {
+                var levelsCount = level.count;
+                var awardPoints = level.points;
 
-                        if (levelsCount <= newTaskCount) {
-                            var achievements = await ParticipantService.getAchievements(participantId, Settings.CONFERENCE_ID, this.#db);
-                            var currentLevel;
-                            achievements.forEach(achievement => {
-                                if (achievement.id == achievementDefinition.getId()) {
-                                    currentLevel = achievement.currentLevel;
-                                }
-                            })
-                            counter++;
-                            if (currentLevel < counter) {
-                                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), counter, this.#db);
-                                currentPoints += awardPoints;
-                                ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db).then(res => {
-                                    Promise.all([...this.#ppants.keys()].map(async ppantId => {
-                                        RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                                            this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
-                                        });
-                                    }))
-                                })
-                            }
-                        }
-                    }))
-                })
-            })
+                if (levelsCount <= newTaskCount) {
+                    var achievements = await ParticipantService.getAchievements(participantId, Settings.CONFERENCE_ID, this.#db);
+                    var currentLevel;
+                    achievements.forEach(achievement => {
+                        if (achievement.id == achievementDefinition.getId())
+                            currentLevel = achievement.currentLevel;
+                    })
+                    counter++;
+                    if (currentLevel < counter) {
+                        ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achievementDefinition.getId(), counter, this.#db);
+                        currentPoints += awardPoints;
+                        await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
+
+                        Promise.all([...this.#ppants.keys()].map(async ppantId => {
+                            var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
+                            this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                        }))
+                    }
+                }
+            }))
         }
     }
 }
