@@ -1,6 +1,5 @@
 const Commands = require('../utils/Commands.js');
 const Messages = require('../utils/Messages.js');
-const ServerController = require('../controller/ServerController.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext');
 
@@ -11,8 +10,9 @@ module.exports = class CommandHandler {
     #commandList
 
     /**
+     * @constructor Creates a command handler instance
      * 
-     * @param {ServerController} serverController 
+     * @param {ServerController} serverController server controller instance
      */
     constructor(serverController) {
 
@@ -22,9 +22,8 @@ module.exports = class CommandHandler {
 
         CommandHandler.instance = this;
 
-        //TypeChecker.isInstanceOf(serverController, ServerController); Does not work for some reason
-
         this.#serverController = serverController;
+
         // maybe slightly switch commands to have two fields, 
         // one for the string needing to be entered
         // and one for the 'kind' of command it is?
@@ -36,10 +35,10 @@ module.exports = class CommandHandler {
      * handles a command, where context is the room or lecture in which it was send 
      * and socket the socket from which it was send
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
-     * @param {String} username 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     * @param {String} username participant username
      */
     handleCommand(socket, context, commandArgs, username) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -68,7 +67,6 @@ module.exports = class CommandHandler {
         } else {
             this['unknownCommand'](socket);
         }
-
     };
 
     // set all of these to private?
@@ -78,10 +76,10 @@ module.exports = class CommandHandler {
      * Sends a global message to all connected participants.
      * Ignores context in which it was send.
      * 
-     * @param {?SocketIO} socket 
-     * @param {?CommandContext} context 
-     * @param {String[]} commandArgs 
-     * @param {String} username 
+     * @param {?SocketIO} socket socket instance
+     * @param {?CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     * @param {String} username participant username
      */
     globalMsg(socket, context, commandArgs, username) {
         // maybe make sure context is allchat?
@@ -101,10 +99,12 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Sends a global note from VIMSU to all connected participants.
+     * Ignores context in which it was send.
      * 
-     * @param {?SocketIO} socket 
-     * @param {?CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {?SocketIO} socket socket instance
+     * @param {?CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     globalNote(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(commandArgs, Array);
@@ -117,10 +117,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Prints help message to the user
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     printHelp(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(commandArgs, Array);
@@ -133,10 +134,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Prints list of log messages to the user
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     logMessages(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -158,11 +160,12 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Removes user from the context
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
-     * @param {?String} username 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     * @param {?String} username participant username
      */
     removeUser(socket, context, commandArgs, username) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -176,12 +179,12 @@ module.exports = class CommandHandler {
         });
     };
 
-    // this may not work this way
     /**
+     * Removes message from the context
      * 
-     * @param {?SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     removeMessage(socket, context, commandArgs) {
         // refactor?
@@ -208,7 +211,7 @@ module.exports = class CommandHandler {
                 toWarn.push(msg[i].senderID);
                 msg.splice(i, 1);
                 i--; // This is important, as without it, we could not remove
-                // two subsequent messages
+                     // two subsequent messages
             }
         }
         toWarn.forEach((senderID) => {
@@ -219,10 +222,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Removes all messages of a participant
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     removeAllBy(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -236,10 +240,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Show all messages of a participant
      * 
-     * @param {SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     showAllBy(socket, context, commandArgs) {
         // refactor?
@@ -262,10 +267,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Mutes participant from this context
      * 
-     * @param {?SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     muteUser(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -280,10 +286,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Unmutes participant from this context
      * 
-     * @param {?SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     unmuteUser(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -298,10 +305,11 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Closes context
      * 
-     * @param {?SocketIO} socket 
-     * @param {CommandContext} context 
-     * @param {String[]} commandArgs 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
      */
     close(socket, context, commandArgs) {
         TypeChecker.isInstanceOf(context, CommandContext);
@@ -313,16 +321,20 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Sends notification on unknown command
      * 
-     * @param {SocketIO} socket 
+     * @param {SocketIO} socket socket instance
      */
     unknownCommand(socket) {
         this.#serverController.sendNotification(socket.id, Messages.UNKNOWNCOMMAND);
     }
 
     /**
+     * Checks if command is known
      * 
-     * @param {Commands.string} commandType 
+     * @param {Commands.string} commandType command type
+     * 
+     * @return true if known, otherwise false
      */
     #knowsCommand = function (commandType) {
 
@@ -335,8 +347,11 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Gets method name based on command type
      * 
-     * @param {Commands.string} commandType 
+     * @param {Commands.string} commandType command type
+     * 
+     * @return method name
      */
     #getMethodString = function (commandType) {
         
