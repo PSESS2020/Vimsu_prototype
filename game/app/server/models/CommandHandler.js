@@ -41,7 +41,6 @@ module.exports = class CommandHandler {
      * @param {String} username 
      */
     handleCommand(socket, context, commandArgs, username) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
         TypeChecker.isString(commandArgs);
         TypeChecker.isString(username);
@@ -110,7 +109,6 @@ module.exports = class CommandHandler {
      * @param {?String} commandArgs 
      */
     printHelp(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
 
         this.#serverController.sendNotification(socket.id, context.getHelpMessage());
@@ -123,7 +121,6 @@ module.exports = class CommandHandler {
      * @param {?String} commandArgs 
      */
     logMessages(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
 
         // refactor?
@@ -146,7 +143,6 @@ module.exports = class CommandHandler {
      * @param {?String} username 
      */
     removeUser(socket, context, commandArgs, username) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
         TypeChecker.isString(commandArgs);
 
@@ -201,7 +197,6 @@ module.exports = class CommandHandler {
      * @param {String} commandArgs 
      */
     removeAllBy(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
         TypeChecker.isString(commandArgs);
 
@@ -217,7 +212,6 @@ module.exports = class CommandHandler {
      */
     showAllBy(socket, context, commandArgs) {
         // refactor?
-        TypeChecker.isInstanceOf(socket, SocketIO);
         TypeChecker.isInstanceOf(context, CommandContext);
         TypeChecker.isString(commandArgs);
 
@@ -279,7 +273,6 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket 
      */
     unknownCommand(socket) {
-        TypeChecker.isInstanceOf(socket, SocketIO);
         this.#serverController.sendNotification(socket.id, Messages.UNKNOWNCOMMAND);
     }
 

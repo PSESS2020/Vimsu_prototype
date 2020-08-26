@@ -4,7 +4,10 @@ const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
-const Settings = require('../../game/app/server/utils/Settings')
+const Settings = require('../../game/app/server/utils/Settings');
+const TypeChecker = require('../../game/app/client/shared/TypeChecker');
+const dbClient = require('../../config/db');
+const blobClient = require('../../config/blob');
 
 module.exports = class RouteController {
 
@@ -13,12 +16,22 @@ module.exports = class RouteController {
     #db;
     #blob;
 
+    /**
+     * 
+     * @param {Express} app 
+     * @param {SocketIO} io 
+     * @param {dbClient} db 
+     * @param {blobClient} blob 
+     */
     constructor(app, io, db, blob) {
         if (!!RouteController.instance) {
             return RouteController.instance;
         }
 
         RouteController.instance = this;
+
+        TypeChecker.isInstanceOf(db, dbClient);
+        TypeChecker.isInstanceOf(blob, blobClient);
 
         this.#app = app;
         this.#io = io;
