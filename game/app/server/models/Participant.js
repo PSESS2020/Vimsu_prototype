@@ -36,7 +36,7 @@ module.exports = class Participant {
      * @param {FriendList} receivedRequestList 
      * @param {FriendList} sentRequestList 
      * @param {Achievement[]} achievements 
-     * @param {Tasks[]} taskMapping
+     * @param {Task[]} taskMapping
      * @param {boolean} isMod 
      * @param {number} awardPoints
      * @param {Chat[]} chatList 
