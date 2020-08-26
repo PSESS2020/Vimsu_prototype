@@ -1,10 +1,11 @@
 class SpriteSheet {
 
     /**
+     * @constructor Creates an instance of SpriteSheet
      * 
-     * @param {String} path 
-     * @param {number} frameWidth 
-     * @param {number} frameHeight 
+     * @param {String} path Sprite sheet path
+     * @param {number} frameWidth frame width
+     * @param {number} frameHeight frame height
      */
     constructor(path, frameWidth, frameHeight) {
         TypeChecker.isString(path);

@@ -4,9 +4,10 @@ class CacheImages {
     static enabled = true;
 
     /**
+     * @static adds an image to the images
      * 
-     * @param {String} key 
-     * @param {Image} image 
+     * @param {String} key image key
+     * @param {Image} image image
      */
     static addImage(key, image) {
         TypeChecker.isString(key);
@@ -17,8 +18,9 @@ class CacheImages {
     }
 
     /**
+     * @static gets an image with its key
      * 
-     * @param {String} key 
+     * @param {String} key image key
      */
     static getImage(key) {
         TypeChecker.isString(key);
@@ -27,18 +29,4 @@ class CacheImages {
         return this.images[key];
 
     }
-
-    /**
-     * 
-     * @param {String} key 
-     */
-    static remove(key) {
-        TypeChecker.isString(key);
-        delete this.images[key];
-    }
-
-    static clear() {
-        this.images = {};
-    }
-
 }

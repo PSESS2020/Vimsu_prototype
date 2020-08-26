@@ -1,11 +1,15 @@
 class ImageLoader {
 
-    constructor() { }
-
     /**
+     * @constructor Creates an ImageLoader instance
+     */
+    constructor() {}
+    
+    /**
+     * loads an image
      * 
-     * @param {String} key 
-     * @param {String} path 
+     * @param {String} key image key
+     * @param {String} path image path
      */
     async loadImage(key, path) {
         TypeChecker.isString(key);

@@ -8,6 +8,9 @@ class IsometricEngine {
 
     #loader;
 
+    /**
+     * Creates an instance of IsometricEngine
+     */
     constructor() {
         if (!!IsometricEngine.instance) {
             return IsometricEngine.instance;
@@ -24,9 +27,9 @@ class IsometricEngine {
     /**
      * Initializes the engines properties
      * 
-     * @param {String[]} assetPaths 
-     * @param {number} xNumTiles 
-     * @param {number} yNumTiles 
+     * @param {String[]} assetPaths asset paths
+     * @param {number} xNumTiles number of x tiles
+     * @param {number} yNumTiles number of y tiles
      */
     async initGameEngine(assetPaths, xNumTiles, yNumTiles) {
         TypeChecker.isInt(xNumTiles);
@@ -43,9 +46,10 @@ class IsometricEngine {
     }
 
     /**
+     * Sets number of x and y tiles
      * 
-     * @param {number} xNumTiles 
-     * @param {number} yNumTiles 
+     * @param {number} xNumTiles number of x tiles
+     * @param {number} yNumTiles number of y tiles
      */
     setNumMapTilesXY(xNumTiles, yNumTiles) {
         TypeChecker.isInt(xNumTiles);
@@ -56,9 +60,10 @@ class IsometricEngine {
     }
 
     /**
+     * Sets map x and y origin
      * 
-     * @param {number} mapOriginX 
-     * @param {number} mapOriginY 
+     * @param {number} mapOriginX map x origin
+     * @param {number} mapOriginY map y origin
      */
     setMapOriginXY(mapOriginX, mapOriginY) {
         TypeChecker.isInt(mapOriginX);
@@ -68,14 +73,29 @@ class IsometricEngine {
         this.#mapOriginY = mapOriginY;
     }
 
+    /**
+     * Gets tile column width
+     * 
+     * @return tileColumnWidth
+     */
     getTileColumnWidth() {
         return this.#tileColumnWidth;
     }
 
+    /**
+     * Gets tile row height
+     * 
+     * @return tileRowHeight
+     */
     getTileRowHeight() {
         return this.#tileRowHeight;
     }
 
+    /**
+     * Gets number of x and y tiles
+     * 
+     * @return Object of xNumTiles and yNumTiles
+     */
     getNumMapTilesXY() {
         return {
             x: this.#xNumTiles,
@@ -83,6 +103,11 @@ class IsometricEngine {
         }
     }
 
+    /**
+     * Gets map x and y origin
+     * 
+     * @return Object of mapOriginX and mapOriginY
+     */
     getMapOriginXY() {
         return {
             x: this.#mapOriginX,
@@ -93,7 +118,7 @@ class IsometricEngine {
     /**
      * loads the images that are needed for object view creation.
      * 
-     * @param {String[]} assetPaths 
+     * @param {String[]} assetPaths asset paths
      */
     async loadImages(assetPaths) {
         for (const [value] of Object.entries(assetPaths)) {
@@ -127,9 +152,10 @@ class IsometricEngine {
     }
 
     /**
+     * Calculates the screen position
      * 
-     * @param {number} xPos 
-     * @param {number} yPos 
+     * @param {number} xPos x position
+     * @param {number} yPos y position
      */
     calculateScreenPosXY(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -144,9 +170,10 @@ class IsometricEngine {
     }
 
     /**
+     * Calculates the x screen position
      * 
-     * @param {number} xPos 
-     * @param {number} yPos 
+     * @param {number} xPos x position
+     * @param {number} yPos y position
      */
     calculateScreenPosX(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -157,9 +184,10 @@ class IsometricEngine {
     }
 
     /**
+     * Calculates the y screen position
      * 
-     * @param {number} xPos 
-     * @param {number} yPos 
+     * @param {number} xPos x position
+     * @param {number} yPos y position
      */
     calculateScreenPosY(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -170,9 +198,12 @@ class IsometricEngine {
     }
 
     /**
+     * Translates mouse to the canvas position
      * 
-     * @param {Canvas} canvas 
-     * @param {Event} e 
+     * @param {Canvas} canvas canvas
+     * @param {Event} e event
+     * 
+     * @return Object of x and y cursor position
      */
     translateMouseToCanvasPos(canvas, e) {
 
@@ -190,8 +221,11 @@ class IsometricEngine {
     }
 
     /**
+     * Translates mouse to the tile position
      * 
-     * @param {{x: number, y: number}} newPosition 
+     * @param {{x: number, y: number}} newPosition new position
+     * 
+     * @return Object of selectedTileX and selectedTileY
      */
     translateMouseToTileCord(newPosition) {
         TypeChecker.isNumber(newPosition.x);

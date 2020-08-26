@@ -1,14 +1,15 @@
 class SpriteAnimation {
 
     /**
+     * @constructor Creates an instance of Sprite Animation
      * 
-     * @param {SpriteSheet} spritesheetBody 
-     * @param {SpriteSheet} spritesheetTopCloth 
-     * @param {SpriteSheet} spriteSheetBottomClothing 
-     * @param {SpriteSheet} spriteSheetShoes 
-     * @param {number} frameRate 
-     * @param {number} firstFrame 
-     * @param {number} lastFrame 
+     * @param {SpriteSheet} spritesheetBody sprite sheet avatar body
+     * @param {SpriteSheet} spritesheetTopCloth sprite sheet avatar top cloth
+     * @param {SpriteSheet} spriteSheetBottomClothing sprite sheet avatar bottom clothing
+     * @param {SpriteSheet} spriteSheetShoes sprite sheet avatar shoes
+     * @param {number} frameRate frame rate
+     * @param {number} firstFrame first frame
+     * @param {number} lastFrame last frame
      */
     constructor(spritesheetBody, spritesheetTopCloth, spriteSheetBottomClothing, spriteSheetShoes, frameRate, firstFrame, lastFrame) {
         TypeChecker.isInstanceOf(spritesheetBody, SpriteSheet);
@@ -36,6 +37,9 @@ class SpriteAnimation {
         }
     }
 
+    /**
+     * Update sprite animation
+     */
     update() {
         if (this.counter == (this.frameRate - 1)) {
             this.currentFrame = (this.currentFrame + 1) % this.animationSequence.length;
@@ -44,9 +48,10 @@ class SpriteAnimation {
     }
 
     /**
+     * Draw sprite animation
      * 
-     * @param {number} x 
-     * @param {number} y 
+     * @param {number} x x position
+     * @param {number} y y position
      */
     draw(x, y) {
         TypeChecker.isInt(x);
