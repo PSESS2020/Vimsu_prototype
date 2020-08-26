@@ -13,20 +13,18 @@ class ClientController {
      * 
      * @param {number} port
      */
-
-
-    constructor(port) { //TODO: instanciate ParticipantClient
+    constructor(port) {
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
 
         ClientController.instance = this;
 
+        TypeChecker.isInt(port);
         this.#port = port;
         this.#openSocketConnection();
         this.#gameView = new GameView();
 
-        //TODO: add Participant List from Server
         return this;
     }
 
@@ -74,9 +72,6 @@ class ClientController {
         this.#gameView.drawProfile(this.#ownParticipant.getUsername())
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         this.#gameView.initCanvasEvents();
-
-        //this.#gameView.initOwnAvatarView(this.#ownParticipant);
-        //TODO this.#gameView.initAnotherAvatarViews(participants);
 
         //Game View is now fully initialised
         this.#gameView.setGameViewInit(true);
@@ -205,7 +200,12 @@ class ClientController {
     /* #################### EDIT VIEW ##################### */
     /* #################################################### */
 
+    /**
+     * 
+     * @param {number} timeStamp 
+     */
     updateGame(timeStamp) {
+        TypeChecker.isNumber(timeStamp);
 
         this.#gameView.update()
         this.#gameView.draw();
@@ -216,8 +216,11 @@ class ClientController {
     /* ################## SEND TO SERVER ################## */
     /* #################################################### */
 
+    /**
+     * 
+     * @param {Direction} direction 
+     */
     sendToServerRequestMovStart(direction) {
-
         if (this.#socketReady()) {
             TypeChecker.isEnumOf(direction, Direction);
             let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
@@ -228,35 +231,48 @@ class ClientController {
     }
 
     sendToServerRequestMovStop() {
-
         if (this.#socketReady()) {
             this.#socket.emit('requestMovementStop');
         }
-
     }
 
+    /**
+     * 
+     * @param {String} text 
+     */
     sendToServerAllchatMessage(text) {
-
-        if (this.#socketReady() && this.#socket.connected)
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(text);
             this.#socket.emit('sendMessage', text);
+        }
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-
     }
 
+    /**
+     * 
+     * @param {String} input 
+     */
     sendToServerEvalInput(input) {
-
-        if (this.#socketReady() && this.#socket.connected)
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(input)
             this.#socket.emit('evalServer', input);
+        }
         else
             $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
 
     }
 
+    /**
+     * 
+     * @param {String} text 
+     */
     sendToServerLectureChatMessage(text) {
 
-        if (this.#socketReady() && this.#socket.connected)
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(input)
             this.#socket.emit('lectureMessage', text);
+        }
         else
             $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
 
@@ -349,6 +365,13 @@ class ClientController {
     }
 
     //Server does collision testing, so this method is only called when movement from other user is legit (P)
+    /**
+     * 
+     * @param {String} ppantID 
+     * @param {Direction} direction 
+     * @param {number} newCordX 
+     * @param {number} newCordY 
+     */
     #handleFromServerStartMovementOther = function(ppantID, direction, newCordX, newCordY) {
 
         TypeChecker.isString(ppantID);
@@ -364,10 +387,12 @@ class ClientController {
 
     }
 
+    /**
+     * 
+     * @param {String} ppantID 
+     */
     #handleFromServerStopMovementOther = function(ppantID) {
-        // TODO:
-        // Typechecking
-        // comparing position with the one saved in the server
+        TypeChecker.isString(ppantID);
 
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
@@ -376,7 +401,12 @@ class ClientController {
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     #handleFromServerLectureFull = function(lectureId) {
+        TypeChecker.isString(lectureId);
         this.#gameView.updateCurrentLectures(lectureId);
     }
 
@@ -395,28 +425,16 @@ class ClientController {
         this.#gameView.initAnotherAvatarViews(participant);
     }
 
-    /*
-    // Wird das noch gebraucht, wenn die collisionDetection nur client-seitig existiert? (E)
-    handleFromServerCollisionDetectionAnswer(isOccupied) {
-        if (isOccupied) {
-            //TODO: Bewegung wird nicht zugelassen
-        } else {
-            //TODO: Avatar wird bewegt
-        }
-    }
-    */
-
-    // Removes disconnected Player from Model and View (P)
+    /**
+     * Removes disconnected Player from Model and View
+     * 
+     * @param {String} ppantId 
+     */
     #handleFromServerRemovePlayer = function(ppantId) {
-        //TypeChecker.isString(ppantId);
-
+        TypeChecker.isString(ppantId);
         this.#currentRoom.exitParticipant(ppantId);
-
-
         this.#gameView.removeAnotherAvatarViews(ppantId);
-
     }
-
 
     // get the current lectures from the server to display in the UI for selection
     #handleFromServerCurrentLectures = function(lectures) {
@@ -482,11 +500,23 @@ class ClientController {
         this.#gameView.drawNewFriend(data.username);
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     #handleFromServerRejectedFriendRequest = function(chatId) {
+        TypeChecker.isString(chatId);
         this.#gameView.updateChatThread(chatId, false, false);
     }
 
+    /**
+     * 
+     * @param {String} friendId 
+     * @param {String} chatId 
+     */
     #handleFromServerRemovedFriend = function(friendId, chatId) {
+        TypeChecker.isString(friendId);
+        TypeChecker.isString(chatId);
         this.#gameView.removeFriend(friendId);
         this.#gameView.updateChatThread(chatId, false, false);
     }
@@ -500,15 +530,33 @@ class ClientController {
         this.#gameView.initRankListView(rankList);
     }
 
+    /**
+     * 
+     * @param {String[]} usernames 
+     */
     #handleFromServerChatParticipantList = function(usernames) {
+        TypeChecker.isInstanceOf(usernames, Array);
+        usernames.forEach(username => {
+            TypeChecker.isString(username);
+        })
         this.#gameView.drawChatParticipantList(usernames);
     }
 
+    /**
+     * 
+     * @param {String} username 
+     */
     #handleFromServerAddToChatParticipantList = function(username) {
+        TypeChecker.isString(username);
         this.#gameView.addToChatParticipantList(username);
     }
 
+    /**
+     * 
+     * @param {String} username 
+     */
     #handleFromServerRemoveFromChatParticipantList = function(username) {
+        TypeChecker.isString(username);
         this.#gameView.removeFromChatParticipantList(username);
     }
 
@@ -516,7 +564,14 @@ class ClientController {
         this.#gameView.addToInviteFriends(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email), hasLeftChat);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {boolean} isMemberOfChat 
+     */
     #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isBoolean(isMemberOfChat);
         this.#gameView.removeFromInviteFriends(participantId, isMemberOfChat);
     }
 
@@ -533,7 +588,12 @@ class ClientController {
         this.#gameView.updateLectureChat(messages);
     };
 
+    /**
+     * 
+     * @param {boolean} hasToken 
+     */
     #handleFromServerUpdateToken = function(hasToken) {
+        TypeChecker.isBoolean(hasToken);
         this.#gameView.updateLectureToken(hasToken);
     };
 
@@ -541,6 +601,11 @@ class ClientController {
         this.#gameView.closeLectureView();
     };
 
+    /**
+     * 
+     * @param {?number} points 
+     * @param {?number} rank 
+     */
     #handleFromServerUpdateSuccessesBar = function(points, rank) {
         if (points) {
             TypeChecker.isInt(points);
@@ -560,21 +625,45 @@ class ClientController {
         this.#gameView.initAllchatView(this.#currentRoom.getTypeOfRoom(), messages);
     }
 
+    /**
+     * 
+     * @param {String} messageHeader 
+     * @param {String} messageText 
+     */
     #handleFromServerNewNotification = function(messageHeader, messageText) {
+        TypeChecker.isString(messageHeader);
+        TypeChecker.isString(messageText);
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
+    /**
+     * 
+     * @param {String} moderatorUsername 
+     * @param {String} messageText 
+     */
     #handleFromServerNewGlobalAnnouncement = function(moderatorUsername, messageText) {
+        TypeChecker.isString(moderatorUsername);
+        TypeChecker.isString(messageText);
         var timestamp = new DateParser(new Date()).parseOnlyTime();
         var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     #handleFromServerHideAvatar = function(participantId) {
+        TypeChecker.isString(participantId);
         this.#gameView.hideAvatar(participantId);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     #handleFromServerShowAvatar = function(participantId) {
+        TypeChecker.isString(participantId);
         this.#gameView.showAvatar(participantId);
     }
 
@@ -586,7 +675,17 @@ class ClientController {
         this.#gameView.initCurrentAchievementsView(achievements);
     }
 
+    /**
+     * 
+     * @param {String} name 
+     * @param {String[]} story 
+     */
     #handleFromServerShowNPCStory = function(name, story) {
+        TypeChecker.isString(name);
+        TypeChecker.isInstanceOf(story, Array);
+        story.forEach(element => {
+            TypeChecker.isString(element);
+        })
         this.#gameView.initNPCStoryView(name, story);
     }
 
@@ -610,15 +709,40 @@ class ClientController {
         this.#gameView.addNewChat(chat, openNow);
     };
 
+    /**
+     * 
+     * @param {String} senderUsername 
+     * @param {String} chatId 
+     */
     #handleFromServerGotNewChat = function(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
         this.#gameView.drawNewChat(senderUsername, chatId);
     }
 
+    /**
+     * 
+     * @param {String} groupName 
+     * @param {String} creatorUsername 
+     * @param {String} chatId 
+     */
     #handleFromServerGotNewGroupChat = function(groupName, creatorUsername, chatId) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isString(creatorUsername);
+        TypeChecker.isString(chatId);
+
         this.#gameView.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
+    /**
+     * 
+     * @param {String} senderUsername 
+     * @param {String} chatId 
+     */
     #handleFromServerGotNewChatMessage = function(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
         this.#gameView.drawNewMessage(senderUsername, chatId);
     }
 
@@ -637,25 +761,51 @@ class ClientController {
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
 
+    /**
+     * 
+     * @param {number} targetRoomId 
+     */
     handleFromViewEnterNewRoom(targetRoomId) {
+        TypeChecker.isInt(targetRoomId);
+
         if (this.#socketReady()) {
             this.#socket.emit('enterRoom', targetRoomId);
         }
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     handleFromViewEnterLecture(lectureId) {
+        TypeChecker.isString(lectureId);
+
         if (this.#socketReady()) {
             this.#socket.emit('enterLecture', lectureId);
         }
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     * @param {boolean} lectureEnded 
+     */
     handleFromViewLectureLeft(lectureId, lectureEnded) {
+        TypeChecker.isString(lectureId);
+        TypeChecker.isBoolean(lectureEnded);
+
         if (this.#socketReady()) {
             this.#socket.emit('leaveLecture', lectureId, lectureEnded);
         }
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     handleFromViewLectureDownload(lectureId) {
+        TypeChecker.isString(lectureId);
+
         if (this.#socketReady()) {
             this.#socket.emit('lectureVideoDownload', lectureId);
         }
@@ -687,7 +837,17 @@ class ClientController {
         }
     }
 
+    /**
+     * 
+     * @param {String} groupName 
+     * @param {String} chatId 
+     */
     handleFromViewShowInviteFriends(groupName, chatId) {
+        TypeChecker.isString(groupName);
+            
+        if (chatId)
+            TypeChecker.isString(chatId);
+
         if (this.#socketReady()) {
             this.#socket.emit('getInviteFriends', groupName, chatId);
         }
@@ -701,8 +861,16 @@ class ClientController {
 
     }
 
-    //called after 'Add Friend' Button
+    /**
+     * called after 'Add Friend' Button
+     * 
+     * @param {String} participantRepicientId 
+     * @param {String} chatId 
+     */
     handleFromViewNewFriendRequest(participantRepicientId, chatId) {
+        TypeChecker.isString(participantRepicientId);
+        TypeChecker.isString(chatId);
+
         if (this.#socketReady()) {
             this.#socket.emit('newFriendRequest', participantRepicientId, chatId);
         }
@@ -722,32 +890,54 @@ class ClientController {
         }
     }
 
-    //called when a friend request is declined
+    /**
+     * called when a friend request is declined
+     * 
+     * @param {String} participantId 
+     */
     handleFromViewRejectRequest(participantId) {
-        if (this.#socketReady()) {
+        TypeChecker.isString(participantId);
 
+        if (this.#socketReady()) {
             //Tells server to reject this request
             this.#socket.emit('handleFriendRequest', participantId, false);
             this.#gameView.updateFriendRequestListView(participantId, false);
         }
     }
 
-    //called when this participants removes another from his friendlist
+    /**
+     * called when this participants removes another from his friendlist
+     * 
+     * @param {String} friendId 
+     */
     handleFromViewRemoveFriend(friendId) {
+        TypeChecker.isString(friendId);
+
         if (this.#socketReady()) {
             this.#socket.emit('removeFriend', friendId);
             this.#gameView.removeFriend(friendId);
         }
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     handleFromViewLeaveChat(chatId) {
+        TypeChecker.isString(chatId);
+        
         if (this.#socketReady()) {
             this.#socket.emit('removeParticipantFromChat', chatId);
             this.#gameView.removeChat(chatId);
         }
     }
 
+    /**
+     * 
+     * @param {String} participantId
+     */
     handleFromViewShowBusinessCard(participantId) {
+        TypeChecker.isString(participantId);
         let ppant = this.#currentRoom.getParticipant(participantId);
         if (ppant === undefined) {
             throw new Error('Ppant with ' + participantId + ' is not in room');
@@ -762,7 +952,13 @@ class ClientController {
         this.#gameView.initProfileView(this.#ownBusinessCard, this.#ownParticipant.getIsModerator());
     }
 
+    /**
+     * 
+     * @param {number} npcId 
+     */
     handleFromViewGetNPCStory(npcId) {
+        TypeChecker.isInt(npcId);
+
         if (this.#socketReady()) {
             this.#socket.emit('getNPCStory', npcId);
         }
@@ -784,35 +980,71 @@ class ClientController {
         }
     };
 
+    /**
+     * 
+     * @param {String} chatID 
+     */
     handleFromViewShowChatThread(chatID) {
+        TypeChecker.isString(chatID);
+
         if (this.#socketReady()) {
             this.#socket.emit('getChatThread', chatID);
         }
     };
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     handleFromViewShowChatParticipantList(chatId) {
+        TypeChecker.isString(chatId);
+
         if (this.#socketReady()) {
             this.#socket.emit('getChatParticipantList', chatId);
         }
     }
 
-    /*Triggers the createNewChat event and emits  
-    the id of the other chat participant to the server.*/
+    /**
+     * Triggers the createNewChat event and emits the id of the other chat participant to the server.
+     * 
+     * @param {String} participantId 
+     */
     handleFromViewCreateNewChat(participantId) {
-        //if isFriend is undefined, checking isFriend is necessary  
-        //isFriend not necessary, because server knows all friendLists
+        TypeChecker.isString(participantId);
+
         if (this.#socketReady()) {
             this.#socket.emit('createNewChat', participantId);
         }
     }
 
+    /**
+     * 
+     * @param {String} chatName 
+     * @param {String[]} participantIdList 
+     * @param {String} chatId 
+     */
     handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId) {
+        TypeChecker.isString(chatName);
+        TypeChecker.isInstanceOf(participantIdList, Array);
+        participantIdList.forEach(ppantId => {
+            TypeChecker.isString(ppantId);
+        })
+        TypeChecker.isString(chatId);
+
         if (this.#socketReady()) {
             this.#socket.emit('createNewGroupChat', chatName, participantIdList, chatId);
         }
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} messageText 
+     */
     handleFromViewSendNewMessage(chatId, messageText) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(messageText);
+
         if (this.#socketReady()) {
             this.#socket.emit('newChatMessage', chatId, messageText);
         }
