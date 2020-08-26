@@ -9,13 +9,16 @@ const db = require('../../../../config/db')
 module.exports = class Chatservice {
 
     /**
+     * @static creates a new one to one chat instance and saves it in the database
      * 
-     * @param {String} ownerId 
-     * @param {String} chatPartnerId 
-     * @param {String} ownerUsername 
-     * @param {String} chatPartnerUsername 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownerId chat initializer ID
+     * @param {String} chatPartnerId chat partner ID
+     * @param {String} ownerUsername chat initializer username
+     * @param {String} chatPartnerUsername chat partner username
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return OneToOneChat instance
      */
     static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -47,16 +50,18 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err);
         })
-
     }
 
     /**
+     * @static creates a new group chat instance and saves it in the database
      * 
-     * @param {String} ownerId 
-     * @param {String[]} memberIds 
-     * @param {String} groupName 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownerId chat initializer ID
+     * @param {String[]} memberIds array of group chat member ID
+     * @param {String} groupName group chat name
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return GroupChat instance
      */
     static newGroupChat(ownerId, memberIds, groupName, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -92,11 +97,14 @@ module.exports = class Chatservice {
     }
 
     /**
+     * @static checks if a one to one chat between 2 participants is already existed in the database
      * 
-     * @param {String} ownerId 
-     * @param {String} chatPartnerId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownerId first participant ID
+     * @param {String} chatPartnerId second participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return chat data if existed, otherwise false
      */
     static existsOneToOneChat(ownerId, chatPartnerId, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -119,11 +127,13 @@ module.exports = class Chatservice {
     }
 
     /**
-     * loads all chats of the specified participant
+     * @static loads all chats of the specified participant from the database
      * 
-     * @param {String[]} chatIDList 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String[]} chatIDList array of chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return array of Chat instances
      */
     static loadChatList(chatIDList, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(chatIDList, Array);
@@ -164,10 +174,13 @@ module.exports = class Chatservice {
     }
 
     /**
+     * @static gets a chat with the specified chat ID from the database
      * 
-     * @param {String} chatId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} chatId chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return Chat instance if found, otherwise false
      */
     static loadChat(chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -207,18 +220,20 @@ module.exports = class Chatservice {
                 console.log("could not find chat with chatId" + chatId);
                 return false;
             }
-
         }).catch(err => {
             console.error(err);
         })
     }
 
     /**
+     * @static stores a participant in the chat member list in the database
      * 
-     * @param {String} chatId 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} chatId chat ID
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if stored successfully, otherwise false
      */
     static storeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -229,11 +244,9 @@ module.exports = class Chatservice {
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
             if (res) {
                 return true;
-
             } else {
                 return false;
             }
-
         }).catch(err => {
             console.error(err);
             return false;
@@ -242,11 +255,14 @@ module.exports = class Chatservice {
     }
 
     /**
+     * @static removes participant from a chat from the database
      * 
-     * @param {String} chatId 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} chatId chat ID
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if successfully removed, otherwise false
      */
     static removeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -254,15 +270,20 @@ module.exports = class Chatservice {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb ,db);
 
-
+        //first, remove participant from chats collection
         return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
             var dbRes = res;
+
+            //then, remove chat from chatIDList in participants collection
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
+                
+                //checks if this chat still has a member
                 return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: 1 }).then(chat => {
                     if (chat && dbRes) {
                         if (chat.memberId.length < 1) {
-                            return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(res => {
 
+                            //chat doesn't have any member anymore, so delete the entry from chats collection
+                            return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(res => {
                                 return true;
                             }).catch(err => {
                                 console.error(err);
@@ -271,7 +292,6 @@ module.exports = class Chatservice {
                         }
                         return true;
                     } else {
-
                         console.log("no chat found with " + chatId);
                         return false;
                     }
@@ -290,13 +310,16 @@ module.exports = class Chatservice {
     }
 
     /**
+     * @static creates a chat message
      * 
-     * @param {String} chatId 
-     * @param {String} senderId 
-     * @param {String} senderUsername 
-     * @param {String} msgText 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} chatId chat ID
+     * @param {String} senderId sender ID
+     * @param {String} senderUsername sender username
+     * @param {String} msgText message
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return Message instance
      */
     static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -321,16 +344,18 @@ module.exports = class Chatservice {
                 message.senderUsername,
                 message.timestamp,
                 message.msgText);
-
         }).catch(err => {
             console.error(err)
         });
     }
 
     /**
+     * @static removes all chats from the database
      * 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if deleted successfully
      */
     static removeAllChats(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -340,7 +365,6 @@ module.exports = class Chatservice {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: { $exists: true } }).then(res => {
                 if (chatsRes)
                     console.log("all chats deleted");
-
                 return chatsRes;
             }).catch(err => {
                 console.error(err);
@@ -351,11 +375,14 @@ module.exports = class Chatservice {
     }
 
     /**
+     * @static removes a chat from the database
      * 
-     * @param {String} participantId 
-     * @param {String} chatId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} chatId chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if deleted successfully
      */
     static removeChat(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -367,7 +394,6 @@ module.exports = class Chatservice {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
                 if (chatRes)
                     console.log("chat with chatId " + chatId + " deleted");
-
                 return chatRes;
             }).catch(err => {
                 console.error(err);
