@@ -21,8 +21,17 @@ class IsometricEngine {
         this.#loader = new LoadingView();
     }
 
-    //Initializes the engines properties
+    /**
+     * Initializes the engines properties
+     * 
+     * @param {String[]} assetPaths 
+     * @param {number} xNumTiles 
+     * @param {number} yNumTiles 
+     */
     async initGameEngine(assetPaths, xNumTiles, yNumTiles) {
+        TypeChecker.isInt(xNumTiles);
+        TypeChecker.isInt(yNumTiles);
+
         this.#xNumTiles = xNumTiles;
         this.#yNumTiles = yNumTiles;
 
@@ -33,12 +42,28 @@ class IsometricEngine {
         return await this.loadImages(assetPaths);
     }
 
+    /**
+     * 
+     * @param {number} xNumTiles 
+     * @param {number} yNumTiles 
+     */
     setNumMapTilesXY(xNumTiles, yNumTiles) {
+        TypeChecker.isInt(xNumTiles);
+        TypeChecker.isInt(yNumTiles);
+
         this.#xNumTiles = xNumTiles;
         this.#yNumTiles = yNumTiles;
     }
 
+    /**
+     * 
+     * @param {number} mapOriginX 
+     * @param {number} mapOriginY 
+     */
     setMapOriginXY(mapOriginX, mapOriginY) {
+        TypeChecker.isInt(mapOriginX);
+        TypeChecker.isInt(mapOriginY);
+
         this.#mapOriginX = mapOriginX;
         this.#mapOriginY = mapOriginY;
     }
@@ -65,8 +90,16 @@ class IsometricEngine {
         }
     }
 
-    //loads the images that are needed for object view creation.
+    /**
+     * loads the images that are needed for object view creation.
+     * 
+     * @param {String[]} assetPaths 
+     */
     async loadImages(assetPaths) {
+        for (const [value] of Object.entries(assetPaths)) {
+            TypeChecker.isString(value);
+        }
+
         var imageLoader = new ImageLoader();
         var totalImages = Object.keys(assetPaths).length;
 
@@ -93,7 +126,15 @@ class IsometricEngine {
         }
     }
 
+    /**
+     * 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     */
     calculateScreenPosXY(xPos, yPos) {
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+
         if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
             return {
                 x: xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX,
@@ -102,16 +143,37 @@ class IsometricEngine {
         }
     }
 
+    /**
+     * 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     */
     calculateScreenPosX(xPos, yPos) {
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+
         if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
             return xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX;
     }
 
+    /**
+     * 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     */
     calculateScreenPosY(xPos, yPos) {
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+
         if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
             return yPos * this.#tileRowHeight / 2 - xPos * this.#tileRowHeight / 2 + this.#mapOriginY;
     }
 
+    /**
+     * 
+     * @param {Canvas} canvas 
+     * @param {Event} e 
+     */
     translateMouseToCanvasPos(canvas, e) {
 
         //gets the absolute size of canvas and calculates the scaling factor
@@ -127,7 +189,14 @@ class IsometricEngine {
         }
     }
 
+    /**
+     * 
+     * @param {{x: number, y: number}} newPosition 
+     */
     translateMouseToTileCord(newPosition) {
+        TypeChecker.isNumber(newPosition.x);
+        TypeChecker.isNumber(newPosition.y);
+
         if (this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
             && this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
 
