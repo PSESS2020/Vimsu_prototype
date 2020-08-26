@@ -6,11 +6,12 @@ const db = require('../../../../config/db');
 module.exports = class LectureService {
 
     /**
+     * @static Gets lecture video URL
      * 
-     * @param {String} videoId 
-     * @param {blobClient} blob 
-     * @param {Date} startingTime 
-     * @param {number} duration 
+     * @param {String} videoId video ID
+     * @param {blobClient} blob blob instance
+     * @param {Date} startingTime lecture starting time
+     * @param {number} duration lecture video duration
      */
     static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
@@ -22,9 +23,12 @@ module.exports = class LectureService {
     }
     
     /**
+     * @static Creates a lecture instance for all accepted lectures stored in the database
      * 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return array of Lecture instance
      */
     static createAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -48,9 +52,12 @@ module.exports = class LectureService {
     }
 
     /**
+     * @static Gets all lectures from the database
      * 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return lectures array if lectures found, otherwise false
      */
     static getAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -69,9 +76,12 @@ module.exports = class LectureService {
     }
 
     /**
+     * @static @private gets all lectures with the orator personal data from the database
      * 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return lectures array if lectures found, otherwise false
      */
     static #getAllLecturesWithOratorData = function(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
