@@ -42,10 +42,11 @@ module.exports = class ServerController {
     #ppants;
 
     /**
+     * @constructor Creates a ServerController instance
      * 
-     * @param {SocketIO} socket 
-     * @param {dbClient} db 
-     * @param {blobClient} blob 
+     * @param {SocketIO} socket socket instance
+     * @param {dbClient} db db instance
+     * @param {blobClient} blob blob instance
      */
     constructor(socket, db, blob) {
         if (!!ServerController.instance) {
@@ -81,6 +82,9 @@ module.exports = class ServerController {
         this.#init();
     }
 
+    /**
+     * @private initializes all socket events from client
+     */
     #init = function() {
 
         LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
@@ -1894,8 +1898,11 @@ module.exports = class ServerController {
     }
 
     /**
+     * Gets socket ID of a participant
      * 
-     * @param {String} ppantID 
+     * @param {String} ppantID participant ID
+     * 
+     * @return socketId
      */
     getSocketId(ppantID) {
         /* So this is functional using this helping variable, but I will need to redo it in pretty.
@@ -1919,10 +1926,12 @@ module.exports = class ServerController {
         return id;
     };
 
-    // The following methods should probably be private
     /**
+     * Gets socket object of a participant
      * 
-     * @param {String} socketId 
+     * @param {String} socketId socket ID
+     * 
+     * @return socket object
      */
     getSocketObject(socketId) {
         TypeChecker.isString(socketId);
@@ -1938,15 +1947,13 @@ module.exports = class ServerController {
     };
 
     /**
+     * Gets ID of username based on its username
      * 
-     * @param {String} username 
+     * @param {String} username username
+     * 
+     * @return participantId
      */
     getIdOf(username) {
-        /* Gets the participantId belonging to a username.
-         * Since double-log-ins are still possible atm, this will only return
-         * the id of last logged-in participant of a user.
-         * - (E) */
-
         TypeChecker.isString(username);
 
         var id;
@@ -1959,10 +1966,11 @@ module.exports = class ServerController {
     };
 
     /**
+     * Called from context class to emits event in a socket room
      * 
-     * @param {(String|number)} idOfSocketRoomToEmitIn 
-     * @param {String} eventName 
-     * @param {*} eventArguments 
+     * @param {(String|number)} idOfSocketRoomToEmitIn socket room ID
+     * @param {String} eventName event name
+     * @param {*} eventArguments event arguments
      */
     emitEventIn(idOfSocketRoomToEmitIn, eventName, eventArguments) {
         TypeChecker.isString(eventName);
@@ -1974,12 +1982,11 @@ module.exports = class ServerController {
         }
     };
 
-    // probably duplicate code that is not actually needed due to above method
     /**
-     * 
-     * @param {(String|number)} idOfSocketRoomToEmitIn 
-     * @param {String} eventName 
-     * @param {*} eventArguments 
+     * Called from context class to emits event to an individual socket id
+     * @param {(String|number)} idOfSocketRoomToEmitIn socket id
+     * @param {String} eventName event name
+     * @param {*} eventArguments event arguments
      */
     emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
         TypeChecker.isString(eventName);
@@ -1993,11 +2000,11 @@ module.exports = class ServerController {
         }
     };
 
-    // replaces all the singular "sendXY"-methods
     /**
+     * Sends notification to an individual socket id
      * 
-     * @param {String} socketid 
-     * @param {{header: String, body: String[]}} message 
+     * @param {String} socketid socket id
+     * @param {{header: String, body: String[]}} message message
      */
     sendNotification(socketid, message) {
         TypeChecker.isString(socketid);
@@ -2017,9 +2024,10 @@ module.exports = class ServerController {
     };
 
     /**
+     * Sends global announcement to all participants
      * 
-     * @param {String} username 
-     * @param {String} text 
+     * @param {String} username announcer username
+     * @param {String} text announcement text
      */
     sendGlobalAnnouncement(username, text) {
         TypeChecker.isString(username);
@@ -2030,8 +2038,11 @@ module.exports = class ServerController {
     }
 
     /**
+     * @private Checks if account is banned from entering the conference
      * 
-     * @param {String} accountId 
+     * @param {String} accountId account ID
+     * 
+     * @return true if banned, otherwise false
      */
     #isBanned = function (accountId) {
         TypeChecker.isString(accountId);
@@ -2040,8 +2051,9 @@ module.exports = class ServerController {
     };
 
     /**
+     * Bans account from entering the conference
      * 
-     * @param {String} accountId 
+     * @param {String} accountId account ID
      */
     ban(accountId) {
         TypeChecker.isString(accountId);
@@ -2051,13 +2063,10 @@ module.exports = class ServerController {
         };
     };
 
-    /* Can't actually be used yet, as it requires accountIds as arguments,
-     * but nothing (no user or method) knows enough to properly use this.
-     * - (E) */
-
     /**
+     * Unbans account from entering the conference. Currently not used
      * 
-     * @param {String} accountId 
+     * @param {String} accountId account ID
      */
     unban(accountId) {
         TypeChecker.isString(accountId);
@@ -2068,8 +2077,11 @@ module.exports = class ServerController {
     };
 
     /**
+     * @private Checks if socket is connected
      * 
-     * @param {String} socketid 
+     * @param {String} socketid socket id
+     * 
+     * @return true if connected, otherwise false
      */
     #socketIsConnected = function (socketid) {
         TypeChecker.isString(socketid);
@@ -2085,8 +2097,11 @@ module.exports = class ServerController {
     };
 
     /**
+     * Checks if participant is muted
      * 
-     * @param {String} accountID 
+     * @param {String} accountID account ID
+     * 
+     * @return true if muted, otherwise false
      */
     isMuted(accountID) {
         TypeChecker.isString(accountID);
@@ -2095,8 +2110,9 @@ module.exports = class ServerController {
     };
 
     /**
+     * Mutes participant
      * 
-     * @param {String} accountID 
+     * @param {String} accountID account ID
      */
     mute(accountID) {
         TypeChecker.isString(accountID);
@@ -2105,8 +2121,9 @@ module.exports = class ServerController {
     };
 
     /**
+     * Unmutes participant
      * 
-     * @param {String} accountID 
+     * @param {String} accountID account ID
      */
     unmute(accountID) {
         TypeChecker.isString(accountID);
@@ -2115,10 +2132,10 @@ module.exports = class ServerController {
     };
 
     /**
-     * Handle the entire logic of applying achievements and points as well as sending updates to the client
+     * @private Handle the entire logic of applying achievements and points as well as sending updates to the client
      * 
-     * @param {String} participantId 
-     * @param {TypeOfTask} taskType 
+     * @param {String} participantId participant ID
+     * @param {TypeOfTask} taskType task type
      */
     #applyTaskAndAchievement = async (participantId, taskType) => {
         TypeChecker.isString(participantId);
@@ -2128,6 +2145,8 @@ module.exports = class ServerController {
         var task = new TaskService().getTaskByType(taskType);
 
         if (participant) {
+            //participant is online
+
             participant.addTask(task);
 
             ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, participant.getTaskTypeMappingCounts(), this.#db);
@@ -2153,11 +2172,14 @@ module.exports = class ServerController {
 
             await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
 
+            //updates the rank of all active participants
             Promise.all([...this.#ppants.keys()].map(async ppantId => {
                 var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
                 this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
             }))
         } else {
+            //participant is not online, so update alle infos to the database
+
             var awardPoints = task.getAwardPoints();
             var points = await ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db);
             var currentPoints = points + awardPoints;
@@ -2188,6 +2210,7 @@ module.exports = class ServerController {
                         currentPoints += awardPoints;
                         await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, currentPoints, this.#db);
 
+                        //updates the rank of all active participants
                         Promise.all([...this.#ppants.keys()].map(async ppantId => {
                             var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
                             this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
