@@ -460,6 +460,13 @@ class ClientController {
     }
 
     #handleFromServerInviteFriends = function(friendListData, groupName, limit, chatId) {
+        
+        if (groupName)
+            TypeChecker.isString(groupName);
+        if (limit)
+            TypeChecker.isInt(limit)
+        if (chatId)
+            TypeChecker.isString(chatId);
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -560,7 +567,16 @@ class ClientController {
         this.#gameView.removeFromChatParticipantList(username);
     }
 
+    /**
+     * 
+     * @param {?Object} data 
+     * @param {boolean} hasLeftChat 
+     */
     #handleFromServerAddToInviteFriends = function(data, hasLeftChat) {
+        if (data) {
+            //Typechecking
+        }
+        TypeChecker.isBoolean(hasLeftChat);   
         this.#gameView.addToInviteFriends(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email), hasLeftChat);
     }
 
@@ -570,7 +586,9 @@ class ClientController {
      * @param {boolean} isMemberOfChat 
      */
     #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
-        TypeChecker.isString(participantId);
+        if (participantId)
+            TypeChecker.isString(participantId);
+
         TypeChecker.isBoolean(isMemberOfChat);
         this.#gameView.removeFromInviteFriends(participantId, isMemberOfChat);
     }
@@ -1034,7 +1052,8 @@ class ClientController {
         participantIdList.forEach(ppantId => {
             TypeChecker.isString(ppantId);
         })
-        TypeChecker.isString(chatId);
+        if (chatId)
+            TypeChecker.isString(chatId);
 
         if (this.#socketReady()) {
             this.#socket.emit('createNewGroupChat', chatName, participantIdList, chatId);

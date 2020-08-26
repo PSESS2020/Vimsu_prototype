@@ -923,7 +923,7 @@ module.exports = class ServerController {
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
                 if (!groupName || groupName.length > 20) {
-                    socket.emit('inviteFriends', undefined, groupName, undefined);
+                    socket.emit('inviteFriends', undefined, groupName, undefined, undefined);
                 } else {
                     let ppant = this.#ppants.get(ppantID);
                     if (!ppant)
