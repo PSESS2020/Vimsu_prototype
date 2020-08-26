@@ -1,6 +1,9 @@
 
 class NPCStoryView extends WindowView {
 
+    /**
+     * @constructor Creates an instance of NPCStoryView
+     */
     constructor() {
         super();
 
@@ -16,6 +19,12 @@ class NPCStoryView extends WindowView {
         });
     }
 
+    /**
+     * Draws NPC story window
+     * 
+     * @param {String} name NPC name
+     * @param {String[]} story NPC story
+     */
     draw(name, story) {
         $('#npcStoryModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle">${name + " says..."}</h5>

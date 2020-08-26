@@ -5,6 +5,11 @@ class BusinessCardView extends WindowView {
     #isModerator;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of BusinessCardView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -21,6 +26,14 @@ class BusinessCardView extends WindowView {
         })
     }
 
+    /**
+     * Draws business card window
+     * 
+     * @param {BusinessCardClient} businessCard business card
+     * @param {boolean} isFriend true if friend, otherwise false
+     * @param {?number} rank rank
+     * @param {boolean} isModerator true if moderator, otherwise false
+     */
     draw(businessCard, isFriend, rank, isModerator) {
         this.#businessCard = businessCard;
         this.#isFriend = isFriend;

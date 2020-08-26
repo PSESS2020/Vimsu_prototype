@@ -2,11 +2,14 @@ class StatusBar extends Views {
     #timeLeft;
     #connectionStatus;
 
-    //FPS vars
+    //FPS variables
     #secondsPassed;
     #oldTimeStamp;
     #fps;
 
+    /**
+     * @constructor Creates an instance of StatusBar
+     */
     constructor() {
         super();
 
@@ -19,15 +22,19 @@ class StatusBar extends Views {
         this.#connectionStatus = ConnectionState.CONNECTED;
     }
 
+    /**
+     * @private draws game clock
+     */
     #drawClock = function() {
-        /* Draw game clock */
         $('#time').empty()
         let now = new DateParser(new Date()).parseWithSeconds();
         $('#time').text(now);
     }
 
+    /**
+     * @private draws connection status
+     */
     #drawConnectionStatus = function() {
-        /* draw connection status */
         if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
 
             if (this.#timeLeft < 0) {
@@ -43,6 +50,9 @@ class StatusBar extends Views {
         }
     }
 
+    /**
+     * draws status bar every 1 seconds
+     */
     draw() {
         this.#drawClock();
         this.#drawConnectionStatus();
@@ -55,23 +65,22 @@ class StatusBar extends Views {
         }, 1000);
     }
 
-    /* not used
-    // this returns the time till next interval. If late will drop calls.
-    getNextCallTime() {
-        var nextCallIn = (startTime + interval * (count + 1)) - performance.now();
-        if (nextCallIn < -interval / 2) { // to late drop the call
-            count = Math.floor((performance.now() - startTime) / interval) + 1;
-            nextCallIn = (startTime + interval * count) - performance.now();
-        }
-        return nextCallIn;
-    }*/
-
+    /**
+     * Updates location
+     * 
+     * @param {String} location location
+     */
     updateLocation(location) {
         TypeChecker.isString(location);
         $('#location').empty();
         $('#location').text("Location: " + location);
     }
 
+    /**
+     * Updates FPS
+     * 
+     * @param {number} timeStamp timestamp
+     */
     updateFPS(timeStamp) {
         $('#fps').empty();
 
@@ -86,19 +95,28 @@ class StatusBar extends Views {
         $('#fps').text('FPS: ' + this.#fps + ', ');
     }
 
+    /**
+     * Updates Ping
+     * 
+     * @param {number} ms ping in miliseconds
+     */
     updatePing(ms) {
         $('#ping').empty();
         $('#ping').text('Ping: ' + ms + 'ms');
     }
 
+    /**
+     * Updates connection status
+     * 
+     * @param {ConnectionState} status connection status
+     */
     updateConnectionStatus(status) {
         this.#connectionStatus = status;
 
         if (status === ConnectionState.CONNECTED) {
             $('#connectionStatus').empty();
         } else
-            if (status === ConnectionState.DISCONNECTED) {
+            if (status === ConnectionState.DISCONNECTED)
                 this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
-            }
     }
 }

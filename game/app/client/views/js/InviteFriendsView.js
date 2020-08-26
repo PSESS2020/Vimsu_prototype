@@ -7,6 +7,11 @@ class InviteFriendsView extends WindowView {
     #invitedFriends = [];
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of InviteFriendsView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -19,6 +24,14 @@ class InviteFriendsView extends WindowView {
         this.#eventManager = eventManager;
     }
 
+    /**
+     * Draws invite friends window
+     * 
+     * @param {?BusinessCardClient[]} businessCards friends' business card
+     * @param {String} groupName group chat name
+     * @param {?number} limit group chat limit
+     * @param {?String} chatId group chat ID
+     */
     draw(businessCards, groupName, limit, chatId) {
         $('#inviteFriendsModal .modal-body .list-group').empty();
         $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
@@ -113,6 +126,12 @@ class InviteFriendsView extends WindowView {
         $('#inviteFriendsModal').modal('show');
     }
 
+    /**
+     * Adds friend to invite friends window
+     * 
+     * @param {?BusinessCardClient} businessCard friend's business card
+     * @param {boolean} hasLeftChat true if friend has left chat, otherwise false
+     */
     addToInviteFriends(businessCard, hasLeftChat) {
         if (hasLeftChat) {
             this.#limit = this.#limit + 1;
@@ -124,6 +143,12 @@ class InviteFriendsView extends WindowView {
         }
     }
 
+    /**
+     * Removes participant from invite friends window
+     * 
+     * @param {?String} participantId participant ID
+     * @param {boolean} isMemberOfChat true if participant is member of this chat
+     */
     removeFromInviteFriends(participantId, isMemberOfChat) {
         if (isMemberOfChat) {
             this.#limit = this.#limit - 1;

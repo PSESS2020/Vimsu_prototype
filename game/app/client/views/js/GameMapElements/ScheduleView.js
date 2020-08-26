@@ -1,11 +1,25 @@
 class ScheduleView extends GameMapElementView {
     #clickMap;
 
+    /**
+     * @constructor Creates an instance of Schedule View
+     * 
+     * @param {Image} scheduleImage 
+     * @param {PositionClient} position 
+     * @param {number} screenPositionOffset 
+     * @param {string} name 
+     * @param {number[][]} clickMap 
+     */
     constructor(scheduleImage, position, screenPositionOffset, name, clickMap) {
         super(scheduleImage, position, screenPositionOffset, name);
         this.#clickMap = clickMap;
     }
 
+    /**
+     * Called if participant clicks the schedule
+     * 
+     * @param {number} mousePos 
+     */
     onclick(mousePos) {
         var screenPos = super.getScreenPosition();
 

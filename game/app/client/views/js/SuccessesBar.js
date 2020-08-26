@@ -1,5 +1,8 @@
 class SuccessesBar extends Views {
 
+    /**
+     * @constructor Creates an instance of SuccessesBar
+     */
     constructor() {
         super();
 
@@ -10,6 +13,12 @@ class SuccessesBar extends Views {
         SuccessesBar.instance = this;
     }
 
+    /**
+     * Updates points and rank
+     * 
+     * @param {?number} points points
+     * @param {?number} rank rank
+     */
     update(points, rank) {
         if (points) {
             $('#pointBox').empty()

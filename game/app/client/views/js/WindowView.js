@@ -1,5 +1,8 @@
 class WindowView extends Views {
 
+    /**
+     * @abstract @constructor abstract WindowView class
+     */
     constructor() {
         super();
 
@@ -8,6 +11,9 @@ class WindowView extends Views {
         }
     }
 
+    /**
+     * @abstract abstract draw method
+     */
     draw() {
         throw new Error('draw() has to be implemented!');
     }

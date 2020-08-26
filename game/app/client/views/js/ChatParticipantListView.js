@@ -2,6 +2,9 @@ class ChatParticipantListView extends Views {
 
     #usernames;
 
+    /**
+     * @constructor Creates an instance of ChatParticipantListView
+     */
     constructor() {
         super();
 
@@ -12,6 +15,10 @@ class ChatParticipantListView extends Views {
         ChatParticipantListView.instance = this;
     }
 
+    /**
+     * Draws chat participant list window
+     * @param {String[]} usernames usernames
+     */
     draw(usernames) {
         $('#chatParticipantListModal .modal-body .list-group').empty()
 
@@ -37,11 +44,21 @@ class ChatParticipantListView extends Views {
         $('#chatParticipantListModal').modal('show');
     }
 
+    /**
+     * Adds username to chat participant list window
+     * 
+     * @param {String} username username
+     */
     addToChatParticipantList(username) {
         this.#usernames.push(username);
         this.draw(this.#usernames);
     }
 
+    /**
+     * Removes username from chat participant list window
+     * 
+     * @param {String} username username
+     */
     removeFromChatParticipantList(username) {
         this.#usernames.forEach(parUsername => {
             if (parUsername === username) {

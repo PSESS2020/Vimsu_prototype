@@ -1,5 +1,10 @@
 class HUDView extends Views {
 
+    /**
+     * @constructor Creates an instance of HUDView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -40,6 +45,11 @@ class HUDView extends Views {
         })
     }
 
+    /**
+     * Draws profile username
+     * 
+     * @param {String} username username
+     */
     drawProfile(username) {
         $('#profilePlaceholder').empty();
         $('#profilePlaceholder').text(username);

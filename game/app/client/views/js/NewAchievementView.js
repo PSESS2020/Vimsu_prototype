@@ -2,6 +2,9 @@ class NewAchievementView extends WindowView {
 
     #confetti;
 
+    /**
+     * @constructor Creates an instance of NewAchievementView
+     */
     constructor() {
         super();
 
@@ -17,7 +20,11 @@ class NewAchievementView extends WindowView {
         });
     }
 
-
+    /**
+     * Draws new achievement window
+     * 
+     * @param {Object} achievement 
+     */
     draw(achievement) {
         $('#newAchievementModalContent').empty();
 

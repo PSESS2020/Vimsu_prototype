@@ -1,5 +1,10 @@
 class AllchatView extends Views {
 
+    /**
+     * @constructor Creates an instance of Allchat View
+     * 
+     * @param {EventManager} eventManager event manager instance
+     */
     constructor(eventManager) {
         super();
 
@@ -44,6 +49,12 @@ class AllchatView extends Views {
         });
     }
 
+    /**
+     * Draws all chat window and all chat message input
+     * 
+     * @param {TypeOfRoom} typeOfRoom 
+     * @param {Object[]} messages 
+     */
     draw(typeOfRoom, messages) {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
         $('#allchatHeader').text(typeOfRoom + ' Chat');
@@ -67,6 +78,11 @@ class AllchatView extends Views {
         }
     }
 
+    /**
+     * Appends message to the allchat window
+     * 
+     * @param {Object} message 
+     */
     appendMessage(message) {
         $('#noAllchat').empty();
 

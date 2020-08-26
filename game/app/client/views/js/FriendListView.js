@@ -3,6 +3,11 @@ class FriendListView extends WindowView {
     #businessCards;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of FriendListView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -20,6 +25,11 @@ class FriendListView extends WindowView {
         })
     }
 
+    /**
+     * Draws friend list window
+     * 
+     * @param {BusinessCardClient[]} businessCards friends' business card
+     */
     draw(businessCards) {
         $('#friendListModal .modal-body #nofriend').empty();
         $('#friendListModal .modal-body .list-group').empty();
@@ -83,6 +93,11 @@ class FriendListView extends WindowView {
         $('#friendListModal').modal('show');
     }
 
+    /**
+     * Deletes friend from friend list window
+     * 
+     * @param {String} participantId participant ID
+     */
     deleteFriend(participantId) {
         this.#businessCards.forEach(businessCard => {
 
@@ -95,6 +110,11 @@ class FriendListView extends WindowView {
         this.draw(this.#businessCards);
     }
 
+    /**
+     * Adds friend to friend list window
+     * 
+     * @param {BusinessCardClient} businessCard friend's business card
+     */
     addToFriendList(businessCard) {
         this.#businessCards.push(businessCard);
         this.draw(this.#businessCards);

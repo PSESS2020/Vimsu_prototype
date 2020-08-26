@@ -3,6 +3,11 @@ class FriendRequestListView extends WindowView {
     #businessCards;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of FriendRequestListView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -15,6 +20,11 @@ class FriendRequestListView extends WindowView {
         this.#eventManager = eventManager;
     }
 
+    /**
+     * Draws friend request list window
+     * 
+     * @param {BusinessCardClient[]} businessCards requesters' business card
+     */
     draw(businessCards) {
         $('#friendRequestListModal .modal-body #nofriendrequest').empty();
         $('#friendRequestListModal .modal-body .list-group').empty()
@@ -72,6 +82,11 @@ class FriendRequestListView extends WindowView {
         $('#friendRequestListModal').modal('show');
     }
 
+    /**
+     * Deletes request from friend request list window
+     * 
+     * @param {String} participantId participant ID
+     */
     deleteFriendRequest(participantId) {
         this.#businessCards.forEach(businessCard => {
 
@@ -84,6 +99,12 @@ class FriendRequestListView extends WindowView {
         this.draw(this.#businessCards);
     }
 
+    /**
+     * Updates friend request list window if accept/request button is clicked
+     * 
+     * @param {String} participantId participant ID
+     * @param {boolean} isAccepted true if request accepted, otherwise false
+     */
     update(participantId, isAccepted) {
         $('#accept' + participantId).hide()
         $('#reject' + participantId).hide()
@@ -102,6 +123,11 @@ class FriendRequestListView extends WindowView {
         }, 300)
     }
 
+    /**
+     * Adds request to friend request list window
+     * 
+     * @param {BusinessCardClient} businessCard requester's business card
+     */
     addToFriendRequestList(businessCard) {
         this.#businessCards.push(businessCard);
         this.draw(this.#businessCards);

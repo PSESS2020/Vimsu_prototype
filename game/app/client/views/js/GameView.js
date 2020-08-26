@@ -149,7 +149,6 @@ class GameView {
             }
             
             this.#currentMap.updateSelectedTile(selectedTileCords);
-
         });
 
         //Handles mouse click on canvas
@@ -608,18 +607,21 @@ class GameView {
     /**
      * Draws invite friends window
      * 
-     * @param {BusinessCardClient[]} businessCards friends' business card
-     * @param {?String} groupName group chat name
+     * @param {?BusinessCardClient[]} businessCards friends' business card
+     * @param {String} groupName group chat name
      * @param {?number} limit group chat limit
      * @param {?String} chatId group chat ID
      */
     initInviteFriendsView(businessCards, groupName, limit, chatId) {
-        TypeChecker.isInstanceOf(businessCards, Array);
-        businessCards.forEach(busCard => {
-            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
-        })
-        if (groupName)
-            TypeChecker.isString(groupName);
+        if (businessCards !== undefined) {
+            TypeChecker.isInstanceOf(businessCards, Array);
+            businessCards.forEach(busCard => {
+                TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+            })
+        }
+
+        TypeChecker.isString(groupName);
+
         if (limit)
             TypeChecker.isInt(limit)
         if (chatId)

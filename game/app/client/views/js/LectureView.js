@@ -8,6 +8,11 @@ class LectureView extends WindowView {
     #timeLeft;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of LectureView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -47,6 +52,11 @@ class LectureView extends WindowView {
 
     }
 
+    /**
+     * @private called if participant inputs a lecturemessage
+     * 
+     * @param {Event} event event
+     */
     #sendMessage = function(event) {
         event.preventDefault();
 
@@ -58,6 +68,13 @@ class LectureView extends WindowView {
         }
     }
 
+    /**
+     * Draws lecture window
+     * 
+     * @param {Object} lecture 
+     * @param {boolean} hasToken 
+     * @param {Object} lectureChat 
+     */
     draw(lecture, hasToken, lectureChat) {
         this.#hasToken = hasToken;
         this.#lectureId = lecture.id;
@@ -163,6 +180,9 @@ class LectureView extends WindowView {
         });
     }
 
+    /**
+     * @private called if participant clicks close button
+     */
     #leaveLecture = function() {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
@@ -186,6 +206,9 @@ class LectureView extends WindowView {
         }
     }
 
+    /**
+     * called to close lecture window
+     */
     close() {
         var video = $(`#lectureVideo${this.#lectureId}`)[0];
         if (video !== undefined) {
@@ -205,6 +228,11 @@ class LectureView extends WindowView {
         }
     }
 
+    /**
+     * Appends message to lecture chat
+     * 
+     * @param {Object} message message
+     */
     appendMessage(message) {
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
@@ -220,6 +248,11 @@ class LectureView extends WindowView {
         $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
     }
 
+    /**
+     * Draws lecture chat on lecture window
+     * 
+     * @param {Object} lectureChat lecture chat
+     */
     drawChat(lectureChat) {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
@@ -229,6 +262,12 @@ class LectureView extends WindowView {
         }
     }
     
+    /**
+     * Draws token on lecture window
+     * 
+     * @param {boolean} hasToken true if has token, otherwise false
+     * @param {TokenMessages} message token message
+     */
     drawToken(hasToken, message) {
         if (hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {

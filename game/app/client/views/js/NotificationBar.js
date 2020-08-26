@@ -2,6 +2,11 @@ class NotificationBar extends Views {
     
     #eventManager;
     
+    /**
+     * @constructor Creates an instance of NotificationBar
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -14,6 +19,12 @@ class NotificationBar extends Views {
         this.#eventManager = eventManager;
     }
 
+    /**
+     * Draws new message notification
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
     drawNewMessage(senderUsername, chatId) {
         if ($('#notifMessageDiv' + senderUsername + chatId).length) {
             $('#notifMessageDiv' + senderUsername + chatId).show();
@@ -40,6 +51,12 @@ class NotificationBar extends Views {
         })
     }
 
+    /**
+     * Draws new chat notification
+     * 
+     * @param {String} senderUsername chat requester username
+     * @param {String} chatId chat ID
+     */
     drawNewChat(senderUsername, chatId) {
         if ($('#notifChatDiv' + chatId).length) {
             $('#notifChatDiv' + chatId).show();
@@ -66,6 +83,13 @@ class NotificationBar extends Views {
         })
     }
 
+    /**
+     * Draws new group chat notification
+     * 
+     * @param {String} groupName chat group name
+     * @param {String} creatorUsername inviter username
+     * @param {String} chatId chat ID
+     */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
         if ($('#notifGroupChatDiv' + chatId).length) {
             $('#notifGroupChatDiv' + chatId).show()
@@ -92,6 +116,11 @@ class NotificationBar extends Views {
         })
     }
 
+    /**
+     * Draws new friend request notification
+     * 
+     * @param {String} senderUsername requester username
+     */
     drawNewFriendRequest(senderUsername) {
         if ($('#notifFriendRequestDiv' + senderUsername).length) {
             $('#notifFriendRequestDiv' + senderUsername).show();
@@ -118,6 +147,11 @@ class NotificationBar extends Views {
         })
     }
 
+    /**
+     * Draws new friend notification
+     * 
+     * @param {String} friendUsername friend username
+     */
     drawNewFriend(friendUsername) {
         if ($('#notifFriendDiv' + friendUsername).length) {
             $('#notifFriendDiv' + friendUsername).show();

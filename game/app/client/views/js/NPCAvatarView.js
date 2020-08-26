@@ -11,6 +11,16 @@ class NPCAvatarView extends AvatarView {
     #gameEngine;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of NPCAvatarView
+     * 
+     * @param {String} npcId NPC ID
+     * @param {String} name NPC name
+     * @param {PositionClient} position NPC position
+     * @param {Direction} direction NPC avatar direction
+     * @param {IsometricEngine} gameEngine game engine instance
+     * @param {EventManager} eventManager event manager instance
+     */
     constructor(npcId, name, position, direction, gameEngine, eventManager) {
         super(position, direction);
         TypeChecker.isInt(npcId);
@@ -33,6 +43,9 @@ class NPCAvatarView extends AvatarView {
         }
     }
 
+    /**
+     * Draws NPC avatar
+     */
     draw() {
         let cordX = super.getGridPosition().getCordX();
         let cordY = super.getGridPosition().getCordY();
@@ -52,6 +65,9 @@ class NPCAvatarView extends AvatarView {
         this.#currentAnimation.draw(screenX, screenY);
     }
 
+    /**
+     * @private initializes sprite animation
+     */
     #initSpriteAnimation = function () {
         var spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         var topClothing = new SpriteSheet('client/assets/avatar/TopClothingRedShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
@@ -63,6 +79,9 @@ class NPCAvatarView extends AvatarView {
         this.#standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
     }
 
+    /**
+     * called if npc is clicked
+     */
     onClick() {
         this.#eventManager.handleNPCClick(this.#npcId);
     }

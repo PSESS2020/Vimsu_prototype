@@ -2,6 +2,9 @@ class ScheduleListView extends WindowView {
 
     #lectures = [];
 
+    /**
+     * @constructor Creates an instance of ScheduleListView
+     */
     constructor() {
         super();
 
@@ -12,6 +15,11 @@ class ScheduleListView extends WindowView {
         ScheduleListView.instance = this;
     }
 
+    /**
+     * Sorts lecture according to starting time and then draws schedule window every 1 second
+     * 
+     * @param {Object[]} lectures 
+     */
     draw(lectures) {
         $('#scheduleModal .modal-body #noschedule').empty();
 
@@ -37,6 +45,9 @@ class ScheduleListView extends WindowView {
         }
     }
 
+    /**
+     * @private draws schedule window
+     */
     #drawSchedule = function() {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
 

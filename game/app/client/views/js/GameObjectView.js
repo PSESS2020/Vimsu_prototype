@@ -4,9 +4,16 @@ class GameObjectView extends Views {
     #gridPosition;
     #screenPositionOffset;
     #name;
-
     #screenPosition;
 
+    /**
+     * @constructor Creates an instance of GameObjectView
+     * 
+     * @param {Image} objectImage game object image
+     * @param {PositionClient} gridPosition game object position
+     * @param {number} screenPositionOffset screen position offset
+     * @param {String} name game object name
+     */
     constructor(objectImage, gridPosition, screenPositionOffset, name) {
         super();
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
@@ -19,45 +26,80 @@ class GameObjectView extends Views {
         this.#gridPosition = gridPosition;
         this.#screenPositionOffset = screenPositionOffset;
         this.#name = name;
-
-        /*if (new.target === GameObjectView) {
-            throw new Error("Cannot construct abstract GameObjectView instances directly");
-        }*/
     }
 
+    /**
+     * Gets game object image
+     * 
+     * @return objectImage
+     */
     getObjectImage() {
         return this.#objectImage;
     }
 
+    /**
+     * Gets grid position
+     * 
+     * @return gridPosition
+     */
     getGridPosition() {
         return this.#gridPosition;
     }
 
+    /**
+     * Gets screen position
+     * 
+     * @return screenPosition
+     */
     getScreenPosition() {
         return this.#screenPosition;
     }
 
+    /**
+     * Gets screen position offset
+     * 
+     * @return screenPositionOffset
+     */
     getScreenPositionOffset() {
         return this.#screenPositionOffset;
     }
 
+    /**
+     * Gets game object name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Updates grid position
+     * 
+     * @param {PositionClient} gridPosition grid position
+     */
     updateGridPos(gridPosition) {
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
 
         this.#gridPosition = gridPosition;
     }
 
+    /**
+     * Updates screen position
+     * 
+     * @param {PositionClient} screenPosition screen position
+     */
     updateScreenPos(screenPosition) {
         TypeChecker.isInstanceOf(screenPosition, PositionClient);
 
         this.#screenPosition = screenPosition;
     }
 
+    /**
+     * Draws game object
+     */
     draw() {
+
         //screen position is not set yet
         if (!this.#screenPosition) {
             return;
@@ -67,6 +109,9 @@ class GameObjectView extends Views {
                                                 this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
     }
 
+    /**
+     * @abstract called if game object is clicked
+     */
     onclick(){
         throw new Error('onclick() has to be implemented!');
     }

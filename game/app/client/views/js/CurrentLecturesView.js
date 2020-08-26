@@ -2,6 +2,11 @@ class CurrentLecturesView extends WindowView {
 
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of CurrentLecturesView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -22,6 +27,11 @@ class CurrentLecturesView extends WindowView {
         })
     }
 
+    /**
+     * Draws current lectures window
+     * 
+     * @param {Object[]} lectures 
+     */
     draw(lectures) {
         $('#currentLecturesContainer').empty();
         $('#nolecture').empty();
@@ -50,9 +60,14 @@ class CurrentLecturesView extends WindowView {
             })
         });
 
-        $('#currentLectures').show(); // TODO: maybe move somewhere else if logic requires it
+        $('#currentLectures').show();
     }
 
+    /**
+     * Draws lecture full on current lectures window
+     * 
+     * @param {String} lectureId lecture ID
+     */
     drawLectureFull(lectureId) {
         $('#show' + lectureId).hide();
         $('#full' + lectureId).show()

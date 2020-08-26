@@ -6,12 +6,15 @@ class AvatarView extends Views {
     #spriteSheet;
     #isVisible;
 
-
-
+    /**
+     * @constructor Creates an instance of AvatarView
+     * 
+     * @param {PositionClient} position avatar position
+     * @param {Direction} direction avatar direction
+     */
     constructor(position, direction) {
         super();
-        //TypeChecker.isInstanceOf(position, PositionClient);
-        //TypeChecker.isEnumOf(direction, Direction);
+
         this.#position = position;
         this.#direction = direction;
 
@@ -20,62 +23,106 @@ class AvatarView extends Views {
         }
     }
 
-
+    /**
+     * Sets position of avatar
+     * @param {PositionClient} position avatar position
+     */
     setPosition(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
         this.#position = position;
     }
 
+    /**
+     * Gets avatar position
+     * 
+     * @return position
+     */
     getGridPosition() {
         return this.#position;
     }
 
+    /**
+     * Sets avatar direction
+     * 
+     * @param {Direction} direction avatar direction
+     */
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
 
+    /**
+     * Gets avatar direction
+     * 
+     * @return direction
+     */
     getDirection() {
         return this.#direction;
     }
 
+    /**
+     * Sets avatar spritesheet
+     * 
+     * @param {SpriteSheet} spriteSheet sprite sheet
+     */
     setSpriteSheet(spriteSheet) {
         this.#spriteSheet = spriteSheet
     }
 
+    /**
+     * Gets avatar spritesheet
+     * 
+     * @return spriteSheet
+     */
     getSpriteSheet() {
         return this.#spriteSheet;
     }
 
-    //returns true if the Avatar is currently walking
+    /**
+     * Gets avatar isWalking status
+     * 
+     * @return true if the Avatar is currently walking, otherwise false
+     */
     isWalking() {
         return this.#walking;
     }
 
+    /**
+     * Gets avatar visibility
+     * 
+     * @return true if avatar is visible, otherwise false
+     */
     getVisibility() {
         return this.#isVisible;
     }
 
+    /**
+     * Sets avatar visibility
+     * 
+     * @param {boolean} visible true if visible, otherwise false
+     */
     setVisibility(visible) {
         this.#isVisible = visible;
     }
 
-    //setWalking(walking) {
-    //TypeChecker.isBoolean(walking);
-    //this.#walking = walking;
-    //}
-
+    /**
+     * @abstract Draws avatar
+     */
     draw() {
         throw new Error('draw() has to be implemented!');
     }
 
+    /**
+     * @abstract called if avatar is clicked
+     */
     onClick() {
         throw new Error('onClick() has to be implemented!');
     }
 
+    /**
+     * @abstract Updates avatar view
+     */
     update() {
         throw new Error('update() has to be implemented!')
     }
-
-
 }

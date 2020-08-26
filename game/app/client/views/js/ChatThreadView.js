@@ -4,6 +4,11 @@ class ChatThreadView extends WindowView {
     #messages;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of ChatThreadView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -83,6 +88,9 @@ class ChatThreadView extends WindowView {
         });
     }
 
+    /**
+     * @private called if participant inputs a message
+     */
     #sendMessage = function () {
         let messageVal = $('#chatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -93,6 +101,11 @@ class ChatThreadView extends WindowView {
         }
     }
 
+    /**
+     * Draws chat thread window
+     * 
+     * @param {Object} chat 
+     */
     draw(chat) {
         this.#chat = chat;
         this.#messages = chat.messages;
@@ -123,6 +136,13 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModal').modal('show');
     };
 
+    /**
+     * Updates friend request button on chat thread window
+     * 
+     * @param {String} chatId chat ID
+     * @param {boolean} areFriends true if are friends
+     * @param {boolean} friendRequestSent true if friend request sent/received
+     */
     updateFriendRequestButton(chatId, areFriends, friendRequestSent) {
         if (this.#chat.chatId != chatId) {
             return;
@@ -140,6 +160,12 @@ class ChatThreadView extends WindowView {
         }
     }
 
+    /**
+     * Adds new message to chat thread window
+     * 
+     * @param {String} chatId chat ID
+     * @param {Object} message chat message
+     */
     addNewMessage(chatId, message) {
         if (this.#chat.chatId != chatId) {
             return;
@@ -149,10 +175,20 @@ class ChatThreadView extends WindowView {
         this.#appendMessage(message);
     };
 
+    /**
+     * Gets current chat ID
+     * 
+     * @return chatId
+     */
     getChatId() {
         return this.#chat.chatId;
     }
 
+    /**
+     * @private appends message to chat thread window
+     * 
+     * @param {Object} message message
+     */
     #appendMessage = (message) => {
         if ($('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).length) {
             $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).hide();
@@ -177,5 +213,4 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModalList').append(messageDiv);
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     }
-
 }

@@ -1,6 +1,10 @@
 class RankListView extends WindowView {
 
     #rankList;
+
+    /**
+     * @constructor Creates an instance of RankListView
+     */
     constructor() {
         super();
 
@@ -11,8 +15,12 @@ class RankListView extends WindowView {
         RankListView.instance = this;
     }
 
+    /**
+     * Draws rank list window
+     * 
+     * @param {Object[]} rankList rank list
+     */
     draw(rankList) {
-
         $('#rankListModal .modal-body .card-columns').empty();
         this.#rankList = rankList;
 

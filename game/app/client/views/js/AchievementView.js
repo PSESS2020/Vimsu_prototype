@@ -1,5 +1,8 @@
 class AchievementView extends WindowView {
 
+    /**
+     * @constructor Creates an instance of Achievement View
+     */
     constructor() {
         super();
 
@@ -13,8 +16,12 @@ class AchievementView extends WindowView {
             $('#achievementModalContent').empty();
         })
     }
-
-
+    
+    /**
+     * Draws achievement window
+     * 
+     * @param {Object[]} achievements 
+     */
     draw(achievements) {
 
         achievements.forEach(achievement => {

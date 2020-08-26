@@ -15,6 +15,15 @@ class MapView extends Views {
 
     selectionOnMap = false;
 
+    /**
+     * @constructor Creates an instance of MapView
+     * 
+     * @param {Object[]} assetPaths 
+     * @param {number[][]} map 
+     * @param {number[][]} objectMap 
+     * @param {IsometricEngine} gameEngine 
+     * @param {eventManager} eventManager 
+     */
     constructor(assetPaths, map, objectMap, gameEngine, eventManager) {
         super();
 
@@ -34,37 +43,59 @@ class MapView extends Views {
         this.#gameEngine = gameEngine;
         this.#eventManager = eventManager;
 
-        /*if (new.target === MapView) {
-            throw new Error("Cannot construct abstract MapView instances directly");
-        }*/
-        this.initProperties(assetPaths);
+        this.#initProperties(assetPaths);
     }
 
+    /**
+     * Gets map array
+     * 
+     * @return map
+     */
     getMap() {
-
         return this.#map;
-
     }
 
+    /**
+     * Gets object map array
+     * 
+     * @return objectMap
+     */
     getObjectMap() {
         return this.#objectMap;
     }
 
+    /**
+     * Gets tiles
+     * 
+     * @return tiles
+     */
     getTiles() {
-
         return this.#tiles;
-
     }
 
+    /**
+     * Gets selected tile
+     * 
+     * @return selectedTile
+     */
     getSelectedTile() {
         return this.#selectedTile;
     }
 
+    /**
+     * Gets game objects
+     * 
+     * @return gameObjects
+     */
     getGameObjects() {
         return this.#gameObjects;
     }
 
-    async initProperties(assetPaths) {
+    /**
+     * @private initializes properties and build map
+     * @param {Object[]} assetPaths 
+     */
+    #initProperties = async (assetPaths) => {
         this.#xNumTiles = this.#map.length;
         this.#yNumTiles = this.#map[0].length;
 
@@ -73,11 +104,13 @@ class MapView extends Views {
 
         this.#gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.#gameEngine, this.#eventManager);
 
-        this.buildMap();
+        this.#buildMap();
     }
 
-    //Creates a map of gamegameObjects to draw on screen.
-    buildMap() {
+    /**
+     * @private Creates a map of gameObjects to draw on screen.
+     */
+    #buildMap = function() {
 
         this.#selectedTile = this.#gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false);
 
@@ -88,13 +121,13 @@ class MapView extends Views {
 
                 var mapObject = this.#map[row][col];
                 if (mapObject !== null) {
-                   
+
                     if (mapObject instanceof Array) {
                         mapObject.forEach(object => {
-                            this.createMapElementView(object, position);
+                            this.#createMapElementView(object, position);
                         });
                     } else {
-                        this.createMapElementView(mapObject, position);
+                        this.#createMapElementView(mapObject, position);
                     }
                 }
 
@@ -102,24 +135,26 @@ class MapView extends Views {
                 if (gameObject !== null) {
                     if (gameObject instanceof Array) {
                         gameObject.forEach(object => {
-                            this.createObjectView(object, position);
+                            this.#createObjectView(object, position);
                         });
                     }
-                    this.createObjectView(gameObject, position);
+                    this.#createObjectView(gameObject, position);
                 }
-
             };
         };
 
-        this.updateMapElements();
-        this.update();
-        this.drawMapElements();
-        //this.draw();
-
+        this.#updateMapElements();
+        this.#update();
+        this.#drawMapElements();
     }
 
-    //HELPER FUNCTION: creates map elements that build the map terrain.
-    createMapElementView(mapObject, position) {
+    /**
+     * @private creates map elements that build the map terrain.
+     * 
+     * @param {number} mapObject 
+     * @param {PositionClient} position 
+     */
+    #createMapElementView = function(mapObject, position) {
         var tileType;
         var tile;
 
@@ -140,8 +175,13 @@ class MapView extends Views {
         }
     }
 
-    //HELPER FUNCTION: creates game objects that are shown on the screen.
-    createObjectView(gameObject, position) {
+    /**
+     * @private creates game objects that are shown on the screen.
+     * 
+     * @param {number} gameObject 
+     * @param {PositionClient} position 
+     */
+    #createObjectView = function(gameObject, position) {
         var objectType = gameObject.getGameObjectType();
         var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.isClickable());
 
@@ -153,28 +193,40 @@ class MapView extends Views {
         }
     }
 
-    //finds the tile in the list of clickable tiles
+    /**
+     * finds the tile in the list of clickable tiles
+     * 
+     * @param {Object} selectedTileCords selected tile coordinates
+     * @param {boolean} isClicked true if tile is clicked
+     * @param {Canvas} canvas canvas
+     */
     findClickableTileOrObject(selectedTileCords, isClicked, canvas) {
         let tile = this.#map[selectedTileCords.x][selectedTileCords.y];
         let object = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
 
         if (tile instanceof Array) {
             tile.forEach(tile => {
-                this.findTile(tile, isClicked, canvas);
+                this.#findTile(tile, isClicked, canvas);
             });
-        } else 
-            this.findTile(tile, isClicked, canvas);
+        } else
+            this.#findTile(tile, isClicked, canvas);
 
         if (object instanceof Array) {
             object.forEach(obj => {
-                this.findObject(obj, isClicked, canvas);
+                this.#findObject(obj, isClicked, canvas);
             });
         } else
-            this.findObject(object, isClicked, canvas);
+            this.#findObject(object, isClicked, canvas);
     }
 
-    //HELPER FUNCTION: determines if the tile is clickable and change cursor/clicks it in that case.
-    findTile(tile, isClicked, canvas) {
+    /**
+     * @private determines if the tile is clickable and change cursor/clicks it in that case.
+     * 
+     * @param {number} tile selected tile
+     * @param {boolean} isClicked true if tile is clicked
+     * @param {Canvas} canvas canvas
+     */
+    #findTile = function(tile, isClicked, canvas) {
         if (tile !== null && (tile instanceof DoorClient || tile.isClickable())) {
             this.#clickableTiles.forEach(viewObject => {
                 let tileName = tile.getName();
@@ -194,11 +246,17 @@ class MapView extends Views {
                 }
             });
         } else
-            canvas.style.cursor = 'default';   
+            canvas.style.cursor = 'default';
     }
 
-    //HELPER FUNCTION: determines if the object is clickable and change cursor/clicks it in that case.
-    findObject(object, isClicked, canvas) {
+    /**
+     * @private determines if the object is clickable and change cursor/clicks it in that case.
+     * 
+     * @param {number} object selected object
+     * @param {boolean} isClicked true if tile is clicked
+     * @param {Canvas} canvas canvas
+     */
+    #findObject = function(object, isClicked, canvas) {
         if (object !== null && object.isClickable()) {
             this.#clickableObjects.forEach(viewObject => {
                 let objectName = object.getName();
@@ -214,49 +272,51 @@ class MapView extends Views {
         }
     }
 
-    //finds the clicked element in the list of clickable tiles
+    /**
+     * finds the clicked element in the list of clickable tiles
+     * 
+     * @param {Object} canvasMousePos mouse position
+     */
     findClickedElementOutsideMap(canvasMousePos) {
         this.#clickableTiles.forEach(elem => {
             let screenPos = elem.getScreenPosition();
             let screenPosOffset = elem.getScreenPositionOffset();
             let image = elem.getObjectImage();
-            //console.log("screen pos" + screenPos.getCordX() + " " + screenPos.getCordY())
-            //console.log("image size" + image.width + " " + image.height)
-            //determines if mouse position on canvas is inside the asset image.
-            if (!(elem instanceof DoorView) && canvasMousePos.x > screenPos.getCordX() + screenPosOffset.x 
-                                            && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width 
-                                            && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
-                                            && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height) {
-                //console.log("hi" + elem.getName())
-                //let withoffsetx = screenPos.getCordX() + screenPosOffset.x;
-                //let withoffsety = screenPos.getCordY() + screenPosOffset.y
-                //console.log("screenposBefore: " + withoffsetx + " " + withoffsety)
 
-                   //elem.onclick(canvasMousePos);
+            //determines if mouse position on canvas is inside the asset image.
+            if (!(elem instanceof DoorView) && canvasMousePos.x > screenPos.getCordX() + screenPosOffset.x
+                && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width
+                && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
+                && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height) {
             }
         });
     }
 
-    //Checks if the mouse cursor is in bounds of the game map.
+    /**
+     * Checks if the mouse cursor is in bounds of the game map.
+     * 
+     * @param {number} cordX x coordinate
+     * @param {number} cordY y coordinate
+     */
     isCursorOnPlayGround(cordX, cordY) {
         if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
             let mapObject = this.#map[cordX][cordY];
             let result = true;
 
-           //Room walls
-           if (mapObject instanceof Array) {
+            //Room walls
+            if (mapObject instanceof Array) {
 
-                for(let i = 0, n = mapObject.length; i < n; i++) {
+                for (let i = 0, n = mapObject.length; i < n; i++) {
 
                     if (mapObject[i] === null || mapObject[i].getGameObjectType() === GameObjectType.LEFTWALL ||
                         mapObject[i].getGameObjectType() === GameObjectType.RIGHTWALL || mapObject[i].getGameObjectType() === GameObjectType.BLANK) {
                         result = false;
                         break;
                     }
-                
+
                 };
             } else if (mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
-                       mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
+                mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
             } else
                 result = false;
 
@@ -265,13 +325,24 @@ class MapView extends Views {
 
     }
 
+    /**
+     * Checks if the mouse cursor is out of the bounds of the game map.
+     * 
+     * @param {number} cordX x coordinate
+     * @param {number} cordY y coordinate
+     */
     isCursorOutsidePlayGround(cordX, cordY) {
-        if ( ( cordY >= -1 && cordX <= this.#xNumTiles && ( (cordY <= 2 &&  cordX >= 0) || (cordY < this.#yNumTiles && cordX >= (this.#xNumTiles - 3)) ) ) ) 
+        if ((cordY >= -1 && cordX <= this.#xNumTiles && ((cordY <= 2 && cordX >= 0) || (cordY < this.#yNumTiles && cordX >= (this.#xNumTiles - 3)))))
             return true;
         else
             return false;
     }
 
+    /**
+     * Updates selected tile
+     * 
+     * @param {Object} selectedTileCords selected tile coordinates
+     */
     updateSelectedTile(selectedTileCords) {
 
         //selectedTileCords not loaded yet
@@ -286,14 +357,16 @@ class MapView extends Views {
 
         if (this.#selectedTile !== undefined)
             this.#selectedTile.updateScreenPos(position);
-
     }
 
-    updateMapElements() {
+    /**
+     * @private update map elements
+     */
+    #updateMapElements = function() {
         if (this.#tiles.length !== 0) {
             this.#tiles.forEach(object => {
                 let gridPos = object.getGridPosition();
-        
+
                 //calculates the screen position where to draw the game object
                 let screenPosXY = this.#gameEngine.calculateScreenPosXY(gridPos.getCordX(), gridPos.getCordY());
                 let screenPos = new PositionClient(screenPosXY.x, screenPosXY.y);
@@ -303,11 +376,14 @@ class MapView extends Views {
         }
     }
 
-    update() {
+    /**
+     * @private updates game object
+     */
+    #update = function() {
         if (this.#gameObjects.length !== 0) {
             this.#gameObjects.forEach(object => {
                 let gridPos = object.getGridPosition();
-        
+
                 //calculates the screen position where to draw the game object
                 let screenPosXY = this.#gameEngine.calculateScreenPosXY(gridPos.getCordX(), gridPos.getCordY());
                 let screenPos = new PositionClient(screenPosXY.x, screenPosXY.y);
@@ -317,15 +393,12 @@ class MapView extends Views {
         }
     }
 
-    drawMapElements() {
+    /**
+     * @private draws map elements
+     */
+    #drawMapElements = function() {
         if (this.#tiles.length !== 0) {
             this.#tiles.forEach(object => object.draw());
         }
     }
-
-    /*draw() {
-        if (this.#gameObjects.length !== 0) {
-            this.#gameObjects.forEach(object => object.draw());
-        }
-    }*/
 }

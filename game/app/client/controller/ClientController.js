@@ -426,23 +426,28 @@ class ClientController {
     /**
      * @private Server sends friends that can be invited to a group chat
      * 
-     * @param {Object} friendListData friend list data
-     * @param {?String} groupName chat group name
+     * @param {?Object} friendListData friend list data
+     * @param {String} groupName chat group name
      * @param {?number} limit group chat limit
      * @param {?String} chatId group chat ID
      */
     #handleFromServerInviteFriends = function(friendListData, groupName, limit, chatId) {
-        if (groupName)
-            TypeChecker.isString(groupName);
+        if (friendListData) {
+            var friendList = [];
+            friendListData.forEach(data => {
+                friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            });
+        } else {
+            var friendList = undefined;
+        }
+
+        TypeChecker.isString(groupName);
+
         if (limit)
             TypeChecker.isInt(limit)
         if (chatId)
             TypeChecker.isString(chatId);
-
-        var friendList = [];
-        friendListData.forEach(data => {
-            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
-        });
+        
         this.#gameView.initInviteFriendsView(friendList, groupName, limit, chatId);
     }
 

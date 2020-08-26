@@ -2,6 +2,9 @@ class ProfileView extends WindowView {
     #businessCard;
     #isModerator;
 
+    /**
+     * @constructor Creates an instance of ProfileView
+     */
     constructor() {
         super();
 
@@ -17,6 +20,12 @@ class ProfileView extends WindowView {
         })
     }
 
+    /**
+     * Draws profile window
+     * 
+     * @param {BusinessCardClient} businessCard own business card
+     * @param {boolean} isModerator true if moderator, otherwise false
+     */
     draw(businessCard, isModerator) {
         this.#businessCard = businessCard;
         this.#isModerator = isModerator;

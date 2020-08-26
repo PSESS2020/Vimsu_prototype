@@ -3,6 +3,11 @@ class ChatListView extends WindowView {
     #chats;
     #eventManager;
 
+    /**
+     * @constructor Creates an instnace of ChatListView
+     * 
+     * @param {EventManager} eventManager event manager
+     */
     constructor(eventManager) {
         super();
 
@@ -15,6 +20,11 @@ class ChatListView extends WindowView {
         this.#eventManager = eventManager;
     }
 
+    /**
+     * Draws chat list window
+     * 
+     * @param {Object[]} chats chats
+     */
     draw(chats) {
         $('#chatListModal .modal-body #nochat').empty();
         $('#chatListModal .modal-body .list-group').empty();
@@ -74,6 +84,11 @@ class ChatListView extends WindowView {
         $('#chatListModal').modal('show');
     }
 
+    /**
+     * Deletes chat from chat list window
+     * 
+     * @param {String} chatId chat ID
+     */
     deleteChat(chatId) {
         this.#chats.forEach(chat => {
 
@@ -86,16 +101,27 @@ class ChatListView extends WindowView {
         this.draw(this.#chats);
     };
 
+    /**
+     * Add chat to chat list window
+     * 
+     * @param {Object} chat chat
+     */
     addNewChat(chat) {
         this.#chats.push(chat);
         this.draw(this.#chats);
     };
 
+    /**
+     * Add new message to chat list window
+     * 
+     * @param {String} chatID 
+     * @param {Object} message 
+     */
     addNewMessage(chatID, message) {
         this.#chats.forEach(chat => {
             if (chat.chatId === chatID) {
-                if (message.msgText.length > 36) {
-                    var msgText = message.msgText.slice(0, 36) + "...";
+                if (message.msgText.length > 35) {
+                    var msgText = message.msgText.slice(0, 35) + "...";
                 } else {
                     var msgText = message.msgText;
                 }

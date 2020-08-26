@@ -19,6 +19,19 @@ class ParticipantAvatarView extends AvatarView {
     #gameEngine;
     #eventManager;
 
+    /**
+     * @constructor Creates an instance of ParticipantAvatarView
+     * 
+     * @param {PositionClient} position avatar position
+     * @param {Direction} direction avatar direction
+     * @param {String} participantId participant ID
+     * @param {String} username username
+     * @param {boolean} isVisible true if visible, otherwise false
+     * @param {boolean} isModerator true if moderator, otherwise false
+     * @param {boolean} isOwnAvatar true if own avatar, otherwise false
+     * @param {IsometricEngine} gameEngine game engine instance
+     * @param {EventManager} eventManager event manager instance
+     */
     constructor(position, direction, participantId, username, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
         super(position, direction);
         TypeChecker.isString(participantId);
@@ -35,29 +48,52 @@ class ParticipantAvatarView extends AvatarView {
         this.#initMovement();
     }
 
-    // changed the name here for test-purposes
-    // otherwise the whole "finding the index"-routine in the GameView will not work
+    /**
+     * Gets participant ID
+     * 
+     * @return participantId
+     */
     getId() {
         return this.#participantId;
     }
 
-    //Is called after server sends participantId
+    /**
+     * Sets participant ID
+     * 
+     * @param {String} participantId participant ID
+     */
     setId(participantId) {
         this.#participantId = participantId;
     }
 
+    /**
+     * Gets visibility
+     * 
+     * @return isVisible
+     */
     getVisibility() {
         return this.#isVisible;
     }
 
+    /**
+     * Sets visibility
+     * 
+     * @param {boolean} visible true if visible, otherwise false
+     */
     setVisibility(visible) {
         this.#isVisible = visible;
     }
 
+    /**
+     * Updates current animation
+     */
     update() {
         this.#currentAnimation.update();
     }
 
+    /**
+     * Updates currentAnimation based on the direction
+     */
     updateCurrentAnimation() {
         var direction = super.getDirection();
         if (this.#walking === true) {
@@ -85,15 +121,18 @@ class ParticipantAvatarView extends AvatarView {
         }
     }
 
-    //only there for testing, TODO: remove
-    getGridPosition() {
-        return super.getGridPosition();
-    }
-
+    /**
+     * Update walking status
+     * 
+     * @param {boolean} isMoving true if moving, otherwise false
+     */
     updateWalking(isMoving) {
         this.#walking = isMoving;
     }
 
+    /**
+     * Draws participant avatar
+     */
     draw() {
         if (this.#isVisible) {
 
@@ -128,36 +167,28 @@ class ParticipantAvatarView extends AvatarView {
         }
     }
 
-    onClick(/*mousePos*/) {
-
-        /*
-        //Needed for calculating the correct position of 
-        //sprite animation in the spritesheet body click map.
-        var clickMapOffsetX;
-        var clickMapOffsetY;
-
-        //Getting the row and column at which the animation frame was taken of the body sprite sheet.
-        //Calc the actual offset of animation frame.
-        clickMapOffsetX = this.#currentAnimation.getCol() * AVATAR_WIDTH;
-        clickMapOffsetY = this.#currentAnimation.getRow() * AVATAR_HEIGHT;
-
-        var clickImgCordX = Math.abs( this.#screenX - Math.round(mousePos.x) ) + clickMapOffsetX;
-        var clickImgCordY = Math.abs( this.#screenY - Math.round(mousePos.y) ) + clickMapOffsetY;
-
-        console.log("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
-        
-        if ( SpriteSheetBodyClickMap.clickMap[clickImgCordY][clickImgCordX] === 1 ) {
-            //alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
-            */
+    /**
+     * Called if participant avatar is clicked
+     */
+    onClick() {
         if (this.#isVisible) {
 
             $('#businessCardModal').modal('toggle');
             this.#eventManager.handleAvatarClick(this.#participantId);
         }
-        //}
     }
 
-    //draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
+    /**
+     * @private draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
+     * 
+     * @param {Context} ctx context to draw
+     * @param {number} fromCordX origin x coordinate
+     * @param {number} fromCordY origin y coordinate
+     * @param {number} toCordX end x coordinate
+     * @param {number} toCordY end y coordinate
+     * @param {number} arrowWidth arrow width
+     * @param {String} color arrow color
+     */
     #drawArrow = function (ctx, fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
         //variables to be used when creating the arrow
         var headlen = 5;
@@ -199,6 +230,9 @@ class ParticipantAvatarView extends AvatarView {
         ctx.restore();
     }
 
+    /**
+     * @private initializes sprite animation
+     */
     #initSpriteAnimation = function () {
         var spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         var topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
@@ -214,6 +248,9 @@ class ParticipantAvatarView extends AvatarView {
         this.#standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
     }
 
+    /**
+     * @private initializes keyboard events for movement
+     */
     #initMovement = function () {
         document.body.onkeydown = (event) => {
 

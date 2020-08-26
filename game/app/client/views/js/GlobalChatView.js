@@ -1,5 +1,8 @@
 class GlobalChatView extends WindowView {
 
+    /**
+     * @constructor Creates an instance of GlobalChatView
+     */
     constructor() {
         super();
 
@@ -17,6 +20,12 @@ class GlobalChatView extends WindowView {
         })
     }
 
+    /**
+     * Draws global chat window
+     * 
+     * @param {String} messageHeader message header
+     * @param {String[]} messageText message text
+     */
     draw(messageHeader, messageText) {
         $('#globalChatWindowHeaderText').empty();
         $('#globalChatMessage').empty();
@@ -33,6 +42,11 @@ class GlobalChatView extends WindowView {
         $('#globalChat').show();
     };
 
+    /**
+     * @private add message text to the global chat window
+     * 
+     * @param {String} text message text
+     */
     #addMessage = function(text) {
         var $newMessageBody = $("<div style='font-size: medium; overflow-wrap: break-word;'></div><br>");
         $newMessageBody.text(text);
