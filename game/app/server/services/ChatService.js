@@ -4,15 +4,26 @@ const OneToOneChat = require('../models/OneToOneChat');
 const GroupChat = require('../models/GroupChat');
 const ObjectId = require('mongodb').ObjectID;
 const Settings = require('../utils/Settings.js');
+const db = require('../../../../config/db')
 
 module.exports = class Chatservice {
 
+    /**
+     * 
+     * @param {String} ownerId 
+     * @param {String} chatPartnerId 
+     * @param {String} ownerUsername 
+     * @param {String} chatPartnerUsername 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(chatPartnerUsername);
         TypeChecker.isString(ownerUsername);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         var chat = {
             chatId: new ObjectId().toString(),
@@ -39,13 +50,23 @@ module.exports = class Chatservice {
 
     }
 
+    /**
+     * 
+     * @param {String} ownerId 
+     * @param {String[]} memberIds 
+     * @param {String} groupName 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static newGroupChat(ownerId, memberIds, groupName, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(groupName);
         TypeChecker.isInstanceOf(memberIds, Array);
+        memberIds.forEach(id => {
+            TypeChecker.isString(id);
+        })
         TypeChecker.isString(conferenceId);
-
-
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         var chat = {
             chatId: new ObjectId().toString(),
@@ -56,7 +77,6 @@ module.exports = class Chatservice {
         }
 
         return vimsudb.insertOneToCollection("chats_" + conferenceId, chat).then(res => {
-
             console.log("group chat saved");
             return new GroupChat(chat.chatId,
                 chat.ownerId,
@@ -69,19 +89,22 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err)
         });
-
-
     }
 
-
+    /**
+     * 
+     * @param {String} ownerId 
+     * @param {String} chatPartnerId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static existsOneToOneChat(ownerId, chatPartnerId, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(conferenceId);
-
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.findOneInCollection("chats_" + conferenceId, { ownerId: { $exists: false }, memberId: { $size: 2 }, memberId: { $all: [ownerId, chatPartnerId] } }, "").then(chat => {
-
             if (chat) {
                 return chat;
             }
@@ -95,12 +118,19 @@ module.exports = class Chatservice {
 
     }
 
-    //loads all chats of the specified participant
+    /**
+     * loads all chats of the specified participant
+     * 
+     * @param {String[]} chatIDList 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static loadChatList(chatIDList, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(chatIDList, Array);
         chatIDList.forEach(id => {
             TypeChecker.isString(id);
         });
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         let chats = [];
         return Promise.all(chatIDList.map(async chatId => {
@@ -133,9 +163,16 @@ module.exports = class Chatservice {
         })
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static loadChat(chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
             let messages = [];
@@ -174,14 +211,20 @@ module.exports = class Chatservice {
         }).catch(err => {
             console.error(err);
         })
-
-
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} participantId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static storeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(participantId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
             if (res) {
@@ -198,8 +241,18 @@ module.exports = class Chatservice {
 
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} participantId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static removeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
 
         return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
@@ -234,15 +287,24 @@ module.exports = class Chatservice {
             console.error(err);
             return false;
         })
-
-
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} senderId 
+     * @param {String} senderUsername 
+     * @param {String} msgText 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
+        TypeChecker.isString(senderId);
+        TypeChecker.isString(senderUsername);
         TypeChecker.isString(msgText);
-
-
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         let message = {
             msgId: new ObjectId().toString(),
@@ -253,7 +315,6 @@ module.exports = class Chatservice {
         }
 
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { messageList: message }).then(res => {
-
             console.log("chat message saved");
             return new Message(message.msgId,
                 message.senderId,
@@ -266,7 +327,15 @@ module.exports = class Chatservice {
         });
     }
 
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static removeAllChats(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
+
         return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(chatsRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: { $exists: true } }).then(res => {
                 if (chatsRes)
@@ -281,8 +350,19 @@ module.exports = class Chatservice {
         })
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {String} chatId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static removeChat(participantId, chatId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
         TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
+
         return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(chatRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
                 if (chatRes)
@@ -296,275 +376,4 @@ module.exports = class Chatservice {
             console.error(err);
         })
     }
-
-    /*
-    static newLectureChat(lectureId) {
-        TypeChecker.isString(lectureId);
-
-        return getDB().then(res => {
-            
-            //var lectureChat = new LectureChat(lectureId, "", "", "", "");
-            
-            var chat = {
-                lectureId: lectureId,
-                participantList: [],
-                messageList: [],
-                moderatorList: [],
-                blackList: [],
-            }
-
-            return vimsudb.insertOneToCollection("lecture_chats" , chat).then(res => {
-
-                console.log("lecture chat saved");
-                //return lectureChat;
-
-            }).catch(err => {
-                console.error(err)
-            })
-        }).catch(err => {
-            console.error(err);
-        });
-
-
-    }
-
-    static newAllchatChat(roomId) {
-        TypeChecker.isString(roomId);
-
-        return getDB().then(res => {
-            
-            var chatId = new ObjectId().toString();
-            //var allChat = new Allchat(chatId, roomId);
-            
-            var chat = {
-                chatId: chatId,
-                roomId: roomId,
-                participantList: [],
-                messageList: [],
-                moderatorList: [],
-                blackList: [],
-            }
-
-            return vimsudb.insertOneToCollection("room_chats" , chat).then(res => {
-
-                console.log("allchat saved");
-                //return allChat;
-
-            }).catch(err => {
-                console.error(err)
-            });
-        
-        }).catch(err => {
-            console.error(err)
-        });
-
-    }
-
-    static updateSentRequest(chatId, ownerId, newValue) {
-        TypeChecker.isString(chatId);
-        TypeChecker.isString(ownerId);
-        TypeChecker.isInt(newValue);
-
-        if(newValue >= 0 && newValue <= 2) {
-            return getDB().then(res => {
-                vimsudb.updateOneToCollection("chats_" + ownerId, {chatId: chatId}, {sentRequest: newValue})
-            }).catch(err => {
-                console.error(err)
-            });
-        } else {
-            console.log("sent request value must be an integer between 0 and 2")
-            return false;
-        }
-    }
-
-    static newGlobalChat(confId, participantList) {
-        TypeChecker.isString(confId);
-        
-        return getDB().then(res => {
-            
-            var chatId = new ObjectId().toString();
-            //var globalChat = new GlobalChat(chatId, confId, listOfParticipants, []);
-            
-            var chat = {
-                chatId: chatId,
-                roomId: roomId,
-                name: "",
-                participantList: participantList,
-                messageList: [],
-            }
-
-            return vimsudb.insertOneToCollection("global_chats" , chat).then(res => {
-                console.log("global chat saved");
-                //return globalChat;
-            
-            }).catch(err => {
-                console.error(err)
-            });
-        
-        }).catch(err => {
-            console.error(err)
-        });
-
-    }
-
-    static loadLectureChat(lectureId) {
-        TypeChecker.isString(lectureId);
-
-        return getDB().then(res => {
-            return vimsudb.findOneInCollection("lecture_chats", {lectureId: lectureId}, "").then(chat => {
-                if (chat) {
-                   
-                    /*let lectureChat = new LectureChat(lectureId, 
-                                            chat.participantList, 
-                                            chat.messageList, 
-                                            chat.moderatorList, 
-                                            chat.blackList);
-                                            
-                    return chats;
-                }
-                else {
-                    console.log("lectureChat not found between in collection lecture_chats for lecture" + lectureId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-    }
-
-    /*static loadAllChat(roomId) {
-        TypeChecker.isString(lectureId);
-
-        return getDB().then(res => {
-            return vimsudb.findOneInCollection("room_chats", {roomId: roomId}, "").then(allChat => {
-                if (allChat) {
-                    return allChat;
-                }
-                else {
-                    console.log("allChat not found between in collection room_chats for room" + roomId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-        })
-    }
-
-    static loadChatParticipants(participantId, chatId) {
-        TypeChecker.isString(chatId);
-
-        return getDB().then(res => {
-            return vimsudb.findOneInCollection("chats_" + participantId, {chatId: chatId}, {participantList: 1}).then(chat => {
-                var participantList = chat.participantList;
-                if (participantList && participantList.length >= 0) {
-
-                    console.log(participantList);
-                    return participantList;
-                }
-                else {
-                    console.log("participant list could not been found for participant with chat id: " + chatId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    } 
-
-    static loadChatMessages(participantId, chatId) {
-        TypeChecker.isString(chatId);
-
-        return getDB().then(res => {
-            return vimsudb.findOneInCollection("chats_" + participantId, {chatId: chatId}, {messageList: 1}).then(chat => {
-                var messageList = chat.messageList;
-
-                if (messageList && messageList.length >= 0) {
-
-                    console.log(messageList);
-                    return messageList;
-                }
-                else {
-                    console.log("participant list could not been found for participant with chat id: " + chatId);
-                    return false;
-                }
-            }).catch(err => {
-                console.error(err);
-            })
-        })
-
-    }
-
-    //tested
-    static storeParticipants(chatId, ownerId, participantIds) {
-        TypeChecker.isString(chatId);
-        TypeChecker.isInstanceOf(participantIds, Array);
-
-        return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("chats_" + ownerId, {chatId: chatId}, {participantList: {$each: participantIds}}).then(res => {
-                
-                return true;
-
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    }
-
-    static storeModerators(chatId, ownerId, participantIds) {
-        TypeChecker.isString(chatId);
-        TypeChecker.isInstanceOf(participantIds, Array);
-
-        return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("chats_" + ownerId, {chatId: chatId}, {moderatorList: {$each: participantIds}}).then(res => {
-                
-                return true;
-
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    }
-
-    static storeBannedParticipants(chatId, ownerId, participantIds) {
-        TypeChecker.isString(chatId);
-        TypeChecker.isInstanceOf(participantIds, Array);
-
-        return getDB().then(res => {
-            return vimsudb.insertToArrayInCollection("chats_" + ownerId, {chatId: chatId}, {blackList: {$each: participantIds}}).then(res => {
-                
-                return true;
-
-            }).catch(err => {
-                console.error(err);
-                return false;
-            })
-        }).catch(err => {
-            console.error(err);
-        })
-
-    }
-
-    
-
-    static storeParticipantMStatus(msgId, participantId, status) {
-        TypeChecker.isString(msgId);
-    
-
-
-
-    }
-    */
 }
