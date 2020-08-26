@@ -48,6 +48,13 @@ module.exports = class NPCService {
         }
     }
 
+    /**
+     * 
+     * @param {String} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {Direction} direction 
+     */
     createFoyerHelperNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(xPos);
@@ -57,6 +64,13 @@ module.exports = class NPCService {
         return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.#STORYS.foyerHelperStory);
     }
 
+    /**
+     * 
+     * @param {String} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {Direction} direction 
+     */
     createBasicTutorialNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(xPos);
@@ -66,6 +80,13 @@ module.exports = class NPCService {
         return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.#STORYS.basicTutorialStory)
     }
 
+    /**
+     * 
+     * @param {String} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {Direction} direction 
+     */
     createChefNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(xPos);
