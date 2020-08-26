@@ -12,13 +12,14 @@ module.exports = class AchievementDefinition {
     #levels;
 
     /**
+     * @constructor Creates an AchievementDefinition instance
      * 
-     * @param {number} id 
-     * @param {TypeOfTask} taskType 
-     * @param {String} title 
-     * @param {String} icon 
-     * @param {String} description 
-     * @param {{count: number, color: String, points: number}[]} levels 
+     * @param {number} id achievement ID
+     * @param {TypeOfTask} taskType achievement task type
+     * @param {String} title achievement title
+     * @param {String} icon achievement icon
+     * @param {String} description achievement description
+     * @param {{count: number, color: String, points: number}[]} levels achievement levels
      */
     constructor(id, taskType, title, icon, description, levels) {
         TypeChecker.isInt(id);
@@ -42,33 +43,66 @@ module.exports = class AchievementDefinition {
         this.#levels = levels;
     }
 
+    /**
+     * Gets achievement ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets achievement task type
+     * 
+     * @return taskType
+     */
     getTaskType() {
         return this.#taskType;
     }
 
+    /**
+     * Gets achievement title
+     * 
+     * @return title
+     */
     getTitle() {
         return this.#title;
     }
 
+    /**
+     * Gets achievement icon
+     * 
+     * @return icon
+     */
     getIcon() {
         return this.#icon;
     }
 
+    /**
+     * Gets achievement description
+     * 
+     * @return description
+     */
     getDescription() {
         return this.#description;
     }
 
+    /**
+     * Gets achievement levels
+     * 
+     * @return levels
+     */
     getLevels() {
         return this.#levels;
     }
 
     /**
+     * Creates an achievement instance based on current level
      * 
-     * @param {number} currentLevel 
+     * @param {number} currentLevel current level
+     * 
+     * @return Achievement instance
      */
     computeAchievement(currentLevel) {
         TypeChecker.isInt(currentLevel);
