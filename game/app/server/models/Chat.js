@@ -7,6 +7,13 @@ module.exports = class Chat {
     #messageList;
     #maxNumMessages;
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {?String[]} participantList 
+     * @param {Message[]} messageList 
+     * @param {number} maxNumMessages 
+     */
     constructor(chatId, participantList, messageList, maxNumMessages) {
         TypeChecker.isString(chatId);
         TypeChecker.isInstanceOf(participantList, Array);
@@ -51,18 +58,32 @@ module.exports = class Chat {
         return this.#participantList;
     }
 
+    /**
+     * 
+     * @param {number} maxNumMsg 
+     */
     setMaxNumMessages(maxNumMsg) {
+        TypeChecker.isInt(maxNumMsg);
         this.#maxNumMessages = maxNumMsg;
     }
 
-    addMessage(msg) {
+    addMessage() {
         throw new Error('addMessage(msg) has to be implemented!');
     }
 
+    /**
+     * 
+     * @param {String} senderId 
+     */
     generateNewMsgId(senderId) {
+        TypeChecker.isString(senderId);
         return this.#chatId + "." + senderId + "." + this.#messageList.length;
     }
 
+    /**
+     * 
+     * @param {String} msgId 
+     */
     removeMessage(msgId) {
         TypeChecker.isString(msgId);
 
@@ -74,6 +95,10 @@ module.exports = class Chat {
         });
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
 
