@@ -5,6 +5,9 @@ const TypeOfTask = require('../utils/TypeOfTask')
 module.exports = class TaskService {
     #tasks;
 
+    /**
+     * @constructor Creates an instance of TaskService
+     */
     constructor() {
         if (!!TaskService.instance) {
             return TaskService.instance;
@@ -15,13 +18,21 @@ module.exports = class TaskService {
         TaskService.instance = this;
     }
 
+    /**
+     * Gets all tasks
+     * 
+     * @return tasks array
+     */
     getAllTasks() {
         return this.#tasks;
     }
 
     /**
+     * Gets task by its task type
      * 
-     * @param {TypeOfTask} taskType 
+     * @param {TypeOfTask} taskType type of task
+     * 
+     * @return Task instance
      */
     getTaskByType(taskType) {
         TypeChecker.isEnumOf(taskType, TypeOfTask);
@@ -35,6 +46,9 @@ module.exports = class TaskService {
         return this.#tasks[index];
     }
 
+    /**
+     * @private Initializes all tasks
+     */
     #initAllTasks = function() {
         var id = 1;
         this.#tasks.push(new Task(id++, TypeOfTask.ASKQUESTIONINLECTURE, 2));

@@ -4,11 +4,14 @@ const db = require('../../../../config/db');
 module.exports = class FriendRequestListService {
 
     /**
+     * @static Stores sent friend request in the database
      * 
-     * @param {String} ownParticipantId 
-     * @param {String} receiverId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownParticipantId own participant ID, i.e. the one who sent the request
+     * @param {String} receiverId participant ID who got the request
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if data stored successfully, otherwise false
      */
     static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
@@ -22,15 +25,17 @@ module.exports = class FriendRequestListService {
             console.error(err);
             return false;
         })
-
     }
 
     /**
+     * @static Stores received friend request in the database
      * 
-     * @param {String} ownParticipantId 
-     * @param {String} senderId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownParticipantId own participant ID, i.e. the one who got the request
+     * @param {String} senderId participant ID who sent the request
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if data stored successfully, otherwise false
      */
     static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
@@ -44,15 +49,17 @@ module.exports = class FriendRequestListService {
             console.error(err);
             return false;
         })
-
     }
 
     /**
+     * @static Removes sent friend request from the database
      * 
-     * @param {String} ownParticipantId 
-     * @param {String} receiverId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownParticipantId own participant ID, i.e. the one who sent the request
+     * @param {String} receiverId participant ID who got the request
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if data removed successfully, otherwise false
      */
     static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
@@ -61,7 +68,6 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
-
             return true;
         }).catch(err => {
             console.error(err);
@@ -71,10 +77,13 @@ module.exports = class FriendRequestListService {
     }
 
     /**
+     * @static Removes all sent friend requests of a participant from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if data removed successfully, otherwise false
      */
     static removeAllSentFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -90,11 +99,14 @@ module.exports = class FriendRequestListService {
     }
 
     /**
+     * @static Removes received friend request from the database
      * 
-     * @param {String} ownParticipantId 
-     * @param {String} senderId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} ownParticipantId own participant ID, i.e. the one who got the request
+     * @param {String} senderId participant ID who sent the request
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if data removed successfully, otherwise false
      */
     static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
@@ -103,20 +115,21 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
-
             return true;
         }).catch(err => {
             console.error(err);
             return false;
         })
-
     }
 
     /**
+     * @static Removes all received friend requests of a participant from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance 
+     * 
+     * @return true if data removed successfully, otherwise false
      */
     static removeAllReceivedFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -132,10 +145,13 @@ module.exports = class FriendRequestListService {
     }
 
     /**
+     * @static Gets all received friend requests of a participant
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return received friend requests if participant is found, otherwise false
      */
     static getReceivedRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -143,7 +159,6 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': 1 }).then(par => {
-
             if (par) {
                 return par.friendRequestId.received;
             }
@@ -158,10 +173,13 @@ module.exports = class FriendRequestListService {
     }
 
     /**
+     * @static Gets all sent friend requests of a participant
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return sent friend requests if participant is found, otherwise false
      */
     static getSentRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -169,7 +187,6 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': 1 }).then(par => {
-
             if (par) {
                 return par.friendRequestId.sent;
             }
@@ -180,6 +197,5 @@ module.exports = class FriendRequestListService {
         }).catch(err => {
             console.error(err);
         })
-
     }
 } 

@@ -8,9 +8,12 @@ const db = require('../../config/db');
 module.exports = class SlotService {
 
     /**
+     * @static stores video in the blob storage
      * 
-     * @param {Object} video 
-     * @param {blobClient} blob 
+     * @param {Object} video video data
+     * @param {blobClient} blob blob instance
+     * 
+     * @return videoData if successful, otherwise false
      */
     static storeVideo(video, blob) {
         TypeChecker.isInstanceOf(blob, blobClient);
@@ -34,16 +37,17 @@ module.exports = class SlotService {
     }
 
     /**
+     * @static creates lecture slot and saves it in the database
      * 
-     * @param {String} videoId 
-     * @param {number} duration
-     * @param {String} conferenceId
-     * @param {String} title 
-     * @param {String} remarks 
-     * @param {Date} startingTime 
-     * @param {String} oratorId
-     * @param {number} maxParticipants 
-     * @param {db} vimsudb
+     * @param {String} videoId video ID
+     * @param {number} duration video duration
+     * @param {String} conferenceId lecture conference ID
+     * @param {String} title lecture title
+     * @param {String} remarks lecture remarks
+     * @param {Date} startingTime lecture starting time
+     * @param {String} oratorId lecture orator ID
+     * @param {number} maxParticipants lecture max participants
+     * @param {db} vimsudb db instance
      */
     static createSlot(videoId, duration, conferenceId, title, remarks, startingTime, oratorId, maxParticipants, vimsudb) {
         TypeChecker.isString(title);
@@ -79,9 +83,10 @@ module.exports = class SlotService {
     }
 
     /**
+     * @static deletes video from the blob storage
      * 
-     * @param {String} videoId
-     * @param {blobClient} blob 
+     * @param {String} videoId video ID
+     * @param {blobClient} blob blob instance
      */
     static deleteVideo(videoId, blob) {
         TypeChecker.isString(videoId);
@@ -91,8 +96,9 @@ module.exports = class SlotService {
     }
 
     /**
+     * @static deletes all lecture slots from the database
      * 
-     * @param {db} vimsudb 
+     * @param {db} vimsudb db instance
      */
     static deleteAllSlots(vimsudb) {
         TypeChecker.isInstanceOf(vimsudb, db);
@@ -105,9 +111,10 @@ module.exports = class SlotService {
     }
 
     /**
+     * @static deletes a slot from the database
      * 
-     * @param {String} lectureId 
-     * @param {db} vimsudb 
+     * @param {String} lectureId lecture ID
+     * @param {db} vimsudb db instance
      */
     static deleteSlot(lectureId, vimsudb) {
         TypeChecker.isString(lectureId);

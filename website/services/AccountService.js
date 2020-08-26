@@ -7,9 +7,12 @@ const db = require('../../config/db');
 module.exports = class AccountService {
 
     /**
+     * @static checks if username is valid
      * 
-     * @param {String} username 
-     * @param {db} vimsudb 
+     * @param {String} username username
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if valid, i.e. there's no user with this username found in the database, otherwise false
      */
     static isUsernameValid(username, vimsudb) {
         TypeChecker.isString(username);
@@ -23,13 +26,15 @@ module.exports = class AccountService {
                 return true;
             }
         })
-
     }
 
     /**
+     * @static checks if email is valid
      * 
-     * @param {String} email 
-     * @param {db} vimsudb 
+     * @param {String} email email
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if valid, i.e. there's no user with this email found in the database, otherwise false
      */
     static isEmailValid(email, vimsudb) {
         TypeChecker.isString(email);
@@ -43,20 +48,22 @@ module.exports = class AccountService {
                 return true;
             }
         })
-
     }
 
     /**
+     * @static creates a user account and saves it in the database.
      * 
-     * @param {String} username 
-     * @param {String} title 
-     * @param {String} surname 
-     * @param {String} forename 
-     * @param {String} job 
-     * @param {String} company 
-     * @param {String} email 
-     * @param {String} password 
-     * @param {db} vimsudb 
+     * @param {String} username account username
+     * @param {String} title user's title
+     * @param {String} surname user's surname
+     * @param {String} forename user's forename
+     * @param {String} job user's job
+     * @param {String} company user's company
+     * @param {String} email user's email
+     * @param {String} password user's password
+     * @param {db} vimsudb db instance
+     * 
+     * @return Account instance
      */
     static createAccount(username, title, surname, forename, job, company, email, password, vimsudb) {
         TypeChecker.isString(username);
@@ -93,9 +100,12 @@ module.exports = class AccountService {
     }
 
     /**
+     * @static gets account by accountID from the database
      * 
-     * @param {String} accountId 
-     * @param {db} vimsudb 
+     * @param {String} accountId account ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return user data if found, otherwise false
      */
     static getAccountById(accountId, vimsudb) {
         TypeChecker.isString(accountId);
@@ -115,16 +125,18 @@ module.exports = class AccountService {
     }
 
     /**
+     * @static gets account by account username from the database
      * 
-     * @param {String} username 
-     * @param {db} vimsudb 
+     * @param {String} username account username
+     * @param {db} vimsudb db instance
+     * 
+     * @return user data if found, otherwise false
      */
     static #getAccountByUsername = function(username, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("accounts", { username: username }, "").then(user => {
-
             if (user) {
                 return user;
             }
@@ -138,9 +150,12 @@ module.exports = class AccountService {
     }
 
     /**
+     * @static gets account username
      * 
-     * @param {String} accountId 
-     * @param {db} vimsudb 
+     * @param {String} accountId account ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return username
      */
     static getAccountUsername(accountId, vimsudb) {
         TypeChecker.isString(accountId);
@@ -157,20 +172,22 @@ module.exports = class AccountService {
         }).catch(err => {
             console.error(err);
         })
-
     }
 
     /**
+     * @static updates account data in the database
      * 
-     * @param {String} accountId
-     * @param {String} username 
-     * @param {String} newTitle 
-     * @param {String} newSurname 
-     * @param {String} newForename 
-     * @param {String} newJob 
-     * @param {String} newCompany 
-     * @param {String} email 
-     * @param {db} vimsudb 
+     * @param {String} accountId account ID
+     * @param {String} username account username
+     * @param {String} newTitle new user title
+     * @param {String} newSurname new user surname
+     * @param {String} newForename new user forename
+     * @param {String} newJob new user job
+     * @param {String} newCompany new user company
+     * @param {String} email user email
+     * @param {db} vimsudb db instance
+     * 
+     * @return Account instance
      */
     static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, vimsudb) {
         TypeChecker.isString(accountId);
@@ -186,7 +203,6 @@ module.exports = class AccountService {
         var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
 
         return vimsudb.updateOneToCollection("accounts", { accountId: accountId }, { title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
-
             return account;
         }).catch(err => {
             console.error(err)
@@ -194,10 +210,13 @@ module.exports = class AccountService {
     }
 
     /**
+     * @static checks if username and password in the database matches
      * 
-     * @param {String} username 
-     * @param {String} password 
-     * @param {db} vimsudb 
+     * @param {String} username account username
+     * @param {String} password user's password
+     * @param {db} vimsudb db instance
+     * 
+     * @return Account instance if matches, otherwise false
      */
     static verifyLoginData(username, password, vimsudb) {
         TypeChecker.isString(username);
