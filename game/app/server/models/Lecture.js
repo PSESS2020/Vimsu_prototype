@@ -20,13 +20,12 @@ module.exports = class Lecture {
     #tokenList;
     #hideThis;
     
-
-
     /**
      * 
      * @param {String} id 
      * @param {String} title 
      * @param {String} videoId 
+     * @param {number} duration
      * @param {String} remarks 
      * @param {Date} startingTime 
      * @param {String} oratorName
@@ -174,7 +173,6 @@ module.exports = class Lecture {
     /**
      * Is called when a participant with this ID leaves a lecture
      * 
-     * 
      * @param {String} participantId 
      */
     leave(participantId) {
@@ -221,28 +219,42 @@ module.exports = class Lecture {
         var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
         return (now >= endTime);
     }
-    
+
     isAccessible() {
         var now = new Date().getTime();
         var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
         return (this.#isOpened() && now <= endTime);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     hasPPant(participantId) {
+        TypeChecker.isString(participantId);
         return this.#activeParticipants.includes(participantId);
     };
 
+    /**
+     * 
+     * @param {String} accountId 
+     */
     ban(accountId) {
+        TypeChecker.isString(accountId);
         this.#removedParticipants.push(accountId);
     };
 
+    /**
+     * 
+     * @param {String} accountId 
+     */
     isBanned(accountId) {
+        TypeChecker.isString(accountId)
         return this.#removedParticipants.includes(accountId);
     };
 
     /**
      * Is called to check, if participant with this ID has an token for this lecture
-     * 
      * 
      * @param {String} participantId 
      * @param {String} ppantUsername
@@ -271,11 +283,14 @@ module.exports = class Lecture {
         return false;
     }
 
-    /* Traverses through the tokenList of the lecture and checks for an entry
+    /**
+     * Traverses through the tokenList of the lecture and checks for an entry
      * that belongs to the passed participant. If it finds such a token,
      * and the token has not already run out, it revokes it by setting 
      * the counter to zero. 
-     * - (E) */
+     * 
+     * @param {String} participantId 
+     */
     revokeToken(participantId) {
         TypeChecker.isString(participantId);
 
@@ -289,6 +304,10 @@ module.exports = class Lecture {
         }
     };
 
+    /**
+     * 
+     * @param {String} participantID 
+     */
     grantToken(participantID) {
         TypeChecker.isString(participantID);
 
@@ -301,7 +320,13 @@ module.exports = class Lecture {
         return true;
     };
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     #checkToken = function (participantId) {
+        TypeChecker.isString(participantId);
+
         let currDate = new Date();
 
         //check if participant was in this lecture before
@@ -349,7 +374,13 @@ module.exports = class Lecture {
         this.#tokenList.push([participantId, undefined, tokenCounter]);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     #getTokenIndex = function (participantId) {
+        TypeChecker.isString(participantId);
+
         for (var i = 0; i < this.#tokenList.length; i++) {
             if (this.#tokenList[i][0] === participantId) {
                 return i;
