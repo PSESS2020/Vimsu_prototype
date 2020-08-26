@@ -32,7 +32,13 @@ module.exports = class db {
             )
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     */
     getCollectionDocCount(collectionName) {
+        TypeChecker.isString(collectionName);
+        
         var collection = this.#vimsudb.collection(collectionName);
 
         return collection.countDocuments({}).then(count => {
@@ -42,6 +48,11 @@ module.exports = class db {
         })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} object 
+     */
     insertOneToCollection(collectionName, object) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -52,6 +63,10 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     */
     findAllInCollection(collectionName) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -65,6 +80,12 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     * @param {Object} projection 
+     */
     findInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -78,6 +99,12 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     * @param {Object} projection 
+     */
     findOneInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -91,9 +118,18 @@ module.exports = class db {
             })
     }
 
-    joinCollection(localCollName, foreignCollName, localField, foreignField, projection) {
+    /**
+     * 
+     * @param {String} localCollName 
+     * @param {String} foreignCollName 
+     * @param {String} localField 
+     * @param {String} foreignField 
+     */
+    joinCollection(localCollName, foreignCollName, localField, foreignField) {
         TypeChecker.isString(localCollName);
         TypeChecker.isString(foreignCollName);
+        TypeChecker.isString(localField);
+        TypeChecker.isString(foreignField);
 
         var collection = this.#vimsudb.collection(localCollName);
 
@@ -115,6 +151,12 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     * @param {(String|number)} newValue 
+     */
     updateOneToCollection(collectionName, query, newValue) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -125,6 +167,12 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     * @param {Objcet} queryToPush 
+     */
     insertToArrayInCollection(collectionName, query, queryToPush) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -142,6 +190,12 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     * @param {Object} queryToPull 
+     */
     deleteFromArrayInCollection(collectionName, query, queryToPull) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -159,6 +213,11 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     * @param {Object} query 
+     */
     deleteOneFromCollection(collectionName, query) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
@@ -177,6 +236,10 @@ module.exports = class db {
             })
     }
 
+    /**
+     * 
+     * @param {String} collectionName 
+     */
     deleteAllFromCollection(collectionName) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
