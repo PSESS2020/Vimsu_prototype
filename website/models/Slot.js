@@ -13,7 +13,6 @@ module.exports = class Slot {
     #maxParticipants;
 
     /**
-     * @author Klaudia
      * 
      * @param {String} id
      * @param {String} title 
@@ -32,7 +31,7 @@ module.exports = class Slot {
         TypeChecker.isString(videoId);
         TypeChecker.isNumber(duration);
         TypeChecker.isString(remarks);
-        TypeChecker.isInstanceOf(startingTime, Date);
+        TypeChecker.isDate(startingTime);
         TypeChecker.isString(oratorId);
         TypeChecker.isInt(maxParticipants);
 
