@@ -227,7 +227,6 @@ module.exports = class Lecture {
             this.#numberOfActiveListeners++;
             this.#activeParticipants.push(participantId);
             this.#checkToken(participantId);
-            console.log('check token');
             return true;
         }
 
@@ -364,7 +363,6 @@ module.exports = class Lecture {
             var element = this.#tokenList[i];
             if (element[0] === participantId) {
                 if (element[2] >= 0) {
-                    console.log(true);
                     return true;
                 }
             }
@@ -440,7 +438,6 @@ module.exports = class Lecture {
                     element[2] -= timeDifference;
 
                 }
-                console.log('token counter: ' + element[2]);
 
                 //if not, token counter stays the same
                 return;

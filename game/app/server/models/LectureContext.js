@@ -75,7 +75,6 @@ module.exports = class LectureContext extends CommandContext {
      */
     close() {
         this.#contextObject.hide();
-        console.log(this.#contextObject.getActiveParticipants());
         var activePPants = this.#contextObject.getActiveParticipants();
         for(var i = 0; i < activePPants.length; i++) {
             this.#removeByID(activePPants[i], Messages.CLOSED);

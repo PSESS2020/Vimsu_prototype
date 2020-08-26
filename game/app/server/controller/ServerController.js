@@ -131,7 +131,7 @@ module.exports = class ServerController {
 
                     //Don't allow user to join the conference more than once with the same account
                     if (this.#ppants.has(ppant.getId())) {
-                        console.log("ppant already joined the conference");
+                        console.log("Participant already joined the conference");
                         this.#io.to(socket.id).emit('gameEntered');
                         return;
                     }
@@ -223,8 +223,6 @@ module.exports = class ServerController {
 
                     //Sends all doors to client
                     doors.forEach(door => {
-                        console.log(door.getTargetRoomId())
-
                         doorData.push({
                             id: door.getId(),
                             typeOfDoor: door.getTypeOfDoor(),
@@ -429,7 +427,6 @@ module.exports = class ServerController {
 
                 //check if participant is in right position to enter room
                 if (!door.isValidEnterPosition(enterPosition)) {
-                    console.log('wrong position');
                     return;
                 }
 
@@ -619,7 +616,6 @@ module.exports = class ServerController {
                     let currentDate = new Date();
                     let message = { senderID: ppantID, username: username, messageID: lectureChat.getMessages().length, timestamp: currentDate, text: text }
                     lectureChat.appendMessage(message);
-                    console.log("<" + currentDate + "> " + ppantID + " says " + text + " in lecture.");
 
                     this.#io.in(socket.currentLecture).emit('lectureMessageFromServer', message);
                 }
@@ -651,16 +647,13 @@ module.exports = class ServerController {
                 }
 
                 if (lecture.enter(ppantID, ppantUsername)) {
-                    console.log(ppantUsername + " joins " + lectureId);
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
                     let token = lecture.hasToken(ppantID, ppantUsername);
                     let lectureChat = lecture.getLectureChat();
-                    console.log(lectureChat);
                     let messages = lecture.getLectureChat().getMessages();
                     ppant.setIsVisible(false);
-                    console.log(messages);
 
                     let startingTime = lecture.getStartingTime().getTime() - Settings.SHOWLECTURE;
                     let duration = Math.ceil(lecture.getDuration() / 60) + Settings.SHOWLECTURE / 60 / 1000;
@@ -692,7 +685,6 @@ module.exports = class ServerController {
 
                 participant.setIsVisible(true);
                 lecture.leave(ppantID);
-                console.log(ppantID + " leaves " + lectureId)
                 socket.leave(lectureId);
                 socket.currentLecture = undefined;
                 socket.broadcast.emit('showAvatar', ppantID);
@@ -719,7 +711,6 @@ module.exports = class ServerController {
 
                 //check if participant is in right position to enter room
                 if (!lectureDoor.isValidEnterPosition(enterPosition)) {
-                    console.log('wrong position');
                     return;
                 }
 
@@ -1236,8 +1227,6 @@ module.exports = class ServerController {
                 } else {
 
                     //group chat doesn't exist yet
-                    console.log("new groupchat participants: " + chatPartnerIDList);
-
                     var limit = Settings.MAXGROUPPARTICIPANTS - 1;
 
                     if (chatPartnerIDList.length > limit || chatPartnerIDList.length < 1) {
@@ -1397,7 +1386,6 @@ module.exports = class ServerController {
                     let chat = participant.getChat(chatID);
                     let messageInfoData = [];
                     chat.getMessageList().forEach((message) => {
-                        console.log("getChatThreadMessages: " + message.getMessageText());
                         messageInfoData.push({
                             senderUsername: message.getUsername(),
                             timestamp: message.getTimestamp(),
@@ -1466,8 +1454,6 @@ module.exports = class ServerController {
                     //creates a new chat message and stores it into DB.
                     ChatService.createChatMessage(chatId, senderId, senderUsername, msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
 
-                        console.log("chatParticipantList: " + chatPartnerIDList);
-
                         chatPartnerIDList.forEach(chatParticipantID => {
                             let chatParticipant = this.#ppants.get(chatParticipantID);
 
@@ -1519,7 +1505,6 @@ module.exports = class ServerController {
             /* adds a new Friend Request to the system */
             socket.on('newFriendRequest', (targetID, chatID) => {
                 let requesterID = socket.ppantID;
-                console.log(`Received friend request from ${requesterID} for ${targetID}.`);
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
 
@@ -1768,7 +1753,6 @@ module.exports = class ServerController {
             socket.on('disconnect', (reason) => {
                 //Prevents server crash because client sends sometimes disconnect event on connection to server.
                 if (!this.#socketMap.has(socket.id)) {
-                    console.log("disconnect");
                     return;
                 }
 
@@ -1799,7 +1783,6 @@ module.exports = class ServerController {
                     var lectureId = socket.currentLecture;
                     var lecture = schedule.getLecture(lectureId);
                     lecture.leave(ppantID);
-                    console.log(ppantID + " leaves " + lectureId)
                     socket.leave(lectureId);
                     socket.currentLecture = undefined;
                 }
@@ -1855,7 +1838,6 @@ module.exports = class ServerController {
         var socketKeys = Object.keys(mainNamespace.connected);
         for (var i = 0; i < socketKeys.length; i++) {
             if (socketKeys[i] == socketId) {
-                console.log("server socket object: " + mainNamespace.connected[socketKeys[i]]);
                 return mainNamespace.connected[socketKeys[i]];
             }
         }
