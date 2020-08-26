@@ -14,7 +14,6 @@ module.exports = class Door {
     #direction;
 
     /**
-     * @author Philipp
      * 
      * @param {number} id 
      * @param {String} name
