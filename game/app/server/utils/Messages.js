@@ -1,3 +1,6 @@
+/**
+ * @enum Messages that will be emitted from a command input by a moderator/orator
+ */
 module.exports = Object.freeze({
     HELPLECTURECHAT: {
         header: "List of Commands",

@@ -1,3 +1,6 @@
+/**
+ * @enum Commands that a moderator/orator can enter
+ */
 module.exports = Object.freeze({
     GLOBAL: {
         string: "global",

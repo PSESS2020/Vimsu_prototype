@@ -1,5 +1,8 @@
 const Direction = require('../../client/shared/Direction');
 
+/**
+ * @enum other constants
+ */
 module.exports = Object.freeze({
 
     /* Start-Position Constants */

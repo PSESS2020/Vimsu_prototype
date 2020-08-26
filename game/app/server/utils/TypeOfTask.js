@@ -1,3 +1,6 @@
+/**
+ * @enum Constants of type of task
+ */
 module.exports = Object.freeze({
     RECEPTIONVISIT: "RECEPTIONVISIT",
     FOODCOURTVISIT: "FOODCOURTVISIT",
