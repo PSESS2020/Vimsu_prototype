@@ -18,16 +18,16 @@ module.exports = class Room {
     #listOfGameObjects;
     #listOfNPCs;
     #listOfDoors; 
-    #listOfMessages; // instead of a seperate chat-class, we just have a list of messages for each room for now
+    #listOfMessages;
     #listOfMapElements;
 
     /**
+     * @constructor Creates a Room instance
      * 
-     * 
-     * @param {number} roomId 
-     * @param {TypeOfRoom} typeOfRoom 
-     * @param {number} width
-     * @param {number} length
+     * @param {number} roomId room ID
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {number} width room width
+     * @param {number} length room length
      */
     constructor(roomId, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
@@ -57,8 +57,9 @@ module.exports = class Room {
     }
 
     /**
+     * Sets map elements
      * 
-     * @param {GameObject[]} lisOfMapElements 
+     * @param {GameObject[]} lisOfMapElements list of map elements
      */
     setMapElements(lisOfMapElements) {
         TypeChecker.isInstanceOf(lisOfMapElements, Array);
@@ -70,8 +71,9 @@ module.exports = class Room {
     }
 
     /**
+     * Sets game objects
      * 
-     * @param {GameObject[]} listOfGameObjects 
+     * @param {GameObject[]} listOfGameObjects list of game objects
      */
     setGameObjects(listOfGameObjects) {
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
@@ -83,8 +85,9 @@ module.exports = class Room {
     }
 
     /**
+     * Sets NPCs
      * 
-     * @param {NPC[]} listOfNPCs 
+     * @param {NPC[]} listOfNPCs list of NPCs
      */
     setNPCs(listOfNPCs) {
         TypeChecker.isInstanceOf(listOfNPCs, Array);
@@ -96,8 +99,9 @@ module.exports = class Room {
     }
 
     /**
+     * Sets doors 
      * 
-     * @param {Door[]} listOfDoors 
+     * @param {Door[]} listOfDoors list of doors
      */
     setDoors(listOfDoors) {
         TypeChecker.isInstanceOf(listOfDoors, Array);
@@ -108,53 +112,109 @@ module.exports = class Room {
         this.#listOfDoors = listOfDoors;
     }
 
+    /**
+     * Gets room ID
+     * 
+     * @return roomId
+     */
     getRoomId() {
         return this.#roomId;
     }
 
+    /**
+     * Gets type of room
+     * 
+     * @return typeOfRoom
+     */
     getTypeOfRoom() {
         return this.#typeOfRoom;
     }
 
+    /**
+     * Gets room chat messages
+     * 
+     * @return listOfMessages
+     */
     getMessages() {
         return this.#listOfMessages;
     }
 
+    /**
+     * Gets room width
+     * 
+     * @return width
+     */
     getWidth() {
         return this.#width;
     }
 
+    /**
+     * Gets room length
+     * 
+     * @return length
+     */
     getLength() {
         return this.#length;
     }
 
+    /**
+     * Gets list of participants in the room
+     * 
+     * @return listOfPpants
+     */
     getListOfPPants() {
         return this.#listOfPPants;
     }
 
+    /**
+     * Gets list of map elements
+     * 
+     * @return listOfMapElements
+     */
     getListOfMapElements() {
         return this.#listOfMapElements;
     }
 
+    /**
+     * Gets list of game objects
+     * 
+     * @return listOfGameObjects
+     */
     getListOfGameObjects() {
         return this.#listOfGameObjects;
     }
 
+    /**
+     * Gets list of NPCs
+     * 
+     * @return listOfNPCs
+     */
     getListOfNPCs() {
         return this.#listOfNPCs;
     }
 
+    /**
+     * Gets list of doors
+     * 
+     * @return listOfDoors
+     */
     getListOfDoors() {
         return this.#listOfDoors;
     }
 
+    /**
+     * Gets occupation map
+     * 
+     * @return occupationMap
+     */
     getOccMap() {
         return this.#occupationMap;
     };
 
     /**
+     * Gets a NPC with this id
      * 
-     * @param {number} id 
+     * @param {number} id NPC ID
      */
     getNPC(id) {
         TypeChecker.isInt(id);
@@ -171,7 +231,7 @@ module.exports = class Room {
     /**
      * Adds ppant into room
      * 
-     * @param {Participant} participant 
+     * @param {Participant} participant participant
      */
     enterParticipant(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
@@ -183,7 +243,7 @@ module.exports = class Room {
     /**
     * Deletes ppant from room
     * 
-    * @param {Participant} participant 
+    * @param {Participant} participant participant
     */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -199,7 +259,7 @@ module.exports = class Room {
     /**
      * Checks if ppant with ppantID is currently in this room
      * 
-     * @param {String} ppantID 
+     * @param {String} ppantID participant ID
      */
     includesParticipant(ppantID) {
         TypeChecker.isString(ppantID);
@@ -215,7 +275,7 @@ module.exports = class Room {
     /**
      * Get a participant who is currently in this room
      * 
-     * @param {String} ppantID 
+     * @param {String} ppantID participant ID
      */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
@@ -231,7 +291,7 @@ module.exports = class Room {
     /**
      * Checks, if there is a collision at this position
      * 
-     * @param {Position} position 
+     * @param {Position} position avatar position
      * @returns true, when collision
      * @returns false, otherwise
      */
@@ -258,11 +318,12 @@ module.exports = class Room {
     }
 
     /**
+     * Adds message to the room chat
      * 
-     * @param {String} ppantID 
-     * @param {String} username 
-     * @param {Date} date 
-     * @param {String} text 
+     * @param {String} ppantID participant ID
+     * @param {String} username participant username
+     * @param {Date} date message timestamp
+     * @param {String} text message text
      */
     addMessage(ppantID, username, date, text) {
         TypeChecker.isString(ppantID);
@@ -270,11 +331,13 @@ module.exports = class Room {
         TypeChecker.isDate(date);
         TypeChecker.isString(text);
 
-        // change to message object?
         var message = { senderID: ppantID, messageID: this.#listOfMessages.length, username: username, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
 
+    /**
+     * Builds occupation map. Array is occupied by 1 if there is a solid game object or a NPC in this position
+     */
     buildOccMap() {
         //Goes through each gameObject
         for (var i = 0; i < this.#listOfGameObjects.length; i++) {
@@ -308,7 +371,9 @@ module.exports = class Room {
     /**
      * Gets Door to room with roomId if it exists
      * 
-     * @param {number} targetId 
+     * @param {number} targetId target room ID
+     * 
+     * @return door
      */
     getDoorTo(targetId) {
         TypeChecker.isInt(targetId);
@@ -321,6 +386,8 @@ module.exports = class Room {
 
     /**
      * Return Lecture Door if it exists in this room
+     * 
+     * @return lecture door
      */
     getLectureDoor() {
         if (this.#typeOfRoom !== TypeOfRoom.FOYER) {
