@@ -17,7 +17,7 @@ module.exports = class AllchatContext extends CommandContext {
     constructor(serverController, room) {
         super();
 
-        TypeChecker.isInstanceOf(serverController, ServerController);
+        //TypeChecker.isInstanceOf(serverController, ServerController); Does not work for some reason
         TypeChecker.isInstanceOf(room, Room);
         this.#serverController = serverController;
         this.#contextObject = room;

@@ -18,10 +18,14 @@ module.exports = class LectureChat {
 
     /**
      * 
-     * @param {Message} message 
+     * @param {(senderID: String, username: String, messageID: number, timestamp: Date)} message 
      */
     appendMessage(message) {
-        TypeChecker.isString(message, Message);
+        TypeChecker.isInstanceOf(message, Object);
+        TypeChecker.isString(message.senderID);
+        TypeChecker.isString(message.username);
+        TypeChecker.isInt(message.messageID);
+        TypeChecker.isDate(message.timestamp);
         
         this.#listOfMessages.push(message);
     }

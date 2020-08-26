@@ -270,7 +270,7 @@ class ClientController {
     sendToServerLectureChatMessage(text) {
 
         if (this.#socketReady() && this.#socket.connected) {
-            TypeChecker.isString(input)
+            TypeChecker.isString(text)
             this.#socket.emit('lectureMessage', text);
         }
         else
@@ -650,11 +650,18 @@ class ClientController {
     /**
      * 
      * @param {String} messageHeader 
-     * @param {String} messageText 
+     * @param {String[]} messageText 
      */
     #handleFromServerNewNotification = function(messageHeader, messageText) {
         TypeChecker.isString(messageHeader);
-        TypeChecker.isString(messageText);
+        if (messageText instanceof Array) {
+            TypeChecker.isInstanceOf(messageText, Array);
+            messageText.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(messageText);
+        }
         this.#gameView.initGlobalChatView(messageHeader, messageText);
     }
 
