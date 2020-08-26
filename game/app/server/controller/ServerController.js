@@ -23,6 +23,9 @@ const FriendListService = require('../services/FriendListService.js');
 const FriendRequestListService = require('../services/FriendRequestListService.js');
 const OneToOneChat = require('../models/OneToOneChat.js');
 const GroupChat = require('../models/GroupChat');
+const dbClient = require('../../../../config/db');
+const blobClient = require('../../../../config/blob');
+const TypeChecker = require('../../client/shared/TypeChecker');
 
 module.exports = class ServerController {
 
@@ -42,12 +45,21 @@ module.exports = class ServerController {
     //map from ppant-id to ppant-instance
     #ppants;
 
+    /**
+     * 
+     * @param {SocketIO} socket 
+     * @param {dbClient} db 
+     * @param {blobClient} blob 
+     */
     constructor(socket, db, blob) {
         if (!!ServerController.instance) {
             return ServerController.instance;
         }
 
         ServerController.instance = this;
+
+        TypeChecker.isInstanceOf(db, dbClient);
+        TypeChecker.isInstanceOf(blob, blobClient);
 
         this.#io = socket;
         this.#db = db;
@@ -72,11 +84,6 @@ module.exports = class ServerController {
 
         this.init();
     }
-
-    //There are currently 3 differenct socketIo Channels
-    //foyerChannel: Settings.FOYER_ID.toString()
-    //foodCourtChannel: Settings.FOODCOURT_ID.toString()
-    //receptionChannel: Settings.RECEPTION_ID.toString()
 
     init() {
 
@@ -313,7 +320,6 @@ module.exports = class ServerController {
 
 
             socket.on('sendMessage', (text) => {
-
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 if (!participant)
@@ -376,7 +382,6 @@ module.exports = class ServerController {
              * THEM INTO A SINGLE MESSAGE THAT GETS SEND OUT REGULARLY
              * - (E) */
             socket.on('requestMovementStart', (direction, newCordX, newCordY) => {
-
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -428,7 +433,6 @@ module.exports = class ServerController {
 
             //Event to handle click on door tile
             socket.on('enterRoom', (targetRoomId) => {
-
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -663,7 +667,6 @@ module.exports = class ServerController {
             var currentLecturesData = [];
 
             socket.on('enterLecture', (lectureId) => {
-
                 let ppantID = socket.ppantID;
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
                 let ppant = this.#ppants.get(ppantID);
@@ -1894,7 +1897,10 @@ module.exports = class ServerController {
 
     }
 
-
+    /**
+     * 
+     * @param {String} ppantID 
+     */
     getSocketId(ppantID) {
         /* So this is functional using this helping variable, but I will need to redo it in pretty.
          * The problem is that, since the forEach()-method takes a function as a callback-parameter,
@@ -1905,6 +1911,9 @@ module.exports = class ServerController {
          * Returning the help-variable instead fixes the issue (for now), but it is not a pretty
          * solution.
          * - (E) */
+
+        TypeChecker.isString(ppantID);
+
         var id;
         this.#socketMap.forEach((participantID, socketId) => {
             if (participantID == ppantID) {
@@ -1915,8 +1924,13 @@ module.exports = class ServerController {
     };
 
     // The following methods should probably be private
-
+    /**
+     * 
+     * @param {String} socketId 
+     */
     getSocketObject(socketId) {
+        TypeChecker.isString(socketId);
+
         var mainNamespace = this.#io.of('/');
         var socketKeys = Object.keys(mainNamespace.connected);
         for (var i = 0; i < socketKeys.length; i++) {
@@ -1927,11 +1941,18 @@ module.exports = class ServerController {
         }
     };
 
+    /**
+     * 
+     * @param {String} username 
+     */
     getIdOf(username) {
         /* Gets the participantId belonging to a username.
          * Since double-log-ins are still possible atm, this will only return
          * the id of last logged-in participant of a user.
          * - (E) */
+
+        TypeChecker.isString(username);
+
         var id;
         this.#ppants.forEach((participant, ppantID) => {
             if (participant.getBusinessCard().getUsername() === username) {
@@ -1941,7 +1962,15 @@ module.exports = class ServerController {
         return id;
     };
 
+    /**
+     * 
+     * @param {(String|number)} idOfSocketRoomToEmitIn 
+     * @param {String} eventName 
+     * @param {*} eventArguments 
+     */
     emitEventIn(idOfSocketRoomToEmitIn, eventName, eventArguments) {
+        TypeChecker.isString(eventName);
+        
         if (eventArguments) {
             this.#io.in(idOfSocketRoomToEmitIn).emit(eventName, eventArguments);
         } else {
@@ -1950,7 +1979,15 @@ module.exports = class ServerController {
     };
 
     // probably duplicate code that is not actually needed due to above method
+    /**
+     * 
+     * @param {(String|number)} idOfSocketRoomToEmitIn 
+     * @param {String} eventName 
+     * @param {*} eventArguments 
+     */
     emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
+        TypeChecker.isString(eventName);
+
         if (eventArguments) {
             if (this.#socketIsConnected(idOfSocketToEmitTo)) {
                 this.#io.to(idOfSocketToEmitTo).emit(eventName, eventArguments);
@@ -1961,23 +1998,51 @@ module.exports = class ServerController {
     };
 
     // replaces all the singular "sendXY"-methods
+    /**
+     * 
+     * @param {String} socketid 
+     * @param {{header: String, body: String}} message 
+     */
     sendNotification(socketid, message) {
-        //TypeChecker.isEnumOf(message, Messages);
+        TypeChecker.isString(socketId);
+        TypeChecker.isString(message.header);
+        TypeChecker.isString(message.body);
+
         if (this.#socketIsConnected(socketid)) {
             this.#io.to(socketid).emit("New notification", message.header, message.body);
         }
     };
 
+    /**
+     * 
+     * @param {String} username 
+     * @param {String} text 
+     */
     sendGlobalAnnouncement(username, text) {
+        TypeChecker.isString(username);
+        TypeChecker.isString(text);
+
         text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         this.#io.emit('New global announcement', username, text);
     }
 
+    /**
+     * 
+     * @param {String} accountId 
+     */
     #isBanned = function (accountId) {
+        TypeChecker.isString(accountId);
+
         return this.#banList.includes(accountId);
     };
 
+    /**
+     * 
+     * @param {String} accountId 
+     */
     ban(accountId) {
+        TypeChecker.isString(accountId);
+
         if (!this.#banList.includes(accountId)) {
             this.#banList.push(accountId);
         };
@@ -1986,13 +2051,26 @@ module.exports = class ServerController {
     /* Can't actually be used yet, as it requires accountIds as arguments,
      * but nothing (no user or method) knows enough to properly use this.
      * - (E) */
+
+    /**
+     * 
+     * @param {String} accountId 
+     */
     unban(accountId) {
+        TypeChecker.isString(accountId);
+        
         if (this.#banList.includes(accountId)) {
             this.#banList.splice(this.#banList.indexOf(accountId), 1);
         };
     };
 
+    /**
+     * 
+     * @param {String} socketid 
+     */
     #socketIsConnected = function (socketid) {
+        TypeChecker.isString(socketid);
+
         var mainNamespace = this.#io.of('/');
         var socketKeys = Object.keys(mainNamespace.connected);
         for (var i = 0; i < socketKeys.length; i++) {
@@ -2003,20 +2081,46 @@ module.exports = class ServerController {
         return false;
     };
 
+    /**
+     * 
+     * @param {String} accountID 
+     */
     isMuted(accountID) {
+        TypeChecker.isString(accountID);
+
         return this.#muteList.includes(accountID);
     };
 
+    /**
+     * 
+     * @param {String} accountID 
+     */
     mute(accountID) {
+        TypeChecker.isString(accountID);
+
         this.#muteList.push(accountID);
     };
 
+    /**
+     * 
+     * @param {String} accountID 
+     */
     unmute(accountID) {
+        TypeChecker.isString(accountID);
+
         this.#muteList.splice(this.#muteList.indexOf(accountID), 1);
     };
 
-    // require to handle the entire logic of applying achievements and points as well as sending updates to the client
+    /**
+     * Handle the entire logic of applying achievements and points as well as sending updates to the client
+     * 
+     * @param {String} participantId 
+     * @param {TypeOfTask} taskType 
+     */
     #applyTaskAndAchievement = async (participantId, taskType) => {
+        TypeChecker.isString(participantId);
+        TypeChecker.isEnumOf(taskType, TypeOfTask);
+
         var participant = this.#ppants.get(participantId);
         var task = new TaskService().getTaskByType(taskType);
 
