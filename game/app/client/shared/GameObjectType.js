@@ -1,3 +1,6 @@
+/**
+ * @enum game object type
+ */
 const GameObjectType = Object.freeze({
     SELECTED_TILE: 'SELECTED_TILE',
     BLANK: 'BLANK',

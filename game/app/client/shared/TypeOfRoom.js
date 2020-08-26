@@ -1,3 +1,6 @@
+/**
+ * @enum type of room
+ */
 const TypeOfRoom = Object.freeze({
     FOYER: "Foyer",
     FOODCOURT: "Food Court",

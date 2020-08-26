@@ -1,3 +1,6 @@
+/**
+ * @enum Avatar direction 
+ */
 const Direction = Object.freeze({
     UPLEFT: "UPLEFT",
     DOWNLEFT: "DOWNLEFT",
