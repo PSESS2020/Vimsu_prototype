@@ -1,5 +1,24 @@
 class SpriteAnimation {
+
+    /**
+     * 
+     * @param {SpriteSheet} spritesheetBody 
+     * @param {SpriteSheet} spritesheetTopCloth 
+     * @param {SpriteSheet} spriteSheetBottomClothing 
+     * @param {SpriteSheet} spriteSheetShoes 
+     * @param {number} frameRate 
+     * @param {number} firstFrame 
+     * @param {number} lastFrame 
+     */
     constructor(spritesheetBody, spritesheetTopCloth, spriteSheetBottomClothing, spriteSheetShoes, frameRate, firstFrame, lastFrame) {
+        TypeChecker.isInstanceOf(spritesheetBody, SpriteSheet);
+        TypeChecker.isInstanceOf(spritesheetTopCloth, SpriteSheet);
+        TypeChecker.isInstanceOf(spriteSheetBottomClothing, SpriteSheet);
+        TypeChecker.isInstanceOf(spriteSheetShoes, SpriteSheet);
+        TypeChecker.isInt(frameRate);
+        TypeChecker.isInt(firstFrame);
+        TypeChecker.isInt(lastFrame);
+
         this.currentFrame = 0;
         this.counter = 0;
         this.animationSequence = [];
@@ -24,7 +43,15 @@ class SpriteAnimation {
         this.counter = (this.counter + 1) % this.frameRate;
     }
 
+    /**
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     */
     draw(x, y) {
+        TypeChecker.isInt(x);
+        TypeChecker.isInt(y);
+
         var row = Math.floor(this.animationSequence[this.currentFrame] / this.spritesheetBody.framesPerRow);
         var col = Math.floor(this.animationSequence[this.currentFrame] % this.spritesheetBody.framesPerRow);
         if (!this.spritesheetBody.framesPerRow) {
