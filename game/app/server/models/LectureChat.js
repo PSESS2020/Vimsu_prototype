@@ -1,3 +1,6 @@
+const Message = require('./Message');
+const TypeChecker = require('../../client/shared/TypeChecker');
+
 module.exports = class LectureChat {
 
     #listOfMessages;
@@ -13,7 +16,13 @@ module.exports = class LectureChat {
         return this.#listOfMessages;
     }
 
+    /**
+     * 
+     * @param {Message} message 
+     */
     appendMessage(message) {
+        TypeChecker.isString(message, Message);
+        
         this.#listOfMessages.push(message);
     }
 }
