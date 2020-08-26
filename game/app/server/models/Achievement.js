@@ -25,7 +25,7 @@ module.exports = class Achievement {
      * @param {number} awardPoints 
      * @param {number} maxLevel 
      * @param {TypeOfTask} taskType 
-     * @param {number} nextCount 
+     * @param {?number} nextCount 
      */
     constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
         TypeChecker.isInt(id);
@@ -121,10 +121,12 @@ module.exports = class Achievement {
 
     /**
      * 
-     * @param {number} nextCount 
+     * @param {?number} nextCount 
      */
     setNextCount(nextCount) {
-        TypeChecker.isInt(nextCount);
+        if (nextCount !== undefined)
+            TypeChecker.isInt(nextCount);
+
         this.#nextCount = nextCount;
     }
 
