@@ -18,11 +18,11 @@ class MapView extends Views {
     /**
      * @constructor Creates an instance of MapView
      * 
-     * @param {Object[]} assetPaths 
-     * @param {number[][]} map 
-     * @param {number[][]} objectMap 
-     * @param {IsometricEngine} gameEngine 
-     * @param {eventManager} eventManager 
+     * @param {Object[]} assetPaths asset paths
+     * @param {number[][]} map map array
+     * @param {number[][]} objectMap object map array
+     * @param {IsometricEngine} gameEngine game engine
+     * @param {eventManager} eventManager event manager
      */
     constructor(assetPaths, map, objectMap, gameEngine, eventManager) {
         super();
@@ -93,7 +93,7 @@ class MapView extends Views {
 
     /**
      * @private initializes properties and build map
-     * @param {Object[]} assetPaths 
+     * @param {Object[]} assetPaths asset paths
      */
     #initProperties = async (assetPaths) => {
         this.#xNumTiles = this.#map.length;
@@ -151,8 +151,8 @@ class MapView extends Views {
     /**
      * @private creates map elements that build the map terrain.
      * 
-     * @param {number} mapObject 
-     * @param {PositionClient} position 
+     * @param {number} mapObject map object
+     * @param {PositionClient} position map element position
      */
     #createMapElementView = function(mapObject, position) {
         var tileType;
@@ -178,8 +178,8 @@ class MapView extends Views {
     /**
      * @private creates game objects that are shown on the screen.
      * 
-     * @param {number} gameObject 
-     * @param {PositionClient} position 
+     * @param {number} gameObject game object
+     * @param {PositionClient} position game object position
      */
     #createObjectView = function(gameObject, position) {
         var objectType = gameObject.getGameObjectType();

@@ -5,10 +5,10 @@ class PlantView extends GameObjectView {
     /**
      * @constructor Creates an instance of PlantView
      * 
-     * @param {Image} objectImage 
-     * @param {PositionClient} gridPosition 
-     * @param {number} screenPositionOffset 
-     * @param {String} name 
+     * @param {Image} objectImage plant image
+     * @param {PositionClient} gridPosition plant position
+     * @param {number} screenPositionOffset platn screen position offset
+     * @param {String} name plant name
      */
     constructor(objectImage, gridPosition, screenPositionOffset, name) {
         super(objectImage, gridPosition, screenPositionOffset, name);

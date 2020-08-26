@@ -18,7 +18,7 @@ class ScheduleListView extends WindowView {
     /**
      * Sorts lecture according to starting time and then draws schedule window every 1 second
      * 
-     * @param {Object[]} lectures 
+     * @param {Object[]} lectures all lectures
      */
     draw(lectures) {
         $('#scheduleModal .modal-body #noschedule').empty();

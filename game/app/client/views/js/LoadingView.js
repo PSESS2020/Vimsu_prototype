@@ -16,8 +16,8 @@ class LoadingView extends Views {
     /**
      * Called when loading contents
      * 
-     * @param {number} totalContents 
-     * @param {number} loadedContents 
+     * @param {number} totalContents total contents
+     * @param {number} loadedContents loaded contents
      */
     contentLoaded(totalContents, loadedContents) {
         var percentage = ((100 / totalContents * loadedContents) << 0) + "%";

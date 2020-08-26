@@ -736,8 +736,8 @@ class GameView {
     /**
      * Adds new chat message to chat list and chat thread
      * 
-     * @param {String} chatId 
-     * @param {Object} message 
+     * @param {String} chatId chat ID
+     * @param {Object} message chat message
      */
     addNewChatMessage(chatId, message) {
         if ($('#chatListModal').is(':visible')) {
@@ -752,7 +752,7 @@ class GameView {
     /**
      * Appends all chat message
      * 
-     * @param {Object} message 
+     * @param {Object} message allchat message
      */
     appendAllchatMessage(message) {
         this.#allchatView.appendMessage(message);
@@ -761,8 +761,8 @@ class GameView {
     /**
      * Draws everything about all chat
      * 
-     * @param {TypeOfRoom} typeOfRoom 
-     * @param {Object[]} messages 
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {Object[]} messages allchat messages
      */
     initAllchatView(typeOfRoom, messages) {
         this.#allchatView.draw(typeOfRoom, messages);

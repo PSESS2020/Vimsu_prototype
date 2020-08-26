@@ -52,8 +52,8 @@ class AllchatView extends Views {
     /**
      * Draws all chat window and all chat message input
      * 
-     * @param {TypeOfRoom} typeOfRoom 
-     * @param {Object[]} messages 
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {Object[]} messages allchat messages
      */
     draw(typeOfRoom, messages) {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
@@ -81,7 +81,7 @@ class AllchatView extends Views {
     /**
      * Appends message to the allchat window
      * 
-     * @param {Object} message 
+     * @param {Object} message alchat message
      */
     appendMessage(message) {
         $('#noAllchat').empty();

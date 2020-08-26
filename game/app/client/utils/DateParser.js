@@ -4,7 +4,7 @@ class DateParser {
     
     /**
      * @constructor creates an instance of Date parser
-     * @param {Date} date 
+     * @param {Date} date date
      */
     constructor(date) {
         TypeChecker.isDate(date);

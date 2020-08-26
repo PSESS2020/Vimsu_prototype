@@ -4,11 +4,11 @@ class ScheduleView extends GameMapElementView {
     /**
      * @constructor Creates an instance of Schedule View
      * 
-     * @param {Image} scheduleImage 
-     * @param {PositionClient} position 
-     * @param {number} screenPositionOffset 
-     * @param {string} name 
-     * @param {number[][]} clickMap 
+     * @param {Image} scheduleImage schedule image
+     * @param {PositionClient} position schedule position
+     * @param {number} screenPositionOffset schedule screen position offset
+     * @param {string} name schedule name
+     * @param {number[][]} clickMap schedule clickMap
      */
     constructor(scheduleImage, position, screenPositionOffset, name, clickMap) {
         super(scheduleImage, position, screenPositionOffset, name);
@@ -18,7 +18,7 @@ class ScheduleView extends GameMapElementView {
     /**
      * Called if participant clicks the schedule
      * 
-     * @param {number} mousePos 
+     * @param {number} mousePos mouse position
      */
     onclick(mousePos) {
         var screenPos = super.getScreenPosition();

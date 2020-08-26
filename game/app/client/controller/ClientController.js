@@ -209,7 +209,7 @@ class ClientController {
      * @private Second message from server, gives you information of starting position, business card and participant id.
      * After that, there is everything to init the game view
      * 
-     * @param {Object} initInfo initial info
+     * @param {Object} initInfo initial own participant info
      */
     #handleFromServerInitOwnParticipant = function(initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
@@ -839,8 +839,8 @@ class ClientController {
     /**
      * @private Receives from server a new chat message is created
      * 
-     * @param {String} chatId 
-     * @param {Object} message 
+     * @param {String} chatId chat ID
+     * @param {Object} message chat message
      */
     #handleFromServerNewChatMessage = function(chatId, message) {
         this.#gameView.addNewChatMessage(chatId, message);

@@ -23,7 +23,7 @@ class NewAchievementView extends WindowView {
     /**
      * Draws new achievement window
      * 
-     * @param {Object} achievement 
+     * @param {Object} achievement achievement
      */
     draw(achievement) {
         $('#newAchievementModalContent').empty();

@@ -104,7 +104,7 @@ class ChatThreadView extends WindowView {
     /**
      * Draws chat thread window
      * 
-     * @param {Object} chat 
+     * @param {Object} chat chat
      */
     draw(chat) {
         this.#chat = chat;

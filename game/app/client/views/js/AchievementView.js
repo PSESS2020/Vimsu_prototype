@@ -20,7 +20,7 @@ class AchievementView extends WindowView {
     /**
      * Draws achievement window
      * 
-     * @param {Object[]} achievements 
+     * @param {Object[]} achievements achievements
      */
     draw(achievements) {
 

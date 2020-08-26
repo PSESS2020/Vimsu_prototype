@@ -30,7 +30,7 @@ class CurrentLecturesView extends WindowView {
     /**
      * Draws current lectures window
      * 
-     * @param {Object[]} lectures 
+     * @param {Object[]} lectures lectures
      */
     draw(lectures) {
         $('#currentLecturesContainer').empty();

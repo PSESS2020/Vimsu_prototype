@@ -9,7 +9,7 @@ class IsometricEngine {
     #loader;
 
     /**
-     * Creates an instance of IsometricEngine
+     * @constructor Creates an instance of IsometricEngine
      */
     constructor() {
         if (!!IsometricEngine.instance) {

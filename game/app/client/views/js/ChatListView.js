@@ -114,8 +114,8 @@ class ChatListView extends WindowView {
     /**
      * Add new message to chat list window
      * 
-     * @param {String} chatID 
-     * @param {Object} message 
+     * @param {String} chatID chat ID
+     * @param {Object} message chat message
      */
     addNewMessage(chatID, message) {
         this.#chats.forEach(chat => {
