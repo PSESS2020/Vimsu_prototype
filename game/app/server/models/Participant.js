@@ -326,7 +326,7 @@ module.exports = class Participant {
     setAchievements(achievements) {
         TypeChecker.isInstanceOf(achievements, Array);
         achievements.forEach(achievement => {
-            TypeChecker.isInstanceOf(achievements, Achievement);
+            TypeChecker.isInstanceOf(achievement, Achievement);
         })
 
         this.#achievements = achievements;
