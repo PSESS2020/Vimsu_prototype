@@ -11,6 +11,17 @@ module.exports = class Account {
     #company;
     #email;
 
+    /**
+     * 
+     * @param {String} accountID 
+     * @param {String} username 
+     * @param {String} title 
+     * @param {String} surname 
+     * @param {String} forename 
+     * @param {String} job 
+     * @param {String} company 
+     * @param {String} email 
+     */
     constructor(accountID, username, title, surname, forename, job, company, email) {
         TypeChecker.isString(accountID);
         TypeChecker.isString(username);
