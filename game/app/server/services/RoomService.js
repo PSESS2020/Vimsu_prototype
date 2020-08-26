@@ -10,6 +10,9 @@ const Settings = require('../utils/Settings.js');
 module.exports = class RoomService {
     #rooms;
 
+    /**
+     * @constructor Creates an instance of RoomService
+     */
     constructor() {
         if (!!RoomService.instance) {
             return RoomService.instance;
@@ -20,13 +23,21 @@ module.exports = class RoomService {
         RoomService.instance = this;
     }
 
+    /**
+     * Gets all rooms
+     * 
+     * @return rooms array
+     */
     getAllRooms() {
         return this.#rooms;
     }
 
     /**
+     * Gets room by its ID
      * 
-     * @param {number} roomId 
+     * @param {number} roomId room ID
+     * 
+     * @return RoomDecorator instance
      */
     getRoom(roomId) {
         TypeChecker.isInt(roomId);
@@ -40,6 +51,9 @@ module.exports = class RoomService {
         return this.#rooms[index];
     }
 
+    /**
+     * Initializes all rooms
+     */
     #initAllRooms = function() {
         this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));
         this.#rooms.push(new FoodcourtRoomDecorator(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)));
