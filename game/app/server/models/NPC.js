@@ -11,13 +11,13 @@ module.exports = class NPC {
     #story;
 
     /**
-     * Only is called by the NPCService to create a NPC instance
+     * @constructor Creates an NPC instance
      * 
-     * @param {number} id 
-     * @param {String} name 
-     * @param {Position} position 
-     * @param {Direction} direction
-     * @param {String} story 
+     * @param {number} id NPC ID
+     * @param {String} name NPC name
+     * @param {Position} position NPC avatar position
+     * @param {Direction} direction NPC avatar direction
+     * @param {String} story NPC story
      */
     constructor(id, name, position, direction, story) {
         TypeChecker.isInt(id);
@@ -36,22 +36,47 @@ module.exports = class NPC {
         this.#story = story;
     }
 
+    /**
+     * Gets NPC ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets NPC name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Gets NPC position
+     * 
+     * @return position
+     */
     getPosition() {
         return this.#position;
     }
 
+    /**
+     * Gets NPC direction
+     * 
+     * @return direction
+     */
     getDirection() {
         return this.#direction;
     }
 
+    /**
+     * Gets NPC story
+     * 
+     * @return story
+     */
     getStory() {
         return this.#story;
     }
