@@ -82,10 +82,10 @@ module.exports = class ServerController {
         // Array to hold all participants
         this.#ppants = new Map();
 
-        this.init();
+        this.#init();
     }
 
-    init() {
+    #init = function() {
 
         LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
             var schedule = new Schedule(lectures);
