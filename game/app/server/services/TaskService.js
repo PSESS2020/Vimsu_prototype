@@ -30,7 +30,7 @@ module.exports = class TaskService {
     /**
      * Gets task by its task type
      * 
-     * @param {TypeOfTask} taskType 
+     * @param {TypeOfTask} taskType type of task
      * 
      * @return task
      */
