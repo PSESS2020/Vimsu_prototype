@@ -18,10 +18,15 @@ const TypeOfTask = require('../utils/TypeOfTask')
 module.exports = class ParticipantService {
 
     /**
+     * @static creates a participant instance with this account. If a participant with this account ID
+     * doesn't exist in the database, stores this participant data in the database. otherwise fetches 
+     * the participant data from the database.
      * 
-     * @param {Account} account 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {Account} account participant's account
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return participant instance
      */
     static async createParticipant(account, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(account, Account);
@@ -202,34 +207,13 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Gets participant's username from the database
      * 
-     * @param {String} accountId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
-     */
-    static getParticipant(accountId, conferenceId, vimsudb) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
-
-        return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: accountId }, "").then(par => {
-
-            if (par) {
-                return par;
-            }
-            else {
-                console.log("participant with accountId " + accountId + " is not found in collection participants_" + conferenceId);
-                return false;
-            }
-
-        })
-    }
-
-    /**
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
      * 
-     * @param {String} participantId
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @return username
      */
     static getUsername(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -254,10 +238,13 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Gets participant's account from the database and creates a business card instance with the data
      * 
-     * @param {String} participantId
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return business card if participant is found, otherwise false
      */
     static getBusinessCard(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -265,7 +252,6 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
-
             if (par) {
                 return AccountService.getAccountById(par.accountId, vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
@@ -279,19 +265,21 @@ module.exports = class ParticipantService {
                 });
             }
             else {
-                console.log("participant with participanntId " + participantId + " is not found in collection participants_" + conferenceId);
+                console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
                 return false;
             }
-
         })
     }
 
     /**
+     * @static Updates participant's position in the database
      * 
-     * @param {String} participantId
-     * @param {String} conferenceId 
-     * @param {Position} position
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {Position} position participant's position
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully
      */
     static updateParticipantPosition(participantId, conferenceId, position, vimsudb) {
         TypeChecker.isString(participantId);
@@ -311,11 +299,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Updates participant's direction in the database
      * 
-     * @param {String} participantId
-     * @param {String} conferenceId 
-     * @param {Direction} direction
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {Direction} direction avatar's direction
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully
      */
     static updateParticipantDirection(participantId, conferenceId, direction, vimsudb) {
         TypeChecker.isString(participantId);
@@ -329,10 +320,13 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Gets participant's points from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return points if participant is found, otherwise false
      */
     static getPoints(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -354,11 +348,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Updates participant's points in the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {number} points 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {number} points new points
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully, otherwise false
      */
     static updatePoints(participantId, conferenceId, points, vimsudb) {
         TypeChecker.isString(participantId);
@@ -376,11 +373,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Stores achievements in the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {{id: number, currentLevel: number}[]} achievementsData 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {{id: number, currentLevel: number}[]} achievementsData achievements
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if achievements stored successfully, otherwise false
      */
     static #storeAchievements = function(participantId, conferenceId, achievementsData, vimsudb) {
         TypeChecker.isString(participantId);
@@ -402,11 +402,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Deletes an achievement from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {number} achievementId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {number} achievementId achievement ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if deleted successfully, otherwise false
      */
     static deleteAchievement(participantId, conferenceId, achievementId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -420,14 +423,16 @@ module.exports = class ParticipantService {
             console.error(err);
             return false;
         })
-
     }
 
     /**
+     * @static Gets all achievements from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return achievements
      */
     static getAchievements(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -449,12 +454,15 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Updates level of an achievement
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {number} achievementId 
-     * @param {number} level 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {number} achievementId achievement ID
+     * @param {number} level achievement's level
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully, otherwise false
      */
     static updateAchievementLevel(participantId, conferenceId, achievementId, level, vimsudb) {
         TypeChecker.isString(participantId);
@@ -466,7 +474,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId, 'achievements.id': achievementId },
             { 'achievements.$.currentLevel': level }).then(res => {
-
                 return true;
             }).catch(err => {
                 console.error(err);
@@ -475,11 +482,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Updates all task counts in the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {Task[]} taskCount 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {Task[]} taskCount task counts
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully, otherwise false
      */
     static updateTaskCounts(participantId, conferenceId, taskCount, vimsudb) {
         TypeChecker.isString(participantId);
@@ -495,11 +505,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Gets task count based on the task type
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {TypeOfTask} taskType 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {TypeOfTask} taskType task type
+     * @param {db} vimsudb db instance
+     * 
+     * @return task count if participant is found, otherwise false
      */
     static getTaskCount(participantId, conferenceId, taskType, vimsudb) {
         TypeChecker.isString(participantId);
@@ -522,12 +535,15 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Updates a task count in the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {TypeOfTask} taskType 
-     * @param {number} count 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {TypeOfTask} taskType task type
+     * @param {number} count task count
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if updated successfully, otherwise false
      */
     static updateTaskCount(participantId, conferenceId, taskType, count, vimsudb) {
         TypeChecker.isString(participantId);
@@ -545,11 +561,14 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Adds chat ID into the chat list in the database
      * 
-     * @param {String} participantId 
-     * @param {String} chatId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} chatId chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if stored successfully, otherwise false
      */
     static addChatID(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -563,13 +582,13 @@ module.exports = class ParticipantService {
             console.error(err);
             return false;
         });
-
     }
 
     /**
+     * @static Deletes all participants from the database
      * 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
      */
     static deleteAllParticipants(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -583,10 +602,11 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Deletes a participant from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
      */
     static deleteParticipant(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
