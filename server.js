@@ -3,13 +3,6 @@
 /* ############################################################################### */
 
 const express = require('express');
-
-/* This package apparently is meant to make more difficult features of the
- * protocol easier to handle - I am not sure how it would be of use here, but
- * I have included since it was included in the example I am mostly working from,
- * see also below.
- * Add.: Without this, the server won't work.
- * - (E) */
 const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
@@ -18,62 +11,41 @@ const socketio = require('socket.io');
 /* ######################### SETTING UP THE SERVER ############################### */
 /* ############################################################################### */
 
-// TODO: comments
-
-/* Set up port s.t. the app should work both on heroku
- * and on localhost. - (E) */
+/* Set up port s.t. the app should work both on heroku and on localhost. */
 const PORT = process.env.PORT || 5000;
 
-/* Setting up the server by
- *   (i) Setting up an express server
- *   (ii) Passing that as an argument to create a http-Server (for some reason)
- *   (iii) creating a socket-Server on top of that for real-time interaction
- * - (E) */
+/* Setting up the server */
 const app = express();
 const httpServer = http.createServer(app);
-const io = socketio(httpServer, {pingInterval: 2000, pingTimeout: 10000});
+const io = socketio(httpServer, { pingInterval: 2000, pingTimeout: 10000 });
 
 app.set('port', PORT);
-
-/* Tbh I don't really know what this does. I copied it from the old server.js.
- * - (E) */
 app.use('/website', express.static(path.join(__dirname + '/website')));
 app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
 
-//Sets the server to websockets only.
+/* Sets the server to websockets only. */
 io.set("transports", ["websocket"]);
 
-/* The http-Server starts listening on the port.
- * If this does not happen (if the express-instance 'app' listen here),
- * then socket.io will not work, as the GET-request for the client-API
- * will try to fetch the data from the wrong directory, resulting in a
- * 404 NOT FOUND error.
- * I don't know why this is, but thanks StackOverflow!
- * - (E) */
+/* The http-Server starts listening on the port. */
 httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT} . . .`));
 
 /* ############################################################################### */
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
 
+/* Allows reading from a .env file */
 require('dotenv').config();
+
+/* Initializes db and blob instances */
 const db = require('./config/db');
 const blob = require('./config/blob')
 
 const database = new db();
 const blobClient = new blob();
 
+/* Connects to blob and db before initializing the RouteController */
 blobClient.connectBlob();
 database.connectDB().then(() => {
     const RouteController = require('./website/controller/RouteController');
     new RouteController(app, io, database, blobClient);
 })
-
-
-
-
-
-
-
-
-

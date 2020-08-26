@@ -1,7 +1,3 @@
-/* ############################################################################### */
-/* ########################### LOADING REQUIREMENTS ############################## */
-/* ############################################################################### */
-
 const Position = require('../models/Position.js');
 const RoomService = require('../services/RoomService.js');
 const Settings = require('../utils/Settings.js');
