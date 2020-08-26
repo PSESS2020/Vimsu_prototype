@@ -101,16 +101,6 @@ module.exports = class Chat {
     }
 
     /**
-     * Generates a new message ID
-     * 
-     * @param {String} senderId sender ID
-     */
-    generateNewMsgId(senderId) {
-        TypeChecker.isString(senderId);
-        return this.#chatId + "." + senderId + "." + this.#messageList.length;
-    }
-
-    /**
      * Remove a message from this chat
      * 
      * @param {String} msgId message ID

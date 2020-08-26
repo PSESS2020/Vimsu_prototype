@@ -58,8 +58,6 @@ var maxNumMessages_result = chat.getMaxNumMessages();
 var messageList_result = chat.getMessageList();
 var participantList_result = chat.getParticipantList();
 
-var messageId_result = chat.generateNewMsgId(ownerId);
-
 describe('Chat Testing', function() {
 
     describe('Chat getter functions', function() {
@@ -104,10 +102,6 @@ describe('Chat Testing', function() {
 
     describe('Chat functions', function() {
         describe('Chat messageList functions', function() {
-            it('Test generate message id', function() {
-                expect(messageId_result).to.be.a('string').and.equal(chatId + "." + ownerId + "." + messageList.length);
-            })
-
             it('Test remove old Message', function() {
                 //Status of message list before removing message
                 expect(messageList_result).to.be.an('array').and.to.have.members(messageList).and.to.have.lengthOf(2);
