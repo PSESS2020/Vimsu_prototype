@@ -1,3 +1,6 @@
+/**
+ * @enum Lecture Status
+ */
 const LectureStatus = Object.freeze({
     PENDING: "Coming soon",
     OPENED: "Opened",

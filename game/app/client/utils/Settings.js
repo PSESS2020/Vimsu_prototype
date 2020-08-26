@@ -1,3 +1,6 @@
+/**
+ * @enum other constants
+ */
 const Settings = Object.freeze({
 
     /* Movement-Speed Constants */

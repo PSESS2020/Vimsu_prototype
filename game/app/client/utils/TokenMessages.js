@@ -1,3 +1,6 @@
+/**
+ * @enum Lecture token messages
+ */
 const TokenMessages = Object.freeze({
     REVOKE: "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. " +
                 "Please remember to follow chat etiquette.",
