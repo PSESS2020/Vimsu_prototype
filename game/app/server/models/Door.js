@@ -14,14 +14,15 @@ module.exports = class Door {
     #direction;
 
     /**
+     * Creates a door instance
      * 
-     * @param {number} id 
-     * @param {String} name
-     * @param {TypeOfDoor} typeOfDoor
-     * @param {Position} mapPosition
-     * @param {Position[]} enterPositions
-     * @param {Position} targetPosition 
-     * @param {Direction} direction
+     * @param {number} id door ID
+     * @param {String} name door name
+     * @param {TypeOfDoor} typeOfDoor type of door
+     * @param {Position} mapPosition door position on the map
+     * @param {Position[]} enterPositions door valid enter positions from the map
+     * @param {Position} targetPosition avatar position on entering the door
+     * @param {Direction} direction avatar direction on entering the door
      */
     constructor(id, typeOfDoor, name, mapPosition, enterPositions, targetPosition, direction) {
         TypeChecker.isInt(id);
@@ -48,14 +49,29 @@ module.exports = class Door {
         this.#direction = direction;
     }
 
+    /**
+     * Gets door ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets starting room ID
+     * 
+     * @return starting room ID
+     */
     getStartingRoomId() {
         return this.#mapPosition.getRoomId();
     }
 
+    /**
+     * Gets target room ID
+     * 
+     * @return target room ID if exists, otherwise undefined
+     */
     getTargetRoomId() {
         if (this.#targetPosition) {
             return this.#targetPosition.getRoomId();
@@ -64,26 +80,60 @@ module.exports = class Door {
         }
     }
 
+    /**
+     * Gets type of door
+     * 
+     * @return typeOfDoor
+     */
     getTypeOfDoor() {
         return this.#typeOfDoor;
     }
 
+    /**
+     * Gets door name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Gets map position
+     * 
+     * @return mapPosition
+     */
     getMapPosition() {
         return this.#mapPosition;
     }
 
+    /**
+     * Gets enter positions
+     * 
+     * @return enterPositions
+     */
     getEnterPositions() {
         return this.#enterPositions;
     }
 
+    /**
+     * Gets avatar position on entering the door
+     * 
+     * @return targetPosition if exists, otherwise undefined
+     */
     getTargetPosition() {
-        return this.#targetPosition;
+        if (this.#targetPosition) {
+            return this.#targetPosition.getRoomId();
+        } else {
+            return undefined;
+        }
     }
 
+    /**
+     * Gets avatar direction on entering the door
+     * 
+     * @return direction if exists, otherwise undefined
+     */
     getDirection() {
         if (this.#direction) {
             return this.#direction;
@@ -95,7 +145,9 @@ module.exports = class Door {
     /**
      * Checks if position is a valid enter position for this door
      * 
-     * @param {Position} position 
+     * @param {Position} position avatar's current position
+     * 
+     * @return true if valid, otherwise false
      */
     isValidEnterPosition(position) {
         TypeChecker.isInstanceOf(position, Position);
