@@ -7,8 +7,6 @@ module.exports = class Position {
     #cordY;
 
     /**
-     * Erstellt Positionsinstanz
-     * 
      * 
      * @param {number} roomId 
      * @param {number} cordX 
