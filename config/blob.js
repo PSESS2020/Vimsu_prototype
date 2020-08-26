@@ -94,7 +94,7 @@ module.exports = class blob {
     }
 
     /**
-     * Gets shared access policy of an URL
+     * @private Gets shared access policy of an URL
      * 
      * @param {Date} startDate access start date
      * @param {number} accessTimeInMinutes access duration in minutes

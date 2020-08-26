@@ -11,7 +11,7 @@ class ClientController {
      * creates an instance of ClientController only if there is not an instance already.
      * Otherwise the existing instance will be returned.
      * 
-     * @param {number} port
+     * @param {number} port client port
      */
     constructor(port) {
         if (!!ClientController.instance) {
@@ -24,31 +24,13 @@ class ClientController {
         this.#port = port;
         this.#openSocketConnection();
         this.#gameView = new GameView();
-
-        return this;
     }
 
-    getPort() {
-        return this.#port;
-    }
-
-    getSocket() {
-        return this.#socket;
-    }
-
-    getCurrentRoom() {
-        return this.#currentRoom;
-    }
-
-    getGameView() {
-        return this.#gameView;
-    }
-
-    /* #################################################### */
-    /* ###################### SOCKET ###################### */
-    /* #################################################### */
-
-    //checks if there is an existing socket. Throws an error if there is no socket.
+    /**
+     * @private checks if there is an existing socket
+     * 
+     * @return true if socket is ready, otherwise false
+     */
     #socketReady = function() {
         if (!this.#socket) {
             return false;
@@ -56,7 +38,9 @@ class ClientController {
         return true;
     }
 
-    /*Initializes the initial view for the player*/
+    /**
+     * @private Initializes the initial view for the player
+     */
     #initGameView = function() {
         var assetPaths = this.#currentRoom.getAssetPaths();
         var map = this.#currentRoom.getMap();
@@ -75,9 +59,11 @@ class ClientController {
 
         //Game View is now fully initialised
         this.#gameView.setGameViewInit(true);
-
     }
 
+    /**
+     * @private Initializes the view for the player after switching room
+     */
     #switchRoomGameView = function() {
 
         //disables update of gameview
@@ -96,21 +82,20 @@ class ClientController {
         this.#gameView.resetAnotherAvatarViews();
         this.#gameView.initCanvasEvents();
         this.#gameView.setGameViewInit(true);
-
     }
 
-    /*opens a new socket connection between the client and the server and initializes the events to be handled.
-    Throws an error if there is already an existing socket */
-    // We also need reconnection handling
+    /**
+     * @private opens a new socket connection between the client and the server and initializes the events to be handled.
+     * also handles socket on disconnect.
+     */
     #openSocketConnection = function() {
         if (this.#port && !this.#socket) {
 
-            /* WARNING: WEBSOCKETS ONLY CONFIGURATION*/
-            /*
-            *Arguments prevent initial http polling and start the websocket directly.
-            *Without the arguments the client starts a http connection and upgrades later to websocket protocol.
-            *This caused a disconnect from the server and therefore a server scrash. 
-            */
+            /**
+             * Arguments prevent initial http polling and start the websocket directly.
+             * Without the arguments the client starts a http connection and upgrades later to websocket protocol.
+             * This caused a disconnect from the server and therefore a server scrash. 
+             */
             this.#socket = io({
                 transports: ['websocket'],
                 upgrade: false,
@@ -118,6 +103,7 @@ class ClientController {
                 'reconnectionDelay': 0,
                 'reconnectionAttempts': 120
             });
+            
             this.#socket.on('connect', (socket) => {
                 this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
             });
@@ -128,6 +114,8 @@ class ClientController {
 
             this.#socket.on('disconnect', () => {
                 this.#gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
+
+                //closes socket on disconnect
                 this.#socket.close();
             });
 
@@ -135,11 +123,11 @@ class ClientController {
             this.#socket.emit('new participant');
 
         }
-        else {
-            // TODO: error state
-        }
     }
 
+    /**
+     * @private Initializes the events to be handled
+     */
     #setUpSocket = function() {
         this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
         //this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
@@ -201,8 +189,9 @@ class ClientController {
     /* #################################################### */
 
     /**
+     * updates game view
      * 
-     * @param {number} timeStamp 
+     * @param {number} timeStamp timestamp
      */
     updateGame(timeStamp) {
         TypeChecker.isNumber(timeStamp);
@@ -213,78 +202,15 @@ class ClientController {
     }
 
     /* #################################################### */
-    /* ################## SEND TO SERVER ################## */
-    /* #################################################### */
-
-    /**
-     * 
-     * @param {Direction} direction 
-     */
-    sendToServerRequestMovStart(direction) {
-        if (this.#socketReady()) {
-            TypeChecker.isEnumOf(direction, Direction);
-            let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
-            let currPosX = currPos.getCordX();
-            let currPosY = currPos.getCordY();
-            this.#socket.emit('requestMovementStart', direction, currPosX, currPosY);
-        }
-    }
-
-    sendToServerRequestMovStop() {
-        if (this.#socketReady()) {
-            this.#socket.emit('requestMovementStop');
-        }
-    }
-
-    /**
-     * 
-     * @param {String} text 
-     */
-    sendToServerAllchatMessage(text) {
-        if (this.#socketReady() && this.#socket.connected) {
-            TypeChecker.isString(text);
-            this.#socket.emit('sendMessage', text);
-        }
-        else
-            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-    }
-
-    /**
-     * 
-     * @param {String} input 
-     */
-    sendToServerEvalInput(input) {
-        if (this.#socketReady() && this.#socket.connected) {
-            TypeChecker.isString(input)
-            this.#socket.emit('evalServer', input);
-        }
-        else
-            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
-
-    }
-
-    /**
-     * 
-     * @param {String} text 
-     */
-    sendToServerLectureChatMessage(text) {
-
-        if (this.#socketReady() && this.#socket.connected) {
-            TypeChecker.isString(text)
-            this.#socket.emit('lectureMessage', text);
-        }
-        else
-            $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-
-    }
-
-    /* #################################################### */
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
 
-
-    //Second message from server, gives you information of starting position, business card and participant id
-    //After that, there is everything to init the game view
+    /**
+     * @private Second message from server, gives you information of starting position, business card and participant id.
+     * After that, there is everything to init the game view
+     * 
+     * @param {Object} initInfo initial info
+     */
     #handleFromServerInitOwnParticipant = function(initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
@@ -309,10 +235,22 @@ class ClientController {
         );
         this.#currentRoom.enterParticipant(this.#ownParticipant);
         this.#initGameView();
-
     }
 
-    //Third message from Server, gives you information of starting room
+    /**
+     * @private Third message from Server, gives you information of starting room
+     * 
+     * @param {number} roomId room ID
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {Object[]} assetPaths asset paths
+     * @param {Object[]} listOfMapElementsData list of map elements
+     * @param {Object[]} listOfGameObjectsData list of game objects
+     * @param {Object} npcData NPC
+     * @param {Object} doorData door
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number[][]} occupationMap occupation map
+     */
     #handleFromServerUpdateRoom = function(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
 
         //tranform MapElements to GameObjectClients
@@ -345,7 +283,7 @@ class ClientController {
         if (!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-            //If not, only swap the room
+        //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
@@ -353,7 +291,11 @@ class ClientController {
         }
     }
 
-    //updates own avatar position
+    /**
+     * @private updates own avatar position
+     * 
+     * @param {Object} posInfo position information
+     */
     #handleFromServerUpdatePosition = function(posInfo) {
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
@@ -364,13 +306,13 @@ class ClientController {
         this.#gameView.updateOwnAvatarDirection(dirUpdate);
     }
 
-    //Server does collision testing, so this method is only called when movement from other user is legit (P)
     /**
+     * @private Starts movement of other participant
      * 
-     * @param {String} ppantID 
-     * @param {Direction} direction 
-     * @param {number} newCordX 
-     * @param {number} newCordY 
+     * @param {String} ppantID participant ID
+     * @param {Direction} direction avatar direction
+     * @param {number} newCordX x coordinate
+     * @param {number} newCordY y coordinate
      */
     #handleFromServerStartMovementOther = function(ppantID, direction, newCordX, newCordY) {
 
@@ -388,8 +330,9 @@ class ClientController {
     }
 
     /**
+     * @private Stops movement of other participant.
      * 
-     * @param {String} ppantID 
+     * @param {String} ppantID participant ID
      */
     #handleFromServerStopMovementOther = function(ppantID) {
         TypeChecker.isString(ppantID);
@@ -397,38 +340,43 @@ class ClientController {
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
     }
 
+    /**
+     * @private receives lecture informations from server from server
+     * 
+     * @param {Object} lecture lecture
+     * @param {boolean} hasToken true if has token, otherwise false
+     * @param {Object} letureChat lecture chat
+     */
     #handleFromServerLectureEntered = function(lecture, hasToken, lectureChat) {
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
 
     /**
+     * @private receives lecture full information from server
      * 
-     * @param {String} lectureId 
+     * @param {String} lectureId lecture ID
      */
     #handleFromServerLectureFull = function(lectureId) {
         TypeChecker.isString(lectureId);
         this.#gameView.updateCurrentLectures(lectureId);
     }
 
-    /* TODO
-     * Change argument from object into list (nicer to read)
-     * - (E) */
+    /**
+     * @private receives info that a participant has entered the room
+     * 
+     * @param {Object} initInfo initial participant info
+     */
     #handleFromServerRoomEnteredByParticipant = function(initInfo) {
-
-        //var entrancePosition = this.#currentRoom; //TODO .getEntrancePosition
-        //var entranceDirection = this.#currentRoom;//TODO .getEntranceDirection
-
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
-        // the following line throws the same error as in the above method
         this.#gameView.initAnotherAvatarViews(participant);
     }
 
     /**
-     * Removes disconnected Player from Model and View
+     * @private Removes disconnected Player from Model and View
      * 
-     * @param {String} ppantId 
+     * @param {String} ppantId participant ID
      */
     #handleFromServerRemovePlayer = function(ppantId) {
         TypeChecker.isString(ppantId);
@@ -436,16 +384,31 @@ class ClientController {
         this.#gameView.removeAnotherAvatarViews(ppantId);
     }
 
-    // get the current lectures from the server to display in the UI for selection
+    /**
+     * @private get the current lectures from the server to display in the UI for selection
+     * 
+     * @param {Object[]} lectures current lectures
+     */
     #handleFromServerCurrentLectures = function(lectures) {
         this.#gameView.initCurrentLectures(lectures);
     }
 
+    /**
+     * @private get the schedule from the server to display in the UI for selection
+     * 
+     * @param {Object[]} lectures all lectures with the schedule
+     */
     #handleFromServerCurrentSchedule = function(lectures) {
         this.#gameView.initCurrentSchedule(lectures);
     }
 
-    //Is called after server send the answer of avatarclick
+    /**
+     * @private Is called after server send the answer of avatarclick
+     * 
+     * @param {Object} businessCardObject business card
+     * @param {number} rank rank
+     * @param {boolean} isModerator true if moderator, otherwise false
+     */
     #handleFromServerBusinessCard = function(businessCardObject, rank, isModerator) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
@@ -460,14 +423,22 @@ class ClientController {
         }
     }
 
+    /**
+     * @private Server sends friends that can be invited to a group chat
+     * 
+     * @param {Object} friendListData friend list data
+     * @param {?String} groupName chat group name
+     * @param {?number} limit group chat limit
+     * @param {?String} chatId group chat ID
+     */
     #handleFromServerInviteFriends = function(friendListData, groupName, limit, chatId) {
-        
         if (groupName)
             TypeChecker.isString(groupName);
         if (limit)
             TypeChecker.isInt(limit)
         if (chatId)
             TypeChecker.isString(chatId);
+
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -475,7 +446,11 @@ class ClientController {
         this.#gameView.initInviteFriendsView(friendList, groupName, limit, chatId);
     }
 
-    //Is called after server send the answer of friendlistclick
+    /**
+     * @private Is called after server send the answer of friendlistclick
+     * 
+     * @param {Object} friendListData friend list
+     */
     #handleFromServerFriendList = function(friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
@@ -484,7 +459,11 @@ class ClientController {
         this.#gameView.initFriendListView(friendList);
     }
 
-    //Is called after server send the answer of friendrequestlistclick
+    /**
+     * @private Is called after server send the answer of friendrequestlistclick
+     * 
+     * @param {Object} friendRequestListData friend request list
+     */
     #handleFromServerFriendRequestList = function(friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
@@ -494,6 +473,12 @@ class ClientController {
         this.#gameView.initFriendRequestListView(friendRequestList);
     }
 
+    /**
+     * @private Is called after new friend request is confirmed from server
+     * 
+     * @param {Object} data business card of the requester
+     * @param {String} chatId chat ID with the requester
+     */
     #handleFromServerNewFriendRequest = function(data, chatId) {
         var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriendRequest(friendRequest);
@@ -501,6 +486,12 @@ class ClientController {
         this.#gameView.drawNewFriendRequest(data.username);
     }
 
+    /**
+     * @private Is called after accepted friend request is confirmed from server
+     * 
+     * @param {Object} data friend business card
+     * @param {String} chatId chat ID with this friend
+     */
     #handleFromServerAcceptedFriendRequest = function(data, chatId) {
         var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriend(friend);
@@ -509,8 +500,9 @@ class ClientController {
     }
 
     /**
+     * @private Is called after rejected friend request is confirmed from server
      * 
-     * @param {String} chatId 
+     * @param {String} chatId chat ID with this participant
      */
     #handleFromServerRejectedFriendRequest = function(chatId) {
         TypeChecker.isString(chatId);
@@ -518,9 +510,10 @@ class ClientController {
     }
 
     /**
+     * @private Is called after removing friend is confirmed from server
      * 
-     * @param {String} friendId 
-     * @param {String} chatId 
+     * @param {String} friendId old friend ID
+     * @param {String} chatId chat ID with this participant
      */
     #handleFromServerRemovedFriend = function(friendId, chatId) {
         TypeChecker.isString(friendId);
@@ -529,6 +522,11 @@ class ClientController {
         this.#gameView.updateChatThread(chatId, false, false);
     }
 
+    /**
+     * @private Is called after server send the answer of ranklistclick
+     * 
+     * @param {Object} rankList rank list
+     */
     #handleFromServerRankList = function(rankList) {
         //remark own participant's ranking
         let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
@@ -539,8 +537,9 @@ class ClientController {
     }
 
     /**
+     * @private Is called after server send the answer of group chat participant list click
      * 
-     * @param {String[]} usernames 
+     * @param {String[]} usernames list of usernames
      */
     #handleFromServerChatParticipantList = function(usernames) {
         TypeChecker.isInstanceOf(usernames, Array);
@@ -551,8 +550,9 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to add participant to chat participant list
      * 
-     * @param {String} username 
+     * @param {String} username username
      */
     #handleFromServerAddToChatParticipantList = function(username) {
         TypeChecker.isString(username);
@@ -560,8 +560,9 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to remove participant from chat participant list
      * 
-     * @param {String} username 
+     * @param {String} username username
      */
     #handleFromServerRemoveFromChatParticipantList = function(username) {
         TypeChecker.isString(username);
@@ -569,13 +570,13 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to add participant to invite friends
      * 
-     * @param {?Object} data 
-     * @param {boolean} hasLeftChat 
+     * @param {?Object} data participant's business card
+     * @param {boolean} hasLeftChat true if participant has left the chat
      */
     #handleFromServerAddToInviteFriends = function(data, hasLeftChat) {
         if (data) {
-            //Typechecking
             var businessCard = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         } else
             var businessCard = undefined;
@@ -585,9 +586,10 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to remove participant from invite friends
      * 
-     * @param {?String} participantId 
-     * @param {boolean} isMemberOfChat 
+     * @param {?String} participantId participant ID
+     * @param {boolean} isMemberOfChat true if participant is now member of chat
      */
     #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
         if (participantId)
@@ -597,36 +599,55 @@ class ClientController {
         this.#gameView.removeFromInviteFriends(participantId, isMemberOfChat);
     }
 
-    // Adds a new message to the all-chat
+    /**
+     * @private Receives from server to add a new message to the allchat 
+     * 
+     * @param {Object} message allchat message
+     */
     #handleFromServerNewAllchatMessage = function(message) {
         this.#gameView.appendAllchatMessage(message);
     }
 
+    /**
+     * @private Receives from server to add a new message to the lecture 
+     * 
+     * @param {Object} message lecture chat message
+     */
     #handleFromServerNewLectureChatMessage = function(message) {
         this.#gameView.appendLectureChatMessage(message);
     }
 
+    /**
+     * @private Receives from server to update messages in the lecture 
+     * 
+     * @param {Object} messages lecture chat messages
+     */
     #handleFromServerUpdateLectureChat = function(messages) {
         this.#gameView.updateLectureChat(messages);
     };
 
     /**
+     * @private Receives from server to update participant's token
      * 
-     * @param {boolean} hasToken 
+     * @param {boolean} hasToken true if has token, otherwise false
      */
     #handleFromServerUpdateToken = function(hasToken) {
         TypeChecker.isBoolean(hasToken);
         this.#gameView.updateLectureToken(hasToken);
     };
 
+    /**
+     * @private Receives from server to force close lecture
+     */
     #handleFromServerForceCloseLecture = function() {
         this.#gameView.closeLectureView();
     };
 
     /**
+     * @private Receives from server to update successes bar
      * 
-     * @param {?number} points 
-     * @param {?number} rank 
+     * @param {?number} points points
+     * @param {?number} rank rank
      */
     #handleFromServerUpdateSuccessesBar = function(points, rank) {
         if (points) {
@@ -640,17 +661,20 @@ class ClientController {
         this.#gameView.updateSuccessesBar(points, rank);
     }
 
-    // Called when a new room is entered.
-    // The argument is an array of objects of the following structure:
-    // { senderID: <String>, timestamp: <String>, text: <String> }
+    /**
+     * @private Called when a new room is entered.
+     * 
+     * @param {{senderId: String, timestamp: String, text: String}} messages allchat messages
+     */
     #handleFromServerInitAllchat = function(messages) {
         this.#gameView.initAllchatView(this.#currentRoom.getTypeOfRoom(), messages);
     }
 
     /**
+     * @private Receives from server for a new notification
      * 
-     * @param {String} messageHeader 
-     * @param {String[]} messageText 
+     * @param {String} messageHeader message header
+     * @param {String[]} messageText message text
      */
     #handleFromServerNewNotification = function(messageHeader, messageText) {
         TypeChecker.isString(messageHeader);
@@ -666,9 +690,10 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server for a new global announcement
      * 
-     * @param {String} moderatorUsername 
-     * @param {String} messageText 
+     * @param {String} moderatorUsername moderator username
+     * @param {String} messageText message text
      */
     #handleFromServerNewGlobalAnnouncement = function(moderatorUsername, messageText) {
         TypeChecker.isString(moderatorUsername);
@@ -679,8 +704,9 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to hide avatar
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     #handleFromServerHideAvatar = function(participantId) {
         TypeChecker.isString(participantId);
@@ -688,26 +714,36 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server to show avatar
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     #handleFromServerShowAvatar = function(participantId) {
         TypeChecker.isString(participantId);
         this.#gameView.showAvatar(participantId);
     }
 
+    /**
+     * @private Receives from server that client has been removed from the conference
+     */
     #handleFromServerRemoved = function() {
         $('#viewBlocker').show();
     };
 
+    /**
+     * @private Receives from server after clicking achievements
+     * 
+     * @param {Object[]} achievements achievements
+     */
     #handleFromServerAchievements = function(achievements) {
         this.#gameView.initCurrentAchievementsView(achievements);
     }
 
     /**
+     * @private Receives from server after clicking a NPC
      * 
-     * @param {String} name 
-     * @param {String[]} story 
+     * @param {String} name NPC name
+     * @param {String[]} story NPC story
      */
     #handleFromServerShowNPCStory = function(name, story) {
         TypeChecker.isString(name);
@@ -718,30 +754,48 @@ class ClientController {
         this.#gameView.initNPCStoryView(name, story);
     }
 
+    /**
+     * @private Receives from server on a new achievement
+     * 
+     * @param {Object} achievement achievement
+     */
     #handleFromServerNewAchievement = function(achievement) {
         this.#gameView.handleNewAchievement(achievement);
     }
 
+    /**
+     * @private Receives from server after clicking chat list
+     * 
+     * @param {Object[]} chats chat list
+     */
     #handleFromServerShowChatList = function(chats) {
         this.#gameView.initChatListView(chats);
     };
 
+    /**
+     * @private Receives from server after clicking a chat in the chat list
+     * 
+     * @param {Object} chat chat
+     */
     #handleFromServerShowChatThread = function(chat) {
         this.#gameView.initChatThreadView(chat, true);
     };
 
-    /* This function is called when another user creates a new chat
-     * with out user in it, ONCE THE FIRST MESSAGE HAS BEEN POSTED 
-     * INTO THAT CHAT (or if a friend request has been send).
-     * - (E) */
+    /**
+     * @private Receives from server that a new chat has been created
+     * 
+     * @param {Object} chat chat
+     * @param {boolean} openNow true if chat thread should be opened now, otherwise false
+     */
     #handleFromServerNewChat = function(chat, openNow) {
         this.#gameView.addNewChat(chat, openNow);
     };
 
     /**
+     * @private Receives from server that user got a new chat
      * 
-     * @param {String} senderUsername 
-     * @param {String} chatId 
+     * @param {String} senderUsername chat sender username
+     * @param {String} chatId chat ID
      */
     #handleFromServerGotNewChat = function(senderUsername, chatId) {
         TypeChecker.isString(senderUsername);
@@ -751,10 +805,11 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server that user is invited to a group chat
      * 
-     * @param {String} groupName 
-     * @param {String} creatorUsername 
-     * @param {String} chatId 
+     * @param {String} groupName group chat name
+     * @param {String} creatorUsername username of the user that invited this user
+     * @param {String} chatId chat ID
      */
     #handleFromServerGotNewGroupChat = function(groupName, creatorUsername, chatId) {
         TypeChecker.isString(groupName);
@@ -765,9 +820,10 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server that user got a new message on an existing chat
      * 
-     * @param {String} senderUsername 
-     * @param {String} chatId 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
      */
     #handleFromServerGotNewChatMessage = function(senderUsername, chatId) {
         TypeChecker.isString(senderUsername);
@@ -775,11 +831,19 @@ class ClientController {
         this.#gameView.drawNewMessage(senderUsername, chatId);
     }
 
-    //This function is called when a new chat message is created in either OneToOneChat or GroupChat.
+    /**
+     * @private Receives from server a new chat message is created
+     * 
+     * @param {String} chatId 
+     * @param {Object} message 
+     */
     #handleFromServerNewChatMessage = function(chatId, message) {
         this.#gameView.addNewChatMessage(chatId, message);
     };
 
+    /**
+     * @private Receives from server that conference is already entered with the same account
+     */
     #handleFromServerGameEntered = function() {
         alert("You have entered the conference with the same account. Redirect to homepage...")
         var redirect = $('#nav_leave_button').attr('href');
@@ -791,8 +855,78 @@ class ClientController {
     /* #################################################### */
 
     /**
+     * Sends to server on movement start
      * 
-     * @param {number} targetRoomId 
+     * @param {Direction} direction movement direction 
+     */
+    sendToServerRequestMovStart(direction) {
+        if (this.#socketReady()) {
+            TypeChecker.isEnumOf(direction, Direction);
+            let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
+            let currPosX = currPos.getCordX();
+            let currPosY = currPos.getCordY();
+            this.#socket.emit('requestMovementStart', direction, currPosX, currPosY);
+        }
+    }
+
+    /**
+     * Sends to server on movement stop
+     */
+    sendToServerRequestMovStop() {
+        if (this.#socketReady()) {
+            this.#socket.emit('requestMovementStop');
+        }
+    }
+
+    /**
+     * Sends to server on allchat message input
+     * 
+     * @param {String} text allchat message text
+     */
+    sendToServerAllchatMessage(text) {
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(text);
+            this.#socket.emit('sendMessage', text);
+        }
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+    }
+
+    /**
+     * Sends to server on evaluation input
+     * 
+     * @param {String} input evaluation input
+     */
+    sendToServerEvalInput(input) {
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(input)
+            this.#socket.emit('evalServer', input);
+        }
+        else
+            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
+
+    }
+
+    /**
+     * Sends to server on lecture chat message input
+     * 
+     * @param {String} text lecture message text
+     */
+    sendToServerLectureChatMessage(text) {
+
+        if (this.#socketReady() && this.#socket.connected) {
+            TypeChecker.isString(text)
+            this.#socket.emit('lectureMessage', text);
+        }
+        else
+            $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+
+    }
+    
+    /**
+     * Sends to server on entering new room
+     * 
+     * @param {number} targetRoomId target room ID
      */
     handleFromViewEnterNewRoom(targetRoomId) {
         TypeChecker.isInt(targetRoomId);
@@ -803,8 +937,9 @@ class ClientController {
     }
 
     /**
+     * Sends to server on entering a lecture
      * 
-     * @param {String} lectureId 
+     * @param {String} lectureId lecture ID
      */
     handleFromViewEnterLecture(lectureId) {
         TypeChecker.isString(lectureId);
@@ -815,9 +950,10 @@ class ClientController {
     }
 
     /**
+     * Sends to server on leaving a lecture
      * 
-     * @param {String} lectureId 
-     * @param {boolean} lectureEnded 
+     * @param {String} lectureId lecture ID
+     * @param {boolean} lectureEnded true if lecture has ended, otherwise false
      */
     handleFromViewLectureLeft(lectureId, lectureEnded) {
         TypeChecker.isString(lectureId);
@@ -829,37 +965,35 @@ class ClientController {
     }
 
     /**
-     * 
-     * @param {String} lectureId 
+     * Gets current lectures from server
      */
-    handleFromViewLectureDownload(lectureId) {
-        TypeChecker.isString(lectureId);
-
-        if (this.#socketReady()) {
-            this.#socket.emit('lectureVideoDownload', lectureId);
-        }
-    }
-
     handleFromViewGetCurrentLectures() {
         if (this.#socketReady()) {
             this.#socket.emit('getCurrentLectures');
         }
     }
 
+    /**
+     * Gets schedule from server
+     */
     handleFromViewShowSchedule() {
         if (this.#socketReady()) {
             this.#socket.emit('getSchedule');
         }
     }
 
-    // called after clicking on achievement list
+    /**
+     * Gets achievement from server
+     */
     handleFromViewShowAchievements() {
         if (this.#socketReady()) {
             this.#socket.emit('getAchievements');
         }
     }
 
-    //called after click on friendlist button
+    /**
+     * Gets friend list from server
+     */
     handleFromViewShowFriendList() {
         if (this.#socketReady()) {
             this.#socket.emit('getFriendList');
@@ -867,9 +1001,10 @@ class ClientController {
     }
 
     /**
+     * Gets friend list to be invited to a group chat from server
      * 
-     * @param {String} groupName 
-     * @param {String} chatId 
+     * @param {String} groupName group chat name
+     * @param {?String} chatId chat ID
      */
     handleFromViewShowInviteFriends(groupName, chatId) {
         TypeChecker.isString(groupName);
@@ -882,33 +1017,34 @@ class ClientController {
         }
     }
 
-    //called after click on friendrequestlist button
+    /**
+     * Gets friend request list from server
+     */
     handleFromViewShowFriendRequestList() {
         if (this.#socketReady()) {
             this.#socket.emit('getFriendRequestList');
         }
-
     }
 
     /**
-     * called after 'Add Friend' Button
+     * Sends to server on sending friend request
      * 
-     * @param {String} participantRepicientId 
-     * @param {String} chatId 
+     * @param {String} participantRecipientId request recipient ID
+     * @param {String} chatId chat ID
      */
-    handleFromViewNewFriendRequest(participantRepicientId, chatId) {
-        TypeChecker.isString(participantRepicientId);
+    handleFromViewNewFriendRequest(participantRecipientId, chatId) {
+        TypeChecker.isString(participantRecipientId);
         TypeChecker.isString(chatId);
 
         if (this.#socketReady()) {
-            this.#socket.emit('newFriendRequest', participantRepicientId, chatId);
+            this.#socket.emit('newFriendRequest', participantRecipientId, chatId);
         }
     }
 
     /**
-     * called when a friend request is accepted
+     * Sends to server after friend request is accepted, and updates view directly
      * 
-     * @param {BusinessCardClient} businessCard 
+     * @param {BusinessCardClient} businessCard accepted business card
      */
     handleFromViewAcceptRequest(businessCard) {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
@@ -925,14 +1061,15 @@ class ClientController {
     }
 
     /**
-     * called when a friend request is declined
+     * Sends to server after friend request is declined and updates view directly
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     handleFromViewRejectRequest(participantId) {
         TypeChecker.isString(participantId);
 
         if (this.#socketReady()) {
+
             //Tells server to reject this request
             this.#socket.emit('handleFriendRequest', participantId, false);
             this.#gameView.updateFriendRequestListView(participantId, false);
@@ -940,9 +1077,9 @@ class ClientController {
     }
 
     /**
-     * called when this participants removes another from his friendlist
+     * Sends to server after removing friend from friend list and updates view directly
      * 
-     * @param {String} friendId 
+     * @param {String} friendId old friend ID
      */
     handleFromViewRemoveFriend(friendId) {
         TypeChecker.isString(friendId);
@@ -954,8 +1091,9 @@ class ClientController {
     }
 
     /**
+     * Sends to server after leaving a chat and updates view directly
      * 
-     * @param {String} chatId 
+     * @param {String} chatId chat ID
      */
     handleFromViewLeaveChat(chatId) {
         TypeChecker.isString(chatId);
@@ -967,8 +1105,9 @@ class ClientController {
     }
 
     /**
+     * Gets business card from server
      * 
-     * @param {String} participantId
+     * @param {String} participantId participant ID
      */
     handleFromViewShowBusinessCard(participantId) {
         TypeChecker.isString(participantId);
@@ -977,18 +1116,22 @@ class ClientController {
             throw new Error('Ppant with ' + participantId + ' is not in room');
         }
         if (this.#socketReady()) {
-            //Emits to server target ID
+            //Emits target ID to server
             this.#socket.emit('getBusinessCard', participantId);
         }
     }
 
+    /**
+     * Shows profile
+     */
     handleFromViewShowProfile() {
         this.#gameView.initProfileView(this.#ownBusinessCard, this.#ownParticipant.getIsModerator());
     }
 
     /**
+     * Gets NPC story from server
      * 
-     * @param {number} npcId 
+     * @param {number} npcId NPC ID
      */
     handleFromViewGetNPCStory(npcId) {
         TypeChecker.isInt(npcId);
@@ -998,16 +1141,18 @@ class ClientController {
         }
     }
 
+    /**
+     * Gets rank list from server
+     */
     handleFromViewShowRankList() {
         if (this.#socketReady()) {
             this.#socket.emit('getRankList');
         }
     }
 
-    /* Gets the list of chats the user is in - one-on-one and group - from the
-     * server. The actual displaying is done in the method dealing with the 
-     * response from the server.
-     * - (E) */
+    /**
+     * Gets the list of chats the user is in - one-on-one and group - from the server. 
+     */
     handleFromViewShowChatList() {
         if (this.#socketReady()) {
             this.#socket.emit('getChatList');
@@ -1015,8 +1160,9 @@ class ClientController {
     };
 
     /**
+     * Gets chat thread from server
      * 
-     * @param {String} chatID 
+     * @param {String} chatID chat ID
      */
     handleFromViewShowChatThread(chatID) {
         TypeChecker.isString(chatID);
@@ -1027,8 +1173,9 @@ class ClientController {
     };
 
     /**
+     * Gets group chat participant list from server
      * 
-     * @param {String} chatId 
+     * @param {String} chatId chat ID
      */
     handleFromViewShowChatParticipantList(chatId) {
         TypeChecker.isString(chatId);
@@ -1041,7 +1188,7 @@ class ClientController {
     /**
      * Triggers the createNewChat event and emits the id of the other chat participant to the server.
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     handleFromViewCreateNewChat(participantId) {
         TypeChecker.isString(participantId);
@@ -1052,10 +1199,11 @@ class ClientController {
     }
 
     /**
+     * Triggers the createNewGroupChat event and emits the group chat name, member list and chat ID to the server
      * 
-     * @param {String} chatName 
-     * @param {String[]} participantIdList 
-     * @param {String} chatId 
+     * @param {String} chatName group chat name
+     * @param {String[]} participantIdList chat member ID list
+     * @param {?String} chatId chat ID
      */
     handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId) {
         TypeChecker.isString(chatName);
@@ -1072,9 +1220,10 @@ class ClientController {
     }
 
     /**
+     * Sends to server on sending a new chat message
      * 
-     * @param {String} chatId 
-     * @param {String} messageText 
+     * @param {String} chatId chat ID
+     * @param {String} messageText message text
      */
     handleFromViewSendNewMessage(chatId, messageText) {
         TypeChecker.isString(chatId);
@@ -1085,17 +1234,20 @@ class ClientController {
         }
     }
 
+    /**
+     * Sends to server to clear interval
+     */
     handleFromViewClearInterval() {
         if (this.#socketReady()) {
             this.#socket.emit('clearInterval');
         }
     }
 
-    // Can we maybe merge these four functions into one?
+    /**
+     * Sends to server request movement start on left arrow down and updates view directly
+     */
     handleLeftArrowDown() {
         this.#gameView.updateOwnAvatarDirection(Direction.UPLEFT);
-        //this.sendMovementToServer(Direction.UPLEFT);
-        //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
@@ -1105,10 +1257,11 @@ class ClientController {
         this.sendToServerRequestMovStart(Direction.UPLEFT);
     }
 
+    /**
+     * Sends to server request movement start on right arrow down and updates view directly
+     */
     handleRightArrowDown() {
         this.#gameView.updateOwnAvatarDirection(Direction.DOWNRIGHT);
-        //this.sendMovementToServer(Direction.DOWNRIGHT);
-        //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.#currentRoom.checkForCollision(newPos)) {
@@ -1118,10 +1271,11 @@ class ClientController {
         this.sendToServerRequestMovStart(Direction.DOWNRIGHT);
     }
 
+    /**
+     * Sends to server request movement start on up arrow down and updates view directly
+     */
     handleUpArrowDown() {
         this.#gameView.updateOwnAvatarDirection(Direction.UPRIGHT);
-        //this.sendMovementToServer(Direction.UPRIGHT);
-        //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
@@ -1131,10 +1285,11 @@ class ClientController {
         this.sendToServerRequestMovStart(Direction.UPRIGHT);
     }
 
+    /**
+     * Sends to server request movement start on down arrow down and updates view directly
+     */
     handleDownArrowDown() {
         this.#gameView.updateOwnAvatarDirection(Direction.DOWNLEFT);
-        //this.sendMovementToServer(Direction.DOWNLEFT);
-        //TODO: Collision Check
         let currPos = this.#gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.#currentRoom.checkForCollision(newPos)) {
@@ -1144,6 +1299,9 @@ class ClientController {
         this.sendToServerRequestMovStart(Direction.DOWNLEFT);
     }
 
+    /**
+     * Sends to server to request movement stop on arrow up and updates view directly
+     */
     handleArrowUp() {
         this.#gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
