@@ -1,3 +1,5 @@
+const TypeChecker = require("../../client/shared/TypeChecker")
+
 module.exports = class Message {
 
     #messageId
@@ -6,7 +8,21 @@ module.exports = class Message {
     #timestamp
     #messageText
 
+    /**
+     * 
+     * @param {String} messageId 
+     * @param {String} senderId 
+     * @param {String} senderUsername 
+     * @param {Date} timestamp 
+     * @param {String} messageText 
+     */
     constructor(messageId, senderId, senderUsername, timestamp, messageText) {
+        TypeChecker.isString(messageId);
+        TypeChecker.isString(senderId);
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isDate(timestamp);
+        TypeChecker.isString(messageText);
+        
         this.#messageId = messageId;
         this.#senderId = senderId;
         this.#senderUsername = senderUsername;
