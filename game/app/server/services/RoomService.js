@@ -24,6 +24,10 @@ module.exports = class RoomService {
         return this.#rooms;
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     */
     getRoom(roomId) {
         TypeChecker.isInt(roomId);
 
