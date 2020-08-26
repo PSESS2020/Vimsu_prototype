@@ -1,15 +1,35 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Lecture = require('../models/Lecture')
+const Lecture = require('../models/Lecture');
+const blobClient = require('../../../../config/blob');
+const db = require('../../../../config/db');
 
 module.exports = class LectureService {
+
+    /**
+     * 
+     * @param {String} videoId 
+     * @param {blobClient} blob 
+     * @param {Date} startingTime 
+     * @param {number} duration 
+     */
     static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
+        TypeChecker.isInstanceOf(blob, blobClient);
+        TypeChecker.isDate(startingTime);
+        TypeChecker.isNumber(duration);
 
         return blob.getWriteSAS("lectures", videoId, startingTime, duration);
     }
-
-
+    
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static createAllLectures(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
+
         return this.#getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
             var lectureLists = [];
 
@@ -27,7 +47,15 @@ module.exports = class LectureService {
         })
     }
 
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static getAllLectures(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
+
         return vimsudb.findInCollection("lectures", { conferenceId: conferenceId, isAccepted: true }, {}).then(lectures => {
             if (lectures.length > 0) {
                 return lectures;
@@ -40,7 +68,14 @@ module.exports = class LectureService {
         })
     }
 
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static #getAllLecturesWithOratorData = function(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.joinCollection("lectures", "accounts", "oratorId", "accountId").then(allLectures => {
             if (allLectures.length > 0) {
@@ -66,18 +101,5 @@ module.exports = class LectureService {
 
         })
 
-    }
-
-    static getOratorLectureIds(oratorId, conferenceId, vimsudb) {
-        return vimsudb.findInCollection("lectures", { oratorId: oratorId, conferenceId: conferenceId, isAccepted: true }, { id: 1 }).then(lectures => {
-
-            if (lectures.length > 0) {
-                return lectures;
-            }
-            else {
-                console.log("no lecture found with oratorId " + oratorId);
-                return false;
-            }
-        })
     }
 } 
