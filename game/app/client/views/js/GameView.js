@@ -76,6 +76,10 @@ class GameView {
         return this.#anotherParticipantAvatarViews;
     }
 
+    /**
+     * 
+     * @param {boolean} bool 
+     */
     setGameViewInit(bool) {
         TypeChecker.isBoolean(bool);
         this.#gameViewInit = bool;
@@ -178,7 +182,11 @@ class GameView {
         });
     }
 
-    addToUpdateList(viewInstance) {
+    /**
+     * 
+     * @param {Views} viewInstance 
+     */
+    #addToUpdateList = function(viewInstance) {
         if (viewInstance instanceof Array) {
             var i;
             for (i = 0; i < viewInstance.length; i++) {
@@ -194,20 +202,12 @@ class GameView {
         }
     }
 
-    removeFromUpdateList(viewInstance) {
-        if (!this.#updateList.includes(viewInstance)) {
-            throw new Error(viewInstance + " is not in update list")
-        }
-
-        let index = this.#updateList.indexOf(viewInstance);
-        this.#updateList.splice(index, 1)
-    }
-
-    getUpdateList() {
-        return this.#updateList;
-    }
-
+    /**
+     * 
+     * @param {String} username 
+     */
     drawProfile(username) {
+        TypeChecker.isString(username);
         this.#hudView.drawProfile(username)
     }
 
@@ -259,20 +259,36 @@ class GameView {
         }
     }
 
+    /**
+     * 
+     * @param {number} ms 
+     */
     updatePing(ms) {
+        TypeChecker.isInt(ms);
         this.#statusBar.updatePing(ms);
     }
 
+    /**
+     * 
+     * @param {number} timeStamp 
+     */
     updateFPS(timeStamp) {
+        TypeChecker.isNumber(timeStamp);
         this.#statusBar.updateFPS(timeStamp);
     }
 
+    /**
+     * 
+     * @param {ConnectionState} status 
+     */
     updateConnectionStatus(status) {
+        TypeChecker.isEnumOf(status, ConnectionState);
         this.#statusBar.updateConnectionStatus(status);
     }
 
     //Is called when participant enters Room
     initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom) {
+        
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
@@ -313,10 +329,16 @@ class GameView {
                 this.#eventManager
             ));
         }
-        this.addToUpdateList(this.#anotherParticipantAvatarViews);
+        this.#addToUpdateList(this.#anotherParticipantAvatarViews);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {PositionClient} newPosition 
+     */
     updateAnotherAvatarPosition(participantId, newPosition) {
+        TypeChecker.isString(participantId);
         TypeChecker.isInstanceOf(newPosition, PositionClient);
 
         let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
@@ -328,7 +350,13 @@ class GameView {
         this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {Direction} direction 
+     */
     updateAnotherAvatarDirection(participantId, direction) {
+        TypeChecker.isString(participantId);
         TypeChecker.isEnumOf(direction, Direction);
 
         let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
@@ -340,7 +368,14 @@ class GameView {
         this.#anotherParticipantAvatarViews[index].setDirection(direction);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {boolean} isMoving 
+     */
     updateAnotherAvatarWalking(participantId, isMoving) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isBoolean(isMoving);
 
         let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
@@ -355,7 +390,7 @@ class GameView {
 
     /**
      * 
-     * @param {ParticipantClient} participants
+     * @param {String} participantId
      */
     removeAnotherAvatarViews(participantId) {
         TypeChecker.isString(participantId);
@@ -376,7 +411,11 @@ class GameView {
         this.#anotherParticipantAvatarViews.length = 0;
     }
 
-    //inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
+    /**
+     * inits ownAvatarView with information from ownParticipant model instance in a room of typeOfRoom
+     * 
+     * @param {ParticipantClient} ownParticipant 
+     */
     initOwnAvatarView(ownParticipant) {
         TypeChecker.isInstanceOf(ownParticipant, ParticipantClient);
 
@@ -387,24 +426,37 @@ class GameView {
         let isModerator = ownParticipant.getIsModerator();
 
         this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
-        this.addToUpdateList(this.#ownAvatarView);
+        this.#addToUpdateList(this.#ownAvatarView);
 
         //Game View is now fully initialized (Is now set by ClientController in initGameView())
         //this.#gameViewInit = true;
     }
 
+    /**
+     * 
+     * @param {PositionClient} newPosition 
+     */
     updateOwnAvatarPosition(newPosition) {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
         this.#ownAvatarView.setPosition(newPosition);
     }
 
+    /**
+     * 
+     * @param {Direction} direction 
+     */
     updateOwnAvatarDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#ownAvatarView.setDirection(direction);
 
     }
 
+    /**
+     * 
+     * @param {boolean} isMoving 
+     */
     updateOwnAvatarWalking(isMoving) {
+        TypeChecker.isBoolean(isMoving);
         this.#ownAvatarView.updateWalking(isMoving);
         this.#ownAvatarView.updateCurrentAnimation();
     }
@@ -413,7 +465,12 @@ class GameView {
         this.#currentLecturesView.draw(lectures);
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     updateCurrentLectures(lectureId) {
+        TypeChecker.isString(lectureId);
         this.#currentLecturesView.drawLectureFull(lectureId);
     }
 
@@ -425,23 +482,80 @@ class GameView {
         this.#lectureView.draw(lecture, hasToken, lectureChat);
     }
 
+    /**
+     * 
+     * @param {String} messageHeader 
+     * @param {String} messageText 
+     */
     initGlobalChatView(messageHeader, messageText) {
+        TypeChecker.isString(messageHeader);
+        TypeChecker.isString(messageText);
+
         this.#globalChatView.draw(messageHeader, messageText);
     };
 
+    /**
+     * 
+     * @param {BusinessCardClient} businessCard 
+     * @param {?number} rank 
+     * @param {boolean} isModerator 
+     */
     initProfileView(businessCard, rank, isModerator) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isInt(rank);
+        TypeChecker.isBoolean(isModerator);
+
         this.#profileView.draw(businessCard, rank, isModerator);
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient} businessCard 
+     * @param {boolean} isFriend 
+     * @param {?number} rank 
+     * @param {boolean} isModerator 
+     */
     initBusinessCardView(businessCard, isFriend, rank, isModerator) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isBoolean(isFriend);
+        TypeChecker.isInt(rank);
+        TypeChecker.isBoolean(isModerator);
+
         this.#businessCardView.draw(businessCard, isFriend, rank, isModerator);
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient[]} businessCards 
+     */
     initFriendListView(businessCards) {
+        TypeChecker.isInstanceOf(businessCards, Array);
+        businessCards.forEach(busCard => {
+            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+        })
+
         this.#friendListView.draw(businessCards)
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient[]} businessCards 
+     * @param {?String} groupName 
+     * @param {?number} limit 
+     * @param {?String} chatId 
+     */
     initInviteFriendsView(businessCards, groupName, limit, chatId) {
+        TypeChecker.isInstanceOf(businessCards, Array);
+        businessCards.forEach(busCard => {
+            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+        })
+        if (groupName)
+            TypeChecker.isString(groupName);
+        if (limit)
+            TypeChecker.isInt(limit)
+        if (chatId)
+            TypeChecker.isString(chatId);
+
         this.#inviteFriendsView.draw(businessCards, groupName, limit, chatId);
     }
 
@@ -453,7 +567,18 @@ class GameView {
         this.#newAchievementView.draw(achievement);
     }
 
+    /**
+     * 
+     * @param {String} name 
+     * @param {String[]} story 
+     */
     initNPCStoryView(name, story) {
+        TypeChecker.isString(name);
+        TypeChecker.isInstanceOf(story, Array);
+        story.forEach(element => {
+            TypeChecker.isString(element);
+        })
+
         this.#npcStoryView.draw(name, story);
     }
 
@@ -482,7 +607,17 @@ class GameView {
         this.initChatThreadView(chat, openNow);
     };
 
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {boolean} areFriends 
+     * @param {boolean} friendRequestSent 
+     */
     updateChatThread(chatId, areFriends, friendRequestSent) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isBoolean(areFriends);
+        TypeChecker.isBoolean(friendRequestSent);
+        
         if ($('#chatThreadModal').is(':visible')) {
             this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
         }
@@ -506,11 +641,30 @@ class GameView {
         this.#allchatView.draw(typeOfRoom, messages);
     }
 
+    /**
+     * 
+     * @param {?number} points 
+     * @param {?number} rank 
+     */
     updateSuccessesBar(points, rank) {
+        if (points) {
+            TypeChecker.isInt(points);
+        }
+
+        if (rank) {
+            TypeChecker.isInt(rank);
+        }
+
         this.#successesBar.update(points, rank);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     removeFriend(participantId) {
+        TypeChecker.isString(participantId);
+
         if ($('#friendListModal').is(':visible')) {
             this.#friendListView.deleteFriend(participantId);
         }
@@ -518,11 +672,22 @@ class GameView {
         this.removeFromInviteFriends(participantId, false);
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     removeChat(chatId) {
+        TypeChecker.isString(chatId);
         this.#chatListView.deleteChat(chatId);
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient} businessCard 
+     */
     addFriend(businessCard) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+
         if ($('#friendListModal').is(':visible')) {
             this.#friendListView.addToFriendList(businessCard);
         }
@@ -530,43 +695,106 @@ class GameView {
         this.addToInviteFriends(businessCard, false);
     }
 
+    /**
+     * 
+     * @param {?BusinessCardClient} businessCard 
+     * @param {boolean} hasLeftChat 
+     */
     addToInviteFriends(businessCard, hasLeftChat) {
+        if (businessCard)
+            TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+
+        TypeChecker.isBoolean(hasLeftChat);
+
         if($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
         }
     }
 
+    /**
+     * 
+     * @param {String} username 
+     */
     addToChatParticipantList(username) {
+        TypeChecker.isString(username);
         if($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.addToChatParticipantList(username);
         }
     }
 
+    /**
+     * 
+     * @param {String} username 
+     */
     removeFromChatParticipantList(username) {
+        TypeChecker.isString(username);
         if($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.removeFromChatParticipantList(username);
         }
     }
 
+    /**
+     * 
+     * @param {?String} participantId 
+     * @param {boolean} isMemberOfChat 
+     */
     removeFromInviteFriends(participantId, isMemberOfChat) {
+        if (participantId)
+            TypeChecker.isString(participantId);
+
+        TypeChecker.isBoolean(isMemberOfChat);
+
         if($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
         }
     }
 
+    /**
+     * 
+     * @param {String[]} usernames 
+     */
     drawChatParticipantList(usernames) {
+        TypeChecker.isInstanceOf(usernames, Array);
+        usernames.forEach(username => {
+            TypeChecker.isString(username);
+        })
         this.#chatParticipantListView.draw(usernames);
     }
 
+    /**
+     * 
+     * @param {String} senderUsername 
+     * @param {String} chatId 
+     */
     drawNewChat(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
         this.#notifBar.drawNewChat(senderUsername, chatId);
     }
 
+    /**
+     * 
+     * @param {String} groupName 
+     * @param {String} creatorUsername 
+     * @param {String} chatId 
+     */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isString(creatorUsername);
+        TypeChecker.isString(chatId);
+
         this.#notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
+    /**
+     * 
+     * @param {String} senderUsername 
+     * @param {String} chatId 
+     */
     drawNewMessage(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
         if ($('#chatThreadModal').is(':visible') && this.#chatThreadView.getChatId() === chatId) {
             return;
         }
@@ -574,25 +802,58 @@ class GameView {
         this.#notifBar.drawNewMessage(senderUsername, chatId);
     }
 
+    /**
+     * 
+     * @param {String} senderUsername 
+     */
     drawNewFriendRequest(senderUsername) {
+        TypeChecker.isString(senderUsername);
         this.#notifBar.drawNewFriendRequest(senderUsername);
     }
 
+    /**
+     * 
+     * @param {String} friendUsername 
+     */
     drawNewFriend(friendUsername) {
+        TypeChecker.isString(friendUsername);
         this.#notifBar.drawNewFriend(friendUsername);
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient[]} businessCards 
+     */
     initFriendRequestListView(businessCards) {
+        TypeChecker.isInstanceOf(businessCards, Array);
+        businessCards.forEach(busCard => {
+            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+        })
+
         this.#friendRequestListView.draw(businessCards);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {boolean} isAccepted 
+     */
     updateFriendRequestListView(participantId, isAccepted) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isBoolean(isAccepted);
+
         if ($('#friendRequestListModal').is(':visible')) {
             this.#friendRequestListView.update(participantId, isAccepted);
         }
     }
 
+    /**
+     * 
+     * @param {BusinessCardClient} businessCard 
+     */
     addFriendRequest(businessCard) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+
         if ($('#friendRequestListModal').is(':visible')) {
             this.#friendRequestListView.addToFriendRequestList(businessCard);
         }
@@ -602,8 +863,14 @@ class GameView {
         this.#ownAvatarView = undefined;
     }
 
-    //used to hide an avatar without destroying the avatarView instance
+    /**
+     * hide an avatar without destroying the avatarView instance
+     * 
+     * @param {String} participantId 
+     */
     hideAvatar(participantId) {
+        TypeChecker.isString(participantId);
+
         for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
             var avatar = this.#anotherParticipantAvatarViews[i];
             if (avatar.getId() === participantId) {
@@ -612,7 +879,13 @@ class GameView {
         }
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     showAvatar(participantId) {
+        TypeChecker.isString(participantId);
+
         for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
             var avatar = this.#anotherParticipantAvatarViews[i];
             if (avatar.getId() === participantId) {
@@ -633,7 +906,13 @@ class GameView {
         }
     };
 
+    /**
+     * 
+     * @param {boolean} hasToken 
+     */
     updateLectureToken(hasToken) {
+        TypeChecker.isBoolean(hasToken);
+        
         if($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }

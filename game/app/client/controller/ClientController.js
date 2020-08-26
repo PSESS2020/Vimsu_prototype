@@ -575,14 +575,17 @@ class ClientController {
     #handleFromServerAddToInviteFriends = function(data, hasLeftChat) {
         if (data) {
             //Typechecking
-        }
+            var businessCard = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        } else
+            var businessCard = undefined;
+            
         TypeChecker.isBoolean(hasLeftChat);   
-        this.#gameView.addToInviteFriends(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email), hasLeftChat);
+        this.#gameView.addToInviteFriends(businessCard, hasLeftChat);
     }
 
     /**
      * 
-     * @param {String} participantId 
+     * @param {?String} participantId 
      * @param {boolean} isMemberOfChat 
      */
     #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
