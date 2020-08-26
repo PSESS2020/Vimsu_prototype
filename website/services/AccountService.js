@@ -53,15 +53,15 @@ module.exports = class AccountService {
     /**
      * @static creates a user account and saves it in the database.
      * 
-     * @param {String} username 
-     * @param {String} title 
-     * @param {String} surname 
-     * @param {String} forename 
-     * @param {String} job 
-     * @param {String} company 
-     * @param {String} email 
-     * @param {String} password 
-     * @param {db} vimsudb 
+     * @param {String} username account username
+     * @param {String} title user's title
+     * @param {String} surname user's surname
+     * @param {String} forename user's forename
+     * @param {String} job user's job
+     * @param {String} company user's company
+     * @param {String} email user's email
+     * @param {String} password user's password
+     * @param {db} vimsudb db instance
      * 
      * @return Account instance
      */
@@ -212,9 +212,9 @@ module.exports = class AccountService {
     /**
      * @static checks if username and password in the database matches
      * 
-     * @param {String} username 
-     * @param {String} password 
-     * @param {db} vimsudb 
+     * @param {String} username account username
+     * @param {String} password user's password
+     * @param {db} vimsudb db instance
      * 
      * @return Account instance if matches, otherwise false
      */
