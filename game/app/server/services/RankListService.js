@@ -1,11 +1,17 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const ParticipantService = require('./ParticipantService');
+const db = require('../../../../config/db');
 
 module.exports = class RankListService {
 
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static #getRankList = function(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findInCollection("participants_" + conferenceId, {}, { participantId: 1, points: 1 }).then(ppants => {
             var rankList = ppants.sort((a, b) => b.points - a.points);
@@ -25,9 +31,16 @@ module.exports = class RankListService {
         })
     }
 
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {number} lastRank 
+     * @param {db} vimsudb 
+     */
     static getRankListWithUsername(conferenceId, lastRank, vimsudb) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(lastRank);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             var rankListLength = 1;
@@ -51,9 +64,16 @@ module.exports = class RankListService {
         })
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     */
     static getRank(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
@@ -61,8 +81,6 @@ module.exports = class RankListService {
                 throw new Error(participantId + " is not in ranklist")
             }
             return rankList[idx].rank;
-        })/*.catch(err => {
-            console.error(err);
-        })*/
+        })
     }
 } 
