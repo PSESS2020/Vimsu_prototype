@@ -15,7 +15,6 @@ module.exports = class GameObject {
 
     /**
      * 
-     * 
      * @param {number} id 
      * @param {String} name
      * @param {GameObjectType} gameObjectType
