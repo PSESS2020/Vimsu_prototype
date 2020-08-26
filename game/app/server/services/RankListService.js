@@ -71,7 +71,7 @@ module.exports = class RankListService {
     }
 
     /**
-     * @static get rank of a participant
+     * @static gets rank of a participant
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID

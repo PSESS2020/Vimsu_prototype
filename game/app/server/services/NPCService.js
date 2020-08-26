@@ -7,7 +7,9 @@ module.exports = class NPCService {
 
     #npcIDs;
 
-
+    /**
+     * @constructor creates an NPCService instance
+     */
     constructor() {
         if (!!NPCService.instance) {
             return NPCService.instance;
@@ -17,7 +19,7 @@ module.exports = class NPCService {
         this.#npcIDs = [];
     }
 
-    #STORYS = {
+    #STORIES = {
         foyerHelperStory: ['Hey! Welcome to our Foyer!',
             'The door to my right leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
             'Enjoy your stay!'],
@@ -36,6 +38,11 @@ module.exports = class NPCService {
             'Come back later to eat some of my fresh food!'],
     }
 
+    /**
+     * @private generates a unique NPC ID
+     * 
+     * @return NPC ID
+     */
     #generateNpcID = function () {
         let idIsGenerated = false;
         while (!idIsGenerated) {
@@ -49,11 +56,14 @@ module.exports = class NPCService {
     }
 
     /**
+     * creates an instance of FoyerHelper NPC
      * 
-     * @param {String} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {Direction} direction 
+     * @param {String} roomId room ID of FoyerHelper NPC
+     * @param {number} xPos x position of FoyerHelper NPC
+     * @param {number} yPos y position of FoyerHelper NPC
+     * @param {Direction} direction direction of FoyerHelper NPC
+     * 
+     * @return FoyerHelper NPC instance
      */
     createFoyerHelperNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
@@ -61,15 +71,18 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.#STORYS.foyerHelperStory);
+        return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.#STORIES.foyerHelperStory);
     }
 
     /**
+     * creates an instance of BasicTutorial NPC
      * 
-     * @param {String} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {Direction} direction 
+     * @param {String} roomId room ID of BasicTutorial NPC
+     * @param {number} xPos x position of BasicTutorial NPC
+     * @param {number} yPos y position of BasicTutorial NPC
+     * @param {Direction} direction direction of BasicTutorial NPC
+     * 
+     * @return BasicTutorial NPC instance
      */
     createBasicTutorialNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
@@ -77,15 +90,18 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.#STORYS.basicTutorialStory)
+        return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.#STORIES.basicTutorialStory)
     }
 
     /**
+     * creates an instance of Chef NPC
      * 
-     * @param {String} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {Direction} direction 
+     * @param {String} roomId room ID of Chef NPC
+     * @param {number} xPos x position of Chef NPC
+     * @param {number} yPos y position of Chef NPC
+     * @param {Direction} direction direction of Chef NPC
+     * 
+     * @return Chef NPC instance
      */
     createChefNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
@@ -93,8 +109,6 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'Chef', new Position(roomId, xPos, yPos), direction, this.#STORYS.chefStory);
+        return new NPC(this.#generateNpcID(), 'Chef', new Position(roomId, xPos, yPos), direction, this.#STORIES.chefStory);
     }
-
-
 }
