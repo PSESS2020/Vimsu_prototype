@@ -7,10 +7,11 @@ module.exports = class Position {
     #cordY;
 
     /**
+     * @constructor Creates a Position instance
      * 
-     * @param {number} roomId 
-     * @param {number} cordX 
-     * @param {number} cordY 
+     * @param {number} roomId room ID
+     * @param {number} cordX x coordinate
+     * @param {number} cordY y coordinate
      */
     constructor(roomId, cordX, cordY) {
         TypeChecker.isInt(roomId);
@@ -22,14 +23,29 @@ module.exports = class Position {
         this.#cordY = cordY;
     }
 
+    /**
+     * Gets Room ID
+     * 
+     * @return roomId
+     */
     getRoomId() {
         return this.#roomId;
     }
 
+    /**
+     * Gets x coordinate
+     * 
+     * @return cordX
+     */
     getCordX() {
         return this.#cordX;
     }
 
+    /**
+     * Gets y coordinate
+     * 
+     * @return cordY
+     */
     getCordY() {
         return this.#cordY;
     }
