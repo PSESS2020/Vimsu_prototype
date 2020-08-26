@@ -6,8 +6,9 @@ module.exports = class Schedule {
     #lectureList = [];
 
     /**
+     * @constructor Creates a Schedule instance
      * 
-     * @param {Lecture[]} lectureList 
+     * @param {Lecture[]} lectureList list of lectures
      */
     constructor(lectureList) {
         lectureList.forEach(lecture => {
@@ -17,8 +18,11 @@ module.exports = class Schedule {
     }
 
     /**
+     * Gets a lecture based on its ID
      * 
-     * @param {String} lectureId 
+     * @param {String} lectureId lecture ID
+     * 
+     * @return Lecture instance
      */
     getLecture(lectureId) {
         TypeChecker.isString(lectureId);
@@ -31,8 +35,11 @@ module.exports = class Schedule {
         }
     }
 
-    //returns the lectures that start soon or have started already.
-    //TODO: maybe move Timedeltas in global constants file
+    /**
+     * Gets the lectures that start soon or have started already.
+     * 
+     * @return Array of current lectures
+     */
     getCurrentLectures() {
         var currentLectures = [];
 
@@ -46,6 +53,11 @@ module.exports = class Schedule {
         return currentLectures;
     }
 
+    /**
+     * Gets all lectures
+     * 
+     * @return Array of lectures
+     */
     getAllLectures() {
         return this.#lectureList;
     }
