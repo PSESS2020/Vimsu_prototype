@@ -5,6 +5,8 @@ const Direction = require('../../client/shared/Direction.js');
 const Settings = require('../utils/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
+const Room = require('./Room.js');
+const TypeChecker = require('../../client/shared/TypeChecker');
 
 module.exports = class FoyerRoomDecorator extends RoomDecorator {
     #room;
@@ -37,8 +39,14 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
     }
 
+    /**
+     * 
+     * @param {Room} room 
+     */
     constructor(room) {
         super();
+
+        TypeChecker.isInstanceOf(room, Room)
         this.#room = room;
 
         let objService = new GameObjectService();
