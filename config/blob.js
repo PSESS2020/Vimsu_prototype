@@ -26,6 +26,12 @@ module.exports = class blob {
         console.log("Connected to blob storage");
     }
 
+    /**
+     * 
+     * @param {String} containerName 
+     * @param {String} fileName 
+     * @param {String} dir 
+     */
     async uploadFile(containerName, fileName, dir) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
@@ -61,7 +67,15 @@ module.exports = class blob {
         })
     }
 
+    /**
+     * 
+     * @param {String} containerName 
+     * @param {String} fileName 
+     */
     deleteFile(containerName, fileName) {
+        TypeChecker.isString(containerName);
+        TypeChecker.isString(fileName);
+
         this.#blobService.deleteBlobIfExists(containerName, fileName, { deleteSnapshots: 'include' }, function(err, result, response) {
             if(!err) {
                 console.log(fileName + " deleted")
@@ -69,9 +83,15 @@ module.exports = class blob {
         })
     }
 
+    /**
+     * 
+     * @param {Date} startDate 
+     * @param {number} accessTimeInMinutes 
+     */
     #getSharedAccessPolicy = function(startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
+
         var expiryDate = new Date(startDate);
         expiryDate.setMinutes(startDate.getMinutes() + accessTimeInMinutes);
         startDate.setMinutes(startDate.getMinutes() - accessTimeInMinutes);
@@ -86,11 +106,17 @@ module.exports = class blob {
         return sharedAccessPolicy;
     }
 
+    /**
+     * 
+     * @param {String} containerName 
+     * @param {String} fileName 
+     * @param {Date} startDate 
+     * @param {number} accessTimeInMinutes 
+     */
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
-        TypeChecker.isDate(startDate);
-        TypeChecker.isNumber(accessTimeInMinutes);
+
         var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.#getSharedAccessPolicy(startDate, accessTimeInMinutes));
         const url = this.#blobService.getUrl(containerName, fileName, sasToken);
         return url;
