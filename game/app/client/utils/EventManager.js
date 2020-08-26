@@ -4,9 +4,6 @@ class EventManager {
 
     /**
      * Handles Events from View and emits it to ClientController
-     * 
-     * @author Philipp
-     * 
      */
     constructor() {
         if (!!EventManager.instance) {
