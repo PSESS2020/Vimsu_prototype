@@ -1,5 +1,3 @@
-const TypeChecker = require("../shared/TypeChecker");
-
 class EventManager {
 
     #clientController;
