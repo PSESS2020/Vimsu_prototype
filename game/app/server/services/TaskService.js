@@ -32,7 +32,7 @@ module.exports = class TaskService {
      * 
      * @param {TypeOfTask} taskType type of task
      * 
-     * @return task
+     * @return Task instance
      */
     getTaskByType(taskType) {
         TypeChecker.isEnumOf(taskType, TypeOfTask);
