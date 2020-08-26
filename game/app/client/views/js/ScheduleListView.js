@@ -4,6 +4,12 @@ class ScheduleListView extends WindowView {
 
     constructor() {
         super();
+
+        if (!!ScheduleListView.instance) {
+            return ScheduleListView.instance;
+        }
+
+        ScheduleListView.instance = this;
     }
 
     draw(lectures) {

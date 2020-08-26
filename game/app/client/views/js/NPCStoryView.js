@@ -4,6 +4,12 @@ class NPCStoryView extends WindowView {
     constructor() {
         super();
 
+        if (!!NPCStoryView.instance) {
+            return NPCStoryView.instance;
+        }
+
+        NPCStoryView.instance = this;
+
         $('#npcStoryModal').on('hidden.bs.modal', function (e) {
             $('#npcStoryModal .modal-header').empty()
             $('#npcStoryModal .modal-body').empty();

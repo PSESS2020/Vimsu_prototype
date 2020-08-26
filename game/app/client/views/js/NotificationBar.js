@@ -4,6 +4,13 @@ class NotificationBar extends Views {
     
     constructor(eventManager) {
         super();
+
+        if (!!NotificationBar.instance) {
+            return NotificationBar.instance;
+        }
+
+        NotificationBar.instance = this;
+
         this.#eventManager = eventManager;
     }
 

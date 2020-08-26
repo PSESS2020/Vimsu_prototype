@@ -3,6 +3,12 @@ class AchievementView extends WindowView {
     constructor() {
         super();
 
+        if (!!AchievementView.instance) {
+            return AchievementView.instance;
+        }
+
+        AchievementView.instance = this;
+
         $('#achievementsModal').on('hidden.bs.modal', function (e) {
             $('#achievementModalContent').empty();
         })

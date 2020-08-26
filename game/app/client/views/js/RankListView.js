@@ -2,7 +2,13 @@ class RankListView extends WindowView {
 
     #rankList;
     constructor() {
-        super()
+        super();
+
+        if (!!RankListView.instance) {
+            return RankListView.instance;
+        }
+
+        RankListView.instance = this;
     }
 
     draw(rankList) {

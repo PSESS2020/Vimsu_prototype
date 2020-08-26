@@ -2,6 +2,12 @@ class LoadingView extends Views {
 
     constructor() {
         super();
+
+        if (!!LoadingView.instance) {
+            return LoadingView.instance;
+        }
+
+        LoadingView.instance = this;
     }
 
     contentLoaded(totalContents, loadedContents) {

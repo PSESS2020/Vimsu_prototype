@@ -2,6 +2,12 @@ class SuccessesBar extends Views {
 
     constructor() {
         super();
+
+        if (!!SuccessesBar.instance) {
+            return SuccessesBar.instance;
+        }
+
+        SuccessesBar.instance = this;
     }
 
     update(points, rank) {

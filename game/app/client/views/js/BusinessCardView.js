@@ -6,7 +6,14 @@ class BusinessCardView extends WindowView {
     #eventManager;
 
     constructor(eventManager) {
-        super()
+        super();
+
+        if (!!BusinessCardView.instance) {
+            return BusinessCardView.instance;
+        }
+
+        BusinessCardView.instance = this;
+
         this.#eventManager = eventManager;
 
         $('#businessCardModal').on('hidden.bs.modal', function (e) {

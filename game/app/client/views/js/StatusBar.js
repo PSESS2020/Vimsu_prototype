@@ -10,6 +10,12 @@ class StatusBar extends Views {
     constructor() {
         super();
 
+        if (!!StatusBar.instance) {
+            return StatusBar.instance;
+        }
+
+        StatusBar.instance = this;
+
         this.#connectionStatus = ConnectionState.CONNECTED;
     }
 

@@ -5,6 +5,13 @@ class ChatListView extends WindowView {
 
     constructor(eventManager) {
         super();
+
+        if (!!ChatListView.instance) {
+            return ChatListView.instance;
+        }
+
+        ChatListView.instance = this;
+
         this.#eventManager = eventManager;
     }
 

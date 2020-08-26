@@ -4,6 +4,12 @@ class ChatParticipantListView extends Views {
 
     constructor() {
         super();
+
+        if (!!ChatParticipantListView.instance) {
+            return ChatParticipantListView.instance;
+        }
+
+        ChatParticipantListView.instance = this;
     }
 
     draw(usernames) {

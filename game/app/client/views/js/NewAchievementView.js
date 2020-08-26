@@ -3,7 +3,13 @@ class NewAchievementView extends WindowView {
     #confetti;
 
     constructor() {
-        super()
+        super();
+
+        if (!!NewAchievementView.instance) {
+            return NewAchievementView.instance;
+        }
+
+        NewAchievementView.instance = this;
 
         $("#newAchievementModal").on("hidden.bs.modal", () => {
             $('#confettiCanvas').hide();

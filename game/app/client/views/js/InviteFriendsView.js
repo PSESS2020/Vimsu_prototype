@@ -10,6 +10,12 @@ class InviteFriendsView extends WindowView {
     constructor(eventManager) {
         super();
 
+        if (!!InviteFriendsView.instance) {
+            return InviteFriendsView.instance;
+        }
+
+        InviteFriendsView.instance = this;
+
         this.#eventManager = eventManager;
     }
 

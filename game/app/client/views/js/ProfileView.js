@@ -5,6 +5,12 @@ class ProfileView extends WindowView {
     constructor() {
         super();
 
+        if (!!ProfileView.instance) {
+            return ProfileView.instance;
+        }
+
+        ProfileView.instance = this;
+
         $('#profileModal').on('hidden.bs.modal', function (e) {
             $('#profileModal .modal-header').empty()
             $('#profileModal .modal-body').empty()

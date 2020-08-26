@@ -6,6 +6,12 @@ class FriendRequestListView extends WindowView {
     constructor(eventManager) {
         super();
 
+        if (!!FriendRequestListView.instance) {
+            return FriendRequestListView.instance;
+        }
+
+        FriendRequestListView.instance = this;
+
         this.#eventManager = eventManager;
     }
 

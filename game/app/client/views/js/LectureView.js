@@ -10,6 +10,13 @@ class LectureView extends WindowView {
 
     constructor(eventManager) {
         super();
+
+        if (!!LectureView.instance) {
+            return LectureView.instance;
+        }
+
+        LectureView.instance = this;
+
         this.#eventManager = eventManager;
 
         this.#lectureStatus = LectureStatus.PENDING;

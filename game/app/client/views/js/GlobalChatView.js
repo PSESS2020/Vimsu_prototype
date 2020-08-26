@@ -3,6 +3,12 @@ class GlobalChatView extends WindowView {
     constructor() {
         super();
 
+        if (!!GlobalChatView.instance) {
+            return GlobalChatView.instance;
+        }
+
+        GlobalChatView.instance = this;
+
         $(document).ready(() => {
             $('#closeGlobalChatButton').off();
             $('#closeGlobalChatButton').click(() => {

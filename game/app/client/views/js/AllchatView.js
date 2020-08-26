@@ -3,6 +3,12 @@ class AllchatView extends Views {
     constructor(eventManager) {
         super();
 
+        if (!!AllchatView.instance) {
+            return AllchatView.instance;
+        }
+
+        AllchatView.instance = this;
+
         $('#hideRoomChat').hide();
         $('#allchatWindow')[0].style.visibility = "hidden";
 

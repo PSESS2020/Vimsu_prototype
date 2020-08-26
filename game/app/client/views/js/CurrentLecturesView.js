@@ -5,6 +5,12 @@ class CurrentLecturesView extends WindowView {
     constructor(eventManager) {
         super();
 
+        if (!!CurrentLecturesView.instance) {
+            return CurrentLecturesView.instance;
+        }
+
+        CurrentLecturesView.instance = this;
+
         this.#eventManager = eventManager;
 
         $(document).ready(() => {

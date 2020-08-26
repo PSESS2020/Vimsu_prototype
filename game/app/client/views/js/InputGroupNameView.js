@@ -2,6 +2,12 @@ class InputGroupNameView extends WindowView {
     constructor(eventManager) {
         super();
 
+        if (!!InputGroupNameView.instance) {
+            return InputGroupNameView.instance;
+        }
+
+        InputGroupNameView.instance = this;
+
         $('#groupName').submit((event) => {
             event.preventDefault();
             let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");

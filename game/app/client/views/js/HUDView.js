@@ -2,6 +2,12 @@ class HUDView extends Views {
 
     constructor(eventManager) {
         super();
+
+        if (!!HUDView.instance) {
+            return HUDView.instance;
+        }
+
+        HUDView.instance = this;
         
         $('#rankListButton').off();
         $('#rankListButton').click(() => {

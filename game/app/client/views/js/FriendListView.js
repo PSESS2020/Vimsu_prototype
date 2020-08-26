@@ -5,6 +5,13 @@ class FriendListView extends WindowView {
 
     constructor(eventManager) {
         super();
+
+        if (!!FriendListView.instance) {
+            return FriendListView.instance;
+        }
+
+        FriendListView.instance = this;
+
         this.#eventManager = eventManager;
 
         $('#friendRequestList').off();
