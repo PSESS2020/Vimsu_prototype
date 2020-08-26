@@ -9,12 +9,13 @@ module.exports = class Message {
     #messageText
 
     /**
+     * @constructor Creates a Message instance
      * 
-     * @param {String} messageId 
-     * @param {String} senderId 
-     * @param {String} senderUsername 
-     * @param {Date} timestamp 
-     * @param {String} messageText 
+     * @param {String} messageId message ID
+     * @param {String} senderId sender ID
+     * @param {String} senderUsername sender username
+     * @param {Date} timestamp message timestamp
+     * @param {String} messageText message text
      */
     constructor(messageId, senderId, senderUsername, timestamp, messageText) {
         TypeChecker.isString(messageId);
@@ -30,22 +31,47 @@ module.exports = class Message {
         this.#messageText = messageText;
     }
 
+    /**
+     * Gets message ID
+     * 
+     * @return messageId
+     */
     getMessageId() {
         return this.#messageId;
     };
 
+    /**
+     * Gets sender ID
+     * 
+     * @return senderId
+     */
     getSenderId() {
         return this.#senderId
     };
 
+    /**
+     * Gets sender username
+     * 
+     * @return senderUsername
+     */
     getUsername() {
         return this.#senderUsername;
     }
 
+    /**
+     * Gets message timestamp
+     * 
+     * @return timestamp
+     */
     getTimestamp() {
         return this.#timestamp;
     };
 
+    /**
+     * Gets message text
+     * 
+     * @return messageText
+     */
     getMessageText() {
         return this.#messageText;
     };
