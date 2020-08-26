@@ -516,7 +516,12 @@ class GameView {
     initBusinessCardView(businessCard, isFriend, rank, isModerator) {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
         TypeChecker.isBoolean(isFriend);
-        TypeChecker.isInt(rank);
+
+        //case when ppant with this businessCard is a friend
+        if (rank !== undefined) {
+            TypeChecker.isInt(rank);
+        }
+
         TypeChecker.isBoolean(isModerator);
 
         this.#businessCardView.draw(businessCard, isFriend, rank, isModerator);
