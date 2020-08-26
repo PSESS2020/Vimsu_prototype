@@ -32,6 +32,8 @@ module.exports = class Room {
     constructor(roomId, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
+        TypeChecker.isInt(width);
+        TypeChecker.isInt(length);
 
         this.#roomId = roomId;
         this.#typeOfRoom = typeOfRoom;
@@ -54,6 +56,10 @@ module.exports = class Room {
         }
     }
 
+    /**
+     * 
+     * @param {GameObject[]} lisOfMapElements 
+     */
     setMapElements(lisOfMapElements) {
         TypeChecker.isInstanceOf(lisOfMapElements, Array);
         lisOfMapElements.forEach(mapElement => {
@@ -63,6 +69,10 @@ module.exports = class Room {
         this.#listOfMapElements = lisOfMapElements;
     }
 
+    /**
+     * 
+     * @param {GameObject[]} listOfGameObjects 
+     */
     setGameObjects(listOfGameObjects) {
         TypeChecker.isInstanceOf(listOfGameObjects, Array);
         listOfGameObjects.forEach(gameObject => {
@@ -72,6 +82,10 @@ module.exports = class Room {
         this.#listOfGameObjects = listOfGameObjects;
     }
 
+    /**
+     * 
+     * @param {NPC[]} listOfNPCs 
+     */
     setNPCs(listOfNPCs) {
         TypeChecker.isInstanceOf(listOfNPCs, Array);
         listOfNPCs.forEach(npc => {
@@ -81,6 +95,10 @@ module.exports = class Room {
         this.#listOfNPCs = listOfNPCs;
     }
 
+    /**
+     * 
+     * @param {Door[]} listOfDoors 
+     */
     setDoors(listOfDoors) {
         TypeChecker.isInstanceOf(listOfDoors, Array);
         listOfDoors.forEach(door => {
@@ -134,6 +152,10 @@ module.exports = class Room {
         return this.#occupationMap;
     };
 
+    /**
+     * 
+     * @param {number} id 
+     */
     getNPC(id) {
         TypeChecker.isInt(id);
 
@@ -149,7 +171,6 @@ module.exports = class Room {
     /**
      * Adds ppant into room
      * 
-     * 
      * @param {Participant} participant 
      */
     enterParticipant(participant) {
@@ -161,7 +182,6 @@ module.exports = class Room {
 
     /**
     * Deletes ppant from room
-    * 
     * 
     * @param {Participant} participant 
     */
@@ -176,7 +196,11 @@ module.exports = class Room {
 
     }
 
-    //Checks if ppant with ppantID is currently in this room
+    /**
+     * Checks if ppant with ppantID is currently in this room
+     * 
+     * @param {String} ppantID 
+     */
     includesParticipant(ppantID) {
         TypeChecker.isString(ppantID);
         var returnValue = false;
@@ -188,7 +212,11 @@ module.exports = class Room {
         return returnValue;
     }
 
-    //Method to get a Participant who is currently in this room
+    /**
+     * Get a participant who is currently in this room
+     * 
+     * @param {String} ppantID 
+     */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
         var result;
@@ -203,13 +231,10 @@ module.exports = class Room {
     /**
      * Checks, if there is a collision at this position
      * 
-     * 
      * @param {Position} position 
      * @returns true, when collision
      * @returns false, otherwise
      */
-
-
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
         let cordX = position.getCordX();
@@ -232,13 +257,23 @@ module.exports = class Room {
         }
     }
 
-
+    /**
+     * 
+     * @param {String} ppantID 
+     * @param {String} username 
+     * @param {Date} date 
+     * @param {String} text 
+     */
     addMessage(ppantID, username, date, text) {
+        TypeChecker.isString(ppantID);
+        TypeChecker.isString(username);
+        TypeChecker.isDate(date);
+        TypeChecker.isString(text);
+
         // change to message object?
         var message = { senderID: ppantID, messageID: this.#listOfMessages.length, username: username, timestamp: date, text: text };
         this.#listOfMessages.push(message);
     }
-
 
     buildOccMap() {
         //Goes through each gameObject
@@ -272,7 +307,6 @@ module.exports = class Room {
 
     /**
      * Gets Door to room with roomId if it exists
-     * 
      * 
      * @param {number} targetId 
      */
