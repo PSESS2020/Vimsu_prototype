@@ -52,7 +52,7 @@ module.exports = class RoomService {
     }
 
     /**
-     * Initializes all rooms
+     * @private Initializes all rooms
      */
     #initAllRooms = function() {
         this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));

@@ -38,16 +38,16 @@ module.exports = class RouteController {
         this.#io = io;
         this.#db = db;
         this.#blob = blob;
-        this.init();
+        this.#init();
     }
 
     /**
-     * Initialize the GET and POST methods. 
+     * @private Initialize the GET and POST methods. 
      * On receiving a GET request, the express server will render the corresponding ejs file.
      * On receiving a POST request, this will call the corresponding service method and
      * the express server will render the appropriate views depending on the failure/success status.
      */
-    init() {
+    #init = function () {
 
         var username, title, forename, surname, job, company, email;
 

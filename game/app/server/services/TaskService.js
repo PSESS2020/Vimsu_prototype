@@ -47,7 +47,7 @@ module.exports = class TaskService {
     }
 
     /**
-     * Initializes all tasks
+     * @private Initializes all tasks
      */
     #initAllTasks = function() {
         var id = 1;
