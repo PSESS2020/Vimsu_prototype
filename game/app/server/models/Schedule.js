@@ -5,7 +5,6 @@ module.exports = class Schedule {
 
     #lectureList = [];
 
-
     /**
      * 
      * @param {Lecture[]} lectureList 
@@ -17,6 +16,10 @@ module.exports = class Schedule {
         this.#lectureList = lectureList;
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     getLecture(lectureId) {
         TypeChecker.isString(lectureId);
 
