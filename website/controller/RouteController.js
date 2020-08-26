@@ -17,11 +17,12 @@ module.exports = class RouteController {
     #blob;
 
     /**
+     * @constructor Creates an instance of RouteController
      * 
-     * @param {Express} app 
-     * @param {SocketIO} io 
-     * @param {dbClient} db 
-     * @param {blobClient} blob 
+     * @param {Express} app Express server
+     * @param {SocketIO} io Socket.io instance
+     * @param {dbClient} db db instance
+     * @param {blobClient} blob blob instance
      */
     constructor(app, io, db, blob) {
         if (!!RouteController.instance) {
@@ -40,6 +41,12 @@ module.exports = class RouteController {
         this.init();
     }
 
+    /**
+     * Initialize the GET and POST methods. 
+     * On receiving a GET request, the express server will render the corresponding ejs file.
+     * On receiving a POST request, this will call the corresponding service method and
+     * the express server will render the appropriate views depending on the failure/success status.
+     */
     init() {
 
         var username, title, forename, surname, job, company, email;
@@ -70,9 +77,6 @@ module.exports = class RouteController {
 
         this.#app.use(sessionMiddleware);
 
-        /* On receiving a get-Request, the express-Server will deliver the
-        * index.html file to the user.
-        * - (E) */
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
