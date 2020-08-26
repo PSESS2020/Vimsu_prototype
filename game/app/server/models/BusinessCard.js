@@ -12,15 +12,16 @@ module.exports = class BusinessCard {
     #email;
 
     /**
+     * @constructor Creates an instance of BusinessCard
      * 
-     * @param {String} participantId 
-     * @param {String} username 
-     * @param {String} title 
-     * @param {String} surname 
-     * @param {String} forename 
-     * @param {String} job 
-     * @param {String} company 
-     * @param {String} email 
+     * @param {String} participantId participant ID
+     * @param {String} username participant username
+     * @param {String} title participant title
+     * @param {String} surname participant surname
+     * @param {String} forename participant forename
+     * @param {String} job participant job
+     * @param {String} company participant company
+     * @param {String} email participant email
      */
     constructor(participantId, username, title, surname, forename, job, company, email) {
         TypeChecker.isString(participantId);
@@ -42,34 +43,74 @@ module.exports = class BusinessCard {
         this.#email = email;
     }
 
+    /**
+     * Gets participant ID
+     * 
+     * @return participantId
+     */
     getParticipantId() {
         return this.#participantId;
     }
 
+    /**
+     * Gets participant username
+     * 
+     * @return username
+     */
     getUsername() {
         return this.#username;
     }
 
+    /**
+     * Gets participant title
+     * 
+     * @return title
+     */
     getTitle() {
         return this.#title;
     }
 
+    /**
+     * Gets participant surname
+     * 
+     * @return surname
+     */
     getSurname() {
         return this.#surname;
     }
 
+    /**
+     * Gets participant forename
+     * 
+     * @return forename
+     */
     getForename() {
         return this.#forename;
     }
 
+    /**
+     * Gets participant job
+     * 
+     * @return job
+     */
     getJob() {
         return this.#job;
     }
 
+    /**
+     * Gets participant company
+     * 
+     * @return company
+     */
     getCompany() {
         return this.#company;
     }
 
+    /**
+     * Gets participant email
+     * 
+     * @return email
+     */
     getEmail() {
         return this.#email;
     }
