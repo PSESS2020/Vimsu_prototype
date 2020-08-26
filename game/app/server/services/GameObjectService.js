@@ -29,6 +29,16 @@ module.exports = class GameObjectService {
         }
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width 
+     * @param {number} length 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     #checkParamTypes = function(roomId, width, length, xPos, yPos, solidity, clickable) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
@@ -51,89 +61,197 @@ module.exports = class GameObjectService {
      */
 
     //Tiles
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createDefaultTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.TILE, "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //This two tiles below are special therefor they have the same name as default tile
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createDefaultLeftTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTTILE, "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createDefaultRightTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTILE, "tile_default", 1, 1, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Walls
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createDefaultLeftWall(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftwall_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createDefaultRightWall(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwall_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Tables
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createTable(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
-
     }
 
     //Plants
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createPlant(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.PLANT, "plant_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
-
     }
 
     //Sofas
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createLeftSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTSOFA, "leftsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
-
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createRightSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTSOFA, "rightsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
-
     }
 
     //Window
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createLeftWindowDefault0(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftwindow_default0", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createRightWindowDefault0(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default0", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createRightWindowDefault1(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default1", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Wall Frames
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createRightWallFrame(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         let wallFrames = [];
@@ -156,6 +274,17 @@ module.exports = class GameObjectService {
     }
 
     //Schedules
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createLeftSchedule(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         let schedules = [];
@@ -176,6 +305,17 @@ module.exports = class GameObjectService {
     }
 
     //Conference Logo
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
     createLeftConferenceLogo(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         let conferenceLogos = [];
@@ -194,5 +334,4 @@ module.exports = class GameObjectService {
         } else
             return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
-
 }
