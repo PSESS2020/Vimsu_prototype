@@ -14,15 +14,16 @@ module.exports = class GameObject {
     #isClickable;
 
     /**
+     * @constructor Creates a game object instance
      * 
-     * @param {number} id 
-     * @param {String} name
-     * @param {GameObjectType} gameObjectType
-     * @param {number} width 
-     * @param {number} length 
-     * @param {Position} position 
-     * @param {boolean} isSolid
-     * @param {boolean} isClickable
+     * @param {number} id game object ID
+     * @param {String} name game object name
+     * @param {GameObjectType} gameObjectType game object type
+     * @param {number} width game object width
+     * @param {number} length game object length
+     * @param {Position} position game object position
+     * @param {boolean} isSolid game object solidity
+     * @param {boolean} isClickable game object clickable status
      */
     constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable) {
 
@@ -47,34 +48,74 @@ module.exports = class GameObject {
         this.#isClickable = isClickable;
     }
 
+    /**
+     * Gets game object id
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets game object type
+     * 
+     * @return gameObjectType
+     */
     getGameObjectType() {
         return this.#gameObjectType;
     }
 
+    /**
+     * Gets game object name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Gets game object width
+     * 
+     * @return width
+     */
     getWidth() {
         return this.#width;
     }
 
+    /**
+     * Gets game object length
+     * 
+     * @return length
+     */
     getLength() {
         return this.#length;
     }
 
+    /**
+     * Gets game object position
+     * 
+     * @return position
+     */
     getPosition() {
         return this.#position;
     }
 
+    /**
+     * Gets game object solidity
+     * 
+     * @return true if solid, otherwise false
+     */
     getSolid() {
         return this.#isSolid;
     }
 
+    /**
+     * Gets game object clickable status
+     * 
+     * @return true if clickable, otherwise false
+     */
     getClickable() {
         return this.#isClickable;
     }
