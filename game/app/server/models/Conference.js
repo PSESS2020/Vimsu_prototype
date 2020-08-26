@@ -6,7 +6,7 @@ module.exports = class Conference {
     #schedule;
 
     /**
-     * Creates a conference instance
+     * @constructor Creates a conference instance
      * 
      * @param {Schedule} schedule lecture schedule
      */

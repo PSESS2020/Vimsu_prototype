@@ -40,8 +40,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
     }
 
     /**
+     * @constructor Creates a RoomDecorator instance for Foyer
      * 
-     * @param {Room} room 
+     * @param {Room} room foyer room instance
      */
     constructor(room) {
         super();
@@ -74,12 +75,6 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             listOfMapElements.push(objService.createDefaultRightWall(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false, false));
         }
 
-        /*//Get left doors
-        listOfMapElements.push(objService.createDefaultLectureLeftDoor(Settings.FOYER_ID, ));
-        //Get right doors
-        listOfMapElements.push(objService.createDefaultReceptionRightDoor(),
-                               objService.createDefaultFoodcourtRightDoor());
-        */
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
@@ -128,7 +123,6 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         listOfNPCs.push(npcService.createFoyerHelperNPC(Settings.FOYER_ID, 0, 0, Direction.DOWNRIGHT));
 
-
         //Get all doors from service
         let doorService = new DoorService();
         let listOfDoors = [];
@@ -150,10 +144,20 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         this.#room.buildOccMap();
     }
 
+    /**
+     * Gets foyer room
+     * 
+     * @return room
+     */
     getRoom() {
         return this.#room;
     }
 
+    /**
+     * Gets asset paths of foyer room objects
+     * 
+     * @return assetPaths
+     */
     getAssetPaths() {
         return this.#assetPaths;
     }

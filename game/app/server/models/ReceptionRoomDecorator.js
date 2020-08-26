@@ -28,8 +28,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
     }
 
     /**
+     * @constructor Creates a RoomDecorator instance for Reception
      * 
-     * @param {Room} room 
+     * @param {Room} room reception room instance
      */
     constructor(room) {
         super();
@@ -45,11 +46,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let listOfMapElements = [];
 
         for (var i = 0; i < this.#room.getLength(); i++) {
-
             for (var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.RECEPTION_ID, i, j, false, false));
             }
-
         }
 
         //Get left walls
@@ -61,7 +60,6 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         for (var j = 0; j < this.#room.getWidth(); j++) {
             listOfMapElements.push(objService.createDefaultRightWall(Settings.RECEPTION_ID, 1, 1, this.#room.getLength(), j, false, false));
         }
-
 
         //Get all gameObjects from service
         let listOfGameObjects = [];
@@ -107,10 +105,20 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         this.#room.buildOccMap();
     }
 
+    /**
+     * Gets reception room
+     * 
+     * @return room
+     */
     getRoom() {
         return this.#room;
     }
 
+    /**
+     * Gets asset paths of reception room objects
+     * 
+     * @return assetPaths
+     */
     getAssetPaths() {
         return this.#assetPaths;
     }

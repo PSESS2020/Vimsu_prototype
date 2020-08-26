@@ -8,7 +8,7 @@ module.exports = class Chat {
     #maxNumMessages;
 
     /**
-     * Creates a Chat instance
+     * @constructor Creates a Chat instance
      * 
      * @param {String} chatId chat ID
      * @param {?String[]} participantList list of chat participants

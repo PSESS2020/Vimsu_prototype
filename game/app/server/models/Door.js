@@ -14,7 +14,7 @@ module.exports = class Door {
     #direction;
 
     /**
-     * Creates a door instance
+     * @constructor Creates a door instance
      * 
      * @param {number} id door ID
      * @param {String} name door name

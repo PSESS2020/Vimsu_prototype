@@ -27,8 +27,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
     }
 
     /**
+     * @constructor Creates a RoomDecorator instance for Food Court
      * 
-     * @param {Room} room 
+     * @param {Room} room food court room instance
      */
     constructor(room) {
         super();
@@ -44,11 +45,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let listOfMapElements = [];
 
         for (var i = 0; i < this.#room.getLength(); i++) {
-
             for (var j = 0; j < this.#room.getWidth(); j++) {
                 listOfMapElements.push(objService.createDefaultTile(Settings.FOODCOURT_ID, i, j, false, false));
             }
-
         }
 
         //Get left walls
@@ -104,10 +103,20 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         this.#room.buildOccMap();
     }
 
+    /**
+     * Gets food court room
+     * 
+     * @return room
+     */
     getRoom() {
         return this.#room;
     }
 
+    /**
+     * Gets asset paths of food court room objects
+     * 
+     * @return assetPaths
+     */
     getAssetPaths() {
         return this.#assetPaths;
     }
