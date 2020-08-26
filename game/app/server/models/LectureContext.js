@@ -2,7 +2,6 @@ const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Messages = require('../utils/Messages.js');
 const Lecture = require('./Lecture.js');
-const ServerController = require('../controller/ServerController');
 
 module.exports = class LectureContext extends CommandContext {
     
@@ -10,37 +9,55 @@ module.exports = class LectureContext extends CommandContext {
     #contextObject
     
     /**
+     * @constructor Creates a lecture context instance
      * 
-     * @param {ServerController} serverController 
-     * @param {Lecture} lecture 
+     * @param {ServerController} serverController server controller instance
+     * @param {Lecture} lecture lecture instance
      */
     constructor(serverController, lecture) {
         super();
 
-        //TypeChecker.isInstanceOf(serverController, ServerController); Does not work for some reason
         TypeChecker.isInstanceOf(lecture, Lecture);
         this.#serverController = serverController;
         this.#contextObject = lecture;
     }
     
+    /**
+     * Gets lecture messages
+     * 
+     * @return lecture messages
+     */
     getMessages() {
         return this.#contextObject.getLectureChat().getMessages();
     };
     
+    /**
+     * Gets lecture title
+     * 
+     * @return lecture title
+     */
     getTitle() {
         return this.#contextObject.getTitle();
     };
     
+    /**
+     * Gets help message
+     * 
+     * @return lecture help message
+     */
     getHelpMessage() {
         return Messages.HELPLECTURECHAT;
     };
     
+    /**
+     * Update messages in lecture chat
+     */
     updateMessages() {
-        // will this work?
         this.#serverController.emitEventIn(this.#contextObject.getId(), 'updateLectureChat', this.getMessages());
     };
     
     /**
+     * Removes participant from lecture
      * 
      * @param {String} userToRemove username of the user to remove
      */
@@ -53,6 +70,9 @@ module.exports = class LectureContext extends CommandContext {
         }
     };
     
+    /**
+     * Closes lecture
+     */
     close() {
         this.#contextObject.hide();
         console.log(this.#contextObject.getActiveParticipants());
@@ -64,6 +84,7 @@ module.exports = class LectureContext extends CommandContext {
     };
     
     /**
+     * Mutes participant in the lecture
      * 
      * @param {String} userToMute username of the user to mute
      */
@@ -83,6 +104,7 @@ module.exports = class LectureContext extends CommandContext {
     };
     
     /**
+     * Unmutes participant in the lecture
      * 
      * @param {String} userToUnmute username of the user to unmute
      */
@@ -99,9 +121,10 @@ module.exports = class LectureContext extends CommandContext {
     };
     
     /**
+     * Removes participant from lecture with its ID
      * 
-     * @param {String} ppantId 
-     * @param {Messages} message 
+     * @param {String} ppantId participant ID
+     * @param {Messages} message notification message
      */
     #removeByID = function(ppantId, message) {
         TypeChecker.isString(ppantId);
@@ -117,5 +140,4 @@ module.exports = class LectureContext extends CommandContext {
         this.#serverController.emitEventTo(socketClient.id, 'force close lecture');
         this.#serverController.sendNotification(socketClient.id, message);
     }
-    
 }
