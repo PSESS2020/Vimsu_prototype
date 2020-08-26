@@ -1,6 +1,7 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const AchievementDefinition = require('../models/AchievementDefinition.js');
 const TypeOfTask = require('../utils/TypeOfTask');
+const Participant = require('../models/Participant');
 
 module.exports = class AchievementService {
     #achievementDefinitions;
@@ -15,6 +16,10 @@ module.exports = class AchievementService {
         AchievementService.instance = this;
     }
 
+    /**
+     * 
+     * @param {String} achievementTaskType 
+     */
     getAchievementDefinitionByTypeOfTask(achievementTaskType) {
         TypeChecker.isString(achievementTaskType);
 
@@ -68,7 +73,13 @@ module.exports = class AchievementService {
 
     }
 
+    /**
+     * 
+     * @param {Participant} participant 
+     */
     getAllAchievements(participant) {
+        TypeChecker.isInstanceOf(participant, Participant);
+
         var taskTypeCountMapping = participant.getTaskTypeMappingCounts();
         var achievements = [];
 
@@ -86,7 +97,13 @@ module.exports = class AchievementService {
         return achievements;
     }
 
+    /**
+     * 
+     * @param {Participant} participant 
+     */
     computeAchievements(participant) {
+        TypeChecker.isInstanceOf(participant, Participant);
+
         var achievements = this.getAllAchievements(participant);
 
         var newAchievements = [];
@@ -120,7 +137,21 @@ module.exports = class AchievementService {
         return newAchievements;
     }
 
+    /**
+     * 
+     * @param {number} count 
+     * @param {{count: number, color: String, points: number}[]} levels 
+     */
     #getLevelFromDefinition = function(count, levels) {
+        TypeChecker.isInt(count);
+        TypeChecker.isInstanceOf(levels, Array);
+        levels.forEach(element => {
+            TypeChecker.isInstanceOf(element, Object);
+            TypeChecker.isInt(element.count);
+            TypeChecker.isString(element.color);
+            TypeChecker.isInt(element.points);
+        });
+
         var level = 0;
         while (level < levels.length && count >= levels[level].count) {
             level++;
@@ -128,13 +159,22 @@ module.exports = class AchievementService {
         return level;
     }
 
-
-    // required to check if list of latest achievements contains any new achievements
+    /**
+     * Check if list of latest achievements contains any new achievements
+     * 
+     * @param {Achievement} achievement 
+     * @param {Achievement[]} oldAchievements 
+     */
     #containsAchievement = function(achievement, oldAchievements) {
+        TypeChecker.isInstanceOf(achievement, Achievement);
+        TypeChecker.isInstanceOf(oldAchievements, Array);
+        oldAchievements.forEach(oldAch => {
+            TypeChecker.isInstanceOf(oldAch, Achievement);
+        })
+
         if (achievement.getCurrentLevel() === 0) return true;
 
-        var i;
-        for (i = 0; i < oldAchievements.length; i++) {
+        for (var i = 0; i < oldAchievements.length; i++) {
             if (oldAchievements[i].equals(achievement)) {
                 return true;
             }
