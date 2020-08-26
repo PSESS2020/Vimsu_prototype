@@ -21,16 +21,17 @@ module.exports = class Lecture {
     #hideThis;
     
     /**
+     * @constructor Creates a lecture instance
      * 
-     * @param {String} id 
-     * @param {String} title 
-     * @param {String} videoId 
-     * @param {number} duration
-     * @param {String} remarks 
-     * @param {Date} startingTime 
-     * @param {String} oratorName
-     * @param {String} oratorUsername
-     * @param {number} maxParticipants 
+     * @param {String} id lecture ID
+     * @param {String} title lecture title
+     * @param {String} videoId lecture video ID
+     * @param {number} duration lecture video duration
+     * @param {String} remarks lecture remarks
+     * @param {Date} startingTime lecture starting time
+     * @param {String} oratorName lecture orator name
+     * @param {String} oratorUsername lecture orator username
+     * @param {number} maxParticipants lecture max participants
      */
     constructor(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants) {
         TypeChecker.isString(id);
@@ -56,79 +57,146 @@ module.exports = class Lecture {
         //includes every ppant except orator
         this.#numberOfActiveListeners = 0;
 
-        //incluedes every ppant including orator
+        //includes every ppant including orator
         this.#activeParticipants = [];
         this.#removedParticipants = [];
 
-        this.#hideThis = false; // will prevent this from showing up on the current lectures screen
+        // will prevent this from showing up on the current lectures screen
+        this.#hideThis = false; 
 
         /*This will be an array of arrays with with size 3
-        that means every element is an array, 
-        element[0] is the participantID (String),
-        element[1] is the leaving time (Date),
-        element[2] is the token counter (Int, init. with 300.000ms (5min))
+          that means every element is an array, 
+          element[0] is the participantID (String),
+          element[1] is the leaving time (Date),
+          element[2] is the token counter (Int, init. with 300.000ms (5min))
         */
         this.#tokenList = [];
 
         this.#lectureChat = new LectureChat();
     }
 
+    /**
+     * Gets lecture ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets lecture title
+     * 
+     * @return title
+     */
     getTitle() {
         return this.#title;
     }
 
+    /**
+     * Gets lecture video ID
+     * 
+     * @return videoId
+     */
     getVideoId() {
         return this.#videoId;
     }
 
+    /**
+     * Gets lecture duration
+     * 
+     * @return duration
+     */
     getDuration() {
         return this.#duration;
     }
 
+    /**
+     * Gets lecture remarks
+     * 
+     * @return remarks
+     */
     getRemarks() {
         return this.#remarks;
     }
 
+    /**
+     * Gets lecture starting time
+     * 
+     * @return startingTime
+     */
     getStartingTime() {
         return this.#startingTime;
     }
 
+    /**
+     * Gets lecture orator name
+     * 
+     * @return oratorName
+     */
     getOratorName() {
         return this.#oratorName;
     }
 
+    /**
+     * Gets lecture orator username
+     * 
+     * @return oratorUsername
+     */
     getOratorUsername() {
         return this.#oratorUsername;
     }
 
+    /**
+     * Gets lecture max participants
+     * 
+     * @return maxParticipants
+     */
     getMaxParticipants() {
         return this.#maxParticipants
     }
 
+    /**
+     * Gets lecture chat instance
+     * 
+     * @return lecture chat instance
+     */
     getLectureChat() {
         return this.#lectureChat;
     }
 
+    /**
+     * Gets lecture active participants
+     * 
+     * @return activeParticipants
+     */
     getActiveParticipants() {
         return this.#activeParticipants;
     };
 
+    /**
+     * Gets lecture hide status
+     * 
+     * @return true if lecture is hidden, otherwise false
+     */
     isHidden() {
         return this.#hideThis;
     };
 
-    // Hides the lecture, so that it will no longer be displayed
-    // in the currentLecturesView 
+    /**
+     * Hides the lecture, so that it will no longer be displayed in the currentLecturesView 
+     */
     hide() {
         if (!this.#hideThis) {
             this.#hideThis = true;
         }
     };
 
+    /**
+     * Gets lecture token list
+     * 
+     * @return tokenList
+     */
     getTokenList() {
         return this.#tokenList;
     }
@@ -136,9 +204,8 @@ module.exports = class Lecture {
     /**
      * Is called when a participant with this ID joins a lecture
      * 
-     * 
-     * @param {String} participantId  
-     * @param {String} ppantUsername
+     * @param {String} participantId participant ID
+     * @param {String} ppantUsername participant username
      * @returns true, if the joining was successful
      *          false, otherwise
      */
@@ -173,7 +240,7 @@ module.exports = class Lecture {
     /**
      * Is called when a participant with this ID leaves a lecture
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     leave(participantId) {
         TypeChecker.isString(participantId);
@@ -208,18 +275,33 @@ module.exports = class Lecture {
         });
     }
 
+    /**
+     * @private checks if lecture is already opened
+     * 
+     * @return true if opened, otherwise false
+     */
     #isOpened = function() {
         var now = new Date().getTime();
         var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
         return (startingTime <= now)
     }
 
+    /**
+     * checks if lecture is already ended
+     * 
+     * @return true if ended, otherwise false
+     */
     isEnded() {
         var now = new Date().getTime();
         var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
         return (now >= endTime);
     }
 
+    /**
+     * checks if lecture is accessible
+     * 
+     * @return true if accessible, otherwise false
+     */
     isAccessible() {
         var now = new Date().getTime();
         var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
@@ -227,8 +309,11 @@ module.exports = class Lecture {
     }
 
     /**
+     * checks if this participant is in list of active participants
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
+     * 
+     * @return true if found, otherwise false
      */
     hasPPant(participantId) {
         TypeChecker.isString(participantId);
@@ -236,8 +321,9 @@ module.exports = class Lecture {
     };
 
     /**
+     * bans user from this lecture
      * 
-     * @param {String} accountId 
+     * @param {String} accountId account ID
      */
     ban(accountId) {
         TypeChecker.isString(accountId);
@@ -245,8 +331,11 @@ module.exports = class Lecture {
     };
 
     /**
+     * checks if user is banned from this lecture
      * 
-     * @param {String} accountId 
+     * @param {String} accountId account ID
+     * 
+     * @return true if banned, otherwise false
      */
     isBanned(accountId) {
         TypeChecker.isString(accountId)
@@ -254,10 +343,10 @@ module.exports = class Lecture {
     };
 
     /**
-     * Is called to check, if participant with this ID has an token for this lecture
+     * Checks if participant with this ID has a token for this lecture
      * 
-     * @param {String} participantId 
-     * @param {String} ppantUsername
+     * @param {String} participantId participant ID
+     * @param {String} ppantUsername participant username
      * @returns true, if so
      *          false, otherwise
      */
@@ -289,7 +378,7 @@ module.exports = class Lecture {
      * and the token has not already run out, it revokes it by setting 
      * the counter to zero. 
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     revokeToken(participantId) {
         TypeChecker.isString(participantId);
@@ -299,14 +388,17 @@ module.exports = class Lecture {
             var element = this.#tokenList[i];
             if (element[0] === participantId && element[2] >= 0) {
                 element[2] = -100; // needs to be negative as setting it to zero won't
-                // change behaviour of hasToken
+                                   // change behaviour of hasToken
             }
         }
     };
 
     /**
+     * Grants token to a participant
      * 
-     * @param {String} participantID 
+     * @param {String} participantID participant ID
+     * 
+     * @return true if token is granted, otherwise false
      */
     grantToken(participantID) {
         TypeChecker.isString(participantID);
@@ -321,8 +413,9 @@ module.exports = class Lecture {
     };
 
     /**
+     * @private Checks participant's token
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     #checkToken = function (participantId) {
         TypeChecker.isString(participantId);
@@ -352,7 +445,6 @@ module.exports = class Lecture {
                 //if not, token counter stays the same
                 return;
             }
-
         }
 
         //There is no entry with participantId
@@ -375,8 +467,11 @@ module.exports = class Lecture {
     }
 
     /**
+     * Gets token index of this participant
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
+     * 
+     * @return token index
      */
     #getTokenIndex = function (participantId) {
         TypeChecker.isString(participantId);
