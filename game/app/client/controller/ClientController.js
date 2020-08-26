@@ -455,7 +455,8 @@ class ClientController {
         if (businessCard.getEmail() === undefined) {
             this.#gameView.initBusinessCardView(businessCard, false, rank, isModerator);
         } else {
-            this.#gameView.initBusinessCardView(businessCard, true, rank, isModerator);
+            //rank is undefined because it is not drawn on friendBusinessCards
+            this.#gameView.initBusinessCardView(businessCard, true, undefined, isModerator);
         }
     }
 
