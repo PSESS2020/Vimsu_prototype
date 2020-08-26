@@ -35,7 +35,7 @@ module.exports = class ParticipantService {
 
         var accountId = account.getAccountID();
 
-        return this.getParticipant(accountId, conferenceId, vimsudb).then(par => {
+        return this.#getParticipant(accountId, conferenceId, vimsudb).then(par => {
             var participant;
 
             if (par) {
@@ -203,6 +203,31 @@ module.exports = class ParticipantService {
             }
         }).catch(err => {
             console.error(err)
+        })
+    }
+
+    /**
+     * @static @private Gets participant with this account from the database
+     * 
+     * @param {String} accountId account ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if participant is found, otherwise false
+     */
+    static #getParticipant = function(accountId, conferenceId, vimsudb) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb ,db);
+
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: accountId }, "").then(par => {
+            if (par) {
+                return par;
+            }
+            else {
+                console.log("participant with accountId " + accountId + " is not found in collection participants_" + conferenceId);
+                return false;
+            }
         })
     }
 
