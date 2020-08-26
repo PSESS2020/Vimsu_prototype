@@ -7,6 +7,12 @@ module.exports = class Task {
     #taskType;
     #awardPoints;
 
+    /**
+     * 
+     * @param {number} id 
+     * @param {TypeOfTask} taskType 
+     * @param {number} awardPoints 
+     */
     constructor(id, taskType, awardPoints) {
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
