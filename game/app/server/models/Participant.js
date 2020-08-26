@@ -129,6 +129,10 @@ module.exports = class Participant {
         return this.#chatList;
     }
 
+    /**
+     * 
+     * @param {Chat} chat 
+     */
     addChat(chat) {
         TypeChecker.isInstanceOf(chat, Chat);
         if (!this.#chatList.includes(chat)) {
@@ -136,16 +140,28 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * 
+     * @param {Position} position 
+     */
     setPosition(position) {
         TypeChecker.isInstanceOf(position, Position);
         this.#position = position;
     }
 
+    /**
+     * 
+     * @param {Direction} direction 
+     */
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
         this.#direction = direction;
     }
 
+    /**
+     * 
+     * @param {boolean} isVisible 
+     */
     setIsVisible(isVisible) {
         TypeChecker.isBoolean(isVisible);
         this.#isVisible = isVisible;
@@ -234,6 +250,10 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * 
+     * @param {?String} ppantId 
+     */
     hasFriend(ppantId) {
         if (ppantId) {
             TypeChecker.isString(ppantId);
@@ -242,6 +262,10 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * 
+     * @param {?String} ppantId 
+     */
     hasSentFriendRequest(ppantId) {
         if (ppantId) {
             TypeChecker.isString(ppantId);
@@ -250,6 +274,10 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     removeChat(chatId) {
         TypeChecker.isString(chatId);
 
@@ -270,6 +298,10 @@ module.exports = class Participant {
         return this.#taskTypeMapping[taskType];
     }
 
+    /**
+     * 
+     * @param {Task} task 
+     */
     addTask(task) {
         TypeChecker.isInstanceOf(task, Task);
 
@@ -278,11 +310,25 @@ module.exports = class Participant {
         this.addAwardPoints(task.getAwardPoints());
     }
 
+    /**
+     * 
+     * @param {number} awardPoints 
+     */
     addAwardPoints(awardPoints) {
+        TypeChecker.isInt(awardPoints);
         this.#awardPoints += awardPoints;
     }
 
+    /**
+     * 
+     * @param {Achievement[]} achievements 
+     */
     setAchievements(achievements) {
+        TypeChecker.isInstanceOf(achievements, Array);
+        achievements.forEach(achievement => {
+            TypeChecker.isInstanceOf(achievements, Achievement);
+        })
+
         this.#achievements = achievements;
     }
 
@@ -290,7 +336,13 @@ module.exports = class Participant {
         return this.#awardPoints;
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     getChat(chatId) {
+        TypeChecker.isString(chatId);
+
         for (var i = 0; i < this.#chatList.length; i++) {
             if (this.#chatList[i].getId() == chatId) {
                 return this.#chatList[i];
@@ -298,7 +350,13 @@ module.exports = class Participant {
         }
     };
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     isMemberOfChat(chatId) {
+        TypeChecker.isString(chatId);
+
         for (var i = 0; i < this.#chatList.length; i++) {
             if (this.#chatList[i].getId() == chatId) {
                 return true;
@@ -307,11 +365,22 @@ module.exports = class Participant {
         return false;
     };
 
+    /**
+     * 
+     * @param {Achievement} achievement 
+     */
     addAchievement(achievement) {
+        TypeChecker.isInstanceOf(achievement, Achievement);
         this.#achievements.push(achievement);
     }
 
+    /**
+     * 
+     * @param {number} achievementId 
+     */
     removeAchievement(achievementId) {
+        TypeChecker.isInt(achievementId);
+
         let index = this.#achievements.findIndex(ach => ach.getId() === achievementId);
 
         if (index < 0) {
@@ -321,7 +390,11 @@ module.exports = class Participant {
         this.#achievements.splice(index, 1);
     }
 
-    //method to check if this ppant has a 1:1 chat with chatPartnerID
+    /**
+     * Check if this ppant has a 1:1 chat with chatPartnerID
+     * 
+     * @param {String} chatPartnerID 
+     */
     hasChatWith(chatPartnerID) {
         TypeChecker.isString(chatPartnerID);
         //check each chat
