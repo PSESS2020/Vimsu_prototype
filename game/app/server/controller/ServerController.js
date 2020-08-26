@@ -2001,12 +2001,19 @@ module.exports = class ServerController {
     /**
      * 
      * @param {String} socketid 
-     * @param {{header: String, body: String}} message 
+     * @param {{header: String, body: String[]}} message 
      */
     sendNotification(socketid, message) {
-        TypeChecker.isString(socketId);
+        TypeChecker.isString(socketid);
         TypeChecker.isString(message.header);
-        TypeChecker.isString(message.body);
+        if (message.body instanceof Array) {
+            TypeChecker.isInstanceOf(message.body, Array);
+            message.body.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(message.body);
+        }
 
         if (this.#socketIsConnected(socketid)) {
             this.#io.to(socketid).emit("New notification", message.header, message.body);

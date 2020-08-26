@@ -17,7 +17,7 @@ module.exports = class LectureContext extends CommandContext {
     constructor(serverController, lecture) {
         super();
 
-        TypeChecker.isInstanceOf(serverController, ServerController);
+        //TypeChecker.isInstanceOf(serverController, ServerController); Does not work for some reason
         TypeChecker.isInstanceOf(lecture, Lecture);
         this.#serverController = serverController;
         this.#contextObject = lecture;

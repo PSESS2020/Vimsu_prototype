@@ -485,11 +485,18 @@ class GameView {
     /**
      * 
      * @param {String} messageHeader 
-     * @param {String} messageText 
+     * @param {String[]} messageText 
      */
     initGlobalChatView(messageHeader, messageText) {
         TypeChecker.isString(messageHeader);
-        TypeChecker.isString(messageText);
+        if (messageText instanceof Array) {
+            TypeChecker.isInstanceOf(messageText, Array);
+            messageText.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(messageText);
+        }
 
         this.#globalChatView.draw(messageHeader, messageText);
     };
