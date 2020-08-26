@@ -8,11 +8,12 @@ module.exports = class Chat {
     #maxNumMessages;
 
     /**
+     * Creates a Chat instance
      * 
-     * @param {String} chatId 
-     * @param {?String[]} participantList 
-     * @param {Message[]} messageList 
-     * @param {number} maxNumMessages 
+     * @param {String} chatId chat ID
+     * @param {?String[]} participantList list of chat participants
+     * @param {Message[]} messageList list of messages
+     * @param {number} maxNumMessages max number of messages
      */
     constructor(chatId, participantList, messageList, maxNumMessages) {
         TypeChecker.isString(chatId);
@@ -23,12 +24,11 @@ module.exports = class Chat {
             }
         });
 
-
         TypeChecker.isInstanceOf(messageList, Array);
+
         messageList.forEach(message => {
             TypeChecker.isInstanceOf(message, Message);
         });
-
 
         TypeChecker.isInt(maxNumMessages);
 
@@ -38,42 +38,72 @@ module.exports = class Chat {
         this.#messageList = messageList;
     }
 
+    /**
+     * Gets chat ID
+     * 
+     * @return chatId
+     */
     getId() {
         return this.#chatId;
     }
 
+    /**
+     * Gets max number of messages
+     * 
+     * @return maxNumMessages
+     */
     getMaxNumMessages() {
         return this.#maxNumMessages;
     }
 
+    /**
+     * Gets number of participants
+     * 
+     * @return number of participants
+     */
     getNumParticipants() {
         return this.#participantList.length;
     }
 
+    /**
+     * Gets list of messages
+     * 
+     * @return messageList
+     */
     getMessageList() {
         return this.#messageList;
     }
 
+    /**
+     * Gets list of chat participants
+     * 
+     * @return participantList
+     */
     getParticipantList() {
         return this.#participantList;
     }
 
     /**
+     * Sets max number of messages
      * 
-     * @param {number} maxNumMsg 
+     * @param {number} maxNumMsg max number of messages
      */
     setMaxNumMessages(maxNumMsg) {
         TypeChecker.isInt(maxNumMsg);
         this.#maxNumMessages = maxNumMsg;
     }
 
+    /**
+     * @abstract Add a message to this chat
+     */
     addMessage() {
-        throw new Error('addMessage(msg) has to be implemented!');
+        throw new Error('addMessage() has to be implemented!');
     }
 
     /**
+     * Generates a new message ID
      * 
-     * @param {String} senderId 
+     * @param {String} senderId sender ID
      */
     generateNewMsgId(senderId) {
         TypeChecker.isString(senderId);
@@ -81,8 +111,9 @@ module.exports = class Chat {
     }
 
     /**
+     * Remove a message from this chat
      * 
-     * @param {String} msgId 
+     * @param {String} msgId message ID
      */
     removeMessage(msgId) {
         TypeChecker.isString(msgId);
@@ -96,8 +127,9 @@ module.exports = class Chat {
     }
 
     /**
+     * Remove a participant from this chat
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
