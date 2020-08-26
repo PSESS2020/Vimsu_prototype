@@ -15,15 +15,15 @@ class GameObjectClient {
     #isClickable;
 
     /**
+     * @constructor Creates an instance of Game Object on client-side
      * 
-     * 
-     * @param {number} id 
-     * @param {GameObjectType} gameObjectType
-     * @param {String} name
-     * @param {number} width 
-     * @param {number} length 
-     * @param {Position} position 
-     * @param {boolean} isClickable
+     * @param {number} id game object ID
+     * @param {GameObjectType} gameObjectType game object type
+     * @param {String} name game object name
+     * @param {number} width game object width
+     * @param {number} length game object length
+     * @param {Position} position game object position
+     * @param {boolean} isClickable game object clickable status
      */
     constructor(id, gameObjectType, name, width, length, position, isClickable) {
 
@@ -46,30 +46,65 @@ class GameObjectClient {
         this.#isClickable = isClickable;
     }
 
+    /**
+     * Gets game object ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets game object type
+     * 
+     * @return gameObjectType
+     */
     getGameObjectType() {
         return this.#gameObjectType;
     }
 
+    /**
+     * Gets game object name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Gets game object width
+     * 
+     * @return width
+     */
     getWidth() {
         return this.#width;
     }
 
+    /**
+     * Gets game object length
+     * 
+     * @return length
+     */
     getLength() {
         return this.#length;
     }
 
+    /**
+     * Gets game object position
+     * 
+     * @return position
+     */
     getPosition() {
         return this.#position;
     }
 
+    /**
+     * Gets game object clickable status
+     * 
+     * @return true if clickable, otherwise false
+     */
     isClickable() {
         return this.#isClickable;
     }

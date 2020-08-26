@@ -8,9 +8,9 @@ class PositionClient {
     #cordY;
 
     /**
-     * 
-     * @param {number} cordX 
-     * @param {number} cordY 
+     * @constructor Creates an instance of Position on client-side
+     * @param {number} cordX x coordinate
+     * @param {number} cordY y coordinate
      */
     constructor(cordX, cordY) {
         TypeChecker.isInt(cordX);
@@ -20,10 +20,20 @@ class PositionClient {
         this.#cordY = cordY;
     }
 
+    /**
+     * Gets x coordinate
+     * 
+     * @return cordX
+     */
     getCordX() {
         return this.#cordX;
     }
 
+    /**
+     * Gets y coordinate
+     * 
+     * @return cordY
+     */
     getCordY() {
         return this.#cordY;
     }

@@ -21,119 +21,121 @@ class RoomClient {
     #listOfDoors;
     #width;
     #length;
-
     #listOfPPants;
     #occupationMap;
-
     #map;
     #objectMap;
 
     /**
+     * @constructor Creates an instance of Room on client-side
      * 
-     * 
-     * @param {number} roomId 
-     * @param {TypeOfRoom} typeOfRoom
-     * @param {Object} assetPaths
-     * @param {GameObjectClient[]} listOfMapElements
-     * @param {GameObjectClient[]} listOfGameObjects
-     * @param {NPCClient[]} listOfNPCs
-     * @param {DoorClient[]} listOfDoors
-     * @param {number} length 
-     * @param {number} width 
-     * @param {number[][]} occupationMap
+     * @param {number} roomId room ID
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {Object} assetPaths asset paths
+     * @param {GameObjectClient[]} listOfMapElements list of map elements
+     * @param {GameObjectClient[]} listOfGameObjects list of game objects
+     * @param {NPCClient[]} listOfNPCs list of NPCs
+     * @param {DoorClient[]} listOfDoors list of Doors
+     * @param {number} length room length
+     * @param {number} width room width
+     * @param {number[][]} occupationMap room occupation map
      */
     constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
-        TypeChecker.isInt(roomId);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
-        TypeChecker.isInstanceOf(assetPaths, Object);
-        for (var key in assetPaths) {
-            //TypeChecker.isInstanceOf(key, String);
-            TypeChecker.isString(assetPaths[key]);
-        }
-        TypeChecker.isInstanceOf(listOfMapElements, Array);
-        listOfGameObjects.forEach(mapElement => {
-            TypeChecker.isInstanceOf(mapElement, GameObjectClient);
-        });
-        TypeChecker.isInstanceOf(listOfGameObjects, Array);
-        listOfGameObjects.forEach(gameObject => {
-            TypeChecker.isInstanceOf(gameObject, GameObjectClient);
-        });
-        TypeChecker.isInstanceOf(listOfNPCs, Array);
-        listOfNPCs.forEach(npc => {
-            TypeChecker.isInstanceOf(npc, NPCClient);
-        });
-        TypeChecker.isInstanceOf(listOfDoors, Array);
-        listOfDoors.forEach(door => {
-            TypeChecker.isInstanceOf(door, DoorClient);
-        });
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
-        TypeChecker.isInstanceOf(occupationMap, Array);
-        occupationMap.forEach(line => {
-            TypeChecker.isInstanceOf(line, Array);
-            line.forEach(element => {
-                TypeChecker.isInt(element);
-            });
-        });
-
-        //Singleton
         if (!!RoomClient.instance) {
             return RoomClient.instance;
         }
 
         RoomClient.instance = this;
 
-        this.#roomId = roomId;
-        this.#typeOfRoom = typeOfRoom;
-        this.#assetPaths = assetPaths;
-        this.#listOfMapElements = listOfMapElements;
-        this.#listOfGameObjects = listOfGameObjects;
-        this.#listOfNPCs = listOfNPCs;
-        this.#listOfDoors = listOfDoors;
-        this.#listOfPPants = [];
-        this.#width = width;
-        this.#length = length;
-        this.#occupationMap = occupationMap;
-
-        this.#buildMapArray();
+        this.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap)
     }
 
+    /**
+     * Gets room ID
+     * 
+     * @return roomId
+     */
     getRoomId() {
         return this.#roomId;
     }
 
+    /**
+     * Gets type of room
+     * 
+     * @return typeOfRoom
+     */
     getTypeOfRoom() {
         return this.#typeOfRoom;
     }
 
+    /**
+     * Gets asset paths
+     * 
+     * @return assetPaths
+     */
     getAssetPaths() {
         return this.#assetPaths;
     }
 
+    /**
+     * Gets room width
+     * 
+     * @return width
+     */
     getWidth() {
         return this.#width;
     }
 
+    /**
+     * Gets room length
+     * 
+     * @return length
+     */
     getLength() {
         return this.#length;
     }
 
+    /**
+     * Gets list of participants in the room
+     * 
+     * @return list of ppants
+     */
     getListOfPPants() {
         return this.#listOfPPants;
     }
 
+    /**
+     * Gets list of map elements
+     * 
+     * @return list of map elements
+     */
     getListOfMapElements() {
         return this.#listOfMapElements;
     }
 
+    /**
+     * Gets list of game objects
+     * 
+     * @return list of game objects
+     */
     getListOfGameObjects() {
         return this.#listOfGameObjects;
     }
 
+    /**
+     * Gets list of NPCs
+     * 
+     * @return list of NPCs
+     */
     getListOfNPCs() {
         return this.#listOfNPCs;
     }
 
+    /**
+     * Gets list of doors
+     * 
+     * @return list of doors
+     */
     getListOfDoors() {
         return this.#listOfDoors;
     }
@@ -141,8 +143,7 @@ class RoomClient {
     /**
      * Adds ppant into room
      * 
-     * 
-     * @param {ParticipantClient} participant 
+     * @param {ParticipantClient} participant participant
      */
     enterParticipant(participant) {
         TypeChecker.isInstanceOf(participant, ParticipantClient);
@@ -154,7 +155,7 @@ class RoomClient {
     /**
      * Deletes ppant from room
      * 
-     * @param {number} participantId 
+     * @param {number} participantId participant ID
      */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -166,7 +167,10 @@ class RoomClient {
         });
     }
 
-    //Method to get a Participant who is currently in this room
+    /**
+     * Gets a Participant who is currently in this room
+     * @param {String} ppantID participant ID
+     */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
         var result;
@@ -181,8 +185,7 @@ class RoomClient {
     /**
      * Checks, if there is a collision at this position
      * 
-     * 
-     * @param {PositionClient} position 
+     * @param {PositionClient} position position
      * @returns true, when collision
      * @returns false, otherwise
      */
@@ -208,24 +211,22 @@ class RoomClient {
     /**
      * Called when a user enters a new room
      * 
-     * 
-     * @param {number} roomId 
-     * @param {TypeOfRoom} typeOfRoom
-     * @param {Object} assetPaths
-     * @param {GameObjectClient[]} listOfMapElements
-     * @param {GameObjectClient[]} listOfGameObjects
-     * @param {NPCClient[]} listOfNPCs
-     * @param {DoorClient[]} listOfDoors
-     * @param {number} length 
-     * @param {number} width  
-     * @param {number[][]} occupationMap
+     * @param {number} roomId room ID
+     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {Object} assetPaths asset paths
+     * @param {GameObjectClient[]} listOfMapElements list of map elements
+     * @param {GameObjectClient[]} listOfGameObjects list of game objects
+     * @param {NPCClient[]} listOfNPCs list of NPCs
+     * @param {DoorClient[]} listOfDoors list of doors
+     * @param {number} length room length
+     * @param {number} width room width
+     * @param {number[][]} occupationMap room occupation map
      */
     swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(assetPaths, Object);
         for (var key in assetPaths) {
-            //TypeChecker.isInstanceOf(key, String);
             TypeChecker.isString(assetPaths[key]);
         }
         TypeChecker.isInstanceOf(listOfMapElements, Array);
@@ -268,6 +269,9 @@ class RoomClient {
         this.#buildMapArray();
     }
 
+    /**
+     * Builds room map and game object map array
+     */
     #buildMapArray = function() {
 
         var mapLength = this.#width + Settings.MAP_BLANK_TILES_LENGTH;
@@ -320,11 +324,20 @@ class RoomClient {
         });
     }
 
-
+    /**
+     * Gets map array
+     * 
+     * @return map array
+     */
     getMap() {
         return this.#map;
     }
 
+    /**
+     * Gets object map array
+     * 
+     * @return object map array
+     */
     getObjectMap() {
         return this.#objectMap;
     }

@@ -13,12 +13,13 @@ class DoorClient {
     #targetRoomId;
 
     /**
+     * @constructor Creates an instance of Door on client-side
      * 
-     * @param {number} id 
-     * @param {TypeOfDoor} typeOfDoor
-     * @param {String} name
-     * @param {PositionClient} mapPosition
-     * @param {Number} targetRoomId
+     * @param {number} id door ID
+     * @param {TypeOfDoor} typeOfDoor type of door
+     * @param {String} name door name
+     * @param {PositionClient} mapPosition door position
+     * @param {Number} targetRoomId target room ID
      */
     constructor(id, typeOfDoor, name, mapPosition, targetRoomId) {
         TypeChecker.isInt(id);
@@ -36,22 +37,47 @@ class DoorClient {
         this.#targetRoomId = targetRoomId;
     }
 
+    /**
+     * Gets door ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets type of door
+     * 
+     * @return typeOfDoor
+     */
     getTypeOfDoor() {
         return this.#typeOfDoor;
     }
 
+    /**
+     * Gets door name
+     * 
+     * @return name
+     */
     getName() {
         return this.#name;
     }
 
+    /**
+     * Gets door position
+     * 
+     * @return mapPosition
+     */
     getMapPosition() {
         return this.#mapPosition;
     }
 
+    /**
+     * Gets target room ID
+     * 
+     * @return targetRoomId
+     */
     getTargetRoomId() {
         return this.#targetRoomId;
     }
