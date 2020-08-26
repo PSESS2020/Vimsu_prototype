@@ -1,3 +1,5 @@
+const TypeChecker = require("../shared/TypeChecker");
+
 class EventManager {
 
     #clientController;
@@ -21,7 +23,6 @@ class EventManager {
 
     /**
      * called from View when lecture door tile is clicked
-     *
      */
     handleLectureDoorClick() {
         this.#clientController.handleFromViewGetCurrentLectures();
@@ -30,11 +31,16 @@ class EventManager {
     /**
      * called from View when door tile is clicked
      *
+     * @param {number} roomId
      */
     handleDoorClick(roomId) {
         this.#clientController.handleFromViewEnterNewRoom(roomId);
     }
 
+    /**
+     * 
+     * @param {String} messageVal 
+     */
     handleAllchatMessageInput(messageVal) {
         if (messageVal[0] === '/') {
             this.#clientController.sendToServerEvalInput(messageVal.slice(1));
@@ -42,14 +48,27 @@ class EventManager {
             this.#clientController.sendToServerAllchatMessage(messageVal);
     }
 
+    /**
+     * 
+     * @param {String} messageVal 
+     */
     handleLectureChatMessageInput(messageVal) {
         this.#clientController.sendToServerLectureChatMessage(messageVal);
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     */
     handleLectureClicked(lectureId) {
         this.#clientController.handleFromViewEnterLecture(lectureId);
     }
 
+    /**
+     * 
+     * @param {String} lectureId 
+     * @param {boolean} lectureEnded 
+     */
     handleLectureLeft(lectureId, lectureEnded) {
         this.#clientController.handleFromViewLectureLeft(lectureId, lectureEnded);
     }
@@ -58,6 +77,10 @@ class EventManager {
         this.#clientController.handleFromViewShowSchedule();
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     handleAvatarClick(participantId) {
         this.#clientController.handleFromViewShowBusinessCard(participantId);
     }
@@ -70,40 +93,58 @@ class EventManager {
         this.#clientController.handleFromViewShowFriendList();
     }
 
-    /* One function to display the list of all chats.
-     * - (E) */
     handleChatListClicked() {
         this.#clientController.handleFromViewShowChatList();
     };
 
-    /* One function to display the messages in a chat.
-     * - (E) */
+    /**
+     * 
+     * @param {String} chatId 
+     */
     handleChatThreadClicked(chatId) {
         this.#clientController.handleFromViewShowChatThread(chatId);
     };
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     handleShowChatParticipantList(chatId) {
         this.#clientController.handleFromViewShowChatParticipantList(chatId);
     }
 
-    /* One function to create a new chat.
-     * - (E) */
+    /**
+     * 
+     * @param {String} participantId 
+     */
     handleChatNowClicked(participantId) {
         this.#clientController.handleFromViewCreateNewChat(participantId);
     }
 
-    /* One function to create a new group chat
-     * - (E) */
+    /**
+     * 
+     * @param {String} chatName 
+     * @param {String[]} participantIdList 
+     * @param {String} chatId 
+     */
     handleCreateGroupChat(chatName, participantIdList, chatId) {
         this.#clientController.handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId)
     }
 
+    /**
+     * 
+     * @param {String} groupName 
+     * @param {String} chatId 
+     */
     handleInviteFriendsClicked(groupName, chatId) {
         this.#clientController.handleFromViewShowInviteFriends(groupName, chatId);
     }
 
-    /* One function to send a new message in a chat.
-     * - (E) */
+    /**
+     * 
+     * @param {String} chatId 
+     * @param {String} message 
+     */
     handleChatMessageInput(chatId, message) {
         this.#clientController.handleFromViewSendNewMessage(chatId, message);
     };
@@ -120,30 +161,51 @@ class EventManager {
         this.#clientController.handleFromViewShowRankList();
     }
 
-    handleSendFriendRequest(chatId) {
-        this.#clientController.handleSendFriendRequest();
-    };
-
+    /**
+     * 
+     * @param {BusinessCardClient} businessCard 
+     */
     handleAcceptRequestClicked(businessCard) {
         this.#clientController.handleFromViewAcceptRequest(businessCard);
     }
 
+    /**
+     * 
+     * @param {String} participantId 
+     */
     handleRejectRequestClicked(participantId) {
         this.#clientController.handleFromViewRejectRequest(participantId);
     }
 
+    /**
+     * 
+     * @param {String} friendId 
+     */
     handleRemoveFriend(friendId) {
         this.#clientController.handleFromViewRemoveFriend(friendId);
     }
 
+    /**
+     * 
+     * @param {String} chatId 
+     */
     handleLeaveChat(chatId) {
         this.#clientController.handleFromViewLeaveChat(chatId);
     }
 
+    /**
+     * 
+     * @param {number} npcId 
+     */
     handleNPCClick(npcId) {
         this.#clientController.handleFromViewGetNPCStory(npcId);
     }
 
+    /**
+     * 
+     * @param {String} participantRecipientId 
+     * @param {String} chatId 
+     */
     handleSendFriendRequest(participantRecipientId, chatId) {
         this.#clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
     }

@@ -876,10 +876,15 @@ class ClientController {
         }
     }
 
-    //called when a friend request is accepted
+    /**
+     * called when a friend request is accepted
+     * 
+     * @param {BusinessCardClient} businessCard 
+     */
     handleFromViewAcceptRequest(businessCard) {
-        if (this.#socketReady()) {
+        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
 
+        if (this.#socketReady()) {
             var participantId = businessCard.getParticipantId();
             TypeChecker.isString(participantId);
 
