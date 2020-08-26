@@ -6,8 +6,9 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker');
 module.exports = class FileSystem {
 
     /**
+     * @static create a directory if not exists
      * 
-     * @param {String} dir 
+     * @param {String} dir directory
      */
     static createDirectory(dir) {
         TypeChecker.isString(dir);
@@ -15,8 +16,9 @@ module.exports = class FileSystem {
     }
 
     /**
+     * @static delete a directory with its content
      * 
-     * @param {String} dir 
+     * @param {String} dir directory
      */
     static deleteDirectory(dir) {
         TypeChecker.isString(dir);
@@ -27,9 +29,12 @@ module.exports = class FileSystem {
     }
 
     /**
+     * @static moves file to a directory
      * 
-     * @param {Object} file 
-     * @param {String} dir 
+     * @param {Object} file file to be moved
+     * @param {String} dir directory to which file should be moved
+     * 
+     * @return true if successfully moved, otherwise error
      */
     static moveFile(file, dir) {
         TypeChecker.isString(dir);
@@ -47,8 +52,9 @@ module.exports = class FileSystem {
     }
 
     /**
+     * @static reads file
      * 
-     * @param {String} filePath 
+     * @param {String} filePath file path
      */
     static createReadStream(filePath) {
         TypeChecker.isString(filePath);

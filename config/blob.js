@@ -7,6 +7,9 @@ module.exports = class blob {
 
     #blobService;
 
+    /**
+     * @constructor Creates an instance of blob
+     */
     constructor() {
         if (!!blob.instance) {
             return blob.instance;
@@ -15,6 +18,9 @@ module.exports = class blob {
         blob.instance = this;
     }
 
+    /**
+     * Connects to blob service
+     */
     connectBlob() {
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
         if (!connectionString) {
@@ -27,10 +33,13 @@ module.exports = class blob {
     }
 
     /**
+     * Uploads file to blob storage
      * 
-     * @param {String} containerName 
-     * @param {String} fileName 
-     * @param {String} dir 
+     * @param {String} containerName container name
+     * @param {String} fileName file name
+     * @param {String} dir file directory where the file is to be read
+     * 
+     * @return fileId and duration
      */
     async uploadFile(containerName, fileName, dir) {
         TypeChecker.isString(containerName);
@@ -68,9 +77,10 @@ module.exports = class blob {
     }
 
     /**
+     * Deletes file from container
      * 
-     * @param {String} containerName 
-     * @param {String} fileName 
+     * @param {String} containerName container name
+     * @param {String} fileName file name
      */
     deleteFile(containerName, fileName) {
         TypeChecker.isString(containerName);
@@ -84,9 +94,12 @@ module.exports = class blob {
     }
 
     /**
+     * Gets shared access policy of an URL
      * 
-     * @param {Date} startDate 
-     * @param {number} accessTimeInMinutes 
+     * @param {Date} startDate access start date
+     * @param {number} accessTimeInMinutes access duration in minutes
+     * 
+     * @return shared access policy
      */
     #getSharedAccessPolicy = function(startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
@@ -107,11 +120,14 @@ module.exports = class blob {
     }
 
     /**
+     * Generates shared access signature
      * 
-     * @param {String} containerName 
-     * @param {String} fileName 
-     * @param {Date} startDate 
-     * @param {number} accessTimeInMinutes 
+     * @param {String} containerName container name
+     * @param {String} fileName file name
+     * @param {Date} startDate access start date
+     * @param {number} accessTimeInMinutes access duration in minutes
+     * 
+     * @return file URL
      */
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);

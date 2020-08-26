@@ -4,6 +4,9 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 module.exports = class db {
     #vimsudb;
 
+    /**
+     * @constructor Creates an instance of db
+     */
     constructor() {
         if (!!db.instance) {
             return db.instance;
@@ -12,6 +15,9 @@ module.exports = class db {
         db.instance = this;
     }
 
+    /**
+     * Connects to the database
+     */
     connectDB() {
         const connectionString = process.env.MONGODB_CONNECTION_STRING;
         if(!connectionString) {
@@ -33,8 +39,11 @@ module.exports = class db {
     }
 
     /**
+     * Get document count in the collection
      * 
-     * @param {String} collectionName 
+     * @param {String} collectionName collection name
+     * 
+     * @return document count
      */
     getCollectionDocCount(collectionName) {
         TypeChecker.isString(collectionName);
@@ -49,9 +58,10 @@ module.exports = class db {
     }
 
     /**
+     * Stores a document into a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} object 
+     * @param {String} collectionName collection name
+     * @param {Object} object document to be stored
      */
     insertOneToCollection(collectionName, object) {
         TypeChecker.isString(collectionName);
@@ -64,8 +74,11 @@ module.exports = class db {
     }
 
     /**
+     * Gets all documents in a collection
      * 
-     * @param {String} collectionName 
+     * @param {String} collectionName collection name
+     * 
+     * @return documents
      */
     findAllInCollection(collectionName) {
         TypeChecker.isString(collectionName);
@@ -81,10 +94,13 @@ module.exports = class db {
     }
 
     /**
+     * Gets multiple documents in a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
-     * @param {Object} projection 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {Object} projection projection
+     * 
+     * @return documents
      */
     findInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
@@ -100,10 +116,13 @@ module.exports = class db {
     }
 
     /**
+     * Gets a document in a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
-     * @param {Object} projection 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {Object} projection projection
+     * 
+     * @return document
      */
     findOneInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
@@ -119,11 +138,14 @@ module.exports = class db {
     }
 
     /**
+     * Joins to collection and returns the results
      * 
-     * @param {String} localCollName 
-     * @param {String} foreignCollName 
-     * @param {String} localField 
-     * @param {String} foreignField 
+     * @param {String} localCollName local collection name
+     * @param {String} foreignCollName foreign collection name
+     * @param {String} localField local field
+     * @param {String} foreignField foreign field
+     * 
+     * @return joined documents
      */
     joinCollection(localCollName, foreignCollName, localField, foreignField) {
         TypeChecker.isString(localCollName);
@@ -152,10 +174,11 @@ module.exports = class db {
     }
 
     /**
+     * Updates a document in a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
-     * @param {(String|number)} newValue 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {(String|number)} newValue new value
      */
     updateOneToCollection(collectionName, query, newValue) {
         TypeChecker.isString(collectionName);
@@ -168,10 +191,13 @@ module.exports = class db {
     }
 
     /**
+     * Inserts a query to an array in a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
-     * @param {Objcet} queryToPush 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {Objcet} queryToPush query to be inserted
+     * 
+     * @return true if inserted successfully, otherwise false
      */
     insertToArrayInCollection(collectionName, query, queryToPush) {
         TypeChecker.isString(collectionName);
@@ -191,10 +217,13 @@ module.exports = class db {
     }
 
     /**
+     * Deletes a query from an array in a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
-     * @param {Object} queryToPull 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {Object} queryToPull query to be deleted
+     * 
+     * @return true if deleted successfully, otherwise false
      */
     deleteFromArrayInCollection(collectionName, query, queryToPull) {
         TypeChecker.isString(collectionName);
@@ -214,9 +243,12 @@ module.exports = class db {
     }
 
     /**
+     * Deletes a document from a collection
      * 
-     * @param {String} collectionName 
-     * @param {Object} query 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * 
+     * @return true if deleted successfully, otherwise false
      */
     deleteOneFromCollection(collectionName, query) {
         TypeChecker.isString(collectionName);
@@ -237,8 +269,11 @@ module.exports = class db {
     }
 
     /**
+     * Deletes all documents from a collection
      * 
-     * @param {String} collectionName 
+     * @param {String} collectionName collection name
+     * 
+     * @return true if deleted successfully, otherwise false
      */
     deleteAllFromCollection(collectionName) {
         TypeChecker.isString(collectionName);

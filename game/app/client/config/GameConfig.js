@@ -24,16 +24,4 @@ class GameConfig {
    * The port at which the game communicates with the server.
    */
    static PORT = 5000;
-
-   /*
-   * Number of game views/ frames that are drawn in each second of the game duration.
-   */
-   //static FPS = 30;
-
-   /*
-   * Time in milliseconds to wait after each game loop, that refreshes all
-   * graphical elements and draws them on screen.
-   */
-   //static TIME_DELTA = 1000 / this.FPS;
-
 }
