@@ -1971,7 +1971,7 @@ module.exports = class ServerController {
     emitEventIn(idOfSocketRoomToEmitIn, eventName, eventArguments) {
         TypeChecker.isString(eventName);
         
-        if (eventArguments) {
+        if (eventArguments !== undefined) {
             this.#io.in(idOfSocketRoomToEmitIn).emit(eventName, eventArguments);
         } else {
             this.#io.in(idOfSocketRoomToEmitIn).emit(eventName);
@@ -1988,7 +1988,7 @@ module.exports = class ServerController {
     emitEventTo(idOfSocketToEmitTo, eventName, eventArguments) {
         TypeChecker.isString(eventName);
 
-        if (eventArguments) {
+        if (eventArguments !== undefined) {
             if (this.#socketIsConnected(idOfSocketToEmitTo)) {
                 this.#io.to(idOfSocketToEmitTo).emit(eventName, eventArguments);
             };
