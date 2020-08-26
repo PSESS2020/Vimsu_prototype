@@ -6,14 +6,20 @@ module.exports = class Conference {
     #schedule;
 
     /**
+     * Creates a conference instance
      * 
-     * @param {Schedule} schedule 
+     * @param {Schedule} schedule lecture schedule
      */
     constructor(schedule) {
         TypeChecker.isInstanceOf(schedule, Schedule);
         this.#schedule = schedule;
     }
 
+    /**
+     * Gets lecture schedule
+     * 
+     * @return schedule
+     */
     getSchedule() {
         return this.#schedule;
     }
