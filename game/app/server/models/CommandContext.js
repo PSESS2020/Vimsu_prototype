@@ -20,15 +20,15 @@ module.exports = class CommandContext {
         throw new Error('updateMessages() has to be implemented!');
     };
     
-    removeUser(userToRemove) {
+    removeUser() {
         throw new Error('removeUser() has to be implemented!');
     };
     
-    muteUser(userToMute) {
+    muteUser() {
         throw new Error('muteUser() has to be implemented!');
     };
     
-    unmuteUser(userToUnmute) {
+    unmuteUser() {
         throw new Error('unmuteUser() has to be implemented!');
     };
     
