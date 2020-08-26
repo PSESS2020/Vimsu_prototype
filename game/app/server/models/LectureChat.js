@@ -1,4 +1,3 @@
-const Message = require('./Message');
 const TypeChecker = require('../../client/shared/TypeChecker');
 
 module.exports = class LectureChat {
@@ -6,19 +5,25 @@ module.exports = class LectureChat {
     #listOfMessages;
 
     /**
-     * 
+     * @constructor Creates Lecture Chat instance
      */
     constructor() {
         this.#listOfMessages = [];
     }
 
+    /**
+     * Gets lecture chat messages
+     * 
+     * @return list of messages
+     */
     getMessages() {
         return this.#listOfMessages;
     }
 
     /**
+     * Appends lecture chat message
      * 
-     * @param {(senderID: String, username: String, messageID: number, timestamp: Date)} message 
+     * @param {(senderID: String, username: String, messageID: number, timestamp: Date)} message message
      */
     appendMessage(message) {
         TypeChecker.isInstanceOf(message, Object);
