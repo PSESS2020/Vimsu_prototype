@@ -15,17 +15,18 @@ module.exports = class Achievement {
     #nextCount;
 
     /**
+     * @constructor Creates an Achievement instance
      * 
-     * @param {number} id 
-     * @param {String} title 
-     * @param {String} icon 
-     * @param {String} description 
-     * @param {number} currentLevel 
-     * @param {String} color 
-     * @param {number} awardPoints 
-     * @param {number} maxLevel 
-     * @param {TypeOfTask} taskType 
-     * @param {?number} nextCount 
+     * @param {number} id achievement ID
+     * @param {String} title achievement title
+     * @param {String} icon achievement icon
+     * @param {String} description achievement description
+     * @param {number} currentLevel participant's current level of this achievement
+     * @param {String} color current color of this achievement
+     * @param {number} awardPoints current award points of this achievement
+     * @param {number} maxLevel max level of this achievement
+     * @param {TypeOfTask} taskType task type of achievement
+     * @param {?number} nextCount next participant's target to gain this achievement
      */
     constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
         TypeChecker.isInt(id);
@@ -52,49 +53,100 @@ module.exports = class Achievement {
         this.#nextCount = nextCount;
     }
 
+    /**
+     * Gets achievement ID
+     * 
+     * @return id
+     */
     getId() {
         return this.#id;
     }
 
+    /**
+     * Gets achievement title
+     * 
+     * @return title
+     */
     getTitle() {
         return this.#title;
     }
 
+    /**
+     * Gets achievement icon
+     * 
+     * @return icon
+     */
     getIcon() {
         return this.#icon;
     }
 
+    /**
+     * Gets achievement description
+     * 
+     * @return description
+     */
     getDescription() {
         return this.#description;
     }
 
+    /**
+     * Gets achievement task type
+     * 
+     * @return taskType
+     */
     getTaskType() {
         return this.#taskType;
     }
 
+    /**
+     * Gets participant's current level of this achievement
+     * 
+     * @return currentLevel
+     */
     getCurrentLevel() {
         return this.#currentLevel;
     }
 
+    /**
+     * Gets current award points of this achievement
+     * 
+     * @return awardPoints
+     */
     getAwardPoints() {
         return this.#awardPoints;
     }
 
+    /**
+     * Gets current color of this achievement
+     * 
+     * @return color
+     */
     getColor() {
         return this.#color;
     }
 
+    /**
+     * Gets max level of this achievement
+     * 
+     * @return maxLevel
+     */
     getMaxLevel() {
         return this.#maxLevel;
     }
 
+    /**
+     * Gets next participant's target to gain this achievement
+     * 
+     * @return nextCount
+     */
     getNextCount() {
         return this.#nextCount;
     }
 
     /**
+     * Sets current level
      * 
-     * @param {number} currentLevel 
+     * @param {number} currentLevel currentLevel
      */
     setCurrentLevel(currentLevel) {
         TypeChecker.isInt(currentLevel);
@@ -102,8 +154,9 @@ module.exports = class Achievement {
     }
 
     /**
+     * Sets achievement color
      * 
-     * @param {String} color 
+     * @param {String} color color
      */
     setColor(color) {
         TypeChecker.isString(color);
@@ -111,8 +164,9 @@ module.exports = class Achievement {
     }
 
     /**
+     * Sets current award points
      * 
-     * @param {number} awardPoints 
+     * @param {number} awardPoints award points
      */
     setAwardPoints(awardPoints) {
         TypeChecker.isInt(awardPoints);
@@ -120,8 +174,9 @@ module.exports = class Achievement {
     }
 
     /**
+     * Sets next target
      * 
-     * @param {?number} nextCount 
+     * @param {?number} nextCount next target
      */
     setNextCount(nextCount) {
         if (nextCount !== undefined)
@@ -131,8 +186,11 @@ module.exports = class Achievement {
     }
 
     /**
+     * Checks if task type and current level matches an achievement
      * 
-     * @param {Achievement} achievement 
+     * @param {Achievement} achievement achievement to compare
+     * 
+     * @return true if matches, otherwise false
      */
     equals(achievement) {
         TypeChecker.isInstanceOf(achievement, Achievement);
