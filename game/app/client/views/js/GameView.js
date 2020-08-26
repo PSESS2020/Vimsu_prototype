@@ -497,15 +497,13 @@ class GameView {
     /**
      * 
      * @param {BusinessCardClient} businessCard 
-     * @param {?number} rank 
      * @param {boolean} isModerator 
      */
-    initProfileView(businessCard, rank, isModerator) {
+    initProfileView(businessCard, isModerator) {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
-        TypeChecker.isInt(rank);
         TypeChecker.isBoolean(isModerator);
 
-        this.#profileView.draw(businessCard, rank, isModerator);
+        this.#profileView.draw(businessCard, isModerator);
     }
 
     /**
