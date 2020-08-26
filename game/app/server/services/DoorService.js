@@ -30,6 +30,10 @@ module.exports = class DoorService {
         }
     }
 
+    /**
+     * 
+     * @param {Position} doorPosition 
+     */
     #generateEnterPositionsLeftWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
@@ -43,6 +47,10 @@ module.exports = class DoorService {
         return enterPositions;
     }
 
+    /**
+     * 
+     * @param {Position} doorPosition 
+     */
     #generateEnterPositionsRightWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
