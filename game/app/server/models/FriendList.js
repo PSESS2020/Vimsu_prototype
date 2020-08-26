@@ -6,8 +6,7 @@ module.exports = class FriendList {
     #memberList;
 
     /**
-     * Creates FriendList Instance. Will be only called by FriendListService, which gets the member list from the DB
-     * 
+     * @constructor Creates FriendList Instance
      * 
      * @param {BusinessCard[]} memberList 
      */
@@ -33,6 +32,7 @@ module.exports = class FriendList {
 
     /**
      * Removes BusinessCard of ppant with ppantID from FriendList, if the BusinessCard is part of it
+     * 
      * @param {String} ppantID 
      */
     removeBusinessCard(ppantID) {
@@ -47,7 +47,10 @@ module.exports = class FriendList {
 
     /**
      * Checks if ppant with ppantID is part of the friendList
+     * 
      * @param {String} ppantID
+     * 
+     * @return true if found, otherwise false
      */
     includes(ppantID) {
         TypeChecker.isString(ppantID);
@@ -62,7 +65,10 @@ module.exports = class FriendList {
 
     /**
      * Gives BusinessCard from ppant with ppantID, if he is part of the friendList
+     * 
      * @param {String} ppantID 
+     * 
+     * @return business card
      */
     getBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
@@ -75,6 +81,11 @@ module.exports = class FriendList {
         return ppantCard;
     }
 
+    /**
+     * Gets all business cards
+     * 
+     * @return Array of business cards
+     */
     getAllBusinessCards() {
         return this.#memberList;
     }
