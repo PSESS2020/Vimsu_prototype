@@ -4,10 +4,13 @@ const db = require('../../../../config/db')
 module.exports = class FriendListService {
     
     /**
+     * @static Gets all friends of a participant from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return array of friends if participant is found, otherwise false
      */
     static getFriendList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -28,11 +31,14 @@ module.exports = class FriendListService {
     }
 
     /**
+     * @static store friend in the database
      * 
-     * @param {String} participantId 
-     * @param {String} friendId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} friendId friend ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if stored successfully, otherwise false
      */
     static storeFriend(participantId, friendId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -41,7 +47,6 @@ module.exports = class FriendListService {
         TypeChecker.isInstanceOf(vimsudb ,db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
-
             return true;
         }).catch(err => {
             console.error(err);
@@ -50,11 +55,14 @@ module.exports = class FriendListService {
     }
 
     /**
+     * @static remove friend from the database
      * 
-     * @param {String} participantId 
-     * @param {String} friendId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} friendId friend ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if removed successfully, otherwise false
      */
     static removeFriend(participantId, friendId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -71,10 +79,13 @@ module.exports = class FriendListService {
     }
 
     /**
+     * @static remove all friends from the database
      * 
-     * @param {String} participantId 
-     * @param {String} conferenceId 
-     * @param {db} vimsudb 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return true if removed successfully, otherwise false
      */
     static removeAllFriends(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
