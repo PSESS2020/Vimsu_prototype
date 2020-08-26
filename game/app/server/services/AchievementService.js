@@ -28,7 +28,7 @@ module.exports = class AchievementService {
      * @return AchievementDefinition instance
      */
     getAchievementDefinitionByTypeOfTask(achievementTaskType) {
-        TypeChecker.isEnumof(achievementTaskType, TypeOfTask);
+        TypeChecker.isEnumOf(achievementTaskType, TypeOfTask);
 
         return this.#achievementDefinitions[achievementTaskType];
     }

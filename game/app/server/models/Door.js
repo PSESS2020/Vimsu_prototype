@@ -123,7 +123,7 @@ module.exports = class Door {
      */
     getTargetPosition() {
         if (this.#targetPosition) {
-            return this.#targetPosition.getRoomId();
+            return this.#targetPosition;
         } else {
             return undefined;
         }
