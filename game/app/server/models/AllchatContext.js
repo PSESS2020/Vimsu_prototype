@@ -2,7 +2,6 @@ const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Messages = require('../utils/Messages.js');
 const Room = require('./Room.js');
-const ServerController = require('../controller/ServerController.js');
 
 module.exports = class AllchatContext extends CommandContext {
     
@@ -10,42 +9,59 @@ module.exports = class AllchatContext extends CommandContext {
     #contextObject
     
     /**
+     * @constructor Creates a allchat context instance
      * 
-     * @param {ServerController} serverController 
-     * @param {Room} room 
+     * @param {ServerController} serverController server controller instance
+     * @param {Room} room room instance
      */
     constructor(serverController, room) {
         super();
 
-        //TypeChecker.isInstanceOf(serverController, ServerController); Does not work for some reason
         TypeChecker.isInstanceOf(room, Room);
         this.#serverController = serverController;
         this.#contextObject = room;
     }
     
+    /**
+     * Gets room messages
+     * 
+     * @return messages
+     */
     getMessages() {
         return this.#contextObject.getMessages();
     };
     
+    /**
+     * Gets room title
+     * 
+     * @return title
+     */
     getTitle() {
         return this.#contextObject.getTypeOfRoom();
     };
     
+    /**
+     * Gets help messages
+     * 
+     * @return help messages
+     */
     getHelpMessage() {
         return Messages.HELPALLCHAT;
     };
     
+    /**
+     * Updates messages in allchat
+     */
     updateMessages() {
         this.#serverController.emitEventIn(this.#contextObject.getRoomId(), 'initAllchat', this.getMessages());
     };
     
     /**
+     * Removes participant from conference
      * 
      * @param {String} userToRemove username of the user to remove
      */
     removeUser(userToRemove) {
-        // removes player(s) from conference
-
         TypeChecker.isString(userToRemove);
         
         var ppantID = this.#serverController.getIdOf(userToRemove);
@@ -53,9 +69,7 @@ module.exports = class AllchatContext extends CommandContext {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
 
             /* First, it gets the socket object corresponding to player that
-            * is supposed to be removed from the game. 
-            * - (E) */
-
+            * is supposed to be removed from the game. */
             if (socket != undefined) {
             
                 if(socket.currentLecture) {
@@ -64,30 +78,30 @@ module.exports = class AllchatContext extends CommandContext {
             
                 /* Tells the clientController to remove itself from the game
                  * (meaning to return to the homepage). Since the handling of
-                * this can be altered client-side, we also need to remove the socket
-                 * from all the rooms (see below).
-                * - (E) */
+                 * this can be altered client-side, we also need to remove the socket
+                 * from all the rooms */
                 this.#serverController.emitEventTo(socket.id, 'remove yourself');
                 this.#serverController.ban(socket.request.session.accountId);
 
                 /* Get all the socketIO-rooms the socket belonging to the participant that
-                 * is to be removed is currently in and remove the socket from all those rooms
-                 * - (E) */
+                 * is to be removed is currently in and remove the socket from all those rooms */
                 Object.keys(socket.rooms).forEach( (room) => {
                     socket.leave(room);
                     this.#serverController.emitEventIn(room, "remove player", ppantID);
                 });
             }
-            
         }
-
-    };
-    
-    close() {
-        return; // does nothing
     };
     
     /**
+     * Not closing anything
+     */
+    close() {
+        return;
+    };
+    
+    /**
+     * Mutes participant from allchat
      * 
      * @param {String} userToMute username of the user to mute
      */
@@ -106,6 +120,7 @@ module.exports = class AllchatContext extends CommandContext {
     };
     
     /**
+     * Unmutes participant from allchat 
      * 
      * @param {String} userToUnmute username of the user to unmute
      */
