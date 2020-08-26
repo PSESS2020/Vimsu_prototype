@@ -8,19 +8,20 @@ module.exports = class OneToOneChat extends Chat {
     #chatPartnerUsername;
 
     /**
+     * @constructor Creates an 1:1 Chat instance
      * 
-     * @param {String} chatId 
-     * @param {String} creatorID 
-     * @param {String} chatPartnerID 
-     * @param {Message[]} messageList 
-     * @param {number} maxNumMessages 
-     * @param {String} creatorUsername 
-     * @param {String} chatPartnerUsername 
+     * @param {String} chatId chat ID
+     * @param {String} creatorID chat creator ID
+     * @param {String} chatPartnerID chat partner ID
+     * @param {Message[]} messageList list of messages
+     * @param {number} maxNumMessages max number of messages
+     * @param {String} creatorUsername creator username
+     * @param {String} chatPartnerUsername chat partner username
      */
     constructor(chatId, creatorID, chatPartnerID, messageList, maxNumMessages, creatorUsername, chatPartnerUsername) {
         super(chatId, [creatorID, chatPartnerID], messageList, maxNumMessages);
 
-        //Needed as a title for the ChatView (P)
+        //Needed as a title for the ChatView
         TypeChecker.isString(creatorUsername);
         TypeChecker.isString(chatPartnerUsername);
         this.#creatorUsername = creatorUsername;
@@ -32,7 +33,7 @@ module.exports = class OneToOneChat extends Chat {
      * Adds a message to the message list.
      * If message list is full then the half of the message list gets deleted.
      * 
-     * @param {Message} msg 
+     * @param {Message} msg message
      */
     addMessage(msg) {
         TypeChecker.isInstanceOf(msg, Message);
@@ -47,7 +48,9 @@ module.exports = class OneToOneChat extends Chat {
     /**
      * Get the other username in this 1:1 chat
      * 
-     * @param {String} ownUsername 
+     * @param {String} ownUsername own username
+     * 
+     * @return chat partner username
      */
     getOtherUsername(ownUsername) {
         TypeChecker.isString(ownUsername);
@@ -66,7 +69,9 @@ module.exports = class OneToOneChat extends Chat {
     /**
      * Get the other user id in this 1:1 chat
      * 
-     * @param {String} ownId 
+     * @param {String} ownId own ID
+     * 
+     * @return chat partner ID
      */
     getOtherUserId(ownId) {
         TypeChecker.isString(ownId);
@@ -83,8 +88,9 @@ module.exports = class OneToOneChat extends Chat {
     }
 
     /**
+     * Removes participant from 1:1 chat
      * 
-     * @param {String} participantId 
+     * @param {String} participantId participant ID
      */
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
