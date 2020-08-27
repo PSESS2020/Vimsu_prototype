@@ -31,53 +31,47 @@ var position = new Position(1, 1, 1);
 var friendList = new FriendList([]);
 var receivedRequestList = new FriendList([]);
 var sentRequestList = new FriendList([]);
-var tasks = new TaskService().getAllTasks();
 var awardPoints = 20;
 var chatList = [];
 var achievements = []
 
-describe('AchievementService getter functions', function() {
-    it('test getAllAchievementDefinitions', function() {
-        let achievementDefinitions = achievementService.getAllAchievementDefinitions();
-        var size = Object.keys(achievementDefinitions).length;
-        expect(achievementDefinitions).to.be.an('object');
-        assert.equal(size, 10);
-        for (const [key, value] of Object.entries(achievementDefinitions)) {
-            expect(value).to.be.instanceOf(AchievementDefinition);
-        }
+function generateTasks() {
+    var tasks = {};
+    new TaskService().getAllTasks().forEach(x => {
+        tasks[x.getTaskType()] = 0
     })
-})
+    return tasks;
+
+}
 
 describe('AchievementService achievement handling', function() {
-    it('test getLevelFromDefinition', function() {
-        var defintion = achievementService.getAllAchievementDefinitions()[TypeOfTask.FOODCOURTVISIT];
-        var level = achievementService.getLevelFromDefinition(1, defintion.getLevels());
-        expect(level).to.eql(1);
-    });
-
     it('test getAllAchievements', function() {
-        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, tasks, false, awardPoints, chatList);
+
+        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, generateTasks(), false, awardPoints, chatList);
         testParticipant.addTask(new TaskService().getTaskByType(TypeOfTask.FOODCOURTVISIT));
         var achievements = achievementService.getAllAchievements(testParticipant);
-        assert.equal(achievements.length, Object.keys(new AchievementService().getAllAchievementDefinitions()).length);
+        assert.equal(achievements.length, 10);
         expect(achievements[3]).to.eql(new Achievement(3, "Coffee Time", "coffee", "Visit food court room to gain this achievement.",1, '#C9B037', 10, 1, TypeOfTask.FOODCOURTVISIT))
     });
 
 
     it('test computeAchievements', function() {
-        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, tasks, false, awardPoints, chatList);
+        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, generateTasks(), false, awardPoints, chatList);
         testParticipant.addTask(new TaskService().getTaskByType(TypeOfTask.FOODCOURTVISIT));
         expect(achievementService.computeAchievements(testParticipant)).to.eql([new Achievement(3, "Coffee Time", "coffee", "Visit food court room to gain this achievement.",1, '#C9B037', 10, 1, TypeOfTask.FOODCOURTVISIT)])
     });
 
     it ('test computeAchievements with at least one unlocked achievement', function() {
-        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, tasks, false, awardPoints, chatList);
+        var testParticipant = new Participant('1234', '1a2b', businessCard, position, Direction.DOWNLEFT, friendList, receivedRequestList, sentRequestList, achievements, generateTasks(), false, awardPoints, chatList);
         
         testParticipant.addTask(new TaskService().getTaskByType(TypeOfTask.RECEPTIONVISIT));
-        achievementService.computeAchievements(testParticipant);
-        testParticipant.addTask(new TaskService().getTaskByType(TypeOfTask.FOODCOURTVISIT));
         var newAchievement = achievementService.computeAchievements(testParticipant);
+        expect(newAchievement.length).to.eql(1);
+
+        testParticipant.addTask(new TaskService().getTaskByType(TypeOfTask.FOODCOURTVISIT));
+        newAchievement = achievementService.computeAchievements(testParticipant);
+        expect(newAchievement.length).to.eql(1);
         expect(newAchievement[0]).to.eql(new Achievement(3, "Coffee Time", "coffee", "Visit food court room to gain this achievement.",1, '#C9B037', 10, 1, TypeOfTask.FOODCOURTVISIT));
-        expect(testParticipant.getAllAchievements()[3]).to.eql(newAchievement);
+        expect(testParticipant.getAchievements()[2]).to.eql(newAchievement[0]);
     });
 })

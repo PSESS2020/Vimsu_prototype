@@ -104,6 +104,7 @@ module.exports = class AchievementService {
 
         Object.keys(taskTypeCountMapping).forEach((taskType) => {
             var achievementDefinition = this.#achievementDefinitions[taskType];
+
             var count = taskTypeCountMapping[taskType];
 
             var currentLevel = this.#getLevelFromDefinition(count, achievementDefinition.getLevels())
