@@ -29,7 +29,7 @@ module.exports = class Message {
         TypeChecker.isString(senderUsername);
         TypeChecker.isDate(timestamp);
         TypeChecker.isString(messageText);
-        
+
         this.#messageId = messageId;
         this.#senderId = senderId;
         this.#senderUsername = senderUsername;

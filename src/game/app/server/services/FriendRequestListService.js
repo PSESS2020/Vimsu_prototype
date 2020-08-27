@@ -23,7 +23,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(receiverId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
             return true;
@@ -47,7 +47,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(senderId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
             return true;
@@ -71,7 +71,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(receiverId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
             return true;
@@ -94,7 +94,7 @@ module.exports = class FriendRequestListService {
     static removeAllSentFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': { $exists: true } }).then(res => {
             return true;
@@ -118,7 +118,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isString(senderId);
         TypeChecker.isString(ownParticipantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
             return true;
@@ -140,7 +140,7 @@ module.exports = class FriendRequestListService {
     static removeAllReceivedFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': { $exists: true } }).then(res => {
             return true;
@@ -162,7 +162,7 @@ module.exports = class FriendRequestListService {
     static getReceivedRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': 1 }).then(par => {
             if (par) {
@@ -190,7 +190,7 @@ module.exports = class FriendRequestListService {
     static getSentRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': 1 }).then(par => {
             if (par) {

@@ -1205,7 +1205,7 @@ module.exports = class ServerController {
 
                                     let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
 
-                                    if (existingChatParticipant.isMemberOfChat(chatId) && existingChatParticipant !== undefined) {
+                                    if (existingChatParticipant !== undefined && existingChatParticipant.isMemberOfChat(chatId)) {
                                         let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
 
                                         existingChatParticipantChat.addParticipant(newChatPartnerID);
@@ -1915,6 +1915,10 @@ module.exports = class ServerController {
      * @param {{header: String, body: String[]}} message message
      */
     sendNotification(socketid, message) {
+        //only send notfitication when socketID is valid and user is online
+        if (socketid === undefined) {
+            return;
+        }
         TypeChecker.isString(socketid);
         TypeChecker.isString(message.header);
         if (message.body instanceof Array) {

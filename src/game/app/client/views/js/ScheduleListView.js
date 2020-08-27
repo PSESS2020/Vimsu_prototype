@@ -45,7 +45,7 @@ class ScheduleListView extends WindowView {
                 this.#drawSchedule();
             }, 1000);
 
-            $('#scheduleModal').on('hidden.bs.modal', function (e) {
+            $('#scheduleModal').on('hide.bs.modal', function (e) {
                 clearInterval(interval);
             })
         }
