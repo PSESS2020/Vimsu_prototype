@@ -23,6 +23,7 @@ module.exports = class AccountService {
      */
     static isUsernameValid(username, suffix, vimsudb) {
         TypeChecker.isString(username);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db)
 
         return vimsudb.findInCollection("accounts" + suffix, { username: username }, { username: username }).then(results => {
@@ -46,6 +47,7 @@ module.exports = class AccountService {
      */
     static isEmailValid(email, suffix, vimsudb) {
         TypeChecker.isString(email);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db)
 
         return vimsudb.findInCollection("accounts" + suffix, { email: email }, { email: email }).then(results => {
@@ -83,6 +85,7 @@ module.exports = class AccountService {
         TypeChecker.isString(company);
         TypeChecker.isString(email);
         TypeChecker.isString(password);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         var accountId = new ObjectId().toString();
@@ -119,6 +122,7 @@ module.exports = class AccountService {
      */
     static getAccountById(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("accounts" + suffix, { accountId: accountId }, "").then(user => {
@@ -145,6 +149,7 @@ module.exports = class AccountService {
      */
     static #getAccountByUsername = function (username, suffix, vimsudb) {
         TypeChecker.isString(username);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("accounts" + suffix, { username: username }, "").then(user => {
@@ -171,6 +176,7 @@ module.exports = class AccountService {
      */
     static getAccountUsername(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("accounts" + suffix, { accountId: accountId }, { username: 1 }).then(user => {
@@ -210,6 +216,7 @@ module.exports = class AccountService {
         TypeChecker.isString(newJob);
         TypeChecker.isString(newCompany);
         TypeChecker.isString(email);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
@@ -234,6 +241,7 @@ module.exports = class AccountService {
     static verifyLoginData(username, password, suffix, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isString(password);
+        TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getAccountByUsername(username, suffix, vimsudb).then(user => {
@@ -246,5 +254,25 @@ module.exports = class AccountService {
         }).catch(err => {
             console.error(err)
         })
+    }
+
+    /**
+     * @static Deletes an account from the database
+     * 
+     * @param {String} accountId account ID
+     * @param {String} suffix collection name suffix
+     * @param {db} vimsudb db instance
+     */
+    static deleteAccount(accountId, suffix, vimsudb) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
+            console.log("account with accountId " + accountId + " deleted");
+        }).catch(err => {
+            console.error(err);
+        })
+
     }
 } 
