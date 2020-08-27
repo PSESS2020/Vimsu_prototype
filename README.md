@@ -49,3 +49,7 @@ To run the unit tests with Mocha and Chai, use the following command.
 To print the test coverage with Istanbul, use the following command.
 
     $ npm run coverage
+
+To print the documentation with JSDoc, use the following command.
+    
+    $ npm run docs
