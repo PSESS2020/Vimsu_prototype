@@ -1,6 +1,7 @@
 const azure = require("azure-storage");
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 const FileSystem = require('./FileSystem');
+const path = require('path');
 
 /**
  * The Blob Storage
@@ -54,7 +55,7 @@ module.exports = class blob {
         TypeChecker.isString(fileType);
 
         const fileNameWithUnderscore = fileName.replace(/ /g, "_");
-        const uploadFileName = fileNameWithUnderscore.slice(0, -4) + "_" + new Date().getTime() + "." + fileNameWithUnderscore.split('.').pop();
+        const uploadFileName = path.parse(fileNameWithUnderscore).name + "_" + new Date().getTime() + path.parse(fileNameWithUnderscore).ext;
 
         console.log('\nUploading to Azure storage as blob:\n\t', uploadFileName);
 

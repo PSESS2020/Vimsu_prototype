@@ -123,13 +123,10 @@ module.exports = class RouteController {
             var lectureTitle = request.body.title;
             var remarks = request.body.remarks;
             var oratorId = request.session.accountId;
+            var video = request.files.video;
 
-            var video = request.files.video
-            var videoName = video.name;
-            var videoSize = video.size;
-
-            if (videoName.split('.').pop() === 'mp4') {
-                if (videoSize > 50 * 1024 * 1024) {
+            if (path.parse(video.name).ext === '.mp4') {
+                if (video.size > 50 * 1024 * 1024) {
                     return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
                 else {
