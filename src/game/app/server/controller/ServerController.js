@@ -2101,7 +2101,7 @@ module.exports = class ServerController {
             var newTaskCount = count + 1;
             ParticipantService.updateTaskCount(participantId, Settings.CONFERENCE_ID, taskType, newTaskCount, this.#db);
 
-            var achievementDefinition = new AchievementService().getAchievementDefinitionByTypeOfTask(taskType);
+            var achievementDefinition = new AchievementService().getAchievementDefinition(taskType);
             var levels = achievementDefinition.getLevels();
 
             var counter = 0;

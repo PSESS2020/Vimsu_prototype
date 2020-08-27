@@ -75,9 +75,9 @@ describe('AchievementService achievement handling', function() {
         expect(testParticipant.getAchievements()[2]).to.eql(newAchievement[0]);
     });
 
-    it ('test achievment by task', function() {
+    it ('test achievement by task', function() {
         var as = new AchievementService();
-        var ad = as.getAchievementDefinitionByTypeOfTask(TypeOfTask.RECEPTIONVISIT);
+        var ad = as.getAchievementDefinition(TypeOfTask.RECEPTIONVISIT);
         expect(ad).to.eql(new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [{ count: 1, color: '#C9B037', points: 10 }]));
     });
 })

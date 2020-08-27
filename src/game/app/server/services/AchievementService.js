@@ -29,11 +29,11 @@ module.exports = class AchievementService {
     /**
      * Gets achievement definition based on task type
      * 
-     * @param {TypeOfTask} achievementTaskType 
+     * @param {TypeOfTask} achievementTaskType task type
      * 
      * @return AchievementDefinition instance
      */
-    getAchievementDefinitionByTypeOfTask(achievementTaskType) {
+    getAchievementDefinition(achievementTaskType) {
         TypeChecker.isEnumOf(achievementTaskType, TypeOfTask);
 
         return this.#achievementDefinitions[achievementTaskType];
@@ -120,7 +120,7 @@ module.exports = class AchievementService {
     /**
      * Computes new possible achievements of a participant. Additionally set achievements in the participant instance if no achievement is found
      * 
-     * @param {Participant} participant 
+     * @param {Participant} participant participant
      * 
      * @return Array of new achievements
      */

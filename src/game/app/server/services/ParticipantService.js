@@ -109,7 +109,7 @@ module.exports = class ParticipantService {
 
                         if (idx > -1) {
                             var taskType = ppantAchievements[idx].getTaskType();
-                            var achievementDefinition = achievementService.getAchievementDefinitionByTypeOfTask(taskType);
+                            var achievementDefinition = achievementService.getAchievementDefinition(taskType);
                             var ach = achievementDefinition.computeAchievement(achievement.currentLevel);
                             achievements.push(ach);
                         }
