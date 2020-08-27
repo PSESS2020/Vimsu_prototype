@@ -174,7 +174,6 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("accounts" + suffix, { accountId: accountId }, { username: 1 }).then(user => {
-
             if (user) {
                 return user.username;
             }
