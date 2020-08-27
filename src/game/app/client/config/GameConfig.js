@@ -25,7 +25,7 @@ class GameConfig {
    /*
    * The version of the game.
    */
-   static GAME_VERSION = "v0.01 (alpha)";
+   static GAME_VERSION = "v1.0.0 (alpha)";
 
    /*
    * The port at which the game communicates with the server.
