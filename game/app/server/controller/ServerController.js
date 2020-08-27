@@ -1198,8 +1198,11 @@ module.exports = class ServerController {
 
                                 if (existingChatParticipant !== undefined) {
                                     let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-                                    existingChatParticipantChat.addParticipant(newChatPartnerID);
-                                    existingChatParticipantChat.addMessage(msg);
+                                    
+                                    if (!chatPartnerIDList.includes(existingChatParticipantID)) {
+                                        existingChatParticipantChat.addParticipant(newChatPartnerID);
+                                        existingChatParticipantChat.addMessage(msg);
+                                    }
 
                                     if (existingChatParticipantChat instanceof GroupChat) {
                                         this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
@@ -1209,7 +1212,7 @@ module.exports = class ServerController {
                                         else
                                             this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
                                     }
-                                }
+                                } 
                             })
 
                             var msgToEmit = {
