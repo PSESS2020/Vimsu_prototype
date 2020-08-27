@@ -19,6 +19,8 @@ var lectureChat = new LectureChat();
 var maxParticipants = 3;
 var participantId1 = '1';
 var participantId2 = '2';
+var participantUsername1 = 'User1';
+var participantUsername2 = 'User2';
 var tokenList = [['1', undefined, 300000]];
 
 var lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
@@ -85,7 +87,7 @@ describe('Lecture getter functions', function() {
 
 describe('Lecture Token handling', function() {
     it('test enterLecture', function() {
-        lecture.enter(participantId1);
+        lecture.enter(participantId1, participantUsername1);
         assert(lecture.getActiveParticipants().includes(participantId1), true);
         let tokenListFirstElement = lecture.getTokenList()[0];
         assert.equal(tokenListFirstElement[0], participantId1);
@@ -94,27 +96,27 @@ describe('Lecture Token handling', function() {
     })
 
     it('test leaveLecture', function() {
-        lecture.enter(participantId2);
-        lecture.leave(participantId2);
+        lecture.enter(participantId2, participantUsername2);
+        lecture.leave(participantId2, participantUsername2);
         let tokenListSecondElement = lecture.getTokenList()[1];
         expect(lecture.getActiveParticipants().includes(participantId2)).to.eql(false);
         expect(tokenListSecondElement[1]).to.not.undefined;
     })
 
     it('test hasToken', function() {
-        assert.equal(lecture.hasToken(participantId1), true);
-        assert.equal(lecture.hasToken('3'), false);
+        assert.equal(lecture.hasToken(participantId1, participantUsername1), true);
+        assert.equal(lecture.hasToken('3', 'random'), false);
     })
 
     it('test enterLectureAgain', function() {
-        lecture.enter(participantId2);
+        lecture.enter(participantId2, participantUsername2);
         let tokenListSecondElement = lecture.getTokenList()[1];
         expect(tokenListSecondElement[2]).to.be.below(300000);
     })
 
     it('test enterLecture with max Participants', function() {
-        lecture.enter('5');
-        lecture.enter('6');
-        assert.equal(lecture.enter('4'), false);
+        lecture.enter('5', 'random');
+        lecture.enter('6', 'modnar');
+        assert.equal(lecture.enter('4', 'nardom'), false);
     })
 })
