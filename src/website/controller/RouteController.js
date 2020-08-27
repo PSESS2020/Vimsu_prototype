@@ -66,9 +66,6 @@ module.exports = class RouteController {
         this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
         this.#app.use(fileUpload({
-            highWaterMark: 1024 * 1024,
-            limits: { fileSize: 50 * 1024 * 1024 },
-            abortOnLimit: true,
             useTempFiles: true,
             tempFileDir: '/tmp/'
         }));
