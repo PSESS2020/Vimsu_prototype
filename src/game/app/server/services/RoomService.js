@@ -48,7 +48,7 @@ module.exports = class RoomService {
     getRoom(roomId) {
         TypeChecker.isInt(roomId);
 
-        let index = this.#rooms.findIndex(room => room.getRoomId() === roomId);
+        let index = this.#rooms.findIndex(room => room.getRoom().getRoomId() === roomId);
 
         if (index < 0) {
             throw new Error(roomId + " is not in list of rooms")

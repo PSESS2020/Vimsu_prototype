@@ -33,9 +33,9 @@ describe('RoomService Room delivery test', function () {
     it('test right type of room delivered', function () {
         expect(() => testRoomService.getRoom("fehler")).to.throw(TypeError);
         expect(() => testRoomService.getRoom(100)).to.throw(Error, " is not in list of rooms");
-        assert.equal(testRoomService.getRoom(Settings.FOYER_ID).getTypeOfRoom(), TypeOfRoom.FOYER);
-        assert.equal(testRoomService.getRoom(Settings.FOODCOURT_ID).getTypeOfRoom(), TypeOfRoom.FOODCOURT);
-        assert.equal(testRoomService.getRoom(Settings.RECEPTION_ID).getTypeOfRoom(), TypeOfRoom.RECEPTION);
+        assert.equal(testRoomService.getRoom(Settings.FOYER_ID).getRoom().getTypeOfRoom(), TypeOfRoom.FOYER);
+        assert.equal(testRoomService.getRoom(Settings.FOODCOURT_ID).getRoom().getTypeOfRoom(), TypeOfRoom.FOODCOURT);
+        assert.equal(testRoomService.getRoom(Settings.RECEPTION_ID).getRoom().getTypeOfRoom(), TypeOfRoom.RECEPTION);
     });
     
 })
