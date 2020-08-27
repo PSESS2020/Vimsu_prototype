@@ -1,5 +1,4 @@
-var AccountService = require('../../../src/website/services/AccountService');
-var Account = require('../../../src/website/models/Account')
+const AccountService = require('../../../src/website/services/AccountService');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
