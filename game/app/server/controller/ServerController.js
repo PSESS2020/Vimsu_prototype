@@ -1107,6 +1107,7 @@ module.exports = class ServerController {
 
                 if (chatId) {
                     //group chat already exists
+
                     if (!creator.isMemberOfChat(chatId))
                         return false;
 
@@ -1194,23 +1195,24 @@ module.exports = class ServerController {
                             }
 
                             existingChatPartnerIDList.forEach(existingChatParticipantID => {
-                                let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
+                                if (!chatPartnerIDList.includes(existingChatParticipantID)) {
 
-                                if (existingChatParticipant !== undefined) {
-                                    let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-                                    
-                                    if (!chatPartnerIDList.includes(existingChatParticipantID)) {
+                                    let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
+
+                                    if (existingChatParticipant.isMemberOfChat(chatId) && existingChatParticipant !== undefined) {
+                                        let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
+                                        
                                         existingChatParticipantChat.addParticipant(newChatPartnerID);
                                         existingChatParticipantChat.addMessage(msg);
-                                    }
 
-                                    if (existingChatParticipantChat instanceof GroupChat) {
-                                        this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
-
-                                        if (existingChatParticipant.hasFriend(newChatPartnerID))
-                                            this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
-                                        else
-                                            this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
+                                        if (existingChatParticipantChat instanceof GroupChat) {
+                                            this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
+    
+                                            if (existingChatParticipant.hasFriend(newChatPartnerID))
+                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
+                                            else
+                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
+                                        }
                                     }
                                 } 
                             })
