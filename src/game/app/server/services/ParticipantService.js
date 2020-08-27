@@ -254,7 +254,7 @@ module.exports = class ParticipantService {
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
 
             if (par) {
-                return AccountService.getAccountUsername(par.accountId, vimsudb).then(username => {
+                return AccountService.getAccountUsername(par.accountId, '', vimsudb).then(username => {
                     return username;
                 }).catch(err => {
                     console.error(err);
@@ -284,7 +284,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
-                return AccountService.getAccountById(par.accountId, vimsudb).then(account => {
+                return AccountService.getAccountById(par.accountId, '', vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
                         account.username,
                         account.title,

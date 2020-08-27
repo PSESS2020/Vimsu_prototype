@@ -117,7 +117,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         });
 
         listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), this.#room.getWidth() - 2, false, false))
- 
+
         let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 14, false, false);
         wallFrames.forEach(wallFrame => {
             listOfMapElements.push(wallFrame);

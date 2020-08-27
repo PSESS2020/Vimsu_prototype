@@ -174,7 +174,7 @@ module.exports = class RouteController {
             username = request.body.username;
             var password = request.body.password;
 
-            return AccountService.verifyLoginData(username, password, this.#db).then(user => {
+            return AccountService.verifyLoginData(username, password, '', this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
@@ -227,9 +227,9 @@ module.exports = class RouteController {
                 return response.render('register', { invalidEmail: true });
             }
 
-            return AccountService.isUsernameValid(username, this.#db).then(res => {
+            return AccountService.isUsernameValid(username, '', this.#db).then(res => {
                 if (res) {
-                    return AccountService.isEmailValid(email, this.#db).then(res => {
+                    return AccountService.isEmailValid(email, '', this.#db).then(res => {
                         if (res) {
                             request.session.registerValid = true;
                             request.session.username = username;
@@ -272,7 +272,7 @@ module.exports = class RouteController {
             email = request.session.email;
             var password = request.body.password;
 
-            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, this.#db).then(res => {
+            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
                 request.session.accountId = res.getAccountID();
                 request.session.registerValid = false;
                 request.session.loggedin = true;
@@ -353,7 +353,7 @@ module.exports = class RouteController {
             username = request.session.username;
             email = request.session.email;
 
-            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, this.#db).then(res => {
+            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, '', this.#db).then(res => {
                 request.session.accountId = res.getAccountID();
                 request.session.title = res.getTitle();
                 request.session.surname = res.getSurname();

@@ -16,15 +16,16 @@ module.exports = class AccountService {
      * @static checks if username is valid
      * 
      * @param {String} username username
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return true if valid, i.e. there's no user with this username found in the database, otherwise false
      */
-    static isUsernameValid(username, vimsudb) {
+    static isUsernameValid(username, suffix, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isInstanceOf(vimsudb, db)
 
-        return vimsudb.findInCollection("accounts", { username: username }, { username: username }).then(results => {
+        return vimsudb.findInCollection("accounts" + suffix, { username: username }, { username: username }).then(results => {
             if (results.length > 0) {
                 return false;
             }
@@ -38,15 +39,16 @@ module.exports = class AccountService {
      * @static checks if email is valid
      * 
      * @param {String} email email
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return true if valid, i.e. there's no user with this email found in the database, otherwise false
      */
-    static isEmailValid(email, vimsudb) {
+    static isEmailValid(email, suffix, vimsudb) {
         TypeChecker.isString(email);
         TypeChecker.isInstanceOf(vimsudb, db)
 
-        return vimsudb.findInCollection("accounts", { email: email }, { email: email }).then(results => {
+        return vimsudb.findInCollection("accounts" + suffix, { email: email }, { email: email }).then(results => {
             if (results.length > 0) {
                 return false;
             }
@@ -67,11 +69,12 @@ module.exports = class AccountService {
      * @param {String} company user's company
      * @param {String} email user's email
      * @param {String} password user's password
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return Account instance
      */
-    static createAccount(username, title, surname, forename, job, company, email, password, vimsudb) {
+    static createAccount(username, title, surname, forename, job, company, email, password, suffix, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isString(title);
         TypeChecker.isString(surname);
@@ -97,7 +100,7 @@ module.exports = class AccountService {
             passwordHash: passwordHash.generate(password)
         }
 
-        return vimsudb.insertOneToCollection("accounts", acc).then(res => {
+        return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
             return account;
         }).catch(err => {
             console.error(err);
@@ -109,15 +112,16 @@ module.exports = class AccountService {
      * @static gets account by accountID from the database
      * 
      * @param {String} accountId account ID
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return user data if found, otherwise false
      */
-    static getAccountById(accountId, vimsudb) {
+    static getAccountById(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("accounts", { accountId: accountId }, "").then(user => {
+        return vimsudb.findOneInCollection("accounts" + suffix, { accountId: accountId }, "").then(user => {
             if (user) {
                 return user;
             }
@@ -134,15 +138,16 @@ module.exports = class AccountService {
      * @static gets account by account username from the database
      * 
      * @param {String} username account username
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return user data if found, otherwise false
      */
-    static #getAccountByUsername = function (username, vimsudb) {
+    static #getAccountByUsername = function (username, suffix, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("accounts", { username: username }, "").then(user => {
+        return vimsudb.findOneInCollection("accounts" + suffix, { username: username }, "").then(user => {
             if (user) {
                 return user;
             }
@@ -159,15 +164,16 @@ module.exports = class AccountService {
      * @static gets account username
      * 
      * @param {String} accountId account ID
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return username
      */
-    static getAccountUsername(accountId, vimsudb) {
+    static getAccountUsername(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("accounts", { accountId: accountId }, { username: 1 }).then(user => {
+        return vimsudb.findOneInCollection("accounts" + suffix, { accountId: accountId }, { username: 1 }).then(user => {
 
             if (user) {
                 return user.username;
@@ -191,11 +197,12 @@ module.exports = class AccountService {
      * @param {String} newJob new user job
      * @param {String} newCompany new user company
      * @param {String} email user email
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return Account instance
      */
-    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, vimsudb) {
+    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, suffix, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(username);
         TypeChecker.isString(newTitle);
@@ -208,7 +215,7 @@ module.exports = class AccountService {
 
         var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
 
-        return vimsudb.updateOneToCollection("accounts", { accountId: accountId }, { title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
             return account;
         }).catch(err => {
             console.error(err)
@@ -220,16 +227,17 @@ module.exports = class AccountService {
      * 
      * @param {String} username account username
      * @param {String} password user's password
+     * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return Account instance if matches, otherwise false
      */
-    static verifyLoginData(username, password, vimsudb) {
+    static verifyLoginData(username, password, suffix, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isString(password);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.#getAccountByUsername(username, vimsudb).then(user => {
+        return this.#getAccountByUsername(username, suffix, vimsudb).then(user => {
             if (user && passwordHash.verify(password, user.passwordHash)) {
                 var account = new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
                 return account;
