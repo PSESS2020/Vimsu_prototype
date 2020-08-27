@@ -1205,7 +1205,7 @@ module.exports = class ServerController {
 
                                     let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
 
-                                    if (existingChatParticipant.isMemberOfChat(chatId) && existingChatParticipant !== undefined) {
+                                    if (existingChatParticipant !== undefined && existingChatParticipant.isMemberOfChat(chatId)) {
                                         let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
 
                                         existingChatParticipantChat.addParticipant(newChatPartnerID);
