@@ -1,7 +1,6 @@
 const azure = require("azure-storage");
 const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 const FileSystem = require('./FileSystem');
-const { getVideoDurationInSeconds } = require('get-video-duration');
 
 /**
  * The Blob Storage
@@ -44,10 +43,11 @@ module.exports = class blob {
      * @param {String} containerName container name
      * @param {String} fileName file name
      * @param {String} dir file directory where the file is to be read
+     * @param {String} fileType file type
      * 
-     * @return fileId and duration
+     * @return fileId
      */
-    async uploadFile(containerName, fileName, dir) {
+    async uploadFile(containerName, fileName, dir, fileType) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
         TypeChecker.isString(dir);
@@ -57,29 +57,20 @@ module.exports = class blob {
 
         console.log('\nUploading to Azure storage as blob:\n\t', uploadFileName);
 
-        return getVideoDurationInSeconds(FileSystem.createReadStream(dir + fileName)).then(duration => {
-            if (duration < 1) {
-                return false;
-            } else {
-                let bufferSize = 1024 * 1024;
-                let writeStream = this.#blobService.createWriteStreamToBlockBlob(containerName, uploadFileName, { contentSettings: { contentType: 'video/mp4' } });
+        let bufferSize = 1024 * 1024;
+        let writeStream = this.#blobService.createWriteStreamToBlockBlob(containerName, uploadFileName, { contentSettings: { contentType: fileType } });
 
-                return new Promise((resolve, reject) => {
-                    FileSystem.createReadStream(dir + fileName, { highWaterMark: bufferSize, allowVolatile: true }).pipe(writeStream)
-                        .on('finish', function () {
-                            console.log(fileName + ' with id ' + uploadFileName + ' and duration ' + duration + ' uploaded');
-                            resolve({
-                                fileId: uploadFileName,
-                                duration: duration
-                            });
-                        })
-                        .on('error', function (error) {
-                            console.error(error);
-                            reject();
-                        });
+        return new Promise((resolve, reject) => {
+            FileSystem.createReadStream(dir + fileName, { highWaterMark: bufferSize, allowVolatile: true }).pipe(writeStream)
+                .on('finish', function () {
+                    console.log(fileName + ' with id ' + uploadFileName + ' uploaded');
+                    resolve(uploadFileName);
+                })
+                .on('error', function (error) {
+                    console.error(error);
+                    reject();
                 });
-            }
-        })
+        });
     }
 
     /**

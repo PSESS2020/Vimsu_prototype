@@ -4,6 +4,7 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 const Slot = require('../models/Slot')
 const blobClient = require('../../config/blob');
 const db = require('../../config/db');
+const { getVideoDurationInSeconds } = require('get-video-duration');
 
 /**
  * The Slot Service
@@ -27,15 +28,24 @@ module.exports = class SlotService {
         var dir = __dirname + "/upload/";
 
         return FileSystem.moveFile(video, dir).then(res => {
-            return blob.uploadFile("lectures", video.name, dir).then(videoData => {
-                FileSystem.deleteDirectory(dir);
-                if (videoData) {
-                    return videoData;
-                } else {
+            return getVideoDurationInSeconds(FileSystem.createReadStream(dir + video.name)).then(duration => {
+                if (duration < 1) {
                     return false;
+                } else {
+                    return blob.uploadFile("lectures", video.name, dir, 'video/mp4').then(fileId => {
+                        FileSystem.deleteDirectory(dir);
+                        if (fileId) {
+                            return ({
+                                fileId: fileId,
+                                duration: duration
+                            });
+                        } else {
+                            return false;
+                        }
+                    }).catch(err => {
+                        console.error(err)
+                    })
                 }
-            }).catch(err => {
-                console.error(err)
             })
         }).catch(err => {
             console.error(err);
