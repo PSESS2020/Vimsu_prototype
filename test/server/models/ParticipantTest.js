@@ -134,7 +134,7 @@ describe('Participant test', function() {
     })
 
     it('test set achievements', function() {
-        let exampleAch = [new Achievement(55, 'achievement', 'icon', 'description', 'currentLevel', 'color', 4444, 3, TypeOfTask.FOODCOURTVISIT)];
+        let exampleAch = [new Achievement(55, 'achievement', 'icon', 'description', 1, 'color', 4444, 3, TypeOfTask.FOODCOURTVISIT, 1)];
         assert.equal(ppant.getAchievements(), achievements);
 
         ppant.setAchievements(exampleAch);
@@ -286,7 +286,7 @@ describe('Participant test', function() {
     
     it('test add Achievement and remove Achievement', function() {
         //add it
-        let ach = new Achievement(333, 't', 'i', 'd', 'cl', 'c', 3, 3, TypeOfTask.ASKQUESTIONINLECTURE);
+        let ach = new Achievement(333, 't', 'i', 'd', 3, 'c', 3, 3, TypeOfTask.ASKQUESTIONINLECTURE, 5);
         let lengthBefore = ppant.getAchievements().length;
         ppant.addAchievement(ach);
         assert.equal(ppant.getAchievements().length, lengthBefore + 1);

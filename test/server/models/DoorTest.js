@@ -7,65 +7,91 @@ const chai = require('chai');
 const { expect } = require('chai');
 const assert = chai.assert;
 
-var testMapPosition;
-var testTargetPosition;
-var testEnterPositions;
-var testDirection;
 var testDoorId;
 var testDoorType;
+var testDoorName;
+var testMapPosition;
+var testEnterPositions;
+var testTargetPosition;
+var testDirection;
+
 
 describe('test Door class functionality', function () {
     
      
     beforeEach( function() {
-        testMapPosition = TestUtil.randomPosition();
-        testTargetPosition = TestUtil.randomPosition();
-        testEnterPositions = TestUtil.randomPositionList();
-        testDirection = TestUtil.randomObjectValue(Direction);
         testDoorId = TestUtil.randomInt();
         testDoorType = TestUtil.randomObjectValue(TypeOfDoor);
+        testDoorName = TestUtil.randomString();
+        testMapPosition = TestUtil.randomPosition();
+        testEnterPositions = TestUtil.randomPositionList();
+        testTargetPosition = TestUtil.randomPosition();
+        testDirection = TestUtil.randomObjectValue(Direction);
     });
     
     it('test non-lecture Door constructor', function () {
-        for(var i = 0; i < --(Object.keys(TypeOfDoor).length); i++) {
-            var doorType = Object.values(TypeOfDoor)[i]
-            expect(() => new Door(undefined, doorType, testMapPosition, 
-                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-            expect(() => new Door(testDoorId, undefined, testMapPosition, 
-                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-            expect(() => new Door(testDoorId, doorType, undefined, 
-                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-            expect(() => new Door(testDoorId, doorType, testMapPosition, 
-                        undefined, testTargetPosition, testDirection)).to.throw(TypeError);
-            expect(() => new Door(testDoorId, doorType, testMapPosition, 
-                        testEnterPositions, undefined, testDirection)).to.throw(TypeError);
-            expect(() => new Door(testDoorId, doorType, testMapPosition, 
-                        testEnterPositions, testTargetPosition, undefined)).to.throw(TypeError);
-        };
         
+        testDoorType = TypeOfDoor.LEFT_DOOR;
+
+        expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        undefined, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, undefined, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, undefined)).to.throw(TypeError);
+
+        testDoorType = TypeOfDoor.RIGHT_DOOR;
+        
+        expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined, 
+                        testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        undefined, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, undefined, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
+                        testEnterPositions, testTargetPosition, undefined)).to.throw(TypeError);
     });
+        
+    
     
     it('test LectureDoor constructor', function () {
-        var doorType = TypeOfDoor.LECTURE_DOOR;
-        expect(() => new Door(undefined, doorType, testMapPosition, 
+        testDoorType = TypeOfDoor.LECTURE_DOOR;
+        expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition, 
                     testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-        expect(() => new Door(testDoorId, undefined, testMapPosition, 
+        expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition, 
                     testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-        expect(() => new Door(testDoorId, doorType, undefined, 
+        expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
                     testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
-        expect(() => new Door(testDoorId, doorType, testMapPosition, 
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined,
+                    testEnterPositions, testTargetPosition, testDirection)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
                     undefined, testTargetPosition, testDirection)).to.throw(TypeError);
-        expect(() => new Door(testDoorId, doorType, testMapPosition, 
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
                     testEnterPositions, undefined, testDirection)).not.to.throw();
-        expect(() => new Door(testDoorId, doorType, testMapPosition, 
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
                     testEnterPositions, testTargetPosition, undefined)).not.to.throw();            
     });
     
     it('test getters', function () {
-        var testDoor = new Door(testDoorId, testDoorType, testMapPosition, 
+        var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
                                     testEnterPositions, testTargetPosition, testDirection);
         assert.strictEqual(testDoor.getId(), testDoorId);
         assert.strictEqual(testDoor.getTypeOfDoor(), testDoorType);
+        assert.strictEqual(testDoor.getName(), testDoorName);
         assert.strictEqual(testDoor.getStartingRoomId(), testMapPosition.getRoomId());
         assert.strictEqual(testDoor.getTargetRoomId(), testTargetPosition.getRoomId());
         assert.strictEqual(testDoor.getMapPosition(), testMapPosition);
@@ -76,7 +102,7 @@ describe('test Door class functionality', function () {
     
     it('test ValidEnterPosition check', function () {
         var testIllegalPositions = TestUtil.randomPositionList();
-        var testDoor = new Door(testDoorId, testDoorType, testMapPosition, 
+        var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, 
                                     testEnterPositions, testTargetPosition, testDirection);
         testIllegalPositions.forEach( (position) => {
             expect(testDoor.isValidEnterPosition(position)).to.be.false;
