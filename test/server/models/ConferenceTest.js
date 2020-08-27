@@ -3,10 +3,10 @@ chai.use(require('chai-datetime'));
 const assert = chai.assert;
 const expect = chai.expect;
 
-const Conference = require('../../../game/app/server/models/Conference.js');
-const Schedule = require('../../../game/app/server/models/Schedule.js');
-const Lecture = require('../../../game/app/server/models/Lecture.js');
-const Settings = require('../../../game/app/server/utils/Settings.js');
+const Conference = require('../../../src/game/app/server/models/Conference.js');
+const Schedule = require('../../../src/game/app/server/models/Schedule.js');
+const Lecture = require('../../../src/game/app/server/models/Lecture.js');
+const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const LectureTestData = require('./TestData/LectureTestData.js');
 
 //Lecture Test Data

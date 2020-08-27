@@ -3,9 +3,9 @@ chai.use(require('chai-datetime'));
 const assert = chai.assert;
 const expect = chai.expect;
 
-const Chat = require('../../../game/app/server/models/Chat.js');
-const GroupChat = require('../../../game/app/server/models/GroupChat.js');
-const Message = require('../../../game/app/server/models/Message.js');
+const Chat = require('../../../src/game/app/server/models/Chat.js');
+const GroupChat = require('../../../src/game/app/server/models/GroupChat.js');
+const Message = require('../../../src/game/app/server/models/Message.js');
 
 const GroupChatTestData = require('./TestData/GroupChatTestData.js');
 const MessageTestData = require('./TestData/MessageTestData.js');
@@ -14,7 +14,7 @@ const MessageTestData = require('./TestData/MessageTestData.js');
 //Test Data Messages
 var oldMessage = new Message(MessageTestData.messageId,
                          MessageTestData.senderId,
-                         MessageTestData.senerUsername,
+                         MessageTestData.senderUsername,
                          new Date(),
                          MessageTestData.messageText
                          );
@@ -26,7 +26,7 @@ var newMessage1 = new Message(MessageTestData.alt_messageId,
                           );
 var newMessage2 = new Message(MessageTestData.messageId,
                           MessageTestData.senderId,
-                            MessageTestData.senerUsername,
+                            MessageTestData.senderUsername,
                             new Date(),
                             MessageTestData.alt_messageText
                             );

@@ -2,9 +2,9 @@
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const Direction = require('../../../game/app/client/shared/Direction.js');
-const NPCClient = require('../../../game/app/client/models/NPCClient.js');
-const PositionClient = require('../../../game/app/client/models/PositionClient.js');
+const Direction = require('../../../src/game/app/client/shared/Direction.js');
+const NPCClient = require('../../../src/game/app/client/models/NPCClient.js');
+const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
 
 //test data
 var id = TestUtil.randomInt();

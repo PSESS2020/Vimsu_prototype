@@ -1,4 +1,4 @@
-const Position = require('../../../game/app/server/models/Position.js');
+const Position = require('../../../src/game/app/server/models/Position.js');
 const chai = require('chai');
 const { expect } = require('chai');
 const assert = chai.assert;

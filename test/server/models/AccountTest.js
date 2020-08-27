@@ -1,5 +1,5 @@
 
-const Account = require('../../../website/models/Account')
+const Account = require('../../../src/website/models/Account')
 const expect = require('chai').expect;
 
 var accountID = "53f";

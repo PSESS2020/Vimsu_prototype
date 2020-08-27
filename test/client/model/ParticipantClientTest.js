@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const Direction = require('../../../game/app/client/shared/Direction.js');
-const PositionClient = require('../../../game/app/client/models/PositionClient.js');
-const ParticipantClient = require('../../../game/app/client/models/ParticipantClient.js');
+const Direction = require('../../../src/game/app/client/shared/Direction.js');
+const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
+const ParticipantClient = require('../../../src/game/app/client/models/ParticipantClient.js');
 
 var id;
 var username;

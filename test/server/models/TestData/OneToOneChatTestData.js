@@ -1,5 +1,5 @@
 const MessageTestData = require('./MessageTestData.js');
-const Message = require('../../../../game/app/server/models/Message.js');
+const Message = require('../../../../src/game/app/server/models/Message.js');
 
 module.exports = Object.freeze
 ({
@@ -18,9 +18,9 @@ module.exports = Object.freeze
 
     oldMessage: new Message(MessageTestData.messageId,
                             MessageTestData.senderId,
-                            MessageTestData.senerUsername,
+                            MessageTestData.senderUsername,
                             new Date(),
-                            MessageTestData.messageTest
+                            MessageTestData.messageText
                             ),
 
     newMessage1: new Message(MessageTestData.alt_messageId,
@@ -32,7 +32,7 @@ module.exports = Object.freeze
 
     newMessage2: new Message(MessageTestData.messageId,
                              MessageTestData.senderId,
-                             MessageTestData.senerUsername,
+                             MessageTestData.senderUsername,
                              new Date(),
                              MessageTestData.alt_messageText
                              ),

@@ -1,7 +1,7 @@
-const Schedule = require('../../../game/app/server/models/Schedule');
+const Schedule = require('../../../src/game/app/server/models/Schedule');
 const chai = require('chai');
 const expect = chai.expect;
-const Lecture = require('../../../game/app/server/models/Lecture');
+const Lecture = require('../../../src/game/app/server/models/Lecture');
 const LectureTestData = require('./TestData/LectureTestData');
 
 var lectureList = [];

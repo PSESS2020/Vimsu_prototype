@@ -1,21 +1,21 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const ChatService = require('../../../game/app/server/services/ChatService.js');
-const OneToOneChat = require('../../../game/app/server/models/OneToOneChat.js');
-const Chat = require('../../../game/app/server/models/Chat.js');
-const GroupChat = require('../../../game/app/server/models/GroupChat.js');
-const LectureChat = require('../../../game/app/server/models/LectureChat.js');
-const Message = require('../../../game/app/server/models/Message.js');
+const ChatService = require('../../../src/game/app/server/services/ChatService.js');
+const OneToOneChat = require('../../../src/game/app/server/models/OneToOneChat.js');
+const Chat = require('../../../src/game/app/server/models/Chat.js');
+const GroupChat = require('../../../src/game/app/server/models/GroupChat.js');
+const LectureChat = require('../../../src/game/app/server/models/LectureChat.js');
+const Message = require('../../../src/game/app/server/models/Message.js');
 
 const OneToOneChatTestData = require('../models/TestData/OneToOneChatTestData.js');
 const GroupChatTestData = require('../models/TestData/GroupChatTestData.js');
 const ChatTestData = require('../models/TestData/ChatTestData.js');
 const MessageTestData = require('../models/TestData/MessageTestData.js');
-const Settings = require('../../../game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const ServiceTestData = require('./TestData/ServiceTestData.js');
 
-const db = require('../../../config/db');
+const db = require('../../../src/config/db');
 const database = new db();
 
 //Test Data OneToOneChat

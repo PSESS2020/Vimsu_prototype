@@ -2,11 +2,12 @@
   "name": "vimsu_prototype",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "./src/server.js",
   "scripts": {
-    "start": "node --max-old-space-size=102400 server.js",
+    "start": "node --max-old-space-size=102400 ./src/server.js",
     "test": "mocha --file ./test/teardown.js test/**/*.js || true",
-    "coverage": "nyc --reporter html --reporter text npm test"
+    "coverage": "nyc --reporter html --reporter text npm test",
+    "docs": "./node_modules/jsdoc/jsdoc.js -c ./.jsdoc.conf.json"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "express-session": "^1.17.1",
     "get-video-duration": "^3.0.1",
     "jquery": "^3.5.1",
+    "jsdoc": "^3.6.5",
     "jsdom": "^16.4.0",
     "merge-images": "^2.0.0",
     "mkdirp": "^1.0.4",

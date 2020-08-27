@@ -1,7 +1,7 @@
 const ServiceTestData = require('./server/services/TestData/ServiceTestData.js');
 
 require('dotenv').config();
-const db = require('../config/db');
+const db = require('../src/config/db');
 const database = new db();
 database.connectDB()
 

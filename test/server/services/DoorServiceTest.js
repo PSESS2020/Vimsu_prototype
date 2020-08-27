@@ -1,10 +1,10 @@
 const { expect } = require('chai');
-const DoorService = require('../../../game/app/server/services/DoorService');
-const Door = require('../../../game/app/server/models/Door');
-const Position = require('../../../game/app/server/models/Position.js');
-const Settings = require('../../../game/app/server/utils/Settings');
+const DoorService = require('../../../src/game/app/server/services/DoorService');
+const Door = require('../../../src/game/app/server/models/Door');
+const Position = require('../../../src/game/app/server/models/Position.js');
+const Settings = require('../../../src/game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
-const Direction = require('../../../game/app/client/shared/Direction');
+const Direction = require('../../../src/game/app/client/shared/Direction');
 
 
 describe('DoorService test', function () {

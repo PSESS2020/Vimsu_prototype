@@ -1,8 +1,8 @@
 const chai = require('chai');
 chai.use(require('chai-datetime'));
 const { expect } = require('chai');
-const Slot = require('../../../website/models/Slot');
-const Settings = require('../../../game/app/server/utils/Settings.js');
+const Slot = require('../../../src/website/models/Slot');
+const Settings = require('../../../src/game/app/server/utils/Settings.js');
 
 var id = '1a2b';
 var title = 'Lineare Alegbra 3';

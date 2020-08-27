@@ -1,7 +1,7 @@
-const TaskService = require('../../../game/app/server/services/TaskService');
+const TaskService = require('../../../src/game/app/server/services/TaskService');
 const { expect } = require('chai');
-const TypeOfTask = require('../../../game/app/server/utils/TypeOfTask')
-const Task = require('../../../game/app/server/models/Task')
+const TypeOfTask = require('../../../src/game/app/server/utils/TypeOfTask')
+const Task = require('../../../src/game/app/server/models/Task')
 
 var taskService = new TaskService();
 var taskId = 3;

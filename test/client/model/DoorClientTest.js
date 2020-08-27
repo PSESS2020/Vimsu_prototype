@@ -1,9 +1,9 @@
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const DoorClient = require('../../../game/app/client/models/DoorClient.js');
-const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
-const PositionClient = require('../../../game/app/client/models/PositionClient.js');
+const DoorClient = require('../../../src/game/app/client/models/DoorClient.js');
+const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
+const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
 
 var id;
 var typeOfDoor;

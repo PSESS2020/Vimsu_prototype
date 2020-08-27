@@ -1,7 +1,7 @@
-const Door = require('../../../game/app/server/models/Door.js');
-const TypeOfDoor = require('../../../game/app/client/shared/TypeOfDoor.js');
-const Position = require('../../../game/app/server/models/Position.js');
-const Direction = require('../../../game/app/client/shared/Direction.js');
+const Door = require('../../../src/game/app/server/models/Door.js');
+const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
+const Position = require('../../../src/game/app/server/models/Position.js');
+const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const TestUtil = require('./utils/TestUtil.js');
 const chai = require('chai');
 const { expect } = require('chai');

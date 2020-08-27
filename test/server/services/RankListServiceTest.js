@@ -1,6 +1,6 @@
-var RankListService = require('../../../game/app/server/services/RankListService');
-var ParticipantService = require('../../../game/app/server/services/ParticipantService')
-var Account = require('../../../website/models/Account')
+var RankListService = require('../../../src/game/app/server/services/RankListService');
+var ParticipantService = require('../../../src/game/app/server/services/ParticipantService')
+var Account = require('../../../src/website/models/Account')
 const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 var conferenceId = ServiceTestData.conferenceId_1;
 var participantId1, participantId2, participantId3;
 var participantId_broken = "1";
-const db = require('../../../config/db');
+const db = require('../../../src/config/db');
 const database = new db()
 database.connectDB().then(res => {
 

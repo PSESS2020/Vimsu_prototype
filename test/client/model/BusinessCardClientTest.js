@@ -1,4 +1,4 @@
-const BusinessCardClient = require('../../../game/app/client/models/BusinessCardClient.js');
+const BusinessCardClient = require('../../../src/game/app/client/models/BusinessCardClient.js');
 const expect = require('chai').expect;
 
 var participantId = "53f";

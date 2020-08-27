@@ -2,9 +2,9 @@
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const GameObjectClient = require('../../../game/app/client/models/GameObjectClient.js');
-const PositionClient = require('../../../game/app/client/models/PositionClient.js');
-const GameObjectType = require('../../../game/app/client/shared/GameObjectType.js');
+const GameObjectClient = require('../../../src/game/app/client/models/GameObjectClient.js');
+const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
+const GameObjectType = require('../../../src/game/app/client/shared/GameObjectType.js');
 
 var id;
 var gameObjectType;

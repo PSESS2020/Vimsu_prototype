@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const Message = require('../../../game/app/server/models/Message.js');
+const Message = require('../../../src/game/app/server/models/Message.js');
 const MessageTestData = require('./TestData/MessageTestData.js');
 
 
