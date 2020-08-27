@@ -54,7 +54,7 @@ module.exports = class blob {
         TypeChecker.isString(fileType);
 
         const fileNameWithUnderscore = fileName.replace(/ /g, "_");
-        const uploadFileName = fileNameWithUnderscore.slice(0, -4) + "_" + new Date().getTime() + ".mp4";
+        const uploadFileName = fileNameWithUnderscore.slice(0, -4) + "_" + new Date().getTime() + "." + fileNameWithUnderscore.split('.').pop();
 
         console.log('\nUploading to Azure storage as blob:\n\t', uploadFileName);
 
