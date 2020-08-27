@@ -51,6 +51,7 @@ module.exports = class blob {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
         TypeChecker.isString(dir);
+        TypeChecker.isString(fileType);
 
         const fileNameWithUnderscore = fileName.replace(/ /g, "_");
         const uploadFileName = fileNameWithUnderscore.slice(0, -4) + "_" + new Date().getTime() + ".mp4";
