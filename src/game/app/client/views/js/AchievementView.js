@@ -22,7 +22,7 @@ class AchievementView extends WindowView {
             $('#achievementModalContent').empty();
         })
     }
-    
+
     /**
      * Draws achievement window
      * 
@@ -36,7 +36,7 @@ class AchievementView extends WindowView {
             var currentCount = achievement.currentCount;
             var nextTarget = achievement.nextTarget;
 
-            if(nextTarget) {
+            if (nextTarget) {
                 var next = "Next target: [" + currentCount + " / " + nextTarget + "]";
             } else {
                 var next = "Completed";

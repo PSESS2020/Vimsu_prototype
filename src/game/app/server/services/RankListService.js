@@ -18,7 +18,7 @@ module.exports = class RankListService {
      * 
      * @return rank list
      */
-    static #getRankList = function(conferenceId, vimsudb) {
+    static #getRankList = function (conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
@@ -57,7 +57,7 @@ module.exports = class RankListService {
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             var rankListLength = 1;
             for (var i = rankList.length - 1; i >= 0; i--) {
-                
+
                 if (rankList[i].rank <= lastRank) {
                     rankListLength = rankListLength + i;
                     rankList = rankList.slice(0, rankListLength);

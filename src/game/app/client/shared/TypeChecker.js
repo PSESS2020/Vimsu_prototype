@@ -5,7 +5,7 @@
  * @version 1.0.0
  */
 class TypeChecker {
-    
+
     /**
      * @static Checks if value is a string
      * 

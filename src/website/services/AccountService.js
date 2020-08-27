@@ -138,7 +138,7 @@ module.exports = class AccountService {
      * 
      * @return user data if found, otherwise false
      */
-    static #getAccountByUsername = function(username, vimsudb) {
+    static #getAccountByUsername = function (username, vimsudb) {
         TypeChecker.isString(username);
         TypeChecker.isInstanceOf(vimsudb, db);
 

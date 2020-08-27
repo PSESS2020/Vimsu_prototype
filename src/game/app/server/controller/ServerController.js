@@ -91,7 +91,7 @@ module.exports = class ServerController {
     /**
      * @private initializes all socket events from client
      */
-    #init = function() {
+    #init = function () {
 
         LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
             var schedule = new Schedule(lectures);
@@ -339,13 +339,13 @@ module.exports = class ServerController {
                     new CommandHandler(this).handleCommand(socket,
                         new AllchatContext(this, room),
                         input, username);
-                } else { 
+                } else {
                     // If the message contains a command, we don't want to be handled like a regular message
 
                     // muted ppants can't post messages into any allchat
                     if (this.#muteList.includes(socket.request.session.accountId)) {
                         this.sendNotification(socket.id, Messages.MUTE);
-                        return; 
+                        return;
                     }
 
                     // timestamping the message
@@ -1151,7 +1151,7 @@ module.exports = class ServerController {
                                 let socketPartner = this.getSocketObject(this.getSocketId(newChatPartner.getId()));
                                 socketPartner.join(loadedChat.getId());
                                 var messageInfoData = [];
-                                
+
                                 loadedChat.getMessageList().forEach((message) => {
                                     messageInfoData.push({
                                         senderUsername: message.getUsername(),
@@ -1207,20 +1207,20 @@ module.exports = class ServerController {
 
                                     if (existingChatParticipant.isMemberOfChat(chatId) && existingChatParticipant !== undefined) {
                                         let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-                                        
+
                                         existingChatParticipantChat.addParticipant(newChatPartnerID);
                                         existingChatParticipantChat.addMessage(msg);
 
                                         if (existingChatParticipantChat instanceof GroupChat) {
                                             this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
-    
+
                                             if (existingChatParticipant.hasFriend(newChatPartnerID))
                                                 this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
                                             else
                                                 this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
                                         }
                                     }
-                                } 
+                                }
                             })
 
                             var msgToEmit = {
@@ -1417,7 +1417,7 @@ module.exports = class ServerController {
                                 groupChat: false,
                                 messages: messageInfoData
                             }
-                            
+
                         } else {
                             //partner left before
 
@@ -1882,7 +1882,7 @@ module.exports = class ServerController {
      */
     emitEventIn(idOfSocketRoomToEmitIn, eventName, eventArguments) {
         TypeChecker.isString(eventName);
-        
+
         if (eventArguments !== undefined) {
             this.#io.in(idOfSocketRoomToEmitIn).emit(eventName, eventArguments);
         } else {
@@ -1978,7 +1978,7 @@ module.exports = class ServerController {
      */
     unban(accountId) {
         TypeChecker.isString(accountId);
-        
+
         if (this.#banList.includes(accountId)) {
             this.#banList.splice(this.#banList.indexOf(accountId), 1);
         };

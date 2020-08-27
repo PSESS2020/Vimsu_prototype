@@ -39,10 +39,10 @@ class LectureView extends WindowView {
             });
 
             $(document).on('keydown', (e) => {
-                if(document.activeElement === $("#lectureChatInput")[0]) {
+                if (document.activeElement === $("#lectureChatInput")[0]) {
                     e.stopPropagation();
 
-                    if(e.keyCode === 13)
+                    if (e.keyCode === 13)
                         this.#sendMessage(event);
                 }
             });
@@ -62,7 +62,7 @@ class LectureView extends WindowView {
      * 
      * @param {Event} event event
      */
-    #sendMessage = function(event) {
+    #sendMessage = function (event) {
         event.preventDefault();
 
         let messageVal = $('#lectureChatInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -97,7 +97,7 @@ class LectureView extends WindowView {
         <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
-        if(hasToken) {
+        if (hasToken) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                 <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
@@ -139,12 +139,12 @@ class LectureView extends WindowView {
                 if (currentTimeDifference < 0) {
                     $('#lecturePending').remove();
                     $('#lectureVideo').append(`
-                    <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
-                        <div id="countdown"></div>
-                        <div>seconds left till the</div>
-                        <div>presentation starts</div>
-                    </div>
-                `)
+                        <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                            <div id="countdown"></div>
+                            <div>seconds left till the</div>
+                            <div>presentation starts</div>
+                        </div>
+                    `)
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -188,7 +188,7 @@ class LectureView extends WindowView {
     /**
      * @private called if participant clicks close button
      */
-    #leaveLecture = function() {
+    #leaveLecture = function () {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
             if (this.#hasToken) {
@@ -266,7 +266,7 @@ class LectureView extends WindowView {
             }
         }
     }
-    
+
     /**
      * Draws token on lecture window
      * 
@@ -289,7 +289,7 @@ class LectureView extends WindowView {
             `)
             $('#tokenLabel').empty();
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
-        // the input field is emptied if the user does not have a valid token
+            // the input field is emptied if the user does not have a valid token
         } else {
             $('#lectureChatInputGroup').empty();
             $('#tokenIcon').empty();

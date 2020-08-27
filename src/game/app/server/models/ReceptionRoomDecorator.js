@@ -39,7 +39,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
      */
     constructor(room) {
         super();
-        
+
         TypeChecker.isInstanceOf(room, Room);
         this.#room = room;
 
@@ -83,7 +83,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         });
 
         listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, 0, true, false));
-        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, this.#room.getWidth() -1, true, false));
+        listOfGameObjects.push(objService.createPlant(Settings.RECEPTION_ID, this.#room.getLength() - 1, this.#room.getWidth() - 1, true, false));
 
         for (i = 5; i < this.#room.getWidth() - 5; i++) {
             listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i, false, false))

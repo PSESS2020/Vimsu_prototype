@@ -104,7 +104,7 @@ class InviteFriendsView extends WindowView {
 
                 $('#createGroupChat').off();
                 $('#createGroupChat').click((event) => {
-                    if(this.#invitedFriends.length > 0 && this.#invitedFriends.length < this.#limit + 1) {
+                    if (this.#invitedFriends.length > 0 && this.#invitedFriends.length < this.#limit + 1) {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
@@ -128,7 +128,7 @@ class InviteFriendsView extends WindowView {
         } else {
             $('#inviteFriendsModal .modal-body').text("Group name was empty!")
         }
-        
+
         $('#inviteFriendsModal').modal('show');
     }
 
@@ -170,7 +170,7 @@ class InviteFriendsView extends WindowView {
                 }
             });
 
-            if(found) {
+            if (found) {
                 this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
             }
         }

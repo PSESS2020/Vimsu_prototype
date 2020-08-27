@@ -37,7 +37,7 @@ module.exports = class ParticipantService {
     static async createParticipant(account, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(account, Account);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         var accountId = account.getAccountID();
 
@@ -221,10 +221,10 @@ module.exports = class ParticipantService {
      * 
      * @return true if participant is found, otherwise false
      */
-    static #getParticipant = function(accountId, conferenceId, vimsudb) {
+    static #getParticipant = function (accountId, conferenceId, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: accountId }, "").then(par => {
             if (par) {
@@ -249,7 +249,7 @@ module.exports = class ParticipantService {
     static getUsername(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
 
@@ -280,7 +280,7 @@ module.exports = class ParticipantService {
     static getBusinessCard(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
@@ -316,7 +316,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(position, Position);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         var pos = {
             roomId: position.getRoomId(),
@@ -343,7 +343,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isEnumOf(direction, Direction);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { direction: direction }).then(res => {
             return true;
@@ -362,7 +362,7 @@ module.exports = class ParticipantService {
     static getPoints(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { points: 1 }).then(par => {
             if (par) {
@@ -392,7 +392,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(points);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { points: points }).then(res => {
             return true;
@@ -413,7 +413,7 @@ module.exports = class ParticipantService {
      * 
      * @return true if achievements stored successfully, otherwise false
      */
-    static #storeAchievements = function(participantId, conferenceId, achievementsData, vimsudb) {
+    static #storeAchievements = function (participantId, conferenceId, achievementsData, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(achievementsData, Array);
@@ -422,7 +422,7 @@ module.exports = class ParticipantService {
             TypeChecker.isInt(element.id);
             TypeChecker.isInt(element.currentLevel);
         });
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { $each: achievementsData } }).then(res => {
             return true;
@@ -446,7 +446,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { id: achievementId } }).then(res => {
             return true;
@@ -468,7 +468,7 @@ module.exports = class ParticipantService {
     static getAchievements(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: 1 }).then(par => {
             if (par) {
@@ -500,7 +500,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInt(achievementId);
         TypeChecker.isInt(level);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId, 'achievements.id': achievementId },
@@ -525,7 +525,7 @@ module.exports = class ParticipantService {
     static updateTaskCounts(participantId, conferenceId, taskCount, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: taskCount }).then(res => {
             return true;
@@ -549,7 +549,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: 1 }).then(par => {
             if (par) {
@@ -581,7 +581,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
         TypeChecker.isInt(count);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { ['taskCount.' + taskType]: count }).then(res => {
             return true;
@@ -605,7 +605,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
             return true;
@@ -623,7 +623,7 @@ module.exports = class ParticipantService {
      */
     static deleteAllParticipants(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteAllFromCollection("participants_" + conferenceId).then(res => {
             console.log("all participants deleted");
@@ -642,7 +642,7 @@ module.exports = class ParticipantService {
     static deleteParticipant(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteOneFromCollection("participants_" + conferenceId, { participantId: participantId }).then(res => {
             console.log("participant with participantId " + participantId + " deleted");

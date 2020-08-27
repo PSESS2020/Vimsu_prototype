@@ -29,7 +29,7 @@ module.exports = Object.freeze({
         string: "rmmsg",
         method: "removeMessage"
     },
-    REMOVEMESSAGESBYPLAYER: { 
+    REMOVEMESSAGESBYPLAYER: {
         string: "rmallby",
         method: "removeAllBy"
     },

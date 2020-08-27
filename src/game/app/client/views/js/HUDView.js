@@ -19,7 +19,7 @@ class HUDView extends Views {
         }
 
         HUDView.instance = this;
-        
+
         $('#rankListButton').off();
         $('#rankListButton').click(() => {
             eventManager.handleRankListClicked();

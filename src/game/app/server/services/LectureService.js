@@ -27,7 +27,7 @@ module.exports = class LectureService {
 
         return blob.getWriteSAS("lectures", videoId, startingTime, duration);
     }
-    
+
     /**
      * @static Creates a lecture instance for all accepted lectures stored in the database
      * 
@@ -38,7 +38,7 @@ module.exports = class LectureService {
      */
     static createAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getAllLecturesWithOratorData(conferenceId, vimsudb).then(lectures => {
             var lectureLists = [];
@@ -67,7 +67,7 @@ module.exports = class LectureService {
      */
     static getAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findInCollection("lectures", { conferenceId: conferenceId, isAccepted: true }, {}).then(lectures => {
             if (lectures.length > 0) {
@@ -89,9 +89,9 @@ module.exports = class LectureService {
      * 
      * @return lectures array if lectures found, otherwise false
      */
-    static #getAllLecturesWithOratorData = function(conferenceId, vimsudb) {
+    static #getAllLecturesWithOratorData = function (conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.joinCollection("lectures", "accounts", "oratorId", "accountId").then(allLectures => {
             if (allLectures.length > 0) {

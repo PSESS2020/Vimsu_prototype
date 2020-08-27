@@ -29,8 +29,8 @@ module.exports = class FileSystem {
     static deleteDirectory(dir) {
         TypeChecker.isString(dir);
 
-        rimraf(dir, function () { 
-            console.log(`${dir} directory is deleted`); 
+        rimraf(dir, function () {
+            console.log(`${dir} directory is deleted`);
         });
     }
 

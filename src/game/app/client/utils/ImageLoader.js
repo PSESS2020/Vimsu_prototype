@@ -9,8 +9,8 @@ class ImageLoader {
     /**
      * @constructor Creates an ImageLoader instance
      */
-    constructor() {}
-    
+    constructor() { }
+
     /**
      * loads an image
      * 
@@ -20,7 +20,7 @@ class ImageLoader {
     async loadImage(key, path) {
         TypeChecker.isString(key);
         TypeChecker.isString(path);
-        
+
         const cached = CacheImages.getImage(key);
 
         if (cached !== undefined) {

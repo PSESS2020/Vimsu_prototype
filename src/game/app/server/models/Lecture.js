@@ -25,7 +25,7 @@ module.exports = class Lecture {
     #removedParticipants;
     #tokenList;
     #hideThis;
-    
+
     /**
      * @constructor Creates a lecture instance
      * 
@@ -68,7 +68,7 @@ module.exports = class Lecture {
         this.#removedParticipants = [];
 
         // will prevent this from showing up on the current lectures screen
-        this.#hideThis = false; 
+        this.#hideThis = false;
 
         /*This will be an array of arrays with with size 3
           that means every element is an array, 
@@ -221,7 +221,7 @@ module.exports = class Lecture {
         TypeChecker.isString(ppantUsername);
 
         //orator can join every time if lecture is opened and not ended
-        if(ppantUsername === this.#oratorUsername && !this.isEnded() && this.#isOpened()) {
+        if (ppantUsername === this.#oratorUsername && !this.isEnded() && this.#isOpened()) {
 
             this.#activeParticipants.push(participantId);
             return true;
@@ -285,7 +285,7 @@ module.exports = class Lecture {
      * 
      * @return true if opened, otherwise false
      */
-    #isOpened = function() {
+    #isOpened = function () {
         var now = new Date().getTime();
         var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
         return (startingTime <= now)
@@ -360,7 +360,7 @@ module.exports = class Lecture {
         TypeChecker.isString(ppantUsername);
 
         //orator has token of his own lecture in every case
-        if(ppantUsername === this.#oratorUsername) {
+        if (ppantUsername === this.#oratorUsername) {
             return true;
         }
 
@@ -392,7 +392,7 @@ module.exports = class Lecture {
             var element = this.#tokenList[i];
             if (element[0] === participantId && element[2] >= 0) {
                 element[2] = -100; // needs to be negative as setting it to zero won't
-                                   // change behaviour of hasToken
+                // change behaviour of hasToken
             }
         }
     };

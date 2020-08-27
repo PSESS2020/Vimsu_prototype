@@ -32,7 +32,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(chatPartnerUsername);
         TypeChecker.isString(ownerUsername);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         var chat = {
             chatId: new ObjectId().toString(),
@@ -77,7 +77,7 @@ module.exports = class Chatservice {
             TypeChecker.isString(id);
         })
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         var chat = {
             chatId: new ObjectId().toString(),
@@ -116,7 +116,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(ownerId);
         TypeChecker.isString(chatPartnerId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("chats_" + conferenceId, { ownerId: { $exists: false }, memberId: { $size: 2 }, memberId: { $all: [ownerId, chatPartnerId] } }, "").then(chat => {
             if (chat) {
@@ -146,7 +146,7 @@ module.exports = class Chatservice {
         chatIDList.forEach(id => {
             TypeChecker.isString(id);
         });
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         let chats = [];
         return Promise.all(chatIDList.map(async chatId => {
@@ -191,7 +191,7 @@ module.exports = class Chatservice {
     static loadChat(chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
             let messages = [];
@@ -245,7 +245,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isString(participantId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
             if (res) {
@@ -274,7 +274,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(chatId);
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         //first, remove participant from chats collection
         return vimsudb.deleteFromArrayInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: participantId }).then(res => {
@@ -282,7 +282,7 @@ module.exports = class Chatservice {
 
             //then, remove chat from chatIDList in participants collection
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
-                
+
                 //checks if this chat still has a member
                 return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }, { memberId: 1 }).then(chat => {
                     if (chat && dbRes) {
@@ -333,7 +333,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(msgText);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         let message = {
             msgId: new ObjectId().toString(),
@@ -365,7 +365,7 @@ module.exports = class Chatservice {
      */
     static removeAllChats(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(chatsRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: { $exists: true } }).then(res => {
@@ -394,7 +394,7 @@ module.exports = class Chatservice {
         TypeChecker.isString(participantId);
         TypeChecker.isString(chatId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(chatRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {

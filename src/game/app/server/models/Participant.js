@@ -78,14 +78,14 @@ module.exports = class Participant {
         this.#businessCard = businessCard;
         this.#position = position;
         this.#direction = direction;
-        this.#friendList = friendList; 
-        this.#receivedRequestList = receivedRequestList; 
+        this.#friendList = friendList;
+        this.#receivedRequestList = receivedRequestList;
         this.#sentRequestList = sentRequestList;
         this.#taskTypeMapping = taskMapping;
         this.#achievements = achievements;
-        this.#isMod = isMod; 
-        this.#awardPoints = awardPoints; 
-        this.#chatList = chatList; 
+        this.#isMod = isMod;
+        this.#awardPoints = awardPoints;
+        this.#chatList = chatList;
         this.#isVisible = true;
     }
 

@@ -44,7 +44,7 @@ module.exports = class Achievement {
         TypeChecker.isInt(awardPoints);
         TypeChecker.isInt(maxLevel);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
-        if(nextCount !== undefined)
+        if (nextCount !== undefined)
             TypeChecker.isInt(nextCount);
 
         this.#id = id;

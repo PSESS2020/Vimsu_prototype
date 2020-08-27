@@ -61,7 +61,7 @@ class GameView {
     /**
      * @private initializes View instances
      */
-    #initViews = function() {
+    #initViews = function () {
         this.#hudView = new HUDView(this.#eventManager);
         this.#statusBar = new StatusBar();
         this.#notifBar = new NotificationBar(this.#eventManager);
@@ -133,7 +133,7 @@ class GameView {
 
             if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
                 this.#currentMap.findClickableTileOrObject(selectedTileCords, false, canvas);
-                
+
                 this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
                         && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
@@ -153,7 +153,7 @@ class GameView {
                 this.#currentMap.selectionOnMap = false;
                 canvas.style.cursor = "default"
             }
-            
+
             this.#currentMap.updateSelectedTile(selectedTileCords);
         });
 
@@ -186,8 +186,8 @@ class GameView {
                         npcView.onClick();
                     }
                 })
-            
-            //check if clicked tile is outside the walkable area
+
+                //check if clicked tile is outside the walkable area
             } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
                 this.#currentMap.findClickedElementOutsideMap(newPosition);
             }
@@ -199,7 +199,7 @@ class GameView {
      * 
      * @param {Views} viewInstance view instance
      */
-    #addToUpdateList = function(viewInstance) {
+    #addToUpdateList = function (viewInstance) {
         if (viewInstance instanceof Array) {
             var i;
             for (i = 0; i < viewInstance.length; i++) {
@@ -247,10 +247,10 @@ class GameView {
 
             //put all AvatarViews and all GameObjects in one list
             var allDrawElements = (gameObjects !== undefined) ? gameObjects.concat(this.#ownAvatarView)
-                                                                             .concat(this.#anotherParticipantAvatarViews)
-                                                                             .concat(this.#npcAvatarViews)
-                                                              : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
-                                                                                     .concat(this.#npcAvatarViews);
+                .concat(this.#anotherParticipantAvatarViews)
+                .concat(this.#npcAvatarViews)
+                : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
+                    .concat(this.#npcAvatarViews);
 
             //sort all Avatars in CordX
             allDrawElements.sort(function (a, b) {
@@ -263,7 +263,7 @@ class GameView {
             }
         }
     }
-    
+
     /**
      * Update Views in update list
      */
@@ -321,7 +321,7 @@ class GameView {
      * @param {TypeOfRoom} typeOfRoom type of room
      */
     initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom) {
-        
+
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
@@ -694,7 +694,7 @@ class GameView {
      * @param {Object} chat chat
      * @param {boolean} openNow true if open window now, otherwise false
      */
-    initChatThreadView(chat, openNow) {    
+    initChatThreadView(chat, openNow) {
         if (openNow) {
             this.#chatThreadView.draw(chat);
         }
@@ -733,7 +733,7 @@ class GameView {
         TypeChecker.isString(chatId);
         TypeChecker.isBoolean(areFriends);
         TypeChecker.isBoolean(friendRequestSent);
-        
+
         if ($('#chatThreadModal').is(':visible')) {
             this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
         }
@@ -847,7 +847,7 @@ class GameView {
 
         TypeChecker.isBoolean(hasLeftChat);
 
-        if($('#inviteFriendsModal').is(':visible')) {
+        if ($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
         }
     }
@@ -859,7 +859,7 @@ class GameView {
      */
     addToChatParticipantList(username) {
         TypeChecker.isString(username);
-        if($('#chatParticipantListModal').is(':visible')) {
+        if ($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.addToChatParticipantList(username);
         }
     }
@@ -871,7 +871,7 @@ class GameView {
      */
     removeFromChatParticipantList(username) {
         TypeChecker.isString(username);
-        if($('#chatParticipantListModal').is(':visible')) {
+        if ($('#chatParticipantListModal').is(':visible')) {
             this.#chatParticipantListView.removeFromChatParticipantList(username);
         }
     }
@@ -888,7 +888,7 @@ class GameView {
 
         TypeChecker.isBoolean(isMemberOfChat);
 
-        if($('#inviteFriendsModal').is(':visible')) {
+        if ($('#inviteFriendsModal').is(':visible')) {
             this.#inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
         }
     }
@@ -1057,7 +1057,7 @@ class GameView {
      * @param {Object} message lecture chat message
      */
     appendLectureChatMessage(message) {
-        if($('#lectureVideoWindow').is(':visible')) {
+        if ($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.appendMessage(message);
         }
     }
@@ -1068,7 +1068,7 @@ class GameView {
      * @param {Object} lectureChat lecture chat
      */
     updateLectureChat(lectureChat) {
-        if($('#lectureVideoWindow').is(':visible')) {
+        if ($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.drawChat(lectureChat);
         }
     };
@@ -1080,8 +1080,8 @@ class GameView {
      */
     updateLectureToken(hasToken) {
         TypeChecker.isBoolean(hasToken);
-        
-        if($('#lectureVideoWindow').is(':visible')) {
+
+        if ($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }
     };
@@ -1090,7 +1090,7 @@ class GameView {
      * Closes lecture window
      */
     closeLectureView() {
-        if($('#lectureVideoWindow').is(':visible')) {
+        if ($('#lectureVideoWindow').is(':visible')) {
             this.#lectureView.close();
         }
     };

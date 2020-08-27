@@ -111,14 +111,14 @@ class GameObjectView extends Views {
             return;
         }
 
-        ctx_avatar.drawImage(this.#objectImage, this.#screenPosition.getCordX() + this.#screenPositionOffset.x, 
-                                                this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
+        ctx_avatar.drawImage(this.#objectImage, this.#screenPosition.getCordX() + this.#screenPositionOffset.x,
+            this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
     }
 
     /**
      * @abstract called if game object is clicked
      */
-    onclick(){
+    onclick() {
         throw new Error('onclick() has to be implemented!');
     }
 }

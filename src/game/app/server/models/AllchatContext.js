@@ -10,10 +10,10 @@ const Room = require('./Room.js');
  * @version 1.0.0
  */
 module.exports = class AllchatContext extends CommandContext {
-    
+
     #serverController
     #contextObject
-    
+
     /**
      * @constructor Creates a allchat context instance
      * 
@@ -27,7 +27,7 @@ module.exports = class AllchatContext extends CommandContext {
         this.#serverController = serverController;
         this.#contextObject = room;
     }
-    
+
     /**
      * Gets room messages
      * 
@@ -36,7 +36,7 @@ module.exports = class AllchatContext extends CommandContext {
     getMessages() {
         return this.#contextObject.getMessages();
     };
-    
+
     /**
      * Gets room title
      * 
@@ -45,7 +45,7 @@ module.exports = class AllchatContext extends CommandContext {
     getTitle() {
         return this.#contextObject.getTypeOfRoom();
     };
-    
+
     /**
      * Gets help messages
      * 
@@ -54,14 +54,14 @@ module.exports = class AllchatContext extends CommandContext {
     getHelpMessage() {
         return Messages.HELPALLCHAT;
     };
-    
+
     /**
      * Updates messages in allchat
      */
     updateMessages() {
         this.#serverController.emitEventIn(this.#contextObject.getRoomId(), 'initAllchat', this.getMessages());
     };
-    
+
     /**
      * Removes participant from conference
      * 
@@ -69,7 +69,7 @@ module.exports = class AllchatContext extends CommandContext {
      */
     removeUser(userToRemove) {
         TypeChecker.isString(userToRemove);
-        
+
         var ppantID = this.#serverController.getIdOf(userToRemove);
         if (ppantID !== undefined) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
@@ -77,11 +77,11 @@ module.exports = class AllchatContext extends CommandContext {
             /* First, it gets the socket object corresponding to player that
             * is supposed to be removed from the game. */
             if (socket != undefined) {
-            
-                if(socket.currentLecture) {
+
+                if (socket.currentLecture) {
                     this.#serverController.emitEventTo(socket.id, 'force close lecture');
                 }
-            
+
                 /* Tells the clientController to remove itself from the game
                  * (meaning to return to the homepage). Since the handling of
                  * this can be altered client-side, we also need to remove the socket
@@ -91,21 +91,21 @@ module.exports = class AllchatContext extends CommandContext {
 
                 /* Get all the socketIO-rooms the socket belonging to the participant that
                  * is to be removed is currently in and remove the socket from all those rooms */
-                Object.keys(socket.rooms).forEach( (room) => {
+                Object.keys(socket.rooms).forEach((room) => {
                     socket.leave(room);
                     this.#serverController.emitEventIn(room, "remove player", ppantID);
                 });
             }
         }
     };
-    
+
     /**
      * Not closing anything
      */
     close() {
         return;
     };
-    
+
     /**
      * Mutes participant from allchat
      * 
@@ -124,15 +124,15 @@ module.exports = class AllchatContext extends CommandContext {
             }
         }
     };
-    
+
     /**
      * Unmutes participant from allchat 
      * 
      * @param {String} userToUnmute username of the user to unmute
      */
-    unmuteUser(userToUnmute) {        
+    unmuteUser(userToUnmute) {
         TypeChecker.isString(userToUnmute);
-        
+
         var ppantID = this.#serverController.getIdOf(userToUnmute);
         if (ppantID !== undefined) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
@@ -143,5 +143,5 @@ module.exports = class AllchatContext extends CommandContext {
             }
         };
     }
-    
+
 }

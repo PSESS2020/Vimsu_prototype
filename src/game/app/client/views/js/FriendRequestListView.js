@@ -37,7 +37,7 @@ class FriendRequestListView extends WindowView {
 
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
-        }  
+        }
 
         this.#businessCards = businessCards;
         this.#businessCards.forEach(businessCard => {
@@ -118,7 +118,7 @@ class FriendRequestListView extends WindowView {
         if (isAccepted) {
             $('#accepted' + participantId).show()
             $('#rejectdisable' + participantId).show()
-            
+
         } else {
             $('#rejected' + participantId).show()
             $('#acceptdisable' + participantId).show()

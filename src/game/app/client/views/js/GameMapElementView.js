@@ -22,8 +22,8 @@ class GameMapElementView extends GameObjectView {
      * Draws game map element
      */
     draw() {
-        ctx_map.drawImage(super.getObjectImage(), super.getScreenPosition().getCordX() + super.getScreenPositionOffset().x, 
-                                                  super.getScreenPosition().getCordY() + super.getScreenPositionOffset().y);
+        ctx_map.drawImage(super.getObjectImage(), super.getScreenPosition().getCordX() + super.getScreenPositionOffset().x,
+            super.getScreenPosition().getCordY() + super.getScreenPositionOffset().y);
     }
 
     /**

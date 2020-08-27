@@ -37,7 +37,7 @@ class ClientController {
      * 
      * @return true if socket is ready, otherwise false
      */
-    #socketReady = function() {
+    #socketReady = function () {
         if (!this.#socket) {
             return false;
         }
@@ -47,7 +47,7 @@ class ClientController {
     /**
      * @private Initializes the initial view for the player
      */
-    #initGameView = function() {
+    #initGameView = function () {
         var assetPaths = this.#currentRoom.getAssetPaths();
         var map = this.#currentRoom.getMap();
         var objectMap = this.#currentRoom.getObjectMap();
@@ -70,7 +70,7 @@ class ClientController {
     /**
      * @private Initializes the view for the player after switching room
      */
-    #switchRoomGameView = function() {
+    #switchRoomGameView = function () {
 
         //disables update of gameview
         this.#gameView.setGameViewInit(false);
@@ -94,7 +94,7 @@ class ClientController {
      * @private opens a new socket connection between the client and the server and initializes the events to be handled.
      * also handles socket on disconnect.
      */
-    #openSocketConnection = function() {
+    #openSocketConnection = function () {
         if (this.#port && !this.#socket) {
 
             /**
@@ -109,7 +109,7 @@ class ClientController {
                 'reconnectionDelay': 0,
                 'reconnectionAttempts': 120
             });
-            
+
             this.#socket.on('connect', (socket) => {
                 this.#gameView.updateConnectionStatus(ConnectionState.CONNECTED);
             });
@@ -134,7 +134,7 @@ class ClientController {
     /**
      * @private Initializes the events to be handled
      */
-    #setUpSocket = function() {
+    #setUpSocket = function () {
         this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
         //this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.#socket.on('currentGameStateYourRoom', this.#handleFromServerUpdateRoom.bind(this));
@@ -217,7 +217,7 @@ class ClientController {
      * 
      * @param {Object} initInfo initial own participant info
      */
-    #handleFromServerInitOwnParticipant = function(initInfo) {
+    #handleFromServerInitOwnParticipant = function (initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         this.#ownBusinessCard = new BusinessCardClient(
@@ -257,7 +257,7 @@ class ClientController {
      * @param {number} length room length
      * @param {number[][]} occupationMap occupation map
      */
-    #handleFromServerUpdateRoom = function(roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+    #handleFromServerUpdateRoom = function (roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
 
         //tranform MapElements to GameObjectClients
         var listOfMapElements = [];
@@ -289,7 +289,7 @@ class ClientController {
         if (!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-        //If not, only swap the room
+            //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
@@ -302,7 +302,7 @@ class ClientController {
      * 
      * @param {Object} posInfo position information
      */
-    #handleFromServerUpdatePosition = function(posInfo) {
+    #handleFromServerUpdatePosition = function (posInfo) {
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
 
@@ -320,7 +320,7 @@ class ClientController {
      * @param {number} newCordX x coordinate
      * @param {number} newCordY y coordinate
      */
-    #handleFromServerStartMovementOther = function(ppantID, direction, newCordX, newCordY) {
+    #handleFromServerStartMovementOther = function (ppantID, direction, newCordX, newCordY) {
 
         TypeChecker.isString(ppantID);
         TypeChecker.isEnumOf(direction, Direction);
@@ -340,7 +340,7 @@ class ClientController {
      * 
      * @param {String} ppantID participant ID
      */
-    #handleFromServerStopMovementOther = function(ppantID) {
+    #handleFromServerStopMovementOther = function (ppantID) {
         TypeChecker.isString(ppantID);
 
         this.#gameView.updateAnotherAvatarWalking(ppantID, false);
@@ -353,7 +353,7 @@ class ClientController {
      * @param {boolean} hasToken true if has token, otherwise false
      * @param {Object} letureChat lecture chat
      */
-    #handleFromServerLectureEntered = function(lecture, hasToken, lectureChat) {
+    #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat) {
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
     }
 
@@ -362,7 +362,7 @@ class ClientController {
      * 
      * @param {String} lectureId lecture ID
      */
-    #handleFromServerLectureFull = function(lectureId) {
+    #handleFromServerLectureFull = function (lectureId) {
         TypeChecker.isString(lectureId);
         this.#gameView.updateCurrentLectures(lectureId);
     }
@@ -372,7 +372,7 @@ class ClientController {
      * 
      * @param {Object} initInfo initial participant info
      */
-    #handleFromServerRoomEnteredByParticipant = function(initInfo) {
+    #handleFromServerRoomEnteredByParticipant = function (initInfo) {
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
@@ -384,7 +384,7 @@ class ClientController {
      * 
      * @param {String} ppantId participant ID
      */
-    #handleFromServerRemovePlayer = function(ppantId) {
+    #handleFromServerRemovePlayer = function (ppantId) {
         TypeChecker.isString(ppantId);
         this.#currentRoom.exitParticipant(ppantId);
         this.#gameView.removeAnotherAvatarViews(ppantId);
@@ -395,7 +395,7 @@ class ClientController {
      * 
      * @param {Object[]} lectures current lectures
      */
-    #handleFromServerCurrentLectures = function(lectures) {
+    #handleFromServerCurrentLectures = function (lectures) {
         this.#gameView.initCurrentLectures(lectures);
     }
 
@@ -404,7 +404,7 @@ class ClientController {
      * 
      * @param {Object[]} lectures all lectures with the schedule
      */
-    #handleFromServerCurrentSchedule = function(lectures) {
+    #handleFromServerCurrentSchedule = function (lectures) {
         this.#gameView.initCurrentSchedule(lectures);
     }
 
@@ -415,7 +415,7 @@ class ClientController {
      * @param {number} rank rank
      * @param {boolean} isModerator true if moderator, otherwise false
      */
-    #handleFromServerBusinessCard = function(businessCardObject, rank, isModerator) {
+    #handleFromServerBusinessCard = function (businessCardObject, rank, isModerator) {
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
             businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
@@ -437,7 +437,7 @@ class ClientController {
      * @param {?number} limit group chat limit
      * @param {?String} chatId group chat ID
      */
-    #handleFromServerInviteFriends = function(friendListData, groupName, limit, chatId) {
+    #handleFromServerInviteFriends = function (friendListData, groupName, limit, chatId) {
         if (friendListData) {
             var friendList = [];
             friendListData.forEach(data => {
@@ -453,7 +453,7 @@ class ClientController {
             TypeChecker.isInt(limit)
         if (chatId)
             TypeChecker.isString(chatId);
-        
+
         this.#gameView.initInviteFriendsView(friendList, groupName, limit, chatId);
     }
 
@@ -462,7 +462,7 @@ class ClientController {
      * 
      * @param {Object} friendListData friend list
      */
-    #handleFromServerFriendList = function(friendListData) {
+    #handleFromServerFriendList = function (friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
             friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -475,7 +475,7 @@ class ClientController {
      * 
      * @param {Object} friendRequestListData friend request list
      */
-    #handleFromServerFriendRequestList = function(friendRequestListData) {
+    #handleFromServerFriendRequestList = function (friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
             friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
@@ -490,7 +490,7 @@ class ClientController {
      * @param {Object} data business card of the requester
      * @param {String} chatId chat ID with the requester
      */
-    #handleFromServerNewFriendRequest = function(data, chatId) {
+    #handleFromServerNewFriendRequest = function (data, chatId) {
         var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriendRequest(friendRequest);
         this.#gameView.updateChatThread(chatId, false, true);
@@ -503,7 +503,7 @@ class ClientController {
      * @param {Object} data friend business card
      * @param {String} chatId chat ID with this friend
      */
-    #handleFromServerAcceptedFriendRequest = function(data, chatId) {
+    #handleFromServerAcceptedFriendRequest = function (data, chatId) {
         var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         this.#gameView.addFriend(friend);
         this.#gameView.updateChatThread(chatId, true, false);
@@ -515,7 +515,7 @@ class ClientController {
      * 
      * @param {String} chatId chat ID with this participant
      */
-    #handleFromServerRejectedFriendRequest = function(chatId) {
+    #handleFromServerRejectedFriendRequest = function (chatId) {
         TypeChecker.isString(chatId);
         this.#gameView.updateChatThread(chatId, false, false);
     }
@@ -526,7 +526,7 @@ class ClientController {
      * @param {String} friendId old friend ID
      * @param {String} chatId chat ID with this participant
      */
-    #handleFromServerRemovedFriend = function(friendId, chatId) {
+    #handleFromServerRemovedFriend = function (friendId, chatId) {
         TypeChecker.isString(friendId);
         TypeChecker.isString(chatId);
         this.#gameView.removeFriend(friendId);
@@ -538,7 +538,7 @@ class ClientController {
      * 
      * @param {Object} rankList rank list
      */
-    #handleFromServerRankList = function(rankList) {
+    #handleFromServerRankList = function (rankList) {
         //remark own participant's ranking
         let idx = rankList.findIndex(ppant => ppant.participantId === this.#ownParticipant.getId());
         if (idx > -1) {
@@ -552,7 +552,7 @@ class ClientController {
      * 
      * @param {String[]} usernames list of usernames
      */
-    #handleFromServerChatParticipantList = function(usernames) {
+    #handleFromServerChatParticipantList = function (usernames) {
         TypeChecker.isInstanceOf(usernames, Array);
         usernames.forEach(username => {
             TypeChecker.isString(username);
@@ -565,7 +565,7 @@ class ClientController {
      * 
      * @param {String} username username
      */
-    #handleFromServerAddToChatParticipantList = function(username) {
+    #handleFromServerAddToChatParticipantList = function (username) {
         TypeChecker.isString(username);
         this.#gameView.addToChatParticipantList(username);
     }
@@ -575,7 +575,7 @@ class ClientController {
      * 
      * @param {String} username username
      */
-    #handleFromServerRemoveFromChatParticipantList = function(username) {
+    #handleFromServerRemoveFromChatParticipantList = function (username) {
         TypeChecker.isString(username);
         this.#gameView.removeFromChatParticipantList(username);
     }
@@ -586,13 +586,13 @@ class ClientController {
      * @param {?Object} data participant's business card
      * @param {boolean} hasLeftChat true if participant has left the chat
      */
-    #handleFromServerAddToInviteFriends = function(data, hasLeftChat) {
+    #handleFromServerAddToInviteFriends = function (data, hasLeftChat) {
         if (data) {
             var businessCard = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
         } else
             var businessCard = undefined;
-            
-        TypeChecker.isBoolean(hasLeftChat);   
+
+        TypeChecker.isBoolean(hasLeftChat);
         this.#gameView.addToInviteFriends(businessCard, hasLeftChat);
     }
 
@@ -602,7 +602,7 @@ class ClientController {
      * @param {?String} participantId participant ID
      * @param {boolean} isMemberOfChat true if participant is now member of chat
      */
-    #handleFromServerRemoveFromInviteFriends = function(participantId, isMemberOfChat) {
+    #handleFromServerRemoveFromInviteFriends = function (participantId, isMemberOfChat) {
         if (participantId)
             TypeChecker.isString(participantId);
 
@@ -615,7 +615,7 @@ class ClientController {
      * 
      * @param {Object} message allchat message
      */
-    #handleFromServerNewAllchatMessage = function(message) {
+    #handleFromServerNewAllchatMessage = function (message) {
         this.#gameView.appendAllchatMessage(message);
     }
 
@@ -624,7 +624,7 @@ class ClientController {
      * 
      * @param {Object} message lecture chat message
      */
-    #handleFromServerNewLectureChatMessage = function(message) {
+    #handleFromServerNewLectureChatMessage = function (message) {
         this.#gameView.appendLectureChatMessage(message);
     }
 
@@ -633,7 +633,7 @@ class ClientController {
      * 
      * @param {Object} messages lecture chat messages
      */
-    #handleFromServerUpdateLectureChat = function(messages) {
+    #handleFromServerUpdateLectureChat = function (messages) {
         this.#gameView.updateLectureChat(messages);
     };
 
@@ -642,7 +642,7 @@ class ClientController {
      * 
      * @param {boolean} hasToken true if has token, otherwise false
      */
-    #handleFromServerUpdateToken = function(hasToken) {
+    #handleFromServerUpdateToken = function (hasToken) {
         TypeChecker.isBoolean(hasToken);
         this.#gameView.updateLectureToken(hasToken);
     };
@@ -650,7 +650,7 @@ class ClientController {
     /**
      * @private Receives from server to force close lecture
      */
-    #handleFromServerForceCloseLecture = function() {
+    #handleFromServerForceCloseLecture = function () {
         this.#gameView.closeLectureView();
     };
 
@@ -660,7 +660,7 @@ class ClientController {
      * @param {?number} points points
      * @param {?number} rank rank
      */
-    #handleFromServerUpdateSuccessesBar = function(points, rank) {
+    #handleFromServerUpdateSuccessesBar = function (points, rank) {
         if (points) {
             TypeChecker.isInt(points);
         }
@@ -677,7 +677,7 @@ class ClientController {
      * 
      * @param {{senderId: String, timestamp: String, text: String}} messages allchat messages
      */
-    #handleFromServerInitAllchat = function(messages) {
+    #handleFromServerInitAllchat = function (messages) {
         this.#gameView.initAllchatView(this.#currentRoom.getTypeOfRoom(), messages);
     }
 
@@ -687,7 +687,7 @@ class ClientController {
      * @param {String} messageHeader message header
      * @param {String[]} messageText message text
      */
-    #handleFromServerNewNotification = function(messageHeader, messageText) {
+    #handleFromServerNewNotification = function (messageHeader, messageText) {
         TypeChecker.isString(messageHeader);
         if (messageText instanceof Array) {
             TypeChecker.isInstanceOf(messageText, Array);
@@ -706,7 +706,7 @@ class ClientController {
      * @param {String} moderatorUsername moderator username
      * @param {String} messageText message text
      */
-    #handleFromServerNewGlobalAnnouncement = function(moderatorUsername, messageText) {
+    #handleFromServerNewGlobalAnnouncement = function (moderatorUsername, messageText) {
         TypeChecker.isString(moderatorUsername);
         TypeChecker.isString(messageText);
         var timestamp = new DateParser(new Date()).parseOnlyTime();
@@ -719,7 +719,7 @@ class ClientController {
      * 
      * @param {String} participantId participant ID
      */
-    #handleFromServerHideAvatar = function(participantId) {
+    #handleFromServerHideAvatar = function (participantId) {
         TypeChecker.isString(participantId);
         this.#gameView.hideAvatar(participantId);
     }
@@ -729,7 +729,7 @@ class ClientController {
      * 
      * @param {String} participantId participant ID
      */
-    #handleFromServerShowAvatar = function(participantId) {
+    #handleFromServerShowAvatar = function (participantId) {
         TypeChecker.isString(participantId);
         this.#gameView.showAvatar(participantId);
     }
@@ -737,7 +737,7 @@ class ClientController {
     /**
      * @private Receives from server that client has been removed from the conference
      */
-    #handleFromServerRemoved = function() {
+    #handleFromServerRemoved = function () {
         $('#viewBlocker').show();
     };
 
@@ -746,7 +746,7 @@ class ClientController {
      * 
      * @param {Object[]} achievements achievements
      */
-    #handleFromServerAchievements = function(achievements) {
+    #handleFromServerAchievements = function (achievements) {
         this.#gameView.initCurrentAchievementsView(achievements);
     }
 
@@ -756,7 +756,7 @@ class ClientController {
      * @param {String} name NPC name
      * @param {String[]} story NPC story
      */
-    #handleFromServerShowNPCStory = function(name, story) {
+    #handleFromServerShowNPCStory = function (name, story) {
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(story, Array);
         story.forEach(element => {
@@ -770,7 +770,7 @@ class ClientController {
      * 
      * @param {Object} achievement achievement
      */
-    #handleFromServerNewAchievement = function(achievement) {
+    #handleFromServerNewAchievement = function (achievement) {
         this.#gameView.handleNewAchievement(achievement);
     }
 
@@ -779,7 +779,7 @@ class ClientController {
      * 
      * @param {Object[]} chats chat list
      */
-    #handleFromServerShowChatList = function(chats) {
+    #handleFromServerShowChatList = function (chats) {
         this.#gameView.initChatListView(chats);
     };
 
@@ -788,7 +788,7 @@ class ClientController {
      * 
      * @param {Object} chat chat
      */
-    #handleFromServerShowChatThread = function(chat) {
+    #handleFromServerShowChatThread = function (chat) {
         this.#gameView.initChatThreadView(chat, true);
     };
 
@@ -798,7 +798,7 @@ class ClientController {
      * @param {Object} chat chat
      * @param {boolean} openNow true if chat thread should be opened now, otherwise false
      */
-    #handleFromServerNewChat = function(chat, openNow) {
+    #handleFromServerNewChat = function (chat, openNow) {
         this.#gameView.addNewChat(chat, openNow);
     };
 
@@ -808,7 +808,7 @@ class ClientController {
      * @param {String} senderUsername chat sender username
      * @param {String} chatId chat ID
      */
-    #handleFromServerGotNewChat = function(senderUsername, chatId) {
+    #handleFromServerGotNewChat = function (senderUsername, chatId) {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(chatId);
 
@@ -822,7 +822,7 @@ class ClientController {
      * @param {String} creatorUsername username of the user that invited this user
      * @param {String} chatId chat ID
      */
-    #handleFromServerGotNewGroupChat = function(groupName, creatorUsername, chatId) {
+    #handleFromServerGotNewGroupChat = function (groupName, creatorUsername, chatId) {
         TypeChecker.isString(groupName);
         TypeChecker.isString(creatorUsername);
         TypeChecker.isString(chatId);
@@ -836,7 +836,7 @@ class ClientController {
      * @param {String} senderUsername message sender username
      * @param {String} chatId chat ID
      */
-    #handleFromServerGotNewChatMessage = function(senderUsername, chatId) {
+    #handleFromServerGotNewChatMessage = function (senderUsername, chatId) {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(chatId);
         this.#gameView.drawNewMessage(senderUsername, chatId);
@@ -848,14 +848,14 @@ class ClientController {
      * @param {String} chatId chat ID
      * @param {Object} message chat message
      */
-    #handleFromServerNewChatMessage = function(chatId, message) {
+    #handleFromServerNewChatMessage = function (chatId, message) {
         this.#gameView.addNewChatMessage(chatId, message);
     };
 
     /**
      * @private Receives from server that conference is already entered with the same account
      */
-    #handleFromServerGameEntered = function() {
+    #handleFromServerGameEntered = function () {
         alert("You have entered the conference with the same account. Redirect to homepage...")
         var redirect = $('#nav_leave_button').attr('href');
         window.location.href = redirect;
@@ -933,7 +933,7 @@ class ClientController {
             $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
 
     }
-    
+
     /**
      * Sends to server on entering new room
      * 
@@ -1019,7 +1019,7 @@ class ClientController {
      */
     handleFromViewShowInviteFriends(groupName, chatId) {
         TypeChecker.isString(groupName);
-            
+
         if (chatId)
             TypeChecker.isString(chatId);
 
@@ -1108,7 +1108,7 @@ class ClientController {
      */
     handleFromViewLeaveChat(chatId) {
         TypeChecker.isString(chatId);
-        
+
         if (this.#socketReady()) {
             this.#socket.emit('removeParticipantFromChat', chatId);
             this.#gameView.removeChat(chatId);

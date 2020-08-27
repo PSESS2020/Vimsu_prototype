@@ -216,7 +216,7 @@ module.exports = class CommandHandler {
                 toWarn.push(msg[i].senderID);
                 msg.splice(i, 1);
                 i--; // This is important, as without it, we could not remove
-                     // two subsequent messages
+                // two subsequent messages
             }
         }
         toWarn.forEach((senderID) => {
@@ -359,7 +359,7 @@ module.exports = class CommandHandler {
      * @return method name
      */
     #getMethodString = function (commandType) {
-        
+
         for (var i = 0; i < this.#commandList.length; i++) {
             if (commandType === this.#commandList[i].string) {
                 return this.#commandList[i].method;

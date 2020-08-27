@@ -37,7 +37,7 @@ module.exports = class LectureChat {
         TypeChecker.isString(message.username);
         TypeChecker.isInt(message.messageID);
         TypeChecker.isDate(message.timestamp);
-        
+
         this.#listOfMessages.push(message);
     }
 }

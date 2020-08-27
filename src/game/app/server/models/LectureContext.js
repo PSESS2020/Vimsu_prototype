@@ -10,10 +10,10 @@ const Lecture = require('./Lecture.js');
  * @version 1.0.0
  */
 module.exports = class LectureContext extends CommandContext {
-    
+
     #serverController
     #contextObject
-    
+
     /**
      * @constructor Creates a lecture context instance
      * 
@@ -27,7 +27,7 @@ module.exports = class LectureContext extends CommandContext {
         this.#serverController = serverController;
         this.#contextObject = lecture;
     }
-    
+
     /**
      * Gets lecture messages
      * 
@@ -36,7 +36,7 @@ module.exports = class LectureContext extends CommandContext {
     getMessages() {
         return this.#contextObject.getLectureChat().getMessages();
     };
-    
+
     /**
      * Gets lecture title
      * 
@@ -45,7 +45,7 @@ module.exports = class LectureContext extends CommandContext {
     getTitle() {
         return this.#contextObject.getTitle();
     };
-    
+
     /**
      * Gets help message
      * 
@@ -54,14 +54,14 @@ module.exports = class LectureContext extends CommandContext {
     getHelpMessage() {
         return Messages.HELPLECTURECHAT;
     };
-    
+
     /**
      * Update messages in lecture chat
      */
     updateMessages() {
         this.#serverController.emitEventIn(this.#contextObject.getId(), 'updateLectureChat', this.getMessages());
     };
-    
+
     /**
      * Removes participant from lecture
      * 
@@ -75,19 +75,19 @@ module.exports = class LectureContext extends CommandContext {
             this.#removeByID(ppantId, Messages.REMOVAL);
         }
     };
-    
+
     /**
      * Closes lecture
      */
     close() {
         this.#contextObject.hide();
         var activePPants = this.#contextObject.getActiveParticipants();
-        for(var i = 0; i < activePPants.length; i++) {
+        for (var i = 0; i < activePPants.length; i++) {
             this.#removeByID(activePPants[i], Messages.CLOSED);
             i--;
         }
     };
-    
+
     /**
      * Mutes participant in the lecture
      * 
@@ -107,7 +107,7 @@ module.exports = class LectureContext extends CommandContext {
             }
         }
     };
-    
+
     /**
      * Unmutes participant in the lecture
      * 
@@ -118,23 +118,23 @@ module.exports = class LectureContext extends CommandContext {
 
         var ppantID = this.#serverController.getIdOf(userToUnmute);
         // If the uses did not previously posess a token, we need to inform him he now does
-        if(ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
+        if (ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
             var socketid = this.#serverController.getSocketId(ppantID);
             this.#serverController.sendNotification(socketid, Messages.GRANT);
             this.#serverController.emitEventTo(socketid, 'update token', true);
         };
     };
-    
+
     /**
      * Removes participant from lecture with its ID
      * 
      * @param {String} ppantId participant ID
      * @param {Messages} message notification message
      */
-    #removeByID = function(ppantId, message) {
+    #removeByID = function (ppantId, message) {
         TypeChecker.isString(ppantId);
         TypeChecker.isEnumOf(message, Messages);
-        
+
         var socketClient = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantId));
         this.#contextObject.leave(ppantId);
         this.#contextObject.revokeToken(ppantId);

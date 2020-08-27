@@ -55,7 +55,7 @@ module.exports = class TaskService {
     /**
      * @private Initializes all tasks
      */
-    #initAllTasks = function() {
+    #initAllTasks = function () {
         var id = 1;
         this.#tasks.push(new Task(id++, TypeOfTask.ASKQUESTIONINLECTURE, 2));
         this.#tasks.push(new Task(id++, TypeOfTask.BASICTUTORIALCLICK, 0));

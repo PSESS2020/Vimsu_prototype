@@ -92,8 +92,8 @@ module.exports = class blob {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
 
-        this.#blobService.deleteBlobIfExists(containerName, fileName, { deleteSnapshots: 'include' }, function(err, result, response) {
-            if(!err) {
+        this.#blobService.deleteBlobIfExists(containerName, fileName, { deleteSnapshots: 'include' }, function (err, result, response) {
+            if (!err) {
                 console.log(fileName + " deleted")
             }
         })
@@ -107,7 +107,7 @@ module.exports = class blob {
      * 
      * @return shared access policy
      */
-    #getSharedAccessPolicy = function(startDate, accessTimeInMinutes) {
+    #getSharedAccessPolicy = function (startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
         TypeChecker.isNumber(accessTimeInMinutes);
 

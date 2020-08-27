@@ -42,7 +42,7 @@ module.exports = class AchievementService {
     /**
      * @private Initializes all achievements
      */
-    #initAllAchievements = function() {
+    #initAllAchievements = function () {
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 15 },
             { count: 10, color: '#C9B037', points: 15 }
@@ -167,7 +167,7 @@ module.exports = class AchievementService {
      * 
      * @return level
      */
-    #getLevelFromDefinition = function(count, levels) {
+    #getLevelFromDefinition = function (count, levels) {
         TypeChecker.isInt(count);
         TypeChecker.isInstanceOf(levels, Array);
         levels.forEach(element => {
@@ -192,7 +192,7 @@ module.exports = class AchievementService {
      * 
      * @return true if the latest achievements contains the achievement, otherwise false
      */
-    #containsAchievement = function(achievement, oldAchievements) {
+    #containsAchievement = function (achievement, oldAchievements) {
         TypeChecker.isInstanceOf(achievement, Achievement);
         TypeChecker.isInstanceOf(oldAchievements, Array);
         oldAchievements.forEach(oldAch => {

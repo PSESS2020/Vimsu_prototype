@@ -23,7 +23,7 @@ module.exports = class Room {
     #occupationMap;
     #listOfGameObjects;
     #listOfNPCs;
-    #listOfDoors; 
+    #listOfDoors;
     #listOfMessages;
     #listOfMapElements;
 

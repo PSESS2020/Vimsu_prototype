@@ -8,7 +8,7 @@ const db = require('../../../../config/db')
  * @version 1.0.0
  */
 module.exports = class FriendListService {
-    
+
     /**
      * @static Gets all friends of a participant from the database
      * 
@@ -21,7 +21,7 @@ module.exports = class FriendListService {
     static getFriendList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: 1 }).then(par => {
             if (par) {
@@ -50,7 +50,7 @@ module.exports = class FriendListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(friendId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
             return true;
@@ -74,7 +74,7 @@ module.exports = class FriendListService {
         TypeChecker.isString(participantId);
         TypeChecker.isString(friendId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
             return true;
@@ -96,7 +96,7 @@ module.exports = class FriendListService {
     static removeAllFriends(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInstanceOf(vimsudb ,db);
+        TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: { $exists: true } }).then(res => {
             return true;

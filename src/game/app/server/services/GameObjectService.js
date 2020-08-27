@@ -45,7 +45,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity 
      * @param {boolean} clickable 
      */
-    #checkParamTypes = function(roomId, width, length, xPos, yPos, solidity, clickable) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -263,14 +263,14 @@ module.exports = class GameObjectService {
         let wallFrames = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-         
-                
+
+
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity, clickable));
             }
             return wallFrames;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-              
+
 
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity, clickable));
             }
@@ -327,7 +327,7 @@ module.exports = class GameObjectService {
         let conferenceLogos = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-             
+
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return conferenceLogos;

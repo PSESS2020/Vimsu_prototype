@@ -7,7 +7,7 @@
 class DateParser {
 
     #date;
-    
+
     /**
      * @constructor creates an instance of Date parser
      * @param {Date} date date
@@ -58,7 +58,7 @@ class DateParser {
      * 
      * @return two digits number
      */
-    #printTwoDigitsNumber = function(number) {
+    #printTwoDigitsNumber = function (number) {
         return (number < 10 ? '0' : '') + number;
     }
 }
