@@ -74,4 +74,20 @@ describe('AchievementService achievement handling', function() {
         expect(newAchievement[0]).to.eql(new Achievement(3, "Coffee Time", "coffee", "Visit food court room to gain this achievement.",1, '#C9B037', 10, 1, TypeOfTask.FOODCOURTVISIT));
         expect(testParticipant.getAchievements()[2]).to.eql(newAchievement[0]);
     });
+
+    it ('test achievment by task', function() {
+        var as = new AchievementService();
+        var ad = as.getAchievementDefinitionByTypeOfTask(TypeOfTask.RECEPTIONVISIT);
+        expect(ad).to.eql(new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [{ count: 1, color: '#C9B037', points: 10 }]));
+    });
+})
+
+describe('AchievementService singleton', function() {
+    it('test constructor', function() {
+        var as1 = new AchievementService();
+        var as2 = new AchievementService();
+
+        expect(as1 == as2).to.eql(true);
+    });
+
 })

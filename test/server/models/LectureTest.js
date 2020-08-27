@@ -25,6 +25,10 @@ var tokenList = [['1', undefined, 300000]];
 
 var lecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
 
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60000);
+}
+
 describe('Lecture constructor error', function() {
     it('test id error', function() {
         expect(() => new Lecture(1, 2, 3, "4", 5, 6, 7, 8, "9")).to.throw(TypeError, "not a string");
@@ -101,6 +105,13 @@ describe('Lecture Token handling', function() {
         let tokenListSecondElement = lecture.getTokenList()[1];
         expect(lecture.getActiveParticipants().includes(participantId2)).to.eql(false);
         expect(tokenListSecondElement[1]).to.not.undefined;
+
+        //un
+        lecture.leave("unbekannt", "unwichtig");
+    })
+
+    it('test leaveLecture Unknown', function() {
+        lecture.leave("unbekannt", "unwichtig"); // should not fail
     })
 
     it('test hasToken', function() {
@@ -119,4 +130,78 @@ describe('Lecture Token handling', function() {
         lecture.enter('6', 'modnar');
         assert.equal(lecture.enter('4', 'nardom'), false);
     })
+
+    it('test revokeToken', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.enter(participantId1, participantUsername1), true)
+        testLecture.revokeToken(participantId1, participantUsername1)
+        assert.equal(testLecture.hasToken(participantId1, participantUsername1), false);
+    });
+
+    it('test grantToken', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.enter(participantId1, participantUsername1), true)
+        testLecture.revokeToken(participantId1, participantUsername1)
+        assert.equal(testLecture.hasToken(participantId1, participantUsername1), false);
+        testLecture.grantToken(participantId1, participantUsername1)
+        assert.equal(testLecture.hasToken(participantId1, participantUsername1), true);
+        assert.equal(testLecture.grantToken("rambazamba", "asdf"), false);
+    });
+
+    it('test hasPPant', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        testLecture.enter(participantId1, participantUsername1);
+        assert.equal(testLecture.hasPPant(participantId1), true)
+        assert.equal(testLecture.hasPPant("random"), false)
+    });
+
+    it('test ban', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        testLecture.ban("asdf")
+        assert.equal(testLecture.isBanned("asdf"), true)
+    });
+
+    it('test isBanned', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        testLecture.ban("asdf")
+        assert.equal(testLecture.isBanned("asdf"), true)
+        assert.equal(testLecture.isBanned("fdsa"), false)
+    });
+
+    it('test hide', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        testLecture.hide()
+        assert.equal(testLecture.isHidden(), true)
+        testLecture.hide()
+        assert.equal(testLecture.isHidden(), true)
+    });
+
+    it('test isHidden', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.isHidden(), false)
+        testLecture.hide()
+        assert.equal(testLecture.isHidden(), true)
+    });
+
+    it('test ppantIsOrator', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.enter('oratorid', oratorUsername), true);
+        assert.equal(testLecture.enter('u1', 'n1'), true);
+        assert.equal(testLecture.enter('u2', 'n2'), true);
+        assert.equal(testLecture.enter('u3', 'n3'), true);
+        assert.equal(testLecture.enter('u4', 'n4'), false);
+    });
+
+    it('test oratorHasToken', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, startingTime, oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.hasToken('oratorid', oratorUsername), true);
+    });
+
+    it('test leave before lecture start', function() {
+        var testLecture = new Lecture(id, title, videoId, duration, remarks, addMinutes(new Date(), 3), oratorName, oratorUsername, maxParticipants);
+        assert.equal(testLecture.enter('u1', 'n1'), true);
+        testLecture.leave('u1');
+    });
+
+
 })

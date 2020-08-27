@@ -216,7 +216,6 @@ module.exports = class Lecture {
      *          false, otherwise
      */
     enter(participantId, ppantUsername) {
-
         TypeChecker.isString(participantId);
         TypeChecker.isString(ppantUsername);
 
