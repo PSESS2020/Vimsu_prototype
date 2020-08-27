@@ -1915,6 +1915,10 @@ module.exports = class ServerController {
      * @param {{header: String, body: String[]}} message message
      */
     sendNotification(socketid, message) {
+        //only send notfitication when socketID is valid and user is online
+        if (socketid === undefined) {
+            return;
+        }
         TypeChecker.isString(socketid);
         TypeChecker.isString(message.header);
         if (message.body instanceof Array) {
