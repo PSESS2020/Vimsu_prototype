@@ -19,7 +19,7 @@ window.onload = new index().init();
 function index() {
 
   /**
-   * Initializes canvas and ClientController for the first time.
+   * Initializes canvas, GameView, and ClientController for the first time.
    * Also calls game loop to update frame constantly
    */
   this.init = function() {

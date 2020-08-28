@@ -18,6 +18,7 @@ class ClientController {
      * Otherwise the existing instance will be returned.
      * 
      * @param {number} port client port
+     * @param {GameView} gameView GameView instance
      */
     constructor(port, gameView) {
         if (!!ClientController.instance) {
@@ -27,6 +28,7 @@ class ClientController {
         ClientController.instance = this;
 
         TypeChecker.isInt(port);
+        TypeChecker.isInstanceOf(gameView, GameView);
         
         this.#port = port;
         this.#openSocketConnection();

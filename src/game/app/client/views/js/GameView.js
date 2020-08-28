@@ -54,10 +54,16 @@ class GameView {
         this.#gameEngine = new IsometricEngine();
     }
     
+    /**
+     * initializes event manager
+     * 
+     * @param {ClientController} clientController ClientController instance
+     */
     initEventManager(clientController) {
+        TypeChecker.isInstanceOf(clientController, ClientController)
         this.#eventManager = new EventManager(clientController);
-        
-        //initialize Views at the very beginning
+
+        //initialize some Views at the very beginning
         this.#initViews();
     } 
 

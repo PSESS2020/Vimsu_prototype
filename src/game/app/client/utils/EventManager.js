@@ -11,6 +11,8 @@ class EventManager {
     /**
      * @constructor creates an instance of EventManager.
      * Handles Events from View and emits it to ClientController
+     * 
+     * @param {ClientController} clientController ClientController instance
      */
     constructor(clientController) {
         if (!!EventManager.instance) {
@@ -19,6 +21,7 @@ class EventManager {
 
         EventManager.instance = this;
 
+        TypeChecker.isInstanceOf(clientController, ClientController);
         this.#clientController = clientController;
     }
 
