@@ -1,19 +1,19 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Position = require('../models/Position.js');
-const Direction = require('../../client/shared/Direction')
-const BusinessCard = require('../models/BusinessCard')
-const Participant = require('../models/Participant')
+const Direction = require('../../client/shared/Direction');
+const BusinessCard = require('../models/BusinessCard');
+const Participant = require('../models/Participant');
 const Settings = require('../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
-const Account = require('../../../../website/models/Account')
+const Account = require('../../../../website/models/Account');
 const AccountService = require('../../../../website/services/AccountService');
-const AchievementService = require('./AchievementService')
+const AchievementService = require('./AchievementService');
 const ChatService = require('./ChatService.js');
 const FriendList = require('../models/FriendList.js');
 const TaskService = require('./TaskService');
 const Task = require('../models/Task');
 const db = require('../../../../config/db');
-const TypeOfTask = require('../utils/TypeOfTask')
+const TypeOfTask = require('../utils/TypeOfTask');
 
 /**
  * The Participant Service

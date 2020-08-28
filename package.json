@@ -45,6 +45,7 @@
     "popper.js": "^1.16.1",
     "requirejs": "^2.3.6",
     "rimraf": "^3.0.2",
+    "sinon": "^9.0.3",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
