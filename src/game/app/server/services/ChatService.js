@@ -220,7 +220,7 @@ module.exports = class Chatservice {
                         chat.username1,
                         chat.username2);
                 }
-
+                
                 return loadedChat;
             } else {
                 console.log("could not find chat with chatId" + chatId);
