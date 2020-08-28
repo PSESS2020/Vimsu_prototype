@@ -1,5 +1,5 @@
 const chai = require("chai");
-const FriendlistService = require('../../../src/game/app/server/services/FriendlistService.js');
+const FriendlistService = require('../../../src/game/app/server/services/FriendListService.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
 
 const db = require('../../../src/config/db');

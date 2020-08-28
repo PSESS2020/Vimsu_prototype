@@ -5,8 +5,15 @@ const Achievement = require('../../../../src/game/app/server/models/Achievement.
 const Message = require('../../../../src/game/app/server/models/Message.js');
 const Task = require('../../../../src/game/app/server/models/Task.js');
 const Chat = require('../../../../src/game/app/server/models/Chat.js');
+const Room = require('../../../../src/game/app/server/models/Room.js');
+const GameObject = require('../../../../src/game/app/server/models/GameObject.js');
+const NPC = require('../../../../src/game/app/server/models/NPC.js');
+const Door = require('../../../../src/game/app/server/models/Door.js');
 const Direction = require('../../../../src/game/app/client/shared/Direction.js');
 const TypeOfTask = require('../../../../src/game/app/server/utils/TypeOfTask.js');
+const TypeOfRoom = require('../../../../src/game/app/client/shared/TypeOfRoom.js');
+const TypeOfDoor = require('../../../../src/game/app/client/shared/TypeOfDoor.js');
+const TypeOfGameObject = require('../../../../src/game/app/client/shared/GameObjectType.js');
 const Participant = require('../../../../src/game/app/server/models/Participant.js');
 const Weekdays = require('../../../server/models/TestData/Weekdays.js');
 
@@ -83,6 +90,13 @@ class TestUtil {
                     this.randomTaskList(), this.randomBool(), this.randomIntWithMax(1024), /* causes stack-overflow this.randomChatList()*/ []));
     };
     
+    static randomParticipantInRoom(id, width, length) {
+        return (new Participant(this.randomString(), this.randomString(), this.randomBusinessCard(),
+                    this.randomPositionWithIdAndMax(id, width, length), this.randomObjectValue(Direction), this.randomFriendList(),
+                    this.randomFriendList(), this.randomFriendList(), this.randomAchievementList(),
+                    this.randomTaskList(), this.randomBool(), this.randomIntWithMax(1024), /* causes stack-overflow this.randomChatList()*/ []));
+    };
+    
     static randomMessage() {
         return (new Message(this.randomString(), this.randomString(), this.randomString(), this.randomTimeStamp(), this.randomString()));
     };
@@ -95,7 +109,7 @@ class TestUtil {
     static randomAchievement() {
         var randomLevel = this.randomIntWithMax(10);
         var randomMaxLevel = this.randomIntWithMaxAndMin(10, randomLevel);
-        return (new Achievement(this.randomString(), this.randomString(), this.randomString(), this.randomString(), 
+        return (new Achievement(this.randomInt(), this.randomString(), this.randomString(), this.randomString(), 
                    randomLevel, this.randomRGB(), this.randomIntWithMax(1024), randomMaxLevel, this.randomObjectValue(TypeOfTask)));
     };
     
@@ -105,6 +119,69 @@ class TestUtil {
     
     static randomChat() {
         return (new Chat(this.randomString(), this.randomParticipantList(), this.randomMessageList(), 100));
+    };
+    
+    static randomGameObject() {
+        retun (new GameObject(this.randomInt(), this.randomObjectValue(TypeOfGameObject),
+                    this.randomString(), this.randomInt(), this.randomInt(), this.randomPosition(),
+                    this.randomBool(), this.randomBool()));
+    };
+    
+    static randomGameObjectInRoom(id, width, length) {
+        var pos = this.randomPositionWithIdAndMax(id, width, length);
+        return (new GameObject(this.randomInt(), this.randomObjectValue(TypeOfGameObject),
+                    this.randomString(), this.randomIntWithMax(width - pos.getCordX() - 1),
+                    this.randomIntWithMax(length - pos.getCordY() - 1),
+                    pos, this.randomBool(), this.randomBool()))
+    };
+    
+    static randomNPC() {
+        return (new NPC(this.randomInt(), this.randomString(), this.randomPosition(), this.randomObjectValue(Direction), this.randomStringList()));
+    };
+    
+    static randomNPCInRoom(id, width, length) {
+        return (new NPC(this.randomInt(), this.randomString(), this.randomPositionWithIdAndMax(id, width, length), this.randomObjectValue(Direction), this.randomStringList()));
+    };
+    
+    static randomDoor() {
+        return (new Door(this.randomInt(), this.randomObjectValue(TypeOfDoor), this.randomString(),
+                    this.randomPosition(), this.randomPositionList(), this.randomPosition(), 
+                    this.randomObjectValue(Direction)));  
+    };
+    
+    static randomDoorInRoom(id, width, length) {
+        return (new Door(this.randomInt(), this.randomObjectValue(TypeOfDoor), this.randomString(),
+                    this.randomPositionWithIdAndMax(id, width, length),
+                    this.randomPositionListWithIdAndMax(id, width, length),
+                    this.randomPositionExcludeId(id), this.randomObjectValue(Direction)));
+    };
+    
+    static randomEmptyRoom() {
+        return (new Room(this.randomInt(), this.randomObjectValue(TypeOfRoom), this.randomIntWithMax(256), this.randomIntWithMax(256)));
+    };
+    
+    static randomFilledRoom() {
+        var room = this.randomEmptyRoom();
+        room.setMapElements(this.randomGameObjectListInRoom(room));
+        room.setGameObjects(this.randomGameObjectListInRoom(room));
+        room.setNPCs(this.randomNPCListInRoom(room));
+        room.setDoors(this.randomDoorListInRoom(room));
+        room.buildOccMap();
+        return room;
+    };
+    
+    static randomFilledRoomWithPPantsAndMessages() {
+        var room = this.randomFilledRoom();
+        this.randomParticipantListInRoom(room).forEach( (ppant) => {
+            room.enterParticipant(ppant);
+        });
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+            var randomPPant = this.drawRandomPPantFrom(room);
+            room.addMessage(randomPPant.getId(), randomPPant.getBusinessCard().getUsername(),
+                        new Date(), this.randomString());
+        }
+        return room;
     };
     
     static randomFriendList() {
@@ -125,6 +202,15 @@ class TestUtil {
         var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
            listToReturn.push(this.randomParticipant()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomParticipantListInRoom(room) {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomParticipantInRoom(room.getRoomId(), room.getWidth(), room.getLength())); 
         }
         return listToReturn;
     };
@@ -174,6 +260,78 @@ class TestUtil {
         return listToReturn;
     };
     
+    static randomGameObjectList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomGameObject()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomGameObjectListInRoom(room) {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomGameObjectInRoom(room.getRoomId(), room.getWidth(), room.getLength())); 
+        }
+        return listToReturn;
+    };
+    
+    static randomNPCList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomNPC()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomNPCListInRoom(room) {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomNPCInRoom(room.getRoomId(), room.getWidth(), room.getLength())); 
+        }
+        return listToReturn;
+    };
+    
+    static randomDoorList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomDoor()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomDoorListInRoom(room) {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomDoorInRoom(room.getRoomId(), room.getWidth(), room.getLength())); 
+        }
+        return listToReturn;
+    };
+    
+    static randomStringList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomString()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomPositionListWithIdAndMax(id, maxX, maxY) {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomPositionWithIdAndMax(id, maxX, maxY)); 
+        }
+        return listToReturn;
+    };
+    
     static randomPositionListWithSizeAndIdAndMax(size, id, maxX, maxY) {
         var listToReturn = [];
         for (var i = 0; i < size; i++) {
@@ -200,6 +358,11 @@ class TestUtil {
 
     static randomObjectValue(object) {
         return Object.values(object)[Math.floor(Math.random() * Object.values(object).length)];
+    };
+    
+    static drawRandomPPantFrom(room) {
+        var randomIndex = this.randomIntWithMax(room.getListOfPPants().length);
+        return room.getListOfPPants()[randomIndex];
     };
     
 }
