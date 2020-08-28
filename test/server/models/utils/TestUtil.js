@@ -6,6 +6,8 @@ const Message = require('../../../../src/game/app/server/models/Message.js');
 const Task = require('../../../../src/game/app/server/models/Task.js');
 const Chat = require('../../../../src/game/app/server/models/Chat.js');
 const Room = require('../../../../src/game/app/server/models/Room.js');
+const Lecture = require('../../../../src/game/app/server/models/Lecture.js');
+const LectureChat = require('../../../../src/game/app/server/models/LectureChat.js');
 const GameObject = require('../../../../src/game/app/server/models/GameObject.js');
 const NPC = require('../../../../src/game/app/server/models/NPC.js');
 const Door = require('../../../../src/game/app/server/models/Door.js');
@@ -184,6 +186,28 @@ class TestUtil {
         return room;
     };
     
+    static randomLecture() {
+        return(new Lecture(this.randomString(), this.randomString(), this.randomString(),
+                    this.randomInt(), this.randomString(), new Date(), this.randomString(),
+                    this.randomString(), this.randomIntWithMax(1024)));
+    };
+    
+    static randomLectureFilledWithPPantsAndMessages() {
+        var lecture = this.randomLecture();
+        var ppants = this.randomParticipantListWithSize(~~(lecture.getMaxParticipants() / 2));
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < ppants.length; i++){
+            lecture.enter(ppants[i].getId(), ppants[i].getBusinessCard().getUsername());
+        }
+        for (var i = 0; i < amount; i++) {
+            var randomPPant = ppants[Math.floor(Math.random() * ppants.length)];
+            var date = new Date();
+            lecture.getLectureChat().appendMessage({senderID: randomPPant.getId(), username: randomPPant.getBusinessCard().getUsername(),
+                        messageID: i, timestamp: date});
+        }
+        return lecture;
+    };
+    
     static randomFriendList() {
         return (new FriendList(this.randomBusinessCardList()));
     };
@@ -196,11 +220,28 @@ class TestUtil {
         }
         return listToReturn;
     };
+
+    static randomLectureList() {
+        var listToReturn = [];
+        var amount = Math.floor(Math.random() * 256) + 1;
+        for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomLecture()); 
+        }
+        return listToReturn;
+    };
     
     static randomParticipantList() {
         var listToReturn = [];
         var amount = Math.floor(Math.random() * 256) + 1;
         for (var i = 0; i < amount; i++) {
+           listToReturn.push(this.randomParticipant()); 
+        }
+        return listToReturn;
+    };
+    
+    static randomParticipantListWithSize(size) {
+        var listToReturn = [];
+        for (var i = 0; i < size; i++) {
            listToReturn.push(this.randomParticipant()); 
         }
         return listToReturn;
@@ -363,6 +404,11 @@ class TestUtil {
     static drawRandomPPantFrom(room) {
         var randomIndex = this.randomIntWithMax(room.getListOfPPants().length);
         return room.getListOfPPants()[randomIndex];
+    };
+    
+    static drawRandomPPantFromLecture(lecture) {
+        var randomIndex = this.randomIntWithMax(lecture.getActiveParticipants().length);
+        return lecture.getActiveParticipants()[randomIndex];
     };
     
 }
