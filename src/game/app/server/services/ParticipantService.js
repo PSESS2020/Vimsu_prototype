@@ -627,6 +627,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.deleteAllFromCollection("participants_" + conferenceId).then(res => {
             console.log("all participants deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })
@@ -646,6 +647,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.deleteOneFromCollection("participants_" + conferenceId, { participantId: participantId }).then(res => {
             console.log("participant with participantId " + participantId + " deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })

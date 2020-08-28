@@ -121,6 +121,7 @@ module.exports = class SlotService {
 
         return vimsudb.deleteAllFromCollection("lectures").then(res => {
             console.log("all slots deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })
@@ -138,6 +139,7 @@ module.exports = class SlotService {
 
         return vimsudb.deleteOneFromCollection("lectures", { lectureId: lectureId }).then(res => {
             console.log("slot with lectureId " + lectureId + " deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })

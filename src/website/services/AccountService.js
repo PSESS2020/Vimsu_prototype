@@ -270,6 +270,7 @@ module.exports = class AccountService {
 
         return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
             console.log("account with accountId " + accountId + " deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })
