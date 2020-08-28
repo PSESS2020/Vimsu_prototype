@@ -9,18 +9,17 @@ class EventManager {
     #clientController;
 
     /**
-     * @constructor creates an instnace of EventManager.
+     * @constructor creates an instance of EventManager.
      * Handles Events from View and emits it to ClientController
      */
-    constructor() {
+    constructor(clientController) {
         if (!!EventManager.instance) {
             return EventManager.instance;
         }
 
         EventManager.instance = this;
 
-        //works because ClientController is singleton
-        this.#clientController = new ClientController();
+        this.#clientController = clientController;
     }
 
     /**

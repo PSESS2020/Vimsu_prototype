@@ -35,9 +35,10 @@ function index() {
   
     ctx_ui.canvas.width = GAME_WIDTH;
     ctx_ui.canvas.height = GAME_HEIGHT;
-  
-    clientController = new ClientController(GameConfig.PORT);
-  
+
+    var gameView = new GameView();
+    clientController = new ClientController(GameConfig.PORT, gameView);
+    
     // Start the first frame request
     window.requestAnimationFrame(gameLoop);
   }

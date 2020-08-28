@@ -52,11 +52,14 @@ class GameView {
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
         this.#gameEngine = new IsometricEngine();
-        this.#eventManager = new EventManager();
-
+    }
+    
+    initEventManager(clientController) {
+        this.#eventManager = new EventManager(clientController);
+        
         //initialize Views at the very beginning
         this.#initViews();
-    }
+    } 
 
     /**
      * @private initializes View instances

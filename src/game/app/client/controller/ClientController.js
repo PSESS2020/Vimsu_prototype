@@ -19,7 +19,7 @@ class ClientController {
      * 
      * @param {number} port client port
      */
-    constructor(port) {
+    constructor(port, gameView) {
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
@@ -27,9 +27,11 @@ class ClientController {
         ClientController.instance = this;
 
         TypeChecker.isInt(port);
+        
         this.#port = port;
         this.#openSocketConnection();
-        this.#gameView = new GameView();
+        this.#gameView = gameView;
+        this.#gameView.initEventManager(this);
     }
 
     /**
