@@ -425,7 +425,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { $each: achievementsData } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -449,7 +449,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { id: achievementId } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -608,7 +608,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
