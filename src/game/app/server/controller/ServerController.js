@@ -965,7 +965,8 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(groupName);
-                    TypeChecker.isString(chatId);
+                    if (chatId !== undefined)
+                        TypeChecker.isString(chatId);
                 } catch(e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
@@ -1197,7 +1198,8 @@ module.exports = class ServerController {
                     for (let i = 0; i < chatPartnerIDList.length; i++) {
                         TypeChecker.isString(chatPartnerIDList[i]);
                     }
-                    TypeChecker.isString(chatId);
+                    if (chatId !== undefined)
+                        TypeChecker.isString(chatId);
                 } catch(e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
