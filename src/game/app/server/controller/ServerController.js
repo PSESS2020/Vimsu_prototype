@@ -728,12 +728,11 @@ module.exports = class ServerController {
             })
 
             /* handles leaving lecture */
-            socket.on('leaveLecture', (lectureId, lectureEnded) => {
+            socket.on('leaveLecture', (lectureId) => {
 
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(lectureId);
-                    TypeChecker.isBoolean(lectureEnded);
                 } catch(e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
@@ -760,7 +759,7 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', ppantID);
 
                 //applies achievement if lecture has already ended and ppant has token
-                if (lectureEnded && lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
+                if (lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.LECTUREVISIT);
                 }
             });

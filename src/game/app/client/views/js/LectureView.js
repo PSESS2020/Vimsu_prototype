@@ -266,11 +266,8 @@ class LectureView extends WindowView {
             $('#lectureVideo').empty();
             $('#lectureVideoWindow').hide();
 
-            if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING)
-                this.#eventManager.handleLectureLeft(this.#lectureId, false);
-            else
-                this.#eventManager.handleLectureLeft(this.#lectureId, true);
-            
+            this.#eventManager.handleLectureLeft(this.#lectureId);
+
         } else {
             $('#lectureVideoWindow').hide();
         }

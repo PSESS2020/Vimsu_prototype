@@ -970,14 +970,12 @@ class ClientController {
      * Sends to server on leaving a lecture
      * 
      * @param {String} lectureId lecture ID
-     * @param {boolean} lectureEnded true if lecture has ended, otherwise false
      */
-    handleFromViewLectureLeft(lectureId, lectureEnded) {
+    handleFromViewLectureLeft(lectureId) {
         TypeChecker.isString(lectureId);
-        TypeChecker.isBoolean(lectureEnded);
 
         if (this.#socketReady()) {
-            this.#socket.emit('leaveLecture', lectureId, lectureEnded);
+            this.#socket.emit('leaveLecture', lectureId);
         }
     }
 

@@ -75,10 +75,9 @@ class EventManager {
      * called from View on lecture leave
      * 
      * @param {String} lectureId lectureID
-     * @param {boolean} lectureEnded true if lecture is ended
      */
-    handleLectureLeft(lectureId, lectureEnded) {
-        this.#clientController.handleFromViewLectureLeft(lectureId, lectureEnded);
+    handleLectureLeft(lectureId) {
+        this.#clientController.handleFromViewLectureLeft(lectureId);
     }
 
     /**
