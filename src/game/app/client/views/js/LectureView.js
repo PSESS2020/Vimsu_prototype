@@ -32,8 +32,8 @@ class LectureView extends WindowView {
         this.#eventManager = eventManager;
         this.#lectureStatus = LectureStatus.PENDING;
 
-        /*sets functions when document is ready, without this it is not possible to assign functions to
-          appended buttons*/
+        /* sets functions when document is ready, without this it is not possible to assign functions to
+          appended buttons */
         $(document).ready(() => {
             $(document).on('click', '#lectureChatButton', () => {
                 this.#sendMessage(event);
@@ -110,17 +110,19 @@ class LectureView extends WindowView {
                     <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
                 </div>
             `);
+        }
 
-            //participant without token
-        } else if (!this.#hasToken && !this.#isOrator && !this.#isModerator) {
+        //participant without token
+        else if (!this.#hasToken && !this.#isOrator && !this.#isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                     <p style="text-align: center">This chat will be opened after the lecture.</p>
                 </div>
             `);
+        }
 
-            //orator or moderator
-        } else {
+        //orator or moderator
+        else {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                     <p style="text-align: center">You have the right to close the lecture or to ban participants after the lecture.</p>
@@ -152,7 +154,7 @@ class LectureView extends WindowView {
         video.addEventListener('loadeddata', () => {
             video.pause();
 
-            var lectureStartingTime = new Date(lecture.startingTime).getTime(); // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
+            var lectureStartingTime = new Date(lecture.startingTime).getTime();
 
             var lectureDuration = lecture.duration * 1000; //duration of the lecture in milliseconds
 
@@ -335,8 +337,11 @@ class LectureView extends WindowView {
 
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
 
-            // the input field is emptied if the user does not have a valid token
-        } else {
+
+        }
+        
+        // the input field is emptied if the user does not have a valid token
+        else {
             $('#lectureChatInputGroup').empty();
 
             $('#tokenIcon').append(`
