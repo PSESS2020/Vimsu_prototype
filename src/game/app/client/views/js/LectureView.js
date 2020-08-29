@@ -106,16 +106,16 @@ class LectureView extends WindowView {
                     <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
                 </div>
             `);
-        } else if (this.#hasToken && this.#isOrator) {
-            $('#lectureChatMessages').append(`
-                <div id="pendingLectureChatMessage">
-                    <p style="text-align: center">As an orator, you have the right to close the lecture or to ban participants after the lecture.</p>
-                </div>
-            `);
         } else if (!this.#hasToken && !this.#isOrator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                     <p style="text-align: center">This chat will be opened after the lecture.</p>
+                </div>
+            `);
+        } else {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                    <p style="text-align: center">As an orator, you have the right to close the lecture or to ban participants after the lecture.</p>
                 </div>
             `);
         }
@@ -206,17 +206,16 @@ class LectureView extends WindowView {
     #leaveLecture = function () {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
-            if (this.#hasToken && !this.#isOrator) {
-                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
-            } else if (!this.#hasToken && !this.#isOrator) {
-                shouldLeave = confirm('Are you sure you want to leave?')
-            } else {
-                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
-            }
 
-            if (shouldLeave) {
+            if (this.#hasToken && !this.#isOrator)
+                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
+            else if (!this.#hasToken && !this.#isOrator)
+                shouldLeave = confirm('Are you sure you want to leave?')
+            else
+                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
+
+            if (shouldLeave)
                 this.close();
-            }
         } 
         
         else if (this.#lectureStatus === LectureStatus.PENDING) {
@@ -224,9 +223,9 @@ class LectureView extends WindowView {
             this.close();
         }
 
-        else {
+        else
             this.close();
-        }
+        
     }
 
     /**
@@ -234,6 +233,7 @@ class LectureView extends WindowView {
      */
     close() {
         var video = $(`#lectureVideo${this.#lectureId}`)[0];
+
         if (video !== undefined) {
             video.removeAttribute('src'); // empty source
             video.load();
@@ -246,9 +246,10 @@ class LectureView extends WindowView {
             } else {
                 this.#eventManager.handleLectureLeft(this.#lectureId, true);
             }
-        } else {
+        } 
+        
+        else
             $('#lectureVideoWindow').hide();
-        }
     }
 
     /**
