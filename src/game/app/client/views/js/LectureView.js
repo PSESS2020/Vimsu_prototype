@@ -9,6 +9,7 @@ class LectureView extends WindowView {
     #timerIntervalId;
     #lectureStatus;
     #hasToken;
+    #isOrator;
     #lectureId;
     #timeLeft;
     #eventManager;
@@ -76,12 +77,14 @@ class LectureView extends WindowView {
     /**
      * Draws lecture window
      * 
-     * @param {Object} lecture 
-     * @param {boolean} hasToken 
-     * @param {Object} lectureChat 
+     * @param {Object} lecture lecture
+     * @param {boolean} hasToken true if has token, otherwise false
+     * @param {Object} lectureChat lecture chat
+     * @param {boolean} isOrator true if is orator, otherwise false
      */
-    draw(lecture, hasToken, lectureChat) {
+    draw(lecture, hasToken, lectureChat, isOrator) {
         this.#hasToken = hasToken;
+        this.#isOrator = isOrator;
         this.#lectureId = lecture.id;
         // hide the overview of current lectures
         $('#currentLectures').hide();
@@ -94,13 +97,25 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-        <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+        <button id="${this.#lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
-        if (hasToken) {
+        if (this.#hasToken && !this.#isOrator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+                    <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
+                </div>
+            `);
+        } else if (this.#hasToken && this.#isOrator) {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                    <p style="text-align: center">As an orator, you have the right to close the lecture or to ban participants after the lecture.</p>
+                </div>
+            `);
+        } else if (!this.#hasToken && !this.#isOrator) {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                    <p style="text-align: center">This chat will be opened after the lecture.</p>
                 </div>
             `);
         }
@@ -118,9 +133,9 @@ class LectureView extends WindowView {
         $('#lectureVideoWindow').show();
 
         $('#lectureVideo').append(`
-        <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+        <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
-        var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+        var video = $(`#lectureVideo${this.#lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
 
         // set default controls
         video.disablePictureInPicture = true;
@@ -191,17 +206,20 @@ class LectureView extends WindowView {
     #leaveLecture = function () {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
-            if (this.#hasToken) {
+            if (this.#hasToken && !this.#isOrator) {
                 shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
-            } else {
+            } else if (!this.#hasToken && !this.#isOrator) {
                 shouldLeave = confirm('Are you sure you want to leave?')
+            } else {
+                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
             }
 
             if (shouldLeave) {
                 this.close();
             }
-
-        } else if (this.#lectureStatus === LectureStatus.PENDING) {
+        } 
+        
+        else if (this.#lectureStatus === LectureStatus.PENDING) {
             alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!')
             this.close();
         }
@@ -274,7 +292,9 @@ class LectureView extends WindowView {
      * @param {TokenMessages} message token message
      */
     drawToken(hasToken, message) {
-        if (hasToken) {
+        this.#hasToken = hasToken;
+
+        if (this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
                     <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">

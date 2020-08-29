@@ -666,7 +666,13 @@ module.exports = class ServerController {
 
                     currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
                         this.#blob, new Date(startingTime), duration);
-                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
+
+                    if (ppantUsername === lecture.getOratorUsername())
+                        var isOrator = true;
+                    else
+                        var isOrator = false;
+
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator);
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', lectureId);

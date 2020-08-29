@@ -545,9 +545,10 @@ class GameView {
      * @param {Object} lecture lecture
      * @param {boolean} hasToken true if has token, otherwise false
      * @param {Object} lectureChat lecture chat
+     * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      */
-    updateCurrentLecture(lecture, hasToken, lectureChat) {
-        this.#lectureView.draw(lecture, hasToken, lectureChat);
+    updateCurrentLecture(lecture, hasToken, lectureChat, isOrator) {
+        this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator);
     }
 
     /**

@@ -356,9 +356,10 @@ class ClientController {
      * @param {Object} lecture lecture
      * @param {boolean} hasToken true if has token, otherwise false
      * @param {Object} letureChat lecture chat
+     * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      */
-    #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat) {
-        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
+    #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat, isOrator) {
+        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat, isOrator);
     }
 
     /**
