@@ -14,6 +14,7 @@ const TestUtil = require('./utils/TestUtil.js');
 const chai = require('chai');
 const { expect } = require('chai');
 const Participant = require('../../../src/game/app/server/models/Participant.js');
+const NPC = require('../../../src/game/app/server/models/NPC.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList.js');
 const assert = chai.assert;
 
@@ -46,6 +47,7 @@ describe('test Room Constructor and getters', function () {
         
         expect(testRoom.getListOfGameObjects()).to.eql([]);
         expect(testRoom.getListOfNPCs()).to.eql([]);
+        expect(testRoom.getNPC(1)).to.eql(undefined);
         expect(testRoom.getListOfDoors()).to.eql([]);
         expect(testRoom.getListOfMapElements()).to.eql([]);
         
@@ -69,10 +71,6 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getWidth()).to.equal(RoomDimensions.FOODCOURT_WIDTH);
         expect(testRoom.getLength()).to.equal(RoomDimensions.FOODCOURT_LENGTH);
         
-        //expect(testRoom.getListOfGameObjects()).to.eql(testGameObjectService.getObjects(Settings.FOODCOURT_ID));
-        //expect(testRoom.getListOfNPCs()).to.eql(testNPCService.getNPCs(Settings.FOODCOURT_ID));
-        //expect(testRoom.getListOfDoors()).to.eql(testDoorService.getDoors(Settings.FOODCOURT_ID));
-        
         expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
           
@@ -92,10 +90,6 @@ describe('test Room Constructor and getters', function () {
         
         expect(testRoom.getWidth()).to.equal(RoomDimensions.RECEPTION_WIDTH);
         expect(testRoom.getLength()).to.equal(RoomDimensions.RECEPTION_LENGTH);
-        
-        //expect(testRoom.getListOfGameObjects()).to.eql(testGameObjectService.getObjects(Settings.RECEPTION_ID));
-        //expect(testRoom.getListOfNPCs()).to.eql(testNPCService.getNPCs(Settings.RECEPTION_ID));
-        //expect(testRoom.getListOfDoors()).to.eql(testDoorService.getDoors(Settings.RECEPTION_ID));
         
         expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty; 
@@ -117,6 +111,19 @@ describe('test Room Constructor and getters', function () {
     
 });
 
+describe('test NPC handling', () => {
+    beforeEach( () => {
+        testRoom = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
+        testNPC = new NPC(0, 'npcName', TestUtil.randomPosition(), TestUtil.randomObjectValue(Direction), ["abc"]);
+        assert.isArray(testRoom.getListOfNPCs());
+        assert.isEmpty(testRoom.getListOfNPCs());
+    });
+
+    it('test set and get NPC', () => {
+        testRoom.setNPCs( [testNPC] );
+        expect(testRoom.getNPC(0)).to.eql(testNPC);
+    });
+});
 
 describe('test Participant handling', function () {
     
@@ -177,65 +184,7 @@ describe('test Message sending', function () {
 
 })
 
-/** Zu Dekorierern verlagern */
-/*describe('test OccMap Init', function () {
-    
-    before( function () {
-        testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER);
-        testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT);
-        testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION);
-        testGameObjectService = new GameObjectService();
-        testNPCService = new NPCService();
-    });
-    
-    it('test OccMap Foyer', function () {
-        var objects = testGameObjectService.getObjects(Settings.FOYER_ID);
-        for(var i = 0; i < objects.length; i++) {
-            var testPos = objects[i].getPosition();
-            assert.equal(testFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-        var NPCs = testNPCService.getNPCs(Settings.FOYER_ID);
-        for(var i = 0; i < NPCs.length; i++) {
-            var testPos = NPCs[i].getPosition();
-            assert.equal(testFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-    });
-    
-    it('test OccMap FoodCourt', function () {
-        var objects = testGameObjectService.getObjects(Settings.FOODCOURT_ID);
-        for(var i = 0; i < objects.length; i++) {
-            var testPos = objects[i].getPosition();
-            assert.equal(testFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-        var NPCs = testNPCService.getNPCs(Settings.FOODCOURT_ID);
-        for(var i = 0; i < NPCs.length; i++) {
-            var testPos = NPCs[i].getPosition();
-            assert.equal(testFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-    });
-    
-    it('test OccMap Reception', function () {
-        var objects = testGameObjectService.getObjects(Settings.RECEPTION_ID);
-        for(var i = 0; i < objects.length; i++) {
-            var testPos = objects[i].getPosition();
-            assert.equal(testReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-        var NPCs = testNPCService.getNPCs(Settings.RECEPTION_ID);
-        for(var i = 0; i < NPCs.length; i++) {
-            var testPos = NPCs[i].getPosition();
-            assert.equal(testReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
-            expect(testReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
-        }
-    });
-    
 
-    
-})*/
 
 describe('test collision checking', function () {
     
