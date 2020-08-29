@@ -1,4 +1,5 @@
 const Position = require('../models/Position.js');
+const Direction = require('../../client/shared/Direction.js');
 const RoomService = require('../services/RoomService.js');
 const Settings = require('../utils/Settings.js');
 const CommandHandler = require('../models/CommandHandler.js');
@@ -311,6 +312,15 @@ module.exports = class ServerController {
 
             /* handles participant sending a message */
             socket.on('sendMessage', (text) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(text);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 if (!participant)
@@ -359,6 +369,17 @@ module.exports = class ServerController {
 
             /* handles receiving a movement-input from a participant. */
             socket.on('requestMovementStart', (direction, newCordX, newCordY) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isEnumOf(direction, Direction);
+                    TypeChecker.isInt(newCordX);
+                    TypeChecker.isInt(newCordY);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -410,6 +431,15 @@ module.exports = class ServerController {
 
             /* Handles click on door tile */
             socket.on('enterRoom', (targetRoomId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isInt(targetRoomId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -582,6 +612,15 @@ module.exports = class ServerController {
 
             /* handles lecture message input */
             socket.on('lectureMessage', (text) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(text);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 if (!participant)
@@ -631,6 +670,15 @@ module.exports = class ServerController {
 
             /* handles entering lecture */
             socket.on('enterLecture', (lectureId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
                 let ppant = this.#ppants.get(ppantID);
@@ -681,6 +729,16 @@ module.exports = class ServerController {
 
             /* handles leaving lecture */
             socket.on('leaveLecture', (lectureId, lectureEnded) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                    TypeChecker.isBoolean(lectureEnded);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let schedule = this.#conference.getSchedule();
                 let lecture = schedule.getLecture(lectureId);
@@ -790,6 +848,15 @@ module.exports = class ServerController {
 
             /* handles ppant clicked, show business card */
             socket.on('getBusinessCard', (targetID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(targetID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -894,6 +961,16 @@ module.exports = class ServerController {
 
             /* shows friends to be invited to the group chat */
             socket.on('getInviteFriends', (groupName, chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(groupName);
+                    TypeChecker.isString(chatId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
@@ -993,6 +1070,15 @@ module.exports = class ServerController {
 
             /* Called whenever a ppant creates a new 1:1 chat */
             socket.on('createNewChat', (chatPartnerID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatPartnerID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 if (!creator)
@@ -1103,6 +1189,20 @@ module.exports = class ServerController {
 
             /* Called whenever a participant creates a new group chat */
             socket.on('createNewGroupChat', (chatName, chatPartnerIDList, chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatName);
+                    TypeChecker.isInstanceOf(chatPartnerIDList, Array);
+                    for (let i = 0; i < chatPartnerIDList.length; i++) {
+                        TypeChecker.isString(chatPartnerIDList[i]);
+                    }
+                    TypeChecker.isString(chatId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 if (!creator)
@@ -1394,6 +1494,14 @@ module.exports = class ServerController {
              * relevant information into a new field, which is then send to the client. */
             socket.on('getChatThread', (chatID) => {
 
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterId = socket.ppantID;
                 let participant = this.#ppants.get(requesterId);
                 if (!participant)
@@ -1456,6 +1564,16 @@ module.exports = class ServerController {
 
             /* Takes a new message in a chat and sends it to every member in that chat. */
             socket.on('newChatMessage', (chatId, msgText) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                    TypeChecker.isString(msgText);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let senderId = socket.ppantID;
                 let sender = this.#ppants.get(senderId);
                 if (!sender)
@@ -1499,6 +1617,15 @@ module.exports = class ServerController {
 
             /* shows group chat participant list */
             socket.on('getChatParticipantList', (chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterId = socket.ppantID;
                 let requester = this.#ppants.get(requesterId);
                 if (!requester)
@@ -1521,6 +1648,16 @@ module.exports = class ServerController {
 
             /* adds a new Friend Request to the system */
             socket.on('newFriendRequest', (targetID, chatID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(targetID);
+                    TypeChecker.isString(chatID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
@@ -1586,6 +1723,16 @@ module.exports = class ServerController {
 
             /* handles a friendrequest, either accepted or declined */
             socket.on('handleFriendRequest', (requesterID, acceptRequest) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(requesterID);
+                    TypeChecker.isBoolean(acceptRequest);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let targetID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
@@ -1648,6 +1795,14 @@ module.exports = class ServerController {
 
             /* handles removing a friend in both friend lists */
             socket.on('removeFriend', (removedFriendID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(removedFriendID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let removerID = socket.ppantID;
                 let remover = this.#ppants.get(removerID);
                 let removedFriend = this.#ppants.get(removedFriendID);
@@ -1673,6 +1828,14 @@ module.exports = class ServerController {
 
             /* handles participant leaving chat, so removes participant from chat */
             socket.on('removeParticipantFromChat', (chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let removerId = socket.ppantID;
                 let remover = this.#ppants.get(removerId);
                 let removerBusinessCard = remover.getBusinessCard();
@@ -1740,6 +1903,14 @@ module.exports = class ServerController {
 
             /* handles npc clicked, show story */
             socket.on('getNPCStory', (npcID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isInt(npcID);
+                } catch(e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
