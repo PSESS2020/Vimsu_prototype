@@ -29,7 +29,6 @@ class LectureView extends WindowView {
         LectureView.instance = this;
 
         this.#eventManager = eventManager;
-
         this.#lectureStatus = LectureStatus.PENDING;
 
         /*sets functions when document is ready, without this it is not possible to assign functions to
@@ -86,6 +85,7 @@ class LectureView extends WindowView {
         this.#hasToken = hasToken;
         this.#isOrator = isOrator;
         this.#lectureId = lecture.id;
+
         // hide the overview of current lectures
         $('#currentLectures').hide();
 
@@ -97,7 +97,7 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-        <button id="${this.#lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+            <button id="${this.#lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
         if (this.#hasToken && !this.#isOrator) {
@@ -133,7 +133,7 @@ class LectureView extends WindowView {
         $('#lectureVideoWindow').show();
 
         $('#lectureVideo').append(`
-        <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
+            <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
         `)
         var video = $(`#lectureVideo${this.#lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
 
@@ -160,6 +160,7 @@ class LectureView extends WindowView {
                             <div>presentation starts</div>
                         </div>
                     `)
+
                     this.#lectureStatus = LectureStatus.PENDING;
 
                     var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
@@ -170,32 +171,41 @@ class LectureView extends WindowView {
                     }
 
                     video.pause();
-                } else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
+                }
+
+                else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
                     $('#lecturePending').hide();
+
                     this.#lectureStatus = LectureStatus.RUNNING;
+
                     video.currentTime = Math.round(currentTimeDifference / 1000);
                     video.play();
-                } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
+                }
+
+                else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
                     clearInterval(this.#timerIntervalId);
+
                     $('#lecturePending').hide();
                     $('#pendingLectureChatMessage').empty();
+
                     this.#lectureStatus = LectureStatus.OVER;
+
                     this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
+
                     video.controlsList.remove('nodownload');
                     video.pause();
                 }
+
             }, 1000); // check lecture status every 1s
 
             video.addEventListener('pause', () => {
-                if (this.#lectureStatus === LectureStatus.RUNNING) {
+                if (this.#lectureStatus === LectureStatus.RUNNING)
                     video.play();
-                }
             })
 
             video.addEventListener('play', () => {
-                if (this.#lectureStatus === LectureStatus.OVER) {
+                if (this.#lectureStatus === LectureStatus.OVER)
                     video.pause();
-                }
             })
         });
     }
@@ -216,8 +226,8 @@ class LectureView extends WindowView {
 
             if (shouldLeave)
                 this.close();
-        } 
-        
+        }
+
         else if (this.#lectureStatus === LectureStatus.PENDING) {
             alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!')
             this.close();
@@ -225,7 +235,7 @@ class LectureView extends WindowView {
 
         else
             this.close();
-        
+
     }
 
     /**
@@ -237,19 +247,20 @@ class LectureView extends WindowView {
         if (video !== undefined) {
             video.removeAttribute('src'); // empty source
             video.load();
+
             clearInterval(this.#timerIntervalId);
+            
             $('#lectureVideo').empty();
             $('#lectureVideoWindow').hide();
 
-            if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
+            if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING)
                 this.#eventManager.handleLectureLeft(this.#lectureId, false);
-            } else {
+            else
                 this.#eventManager.handleLectureLeft(this.#lectureId, true);
-            }
-        } 
-        
-        else
+            
+        } else {
             $('#lectureVideoWindow').hide();
+        }
     }
 
     /**
@@ -295,6 +306,9 @@ class LectureView extends WindowView {
     drawToken(hasToken, message) {
         this.#hasToken = hasToken;
 
+        $('#tokenIcon').empty();
+        $('#tokenLabel').empty();
+
         if (this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
@@ -304,20 +318,21 @@ class LectureView extends WindowView {
                     </div>
                 `)
             }
-            $('#tokenIcon').empty();
+
             $('#tokenIcon').append(`
                 <i class="fa fa-question-circle fa-4x"></i>
             `)
-            $('#tokenLabel').empty();
+
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
+
             // the input field is emptied if the user does not have a valid token
         } else {
             $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
+
             $('#tokenIcon').append(`
                 <i class="fa fa-times-circle fa-4x"></i>
             `)
-            $('#tokenLabel').empty();
+
             $('#tokenLabel').append(message);
         }
     };
