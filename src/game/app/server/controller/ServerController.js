@@ -316,7 +316,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(text);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -375,7 +375,7 @@ module.exports = class ServerController {
                     TypeChecker.isEnumOf(direction, Direction);
                     TypeChecker.isInt(newCordX);
                     TypeChecker.isInt(newCordY);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -435,7 +435,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isInt(targetRoomId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -616,7 +616,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(text);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -674,7 +674,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(lectureId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -717,7 +717,7 @@ module.exports = class ServerController {
 
                     if (ppantUsername === lecture.getOratorUsername())
                         var isOrator = true;
-                    else 
+                    else
                         var isOrator = false;
 
                     socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator);
@@ -733,7 +733,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(lectureId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -851,7 +851,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(targetID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -966,7 +966,7 @@ module.exports = class ServerController {
                     TypeChecker.isString(groupName);
                     if (chatId !== undefined)
                         TypeChecker.isString(chatId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1074,7 +1074,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(chatPartnerID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1199,7 +1199,7 @@ module.exports = class ServerController {
                     }
                     if (chatId !== undefined)
                         TypeChecker.isString(chatId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1498,7 +1498,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(chatID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1570,7 +1570,7 @@ module.exports = class ServerController {
                 try {
                     TypeChecker.isString(chatId);
                     TypeChecker.isString(msgText);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1622,7 +1622,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(chatId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1654,7 +1654,7 @@ module.exports = class ServerController {
                 try {
                     TypeChecker.isString(targetID);
                     TypeChecker.isString(chatID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1729,7 +1729,7 @@ module.exports = class ServerController {
                 try {
                     TypeChecker.isString(requesterID);
                     TypeChecker.isBoolean(acceptRequest);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                     return;
                 }
@@ -1800,7 +1800,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(removedFriendID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                 }
 
@@ -1833,7 +1833,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(chatId);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                 }
 
@@ -1908,7 +1908,7 @@ module.exports = class ServerController {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isInt(npcID);
-                } catch(e) {
+                } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
                 }
 

@@ -110,8 +110,8 @@ class LectureView extends WindowView {
                     <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
                 </div>
             `);
-        
-        //participant without token
+
+            //participant without token
         } else if (!this.#hasToken && !this.#isOrator && !this.#isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
@@ -119,7 +119,7 @@ class LectureView extends WindowView {
                 </div>
             `);
 
-        //orator or moderator
+            //orator or moderator
         } else {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
@@ -228,11 +228,11 @@ class LectureView extends WindowView {
             //participant with token
             if (this.#hasToken && !this.#isOrator && !this.#isModerator)
                 shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
-            
+
             //orator
             else if (this.#isOrator)
                 shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
-            
+
             //participant without token or moderator
             else
                 shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?')
@@ -262,7 +262,7 @@ class LectureView extends WindowView {
             video.load();
 
             clearInterval(this.#timerIntervalId);
-            
+
             $('#lectureVideo').empty();
             $('#lectureVideoWindow').hide();
 
