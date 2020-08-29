@@ -5,10 +5,7 @@
  * @version 1.0.0
  */
 
-const GAME_WIDTH = GameConfig.CTX_WIDTH;
-const GAME_HEIGHT = GameConfig.CTX_HEIGHT;
 var ctx_map, ctx_avatar, ctx_ui;
-var clientController;
 
 /* Initializes canvas and ClientController on window onload */
 window.onload = new index().init();
@@ -17,6 +14,11 @@ window.onload = new index().init();
  * Holds init() and gameLoop()
  */
 function index() {
+
+  const GAME_WIDTH = GameConfig.CTX_WIDTH;
+  const GAME_HEIGHT = GameConfig.CTX_HEIGHT;
+
+  var clientController;
 
   /**
    * Initializes canvas, GameView, and ClientController for the first time.
