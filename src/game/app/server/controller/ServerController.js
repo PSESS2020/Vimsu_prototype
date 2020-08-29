@@ -613,8 +613,8 @@ module.exports = class ServerController {
                         new LectureContext(this, lecture),
                         input);
 
-                } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
-                    //User can only chat when he has a token or is the orator of this lecture
+                } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
+                    //User can only chat when he has a token or is the orator or moderator of this lecture
 
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
@@ -637,6 +637,7 @@ module.exports = class ServerController {
                 if (!ppant)
                     return;
                 let ppantUsername = ppant.getBusinessCard().getUsername();
+                let isModerator = ppant.getIsModerator();
 
                 //prevents server to crash when client emits a wrong lectureID
                 if (idx < 0) {
@@ -652,12 +653,11 @@ module.exports = class ServerController {
                     return;
                 }
 
-                if (lecture.enter(ppantID, ppantUsername)) {
+                if (lecture.enter(ppantID, ppantUsername, isModerator)) {
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
-                    let token = lecture.hasToken(ppantID, ppantUsername);
-                    let lectureChat = lecture.getLectureChat();
+                    let token = lecture.hasToken(ppantID, ppantUsername, isModerator);
                     let messages = lecture.getLectureChat().getMessages();
                     ppant.setIsVisible(false);
 
@@ -669,10 +669,10 @@ module.exports = class ServerController {
 
                     if (ppantUsername === lecture.getOratorUsername())
                         var isOrator = true;
-                    else
+                    else 
                         var isOrator = false;
 
-                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator);
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator);
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', lectureId);
@@ -702,7 +702,7 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', ppantID);
 
                 //applies achievement if lecture has already ended and ppant has token
-                if (lectureEnded && lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
+                if (lectureEnded && lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.LECTUREVISIT);
                 }
             });

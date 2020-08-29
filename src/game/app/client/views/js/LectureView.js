@@ -10,6 +10,7 @@ class LectureView extends WindowView {
     #lectureStatus;
     #hasToken;
     #isOrator;
+    #isModerator;
     #lectureId;
     #timeLeft;
     #eventManager;
@@ -80,10 +81,12 @@ class LectureView extends WindowView {
      * @param {boolean} hasToken true if has token, otherwise false
      * @param {Object} lectureChat lecture chat
      * @param {boolean} isOrator true if is orator, otherwise false
+     * @param {boolean} isModerator true if is moderator of the conference, otherwise false
      */
-    draw(lecture, hasToken, lectureChat, isOrator) {
+    draw(lecture, hasToken, lectureChat, isOrator, isModerator) {
         this.#hasToken = hasToken;
         this.#isOrator = isOrator;
+        this.#isModerator = isModerator;
         this.#lectureId = lecture.id;
 
         // hide the overview of current lectures
@@ -100,22 +103,27 @@ class LectureView extends WindowView {
             <button id="${this.#lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
-        if (this.#hasToken && !this.#isOrator) {
+        //participant with token
+        if (this.#hasToken && !this.#isOrator && !this.#isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                     <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
                 </div>
             `);
-        } else if (!this.#hasToken && !this.#isOrator) {
+        
+        //participant without token
+        } else if (!this.#hasToken && !this.#isOrator && !this.#isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
                     <p style="text-align: center">This chat will be opened after the lecture.</p>
                 </div>
             `);
+
+        //orator or moderator
         } else {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                    <p style="text-align: center">As an orator, you have the right to close the lecture or to ban participants after the lecture.</p>
+                    <p style="text-align: center">You have the right to close the lecture or to ban participants after the lecture.</p>
                 </div>
             `);
         }
@@ -217,12 +225,17 @@ class LectureView extends WindowView {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
 
-            if (this.#hasToken && !this.#isOrator)
+            //participant with token
+            if (this.#hasToken && !this.#isOrator && !this.#isModerator)
                 shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
-            else if (!this.#hasToken && !this.#isOrator)
-                shouldLeave = confirm('Are you sure you want to leave?')
-            else
+            
+            //orator
+            else if (this.#isOrator)
                 shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
+            
+            //participant without token or moderator
+            else
+                shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?')
 
             if (shouldLeave)
                 this.close();

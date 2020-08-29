@@ -212,15 +212,18 @@ module.exports = class Lecture {
      * 
      * @param {String} participantId participant ID
      * @param {String} ppantUsername participant username
+     * @param {boolean} isModerator true if participant is moderator, otherwise false
+     * 
      * @returns true, if the joining was successful
      *          false, otherwise
      */
-    enter(participantId, ppantUsername) {
+    enter(participantId, ppantUsername, isModerator) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(ppantUsername);
+        TypeChecker.isBoolean(isModerator);
 
-        //orator can join every time if lecture is opened and not ended
-        if (ppantUsername === this.#oratorUsername && !this.isEnded() && this.#isOpened()) {
+        //orator and moderator can join every time if lecture is opened and not ended
+        if ((ppantUsername === this.#oratorUsername || isModerator) && !this.isEnded() && this.#isOpened()) {
 
             this.#activeParticipants.push(participantId);
             return true;
@@ -260,7 +263,7 @@ module.exports = class Lecture {
             //check if there is an element with this ID
             if (element[0] === participantId) {
 
-                //orator has no entry in token list, so active participants only get decremented for listeners
+                //orator and moderator has no entry in token list, so active participants only get decremented for listeners
                 this.#numberOfActiveListeners--;
 
                 let leaveDate = new Date();
@@ -351,15 +354,18 @@ module.exports = class Lecture {
      * 
      * @param {String} participantId participant ID
      * @param {String} ppantUsername participant username
+     * @param {boolean} isModerator true if participant is moderator, otherwise false
+     * 
      * @returns true, if so
      *          false, otherwise
      */
-    hasToken(participantId, ppantUsername) {
+    hasToken(participantId, ppantUsername, isModerator) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(ppantUsername);
+        TypeChecker.isBoolean(isModerator);
 
-        //orator has token of his own lecture in every case
-        if (ppantUsername === this.#oratorUsername) {
+        //orator and moderator has token in every case
+        if (ppantUsername === this.#oratorUsername || isModerator) {
             return true;
         }
 
@@ -386,7 +392,7 @@ module.exports = class Lecture {
     revokeToken(participantId) {
         TypeChecker.isString(participantId);
 
-        //it's not possible to revoke a token from the orator
+        //it's not possible to revoke a token from the orator or moderator
         for (var i = 0; i < this.#tokenList.length; i++) {
             var element = this.#tokenList[i];
             if (element[0] === participantId && element[2] >= 0) {
@@ -406,7 +412,7 @@ module.exports = class Lecture {
     grantToken(participantID) {
         TypeChecker.isString(participantID);
 
-        // If the participant is the orator or already has a token, we don't need to do anything
+        // If the participant is the orator, moderator or already has a token, we don't need to do anything
         // We can not grant a token to a participant not yet in the lecture
         if (this.#tokenList[this.#getTokenIndex(participantID)] === undefined || this.#tokenList[this.#getTokenIndex(participantID)][2] >= 0 || !this.#activeParticipants.includes(participantID)) {
             return false;
