@@ -568,8 +568,8 @@ class GameView {
      * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      * @param {boolean} isModerator true if is moderator of the conference, otherwise false
      */
-    updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator) {
-        this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator);
+    updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
+        this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset);
     }
 
     /**
