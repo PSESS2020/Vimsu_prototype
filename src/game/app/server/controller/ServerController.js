@@ -920,7 +920,6 @@ module.exports = class ServerController {
                 } else {
                     RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
                         targetRank = rank;
-                        console.log(targetRank);
                         socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                     })
                 }
