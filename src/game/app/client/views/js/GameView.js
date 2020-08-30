@@ -1097,6 +1097,18 @@ class GameView {
         }
     };
 
+    drawVideo(videoUrl, currentTime) {
+        if ($('#lectureVideoWindow').is(':visible')) {
+            this.#lectureView.drawVideo(videoUrl, currentTime);
+        }
+    }
+
+    updateLecture(currentTimeDifference) {
+        if ($('#lectureVideoWindow').is(':visible')) {
+            this.#lectureView.update(currentTimeDifference);
+        }
+    }
+
     /**
      * Closes lecture window
      */

@@ -80,6 +80,10 @@ class EventManager {
         this.#clientController.handleFromViewLectureLeft(lectureId);
     }
 
+    handleShowVideo(lectureId) {
+        this.#clientController.handleFromViewGetVideoUrl(lectureId);
+    }
+
     /**
      * called from View on schedule click
      */

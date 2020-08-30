@@ -709,12 +709,6 @@ module.exports = class ServerController {
                     let messages = lecture.getLectureChat().getMessages();
                     ppant.setIsVisible(false);
 
-                    let startingTime = lecture.getStartingTime().getTime() - Settings.SHOWLECTURE;
-                    let duration = Math.ceil(lecture.getDuration() / 60) + Settings.SHOWLECTURE / 60 / 1000;
-
-                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
-                        this.#blob, new Date(startingTime), duration);
-
                     if (ppantUsername === lecture.getOratorUsername())
                         var isOrator = true;
                     else
@@ -722,8 +716,55 @@ module.exports = class ServerController {
 
                     socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator);
                     socket.broadcast.emit('hideAvatar', ppantID);
+
+                    var lectureStartingTime = new Date(lecture.getStartingTime()).getTime();
+
+                    function updateLecture() {
+                        var currentTimeDifference = Date.now() - lectureStartingTime;
+                        socket.emit('updateLecture', currentTimeDifference);
+                    }
+    
+                    clearInterval(interval);
+    
+                    updateLecture();
+    
+                    //updates view every 1 second
+                    interval = setInterval(() => {
+                        updateLecture();
+                    }, 1000);
                 } else {
                     socket.emit('lectureFull', lectureId);
+                }
+            })
+
+            socket.on('getVideoUrl', (lectureId) => {
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
+                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+
+                //prevents server to crash when client emits a wrong lectureID
+                if (idx < 0) {
+                    console.log('Client emitted wrong Lecture-ID!');
+                    return;
+                }
+
+                let schedule = this.#conference.getSchedule();
+                let lecture = schedule.getLecture(lectureId);
+
+                if (socket.currentLecture == lectureId && lecture.isOpened() && !lecture.isEnded()) {
+                    var videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
+                        this.#blob, new Date(), new Date(lecture.getEndTime()));
+                    
+                    var currentTimeDifference = Date.now() - new Date(lecture.getStartingTime()).getTime();
+                    var currentTime = Math.ceil(currentTimeDifference / 1000);
+
+                    socket.emit('videoUrl', videoUrl, currentTime);
                 }
             })
 

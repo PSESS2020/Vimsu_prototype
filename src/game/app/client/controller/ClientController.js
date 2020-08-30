@@ -159,6 +159,8 @@ class ClientController {
         this.#socket.on('newAllchatMessage', this.#handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.#socket.on('initAllchat', this.#handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.#socket.on('lectureMessageFromServer', this.#handleFromServerNewLectureChatMessage.bind(this));
+        this.#socket.on('videoUrl', this.#handleFromServerVideoUrl.bind(this));
+        this.#socket.on('updateLecture', this.#handleFromServerUpdateLecture.bind(this));
         this.#socket.on('updateLectureChat', this.#handleFromServerUpdateLectureChat.bind(this));
         this.#socket.on('update token', this.#handleFromServerUpdateToken.bind(this));
         this.#socket.on('force close lecture', this.#handleFromServerForceCloseLecture.bind(this));
@@ -403,6 +405,14 @@ class ClientController {
      */
     #handleFromServerCurrentLectures = function (lectures) {
         this.#gameView.initCurrentLectures(lectures);
+    }
+
+    #handleFromServerVideoUrl = function (videoUrl, currentTime) {
+        this.#gameView.drawVideo(videoUrl, currentTime);
+    }
+
+    #handleFromServerUpdateLecture = function (currentTimeDifference) {
+        this.#gameView.updateLecture(currentTimeDifference);
     }
 
     /**
@@ -976,6 +986,14 @@ class ClientController {
 
         if (this.#socketReady()) {
             this.#socket.emit('leaveLecture', lectureId);
+        }
+    }
+
+    handleFromViewGetVideoUrl(lectureId) {
+        TypeChecker.isString(lectureId);
+
+        if (this.#socketReady()) {
+            this.#socket.emit('getVideoUrl', lectureId);
         }
     }
 

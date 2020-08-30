@@ -96,17 +96,13 @@ module.exports = class blob {
      * @private Gets shared access policy of an URL
      * 
      * @param {Date} startDate access start date
-     * @param {number} accessTimeInMinutes access duration in minutes
+     * @param {Date} expiryDate access expiry date
      * 
      * @return shared access policy
      */
-    #getSharedAccessPolicy = function (startDate, accessTimeInMinutes) {
+    #getSharedAccessPolicy = function (startDate, expiryDate) {
         TypeChecker.isDate(startDate);
-        TypeChecker.isNumber(accessTimeInMinutes);
-
-        var expiryDate = new Date(startDate);
-        expiryDate.setMinutes(startDate.getMinutes() + accessTimeInMinutes);
-        startDate.setMinutes(startDate.getMinutes() - accessTimeInMinutes);
+        TypeChecker.isDate(expiryDate);
 
         var sharedAccessPolicy = {
             AccessPolicy: {
@@ -124,15 +120,15 @@ module.exports = class blob {
      * @param {String} containerName container name
      * @param {String} fileName file name
      * @param {Date} startDate access start date
-     * @param {number} accessTimeInMinutes access duration in minutes
+     * @param {Date} expiryDate access expiry date
      * 
      * @return file URL
      */
-    getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
+    getWriteSAS(containerName, fileName, startDate, expiryDate) {
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
 
-        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.#getSharedAccessPolicy(startDate, accessTimeInMinutes));
+        var sasToken = this.#blobService.generateSharedAccessSignature(containerName, fileName, this.#getSharedAccessPolicy(startDate, expiryDate));
         const url = this.#blobService.getUrl(containerName, fileName, sasToken);
         return url;
     }

@@ -12,6 +12,8 @@ class LectureView extends WindowView {
     #isOrator;
     #isModerator;
     #lectureId;
+    #lectureDuration;
+    #video;
     #timeLeft;
     #eventManager;
 
@@ -74,6 +76,40 @@ class LectureView extends WindowView {
         }
     }
 
+    drawVideo(videoUrl, currentTime) {
+        //empties video div to prevent showing the wrong video
+        $('#lectureVideo').empty();
+
+        $('#lectureVideo').append(`
+            <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${videoUrl}"></video>
+        `)
+        this.#video = $(`#lectureVideo${this.#lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+
+        // set default controls
+        this.#video.disablePictureInPicture = true;
+
+        this.#video.addEventListener('loadeddata', () => {
+            this.#video.pause();
+
+            if (this.#lectureStatus == LectureStatus.RUNNING && this.#video.paused) {
+                $('#lecturePending').hide();
+
+                this.#video.currentTime = currentTime;
+                this.#video.play();
+            }
+
+            this.#video.addEventListener('pause', () => {
+                if (this.#lectureStatus === LectureStatus.RUNNING)
+                    this.#video.play();
+            })
+
+            this.#video.addEventListener('play', () => {
+                if (this.#lectureStatus === LectureStatus.OVER)
+                    this.#video.pause();
+            })
+        })
+    }
+
     /**
      * Draws lecture window
      * 
@@ -88,9 +124,13 @@ class LectureView extends WindowView {
         this.#isOrator = isOrator;
         this.#isModerator = isModerator;
         this.#lectureId = lecture.id;
+        this.#lectureDuration = lecture.duration * 1000;
+        this.#video = undefined;
 
         // hide the overview of current lectures
         $('#currentLectures').hide();
+
+        $('#lectureVideo').empty();
 
         this.drawChat(lectureChat);
 
@@ -136,88 +176,52 @@ class LectureView extends WindowView {
         $('#tokenIcon').empty();
         $('#tokenLabel').empty();
 
-        //empties video div to prevent showing the wrong video
-        $('#lectureVideo').empty();
-
         //opens lecture video window
         $('#lectureVideoWindow').show();
+    }
 
-        $('#lectureVideo').append(`
-            <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
-        `)
-        var video = $(`#lectureVideo${this.#lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+    update(currentTimeDifference) {
+        if (currentTimeDifference < 0) {
+            $('#lecturePending').remove();
+            $('#lectureVideo').append(`
+                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                    <div id="countdown"></div>
+                    <div>seconds left till the</div>
+                    <div>presentation starts</div>
+                </div>
+            `)
 
-        // set default controls
-        video.disablePictureInPicture = true;
+            this.#lectureStatus = LectureStatus.PENDING;
 
+            var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
+            if (this.#timeLeft !== newTimeLeft) {
+                this.#timeLeft = newTimeLeft;
+                $('#countdown').empty()
+                $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
+            }
+        }
 
-        video.addEventListener('loadeddata', () => {
-            video.pause();
+        else if (currentTimeDifference >= 0 && currentTimeDifference <= this.#lectureDuration) {
+            $('#lecturePending').hide();
 
-            var lectureStartingTime = new Date(lecture.startingTime).getTime();
+            this.#lectureStatus = LectureStatus.RUNNING;
 
-            var lectureDuration = lecture.duration * 1000; //duration of the lecture in milliseconds
+            if (this.#video === undefined)
+                this.#eventManager.handleShowVideo(this.#lectureId);
+        }
 
-            this.#timerIntervalId = setInterval(() => {
-                var currentTimeDifference = Date.now() - lectureStartingTime;
+        else if (this.#video !== undefined && currentTimeDifference >= 0 && this.#video.currentTime >= this.#lectureDuration) {
+            this.#eventManager.handleClearInterval();
 
-                if (currentTimeDifference < 0) {
-                    $('#lecturePending').remove();
-                    $('#lectureVideo').append(`
-                        <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
-                            <div id="countdown"></div>
-                            <div>seconds left till the</div>
-                            <div>presentation starts</div>
-                        </div>
-                    `)
+            $('#lecturePending').hide();
+            $('#pendingLectureChatMessage').empty();
 
-                    this.#lectureStatus = LectureStatus.PENDING;
+            this.#lectureStatus = LectureStatus.OVER;
 
-                    var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
-                    if (this.#timeLeft !== newTimeLeft) {
-                        this.#timeLeft = newTimeLeft;
-                        $('#countdown').empty()
-                        $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
-                    }
+            this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
 
-                    video.pause();
-                }
-
-                else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
-                    $('#lecturePending').hide();
-
-                    this.#lectureStatus = LectureStatus.RUNNING;
-
-                    video.currentTime = Math.round(currentTimeDifference / 1000);
-                    video.play();
-                }
-
-                else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
-                    clearInterval(this.#timerIntervalId);
-
-                    $('#lecturePending').hide();
-                    $('#pendingLectureChatMessage').empty();
-
-                    this.#lectureStatus = LectureStatus.OVER;
-
-                    this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
-
-                    video.controlsList.remove('nodownload');
-                    video.pause();
-                }
-
-            }, 1000); // check lecture status every 1s
-
-            video.addEventListener('pause', () => {
-                if (this.#lectureStatus === LectureStatus.RUNNING)
-                    video.play();
-            })
-
-            video.addEventListener('play', () => {
-                if (this.#lectureStatus === LectureStatus.OVER)
-                    video.pause();
-            })
-        });
+            this.#video.pause();
+        }
     }
 
     /**
@@ -257,11 +261,9 @@ class LectureView extends WindowView {
      * called to close lecture window
      */
     close() {
-        var video = $(`#lectureVideo${this.#lectureId}`)[0];
-
-        if (video !== undefined) {
-            video.removeAttribute('src'); // empty source
-            video.load();
+        if (this.#video !== undefined) {
+            this.#video.removeAttribute('src'); // empty source
+            this.#video.load();
 
             clearInterval(this.#timerIntervalId);
 
@@ -339,7 +341,7 @@ class LectureView extends WindowView {
 
 
         }
-        
+
         // the input field is emptied if the user does not have a valid token
         else {
             $('#lectureChatInputGroup').empty();

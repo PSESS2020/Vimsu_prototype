@@ -223,14 +223,14 @@ module.exports = class Lecture {
         TypeChecker.isBoolean(isModerator);
 
         //orator and moderator can join every time if lecture is opened and not ended
-        if ((ppantUsername === this.#oratorUsername || isModerator) && !this.isEnded() && this.#isOpened()) {
+        if ((ppantUsername === this.#oratorUsername || isModerator) && !this.isEnded() && this.isOpened()) {
 
             this.#activeParticipants.push(participantId);
             return true;
         }
 
         //listeners can join if lecture is not full and opened and not ended
-        if (this.#numberOfActiveListeners < this.#maxParticipants && !this.isEnded() && this.#isOpened()) {
+        if (this.#numberOfActiveListeners < this.#maxParticipants && !this.isEnded() && this.isOpened()) {
 
             this.#numberOfActiveListeners++;
             this.#activeParticipants.push(participantId);
@@ -283,11 +283,11 @@ module.exports = class Lecture {
     }
 
     /**
-     * @private checks if lecture is already opened
+     * checks if lecture is already opened
      * 
      * @return true if opened, otherwise false
      */
-    #isOpened = function () {
+    isOpened() {
         var now = new Date().getTime();
         var startingTime = this.#startingTime.getTime() - Settings.SHOWLECTURE;
         return (startingTime <= now)
@@ -300,8 +300,11 @@ module.exports = class Lecture {
      */
     isEnded() {
         var now = new Date().getTime();
-        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
-        return (now >= endTime);
+        return (now >= this.getEndTime());
+    }
+
+    getEndTime() {
+        return this.#startingTime.getTime() + this.#duration * 1000;
     }
 
     /**
@@ -311,8 +314,7 @@ module.exports = class Lecture {
      */
     isAccessible() {
         var now = new Date().getTime();
-        var endTime = (this.#startingTime.getTime() + this.#duration * 1000);
-        return (this.#isOpened() && now <= endTime);
+        return (this.isOpened() && now <= this.getEndTime());
     }
 
     /**
