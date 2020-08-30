@@ -567,6 +567,7 @@ class GameView {
      * @param {Object} lectureChat lecture chat
      * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      * @param {boolean} isModerator true if is moderator of the conference, otherwise false
+     * @param {number} timeOffset offset if client has different local time than the server
      */
     updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
         this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset);

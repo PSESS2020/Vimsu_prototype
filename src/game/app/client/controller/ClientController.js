@@ -429,10 +429,9 @@ class ClientController {
      * @param {Object[]} letureChat lecture chat
      * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      * @param {boolean} isModerator true if is moderator of the conference, otherwise false
+     * @param {number} serverTime current server time
      */
     #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat, isOrator, isModerator, serverTime) {
-        var offset = new Date().getTime() - serverTime;
-
         TypeChecker.isInstanceOf(lecture, Object);
         TypeChecker.isString(lecture.id);
         TypeChecker.isString(lecture.title);
@@ -452,7 +451,9 @@ class ClientController {
             /* TypeChecker.isDate(message.timestamp); */
         });
         TypeChecker.isBoolean(isModerator);
+        TypeChecker.isNumber(serverTime);
 
+        var offset = new Date().getTime() - serverTime;
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, offset);
     }
 
