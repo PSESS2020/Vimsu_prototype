@@ -188,7 +188,7 @@ class LectureView extends WindowView {
 
                     this.#lectureStatus = LectureStatus.RUNNING;
 
-                    video.currentTime = Math.round(currentTimeDifference / 1000);
+                    video.currentTime = currentTimeDifference / 1000;
                     video.play();
                 }
 
@@ -202,10 +202,11 @@ class LectureView extends WindowView {
 
                     this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
 
-                    video.controlsList.remove('nodownload');
+                    if (this.#hasToken)
+                        video.controlsList.remove('nodownload');
+
                     video.pause();
                 }
-
             }, 1000); // check lecture status every 1s
 
             video.addEventListener('pause', () => {
@@ -336,8 +337,6 @@ class LectureView extends WindowView {
             `)
 
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
-
-
         }
         
         // the input field is emptied if the user does not have a valid token
