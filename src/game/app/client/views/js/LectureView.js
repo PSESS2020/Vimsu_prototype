@@ -17,6 +17,7 @@ class LectureView extends WindowView {
     #video;
     #timeLeft;
     #eventManager;
+    #timeOffset;
 
     /**
      * @constructor Creates an instance of LectureView
@@ -124,13 +125,14 @@ class LectureView extends WindowView {
      * @param {boolean} isOrator true if is orator, otherwise false
      * @param {boolean} isModerator true if is moderator of the conference, otherwise false
      */
-    draw(lecture, hasToken, lectureChat, isOrator, isModerator) {
+    draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
         this.#hasToken = hasToken;
         this.#isOrator = isOrator;
         this.#isModerator = isModerator;
         this.#lectureId = lecture.id;
         this.#lectureDuration = lecture.duration * 1000;
         this.#video = undefined;
+        this.#timeOffset = timeOffset;
 
         // hide the overview of current lectures
         $('#currentLectures').hide();
@@ -185,7 +187,7 @@ class LectureView extends WindowView {
         $('#lectureVideoWindow').show();
 
         this.#timerIntervalId = setInterval(() => {
-            this.#currentTimeDifference = Date.now() - new Date(lecture.startingTime).getTime();
+            this.#currentTimeDifference = Date.now() - new Date(lecture.startingTime).getTime() - this.#timeOffset;
             this.#update(this.#currentTimeDifference);
         }, 1000);
     }

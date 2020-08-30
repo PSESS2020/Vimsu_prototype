@@ -718,7 +718,7 @@ module.exports = class ServerController {
                     else
                         var isOrator = false;
 
-                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator);
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator, new Date().getTime());
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', lectureId);
