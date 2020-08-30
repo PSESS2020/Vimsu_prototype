@@ -91,16 +91,11 @@ database.connectDB().then(res => {
             expect(globalResults[0]).to.eql(1);
         });
 
-        it('test getRank Error', async () => {
-            let error = null;
-            try {
-                await RankListService.getRank(participantId_broken, conferenceId, database);
-            } catch (err) {
-                error = err;
-            }
-            expect(error).to.be.an('Error');
-            expect(error.message).to.equal(participantId_broken + ' is not in ranklist');
-
+        it('test getRank wrongID', async () => {
+           
+            return RankListService.getRank(participantId_broken, conferenceId, database).then(rank => {
+                expect(rank).to.equal(undefined);
+            });
         })
 
         it('test getRankListWithUsername', function() {
