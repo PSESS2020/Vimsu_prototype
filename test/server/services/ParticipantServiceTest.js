@@ -64,6 +64,7 @@ var chatCollectionName = "chats_" + conferenceId;
 var account = new Account("accountId", "asdf", "prof", "", "", "", "", "");
 var participant = new Participant("asd", account.getAccountID(), new BusinessCard("", "", "", "", "", "", "", ""), new Position(0, 0, 0), Direction.UPRIGHT, new FriendList([]), new FriendList([]), new FriendList([]), [], [], false, 0, []);
 
+
 const dbStub = sinon.createStubInstance(db);
 dbStub.findOneInCollection = (collectionName, query, projection) => {
 
@@ -86,7 +87,7 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
             direction: Direction.DOWNLEFT,
             taskCount: generateTasks(),
             isModerator: false,
-            points: 0
+            points: 10
          });
     } else if (collectionName === "accounts" && query.accountId === "accountId") {
         return Promise.resolve({username: account.getUsername()})
@@ -94,8 +95,21 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
     return Promise.resolve(undefined);
 };
 
+dbStub.updateOneToCollection = (collectionName, query, update) => {
+    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+        return Promise.resolve(true);
+    }
+}
+
+dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
+    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+        return Promise.resolve(true);
+    } else 
+        return Promise.resolve(false);
+};
 
 describe('Participant Service Test', () => {
+
     it('test createParticipant', async () => {
         var participant = await ParticipantService.createParticipant(account, conferenceId, dbStub);
         expect(participant).to.be.instanceOf(Participant);
@@ -110,52 +124,66 @@ describe('Participant Service Test', () => {
     })
 
     it('test getBusinessCard', async () => {
-        var businessCard = await ParticipantService.getBusinessCard(participant.getId(), conferenceId, dbStub);
-
+      // var businessCard = await ParticipantService.getBusinessCard("asdf1234", conferenceId, dbStub);
+       
     })
 
     it('test updateParticipantPosition', async () => {
-        await ParticipantService.updateParticipantPosition(participant.getId(), conferenceId, new Position(1, 10, 10), dbStub)
+        var updatedParticipant = await ParticipantService.updateParticipantPosition("asdf12345", conferenceId, new Position(2, 2, 2), dbStub);
+        expect(updatedParticipant).to.eql(true);
     })
 
     it('test updateParticipantDirection', async () => {
-        await ParticipantService.updateParticipantDirection(participant.getId(), conferenceId, Direction.DOWNLEFT, dbStub);
+       var updatedParticipant = await ParticipantService.updateParticipantDirection("asdf12345", conferenceId, Direction.DOWNLEFT, dbStub);
+       expect(updatedParticipant).to.eql(true);
     })
 
     it('test getPoints', async () => {
-        await ParticipantService.getPoints(participant.getId(), conferenceId, dbStub);
+        points = await ParticipantService.getPoints("asdf12345", conferenceId, dbStub);
+        expect(points).to.eql(10);
     })
 
     it('test updatePoints', async () => {
-        await ParticipantService.updatePoints(participant.getId(), conferenceId, 19, dbStub);
+        updatedPoints = await ParticipantService.updatePoints("asdf12345", conferenceId, 19, dbStub);
+        expect(updatedPoints).to.eql(true);
+
     })
 
     it('test deleteAchievement', async () => {
-        await ParticipantService.deleteAchievement(participant.getId(), conferenceId, 0, dbStub);
+        //await ParticipantService.deleteAchievement(participant.getId(), conferenceId, 0, dbStub);
     })
 
     it('test getAchievements', async () => {
-        await ParticipantService.getAchievements(participant.getId(), conferenceId, dbStub);
+        achievements = await ParticipantService.getAchievements("asdf12345", conferenceId, dbStub);
+        expect(achievements).to.eql(generateAchievements());
+        invalidIdAchievments = await ParticipantService.getAchievements("1234", conferenceId, dbStub);
+        expect(invalidIdAchievments).to.eql(false);
     })
 
     it('test updateAchievementLevel', async () => {
-        await ParticipantService.updateAchievementLevel(participant.getId(), conferenceId, 0, 1, dbStub);
+        //await ParticipantService.updateAchievementLevel(participant.getId(), conferenceId, 0, 1, dbStub);
     })
 
     it('test updateTaskCounts', async () => {
-        await ParticipantService.updateTaskCounts(participant.getId(), conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
+        //await ParticipantService.updateTaskCounts(participant.getId(), conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
     })
 
     it('test getTaskCount', async () => {
-        await ParticipantService.getTaskCount(participant.getId(), conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
+        taskCount = await ParticipantService.getTaskCount("asdf12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
+        expect(taskCount).to.eql(0);
+        invalidIdTaskCount =  await ParticipantService.getTaskCount("12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
+        expect(invalidIdTaskCount).to.eql(false);
     })
 
     it('test updateTaskCount', async () => {
-        await ParticipantService.updateTaskCount(participant.getId(), conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
+        //await ParticipantService.updateTaskCount(participant.getId(), conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
     })
 
     it('test addChatID', async () => {
-        await ParticipantService.addChatID(participant.getId(), "0", conferenceId, dbStub);
+        updatesChatId = await ParticipantService.addChatID("asdf12345", "0", conferenceId, dbStub);
+        expect(updatesChatId).to.eql(true);
+        invalidIdChatId = await ParticipantService.addChatID("12345", "0", conferenceId, dbStub);
+        expect(invalidIdChatId).to.eql(false);
     })
 
     it('test deleteAllParticipants', async () => {
