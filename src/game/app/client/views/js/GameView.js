@@ -1100,7 +1100,7 @@ class GameView {
     /**
      * draws lecture video
      * 
-     * @param {*} videoUrl video URL
+     * @param {String} videoUrl video URL
      */
     drawVideo(videoUrl) {
         TypeChecker.isString(videoUrl);

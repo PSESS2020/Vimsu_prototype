@@ -990,6 +990,11 @@ class ClientController {
         }
     }
 
+    /**
+     * Gets video URL from server
+     * 
+     * @param {String} lectureId lecture ID
+     */
     handleFromViewGetVideoUrl(lectureId) {
         TypeChecker.isString(lectureId);
 

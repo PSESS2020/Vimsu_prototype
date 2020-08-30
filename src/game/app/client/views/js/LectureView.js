@@ -191,7 +191,7 @@ class LectureView extends WindowView {
     }
 
     /**
-     * @private updates lecture view constantly
+     * @private updates lecture view
      * 
      * @param {number} currentTimeDifference time difference between now and starting time
      */
