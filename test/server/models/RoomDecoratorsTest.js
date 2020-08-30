@@ -54,7 +54,11 @@ foodcourtAssetPaths = {
     "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
     "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
     "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
-    "table_default": "client/assets/tables/table.png"
+    "righttable_default": "client/assets/tables/dinnerTableRight.png",
+    "leftchair_default": "client/assets/chairs/chair_left.png",
+    "rightchair_default": "client/assets/chairs/chair_right.png",
+    "leftchairback_default": "client/assets/chairs/chair_left_back.png",
+    "rightchairback_default": "client/assets/chairs/chair_right_back.png",
 }
 
 receptionAssetPaths = {
