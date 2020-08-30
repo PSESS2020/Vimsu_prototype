@@ -354,10 +354,25 @@ body::-webkit-scrollbar {
   border-radius: 3px;
   color: antiquewhite;
   text-decoration: none;
-
 }
 
 .btn-lecture:hover {
+  background-color: #028090;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+}
+
+.btn-accept {
+  background-color: #028090;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+}
+
+.btn-accept:hover {
   background-color: #015a66;
   color: antiquewhite;
 }
