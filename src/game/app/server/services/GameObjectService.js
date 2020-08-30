@@ -156,6 +156,74 @@ module.exports = class GameObjectService {
         return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} width
+     * @param {number} length
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
+    createRightDinnerTable(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTABLE, "righttable_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    //Chairs
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
+    createLeftChair(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
+    createRightChair(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
+    createLeftChairBack(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * 
+     * @param {number} roomId 
+     * @param {number} xPos 
+     * @param {number} yPos 
+     * @param {boolean} solidity 
+     * @param {boolean} clickable 
+     */
+    createRightChairBack(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
     //Plants
 
     /**
@@ -183,7 +251,7 @@ module.exports = class GameObjectService {
      */
     createLeftSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTSOFA, "leftsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "leftsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     /**
@@ -196,7 +264,7 @@ module.exports = class GameObjectService {
      */
     createRightSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTSOFA, "rightsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "rightsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Window
@@ -263,15 +331,11 @@ module.exports = class GameObjectService {
         let wallFrames = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-
-
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity, clickable));
             }
             return wallFrames;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-
-
                 wallFrames.push(new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwallframe_default" + i, width, length, new Position(roomId, xPos, yPos + i), solidity, clickable));
             }
             return wallFrames;
@@ -296,13 +360,11 @@ module.exports = class GameObjectService {
         let schedules = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-
                 schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return schedules;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-
                 schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTSCHEDULE, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return schedules;
@@ -325,15 +387,14 @@ module.exports = class GameObjectService {
     createLeftConferenceLogo(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         let conferenceLogos = [];
+        
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return conferenceLogos;
         } else if (width > 1) {
             for (let i = 0; i < width; i++) {
-
                 conferenceLogos.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return conferenceLogos;
