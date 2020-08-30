@@ -36,14 +36,15 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * @private checks parameters' data type
      * 
-     * @param {number} roomId 
-     * @param {number} width 
-     * @param {number} length 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable) {
         TypeChecker.isInt(roomId);
@@ -60,7 +61,7 @@ module.exports = class GameObjectService {
     /* ##################################################################### */
 
     /**
-     * The game object names needs to be unique äquivalent to the asset keys in the room decorators. 
+     * The game object names needs to be unique equivalent to the asset keys in the room decorators. 
      * If a new object with an unknown object type is added, then the new ObjectType has to be added to GameObjectType.js.
      * Further a new ObjectView.js needs to be implemented in the client and added to the GameObjectViewFactory.js.
      * Also when objects should overlap, then first push the background object to the object array and then the foreground objects.
@@ -69,12 +70,13 @@ module.exports = class GameObjectService {
     //Tiles
 
     /**
+     * creates default tile
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createDefaultTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
@@ -84,12 +86,13 @@ module.exports = class GameObjectService {
     //This two tiles below are special therefor they have the same name as default tile
 
     /**
+     * creates default left tile
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createDefaultLeftTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
@@ -97,12 +100,13 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default right tile
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createDefaultRightTile(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, 1, 1, xPos, yPos, solidity, clickable);
@@ -112,14 +116,15 @@ module.exports = class GameObjectService {
     //Walls
 
     /**
+     * creates default left wall
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createDefaultLeftWall(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -127,14 +132,15 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default right wall
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createDefaultRightWall(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -144,12 +150,13 @@ module.exports = class GameObjectService {
     //Tables
 
     /**
+     * creates default table
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createTable(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -157,14 +164,15 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates right dinner table
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createRightDinnerTable(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -173,12 +181,13 @@ module.exports = class GameObjectService {
 
     //Chairs
     /**
+     * creates default left chair
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createLeftChair(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -186,12 +195,13 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default right chair
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createRightChair(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -199,12 +209,13 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default left chair's back
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createLeftChairBack(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -212,12 +223,13 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default right chair's back
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createRightChairBack(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -227,12 +239,13 @@ module.exports = class GameObjectService {
     //Plants
 
     /**
+     * creates default plant
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createPlant(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -242,12 +255,13 @@ module.exports = class GameObjectService {
     //Sofas
 
     /**
+     * creates default left sofa
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createLeftSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -255,12 +269,13 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default right sofa
      * 
-     * @param {number} roomId 
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createRightSofa(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
@@ -270,61 +285,49 @@ module.exports = class GameObjectService {
     //Window
 
     /**
+     * creates default left window
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
-    createLeftWindowDefault0(roomId, width, length, xPos, yPos, solidity, clickable) {
+    createLeftWindowDefault(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftwindow_default0", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     /**
+     * creates default right window
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
-    createRightWindowDefault0(roomId, width, length, xPos, yPos, solidity, clickable) {
+    createRightWindowDefault(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default0", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
-    }
-
-    /**
-     * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
-     */
-    createRightWindowDefault1(roomId, width, length, xPos, yPos, solidity, clickable) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwindow_default1", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Wall Frames
 
     /**
+     * creates right wall frames
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createRightWallFrame(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -346,14 +349,15 @@ module.exports = class GameObjectService {
     //Schedules
 
     /**
+     * creates left schedule
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createLeftSchedule(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -375,14 +379,15 @@ module.exports = class GameObjectService {
     //Conference Logo
 
     /**
+     * creates left conference logo
      * 
-     * @param {number} roomId 
-     * @param {number} width
-     * @param {number} length
-     * @param {number} xPos 
-     * @param {number} yPos 
-     * @param {boolean} solidity 
-     * @param {boolean} clickable 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
      */
     createLeftConferenceLogo(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);

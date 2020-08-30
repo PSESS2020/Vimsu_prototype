@@ -72,12 +72,12 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
-        for (var i = 3; i <= 8; i += 5) {
+        for (var i = 3; i <= 9; i += 6) {
             listOfGameObjects.push(objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 3, true, false),
                 objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 8, true, false));
         }
 
-        for (var i = 2; i <= 7; i += 5) {
+        for (var i = 2; i <= 8; i += 6) {
             listOfGameObjects.push(
                 objService.createRightChairBack(Settings.FOODCOURT_ID, i, 3, true, false),
                 objService.createRightChairBack(Settings.FOODCOURT_ID, i, 4, true, false),
@@ -87,7 +87,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
                 objService.createRightChairBack(Settings.FOODCOURT_ID, i, 10, true, false));
         }
 
-        for (var i = 4; i <= 9; i += 5) {
+        for (var i = 4; i <= 10; i += 6) {
             listOfGameObjects.push(
                 objService.createRightChair(Settings.FOODCOURT_ID, i, 3, true, false),
                 objService.createRightChair(Settings.FOODCOURT_ID, i, 4, true, false),
@@ -104,7 +104,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 5; j += 5) {
-                listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
+                listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
             }
         }
 

@@ -139,8 +139,8 @@ describe('GameObjectService test', function () {
         expect(rightSofa.getId()).to.be.a('number');
     });
 
-    it('test create left Window Default0', function() {
-        let leftWindowDefault0 = gameObjectService.createLeftWindowDefault0(roomId, width, length, cordX, cordY, solidity, clickable);
+    it('test create left Window Default', function() {
+        let leftWindowDefault0 = gameObjectService.createLeftWindowDefault(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(leftWindowDefault0).to.be.instanceOf(GameObject);
         expect(leftWindowDefault0.getPosition().getRoomId()).to.equal(roomId);
@@ -153,8 +153,8 @@ describe('GameObjectService test', function () {
         expect(leftWindowDefault0.getId()).to.be.a('number');
     });
 
-    it('test create right Window Default0', function() {
-        let rightWindowDefault0 = gameObjectService.createRightWindowDefault0(roomId, width, length, cordX, cordY, solidity, clickable);
+    it('test create right Window Default', function() {
+        let rightWindowDefault0 = gameObjectService.createRightWindowDefault(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(rightWindowDefault0).to.be.instanceOf(GameObject);
         expect(rightWindowDefault0.getPosition().getRoomId()).to.equal(roomId);
@@ -165,20 +165,6 @@ describe('GameObjectService test', function () {
         expect(rightWindowDefault0.getSolid()).to.equal(solidity);
         expect(rightWindowDefault0.getClickable()).to.equal(clickable);
         expect(rightWindowDefault0.getId()).to.be.a('number');
-    });
-
-    it('test create right Window Default1', function() {
-        let rightWindowDefault1 = gameObjectService.createRightWindowDefault1(roomId, width, length, cordX, cordY, solidity, clickable);
-
-        expect(rightWindowDefault1).to.be.instanceOf(GameObject);
-        expect(rightWindowDefault1.getPosition().getRoomId()).to.equal(roomId);
-        expect(rightWindowDefault1.getWidth()).to.equal(width);
-        expect(rightWindowDefault1.getLength()).to.equal(length);
-        expect(rightWindowDefault1.getPosition().getCordX()).to.equal(cordX);
-        expect(rightWindowDefault1.getPosition().getCordY()).to.equal(cordY);
-        expect(rightWindowDefault1.getSolid()).to.equal(solidity);
-        expect(rightWindowDefault1.getClickable()).to.equal(clickable);
-        expect(rightWindowDefault1.getId()).to.be.a('number');
     });
 
     it('test create right Wall Frame', function() {

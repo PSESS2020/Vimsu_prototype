@@ -28,7 +28,6 @@ foyerAssetPaths = {
     "leftschedule_default2": "client/assets/walls/schedule3.png",
     "leftwindow_default0": "client/assets/windows/left_small_window_default0.png",
     "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-    "rightwindow_default1": "client/assets/windows/right_small_window_default1.png",
     "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
     "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
     "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
