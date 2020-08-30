@@ -307,4 +307,28 @@ describe('GameObjectService test', function () {
         expect(leftConferenceLogo.getClickable()).to.equal(clickable);
         expect(leftConferenceLogo.getId()).to.be.a('number');
     });  
+
+    it('test create leftChair', function() {
+        let leftChair = gameObjectService.createLeftChair(roomId, cordX, cordY, solidity, clickable);
+
+        expect(leftChair).to.be.instanceOf(GameObject);
+        expect(leftChair.getPosition().getRoomId()).to.equal(roomId);
+        expect(leftChair.getPosition().getCordX()).to.equal(cordX);
+        expect(leftChair.getPosition().getCordY()).to.equal(cordY);
+        expect(leftChair.getSolid()).to.equal(solidity);
+        expect(leftChair.getClickable()).to.equal(clickable);
+        expect(leftChair.getId()).to.be.a('number');
+    });
+
+    it('test create leftChairBack', function() {
+        let leftChairBack = gameObjectService.createLeftChairBack(roomId, cordX, cordY, solidity, clickable);
+
+        expect(leftChairBack).to.be.instanceOf(GameObject);
+        expect(leftChairBack.getPosition().getRoomId()).to.equal(roomId);
+        expect(leftChairBack.getPosition().getCordX()).to.equal(cordX);
+        expect(leftChairBack.getPosition().getCordY()).to.equal(cordY);
+        expect(leftChairBack.getSolid()).to.equal(solidity);
+        expect(leftChairBack.getClickable()).to.equal(clickable);
+        expect(leftChairBack.getId()).to.be.a('number');
+    });
 });
