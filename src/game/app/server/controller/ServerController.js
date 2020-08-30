@@ -633,6 +633,10 @@ module.exports = class ServerController {
                 let lectureChat = lecture.getLectureChat();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+                if (!(lecture.getEndTime() > new Date().getTime())) {
+                    return;
+                }
+
                 /* 
                  * Check if this ppant is a moderator or the orator of this lecture
                  * Only moderators and the orator can use commands
