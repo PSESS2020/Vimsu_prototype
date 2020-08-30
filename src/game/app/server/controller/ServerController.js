@@ -463,6 +463,11 @@ module.exports = class ServerController {
                 //get door from current room to target room
                 let door = currentRoom.getDoorTo(targetRoomId);
 
+                if (!door) {
+                    console.log('There is no door from ' + currentRoom.getTypeOfRoom() + ' to ' + targetRoomType + '!');
+                    return;
+                }
+
                 //check if participant is in right position to enter room
                 if (!door.isValidEnterPosition(enterPosition)) {
                     return;
