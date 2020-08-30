@@ -223,6 +223,24 @@ class ClientController {
      * @param {Object} initInfo initial own participant info
      */
     #handleFromServerInitOwnParticipant = function (initInfo) {
+        
+        TypeChecker.isInstanceOf(initInfo, Object);
+        TypeChecker.isString(initInfo.id);
+        TypeChecker.isInstanceOf(initInfo.businessCard, Object);
+        TypeChecker.isString(initInfo.businessCard.id);
+        TypeChecker.isString(initInfo.businessCard.username);
+        TypeChecker.isString(initInfo.businessCard.title);
+        TypeChecker.isString(initInfo.businessCard.surname);
+        TypeChecker.isString(initInfo.businessCard.forename);
+        TypeChecker.isString(initInfo.businessCard.job);
+        TypeChecker.isString(initInfo.businessCard.company);
+        TypeChecker.isString(initInfo.businessCard.email);
+        TypeChecker.isInt(initInfo.cordX);
+        TypeChecker.isInt(initInfo.cordY);
+        TypeChecker.isEnumOf(initInfo.dir, Direction);
+        TypeChecker.isBoolean(initInfo.isVisible);
+        TypeChecker.isBoolean(initInfo.isModerator);
+
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         this.#ownBusinessCard = new BusinessCardClient(
@@ -253,7 +271,7 @@ class ClientController {
      * 
      * @param {number} roomId room ID
      * @param {TypeOfRoom} typeOfRoom type of room
-     * @param {Object[]} assetPaths asset paths
+     * @param {Object} assetPaths asset paths
      * @param {Object[]} listOfMapElementsData list of map elements
      * @param {Object[]} listOfGameObjectsData list of game objects
      * @param {Object} npcData NPC
@@ -263,6 +281,52 @@ class ClientController {
      * @param {number[][]} occupationMap occupation map
      */
     #handleFromServerUpdateRoom = function (roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+
+        TypeChecker.isInt(roomId);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
+        TypeChecker.isInstanceOf(assetPaths, Object);
+        TypeChecker.isInstanceOf(listOfMapElementsData, Array);
+        listOfMapElementsData.forEach(mapElement => {
+            TypeChecker.isInstanceOf(mapElement, Object);
+            TypeChecker.isInt(mapElement.id);
+            TypeChecker.isEnumOf(mapElement.type, GameObjectType);
+            TypeChecker.isString(mapElement.name);
+            TypeChecker.isInt(mapElement.width);
+            TypeChecker.isInt(mapElement.length);
+            TypeChecker.isInt(mapElement.cordX);
+            TypeChecker.isInt(mapElement.cordY);
+            TypeChecker.isBoolean(mapElement.isClickable);
+        });
+        TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
+        listOfGameObjectsData.forEach(gameObject => {
+            TypeChecker.isInstanceOf(gameObject, Object);
+            TypeChecker.isInt(gameObject.id);
+            TypeChecker.isEnumOf(gameObject.type, GameObjectType);
+            TypeChecker.isString(gameObject.name);
+            TypeChecker.isInt(gameObject.width);
+            TypeChecker.isInt(gameObject.length);
+            TypeChecker.isInt(gameObject.cordX);
+            TypeChecker.isInt(gameObject.cordY);
+            TypeChecker.isBoolean(gameObject.isClickable);
+        });
+        TypeChecker.isInstanceOf(npcData, Array);
+        npcData.forEach(npc => {
+            TypeChecker.isInstanceOf(npc, Object);
+            TypeChecker.isInt(npc.id);
+            TypeChecker.isString(npc.name);
+            TypeChecker.isInt(npc.cordX);
+            TypeChecker.isInt(npc.cordY);
+            TypeChecker.isEnumOf(npc.direction, Direction);
+        });
+        TypeChecker.isInt(width);
+        TypeChecker.isInt(length);
+        TypeChecker.isInstanceOf(occupationMap, Array);
+        occupationMap.forEach(line => {
+            TypeChecker.isInstanceOf(line, Array);
+            line.forEach(element => {
+                TypeChecker.isInt(element);
+            });
+        });
 
         //tranform MapElements to GameObjectClients
         var listOfMapElements = [];
@@ -308,6 +372,12 @@ class ClientController {
      * @param {Object} posInfo position information
      */
     #handleFromServerUpdatePosition = function (posInfo) {
+
+        TypeChecker.isInstanceOf(posInfo, Object);
+        TypeChecker.isInt(posInfo.cordX);
+        TypeChecker.isInt(posInfo.cordY);
+        TypeChecker.isEnumOf(posInfo.dir, Direction);
+
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
 
@@ -356,11 +426,32 @@ class ClientController {
      * 
      * @param {Object} lecture lecture
      * @param {boolean} hasToken true if has token, otherwise false
-     * @param {Object} letureChat lecture chat
+     * @param {Object[]} letureChat lecture chat
      * @param {boolean} isOrator true if is orator of this lecture, otherwise false
      * @param {boolean} isModerator true if is moderator of the conference, otherwise false
      */
     #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat, isOrator, isModerator) {
+
+        TypeChecker.isInstanceOf(lecture, Object);
+        TypeChecker.isString(lecture.id);
+        TypeChecker.isString(lecture.title);
+        TypeChecker.isString(lecture.videoId);
+        TypeChecker.isNumber(lecture.duration);
+        TypeChecker.isString(lecture.remarks);
+        TypeChecker.isString(lecture.oratorName);
+        /* TypeChecker.isDate(lecture.startingTime); */
+        TypeChecker.isInt(lecture.maxParticipants);
+        TypeChecker.isBoolean(hasToken);
+        TypeChecker.isInstanceOf(lectureChat, Array);
+        lectureChat.forEach(msg => {
+            TypeChecker.isInstanceOf(msg, Object);
+            TypeChecker.isString(msg.senderID);
+            TypeChecker.isString(message.username);
+            TypeChecker.isInt(message.messageID);
+            /* TypeChecker.isDate(message.timestamp); */
+        });
+        TypeChecker.isBoolean(isModerator);
+        
         this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator);
     }
 
@@ -380,6 +471,16 @@ class ClientController {
      * @param {Object} initInfo initial participant info
      */
     #handleFromServerRoomEnteredByParticipant = function (initInfo) {
+
+        TypeChecker.isInstanceOf(initInfo, Object);
+        TypeChecker.isString(initInfo.id);
+        TypeChecker.isString(initInfo.username);
+        TypeChecker.isInt(initInfo.cordX);
+        TypeChecker.isInt(initInfo.cordY);
+        TypeChecker.isEnumOf(initInfo.dir, Direction);
+        TypeChecker.isBoolean(initInfo.isVisible);
+        TypeChecker.isBoolean(initInfo.isModerator);
+
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
