@@ -35,6 +35,7 @@ const Account = require('../../../src/website/models/Account');
 const Participant = require('../../../src/game/app/server/models/Participant');
 const BusinessCard = require('../../../src/game/app/server/models/BusinessCard');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
+const { deleteParticipant, deleteAllParticipants, updateTaskCount } = require('../../../src/game/app/server/services/ParticipantService');
 
 function generateTasks() {
     var tasks = {};
@@ -90,7 +91,15 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
             points: 10
          });
     } else if (collectionName === "accounts" && query.accountId === "accountId") {
-        return Promise.resolve({username: account.getUsername()})
+        return Promise.resolve({
+            username: account.getUsername(),
+            title: account.getTitle(),
+            surname: account.getSurname(),
+            forename: account.getForename(),
+            job: account.getJob(),
+            company: account.getCompany(),
+            email: account.getEmail()
+        })
     }
     return Promise.resolve(undefined);
 };
@@ -108,6 +117,31 @@ dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
         return Promise.resolve(false);
 };
 
+dbStub.deleteFromArrayInCollection = (collectionName, query, toDelete) => {
+    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+        return Promise.resolve(true);
+    } else {
+        return Promise.resolve(false);
+    }
+}
+
+dbStub.deleteOneFromCollection = (collectionName, query) => {
+    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+        return Promise.resolve(true);
+    } else {
+        return Promise.resolve(false);
+    }
+}
+
+dbStub.deleteAllFromCollection = (collectionName) => {
+    if (collectionName === participantCollectionName) {
+        return Promise.resolve(true);
+    } else {
+        return Promise.resolve(false);
+    }
+}
+
+
 describe('Participant Service Test', () => {
 
     it('test createParticipant', async () => {
@@ -124,8 +158,8 @@ describe('Participant Service Test', () => {
     })
 
     it('test getBusinessCard', async () => {
-      // var businessCard = await ParticipantService.getBusinessCard("asdf1234", conferenceId, dbStub);
-       
+        var businessCard = await ParticipantService.getBusinessCard("asdf12345", conferenceId, dbStub);
+        expect(businessCard).to.eql(new BusinessCard("asdf12345", "asdf", "prof", "", "", "", "", ""));     
     })
 
     it('test updateParticipantPosition', async () => {
@@ -139,33 +173,36 @@ describe('Participant Service Test', () => {
     })
 
     it('test getPoints', async () => {
-        points = await ParticipantService.getPoints("asdf12345", conferenceId, dbStub);
+        var points = await ParticipantService.getPoints("asdf12345", conferenceId, dbStub);
         expect(points).to.eql(10);
     })
 
     it('test updatePoints', async () => {
-        updatedPoints = await ParticipantService.updatePoints("asdf12345", conferenceId, 19, dbStub);
+        var updatedPoints = await ParticipantService.updatePoints("asdf12345", conferenceId, 19, dbStub);
         expect(updatedPoints).to.eql(true);
 
     })
 
     it('test deleteAchievement', async () => {
-        //await ParticipantService.deleteAchievement(participant.getId(), conferenceId, 0, dbStub);
+        var deletedAchievement = await ParticipantService.deleteAchievement("asdf12345", conferenceId, 0, dbStub);
+        expect(deletedAchievement).to.eql(true);
     })
 
     it('test getAchievements', async () => {
-        achievements = await ParticipantService.getAchievements("asdf12345", conferenceId, dbStub);
+        var achievements = await ParticipantService.getAchievements("asdf12345", conferenceId, dbStub);
         expect(achievements).to.eql(generateAchievements());
         invalidIdAchievments = await ParticipantService.getAchievements("1234", conferenceId, dbStub);
         expect(invalidIdAchievments).to.eql(false);
     })
 
     it('test updateAchievementLevel', async () => {
-        //await ParticipantService.updateAchievementLevel(participant.getId(), conferenceId, 0, 1, dbStub);
+        var updatedAchievement = await ParticipantService.updateAchievementLevel("asdf12345", conferenceId, 0, 1, dbStub);
+        expect(updatedAchievement).to.eql(true);
     })
 
     it('test updateTaskCounts', async () => {
-        //await ParticipantService.updateTaskCounts(participant.getId(), conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
+        var updatedTaskCounts = await ParticipantService.updateTaskCounts("asdf12345", conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
+        expect(updatedTaskCounts).to.eql(true);
     })
 
     it('test getTaskCount', async () => {
@@ -176,7 +213,8 @@ describe('Participant Service Test', () => {
     })
 
     it('test updateTaskCount', async () => {
-        //await ParticipantService.updateTaskCount(participant.getId(), conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
+        var updatedTaskCount = await ParticipantService.updateTaskCount("asdf12345", conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
+        expect(updatedTaskCount).to.eql(true);
     })
 
     it('test addChatID', async () => {
@@ -187,10 +225,12 @@ describe('Participant Service Test', () => {
     })
 
     it('test deleteAllParticipants', async () => {
-        //
+        var deletedAllParticipants = await ParticipantService.deleteAllParticipants(conferenceId, dbStub);
+        expect(deletedAllParticipants).to.eql(true);
     })
 
     it('test deleteParticipant', async () => {
-        //
+        var deletedParticipant = await ParticipantService.deleteParticipant("asdf12345", conferenceId, dbStub);
+        expect(deletedParticipant).to.eql(true);
     })
 });
