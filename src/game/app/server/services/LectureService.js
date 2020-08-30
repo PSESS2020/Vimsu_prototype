@@ -17,15 +17,15 @@ module.exports = class LectureService {
      * @param {String} videoId video ID
      * @param {blobClient} blob blob instance
      * @param {Date} startingTime lecture starting time
-     * @param {Date} endTime lecture video end time
+     * @param {number} duration lecture video duration
      */
-    static getVideoUrl(videoId, blob, startingTime, endTime) {
+    static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
         TypeChecker.isInstanceOf(blob, blobClient);
         TypeChecker.isDate(startingTime);
-        TypeChecker.isDate(endTime);
+        TypeChecker.isNumber(duration);
 
-        return blob.getWriteSAS("lectures", videoId, startingTime, endTime);
+        return blob.getWriteSAS("lectures", videoId, startingTime, duration);
     }
 
     /**

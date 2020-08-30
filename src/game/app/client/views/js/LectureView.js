@@ -13,6 +13,7 @@ class LectureView extends WindowView {
     #isModerator;
     #lectureId;
     #lectureDuration;
+    #currentTimeDifference;
     #video;
     #timeLeft;
     #eventManager;
@@ -76,8 +77,12 @@ class LectureView extends WindowView {
         }
     }
 
-    drawVideo(videoUrl, currentTime) {
-        //empties video div to prevent showing the wrong video
+    /**
+     * draws video
+     * 
+     * @param {String} videoUrl video URL
+     */
+    drawVideo(videoUrl) {
         $('#lectureVideo').empty();
 
         $('#lectureVideo').append(`
@@ -94,7 +99,7 @@ class LectureView extends WindowView {
             if (this.#lectureStatus == LectureStatus.RUNNING && this.#video.paused) {
                 $('#lecturePending').hide();
 
-                this.#video.currentTime = currentTime;
+                this.#video.currentTime = this.#currentTimeDifference / 1000;
                 this.#video.play();
             }
 
@@ -178,9 +183,19 @@ class LectureView extends WindowView {
 
         //opens lecture video window
         $('#lectureVideoWindow').show();
+
+        this.#timerIntervalId = setInterval(() => {
+            this.#currentTimeDifference = Date.now() - new Date(lecture.startingTime).getTime();
+            this.#update(this.#currentTimeDifference);
+        }, 1000);
     }
 
-    update(currentTimeDifference) {
+    /**
+     * @private updates lecture view constantly
+     * 
+     * @param {number} currentTimeDifference time difference between now and starting time
+     */
+    #update = function (currentTimeDifference) {
         if (currentTimeDifference < 0) {
             $('#lecturePending').remove();
             $('#lectureVideo').append(`
@@ -210,7 +225,7 @@ class LectureView extends WindowView {
                 this.#eventManager.handleShowVideo(this.#lectureId);
         }
 
-        else if (this.#video !== undefined && currentTimeDifference >= 0 && this.#video.currentTime >= this.#lectureDuration) {
+        else if (this.#video !== undefined && currentTimeDifference >= 0 && currentTimeDifference > this.#lectureDuration) {
             this.#eventManager.handleClearInterval();
 
             $('#lecturePending').hide();
@@ -220,6 +235,7 @@ class LectureView extends WindowView {
 
             this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
 
+            this.#video.controlsList.remove('nodownload');
             this.#video.pause();
         }
     }

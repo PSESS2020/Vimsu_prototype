@@ -80,6 +80,11 @@ class EventManager {
         this.#clientController.handleFromViewLectureLeft(lectureId);
     }
 
+    /**
+     * called from View to show video
+     * 
+     * @param {String} lectureId lecture ID
+     */
     handleShowVideo(lectureId) {
         this.#clientController.handleFromViewGetVideoUrl(lectureId);
     }

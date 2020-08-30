@@ -303,8 +303,13 @@ module.exports = class Lecture {
         return (now >= this.getEndTime());
     }
 
+    /**
+     * Gets lecture end time
+     * 
+     * @return end time
+     */
     getEndTime() {
-        return this.#startingTime.getTime() + this.#duration * 1000;
+        return (this.#startingTime.getTime() + this.#duration * 1000);
     }
 
     /**

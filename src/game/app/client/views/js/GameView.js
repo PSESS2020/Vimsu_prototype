@@ -1097,15 +1097,16 @@ class GameView {
         }
     };
 
-    drawVideo(videoUrl, currentTime) {
-        if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.drawVideo(videoUrl, currentTime);
-        }
-    }
+    /**
+     * draws lecture video
+     * 
+     * @param {*} videoUrl video URL
+     */
+    drawVideo(videoUrl) {
+        TypeChecker.isString(videoUrl);
 
-    updateLecture(currentTimeDifference) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.update(currentTimeDifference);
+            this.#lectureView.drawVideo(videoUrl);
         }
     }
 

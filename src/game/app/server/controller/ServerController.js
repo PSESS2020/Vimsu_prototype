@@ -716,27 +716,12 @@ module.exports = class ServerController {
 
                     socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator);
                     socket.broadcast.emit('hideAvatar', ppantID);
-
-                    var lectureStartingTime = new Date(lecture.getStartingTime()).getTime();
-
-                    function updateLecture() {
-                        var currentTimeDifference = Date.now() - lectureStartingTime;
-                        socket.emit('updateLecture', currentTimeDifference);
-                    }
-    
-                    clearInterval(interval);
-    
-                    updateLecture();
-    
-                    //updates view every 1 second
-                    interval = setInterval(() => {
-                        updateLecture();
-                    }, 1000);
                 } else {
                     socket.emit('lectureFull', lectureId);
                 }
             })
 
+            /* handles getting video on lecture start */
             socket.on('getVideoUrl', (lectureId) => {
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
@@ -759,12 +744,9 @@ module.exports = class ServerController {
 
                 if (socket.currentLecture == lectureId && lecture.isOpened() && !lecture.isEnded()) {
                     var videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
-                        this.#blob, new Date(), new Date(lecture.getEndTime()));
+                        this.#blob, new Date(lecture.getStartingTime()), Math.ceil(lecture.getDuration() / 60));
                     
-                    var currentTimeDifference = Date.now() - new Date(lecture.getStartingTime()).getTime();
-                    var currentTime = Math.ceil(currentTimeDifference / 1000);
-
-                    socket.emit('videoUrl', videoUrl, currentTime);
+                    socket.emit('videoUrl', videoUrl);
                 }
             })
 

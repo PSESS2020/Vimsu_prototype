@@ -160,7 +160,6 @@ class ClientController {
         this.#socket.on('initAllchat', this.#handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.#socket.on('lectureMessageFromServer', this.#handleFromServerNewLectureChatMessage.bind(this));
         this.#socket.on('videoUrl', this.#handleFromServerVideoUrl.bind(this));
-        this.#socket.on('updateLecture', this.#handleFromServerUpdateLecture.bind(this));
         this.#socket.on('updateLectureChat', this.#handleFromServerUpdateLectureChat.bind(this));
         this.#socket.on('update token', this.#handleFromServerUpdateToken.bind(this));
         this.#socket.on('force close lecture', this.#handleFromServerForceCloseLecture.bind(this));
@@ -407,12 +406,14 @@ class ClientController {
         this.#gameView.initCurrentLectures(lectures);
     }
 
-    #handleFromServerVideoUrl = function (videoUrl, currentTime) {
-        this.#gameView.drawVideo(videoUrl, currentTime);
-    }
-
-    #handleFromServerUpdateLecture = function (currentTimeDifference) {
-        this.#gameView.updateLecture(currentTimeDifference);
+    /**
+     * @private receives video URL from server
+     * 
+     * @param {String} videoUrl 
+     */
+    #handleFromServerVideoUrl = function (videoUrl) {
+        TypeChecker.isString(videoUrl);
+        this.#gameView.drawVideo(videoUrl);
     }
 
     /**
