@@ -226,7 +226,7 @@ class LectureView extends WindowView {
         }
 
         else if (this.#video !== undefined && currentTimeDifference >= 0 && currentTimeDifference > this.#lectureDuration) {
-            this.#eventManager.handleClearInterval();
+            clearInterval(this.#timerIntervalId);
 
             $('#lecturePending').hide();
             $('#pendingLectureChatMessage').empty();
