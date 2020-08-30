@@ -1098,6 +1098,19 @@ class GameView {
     };
 
     /**
+     * draws lecture video
+     * 
+     * @param {*} videoUrl video URL
+     */
+    drawVideo(videoUrl) {
+        TypeChecker.isString(videoUrl);
+
+        if ($('#lectureVideoWindow').is(':visible')) {
+            this.#lectureView.drawVideo(videoUrl);
+        }
+    }
+
+    /**
      * Closes lecture window
      */
     closeLectureView() {

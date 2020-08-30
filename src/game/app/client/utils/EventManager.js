@@ -81,6 +81,15 @@ class EventManager {
     }
 
     /**
+     * called from View to show video
+     * 
+     * @param {String} lectureId lecture ID
+     */
+    handleShowVideo(lectureId) {
+        this.#clientController.handleFromViewGetVideoUrl(lectureId);
+    }
+
+    /**
      * called from View on schedule click
      */
     handleScheduleClicked() {
