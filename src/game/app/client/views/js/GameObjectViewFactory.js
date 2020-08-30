@@ -211,7 +211,7 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, pos, chairOffset, objectName);
-                else throw new Error("The image for the right chair back view could not be found in the cache for images. Did you reload the images after cache clear?");
+                else throw new Error("The image for the chair view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
@@ -222,7 +222,7 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, pos, sofaOffset, objectName);
-                else throw new Error("The image for the left sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
+                else throw new Error("The image for the sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
