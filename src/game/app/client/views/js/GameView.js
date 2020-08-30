@@ -261,12 +261,32 @@ class GameView {
                 : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
                     .concat(this.#npcAvatarViews);
 
-            //sort all Avatars in CordX
+            //sort all Elements 
             allDrawElements.sort(function (a, b) {
-                return b.getGridPosition().getCordX() - a.getGridPosition().getCordX();
+                let cordXFromA = a.getGridPosition().getCordX();
+                let cordYFromA = a.getGridPosition().getCordY();
+                let cordXFromB = b.getGridPosition().getCordX();
+                let cordYFromB = b.getGridPosition().getCordY();
+
+                //Make GameObjectView Position and AvatarView Position consistent
+                if (a instanceof GameObjectView) {
+                    cordYFromA = cordYFromA - Settings.MAP_BLANK_TILES_LENGTH; 
+                }
+
+                if (b instanceof GameObjectView) {
+                    cordYFromB = cordYFromB - Settings.MAP_BLANK_TILES_LENGTH;
+                }
+
+                if (cordXFromA === cordXFromB) {
+                    //if they have the same cordX value, sort in cordY descending
+                    return cordYFromA - cordYFromB;
+                }
+
+                //otherwise, sort in cordX ascending
+                return cordXFromB - cordXFromA;
             });
 
-            //draw all avatars
+            //draw all elements
             for (var i = 0; i < allDrawElements.length; i++) {
                 allDrawElements[i].draw();
             }

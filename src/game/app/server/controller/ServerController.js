@@ -633,7 +633,7 @@ module.exports = class ServerController {
                 let lectureChat = lecture.getLectureChat();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-                if (!(lecture.getEndTime() > new Date().getTime())) {
+                if (!lecture.isOpened() && !lecture.isEnded()) {
                     return;
                 }
 
