@@ -300,8 +300,10 @@ module.exports = class ServerController {
                     }
 
                     /* Sends current points and rank to client */
+                    socket.emit('updatePoints', ppant.getAwardPoints());
+
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
-                        socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank);
+                        socket.emit('updateRank', rank);
                     }).catch(err => {
                         console.error(err);
                     })
@@ -918,6 +920,7 @@ module.exports = class ServerController {
                 } else {
                     RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
                         targetRank = rank;
+                        console.log(targetRank);
                         socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                     })
                 }
@@ -2285,14 +2288,14 @@ module.exports = class ServerController {
                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
-            this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), undefined);
+            this.#io.to(this.getSocketId(participantId)).emit('updatePoints', participant.getAwardPoints());
 
             await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
 
             //updates the rank of all active participants
             Promise.all([...this.#ppants.keys()].map(async ppantId => {
                 var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
-                this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                this.#io.to(this.getSocketId(ppantId)).emit('updateRank', rank);
             }))
         } else {
             //participant is not online, so update alle infos to the database
@@ -2330,7 +2333,7 @@ module.exports = class ServerController {
                         //updates the rank of all active participants
                         Promise.all([...this.#ppants.keys()].map(async ppantId => {
                             var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
-                            this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                            this.#io.to(this.getSocketId(ppantId)).emit('updateRank', rank);
                         }))
                     }
                 }

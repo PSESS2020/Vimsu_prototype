@@ -618,8 +618,8 @@ class GameView {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
         TypeChecker.isBoolean(isFriend);
 
-        //case when ppant with this businessCard is a friend
-        if (rank !== undefined) {
+        //case when ppant with this businessCard is a friend or is a moderator
+        if (rank) {
             TypeChecker.isInt(rank);
         }
 
@@ -807,21 +807,26 @@ class GameView {
     }
 
     /**
-     * Updates points and rank on successesBar
+     * Updates points on successesBar
      * 
-     * @param {?number} points points
+     * @param {number} points points
+     */
+    updatePoints(points) {
+        TypeChecker.isInt(points);
+        this.#successesBar.updatePoints(points);
+    }
+
+    /**
+     * Updates rank on successesBar
+     * 
      * @param {?number} rank rank
      */
-    updateSuccessesBar(points, rank) {
-        if (points) {
-            TypeChecker.isInt(points);
-        }
-
+    updateRank(rank) {
         if (rank) {
             TypeChecker.isInt(rank);
         }
 
-        this.#successesBar.update(points, rank);
+        this.#successesBar.updateRank(rank);
     }
 
     /**

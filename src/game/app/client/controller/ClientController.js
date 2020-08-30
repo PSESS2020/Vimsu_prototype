@@ -140,11 +140,9 @@ class ClientController {
      */
     #setUpSocket = function () {
         this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
-        //this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.#socket.on('currentGameStateYourRoom', this.#handleFromServerUpdateRoom.bind(this));
         this.#socket.on('currentGameStateYourPosition', this.#handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
         this.#socket.on('roomEnteredByParticipant', this.#handleFromServerRoomEnteredByParticipant.bind(this));
-        //this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.#socket.on('movementOfAnotherPPantStart', this.#handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.#socket.on('movementOfAnotherPPantStop', this.#handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.#socket.on('remove player', this.#handleFromServerRemovePlayer.bind(this)); // handles remove event
@@ -172,7 +170,8 @@ class ClientController {
         this.#socket.on('removeFromChatParticipantList', this.#handleFromServerRemoveFromChatParticipantList.bind(this));
         this.#socket.on('addToInviteFriends', this.#handleFromServerAddToInviteFriends.bind(this));
         this.#socket.on('removeFromInviteFriends', this.#handleFromServerRemoveFromInviteFriends.bind(this));
-        this.#socket.on('updateSuccessesBar', this.#handleFromServerUpdateSuccessesBar.bind(this));
+        this.#socket.on('updatePoints', this.#handleFromServerUpdatePoints.bind(this));
+        this.#socket.on('updateRank', this.#handleFromServerUpdateRank.bind(this));
         this.#socket.on('acceptedFriendRequest', this.#handleFromServerAcceptedFriendRequest.bind(this));
         this.#socket.on('rejectedFriendRequest', this.#handleFromServerRejectedFriendRequest.bind(this));
         this.#socket.on('addToChatParticipantList', this.#handleFromServerAddToChatParticipantList.bind(this));
@@ -545,7 +544,7 @@ class ClientController {
             this.#gameView.initBusinessCardView(businessCard, false, rank, isModerator);
         } else {
             //rank is undefined because it is not drawn on friendBusinessCards
-            this.#gameView.initBusinessCardView(businessCard, true, undefined, isModerator);
+            this.#gameView.initBusinessCardView(businessCard, true, rank, isModerator);
         }
     }
 
@@ -775,21 +774,26 @@ class ClientController {
     };
 
     /**
-     * @private Receives from server to update successes bar
+     * @private Receives from server to update points
      * 
-     * @param {?number} points points
+     * @param {number} points points
      * @param {?number} rank rank
      */
-    #handleFromServerUpdateSuccessesBar = function (points, rank) {
-        if (points) {
-            TypeChecker.isInt(points);
-        }
+    #handleFromServerUpdatePoints = function (points) {
+        TypeChecker.isInt(points);
+        this.#gameView.updatePoints(points);
+    }
 
+    /**
+     * @private Receives from server to update rank
+     * 
+     * @param {?number} rank rank
+     */
+    #handleFromServerUpdateRank = function (rank) {
         if (rank) {
             TypeChecker.isInt(rank);
         }
-
-        this.#gameView.updateSuccessesBar(points, rank);
+        this.#gameView.updateRank(rank);
     }
 
     /**

@@ -66,7 +66,7 @@ class BusinessCardView extends WindowView {
                     <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
                 </tr>
             `)
-        } else {
+        } else if (!this.#isFriend && !this.#isModerator) {
             $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Rank</td>
