@@ -28,7 +28,11 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
         "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
         "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
-        "table_default": "client/assets/tables/table.png"
+        "righttable_default": "client/assets/tables/dinnerTableRight.png",
+        "leftchair_default": "client/assets/chairs/chair_left.png",
+        "rightchair_default": "client/assets/chairs/chair_right.png",
+        "leftchairback_default": "client/assets/chairs/chair_left_back.png",
+        "rightchairback_default": "client/assets/chairs/chair_right_back.png",
     }
 
     /**
@@ -68,12 +72,29 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
-        for (var i = 2; i <= 10; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.FOODCOURT_ID, 10, i, true, false),
-                objService.createTable(Settings.FOODCOURT_ID, 8, i, true, false),
-                objService.createTable(Settings.FOODCOURT_ID, 6, i, true, false),
-                objService.createTable(Settings.FOODCOURT_ID, 4, i, true, false),
-                objService.createTable(Settings.FOODCOURT_ID, 2, i, true, false));
+        for (var i = 3; i <= 9; i += 6) {
+            listOfGameObjects.push(objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 3, true, false),
+                objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 8, true, false));
+        }
+
+        for (var i = 2; i <= 8; i += 6) {
+            listOfGameObjects.push(
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 3, true, false),
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 4, true, false),
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 5, true, false),
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 8, true, false),
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 9, true, false),
+                objService.createRightChairBack(Settings.FOODCOURT_ID, i, 10, true, false));
+        }
+
+        for (var i = 4; i <= 10; i += 6) {
+            listOfGameObjects.push(
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 3, true, false),
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 4, true, false),
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 5, true, false),
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 8, true, false),
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 9, true, false),
+                objService.createRightChair(Settings.FOODCOURT_ID, i, 10, true, false));
         }
 
         let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOODCOURT_ID, 1, 5, 5, -1, false, false);
@@ -83,7 +104,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 5; j += 5) {
-                listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
+                listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
             }
         }
 
