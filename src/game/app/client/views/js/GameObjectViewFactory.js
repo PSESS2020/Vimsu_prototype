@@ -193,25 +193,36 @@ class GameObjectViewFactory {
 
                 break;
 
-            case GameObjectType.LEFTSOFA:
+            case GameObjectType.RIGHTTABLE:
+                    gameObjectImage = this.#assetImages[objectName];
+    
+                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+    
+                    if (gameObjectImage !== undefined)
+                        gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
+    
+                    break; 
+
+            case GameObjectType.CHAIR:
                 gameObjectImage = this.#assetImages[objectName];
 
-                var leftSofaOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4 };
+                var chairOffset = { x: 15, y: this.#tileRowHeight - gameObjectImage.height - 6 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, leftSofaOffset, objectName);
-                else throw new Error("The image for the left sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, chairOffset, objectName);
+                else throw new Error("The image for the chair view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
-            case GameObjectType.RIGHTSOFA:
+            case GameObjectType.SOFA:
                 gameObjectImage = this.#assetImages[objectName];
 
-                var rightSofaOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4 };
+                var sofaOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, rightSofaOffset, objectName);
-                else throw new Error("The image for the right sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, sofaOffset, objectName);
+                else throw new Error("The image for the sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 

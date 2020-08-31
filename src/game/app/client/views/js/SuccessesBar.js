@@ -20,20 +20,27 @@ class SuccessesBar extends Views {
     }
 
     /**
-     * Updates points and rank
+     * Updates points
      * 
-     * @param {?number} points points
+     * @param {number} points points
+     */
+    updatePoints(points) {
+        $('#pointBox').empty()
+        $('#pointBox').text(points);
+
+    }
+
+    /**
+     * Updates rank
+     * 
      * @param {?number} rank rank
      */
-    update(points, rank) {
-        if (points) {
-            $('#pointBox').empty()
-            $('#pointBox').text(points);
-        }
+    updateRank(rank) {
+        $('#rankBox').empty()
 
-        if (rank) {
-            $('#rankBox').empty()
+        if (rank)
             $('#rankBox').text(rank);
-        }
+        else
+            $('#rankBox').text("-");
     }
 }

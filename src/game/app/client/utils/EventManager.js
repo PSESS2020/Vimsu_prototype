@@ -9,18 +9,20 @@ class EventManager {
     #clientController;
 
     /**
-     * @constructor creates an instnace of EventManager.
+     * @constructor creates an instance of EventManager.
      * Handles Events from View and emits it to ClientController
+     * 
+     * @param {ClientController} clientController ClientController instance
      */
-    constructor() {
+    constructor(clientController) {
         if (!!EventManager.instance) {
             return EventManager.instance;
         }
 
         EventManager.instance = this;
 
-        //works because ClientController is singleton
-        this.#clientController = new ClientController();
+        TypeChecker.isInstanceOf(clientController, ClientController);
+        this.#clientController = clientController;
     }
 
     /**
@@ -73,10 +75,18 @@ class EventManager {
      * called from View on lecture leave
      * 
      * @param {String} lectureId lectureID
-     * @param {boolean} lectureEnded true if lecture is ended
      */
-    handleLectureLeft(lectureId, lectureEnded) {
-        this.#clientController.handleFromViewLectureLeft(lectureId, lectureEnded);
+    handleLectureLeft(lectureId) {
+        this.#clientController.handleFromViewLectureLeft(lectureId);
+    }
+
+    /**
+     * called from View to show video
+     * 
+     * @param {String} lectureId lecture ID
+     */
+    handleShowVideo(lectureId) {
+        this.#clientController.handleFromViewGetVideoUrl(lectureId);
     }
 
     /**

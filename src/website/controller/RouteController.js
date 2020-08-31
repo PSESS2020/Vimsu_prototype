@@ -259,7 +259,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('registerValid', { invalidTitle: true });
+                return response.render('register', { invalidTitle: true });
             }
 
             surname = request.body.surname;
@@ -270,23 +270,26 @@ module.exports = class RouteController {
             var password = request.body.password;
 
             return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
-                request.session.accountId = res.getAccountID();
-                request.session.registerValid = false;
-                request.session.loggedin = true;
-                request.session.title = res.getTitle();
-                request.session.surname = res.getSurname();
-                request.session.forename = res.getForename();
+                if (res) {
+                    request.session.accountId = res.getAccountID();
+                    request.session.registerValid = false;
+                    request.session.loggedin = true;
+                    request.session.title = res.getTitle();
+                    request.session.surname = res.getSurname();
+                    request.session.forename = res.getForename();
 
-                //Needed for creating business card during entering the conference.
-                request.session.username = res.getUsername();
-                request.session.job = res.getJob();
-                request.session.company = res.getCompany();
-                request.session.email = res.getEmail();
+                    //Needed for creating business card during entering the conference.
+                    request.session.username = res.getUsername();
+                    request.session.job = res.getJob();
+                    request.session.company = res.getCompany();
+                    request.session.email = res.getEmail();
+                }
+                
                 response.redirect('/');
                 response.end();
             }).catch(err => {
                 console.error(err);
-                return response.render('registerValid', { registerFailed: true });
+                return response.render('register', { registerFailed: true });
             })
         })
 

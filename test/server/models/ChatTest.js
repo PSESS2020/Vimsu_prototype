@@ -102,6 +102,11 @@ describe('Chat Testing', function() {
 
     describe('Chat functions', function() {
         describe('Chat messageList functions', function() {
+
+            it('Test abstract addMessage', () => {
+                expect(() => chat.addMessage()).to.throw(Error, 'addMessage() has to be implemented!');
+            });
+
             it('Test remove old Message', function() {
                 //Status of message list before removing message
                 expect(messageList_result).to.be.an('array').and.to.have.members(messageList).and.to.have.lengthOf(2);

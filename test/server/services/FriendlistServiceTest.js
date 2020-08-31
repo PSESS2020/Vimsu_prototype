@@ -123,7 +123,16 @@ describe("FriendListService Test", () => {
     it('Test load FriendList', async () => {
         var friendList = await FriendListService.loadFriendList(friendListOwner, conferenceId, dbStub);
         expect(friendList).to.be.instanceOf(FriendList);
-        expect(friendList.getAllBusinessCards()).to.be.an('array').and.to.have.lengthOf(3); 
+        
+        var businessCards = friendList.getAllBusinessCards();
+        var businessCardIds = [];
+        
+        expect(businessCards).to.be.an('array').and.to.have.lengthOf(3);
+        
+        businessCards.forEach(card => {
+            businessCardIds.push(card.getParticipantId());
+        });
+        expect(businessCardIds).to.be.an('array').and.to.have.members(["123", "456", "678"]).and.to.have.lengthOf(3);
     });
 
     it('Test load FriendList with invalid owner id', async () => {

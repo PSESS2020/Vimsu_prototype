@@ -22,7 +22,7 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findInCollection("participants_" + conferenceId, {}, { participantId: 1, points: 1 }).then(ppants => {
+        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }).then(ppants => {
             var rankList = ppants.sort((a, b) => b.points - a.points);
 
             var rank = 1;
@@ -92,10 +92,12 @@ module.exports = class RankListService {
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
-            if (idx < 0) {
-                throw new Error(participantId + " is not in ranklist")
-            }
-            return rankList[idx].rank;
+            if (idx < 0)
+                var rank = undefined;
+            else
+                var rank = rankList[idx].rank;
+
+            return rank;
         })
     }
 } 

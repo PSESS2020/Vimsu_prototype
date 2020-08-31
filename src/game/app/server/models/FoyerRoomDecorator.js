@@ -29,7 +29,6 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftschedule_default2": "client/assets/walls/schedule3.png",
         "leftwindow_default0": "client/assets/windows/left_small_window_default0.png",
         "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-        "rightwindow_default1": "client/assets/windows/right_small_window_default1.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
         "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
@@ -100,15 +99,15 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         for (var i = this.#room.getLength() - 3; i < this.#room.getLength() - 1; i++) {
             listOfGameObjects.push(objService.createLeftSofa(Settings.FOYER_ID, i, 0, true, false));
-            listOfMapElements.push(objService.createLeftWindowDefault0(Settings.FOYER_ID, 1, 1, i, -1, false, false))
+            listOfMapElements.push(objService.createLeftWindowDefault(Settings.FOYER_ID, 1, 1, i, -1, false, false))
         }
 
-        listOfMapElements.push(objService.createLeftWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength() - 1, -1, false, false))
-        listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 0, false, false))
+        listOfMapElements.push(objService.createLeftWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength() - 1, -1, false, false))
+        listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), 0, false, false))
 
         for (var j = 1; j < 6; j++) {
             listOfGameObjects.push(objService.createRightSofa(Settings.FOYER_ID, this.#room.getWidth() - 1, j, true, false));
-            listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false, false));
+            listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), j, false, false));
         }
 
         let conferenceLogos = objService.createLeftConferenceLogo(Settings.FOYER_ID, 1, 5, 13, -1, false, false);
@@ -116,7 +115,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
             listOfMapElements.push(conferenceLogo);
         });
 
-        listOfMapElements.push(objService.createRightWindowDefault0(Settings.FOYER_ID, 1, 1, this.#room.getLength(), this.#room.getWidth() - 2, false, false))
+        listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), this.#room.getWidth() - 2, false, false))
 
         let wallFrames = objService.createRightWallFrame(Settings.FOYER_ID, 1, 3, this.#room.getLength(), 14, false, false);
         wallFrames.forEach(wallFrame => {

@@ -220,7 +220,7 @@ module.exports = class Chatservice {
                         chat.username1,
                         chat.username2);
                 }
-
+                
                 return loadedChat;
             } else {
                 console.log("could not find chat with chatId" + chatId);
@@ -290,7 +290,7 @@ module.exports = class Chatservice {
 
                             //chat doesn't have any member anymore, so delete the entry from chats collection
                             return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(res => {
-                                return true;
+                                return res;
                             }).catch(err => {
                                 console.error(err);
                                 return false;
@@ -369,7 +369,7 @@ module.exports = class Chatservice {
 
         return vimsudb.deleteAllFromCollection("chats_" + conferenceId).then(chatsRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, {}, { chatIDList: { $exists: true } }).then(res => {
-                if (chatsRes)
+                if (chatsRes && res)
                     console.log("all chats deleted");
                 return chatsRes;
             }).catch(err => {
@@ -398,7 +398,7 @@ module.exports = class Chatservice {
 
         return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(chatRes => {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
-                if (chatRes)
+                if (chatRes && res)
                     console.log("chat with chatId " + chatId + " deleted");
                 return chatRes;
             }).catch(err => {

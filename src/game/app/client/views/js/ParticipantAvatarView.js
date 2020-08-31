@@ -160,7 +160,7 @@ class ParticipantAvatarView extends AvatarView {
             }
 
             if (this.#isOwnAvatar) {
-                this.#drawArrow(ctx_avatar, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15 - Settings.ARROW_LENGTH, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15, Settings.ARROW_WIDTH, arrowColor);
+                this.#drawArrow(screenX + Settings.AVATAR_WIDTH / 2, screenY - 15 - Settings.ARROW_LENGTH, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15, Settings.ARROW_WIDTH, arrowColor);
             }
 
             ctx_avatar.textAlign = "center";
@@ -187,7 +187,6 @@ class ParticipantAvatarView extends AvatarView {
     /**
      * @private draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
      * 
-     * @param {Context} ctx context to draw
      * @param {number} fromCordX origin x coordinate
      * @param {number} fromCordY origin y coordinate
      * @param {number} toCordX end x coordinate
@@ -195,45 +194,45 @@ class ParticipantAvatarView extends AvatarView {
      * @param {number} arrowWidth arrow width
      * @param {String} color arrow color
      */
-    #drawArrow = function (ctx, fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
+    #drawArrow = function (fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
         //variables to be used when creating the arrow
         var headlen = 5;
         var angle = Math.atan2(toCordY - fromCordY, toCordX - fromCordX);
 
-        ctx.save();
+        ctx_avatar.save();
 
-        ctx.strokeStyle = color;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 15;
+        ctx_avatar.strokeStyle = color;
+        ctx_avatar.shadowColor = color;
+        ctx_avatar.shadowBlur = 15;
 
         //starting path of the arrow from the start square to the end square
         //and drawing the stroke
-        ctx.beginPath();
-        ctx.moveTo(fromCordX, fromCordY);
-        ctx.lineTo(toCordX, toCordY);
-        ctx.lineWidth = arrowWidth;
-        ctx.stroke();
+        ctx_avatar.beginPath();
+        ctx_avatar.moveTo(fromCordX, fromCordY);
+        ctx_avatar.lineTo(toCordX, toCordY);
+        ctx_avatar.lineWidth = arrowWidth;
+        ctx_avatar.stroke();
 
         //starting a new path from the head of the arrow to one of the sides of
         //the point
-        ctx.beginPath();
-        ctx.moveTo(toCordX, toCordY);
-        ctx.lineTo(toCordX - headlen * Math.cos(angle - Math.PI / 7),
+        ctx_avatar.beginPath();
+        ctx_avatar.moveTo(toCordX, toCordY);
+        ctx_avatar.lineTo(toCordX - headlen * Math.cos(angle - Math.PI / 7),
             toCordY - headlen * Math.sin(angle - Math.PI / 7));
 
         //path from the side point of the arrow, to the other side point
-        ctx.lineTo(toCordX - headlen * Math.cos(angle + Math.PI / 7),
+        ctx_avatar.lineTo(toCordX - headlen * Math.cos(angle + Math.PI / 7),
             toCordY - headlen * Math.sin(angle + Math.PI / 7));
 
         //path from the side point back to the tip of the arrow, and then
         //again to the opposite side point
-        ctx.lineTo(toCordX, toCordY);
-        ctx.lineTo(toCordX - headlen * Math.cos(angle - Math.PI / 7),
+        ctx_avatar.lineTo(toCordX, toCordY);
+        ctx_avatar.lineTo(toCordX - headlen * Math.cos(angle - Math.PI / 7),
             toCordY - headlen * Math.sin(angle - Math.PI / 7));
 
         //draws the paths created above
-        ctx.stroke();
-        ctx.restore();
+        ctx_avatar.stroke();
+        ctx_avatar.restore();
     }
 
     /**
@@ -265,28 +264,28 @@ class ParticipantAvatarView extends AvatarView {
             }
 
             switch (event.code) {
-                case "KeyW": 
-                this.#eventManager.handleUpArrowDown();
-                break;
+                case "KeyW":
+                    this.#eventManager.handleUpArrowDown();
+                    break;
                 case "ArrowUp":
                     event.preventDefault();
                     this.#eventManager.handleUpArrowDown();
                     break;
-                case "KeyS": 
+                case "KeyS":
                     this.#eventManager.handleDownArrowDown();
                     break;
                 case "ArrowDown":
                     event.preventDefault();
                     this.#eventManager.handleDownArrowDown();
                     break;
-                case "KeyD": 
+                case "KeyD":
                     this.#eventManager.handleRightArrowDown();
                     break;
                 case "ArrowRight":
                     event.preventDefault();
                     this.#eventManager.handleRightArrowDown();
                     break;
-                case "KeyA": 
+                case "KeyA":
                     this.#eventManager.handleLeftArrowDown();
                     break;
                 case "ArrowLeft":

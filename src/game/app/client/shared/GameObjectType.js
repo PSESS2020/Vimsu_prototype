@@ -16,8 +16,9 @@ const GameObjectType = Object.freeze({
     LEFTSCHEDULE: 'LEFTSCHEDULE',
     PLANT: 'PLANT',
     CONFERENCELOGO: 'CONFERENCELOGO',
-    LEFTSOFA: 'LEFTSOFA',
-    RIGHTSOFA: 'RIGHTSOFA'
+    SOFA: 'SOFA',
+    RIGHTTABLE: 'RIGHTTABLE',
+    CHAIR: 'CHAIR'
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

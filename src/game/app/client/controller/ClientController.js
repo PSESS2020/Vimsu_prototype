@@ -18,8 +18,9 @@ class ClientController {
      * Otherwise the existing instance will be returned.
      * 
      * @param {number} port client port
+     * @param {GameView} gameView GameView instance
      */
-    constructor(port) {
+    constructor(port, gameView) {
         if (!!ClientController.instance) {
             return ClientController.instance;
         }
@@ -27,9 +28,12 @@ class ClientController {
         ClientController.instance = this;
 
         TypeChecker.isInt(port);
+        TypeChecker.isInstanceOf(gameView, GameView);
+        
         this.#port = port;
         this.#openSocketConnection();
-        this.#gameView = new GameView();
+        this.#gameView = gameView;
+        this.#gameView.initEventManager(this);
     }
 
     /**
@@ -136,11 +140,9 @@ class ClientController {
      */
     #setUpSocket = function () {
         this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
-        //this.#socket.on('currentGameStateYourID', this.handleFromServerUpdateID.bind(this)); //First Message from server
         this.#socket.on('currentGameStateYourRoom', this.#handleFromServerUpdateRoom.bind(this));
         this.#socket.on('currentGameStateYourPosition', this.#handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
         this.#socket.on('roomEnteredByParticipant', this.#handleFromServerRoomEnteredByParticipant.bind(this));
-        //this.#socket.on('collisionDetetcionAnswer', this.handleFromServerCollisionDetectionAnswer.bind(this));
         this.#socket.on('movementOfAnotherPPantStart', this.#handleFromServerStartMovementOther.bind(this)); // onKeyDown, start recalculating position
         this.#socket.on('movementOfAnotherPPantStop', this.#handleFromServerStopMovementOther.bind(this));  // onKeyUp, check if position fits server 
         this.#socket.on('remove player', this.#handleFromServerRemovePlayer.bind(this)); // handles remove event
@@ -155,6 +157,7 @@ class ClientController {
         this.#socket.on('newAllchatMessage', this.#handleFromServerNewAllchatMessage.bind(this)); // handles new message in allchat
         this.#socket.on('initAllchat', this.#handleFromServerInitAllchat.bind(this)); // called on entering a new room to load the allchat
         this.#socket.on('lectureMessageFromServer', this.#handleFromServerNewLectureChatMessage.bind(this));
+        this.#socket.on('videoUrl', this.#handleFromServerVideoUrl.bind(this));
         this.#socket.on('updateLectureChat', this.#handleFromServerUpdateLectureChat.bind(this));
         this.#socket.on('update token', this.#handleFromServerUpdateToken.bind(this));
         this.#socket.on('force close lecture', this.#handleFromServerForceCloseLecture.bind(this));
@@ -167,7 +170,8 @@ class ClientController {
         this.#socket.on('removeFromChatParticipantList', this.#handleFromServerRemoveFromChatParticipantList.bind(this));
         this.#socket.on('addToInviteFriends', this.#handleFromServerAddToInviteFriends.bind(this));
         this.#socket.on('removeFromInviteFriends', this.#handleFromServerRemoveFromInviteFriends.bind(this));
-        this.#socket.on('updateSuccessesBar', this.#handleFromServerUpdateSuccessesBar.bind(this));
+        this.#socket.on('updatePoints', this.#handleFromServerUpdatePoints.bind(this));
+        this.#socket.on('updateRank', this.#handleFromServerUpdateRank.bind(this));
         this.#socket.on('acceptedFriendRequest', this.#handleFromServerAcceptedFriendRequest.bind(this));
         this.#socket.on('rejectedFriendRequest', this.#handleFromServerRejectedFriendRequest.bind(this));
         this.#socket.on('addToChatParticipantList', this.#handleFromServerAddToChatParticipantList.bind(this));
@@ -218,6 +222,24 @@ class ClientController {
      * @param {Object} initInfo initial own participant info
      */
     #handleFromServerInitOwnParticipant = function (initInfo) {
+        
+        TypeChecker.isInstanceOf(initInfo, Object);
+        TypeChecker.isString(initInfo.id);
+        TypeChecker.isInstanceOf(initInfo.businessCard, Object);
+        TypeChecker.isString(initInfo.businessCard.id);
+        TypeChecker.isString(initInfo.businessCard.username);
+        TypeChecker.isString(initInfo.businessCard.title);
+        TypeChecker.isString(initInfo.businessCard.surname);
+        TypeChecker.isString(initInfo.businessCard.forename);
+        TypeChecker.isString(initInfo.businessCard.job);
+        TypeChecker.isString(initInfo.businessCard.company);
+        TypeChecker.isString(initInfo.businessCard.email);
+        TypeChecker.isInt(initInfo.cordX);
+        TypeChecker.isInt(initInfo.cordY);
+        TypeChecker.isEnumOf(initInfo.dir, Direction);
+        TypeChecker.isBoolean(initInfo.isVisible);
+        TypeChecker.isBoolean(initInfo.isModerator);
+
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
         this.#ownBusinessCard = new BusinessCardClient(
@@ -248,7 +270,7 @@ class ClientController {
      * 
      * @param {number} roomId room ID
      * @param {TypeOfRoom} typeOfRoom type of room
-     * @param {Object[]} assetPaths asset paths
+     * @param {Object} assetPaths asset paths
      * @param {Object[]} listOfMapElementsData list of map elements
      * @param {Object[]} listOfGameObjectsData list of game objects
      * @param {Object} npcData NPC
@@ -258,6 +280,52 @@ class ClientController {
      * @param {number[][]} occupationMap occupation map
      */
     #handleFromServerUpdateRoom = function (roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+
+        TypeChecker.isInt(roomId);
+        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
+        TypeChecker.isInstanceOf(assetPaths, Object);
+        TypeChecker.isInstanceOf(listOfMapElementsData, Array);
+        listOfMapElementsData.forEach(mapElement => {
+            TypeChecker.isInstanceOf(mapElement, Object);
+            TypeChecker.isInt(mapElement.id);
+            TypeChecker.isEnumOf(mapElement.type, GameObjectType);
+            TypeChecker.isString(mapElement.name);
+            TypeChecker.isInt(mapElement.width);
+            TypeChecker.isInt(mapElement.length);
+            TypeChecker.isInt(mapElement.cordX);
+            TypeChecker.isInt(mapElement.cordY);
+            TypeChecker.isBoolean(mapElement.isClickable);
+        });
+        TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
+        listOfGameObjectsData.forEach(gameObject => {
+            TypeChecker.isInstanceOf(gameObject, Object);
+            TypeChecker.isInt(gameObject.id);
+            TypeChecker.isEnumOf(gameObject.type, GameObjectType);
+            TypeChecker.isString(gameObject.name);
+            TypeChecker.isInt(gameObject.width);
+            TypeChecker.isInt(gameObject.length);
+            TypeChecker.isInt(gameObject.cordX);
+            TypeChecker.isInt(gameObject.cordY);
+            TypeChecker.isBoolean(gameObject.isClickable);
+        });
+        TypeChecker.isInstanceOf(npcData, Array);
+        npcData.forEach(npc => {
+            TypeChecker.isInstanceOf(npc, Object);
+            TypeChecker.isInt(npc.id);
+            TypeChecker.isString(npc.name);
+            TypeChecker.isInt(npc.cordX);
+            TypeChecker.isInt(npc.cordY);
+            TypeChecker.isEnumOf(npc.direction, Direction);
+        });
+        TypeChecker.isInt(width);
+        TypeChecker.isInt(length);
+        TypeChecker.isInstanceOf(occupationMap, Array);
+        occupationMap.forEach(line => {
+            TypeChecker.isInstanceOf(line, Array);
+            line.forEach(element => {
+                TypeChecker.isInt(element);
+            });
+        });
 
         //tranform MapElements to GameObjectClients
         var listOfMapElements = [];
@@ -289,7 +357,7 @@ class ClientController {
         if (!this.#currentRoom) {
             this.#currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-            //If not, only swap the room
+        //If not, only swap the room
         } else {
             this.#currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.#currentRoom.enterParticipant(this.#ownParticipant);
@@ -303,6 +371,12 @@ class ClientController {
      * @param {Object} posInfo position information
      */
     #handleFromServerUpdatePosition = function (posInfo) {
+
+        TypeChecker.isInstanceOf(posInfo, Object);
+        TypeChecker.isInt(posInfo.cordX);
+        TypeChecker.isInt(posInfo.cordY);
+        TypeChecker.isEnumOf(posInfo.dir, Direction);
+
         var posUpdate = new PositionClient(posInfo.cordX, posInfo.cordY);
         var dirUpdate = posInfo.dir;
 
@@ -351,10 +425,35 @@ class ClientController {
      * 
      * @param {Object} lecture lecture
      * @param {boolean} hasToken true if has token, otherwise false
-     * @param {Object} letureChat lecture chat
+     * @param {Object[]} letureChat lecture chat
+     * @param {boolean} isOrator true if is orator of this lecture, otherwise false
+     * @param {boolean} isModerator true if is moderator of the conference, otherwise false
+     * @param {number} serverTime current server time
      */
-    #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat) {
-        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat);
+    #handleFromServerLectureEntered = function (lecture, hasToken, lectureChat, isOrator, isModerator, serverTime) {
+        TypeChecker.isInstanceOf(lecture, Object);
+        TypeChecker.isString(lecture.id);
+        TypeChecker.isString(lecture.title);
+        TypeChecker.isString(lecture.videoId);
+        TypeChecker.isNumber(lecture.duration);
+        TypeChecker.isString(lecture.remarks);
+        TypeChecker.isString(lecture.oratorName);
+        /* TypeChecker.isDate(lecture.startingTime); */
+        TypeChecker.isInt(lecture.maxParticipants);
+        TypeChecker.isBoolean(hasToken);
+        TypeChecker.isInstanceOf(lectureChat, Array);
+        lectureChat.forEach(msg => {
+            TypeChecker.isInstanceOf(msg, Object);
+            TypeChecker.isString(msg.senderID);
+            TypeChecker.isString(message.username);
+            TypeChecker.isInt(message.messageID);
+            /* TypeChecker.isDate(message.timestamp); */
+        });
+        TypeChecker.isBoolean(isModerator);
+        TypeChecker.isNumber(serverTime);
+
+        var offset = new Date().getTime() - serverTime;
+        this.#gameView.updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, offset);
     }
 
     /**
@@ -373,6 +472,16 @@ class ClientController {
      * @param {Object} initInfo initial participant info
      */
     #handleFromServerRoomEnteredByParticipant = function (initInfo) {
+
+        TypeChecker.isInstanceOf(initInfo, Object);
+        TypeChecker.isString(initInfo.id);
+        TypeChecker.isString(initInfo.username);
+        TypeChecker.isInt(initInfo.cordX);
+        TypeChecker.isInt(initInfo.cordY);
+        TypeChecker.isEnumOf(initInfo.dir, Direction);
+        TypeChecker.isBoolean(initInfo.isVisible);
+        TypeChecker.isBoolean(initInfo.isModerator);
+
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
         var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
@@ -397,6 +506,16 @@ class ClientController {
      */
     #handleFromServerCurrentLectures = function (lectures) {
         this.#gameView.initCurrentLectures(lectures);
+    }
+
+    /**
+     * @private receives video URL from server
+     * 
+     * @param {String} videoUrl 
+     */
+    #handleFromServerVideoUrl = function (videoUrl) {
+        TypeChecker.isString(videoUrl);
+        this.#gameView.drawVideo(videoUrl);
     }
 
     /**
@@ -425,7 +544,7 @@ class ClientController {
             this.#gameView.initBusinessCardView(businessCard, false, rank, isModerator);
         } else {
             //rank is undefined because it is not drawn on friendBusinessCards
-            this.#gameView.initBusinessCardView(businessCard, true, undefined, isModerator);
+            this.#gameView.initBusinessCardView(businessCard, true, rank, isModerator);
         }
     }
 
@@ -655,21 +774,26 @@ class ClientController {
     };
 
     /**
-     * @private Receives from server to update successes bar
+     * @private Receives from server to update points
      * 
-     * @param {?number} points points
+     * @param {number} points points
      * @param {?number} rank rank
      */
-    #handleFromServerUpdateSuccessesBar = function (points, rank) {
-        if (points) {
-            TypeChecker.isInt(points);
-        }
+    #handleFromServerUpdatePoints = function (points) {
+        TypeChecker.isInt(points);
+        this.#gameView.updatePoints(points);
+    }
 
+    /**
+     * @private Receives from server to update rank
+     * 
+     * @param {?number} rank rank
+     */
+    #handleFromServerUpdateRank = function (rank) {
         if (rank) {
             TypeChecker.isInt(rank);
         }
-
-        this.#gameView.updateSuccessesBar(points, rank);
+        this.#gameView.updateRank(rank);
     }
 
     /**
@@ -964,14 +1088,25 @@ class ClientController {
      * Sends to server on leaving a lecture
      * 
      * @param {String} lectureId lecture ID
-     * @param {boolean} lectureEnded true if lecture has ended, otherwise false
      */
-    handleFromViewLectureLeft(lectureId, lectureEnded) {
+    handleFromViewLectureLeft(lectureId) {
         TypeChecker.isString(lectureId);
-        TypeChecker.isBoolean(lectureEnded);
 
         if (this.#socketReady()) {
-            this.#socket.emit('leaveLecture', lectureId, lectureEnded);
+            this.#socket.emit('leaveLecture', lectureId);
+        }
+    }
+
+    /**
+     * Gets video URL from server
+     * 
+     * @param {String} lectureId lecture ID
+     */
+    handleFromViewGetVideoUrl(lectureId) {
+        TypeChecker.isString(lectureId);
+
+        if (this.#socketReady()) {
+            this.#socket.emit('getVideoUrl', lectureId);
         }
     }
 

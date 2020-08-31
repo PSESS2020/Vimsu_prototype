@@ -109,19 +109,19 @@ describe('ChatService Testing', function() {
     }*/
 
     before(async () => {
-    await database.connectDB();
-    //vimsudb = await database.getDB();
-    var newOneToOneChat_result = await newOneToOneChat(); 
-    var newGroupChat_result = await newGroupChat();
-    var newGroupChat2_result = await newGroupChat2();
-    var results = [newOneToOneChat_result, newGroupChat_result, newGroupChat2_result];
+        await database.connectDB();
+        //vimsudb = await database.getDB();
+        var newOneToOneChat_result = await newOneToOneChat();
+        var newGroupChat_result = await newGroupChat();
+        var newGroupChat2_result = await newGroupChat2();
+        var results = [newOneToOneChat_result, newGroupChat_result, newGroupChat2_result];
 
-        Promise.all(results).then(() => {
-           //this.results = results;
-            globalResults = results;
-        }).catch(err => {
-            console.error(err);
-        })
+            Promise.all(results).then(() => {
+            //this.results = results;
+                globalResults = results;
+            }).catch(err => {
+                console.error(err);
+            })
     })
 
 it('Test newOneToOneChat()', () => {
@@ -444,18 +444,18 @@ describe('Create message in chat function testing', () => {
                 expect(result).to.be.a('boolean').and.to.be.true;
                
             })
-    
-            //It could be solved with setTimeout but in a real case scenario it is also possible that
-            //the deleted data gets queried immediately (N)
-            it('Test validate test: remove valid chat creator from OneToOneChat', async () => {
-                var newOneToOneChat_result = globalResults[0];
-                var chatId_result = newOneToOneChat_result.getId();
-                
-                var chat = await ChatService.loadChat(chatId_result, conferenceId, database);
-    
-                expect(chat.getParticipantList()).to.have.members([chatPartnerID]).and.to.have.lengthOf(1);
-            })
-    
+            
+            //second value of member array is correct because the array size should not shrink or increase when 
+            //removing or adding participant from/to chat. See implementation of OneToOneChat.
+                it('Test validate test: remove valid chat creator from OneToOneChat', async () => {
+                    var newOneToOneChat_result = globalResults[0];
+                    var chatId_result = newOneToOneChat_result.getId();
+                    
+                        var chat = await ChatService.loadChat(chatId_result, conferenceId, database);
+
+                        expect(chat).to.be.instanceOf(OneToOneChat);
+                        expect(chat.getParticipantList()).to.have.members([chatPartnerID, undefined]).and.to.have.lengthOf(2);
+                })
         
             it('Test remove valid chat partner from OneToOneChat', async () => {
                 var newOneToOneChat_result = globalResults[0];
@@ -569,7 +569,7 @@ describe('Create message in chat function testing', () => {
                     error = err;
                 }
                 expect(error).to.be.instanceOf(TypeError);
-                expect(error.message).to.equal("vimsudb.deleteAllFromCollection is not a function");
+                expect(error.message).to.equal(12345 + ' is not an instance of ' + db + ' class!');
 
             })
         })
@@ -577,10 +577,6 @@ describe('Create message in chat function testing', () => {
     })
 
 })
-
-
-
-
 
     after(async () => {
         //ChatService.removeAllChats(conferenceId, database);

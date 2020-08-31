@@ -19,7 +19,7 @@ module.exports = class FriendListService {
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return array of friends if participant is found, otherwise false
+     * @return Friendlist instance if participant is found, otherwise false
      */
     static loadFriendList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);

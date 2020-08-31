@@ -52,11 +52,20 @@ class GameView {
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.#gameViewInit = false;
         this.#gameEngine = new IsometricEngine();
-        this.#eventManager = new EventManager();
-
-        //initialize Views at the very beginning
-        this.#initViews();
     }
+    
+    /**
+     * initializes event manager
+     * 
+     * @param {ClientController} clientController ClientController instance
+     */
+    initEventManager(clientController) {
+        TypeChecker.isInstanceOf(clientController, ClientController)
+        this.#eventManager = new EventManager(clientController);
+
+        //initialize some Views at the very beginning
+        this.#initViews();
+    } 
 
     /**
      * @private initializes View instances
@@ -252,12 +261,32 @@ class GameView {
                 : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
                     .concat(this.#npcAvatarViews);
 
-            //sort all Avatars in CordX
+            //sort all Elements 
             allDrawElements.sort(function (a, b) {
-                return b.getGridPosition().getCordX() - a.getGridPosition().getCordX();
+                let cordXFromA = a.getGridPosition().getCordX();
+                let cordYFromA = a.getGridPosition().getCordY();
+                let cordXFromB = b.getGridPosition().getCordX();
+                let cordYFromB = b.getGridPosition().getCordY();
+
+                //Make GameObjectView Position and AvatarView Position consistent
+                if (a instanceof GameObjectView) {
+                    cordYFromA = cordYFromA - Settings.MAP_BLANK_TILES_LENGTH; 
+                }
+
+                if (b instanceof GameObjectView) {
+                    cordYFromB = cordYFromB - Settings.MAP_BLANK_TILES_LENGTH;
+                }
+
+                if (cordXFromA === cordXFromB) {
+                    //if they have the same cordX value, sort in cordY descending
+                    return cordYFromA - cordYFromB;
+                }
+
+                //otherwise, sort in cordX ascending
+                return cordXFromB - cordXFromA;
             });
 
-            //draw all avatars
+            //draw all elements
             for (var i = 0; i < allDrawElements.length; i++) {
                 allDrawElements[i].draw();
             }
@@ -536,9 +565,12 @@ class GameView {
      * @param {Object} lecture lecture
      * @param {boolean} hasToken true if has token, otherwise false
      * @param {Object} lectureChat lecture chat
+     * @param {boolean} isOrator true if is orator of this lecture, otherwise false
+     * @param {boolean} isModerator true if is moderator of the conference, otherwise false
+     * @param {number} timeOffset offset if client has different local time than the server
      */
-    updateCurrentLecture(lecture, hasToken, lectureChat) {
-        this.#lectureView.draw(lecture, hasToken, lectureChat);
+    updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
+        this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset);
     }
 
     /**
@@ -586,8 +618,8 @@ class GameView {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
         TypeChecker.isBoolean(isFriend);
 
-        //case when ppant with this businessCard is a friend
-        if (rank !== undefined) {
+        //case when ppant with this businessCard is a friend or is a moderator
+        if (rank) {
             TypeChecker.isInt(rank);
         }
 
@@ -775,21 +807,26 @@ class GameView {
     }
 
     /**
-     * Updates points and rank on successesBar
+     * Updates points on successesBar
      * 
-     * @param {?number} points points
+     * @param {number} points points
+     */
+    updatePoints(points) {
+        TypeChecker.isInt(points);
+        this.#successesBar.updatePoints(points);
+    }
+
+    /**
+     * Updates rank on successesBar
+     * 
      * @param {?number} rank rank
      */
-    updateSuccessesBar(points, rank) {
-        if (points) {
-            TypeChecker.isInt(points);
-        }
-
+    updateRank(rank) {
         if (rank) {
             TypeChecker.isInt(rank);
         }
 
-        this.#successesBar.update(points, rank);
+        this.#successesBar.updateRank(rank);
     }
 
     /**
@@ -1085,6 +1122,19 @@ class GameView {
             this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }
     };
+
+    /**
+     * draws lecture video
+     * 
+     * @param {String} videoUrl video URL
+     */
+    drawVideo(videoUrl) {
+        TypeChecker.isString(videoUrl);
+
+        if ($('#lectureVideoWindow').is(':visible')) {
+            this.#lectureView.drawVideo(videoUrl);
+        }
+    }
 
     /**
      * Closes lecture window

@@ -56,7 +56,7 @@ class CurrentLecturesView extends WindowView {
                     <br>
                     <div class="small">${"Start: " + startingTime + " || Duration: " + Math.floor(lecture.duration / 60) + " minutes" + " || Seat: " + lecture.maxParticipants + " participants"}</div>
                     <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full.</span>
-                    <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto">Show</button>
+                    <button id='${"show" + lecture.id}' class="btn btn-lecture m-2 align-self-end mt-auto">Enter</button>
                 </div>
             `)
 

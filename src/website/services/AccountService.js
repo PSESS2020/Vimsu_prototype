@@ -88,27 +88,36 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var accountId = new ObjectId().toString();
-        var account = new Account(accountId, username, title, surname, forename, job, company, email);
+        return this.isUsernameValid(username, '', vimsudb).then(res => {
+            if (!res)
+                return res;
+            
+            return this.isEmailValid(email, '', vimsudb).then(res => {
+                if (!res)
+                    return res;
 
-        var acc = {
-            accountId: account.getAccountID(),
-            username: account.getUsername(),
-            title: account.getTitle(),
-            surname: account.getSurname(),
-            forename: account.getForename(),
-            job: account.getJob(),
-            company: account.getCompany(),
-            email: account.getEmail(),
-            passwordHash: passwordHash.generate(password)
-        }
-
-        return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-            return account;
-        }).catch(err => {
-            console.error(err);
+                var accountId = new ObjectId().toString();
+                var account = new Account(accountId, username, title, surname, forename, job, company, email);
+        
+                var acc = {
+                    accountId: account.getAccountID(),
+                    username: account.getUsername(),
+                    title: account.getTitle(),
+                    surname: account.getSurname(),
+                    forename: account.getForename(),
+                    job: account.getJob(),
+                    company: account.getCompany(),
+                    email: account.getEmail(),
+                    passwordHash: passwordHash.generate(password)
+                }
+        
+                return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
+                    return account;
+                }).catch(err => {
+                    console.error(err);
+                })
+            })
         })
-
     }
 
     /**
@@ -270,6 +279,7 @@ module.exports = class AccountService {
 
         return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
             console.log("account with accountId " + accountId + " deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })

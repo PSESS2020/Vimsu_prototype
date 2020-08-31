@@ -1,4 +1,5 @@
 const Position = require('../models/Position.js');
+const Direction = require('../../client/shared/Direction.js');
 const RoomService = require('../services/RoomService.js');
 const Settings = require('../utils/Settings.js');
 const CommandHandler = require('../models/CommandHandler.js');
@@ -299,8 +300,10 @@ module.exports = class ServerController {
                     }
 
                     /* Sends current points and rank to client */
+                    socket.emit('updatePoints', ppant.getAwardPoints());
+
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
-                        socket.emit('updateSuccessesBar', ppant.getAwardPoints(), rank);
+                        socket.emit('updateRank', rank);
                     }).catch(err => {
                         console.error(err);
                     })
@@ -311,6 +314,15 @@ module.exports = class ServerController {
 
             /* handles participant sending a message */
             socket.on('sendMessage', (text) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(text);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 if (!participant)
@@ -359,6 +371,17 @@ module.exports = class ServerController {
 
             /* handles receiving a movement-input from a participant. */
             socket.on('requestMovementStart', (direction, newCordX, newCordY) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isEnumOf(direction, Direction);
+                    TypeChecker.isInt(newCordX);
+                    TypeChecker.isInt(newCordY);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -410,6 +433,15 @@ module.exports = class ServerController {
 
             /* Handles click on door tile */
             socket.on('enterRoom', (targetRoomId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isInt(targetRoomId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -430,6 +462,11 @@ module.exports = class ServerController {
 
                 //get door from current room to target room
                 let door = currentRoom.getDoorTo(targetRoomId);
+
+                if (!door) {
+                    console.log('There is no door from ' + currentRoom.getTypeOfRoom() + ' to ' + targetRoomType + '!');
+                    return;
+                }
 
                 //check if participant is in right position to enter room
                 if (!door.isValidEnterPosition(enterPosition)) {
@@ -582,6 +619,15 @@ module.exports = class ServerController {
 
             /* handles lecture message input */
             socket.on('lectureMessage', (text) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(text);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let participant = this.#ppants.get(ppantID);
                 if (!participant)
@@ -593,6 +639,10 @@ module.exports = class ServerController {
                 let lecture = this.#conference.getSchedule().getLecture(lectureID);
                 let lectureChat = lecture.getLectureChat();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                if (!lecture.isOpened() && !lecture.isEnded()) {
+                    return;
+                }
 
                 /* 
                  * Check if this ppant is a moderator or the orator of this lecture
@@ -613,8 +663,8 @@ module.exports = class ServerController {
                         new LectureContext(this, lecture),
                         input);
 
-                } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
-                    //User can only chat when he has a token or is the orator of this lecture
+                } else if (lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
+                    //User can only chat when he has a token or is the orator or moderator of this lecture
 
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.ASKQUESTIONINLECTURE);
 
@@ -631,12 +681,22 @@ module.exports = class ServerController {
 
             /* handles entering lecture */
             socket.on('enterLecture', (lectureId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let idx = currentLecturesData.findIndex(x => x.id === lectureId);
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
                     return;
                 let ppantUsername = ppant.getBusinessCard().getUsername();
+                let isModerator = ppant.getIsModerator();
 
                 //prevents server to crash when client emits a wrong lectureID
                 if (idx < 0) {
@@ -652,29 +712,66 @@ module.exports = class ServerController {
                     return;
                 }
 
-                if (lecture.enter(ppantID, ppantUsername)) {
+                if (lecture.enter(ppantID, ppantUsername, isModerator)) {
                     socket.join(lectureId);
                     socket.currentLecture = lectureId;
 
-                    let token = lecture.hasToken(ppantID, ppantUsername);
-                    let lectureChat = lecture.getLectureChat();
+                    let token = lecture.hasToken(ppantID, ppantUsername, isModerator);
                     let messages = lecture.getLectureChat().getMessages();
                     ppant.setIsVisible(false);
 
-                    let startingTime = lecture.getStartingTime().getTime() - Settings.SHOWLECTURE;
-                    let duration = Math.ceil(lecture.getDuration() / 60) + Settings.SHOWLECTURE / 60 / 1000;
+                    if (ppantUsername === lecture.getOratorUsername())
+                        var isOrator = true;
+                    else
+                        var isOrator = false;
 
-                    currentLecturesData[idx].videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
-                        this.#blob, new Date(startingTime), duration);
-                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages);
+                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator, new Date().getTime());
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', lectureId);
                 }
             })
 
+            /* handles getting video on lecture start */
+            socket.on('getVideoUrl', (lectureId) => {
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
+                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+
+                //prevents server to crash when client emits a wrong lectureID
+                if (idx < 0) {
+                    console.log('Client emitted wrong Lecture-ID!');
+                    return;
+                }
+
+                let schedule = this.#conference.getSchedule();
+                let lecture = schedule.getLecture(lectureId);
+
+                if (socket.currentLecture == lectureId && lecture.isOpened() && !lecture.isEnded()) {
+                    var videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
+                        this.#blob, new Date(lecture.getStartingTime()), Math.ceil(lecture.getDuration() / 60));
+                    
+                    socket.emit('videoUrl', videoUrl);
+                }
+            })
+
             /* handles leaving lecture */
-            socket.on('leaveLecture', (lectureId, lectureEnded) => {
+            socket.on('leaveLecture', (lectureId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(lectureId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let schedule = this.#conference.getSchedule();
                 let lecture = schedule.getLecture(lectureId);
@@ -696,7 +793,7 @@ module.exports = class ServerController {
                 socket.broadcast.emit('showAvatar', ppantID);
 
                 //applies achievement if lecture has already ended and ppant has token
-                if (lectureEnded && lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername())) {
+                if (lecture.isEnded() && lecture.hasToken(ppantID, participant.getBusinessCard().getUsername(), participant.getIsModerator())) {
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.LECTUREVISIT);
                 }
             });
@@ -784,6 +881,15 @@ module.exports = class ServerController {
 
             /* handles ppant clicked, show business card */
             socket.on('getBusinessCard', (targetID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(targetID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -888,6 +994,17 @@ module.exports = class ServerController {
 
             /* shows friends to be invited to the group chat */
             socket.on('getInviteFriends', (groupName, chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(groupName);
+                    if (chatId !== undefined)
+                        TypeChecker.isString(chatId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
@@ -987,6 +1104,15 @@ module.exports = class ServerController {
 
             /* Called whenever a ppant creates a new 1:1 chat */
             socket.on('createNewChat', (chatPartnerID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatPartnerID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 if (!creator)
@@ -1097,6 +1223,21 @@ module.exports = class ServerController {
 
             /* Called whenever a participant creates a new group chat */
             socket.on('createNewGroupChat', (chatName, chatPartnerIDList, chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatName);
+                    TypeChecker.isInstanceOf(chatPartnerIDList, Array);
+                    for (let i = 0; i < chatPartnerIDList.length; i++) {
+                        TypeChecker.isString(chatPartnerIDList[i]);
+                    }
+                    if (chatId !== undefined)
+                        TypeChecker.isString(chatId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 if (!creator)
@@ -1388,6 +1529,14 @@ module.exports = class ServerController {
              * relevant information into a new field, which is then send to the client. */
             socket.on('getChatThread', (chatID) => {
 
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterId = socket.ppantID;
                 let participant = this.#ppants.get(requesterId);
                 if (!participant)
@@ -1450,6 +1599,16 @@ module.exports = class ServerController {
 
             /* Takes a new message in a chat and sends it to every member in that chat. */
             socket.on('newChatMessage', (chatId, msgText) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                    TypeChecker.isString(msgText);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let senderId = socket.ppantID;
                 let sender = this.#ppants.get(senderId);
                 if (!sender)
@@ -1493,6 +1652,15 @@ module.exports = class ServerController {
 
             /* shows group chat participant list */
             socket.on('getChatParticipantList', (chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterId = socket.ppantID;
                 let requester = this.#ppants.get(requesterId);
                 if (!requester)
@@ -1515,6 +1683,16 @@ module.exports = class ServerController {
 
             /* adds a new Friend Request to the system */
             socket.on('newFriendRequest', (targetID, chatID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(targetID);
+                    TypeChecker.isString(chatID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let requesterID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
@@ -1580,6 +1758,16 @@ module.exports = class ServerController {
 
             /* handles a friendrequest, either accepted or declined */
             socket.on('handleFriendRequest', (requesterID, acceptRequest) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(requesterID);
+                    TypeChecker.isBoolean(acceptRequest);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
                 let targetID = socket.ppantID;
                 let target = this.#ppants.get(targetID);
                 let requester = this.#ppants.get(requesterID);
@@ -1642,6 +1830,14 @@ module.exports = class ServerController {
 
             /* handles removing a friend in both friend lists */
             socket.on('removeFriend', (removedFriendID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(removedFriendID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let removerID = socket.ppantID;
                 let remover = this.#ppants.get(removerID);
                 let removedFriend = this.#ppants.get(removedFriendID);
@@ -1667,6 +1863,14 @@ module.exports = class ServerController {
 
             /* handles participant leaving chat, so removes participant from chat */
             socket.on('removeParticipantFromChat', (chatId) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(chatId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let removerId = socket.ppantID;
                 let remover = this.#ppants.get(removerId);
                 let removerBusinessCard = remover.getBusinessCard();
@@ -1734,6 +1938,14 @@ module.exports = class ServerController {
 
             /* handles npc clicked, show story */
             socket.on('getNPCStory', (npcID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isInt(npcID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
@@ -2080,14 +2292,14 @@ module.exports = class ServerController {
                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
-            this.#io.to(this.getSocketId(participantId)).emit('updateSuccessesBar', participant.getAwardPoints(), undefined);
+            this.#io.to(this.getSocketId(participantId)).emit('updatePoints', participant.getAwardPoints());
 
             await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
 
             //updates the rank of all active participants
             Promise.all([...this.#ppants.keys()].map(async ppantId => {
                 var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
-                this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                this.#io.to(this.getSocketId(ppantId)).emit('updateRank', rank);
             }))
         } else {
             //participant is not online, so update alle infos to the database
@@ -2125,7 +2337,7 @@ module.exports = class ServerController {
                         //updates the rank of all active participants
                         Promise.all([...this.#ppants.keys()].map(async ppantId => {
                             var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
-                            this.#io.to(this.getSocketId(ppantId)).emit('updateSuccessesBar', undefined, rank);
+                            this.#io.to(this.getSocketId(ppantId)).emit('updateRank', rank);
                         }))
                     }
                 }

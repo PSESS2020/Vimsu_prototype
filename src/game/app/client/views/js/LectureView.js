@@ -9,9 +9,15 @@ class LectureView extends WindowView {
     #timerIntervalId;
     #lectureStatus;
     #hasToken;
+    #isOrator;
+    #isModerator;
     #lectureId;
+    #lectureDuration;
+    #currentTimeDifference;
+    #video;
     #timeLeft;
     #eventManager;
+    #timeOffset;
 
     /**
      * @constructor Creates an instance of LectureView
@@ -28,11 +34,10 @@ class LectureView extends WindowView {
         LectureView.instance = this;
 
         this.#eventManager = eventManager;
-
         this.#lectureStatus = LectureStatus.PENDING;
 
-        /*sets functions when document is ready, without this it is not possible to assign functions to
-          appended buttons*/
+        /* sets functions when document is ready, without this it is not possible to assign functions to
+          appended buttons */
         $(document).ready(() => {
             $(document).on('click', '#lectureChatButton', () => {
                 this.#sendMessage(event);
@@ -74,17 +79,66 @@ class LectureView extends WindowView {
     }
 
     /**
+     * draws video
+     * 
+     * @param {String} videoUrl video URL
+     */
+    drawVideo(videoUrl) {
+        $('#lectureVideo').empty();
+
+        $('#lectureVideo').append(`
+            <video id="${"lectureVideo" + this.#lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${videoUrl}"></video>
+        `)
+        this.#video = $(`#lectureVideo${this.#lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+
+        // set default controls
+        this.#video.disablePictureInPicture = true;
+
+        this.#video.addEventListener('loadeddata', () => {
+            this.#video.pause();
+
+            if (this.#lectureStatus == LectureStatus.RUNNING && this.#video.paused) {
+                $('#lecturePending').hide();
+
+                this.#video.currentTime = this.#currentTimeDifference / 1000;
+                this.#video.play();
+            }
+
+            this.#video.addEventListener('pause', () => {
+                if (this.#lectureStatus === LectureStatus.RUNNING)
+                    this.#video.play();
+            })
+
+            this.#video.addEventListener('play', () => {
+                if (this.#lectureStatus === LectureStatus.OVER)
+                    this.#video.pause();
+            })
+        })
+    }
+
+    /**
      * Draws lecture window
      * 
-     * @param {Object} lecture 
-     * @param {boolean} hasToken 
-     * @param {Object} lectureChat 
+     * @param {Object} lecture lecture
+     * @param {boolean} hasToken true if has token, otherwise false
+     * @param {Object} lectureChat lecture chat
+     * @param {boolean} isOrator true if is orator, otherwise false
+     * @param {boolean} isModerator true if is moderator of the conference, otherwise false
+     * @param {number} timeOffset offset if client has different local time than the server
      */
-    draw(lecture, hasToken, lectureChat) {
+    draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
         this.#hasToken = hasToken;
+        this.#isOrator = isOrator;
+        this.#isModerator = isModerator;
         this.#lectureId = lecture.id;
+        this.#lectureDuration = lecture.duration * 1000;
+        this.#video = undefined;
+        this.#timeOffset = timeOffset;
+
         // hide the overview of current lectures
         $('#currentLectures').hide();
+
+        $('#lectureVideo').empty();
 
         this.drawChat(lectureChat);
 
@@ -94,13 +148,32 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-        <button id="${lecture.id}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+            <button id="${this.#lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
-        if (hasToken) {
+        //participant with token
+        if (this.#hasToken && !this.#isOrator && !this.#isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                <p style="text-align: center">You can ask questions in this chat after the lecture!</p>
+                    <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
+                </div>
+            `);
+        }
+
+        //participant without token
+        else if (!this.#hasToken && !this.#isOrator && !this.#isModerator) {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                    <p style="text-align: center">This chat will be opened after the lecture.</p>
+                </div>
+            `);
+        }
+
+        //orator or moderator
+        else {
+            $('#lectureChatMessages').append(`
+                <div id="pendingLectureChatMessage">
+                    <p style="text-align: center">You have the right to close the lecture or to ban participants after the lecture.</p>
                 </div>
             `);
         }
@@ -111,78 +184,63 @@ class LectureView extends WindowView {
         $('#tokenIcon').empty();
         $('#tokenLabel').empty();
 
-        //empties video div to prevent showing the wrong video
-        $('#lectureVideo').empty();
-
         //opens lecture video window
         $('#lectureVideoWindow').show();
 
-        $('#lectureVideo').append(`
-        <video id="${"lectureVideo" + lecture.id}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${lecture.videoUrl}"></video>
-        `)
-        var video = $(`#lectureVideo${lecture.id}`)[0]; // get the first element otherwise the video is wrapped as jquery object
+        this.#timerIntervalId = setInterval(() => {
+            this.#currentTimeDifference = Date.now() - new Date(lecture.startingTime).getTime() - this.#timeOffset;
+            this.#update(this.#currentTimeDifference);
+        }, 1000);
+    }
 
-        // set default controls
-        video.disablePictureInPicture = true;
+    /**
+     * @private updates lecture view
+     * 
+     * @param {number} currentTimeDifference time difference between now and starting time
+     */
+    #update = function (currentTimeDifference) {
+        if (currentTimeDifference < 0) {
+            $('#lecturePending').remove();
+            $('#lectureVideo').append(`
+                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                    <div id="countdown"></div>
+                    <div>seconds left till the</div>
+                    <div>presentation starts</div>
+                </div>
+            `)
 
+            this.#lectureStatus = LectureStatus.PENDING;
 
-        video.addEventListener('loadeddata', () => {
-            video.pause();
+            var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
+            if (this.#timeLeft !== newTimeLeft) {
+                this.#timeLeft = newTimeLeft;
+                $('#countdown').empty()
+                $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
+            }
+        }
 
-            var lectureStartingTime = new Date(lecture.startingTime).getTime(); // TODO: replace with lecture.startingTime, assuming lecture starts in 20 seconds for now
+        else if (currentTimeDifference >= 0 && currentTimeDifference <= this.#lectureDuration) {
+            $('#lecturePending').hide();
 
-            var lectureDuration = lecture.duration * 1000; //duration of the lecture in milliseconds
+            this.#lectureStatus = LectureStatus.RUNNING;
 
-            this.#timerIntervalId = setInterval(() => {
-                var currentTimeDifference = Date.now() - lectureStartingTime;
+            if (this.#video === undefined)
+                this.#eventManager.handleShowVideo(this.#lectureId);
+        }
 
-                if (currentTimeDifference < 0) {
-                    $('#lecturePending').remove();
-                    $('#lectureVideo').append(`
-                        <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
-                            <div id="countdown"></div>
-                            <div>seconds left till the</div>
-                            <div>presentation starts</div>
-                        </div>
-                    `)
-                    this.#lectureStatus = LectureStatus.PENDING;
+        else if (this.#video !== undefined && currentTimeDifference >= 0 && currentTimeDifference > this.#lectureDuration) {
+            clearInterval(this.#timerIntervalId);
 
-                    var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
-                    if (this.#timeLeft !== newTimeLeft) {
-                        this.#timeLeft = newTimeLeft;
-                        $('#countdown').empty()
-                        $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.#timeLeft}</b></div>`);
-                    }
+            $('#lecturePending').hide();
+            $('#pendingLectureChatMessage').empty();
 
-                    video.pause();
-                } else if (currentTimeDifference >= 0 && currentTimeDifference <= lectureDuration && video.paused) {
-                    $('#lecturePending').hide();
-                    this.#lectureStatus = LectureStatus.RUNNING;
-                    video.currentTime = Math.round(currentTimeDifference / 1000);
-                    video.play();
-                } else if (currentTimeDifference >= 0 && currentTimeDifference > lectureDuration) {
-                    clearInterval(this.#timerIntervalId);
-                    $('#lecturePending').hide();
-                    $('#pendingLectureChatMessage').empty();
-                    this.#lectureStatus = LectureStatus.OVER;
-                    this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
-                    video.controlsList.remove('nodownload');
-                    video.pause();
-                }
-            }, 1000); // check lecture status every 1s
+            this.#lectureStatus = LectureStatus.OVER;
 
-            video.addEventListener('pause', () => {
-                if (this.#lectureStatus === LectureStatus.RUNNING) {
-                    video.play();
-                }
-            })
+            this.drawToken(this.#hasToken, TokenMessages.TIMEOUT);
 
-            video.addEventListener('play', () => {
-                if (this.#lectureStatus === LectureStatus.OVER) {
-                    video.pause();
-                }
-            })
-        });
+            this.#video.controlsList.remove('nodownload');
+            this.#video.pause();
+        }
     }
 
     /**
@@ -191,43 +249,48 @@ class LectureView extends WindowView {
     #leaveLecture = function () {
         if (this.#lectureStatus === LectureStatus.RUNNING) {
             var shouldLeave = false;
-            if (this.#hasToken) {
+
+            //participant with token
+            if (this.#hasToken && !this.#isOrator && !this.#isModerator)
                 shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
-            } else {
-                shouldLeave = confirm('Are you sure you want to leave?')
-            }
 
-            if (shouldLeave) {
+            //orator
+            else if (this.#isOrator)
+                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
+
+            //participant without token or moderator
+            else
+                shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?')
+
+            if (shouldLeave)
                 this.close();
-            }
+        }
 
-        } else if (this.#lectureStatus === LectureStatus.PENDING) {
+        else if (this.#lectureStatus === LectureStatus.PENDING) {
             alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!')
             this.close();
         }
 
-        else {
+        else
             this.close();
-        }
+
     }
 
     /**
      * called to close lecture window
      */
     close() {
-        var video = $(`#lectureVideo${this.#lectureId}`)[0];
-        if (video !== undefined) {
-            video.removeAttribute('src'); // empty source
-            video.load();
+        if (this.#video !== undefined) {
+            this.#video.removeAttribute('src'); // empty source
+            this.#video.load();
+
             clearInterval(this.#timerIntervalId);
+
             $('#lectureVideo').empty();
             $('#lectureVideoWindow').hide();
 
-            if (this.#lectureStatus === LectureStatus.RUNNING || this.#lectureStatus === LectureStatus.PENDING) {
-                this.#eventManager.handleLectureLeft(this.#lectureId, false);
-            } else {
-                this.#eventManager.handleLectureLeft(this.#lectureId, true);
-            }
+            this.#eventManager.handleLectureLeft(this.#lectureId);
+
         } else {
             $('#lectureVideoWindow').hide();
         }
@@ -274,29 +337,36 @@ class LectureView extends WindowView {
      * @param {TokenMessages} message token message
      */
     drawToken(hasToken, message) {
-        if (hasToken) {
+        this.#hasToken = hasToken;
+
+        $('#tokenIcon').empty();
+        $('#tokenLabel').empty();
+
+        if (this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
                     <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
                     <div class="input-group-append">
-                        <button id="lectureChatButton" class="btn btn-lecture mr-3" type="button">Send</button>
+                        <button id="lectureChatButton" class="btn btn-accept mr-3" type="button">Send</button>
                     </div>
                 `)
             }
-            $('#tokenIcon').empty();
+
             $('#tokenIcon').append(`
                 <i class="fa fa-question-circle fa-4x"></i>
             `)
-            $('#tokenLabel').empty();
+
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
-            // the input field is emptied if the user does not have a valid token
-        } else {
+        }
+
+        // the input field is emptied if the user does not have a valid token
+        else {
             $('#lectureChatInputGroup').empty();
-            $('#tokenIcon').empty();
+
             $('#tokenIcon').append(`
                 <i class="fa fa-times-circle fa-4x"></i>
             `)
-            $('#tokenLabel').empty();
+
             $('#tokenLabel').append(message);
         }
     };

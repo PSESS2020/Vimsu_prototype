@@ -6,7 +6,7 @@
  */
 class CacheImages {
 
-    static images = {};
+    static images = new Map();
     static enabled = true;
 
     /**
@@ -20,7 +20,7 @@ class CacheImages {
         TypeChecker.isInstanceOf(image, Image);
 
         if (this.enabled === false) return;
-        this.images[key] = image;
+        this.images.set(key, image);
     }
 
     /**
@@ -32,7 +32,7 @@ class CacheImages {
         TypeChecker.isString(key);
 
         if (this.enabled === false) return;
-        return this.images[key];
+        return this.images.get(key);
 
     }
 }

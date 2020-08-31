@@ -77,6 +77,7 @@ module.exports = class ParticipantService {
 
                     var achievements = [];
 
+
                     participant = new Participant(par.participantId,
                         accountId,
                         new BusinessCard(par.participantId,
@@ -116,7 +117,7 @@ module.exports = class ParticipantService {
                     })
 
                     participant.setAchievements(achievements);
-
+                    
                     return Promise.all(ppantAchievements.map(async achievement => {
                         let index = participant.getAchievements().findIndex(ach => ach.getId() === achievement.getId());
                         if (index < 0) {
@@ -252,7 +253,6 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
-
             if (par) {
                 return AccountService.getAccountUsername(par.accountId, '', vimsudb).then(username => {
                     return username;
@@ -425,7 +425,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { $each: achievementsData } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -449,7 +449,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { id: achievementId } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -608,7 +608,7 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -627,6 +627,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.deleteAllFromCollection("participants_" + conferenceId).then(res => {
             console.log("all participants deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })
@@ -646,6 +647,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.deleteOneFromCollection("participants_" + conferenceId, { participantId: participantId }).then(res => {
             console.log("participant with participantId " + participantId + " deleted");
+            return res;
         }).catch(err => {
             console.error(err);
         })

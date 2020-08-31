@@ -26,7 +26,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -50,7 +50,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -74,7 +74,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -97,7 +97,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': { $exists: true } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -121,7 +121,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;
@@ -143,7 +143,7 @@ module.exports = class FriendRequestListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': { $exists: true } }).then(res => {
-            return true;
+            return res;
         }).catch(err => {
             console.error(err);
             return false;

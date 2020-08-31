@@ -89,19 +89,6 @@ video::-webkit-media-controls-timeline {
   z-index: 1;
 }
 
-#uiCanvas {
-  position: absolute;
-  width: 1280px;
-  height: 640px;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  pointer-events: none;
-  z-index: 2;
-}
-
 form {
   border-radius: 5px;
   top: 0;
@@ -367,10 +354,25 @@ body::-webkit-scrollbar {
   border-radius: 3px;
   color: antiquewhite;
   text-decoration: none;
-
 }
 
 .btn-lecture:hover {
+  background-color: #028090;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+}
+
+.btn-accept {
+  background-color: #028090;
+  border: none;
+  border-radius: 3px;
+  color: antiquewhite;
+  text-decoration: none;
+}
+
+.btn-accept:hover {
   background-color: #015a66;
   color: antiquewhite;
 }
