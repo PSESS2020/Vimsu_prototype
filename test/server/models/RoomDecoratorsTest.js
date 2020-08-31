@@ -39,7 +39,6 @@ foyerAssetPaths = {
     "leftsofa_default": "client/assets/chairs/sofa_left.png",
     "rightsofa_default": "client/assets/chairs/sofa_right.png",
     "plant_default": "client/assets/plants/plant.png",
-    "table_default": "client/assets/tables/table.png",
 
 }
 
