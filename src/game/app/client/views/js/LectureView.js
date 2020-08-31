@@ -131,14 +131,11 @@ class LectureView extends WindowView {
         this.#isOrator = isOrator;
         this.#isModerator = isModerator;
         this.#lectureId = lecture.id;
-        this.#lectureDuration = lecture.duration * 1000;
         this.#video = undefined;
         this.#timeOffset = timeOffset;
 
         // hide the overview of current lectures
         $('#currentLectures').hide();
-
-        $('#lectureVideo').empty();
 
         this.drawChat(lectureChat);
 
@@ -184,11 +181,16 @@ class LectureView extends WindowView {
         $('#tokenIcon').empty();
         $('#tokenLabel').empty();
 
+        $('#lectureVideo').empty();
+
         //opens lecture video window
         $('#lectureVideoWindow').show();
 
+        var lectureStartingTime = new Date(lecture.startingTime).getTime();
+        this.#lectureDuration = lecture.duration * 1000;
+
         this.#timerIntervalId = setInterval(() => {
-            this.#currentTimeDifference = Date.now() - new Date(lecture.startingTime).getTime() - this.#timeOffset;
+            this.#currentTimeDifference = Date.now() - lectureStartingTime - this.#timeOffset;
             this.#update(this.#currentTimeDifference);
         }, 1000);
     }
@@ -280,19 +282,16 @@ class LectureView extends WindowView {
      * called to close lecture window
      */
     close() {
+        clearInterval(this.#timerIntervalId);
+
+        $('#lectureVideo').empty();
+        $('#lectureVideoWindow').hide();
+        
+        this.#eventManager.handleLectureLeft(this.#lectureId);
+
         if (this.#video !== undefined) {
             this.#video.removeAttribute('src'); // empty source
             this.#video.load();
-
-            clearInterval(this.#timerIntervalId);
-
-            $('#lectureVideo').empty();
-            $('#lectureVideoWindow').hide();
-
-            this.#eventManager.handleLectureLeft(this.#lectureId);
-
-        } else {
-            $('#lectureVideoWindow').hide();
         }
     }
 
