@@ -68,8 +68,7 @@ class ScheduleListView extends WindowView {
                 var status = LectureStatus.OPENED;
                 var countdown = Math.round((startingTime - now) / 1000) + " secs";
             } else if (stopToShow < now) {
-                var status = LectureStatus.OVER;
-                var countdown = ''
+                return;
             } else if (now < startToShow) {
                 var status = LectureStatus.PENDING;
                 var countdown = ''
