@@ -158,9 +158,12 @@ class GameView {
                 });
 
                 this.#currentMap.selectionOnMap = true;
+            } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMap.selectionOnMap = false;
+                this.#currentMap.findClickableElementOutsideMap(newPosition, false, canvas);
             } else {
                 this.#currentMap.selectionOnMap = false;
-                canvas.style.cursor = "default"
+                canvas.style.cursor = "default";
             }
 
             this.#currentMap.updateSelectedTile(selectedTileCords);
@@ -198,7 +201,7 @@ class GameView {
 
                 //check if clicked tile is outside the walkable area
             } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.findClickedElementOutsideMap(newPosition);
+                this.#currentMap.findClickableElementOutsideMap(newPosition, true, canvas);
             }
         });
     }

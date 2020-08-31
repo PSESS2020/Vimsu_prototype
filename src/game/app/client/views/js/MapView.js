@@ -203,7 +203,7 @@ class MapView extends Views {
      * finds the tile in the list of clickable tiles
      * 
      * @param {Object} selectedTileCords selected tile coordinates
-     * @param {boolean} isClicked true if tile is clicked
+     * @param {boolean} isClicked true if tile or object is clicked
      * @param {Canvas} canvas canvas
      */
     findClickableTileOrObject(selectedTileCords, isClicked, canvas) {
@@ -233,6 +233,8 @@ class MapView extends Views {
      * @param {Canvas} canvas canvas
      */
     #findTile = function(tile, isClicked, canvas) {
+        canvas.style.cursor = 'default';
+        
         if (tile !== null && (tile instanceof DoorClient || tile.isClickable())) {
             this.#clickableTiles.forEach(viewObject => {
                 let tileName = tile.getName();
@@ -259,7 +261,7 @@ class MapView extends Views {
      * @private determines if the object is clickable and change cursor/clicks it in that case.
      * 
      * @param {number} object selected object
-     * @param {boolean} isClicked true if tile is clicked
+     * @param {boolean} isClicked true if object is clicked
      * @param {Canvas} canvas canvas
      */
     #findObject = function(object, isClicked, canvas) {
@@ -279,11 +281,15 @@ class MapView extends Views {
     }
 
     /**
-     * finds the clicked element in the list of clickable tiles
+     * finds the element in the list of clickable tiles
      * 
      * @param {Object} canvasMousePos mouse position
+     * @param {boolean} isClicked true if element is clicked
+     * @param {Canvas} canvas canvas
      */
-    findClickedElementOutsideMap(canvasMousePos) {
+    findClickableElementOutsideMap(canvasMousePos, isClicked, canvas) {
+        canvas.style.cursor = 'default';
+
         this.#clickableTiles.forEach(elem => {
             let screenPos = elem.getScreenPosition();
             let screenPosOffset = elem.getScreenPositionOffset();
@@ -294,8 +300,11 @@ class MapView extends Views {
                 && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width
                 && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
                 && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height) {
-                elem.onclick(canvasMousePos);
-            }
+                    if (isClicked)
+                        elem.onclick(canvasMousePos);
+                    else
+                        canvas.style.cursor = 'pointer';
+            } 
         });
     }
 
