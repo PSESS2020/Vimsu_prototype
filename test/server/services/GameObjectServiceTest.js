@@ -331,4 +331,54 @@ describe('GameObjectService test', function () {
         expect(leftChairBack.getClickable()).to.equal(clickable);
         expect(leftChairBack.getId()).to.be.a('number');
     });
+
+    it('test create rightChair', function() {
+        let rightChair = gameObjectService.createRightChair(roomId, cordX, cordY, solidity, clickable);
+
+        expect(rightChair).to.be.instanceOf(GameObject);
+        expect(rightChair.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightChair.getPosition().getCordX()).to.equal(cordX);
+        expect(rightChair.getPosition().getCordY()).to.equal(cordY);
+        expect(rightChair.getSolid()).to.equal(solidity);
+        expect(rightChair.getClickable()).to.equal(clickable);
+        expect(rightChair.getId()).to.be.a('number');
+    });
+
+    it('test create rightChairBack', function() {
+        let rightChairBack = gameObjectService.createRightChairBack(roomId, cordX, cordY, solidity, clickable);
+
+        expect(rightChairBack).to.be.instanceOf(GameObject);
+        expect(rightChairBack.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightChairBack.getPosition().getCordX()).to.equal(cordX);
+        expect(rightChairBack.getPosition().getCordY()).to.equal(cordY);
+        expect(rightChairBack.getSolid()).to.equal(solidity);
+        expect(rightChairBack.getClickable()).to.equal(clickable);
+        expect(rightChairBack.getId()).to.be.a('number');
+    });
+
+    it('test create smallDinnerTable', function() {
+        let smallDinnerTable = gameObjectService.createSmallDinnerTable(roomId, cordX, cordY, solidity, clickable);
+
+        expect(smallDinnerTable).to.be.instanceOf(GameObject);
+        expect(smallDinnerTable.getPosition().getRoomId()).to.equal(roomId);
+        expect(smallDinnerTable.getPosition().getCordX()).to.equal(cordX);
+        expect(smallDinnerTable.getPosition().getCordY()).to.equal(cordY);
+        expect(smallDinnerTable.getSolid()).to.equal(solidity);
+        expect(smallDinnerTable.getClickable()).to.equal(clickable);
+        expect(smallDinnerTable.getId()).to.be.a('number');
+    });
+
+    it('test create rightDinnerTable', function() {
+        let rightDinnerTable = gameObjectService.createRightDinnerTable(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(rightDinnerTable).to.be.instanceOf(GameObject);
+        expect(rightDinnerTable.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightDinnerTable.getWidth()).to.equal(width);
+        expect(rightDinnerTable.getLength()).to.equal(length);
+        expect(rightDinnerTable.getPosition().getCordX()).to.equal(cordX);
+        expect(rightDinnerTable.getPosition().getCordY()).to.equal(cordY);
+        expect(rightDinnerTable.getSolid()).to.equal(solidity);
+        expect(rightDinnerTable.getClickable()).to.equal(clickable);
+        expect(rightDinnerTable.getId()).to.be.a('number');
+    });
 });

@@ -193,6 +193,17 @@ class GameObjectViewFactory {
 
                 break;
 
+            case GameObjectType.SMALLDINNERTABLE:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
             case GameObjectType.RIGHTTABLE:
                     gameObjectImage = this.#assetImages[objectName];
     
@@ -203,6 +214,28 @@ class GameObjectViewFactory {
                     else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
     
                     break; 
+            
+            case GameObjectType.CANTEENCOUNTER:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break; 
+
+            case GameObjectType.DRINKS:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 14, y: this.#tileRowHeight - gameObjectImage.height + 12 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the drinking machine could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break; 
 
             case GameObjectType.CHAIR:
                 gameObjectImage = this.#assetImages[objectName];
