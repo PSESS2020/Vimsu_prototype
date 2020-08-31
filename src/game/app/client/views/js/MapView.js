@@ -303,7 +303,7 @@ class MapView extends Views {
                     if (isClicked)
                         elem.onclick(canvasMousePos);
                     else
-                        canvas.style.cursor = 'pointer';
+                        canvas.style.cursor = (elem.getClickMapValueWithGridCoords(canvasMousePos) === 1) ? 'pointer' : 'default';
             } 
         });
     }

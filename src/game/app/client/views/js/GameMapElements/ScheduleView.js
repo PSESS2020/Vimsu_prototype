@@ -24,19 +24,24 @@ class ScheduleView extends GameMapElementView {
         this.#eventManager = eventManager;
     }
 
-    /**
-     * Called if participant clicks the schedule
-     * 
-     * @param {number} mousePos mouse position
-     */
-    onclick(mousePos) {
+    getClickMapValueWithGridCoords(mousePos) {
         var screenPos = super.getScreenPosition();
 
         var clickImgCordX = Math.abs(Math.abs(screenPos.getCordX() - Math.round(mousePos.x)));
         
         var clickImgCordY = Math.abs((screenPos.getCordY() + super.getScreenPositionOffset().y) - Math.round(mousePos.y));
 
-        if (this.#clickMap[clickImgCordY][clickImgCordX] === 1) {
+        return this.#clickMap[clickImgCordY][clickImgCordX];
+    }
+    
+    /**
+     * Called if participant clicks the schedule
+     * 
+     * @param {number} mousePos mouse position
+     */
+    onclick(mousePos) {
+
+        if (this.getClickMapValueWithGridCoords(mousePos) === 1) {
             //This Event fires multiple times because of three parallel schedule images.
             //Not sure how to prevent this.
             this.#eventManager.handleScheduleClicked();
