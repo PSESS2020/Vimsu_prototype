@@ -421,10 +421,10 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
                 }
 
-                //Checks old position and current direction whether they're valid position and direction to enter a room
+                //Checks old position and old direction whether they're valid position and direction to enter a room
                 let doors = currentRoom.getListOfDoors();
                 doors.forEach(door => {
-                    if (door.isValidEnterPositionWithoutClick(oldPos, direction)) {
+                    if (door.isValidEnterPositionWithoutClick(oldPos, oldDir)) {
                         if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
                             this.#getCurrentLectures(socket);
                         else
