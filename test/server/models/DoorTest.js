@@ -128,17 +128,13 @@ describe('test Door class functionality', function () {
 
     it('test ValidEnterPositionWithoutClick check', function () {
         var illegalPos = TestUtil.randomPosition();
-        var illegalDir = TestUtil.randomObjectValue(Direction);
-
-        var testIllegalPosition = {
-            position: illegalPos,
-            direction: illegalDir
-        }
+        var illegalOldDir = TestUtil.randomObjectValue(Direction);
+        var illegalNewDir = TestUtil.randomObjectValue(Direction);
 
         var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
             testEnterPosition, testEnterPositions, testTargetPosition, testDirection);
-        expect(testDoor.isValidEnterPositionWithoutClick(testIllegalPosition.position, testIllegalPosition.direction)).to.be.false;
-        expect(testDoor.isValidEnterPositionWithoutClick(testEnterPosition.position, testEnterPosition.direction)).to.be.true;
+        expect(testDoor.isValidEnterPositionWithoutClick(illegalPos, illegalOldDir, illegalNewDir)).to.be.false;
+        expect(testDoor.isValidEnterPositionWithoutClick(testEnterPosition.position, testEnterPosition.direction, testEnterPosition.direction)).to.be.true;
     });
 
 });

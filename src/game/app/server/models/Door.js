@@ -186,18 +186,21 @@ module.exports = class Door {
      * Checks if position is a valid enter position for this door without clicking it
      * 
      * @param {Position} position avatar's current position
-     * @param {Direction} direction avatar's current direction
+     * @param {Direction} oldDirection avatar's old direction
+     * @param {Direction} newDirection avatar's new direction
      * 
      * @return true if valid, otherwise false
      */
-    isValidEnterPositionWithoutClick(position, direction) {
+    isValidEnterPositionWithoutClick(position, oldDirection, newDirection) {
         TypeChecker.isInstanceOf(position, Position);
-        TypeChecker.isEnumOf(direction, Direction);
+        TypeChecker.isEnumOf(oldDirection, Direction);
+        TypeChecker.isEnumOf(newDirection, Direction);
 
         if (position.getRoomId() === this.#enterPositionWithoutClick.position.getRoomId() &&
                 position.getCordX() === this.#enterPositionWithoutClick.position.getCordX() &&
                 position.getCordY() === this.#enterPositionWithoutClick.position.getCordY() &&
-                direction === this.#enterPositionWithoutClick.direction){
+                oldDirection === this.#enterPositionWithoutClick.direction &&
+                newDirection === this.#enterPositionWithoutClick.direction){
                 return true;
         }
         return false;
