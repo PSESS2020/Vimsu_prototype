@@ -32,7 +32,7 @@ module.exports = class NPCService {
         basicTutorialStory: ['Hello and welcome to this conference hosted by VIMSU!',
             'I would like to give you a short introduction with some basic tips.',
             'You can move around using WASD or arrow keys.',
-            'You can enter a room by clicking the door tile. You need to be in range to enter a door.',
+            'You can enter a room by clicking the door tile or running against the door. You need to be in range to enter a door.',
             'The door in this room leads you to the Foyer. From there, you can go anywhere and visit lectures!',
             'Keep in mind: you can interact with other participants by clicking the tile they are standing on.',
             'Earn points by visiting lectures, interacting with others or by reaching achievements!',

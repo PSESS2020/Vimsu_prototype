@@ -15,6 +15,7 @@ module.exports = class Door {
     #typeOfDoor;
     #name;
     #mapPosition;
+    #enterPositionWithoutClick;
     #enterPositions;
     #targetPosition;
     #direction;
@@ -26,15 +27,18 @@ module.exports = class Door {
      * @param {String} name door name
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {Position} mapPosition door position on the map
+     * @param {Position[]} enterPosition door valid enter position from the map without clicking the door
      * @param {Position[]} enterPositions door valid enter positions from the map
      * @param {Position} targetPosition avatar position on entering the door
      * @param {Direction} direction avatar direction on entering the door
      */
-    constructor(id, typeOfDoor, name, mapPosition, enterPositions, targetPosition, direction) {
+    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction) {
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, Position);
+        TypeChecker.isInstanceOf(enterPositionWithoutClick.position, Position);
+        TypeChecker.isEnumOf(enterPositionWithoutClick.direction, Direction);
         TypeChecker.isInstanceOf(enterPositions, Array);
         enterPositions.forEach(enterPosition => {
             TypeChecker.isInstanceOf(enterPosition, Position);
@@ -50,6 +54,7 @@ module.exports = class Door {
         this.#typeOfDoor = typeOfDoor;
         this.#name = name;
         this.#mapPosition = mapPosition;
+        this.#enterPositionWithoutClick = enterPositionWithoutClick;
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
@@ -114,6 +119,15 @@ module.exports = class Door {
     }
 
     /**
+     * Gets enter position without clicking the door
+     * 
+     * @return enterPosition
+     */
+    getEnterPositionWithoutClick() {
+        return this.#enterPositionWithoutClick;
+    }
+
+    /**
      * Gets enter positions
      * 
      * @return enterPositions
@@ -161,9 +175,30 @@ module.exports = class Door {
         for (var i = 0; i < this.#enterPositions.length; i++) {
             if (position.getRoomId() === this.#enterPositions[i].getRoomId() &&
                 position.getCordX() === this.#enterPositions[i].getCordX() &&
-                position.getCordY() === this.#enterPositions[i].getCordY()) {
+                position.getCordY() === this.#enterPositions[i].getCordY()){
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if position is a valid enter position for this door without clicking it
+     * 
+     * @param {Position} position avatar's current position
+     * @param {Direction} direction avatar's current direction
+     * 
+     * @return true if valid, otherwise false
+     */
+    isValidEnterPositionWithoutClick(position, direction) {
+        TypeChecker.isInstanceOf(position, Position);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        if (position.getRoomId() === this.#enterPositionWithoutClick.position.getRoomId() &&
+                position.getCordX() === this.#enterPositionWithoutClick.position.getCordX() &&
+                position.getCordY() === this.#enterPositionWithoutClick.position.getCordY() &&
+                direction === this.#enterPositionWithoutClick.direction){
+                return true;
         }
         return false;
     }
