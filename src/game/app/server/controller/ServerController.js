@@ -424,7 +424,7 @@ module.exports = class ServerController {
                 //Checks old position and old direction whether they're valid position and direction to enter a room
                 let doors = currentRoom.getListOfDoors();
                 doors.forEach(door => {
-                    if (door.isValidEnterPositionWithoutClick(oldPos, oldDir)) {
+                    if (door.isValidEnterPositionWithoutClick(oldPos, oldDir, direction)) {
                         if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
                             this.#getCurrentLectures(socket);
                         else
