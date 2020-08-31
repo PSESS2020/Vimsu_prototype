@@ -381,4 +381,32 @@ describe('GameObjectService test', function () {
         expect(rightDinnerTable.getClickable()).to.equal(clickable);
         expect(rightDinnerTable.getId()).to.be.a('number');
     });
+
+    it('test create canteenCounter', function() {
+        let canteenCounter = gameObjectService.createCanteenCounter(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(canteenCounter).to.be.instanceOf(GameObject);
+        expect(canteenCounter.getPosition().getRoomId()).to.equal(roomId);
+        expect(canteenCounter.getWidth()).to.equal(width);
+        expect(canteenCounter.getLength()).to.equal(length);
+        expect(canteenCounter.getPosition().getCordX()).to.equal(cordX);
+        expect(canteenCounter.getPosition().getCordY()).to.equal(cordY);
+        expect(canteenCounter.getSolid()).to.equal(solidity);
+        expect(canteenCounter.getClickable()).to.equal(clickable);
+        expect(canteenCounter.getId()).to.be.a('number');
+    });
+
+    it('test create drinkingMachine', function() {
+        let drinkingMachine = gameObjectService.createDrinkingMachine(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(drinkingMachine).to.be.instanceOf(GameObject);
+        expect(drinkingMachine.getPosition().getRoomId()).to.equal(roomId);
+        expect(drinkingMachine.getWidth()).to.equal(width);
+        expect(drinkingMachine.getLength()).to.equal(length);
+        expect(drinkingMachine.getPosition().getCordX()).to.equal(cordX);
+        expect(drinkingMachine.getPosition().getCordY()).to.equal(cordY);
+        expect(drinkingMachine.getSolid()).to.equal(solidity);
+        expect(drinkingMachine.getClickable()).to.equal(clickable);
+        expect(drinkingMachine.getId()).to.be.a('number');
+    });
 });
