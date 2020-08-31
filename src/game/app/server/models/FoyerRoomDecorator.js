@@ -40,8 +40,6 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         "leftsofa_default": "client/assets/chairs/sofa_left.png",
         "rightsofa_default": "client/assets/chairs/sofa_right.png",
         "plant_default": "client/assets/plants/plant.png",
-        "table_default": "client/assets/tables/table.png",
-
     }
 
     /**
@@ -82,9 +80,6 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
         //Get all gameObjects from service
         let listOfGameObjects = [];
-
-        for (var i = 4; i < 9; i++)
-            listOfGameObjects.push(objService.createTable(Settings.FOYER_ID, i, 0, true, false));
 
         //Get schedule elements
         let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1, false, true);
