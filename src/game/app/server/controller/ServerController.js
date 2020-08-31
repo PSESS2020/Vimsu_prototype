@@ -408,12 +408,11 @@ module.exports = class ServerController {
                 }
 
                 let currentRoom = this.#rooms[roomId - 1].getRoom();
-                let doors = currentRoom.getListOfDoors();
 
                 //Collision Checking
 
                 //No Collision, so every other participant gets the new position
-                if (!this.#rooms[roomId - 1].getRoom().checkForCollision(newPos)) {
+                if (!currentRoom.checkForCollision(newPos)) {
                     ppant.setPosition(newPos);
                     ppant.setDirection(direction);
                     socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
@@ -422,7 +421,8 @@ module.exports = class ServerController {
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
                 }
 
-                //Checks old position and direction if it's a valid position to enter a room
+                //Checks old position and current direction whether they're valid position and direction to enter a room
+                let doors = currentRoom.getListOfDoors();
                 doors.forEach(door => {
                     if (door.isValidEnterPositionWithoutClick(oldPos, direction)) {
                         if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
