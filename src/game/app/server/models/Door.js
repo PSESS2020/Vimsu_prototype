@@ -27,7 +27,7 @@ module.exports = class Door {
      * @param {String} name door name
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {Position} mapPosition door position on the map
-     * @param {Position[]} enterPosition door valid enter position from the map without clicking the door
+     * @param {Object} enterPosition door valid enter position from the map without clicking the door
      * @param {Position[]} enterPositions door valid enter positions from the map
      * @param {Position} targetPosition avatar position on entering the door
      * @param {Direction} direction avatar direction on entering the door
