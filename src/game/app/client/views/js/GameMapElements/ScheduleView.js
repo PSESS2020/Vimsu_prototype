@@ -6,6 +6,7 @@
  */
 class ScheduleView extends GameMapElementView {
     #clickMap;
+    #eventManager;
 
     /**
      * @constructor Creates an instance of Schedule View
@@ -15,10 +16,12 @@ class ScheduleView extends GameMapElementView {
      * @param {number} screenPositionOffset schedule screen position offset
      * @param {string} name schedule name
      * @param {number[][]} clickMap schedule clickMap
+     * @param {EventManager} eventManager event manager instance
      */
-    constructor(scheduleImage, position, screenPositionOffset, name, clickMap) {
+    constructor(scheduleImage, position, screenPositionOffset, name, clickMap, eventManager) {
         super(scheduleImage, position, screenPositionOffset, name);
         this.#clickMap = clickMap;
+        this.#eventManager = eventManager;
     }
 
     /**
@@ -30,18 +33,13 @@ class ScheduleView extends GameMapElementView {
         var screenPos = super.getScreenPosition();
 
         var clickImgCordX = Math.abs(Math.abs(screenPos.getCordX() - Math.round(mousePos.x)));
+        
+        var clickImgCordY = Math.abs((screenPos.getCordY() + super.getScreenPositionOffset().y) - Math.round(mousePos.y));
 
-        //This coordinate is flipped, so therefore an offset is needed
-        var clickImgCordY = Math.abs(screenPos.getCordY() - Math.round(mousePos.y));
-        //console.log("mousePos: " + mousePos.x + " " + mousePos.y)
-        //console.log("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
-
-        //for ( var i = 0, n = this.#clickMap.length; i < n; i++) {
-        //  for ( var j = 0, m = this.#clickMap[i].length; j < n; j++) {
         if (this.#clickMap[clickImgCordY][clickImgCordX] === 1) {
-            alert("image x pos: " + clickImgCordX + "image y pos: " + clickImgCordY);
+            //This Event fires multiple times because of three parallel schedule images.
+            //Not sure how to prevent this.
+            this.#eventManager.handleScheduleClicked();
         }
-        //}
-        //}
     }
 }

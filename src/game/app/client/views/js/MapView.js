@@ -294,6 +294,7 @@ class MapView extends Views {
                 && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width
                 && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
                 && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height) {
+                elem.onclick(canvasMousePos);
             }
         });
     }

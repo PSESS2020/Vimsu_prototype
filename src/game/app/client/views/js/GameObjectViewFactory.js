@@ -108,7 +108,7 @@ class GameObjectViewFactory {
 
                 if (gameMapElementImage !== undefined) {
                     if (gameObjectType === GameObjectType.LEFTSCHEDULE)
-                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset));
+                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset), this.#eventManager);
                     else
                         gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
                 } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
