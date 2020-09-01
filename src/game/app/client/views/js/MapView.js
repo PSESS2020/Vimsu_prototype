@@ -329,15 +329,8 @@ class MapView extends Views {
                     }
 
                 };
-            } else if (!(mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
-                       mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK)
-                       
-                       
-                       
-                       
-                       
-                       
-                       )
+            } else if ( !(mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
+                       mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) )
                         result = false;
 
             return result;
