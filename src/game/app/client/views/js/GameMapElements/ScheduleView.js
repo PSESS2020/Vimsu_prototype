@@ -24,6 +24,11 @@ class ScheduleView extends GameMapElementView {
         this.#eventManager = eventManager;
     }
 
+    /**
+     * gets click map with grid coordinates
+     * 
+     * @param {number} mousePos mouse position
+     */
     getClickMapValueWithGridCoords(mousePos) {
         var screenPos = super.getScreenPosition();
 
