@@ -48,8 +48,12 @@ class GameObjectViewFactory {
         let screenPosWithOffsetX = screenPosXY.x + offset.x;
         let screenPosWithOffsetY = screenPosXY.y + offset.y;
 
-        ctx_avatar.drawImage(image, screenPosWithOffsetX, screenPosWithOffsetY);
-        var imageData = ctx_avatar.getImageData(screenPosWithOffsetX, screenPosWithOffsetY, image.width, image.height).data;
+        //This draws on the map canvas because getImageData is buggy when called on avatar canvas.
+        //Probably because a reference to the canvas is not released after calling getImageData.
+        //There is also an issue on chrome dev site: https://bugs.chromium.org/p/chromium/issues/detail?id=977179
+        ctx_map.drawImage(image, screenPosWithOffsetX, screenPosWithOffsetY);
+        var imageData = ctx_map.getImageData(screenPosWithOffsetX, screenPosWithOffsetY, image.width, image.height).data;
+        ctx_map.clearRect(0, 0, GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
 
         for (var i = 0, n = imageData.length; i < n; i += 4) {
             var row = Math.floor((i / 4) / image.width);
