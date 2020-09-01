@@ -31,6 +31,7 @@ coverage
 
 # JSDoc output
 docs
+out
 
 # nyc test coverage
 .nyc_output
