@@ -412,7 +412,7 @@ module.exports = class GameObjectService {
         let schedules = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTSCHEDULE, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
+                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return schedules;
         } else if (width > 1) {
