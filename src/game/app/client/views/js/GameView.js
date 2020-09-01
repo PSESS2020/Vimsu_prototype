@@ -141,7 +141,7 @@ class GameView {
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
             if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.findClickableTileOrObject(selectedTileCords, false, canvas);
+                canvas.style.cursor = (this.#currentMap.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
 
                 this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
@@ -158,9 +158,12 @@ class GameView {
                 });
 
                 this.#currentMap.selectionOnMap = true;
+            } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMap.selectionOnMap = false;
+                this.#currentMap.findClickableElementOutsideMap(newPosition, false, canvas);
             } else {
                 this.#currentMap.selectionOnMap = false;
-                canvas.style.cursor = "default"
+                canvas.style.cursor = "default";
             }
 
             this.#currentMap.updateSelectedTile(selectedTileCords);
@@ -178,7 +181,7 @@ class GameView {
             if (this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
 
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findClickableTileOrObject(selectedTileCords, true, canvas);
+                this.#currentMap.findAndClickTileOrObject(selectedTileCords, true, canvas);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -198,7 +201,7 @@ class GameView {
 
                 //check if clicked tile is outside the walkable area
             } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.findClickedElementOutsideMap(newPosition);
+                this.#currentMap.findClickableElementOutsideMap(newPosition, true, canvas);
             }
         });
     }

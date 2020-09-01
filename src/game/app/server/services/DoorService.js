@@ -46,19 +46,25 @@ module.exports = class DoorService {
      * 
      * @param {Position} doorPosition door position
      * 
-     * @return array of valid enter positions
+     * @return enter position data
      */
     #generateEnterPositionsLeftWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
         let enterPositions = [];
         let roomId = doorPosition.getRoomId();
+
+        var enterPositionWithoutClick = {
+            position: new Position(roomId, doorPosition.getCordX(), doorPosition.getCordY() + 1),
+            direction: Direction.UPLEFT
+        }
+        
         for (var i = doorPosition.getCordX() - 2; i <= doorPosition.getCordX() + 2; i++) {
             for (var j = doorPosition.getCordY() + 1; j <= doorPosition.getCordY() + 3; j++) {
                 enterPositions.push(new Position(roomId, i, j));
             }
         }
-        return enterPositions;
+        return {enterPositionWithoutClick: enterPositionWithoutClick, enterPositions: enterPositions};
     }
 
     /**
@@ -66,19 +72,25 @@ module.exports = class DoorService {
      * 
      * @param {Position} doorPosition door position
      * 
-     * @return array of valid enter positions
+     * @return enter position data
      */
     #generateEnterPositionsRightWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
 
         let enterPositions = [];
         let roomId = doorPosition.getRoomId();
+
+        var enterPositionWithoutClick = {
+            position: new Position(roomId, doorPosition.getCordX() - 1, doorPosition.getCordY()),
+            direction: Direction.UPRIGHT
+        }
+
         for (var i = doorPosition.getCordX() - 3; i <= doorPosition.getCordX() - 1; i++) {
             for (var j = doorPosition.getCordY() - 2; j <= doorPosition.getCordY() + 2; j++) {
                 enterPositions.push(new Position(roomId, i, j));
             }
         }
-        return enterPositions;
+        return {enterPositionWithoutClick: enterPositionWithoutClick, enterPositions: enterPositions};
     }
 
     /**
@@ -91,8 +103,10 @@ module.exports = class DoorService {
     createLectureDoor(mapPosition) {
         TypeChecker.isInstanceOf(mapPosition, Position);
 
-        let enterPositions = this.#generateEnterPositionsLeftWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositions, undefined, undefined);
+        let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined);
     }
 
     /**
@@ -109,8 +123,10 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        let enterPositions = this.#generateEnterPositionsLeftWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositions, targetPosition, direction);
+        let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+        return new Door(this.#generateDoorID(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -127,8 +143,10 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositions, targetPosition, direction);
+        let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -145,7 +163,9 @@ module.exports = class DoorService {
         TypeChecker.isInstanceOf(targetPosition, Position);
         TypeChecker.isEnumOf(direction, Direction);
 
-        let enterPositions = this.#generateEnterPositionsRightWall(mapPosition);
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositions, targetPosition, direction);
+        let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 } 

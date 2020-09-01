@@ -7,7 +7,8 @@
     "start": "node --max-old-space-size=102400 ./src/server.js",
     "test": "mocha --file ./test/teardown.js test/**/*.js || true",
     "coverage": "nyc --reporter html --reporter text npm test",
-    "docs": "./node_modules/jsdoc/jsdoc.js -c ./.jsdoc.conf.json"
+    "lcov": "nyc --reporter=text-lcov > coverage.lcov npm test",
+    "docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.conf.json"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "codecov": "^3.7.2",
     "mocha": "^8.1.1",
     "nyc": "^15.1.0"
   }

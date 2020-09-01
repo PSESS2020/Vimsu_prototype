@@ -331,4 +331,82 @@ describe('GameObjectService test', function () {
         expect(leftChairBack.getClickable()).to.equal(clickable);
         expect(leftChairBack.getId()).to.be.a('number');
     });
+
+    it('test create rightChair', function() {
+        let rightChair = gameObjectService.createRightChair(roomId, cordX, cordY, solidity, clickable);
+
+        expect(rightChair).to.be.instanceOf(GameObject);
+        expect(rightChair.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightChair.getPosition().getCordX()).to.equal(cordX);
+        expect(rightChair.getPosition().getCordY()).to.equal(cordY);
+        expect(rightChair.getSolid()).to.equal(solidity);
+        expect(rightChair.getClickable()).to.equal(clickable);
+        expect(rightChair.getId()).to.be.a('number');
+    });
+
+    it('test create rightChairBack', function() {
+        let rightChairBack = gameObjectService.createRightChairBack(roomId, cordX, cordY, solidity, clickable);
+
+        expect(rightChairBack).to.be.instanceOf(GameObject);
+        expect(rightChairBack.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightChairBack.getPosition().getCordX()).to.equal(cordX);
+        expect(rightChairBack.getPosition().getCordY()).to.equal(cordY);
+        expect(rightChairBack.getSolid()).to.equal(solidity);
+        expect(rightChairBack.getClickable()).to.equal(clickable);
+        expect(rightChairBack.getId()).to.be.a('number');
+    });
+
+    it('test create smallDinnerTable', function() {
+        let smallDinnerTable = gameObjectService.createSmallDinnerTable(roomId, cordX, cordY, solidity, clickable);
+
+        expect(smallDinnerTable).to.be.instanceOf(GameObject);
+        expect(smallDinnerTable.getPosition().getRoomId()).to.equal(roomId);
+        expect(smallDinnerTable.getPosition().getCordX()).to.equal(cordX);
+        expect(smallDinnerTable.getPosition().getCordY()).to.equal(cordY);
+        expect(smallDinnerTable.getSolid()).to.equal(solidity);
+        expect(smallDinnerTable.getClickable()).to.equal(clickable);
+        expect(smallDinnerTable.getId()).to.be.a('number');
+    });
+
+    it('test create rightDinnerTable', function() {
+        let rightDinnerTable = gameObjectService.createRightDinnerTable(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(rightDinnerTable).to.be.instanceOf(GameObject);
+        expect(rightDinnerTable.getPosition().getRoomId()).to.equal(roomId);
+        expect(rightDinnerTable.getWidth()).to.equal(width);
+        expect(rightDinnerTable.getLength()).to.equal(length);
+        expect(rightDinnerTable.getPosition().getCordX()).to.equal(cordX);
+        expect(rightDinnerTable.getPosition().getCordY()).to.equal(cordY);
+        expect(rightDinnerTable.getSolid()).to.equal(solidity);
+        expect(rightDinnerTable.getClickable()).to.equal(clickable);
+        expect(rightDinnerTable.getId()).to.be.a('number');
+    });
+
+    it('test create canteenCounter', function() {
+        let canteenCounter = gameObjectService.createCanteenCounter(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(canteenCounter).to.be.instanceOf(GameObject);
+        expect(canteenCounter.getPosition().getRoomId()).to.equal(roomId);
+        expect(canteenCounter.getWidth()).to.equal(width);
+        expect(canteenCounter.getLength()).to.equal(length);
+        expect(canteenCounter.getPosition().getCordX()).to.equal(cordX);
+        expect(canteenCounter.getPosition().getCordY()).to.equal(cordY);
+        expect(canteenCounter.getSolid()).to.equal(solidity);
+        expect(canteenCounter.getClickable()).to.equal(clickable);
+        expect(canteenCounter.getId()).to.be.a('number');
+    });
+
+    it('test create drinkingMachine', function() {
+        let drinkingMachine = gameObjectService.createDrinkingMachine(roomId, width, length, cordX, cordY, solidity, clickable);
+
+        expect(drinkingMachine).to.be.instanceOf(GameObject);
+        expect(drinkingMachine.getPosition().getRoomId()).to.equal(roomId);
+        expect(drinkingMachine.getWidth()).to.equal(width);
+        expect(drinkingMachine.getLength()).to.equal(length);
+        expect(drinkingMachine.getPosition().getCordX()).to.equal(cordX);
+        expect(drinkingMachine.getPosition().getCordY()).to.equal(cordY);
+        expect(drinkingMachine.getSolid()).to.equal(solidity);
+        expect(drinkingMachine.getClickable()).to.equal(clickable);
+        expect(drinkingMachine.getId()).to.be.a('number');
+    });
 });

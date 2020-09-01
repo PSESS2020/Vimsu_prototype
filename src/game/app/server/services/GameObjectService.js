@@ -164,6 +164,20 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * creates default small dinner table
+     * 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createSmallDinnerTable(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLE, "smalldinnertable_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
      * creates right dinner table
      * 
      * @param {number} roomId room ID
@@ -177,6 +191,55 @@ module.exports = class GameObjectService {
     createRightDinnerTable(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTABLE, "righttable_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    //Canteen
+
+    /**
+     * creates canteen counter
+     * 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createCanteenCounter(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CANTEENCOUNTER, "canteencounter_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * creates drinking machine
+     * 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createDrinkingMachine(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.DRINKS, "drinks_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    //Food
+    /**
+     * creates default left koeriWurst
+     * 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createKoeriWurst(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     //Chairs
@@ -364,7 +427,7 @@ module.exports = class GameObjectService {
         let schedules = [];
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
+                schedules.push(new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTSCHEDULE, "leftschedule_default" + i, width, length, new Position(roomId, xPos + i, yPos), solidity, clickable));
             }
             return schedules;
         } else if (width > 1) {

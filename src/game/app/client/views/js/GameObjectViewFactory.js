@@ -48,8 +48,12 @@ class GameObjectViewFactory {
         let screenPosWithOffsetX = screenPosXY.x + offset.x;
         let screenPosWithOffsetY = screenPosXY.y + offset.y;
 
-        ctx_avatar.drawImage(image, screenPosWithOffsetX, screenPosWithOffsetY);
-        var imageData = ctx_avatar.getImageData(screenPosWithOffsetX, screenPosWithOffsetY, image.width, image.height).data;
+        //This draws on the map canvas because getImageData is buggy when called on avatar canvas.
+        //Probably because a reference to the canvas is not released after calling getImageData.
+        //There is also an issue on chrome dev site: https://bugs.chromium.org/p/chromium/issues/detail?id=977179
+        ctx_map.drawImage(image, screenPosWithOffsetX, screenPosWithOffsetY);
+        var imageData = ctx_map.getImageData(screenPosWithOffsetX, screenPosWithOffsetY, image.width, image.height).data;
+        ctx_map.clearRect(0, 0, GameConfig.GAME_WIDTH, GameConfig.GAME_HEIGHT);
 
         for (var i = 0, n = imageData.length; i < n; i += 4) {
             var row = Math.floor((i / 4) / image.width);
@@ -108,7 +112,7 @@ class GameObjectViewFactory {
 
                 if (gameMapElementImage !== undefined) {
                     if (gameObjectType === GameObjectType.LEFTSCHEDULE)
-                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset));
+                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset), this.#eventManager);
                     else
                         gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
                 } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
@@ -192,6 +196,17 @@ class GameObjectViewFactory {
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
+            case GameObjectType.SMALLDINNERTABLEFOOD:
+            case GameObjectType.SMALLDINNERTABLE:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
 
             case GameObjectType.RIGHTTABLE:
                     gameObjectImage = this.#assetImages[objectName];
@@ -203,6 +218,28 @@ class GameObjectViewFactory {
                     else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
     
                     break; 
+            
+            case GameObjectType.CANTEENCOUNTER:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break; 
+
+            case GameObjectType.DRINKS:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: 14, y: this.#tileRowHeight - gameObjectImage.height + 12 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the drinking machine could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break; 
 
             case GameObjectType.CHAIR:
                 gameObjectImage = this.#assetImages[objectName];

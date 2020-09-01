@@ -23,6 +23,7 @@ const GroupChat = require('../models/GroupChat');
 const dbClient = require('../../../../config/db');
 const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
+const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 
 /**
  * The Server Controller
@@ -41,6 +42,8 @@ module.exports = class ServerController {
     #muteList;
     #rooms;
     #roomService;
+    #interval;
+    #currentLecturesData;
 
     //map from socket-id to ppant-id
     #socketMap;
@@ -404,10 +407,12 @@ module.exports = class ServerController {
                     return;
                 }
 
+                let currentRoom = this.#rooms[roomId - 1].getRoom();
+
                 //Collision Checking
 
                 //No Collision, so every other participant gets the new position
-                if (!this.#rooms[roomId - 1].getRoom().checkForCollision(newPos)) {
+                if (!currentRoom.checkForCollision(newPos)) {
                     ppant.setPosition(newPos);
                     ppant.setDirection(direction);
                     socket.to(roomId.toString()).emit('movementOfAnotherPPantStart', ppantID, direction, newCordX, newCordY);
@@ -415,6 +420,18 @@ module.exports = class ServerController {
                     //Server resets client position to old Position (P)
                     this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
                 }
+
+                //Checks old position and old direction whether they're valid position and direction to enter a room
+                let doors = currentRoom.getListOfDoors();
+                doors.forEach(door => {
+                    if (door.isValidEnterPositionWithoutClick(oldPos, oldDir, direction)) {
+                        if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
+                            this.#getCurrentLectures(socket);
+                        else
+                            this.#enterRoom(door.getTargetRoomId(), socket);
+                        return;
+                    }
+                })
             });
 
 
@@ -433,188 +450,7 @@ module.exports = class ServerController {
 
             /* Handles click on door tile */
             socket.on('enterRoom', (targetRoomId) => {
-
-                //prevents server to crash when client purposely sends wrong type of data to server
-                try {
-                    TypeChecker.isInt(targetRoomId);
-                } catch (e) {
-                    console.log('Client emitted wrong type of data! ' + e);
-                    return;
-                }
-
-                let ppantID = socket.ppantID;
-                let ppant = this.#ppants.get(ppantID);
-                if (!ppant)
-                    return;
-
-                let enterPosition = ppant.getPosition();
-                let currentRoomId = enterPosition.getRoomId();
-                let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
-
-                //prevents server to crash when client emits a non existing room ID
-                if (!this.#rooms[targetRoomId - 1]) {
-                    console.log('Client emitted wrong Room-ID!');
-                    return;
-                }
-
-                let targetRoom = this.#rooms[targetRoomId - 1].getRoom();
-                let targetRoomType = targetRoom.getTypeOfRoom();
-
-                //get door from current room to target room
-                let door = currentRoom.getDoorTo(targetRoomId);
-
-                if (!door) {
-                    console.log('There is no door from ' + currentRoom.getTypeOfRoom() + ' to ' + targetRoomType + '!');
-                    return;
-                }
-
-                //check if participant is in right position to enter room
-                if (!door.isValidEnterPosition(enterPosition)) {
-                    return;
-                }
-
-                /*
-                * Check if ppant clicked BasicTutorial before leaving reception at his first visit
-                * He should read it before he is allowed to visit other rooms
-                */
-                if (currentRoomId === Settings.RECEPTION_ID && targetRoomId === Settings.FOYER_ID
-                    && ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
-
-                    let messageHeader = 'Welcome to VIMSU!';
-                    let messageBody = 'Before you can start exploring this conference,' +
-                        ' please talk to our BasicTutorial NPC by clicking' +
-                        ' the tile he is standing on. He will give you a' +
-                        ' short introduction that will help you to learn the basics of using VIMSU.';
-
-                    this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
-                    return;
-                }
-
-                let newPos = door.getTargetPosition();
-                let x = newPos.getCordX();
-                let y = newPos.getCordY();
-                let d = door.getDirection();
-
-                targetRoom.enterParticipant(ppant);
-                currentRoom.exitParticipant(ppantID);
-
-                //Get asset paths of target room
-                let assetPaths = this.#rooms[targetRoomId - 1].getAssetPaths();
-
-                //Get MapElements of target room
-                let mapElements = targetRoom.getListOfMapElements();
-                let mapElementsData = [];
-
-                mapElements.forEach(mapElement => {
-                    mapElementsData.push({
-                        id: mapElement.getId(),
-                        type: mapElement.getGameObjectType(),
-                        name: mapElement.getName(),
-                        width: mapElement.getWidth(),
-                        length: mapElement.getLength(),
-                        cordX: mapElement.getPosition().getCordX(),
-                        cordY: mapElement.getPosition().getCordY(),
-                        isClickable: mapElement.getClickable()
-                    });
-                });
-
-                //get all GameObjects from target room
-                let gameObjects = targetRoom.getListOfGameObjects();
-                let gameObjectData = [];
-
-                //needed to send all gameObjects of starting room to client
-                gameObjects.forEach(gameObject => {
-                    gameObjectData.push({
-                        id: gameObject.getId(),
-                        type: gameObject.getGameObjectType(),
-                        name: gameObject.getName(),
-                        width: gameObject.getWidth(),
-                        length: gameObject.getLength(),
-                        cordX: gameObject.getPosition().getCordX(),
-                        cordY: gameObject.getPosition().getCordY(),
-                        isClickable: gameObject.getClickable()
-                    });
-                });
-
-                let npcs = targetRoom.getListOfNPCs();
-                let npcData = [];
-
-                //needed to init all NPCs in clients game view
-                npcs.forEach(npc => {
-                    npcData.push({
-                        id: npc.getId(),
-                        name: npc.getName(),
-                        cordX: npc.getPosition().getCordX(),
-                        cordY: npc.getPosition().getCordY(),
-                        direction: npc.getDirection()
-                    });
-                });
-
-                //Get all Doors from starting room
-                let doors = targetRoom.getListOfDoors();
-                let doorData = [];
-
-                //needed to init all Doors in clients game view
-                doors.forEach(door => {
-                    doorData.push({
-                        id: door.getId(),
-                        typeOfDoor: door.getTypeOfDoor(),
-                        name: door.getName(),
-                        cordX: door.getMapPosition().getCordX(),
-                        cordY: door.getMapPosition().getCordY(),
-                        targetRoomId: door.getTargetRoomId()
-                    });
-                });
-
-                //emit new room data to client
-                this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
-                    assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
-
-                //set new position in server model
-                ppant.setPosition(newPos);
-                ppant.setDirection(d);
-
-                //Get username, isModerator, isVisible
-                let username = ppant.getBusinessCard().getUsername();
-                let isModerator = ppant.getIsModerator();
-                let isVisible = ppant.getIsVisible();
-
-                //Emit new position to participant
-                this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
-
-                //Emit to all participants in old room, that participant is leaving
-                socket.to(currentRoomId.toString()).emit('remove player', ppantID);
-
-                //Emit to all participants in new room, that participant is joining
-                socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d, isVisible: isVisible, isModerator: isModerator });
-
-                //Emit to participant all participant positions, that were in new room before him
-                this.#ppants.forEach((ppant, id, map) => {
-                    if (id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
-                        let username = ppant.getBusinessCard().getUsername();
-                        let tempPos = ppant.getPosition();
-                        let tempX = tempPos.getCordX();
-                        let tempY = tempPos.getCordY();
-                        let tempDir = ppant.getDirection();
-                        let isVisible = ppant.getIsVisible();
-                        let isModerator = ppant.getIsModerator();
-                        this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
-                    }
-                });
-
-                //switch socket channel
-                socket.leave(currentRoomId.toString());
-                socket.join(targetRoomId.toString());
-                this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
-
-                //applies achievement when entering a room
-                if (targetRoomId === Settings.FOYER_ID) {
-                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
-                } else if (targetRoomId === Settings.FOODCOURT_ID) {
-                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
-                } else if (targetRoomId === Settings.RECEPTION_ID) {
-                    this.#applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
-                }
+                this.#enterRoom(targetRoomId, socket);
             });
 
             /* handles lecture message input */
@@ -677,8 +513,6 @@ module.exports = class ServerController {
                 }
             });
 
-            var currentLecturesData = [];
-
             /* handles entering lecture */
             socket.on('enterLecture', (lectureId) => {
 
@@ -691,7 +525,7 @@ module.exports = class ServerController {
                 }
 
                 let ppantID = socket.ppantID;
-                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+                let idx = this.#currentLecturesData.findIndex(x => x.id === lectureId);
                 let ppant = this.#ppants.get(ppantID);
                 if (!ppant)
                     return;
@@ -725,7 +559,7 @@ module.exports = class ServerController {
                     else
                         var isOrator = false;
 
-                    socket.emit('lectureEntered', currentLecturesData[idx], token, messages, isOrator, isModerator, new Date().getTime());
+                    socket.emit('lectureEntered', this.#currentLecturesData[idx], token, messages, isOrator, isModerator, new Date().getTime());
                     socket.broadcast.emit('hideAvatar', ppantID);
                 } else {
                     socket.emit('lectureFull', lectureId);
@@ -742,7 +576,7 @@ module.exports = class ServerController {
                     return;
                 }
 
-                let idx = currentLecturesData.findIndex(x => x.id === lectureId);
+                let idx = this.#currentLecturesData.findIndex(x => x.id === lectureId);
 
                 //prevents server to crash when client emits a wrong lectureID
                 if (idx < 0) {
@@ -756,7 +590,7 @@ module.exports = class ServerController {
                 if (socket.currentLecture == lectureId && lecture.isOpened() && !lecture.isEnded()) {
                     var videoUrl = LectureService.getVideoUrl(lecture.getVideoId(),
                         this.#blob, new Date(lecture.getStartingTime()), Math.ceil(lecture.getDuration() / 60));
-                    
+
                     socket.emit('videoUrl', videoUrl);
                 }
             })
@@ -798,62 +632,14 @@ module.exports = class ServerController {
                 }
             });
 
-            var interval;
-
             /* handles clicking lecture door, show current lectures */
             socket.on('getCurrentLectures', () => {
-
-                let ppantID = socket.ppantID;
-                let ppant = this.#ppants.get(ppantID);
-                if (!ppant)
-                    return;
-
-                let enterPosition = ppant.getPosition();
-                let currentRoomId = enterPosition.getRoomId();
-                let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
-
-                //check if participant is in right position to enter room
-                if (!lectureDoor.isValidEnterPosition(enterPosition)) {
-                    return;
-                }
-
-                var schedule = this.#conference.getSchedule();
-
-                function emitCurrentLectures() {
-                    let currentLectures = schedule.getCurrentLectures();
-
-                    currentLecturesData = [];
-                    currentLectures.forEach(lecture => {
-                        currentLecturesData.push(
-                            {
-                                id: lecture.getId(),
-                                title: lecture.getTitle(),
-                                videoId: lecture.getVideoId(),
-                                duration: lecture.getDuration(),
-                                remarks: lecture.getRemarks(),
-                                oratorName: lecture.getOratorName(),
-                                startingTime: lecture.getStartingTime(),
-                                maxParticipants: lecture.getMaxParticipants()
-                            }
-                        )
-                    })
-
-                    socket.emit('currentLectures', currentLecturesData);
-                }
-
-                clearInterval(interval);
-
-                emitCurrentLectures();
-
-                //checks every 1 second if there is any new accessible lecture
-                interval = setInterval(() => {
-                    emitCurrentLectures();
-                }, 1000);
+                this.#getCurrentLectures(socket);
             });
 
             /* handles clearing interval for emiting current lectures */
             socket.on('clearInterval', () => {
-                clearInterval(interval);
+                clearInterval(this.#interval);
             })
 
             /* handles schedule list clicked, show schedule */
@@ -2254,6 +2040,254 @@ module.exports = class ServerController {
 
         this.#muteList.splice(this.#muteList.indexOf(accountID), 1);
     };
+
+    /**
+     * Gets current lectures and emit to client
+     * 
+     * @param {Socket.IO} socket 
+     */
+    #getCurrentLectures = function (socket) {
+        let ppantID = socket.ppantID;
+        let ppant = this.#ppants.get(ppantID);
+        if (!ppant)
+            return;
+
+        let enterPosition = ppant.getPosition();
+        let currentRoomId = enterPosition.getRoomId();
+        let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
+
+        //check if participant is in right position to enter room
+        if (!lectureDoor.isValidEnterPosition(enterPosition)) {
+            return;
+        }
+
+        clearInterval(this.#interval);
+
+        this.#emitCurrentLectures(socket);
+
+        //checks every 1 second if there is any new accessible lecture
+        this.#interval = setInterval(() => {
+            this.#emitCurrentLectures(socket);
+        }, 1000);
+    }
+
+    /**
+     * Emits current lectures to client
+     * 
+     * @param {Socket.IO} socket 
+     */
+    #emitCurrentLectures = function (socket) {
+        var schedule = this.#conference.getSchedule();
+        let currentLectures = schedule.getCurrentLectures();
+
+        this.#currentLecturesData = [];
+        currentLectures.forEach(lecture => {
+            this.#currentLecturesData.push(
+                {
+                    id: lecture.getId(),
+                    title: lecture.getTitle(),
+                    videoId: lecture.getVideoId(),
+                    duration: lecture.getDuration(),
+                    remarks: lecture.getRemarks(),
+                    oratorName: lecture.getOratorName(),
+                    startingTime: lecture.getStartingTime(),
+                    maxParticipants: lecture.getMaxParticipants()
+                }
+            )
+        })
+
+        socket.emit('currentLectures', this.#currentLecturesData);
+    }
+
+    /**
+     * Handles entering room
+     * 
+     * @param {number} targetRoomId 
+     * @param {Socket.IO} socket 
+     */
+    #enterRoom = function (targetRoomId, socket) {
+        //prevents server to crash when client purposely sends wrong type of data to server
+        try {
+            TypeChecker.isInt(targetRoomId);
+        } catch (e) {
+            console.log('Client emitted wrong type of data! ' + e);
+            return;
+        }
+
+        let ppantID = socket.ppantID;
+        let ppant = this.#ppants.get(ppantID);
+        if (!ppant)
+            return;
+
+        let enterPosition = ppant.getPosition();
+        let currentRoomId = enterPosition.getRoomId();
+        let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
+
+        //prevents server to crash when client emits a non existing room ID
+        if (!this.#rooms[targetRoomId - 1]) {
+            console.log('Client emitted wrong Room-ID!');
+            return;
+        }
+
+        let targetRoom = this.#rooms[targetRoomId - 1].getRoom();
+        let targetRoomType = targetRoom.getTypeOfRoom();
+
+        //get door from current room to target room
+        let door = currentRoom.getDoorTo(targetRoomId);
+
+        if (!door) {
+            console.log('There is no door from ' + currentRoom.getTypeOfRoom() + ' to ' + targetRoomType + '!');
+            return;
+        }
+
+        //check if participant is in right position to enter room
+        if (!door.isValidEnterPosition(enterPosition)) {
+            return;
+        }
+
+        /*
+        * Check if ppant clicked BasicTutorial before leaving reception at his first visit
+        * He should read it before he is allowed to visit other rooms
+        */
+        if (currentRoomId === Settings.RECEPTION_ID && targetRoomId === Settings.FOYER_ID
+            && ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
+
+            let messageHeader = 'Welcome to VIMSU!';
+            let messageBody = 'Before you can start exploring this conference,' +
+                ' please talk to our BasicTutorial NPC by clicking' +
+                ' the tile he is standing on. He will give you a' +
+                ' short introduction that will help you to learn the basics of using VIMSU.';
+
+            this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
+            return;
+        }
+
+        let newPos = door.getTargetPosition();
+        let x = newPos.getCordX();
+        let y = newPos.getCordY();
+        let d = door.getDirection();
+
+        targetRoom.enterParticipant(ppant);
+        currentRoom.exitParticipant(ppantID);
+
+        //Get asset paths of target room
+        let assetPaths = this.#rooms[targetRoomId - 1].getAssetPaths();
+
+        //Get MapElements of target room
+        let mapElements = targetRoom.getListOfMapElements();
+        let mapElementsData = [];
+
+        mapElements.forEach(mapElement => {
+            mapElementsData.push({
+                id: mapElement.getId(),
+                type: mapElement.getGameObjectType(),
+                name: mapElement.getName(),
+                width: mapElement.getWidth(),
+                length: mapElement.getLength(),
+                cordX: mapElement.getPosition().getCordX(),
+                cordY: mapElement.getPosition().getCordY(),
+                isClickable: mapElement.getClickable()
+            });
+        });
+
+        //get all GameObjects from target room
+        let gameObjects = targetRoom.getListOfGameObjects();
+        let gameObjectData = [];
+
+        //needed to send all gameObjects of starting room to client
+        gameObjects.forEach(gameObject => {
+            gameObjectData.push({
+                id: gameObject.getId(),
+                type: gameObject.getGameObjectType(),
+                name: gameObject.getName(),
+                width: gameObject.getWidth(),
+                length: gameObject.getLength(),
+                cordX: gameObject.getPosition().getCordX(),
+                cordY: gameObject.getPosition().getCordY(),
+                isClickable: gameObject.getClickable()
+            });
+        });
+
+        let npcs = targetRoom.getListOfNPCs();
+        let npcData = [];
+
+        //needed to init all NPCs in clients game view
+        npcs.forEach(npc => {
+            npcData.push({
+                id: npc.getId(),
+                name: npc.getName(),
+                cordX: npc.getPosition().getCordX(),
+                cordY: npc.getPosition().getCordY(),
+                direction: npc.getDirection()
+            });
+        });
+
+        //Get all Doors from starting room
+        let doors = targetRoom.getListOfDoors();
+        let doorData = [];
+
+        //needed to init all Doors in clients game view
+        doors.forEach(door => {
+            doorData.push({
+                id: door.getId(),
+                typeOfDoor: door.getTypeOfDoor(),
+                name: door.getName(),
+                cordX: door.getMapPosition().getCordX(),
+                cordY: door.getMapPosition().getCordY(),
+                targetRoomId: door.getTargetRoomId()
+            });
+        });
+
+        //emit new room data to client
+        this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
+            assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
+
+        //set new position in server model
+        ppant.setPosition(newPos);
+        ppant.setDirection(d);
+
+        //Get username, isModerator, isVisible
+        let username = ppant.getBusinessCard().getUsername();
+        let isModerator = ppant.getIsModerator();
+        let isVisible = ppant.getIsVisible();
+
+        //Emit new position to participant
+        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
+
+        //Emit to all participants in old room, that participant is leaving
+        socket.to(currentRoomId.toString()).emit('remove player', ppantID);
+
+        //Emit to all participants in new room, that participant is joining
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d, isVisible: isVisible, isModerator: isModerator });
+
+        //Emit to participant all participant positions, that were in new room before him
+        this.#ppants.forEach((ppant, id, map) => {
+            if (id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
+                let username = ppant.getBusinessCard().getUsername();
+                let tempPos = ppant.getPosition();
+                let tempX = tempPos.getCordX();
+                let tempY = tempPos.getCordY();
+                let tempDir = ppant.getDirection();
+                let isVisible = ppant.getIsVisible();
+                let isModerator = ppant.getIsModerator();
+                this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+            }
+        });
+
+        //switch socket channel
+        socket.leave(currentRoomId.toString());
+        socket.join(targetRoomId.toString());
+        this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
+
+        //applies achievement when entering a room
+        if (targetRoomId === Settings.FOYER_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
+        } else if (targetRoomId === Settings.FOODCOURT_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
+        } else if (targetRoomId === Settings.RECEPTION_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
+        }
+    }
 
     /**
      * @private Handle the entire logic of applying achievements and points as well as sending updates to the client

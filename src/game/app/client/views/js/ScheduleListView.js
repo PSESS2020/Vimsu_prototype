@@ -68,8 +68,7 @@ class ScheduleListView extends WindowView {
                 var status = LectureStatus.OPENED;
                 var countdown = Math.round((startingTime - now) / 1000) + " secs";
             } else if (stopToShow < now) {
-                var status = LectureStatus.OVER;
-                var countdown = ''
+                return;
             } else if (now < startToShow) {
                 var status = LectureStatus.PENDING;
                 var countdown = ''
@@ -92,9 +91,7 @@ class ScheduleListView extends WindowView {
                 </tr>
             `)
 
-            if (status === LectureStatus.OVER) {
-                $('#schedulerow' + lecture.id)[0].style.opacity = "0.5";
-            } else if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
+            if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
                 $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })

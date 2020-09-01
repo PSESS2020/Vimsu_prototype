@@ -18,7 +18,11 @@ const GameObjectType = Object.freeze({
     CONFERENCELOGO: 'CONFERENCELOGO',
     SOFA: 'SOFA',
     RIGHTTABLE: 'RIGHTTABLE',
-    CHAIR: 'CHAIR'
+    CHAIR: 'CHAIR',
+    SMALLDINNERTABLE: 'SMALLDINNERTABLE',
+    SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
+    DRINKS: 'DRINKS',
+    CANTEENCOUNTER: 'CANTEENCOUNTER'
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

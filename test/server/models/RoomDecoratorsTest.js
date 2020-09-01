@@ -39,7 +39,6 @@ foyerAssetPaths = {
     "leftsofa_default": "client/assets/chairs/sofa_left.png",
     "rightsofa_default": "client/assets/chairs/sofa_right.png",
     "plant_default": "client/assets/plants/plant.png",
-    "table_default": "client/assets/tables/table.png",
 
 }
 
@@ -59,6 +58,9 @@ foodcourtAssetPaths = {
     "rightchair_default": "client/assets/chairs/chair_right.png",
     "leftchairback_default": "client/assets/chairs/chair_left_back.png",
     "rightchairback_default": "client/assets/chairs/chair_right_back.png",
+    "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
+    "canteencounter_default": "client/assets/other/canteenCounter.png",
+    "drinks_default": "client/assets/other/Drinks.png"
 }
 
 receptionAssetPaths = {
