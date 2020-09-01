@@ -143,8 +143,8 @@ class MapView extends Views {
                         gameObject.forEach(object => {
                             this.#createObjectView(object, position);
                         });
-                    }
-                    this.#createObjectView(gameObject, position);
+                    } else
+                        this.#createObjectView(gameObject, position);
                 }
             };
         };
@@ -207,10 +207,22 @@ class MapView extends Views {
     checkTileOrObjectIsClickable(selectedTileCords) {
         let tile = this.#map[selectedTileCords.x][selectedTileCords.y];
         let object = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
+        let result = false;
 
         //This needs a rewrite if gameobjects are not static anymore.
-        return ( tile !== null && (tile instanceof DoorClient || tile.isClickable()) 
-                || (object !== null && object.isClickable()) );
+        if (tile instanceof Array) {
+            tile.forEach(tile => {
+                if ( tile !== null && (tile instanceof DoorClient || tile.isClickable()) )
+                    result = true;
+            });
+        } else if (object instanceof Array) {
+            object.forEach(object => {
+                if ( object !== null && object.isClickable() )
+                    result = true;
+            });
+        } else if ( tile !== null && (tile instanceof DoorClient || tile.isClickable()) || (object !== null && object.isClickable()) )
+                    result = true;
+        return result;
     }
 
     /**

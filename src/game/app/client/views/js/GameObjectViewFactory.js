@@ -196,7 +196,7 @@ class GameObjectViewFactory {
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
-
+            case GameObjectType.SMALLDINNERTABLEFOOD:
             case GameObjectType.SMALLDINNERTABLE:
                 gameObjectImage = this.#assetImages[objectName];
 
