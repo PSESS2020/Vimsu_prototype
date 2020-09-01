@@ -8,7 +8,7 @@
     "test": "mocha --file ./test/teardown.js test/**/*.js || true",
     "coverage": "nyc --reporter html --reporter text npm test",
     "lcov": "nyc --reporter=text-lcov > coverage.lcov npm test",
-    "docs": "./node_modules/jsdoc/jsdoc.js -c ./.jsdoc.conf.json"
+    "docs": "./node_modules/.bin/jsdoc -r ./src"
   },
   "repository": {
     "type": "git",
