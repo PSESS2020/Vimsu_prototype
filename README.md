@@ -1,6 +1,6 @@
 # Vimsu
 
-[![coverage](https://img.shields.io/codecov/c/github/PSESS2020/Vimsu_prototype?flag=coverage&token=777175b3-f44f-4be6-8d14-5edda8c50b5a)](https://codecov.io/gh/PSESS2020/Vimsu_prototype)
+[![coverage](https://img.shields.io/codecov/c/github/PSESS2020/Vimsu_prototype)](https://codecov.io/gh/PSESS2020/Vimsu_prototype)
 
 Welcome to the GitHub repository of Vimsu. The project Vimsu is developed as part of the software engineering practice module in summer 2020 at the Karlsruhe Institute of Technology on the topic 'Virtual conference simulator with telepresence'.
 
