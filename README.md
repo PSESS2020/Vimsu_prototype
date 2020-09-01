@@ -9,19 +9,7 @@ Welcome to the GitHub repository of Vimsu. The project Vimsu is developed as par
 For development, you will only need Node.js installed in your environment.
 
 ### Node
-- #### Node installation on Windows
-
-  Download the installer of node in the [official Node.js website](https://nodejs.org/).
-
-- #### Node installation on Ubuntu
-
-  You can install nodejs and npm easily with apt install, just run the following commands.
-
-      $ sudo apt install nodejs
-      $ sudo apt install npm
-
-- #### Other Operating Systems
-  You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
+You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
 
 If the installation was successful, you should be able to run the following command.
 
@@ -44,14 +32,14 @@ If the installation was successful, you should be able to run the following comm
     
 ## Running the test
 
-To run the unit tests with Mocha and Chai, use the following command.
+- To run the unit tests with Mocha and Chai, use the following command.
 
-    $ npm test
+      $ npm test
     
-To print the test coverage with Istanbul, use the following command.
+- To print the test coverage with Istanbul, use the following command.
 
-    $ npm run coverage
+      $ npm run coverage
 
-To print the documentation with JSDoc, use the following command.
+- To print the documentation with JSDoc, use the following command.
     
-    $ npm run docs
+      $ npm run docs
