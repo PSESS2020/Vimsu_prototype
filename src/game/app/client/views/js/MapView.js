@@ -200,40 +200,50 @@ class MapView extends Views {
     }
 
     /**
-     * finds the tile in the list of clickable tiles
+     * checks if tile or object is clickable at the selected position 
      * 
      * @param {Object} selectedTileCords selected tile coordinates
-     * @param {boolean} isClicked true if tile or object is clicked
-     * @param {Canvas} canvas canvas
      */
-    findClickableTileOrObject(selectedTileCords, isClicked, canvas) {
+    checkTileOrObjectIsClickable(selectedTileCords) {
+        let tile = this.#map[selectedTileCords.x][selectedTileCords.y];
+        let object = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
+
+        //This needs a rewrite if gameobjects are not static anymore.
+        return ( tile !== null && (tile instanceof DoorClient || tile.isClickable()) 
+                || (object !== null && object.isClickable()) );
+    }
+
+    /**
+     * finds the tile/object in the list of clickable tiles/objects
+     * and calls it's onclick function.
+     * 
+     * @param {Object} selectedTileCords selected tile coordinates
+     */
+    findAndClickTileOrObject(selectedTileCords) {
         let tile = this.#map[selectedTileCords.x][selectedTileCords.y];
         let object = this.#objectMap[selectedTileCords.x][selectedTileCords.y];
 
         if (tile instanceof Array) {
             tile.forEach(tile => {
-                this.#findTile(tile, isClicked, canvas);
+                this.#findTileAndClick(tile);
             });
         } else
-            this.#findTile(tile, isClicked, canvas);
+            this.#findTileAndClick(tile);
 
         if (object instanceof Array) {
             object.forEach(obj => {
-                this.#findObject(obj, isClicked, canvas);
+                this.#findObjectAndClick(obj);
             });
         } else
-            this.#findObject(object, isClicked, canvas);
+            this.#findObjectAndClick(object);
     }
 
     /**
-     * @private determines if the tile is clickable and change cursor/clicks it in that case.
+     * @private determines if the tile is clickable and calls it's onclick function.
      * 
      * @param {number} tile selected tile
-     * @param {boolean} isClicked true if tile is clicked
-     * @param {Canvas} canvas canvas
      */
-    #findTile = function(tile, isClicked, canvas) {
-        canvas.style.cursor = 'default';
+    #findTileAndClick = function(tile) {
         
         if (tile !== null && (tile instanceof DoorClient || tile.isClickable())) {
             this.#clickableTiles.forEach(viewObject => {
@@ -241,40 +251,28 @@ class MapView extends Views {
                 let viewObjectName = viewObject.getName();
 
                 if (tile instanceof DoorClient && tileName === viewObjectName) {
-                    if (isClicked)
                         viewObject.onclick(tile.getTargetRoomId());
-                    else
-                        canvas.style.cursor = 'pointer';
                 }
                 else if (tile instanceof GameObjectClient && tileName === viewObjectName) {
-                    if (isClicked)
                         viewObject.onclick();
-                    else
-                        canvas.style.cursor = 'pointer';
                 }
             });
-        } else
-            canvas.style.cursor = 'default';
+        }
     }
 
     /**
-     * @private determines if the object is clickable and change cursor/clicks it in that case.
+     * @private determines if the object is clickable and and calls it's onclick function.
      * 
      * @param {number} object selected object
-     * @param {boolean} isClicked true if object is clicked
-     * @param {Canvas} canvas canvas
      */
-    #findObject = function(object, isClicked, canvas) {
+    #findObjectAndClick = function(object) {
         if (object !== null && object.isClickable()) {
             this.#clickableObjects.forEach(viewObject => {
                 let objectName = object.getName();
                 let viewObjectName = viewObject.getName();
 
                 if (object instanceof GameObjectClient && objectName === viewObjectName) {
-                    if (isClicked)
-                        viewObject.onclick();
-                    else
-                        canvas.style.cursor = 'pointer';
+                    viewObject.onclick();
                 }
             });
         }
@@ -331,10 +329,16 @@ class MapView extends Views {
                     }
 
                 };
-            } else if (mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
-                mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK) {
-            } else
-                result = false;
+            } else if (!(mapObject instanceof DoorClient || mapObject !== null && mapObject.getGameObjectType() !== GameObjectType.LEFTWALL &&
+                       mapObject.getGameObjectType() !== GameObjectType.RIGHTWALL && mapObject.getGameObjectType() !== GameObjectType.BLANK)
+                       
+                       
+                       
+                       
+                       
+                       
+                       )
+                        result = false;
 
             return result;
         }
