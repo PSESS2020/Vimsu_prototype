@@ -142,7 +142,9 @@ form button:hover {
 #allchatMessageInput {
   outline: none;
   background-color: rgb(15, 15, 15); 
-  color: antiquewhite
+  color: antiquewhite;
+  font-size: 14px;
+  max-width: 18vw;
 }
 
 #allchatMessages div {
