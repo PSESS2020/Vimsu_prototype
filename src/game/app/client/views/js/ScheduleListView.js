@@ -40,7 +40,7 @@ class ScheduleListView extends WindowView {
             this.#lectures = sortedLectures;
 
             this.#drawSchedule();
-            
+
             var interval = setInterval(() => {
                 this.#drawSchedule();
             }, 1000);
@@ -54,7 +54,7 @@ class ScheduleListView extends WindowView {
     /**
      * @private draws schedule window
      */
-    #drawSchedule = function() {
+    #drawSchedule = function () {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
 
         var count = 1;
@@ -64,20 +64,23 @@ class ScheduleListView extends WindowView {
             var startingTime = lecture.startingTime.getTime();
             var startToShow = startingTime - Settings.SHOWLECTURE;
             var stopToShow = startingTime + lecture.duration * 1000;
+
             if (startToShow <= now && now < startingTime) {
                 var status = LectureStatus.OPENED;
-                var countdown = Math.round((startingTime - now) / 1000) + " secs";
-            } else if (stopToShow < now) {
-                return;
-            } else if (now < startToShow) {
-                var status = LectureStatus.PENDING;
-                var countdown = ''
+                var seconds = Math.round((startingTime - now) / 1000) + " secs";
             } else if (now >= startingTime && now <= stopToShow) {
                 var status = LectureStatus.RUNNING;
-                var countdown = ''
+                var seconds = Math.round((now - startingTime) / 1000) + " secs";
+            } else if (now < startToShow) {
+                var status = LectureStatus.PENDING;
+                var seconds = ''
+            } else {
+                //expired lectures won't be shown
+                return;
             }
 
             var startingTime = new DateParser(lecture.startingTime).parse();
+            
             $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
                 <tr id="${"schedulerow" + lecture.id}">
                     <th scope="row">${count++}</th>
@@ -87,7 +90,7 @@ class ScheduleListView extends WindowView {
                     <td>${Math.floor(lecture.duration / 60)}</td>
                     <td>${lecture.maxParticipants}</td>
                     <td>${(lecture.remarks == '' ? '-' : '' + lecture.remarks)}</td>
-                    <td>${status}<br><br><small style="opacity: 0.5">${countdown}</small></td>
+                    <td>${status}<br><br><small style="opacity: 0.5">${seconds}</small></td>
                 </tr>
             `)
 
