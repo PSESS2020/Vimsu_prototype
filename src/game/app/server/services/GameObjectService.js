@@ -242,6 +242,48 @@ module.exports = class GameObjectService {
         return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    /**
+     * creates small left koeriWurst at top
+     * 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createTopKoeriWurst(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_top", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * creates small left koeriWurst at bottom
+     * 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createBottomKoeriWurst(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_bottom", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * creates small left koeriWurst at top and bottom 
+     * 
+     * @param {number} roomId room ID
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     */
+    createTopBottomKoeriWurst(roomId, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_topBottom", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
     //Chairs
     /**
      * creates default left chair
