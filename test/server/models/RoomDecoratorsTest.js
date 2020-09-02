@@ -60,7 +60,8 @@ foodcourtAssetPaths = {
     "rightchairback_default": "client/assets/chairs/chair_right_back.png",
     "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
     "canteencounter_default": "client/assets/other/canteenCounter.png",
-    "drinks_default": "client/assets/other/Drinks.png"
+    "drinks_default": "client/assets/other/Drinks.png",
+    "koeriWurst_default": "client/assets/food/koeriWurscht.png",
 }
 
 receptionAssetPaths = {
