@@ -239,7 +239,7 @@ module.exports = class GameObjectService {
      */
     createKoeriWurst(roomId, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_allSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
     /**

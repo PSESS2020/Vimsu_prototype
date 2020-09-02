@@ -197,6 +197,16 @@ class GameObjectViewFactory {
 
                 break;
             case GameObjectType.SMALLDINNERTABLEFOOD:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: -4, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the food view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
             case GameObjectType.SMALLDINNERTABLE:
                 gameObjectImage = this.#assetImages[objectName];
 
@@ -211,7 +221,7 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTTABLE:
                     gameObjectImage = this.#assetImages[objectName];
     
-                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 52 };
     
                     if (gameObjectImage !== undefined)
                         gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);

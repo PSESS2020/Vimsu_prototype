@@ -36,7 +36,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
         "canteencounter_default": "client/assets/other/canteenCounter.png",
         "drinks_default": "client/assets/other/Drinks.png",
-        "koeriWurst_default": "client/assets/food/koeriWurscht.png"
+        "koeriWurst_topBottom": "client/assets/food/koeriWurscht_TopAndBottom.png",
     }
 
     /**
@@ -78,15 +78,15 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (var i = 2; i <= 12; i += 5) {
             listOfGameObjects.push(objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 3, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 3, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 4, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 5, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 3, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 4, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 5, true, false),
                 objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 9, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 9, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 10, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 11, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 9, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 10, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 11, true, false),
                 objService.createSmallDinnerTable(Settings.FOODCOURT_ID, i, 16, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 16, true, false),
+                objService.createTopBottomKoeriWurst(Settings.FOODCOURT_ID, i, 16, true, false),
                 objService.createLeftChair(Settings.FOODCOURT_ID, i, 15, true, false),
                 objService.createLeftChairBack(Settings.FOODCOURT_ID, i, 17, true, false));
         }
