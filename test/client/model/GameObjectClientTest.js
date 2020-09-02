@@ -1,4 +1,3 @@
-
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
@@ -14,10 +13,10 @@ var length;
 var position;
 var isClickable;
 
-describe('GameObjectClient test', function() {
-    
+describe('GameObjectClient test', function () {
+
     //test data
-    beforeEach( function () {
+    beforeEach(function () {
         id = TestUtil.randomInt();
         gameObjectType = GameObjectType.TABLE;
         name = TestUtil.randomString();
@@ -27,7 +26,7 @@ describe('GameObjectClient test', function() {
         isClickable = TestUtil.randomBool();
     });
 
-    it('test constructor and getters', function() {
+    it('test constructor and getters', function () {
         let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable);
 
         assert.equal(id, gameObject.getId());
@@ -39,7 +38,7 @@ describe('GameObjectClient test', function() {
         assert.equal(isClickable, gameObject.isClickable());
     });
 
-    it('test constructor invalid input', function() {
+    it('test constructor invalid input', function () {
         expect(() => new GameObjectClient('id', gameObjectType, name, width, length, position, isClickable)).to.throw(TypeError);
         expect(() => new GameObjectClient(id, 'gameObjectType', name, width, length, position, isClickable)).to.throw(TypeError);
         expect(() => new GameObjectClient(id, gameObjectType, 42, width, length, position, isClickable)).to.throw(TypeError);

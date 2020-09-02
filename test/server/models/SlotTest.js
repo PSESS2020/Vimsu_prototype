@@ -16,40 +16,40 @@ var maxParticipants = 3;
 
 var slot = new Slot(id, title, conferenceId, videoId, duration, remarks, startingTime, oratorId, maxParticipants);
 
-describe('Slot getter functions', function() {
-    it('test getId', function() {
+describe('Slot getter functions', function () {
+    it('test getId', function () {
         expect(slot.getId()).to.be.a('string').and.equal(id);
     })
 
-    it('test getTitle', function() {
+    it('test getTitle', function () {
         expect(slot.getTitle()).to.be.a('string').and.equal(title);
     })
 
-    it('test getConferenceId', function() {
+    it('test getConferenceId', function () {
         expect(slot.getConferenceId()).to.be.a('string').and.equal(conferenceId);
     })
-    
-    it('test getVideoId', function() {
+
+    it('test getVideoId', function () {
         expect(slot.getVideoId()).to.be.a('string').and.equal(videoId);
     })
 
-    it('test getDuration', function() {
+    it('test getDuration', function () {
         expect(slot.getDuration()).to.be.a('number').and.equal(duration);
     })
 
-    it('test getRemarks', function() {
+    it('test getRemarks', function () {
         expect(slot.getRemarks()).to.be.a('string').and.equal(remarks);
     })
 
-    it('test getStartingTime', function() {
+    it('test getStartingTime', function () {
         expect(slot.getStartingTime()).to.equalDate(startingTime);
     })
 
-    it('test getOratorId', function() {
+    it('test getOratorId', function () {
         expect(slot.getOratorId()).to.be.a('string').and.equal(oratorId);
     })
 
-    it('test getMaxParticipants', function() {
+    it('test getMaxParticipants', function () {
         expect(slot.getMaxParticipants()).to.be.a('number').and.equal(maxParticipants);
     })
 })

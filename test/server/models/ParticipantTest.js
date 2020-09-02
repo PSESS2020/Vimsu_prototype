@@ -1,6 +1,5 @@
 const Participant = require('../../../src/game/app/server/models/Participant.js');
 const chai = require('chai');
-const Position = require('../../../src/game/app/server/models/Position.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const BusinessCard = require('../../../src/game/app/server/models/BusinessCard.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList.js');
@@ -8,10 +7,8 @@ const TaskService = require('../../../src/game/app/server/services/TaskService.j
 const Achievement = require('../../../src/game/app/server/models/Achievement.js');
 const TypeOfTask = require('../../../src/game/app/server/utils/TypeOfTask.js');
 const Chat = require('../../../src/game/app/server/models/Chat.js');
-const Message = require('../../../src/game/app/server/models/Message.js');
 const OneToOneChat = require('../../../src/game/app/server/models/OneToOneChat.js');
 const Task = require('../../../src/game/app/server/models/Task.js');
-const MessageTestData = require('./TestData/MessageTestData.js');
 const assert = chai.assert;
 const expect = chai.expect;
 const TestUtil = require('./utils/TestUtil.js');
@@ -31,10 +28,10 @@ var awardPoints;
 var chatList;
 var ppant;
 
-describe('Participant test', function() {
+describe('Participant test', function () {
 
     //test data
-    beforeEach(function() {
+    beforeEach(function () {
         id = TestUtil.randomString();
         accountId = TestUtil.randomString();
         businessCard = new BusinessCard(id, 'username', 'title', 'surname', 'forename', 'job', 'company', 'email');
@@ -50,11 +47,11 @@ describe('Participant test', function() {
         isMod = TestUtil.randomBool();
         awardPoints = TestUtil.randomInt();
         chatList = [new Chat(TestUtil.randomString(), [], [], TestUtil.randomIntWithMin(1))];
-        ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList, 
-                    sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList);
+        ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList,
+            sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList);
     });
 
-    it('test getters', function() {
+    it('test getters', function () {
         assert.equal(ppant.getId(), id);
         assert.equal(ppant.getPosition(), position);
         assert.equal(ppant.getDirection(), direction);
@@ -71,7 +68,7 @@ describe('Participant test', function() {
         assert.equal(ppant.getTaskTypeMappingCounts(), taskMapping);
     });
 
-    it('test adding and removing a chat', function() {
+    it('test adding and removing a chat', function () {
 
         let newChat = new Chat('chatId', [], [], TestUtil.randomIntWithMin(1));
         let oldChatListLength = ppant.getChatList().length;
@@ -100,8 +97,8 @@ describe('Participant test', function() {
         expect(ppant.getChatList()).to.be.an('array').and.to.have.lengthOf(oldChatListLength);
         assert.equal(ppant.isMemberOfChat(newChat.getId()), false);
     });
-    
-    it('test adding a 1:1 chat and hasChatWith', function() {
+
+    it('test adding a 1:1 chat and hasChatWith', function () {
         assert.equal(ppant.hasChatWith('chatPartnerID'), false);
 
         //create 1:1 chat and add it to list
@@ -111,13 +108,13 @@ describe('Participant test', function() {
         assert.equal(ppant.hasChatWith('chatPartnerID'), true);
     });
 
-    it('test set position', function() {
+    it('test set position', function () {
         let newPosition = TestUtil.randomPosition();
         ppant.setPosition(newPosition);
         assert.equal(ppant.getPosition(), newPosition);
     });
 
-    it('test setDirection', function() {
+    it('test setDirection', function () {
         let newDirection = TestUtil.randomObjectValue(Direction);
         while (newDirection === direction) {
             newDirection = TestUtil.randomObjectValue(Direction);
@@ -127,13 +124,13 @@ describe('Participant test', function() {
         assert.equal(ppant.getDirection(), newDirection);
     });
 
-    it('test setIsVisible', function() {
+    it('test setIsVisible', function () {
         let newVisibility = !ppant.getIsVisible();
         ppant.setIsVisible(newVisibility);
         assert.equal(ppant.getIsVisible(), newVisibility);
     })
 
-    it('test set achievements', function() {
+    it('test set achievements', function () {
         let exampleAch = [new Achievement(55, 'achievement', 'icon', 'description', 1, 'color', 4444, 3, TypeOfTask.FOODCOURTVISIT, 1)];
         assert.equal(ppant.getAchievements(), achievements);
 
@@ -141,7 +138,7 @@ describe('Participant test', function() {
         assert.equal(ppant.getAchievements(), exampleAch);
     });
 
-    it('test add SentFriendRequest and accept it', function() {
+    it('test add SentFriendRequest and accept it', function () {
         let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
@@ -168,13 +165,13 @@ describe('Participant test', function() {
 
     });
 
-    it('test add SentFriendRequest and decline it', function() {
+    it('test add SentFriendRequest and decline it', function () {
         let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
         let busCard = new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
         ppant.addSentFriendRequest(busCard);
-    
+
         assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
         assert.equal(ppant.getSentRequestList().includes('4'), true);
         assert.equal(ppant.hasSentFriendRequest('4'), true);
@@ -191,7 +188,7 @@ describe('Participant test', function() {
 
     });
 
-    it('test add ReceivedFriendRequest and accept it', function() {
+    it('test add ReceivedFriendRequest and accept it', function () {
         let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
@@ -219,7 +216,7 @@ describe('Participant test', function() {
         assert.equal(ppant.getFriendList().includes('44'), true);
     });
 
-    it('test add ReceivedFriendRequest and decline it', function() {
+    it('test add ReceivedFriendRequest and decline it', function () {
         let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
@@ -240,7 +237,7 @@ describe('Participant test', function() {
         assert.equal(ppant.getFriendList().includes('44'), false);
     });
 
-    it('test remove friend', function() {
+    it('test remove friend', function () {
         //add new friendRequest and accept it 
         let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
         ppant.addFriendRequest(busCard);
@@ -255,15 +252,15 @@ describe('Participant test', function() {
         assert.equal(ppant.getReceivedRequestList().includes('44'), false);
     });
 
-    it('test hasFriend undefined', function() {
+    it('test hasFriend undefined', function () {
         assert.equal(ppant.hasFriend(undefined), undefined);
     });
 
-    it('test hasSentFriendRequest undefined', function() {
+    it('test hasSentFriendRequest undefined', function () {
         assert.equal(ppant.hasSentFriendRequest(undefined), undefined);
-    });    
+    });
 
-    it('test addTask', function() {
+    it('test addTask', function () {
 
         let task = new Task(1, TypeOfTask.ASKQUESTIONINLECTURE, 2);
 
@@ -278,13 +275,13 @@ describe('Participant test', function() {
         assert.equal(ppant.getTaskTypeMappingCount(TypeOfTask.ASKQUESTIONINLECTURE), 1);
     });
 
-    it('test addPoints', function() {
+    it('test addPoints', function () {
         let points = ppant.getAwardPoints();
         ppant.addAwardPoints(42);
         assert.equal(ppant.getAwardPoints(), points + 42);
     });
-    
-    it('test add Achievement and remove Achievement', function() {
+
+    it('test add Achievement and remove Achievement', function () {
         //add it
         let ach = new Achievement(333, 't', 'i', 'd', 3, 'c', 3, 3, TypeOfTask.ASKQUESTIONINLECTURE, 5);
         let lengthBefore = ppant.getAchievements().length;
@@ -296,7 +293,7 @@ describe('Participant test', function() {
         assert.equal(ppant.getAchievements().length, lengthBefore);
     });
 
-    it('test remove achievement that is not in list', function() {
+    it('test remove achievement that is not in list', function () {
         assert.throws(() => ppant.removeAchievement(333), Error, '333 not found in list of achievements');
-    }); 
+    });
 });

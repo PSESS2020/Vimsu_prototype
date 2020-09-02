@@ -8,28 +8,28 @@ const assert = chai.assert;
 var testRoomService;
 
 describe('RoomService constructor test', function () {
-    
-    before( function () {
+
+    before(function () {
         testRoomService = new RoomService();
     });
-    
+
     it('test singleton pattern', function () {
         expect(new RoomService()).to.be.equal(testRoomService);
         assert.equal((new RoomService()).getAllRooms(), testRoomService.getAllRooms());
     });
-    
+
     it('test right amount of rooms init', function () {
         expect(testRoomService.getAllRooms()).to.be.an('array').of.length(3);
     });
-    
+
 });
 
 describe('RoomService Room delivery test', function () {
-    
-    before( function () {
+
+    before(function () {
         testRoomService = new RoomService();
     });
-    
+
     it('test right type of room delivered', function () {
         expect(() => testRoomService.getRoom("fehler")).to.throw(TypeError);
         expect(() => testRoomService.getRoom(100)).to.throw(Error, " is not in list of rooms");
@@ -37,5 +37,5 @@ describe('RoomService Room delivery test', function () {
         assert.equal(testRoomService.getRoom(Settings.FOODCOURT_ID).getRoom().getTypeOfRoom(), TypeOfRoom.FOODCOURT);
         assert.equal(testRoomService.getRoom(Settings.RECEPTION_ID).getRoom().getTypeOfRoom(), TypeOfRoom.RECEPTION);
     });
-    
+
 })

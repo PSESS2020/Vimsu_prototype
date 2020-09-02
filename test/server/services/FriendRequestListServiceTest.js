@@ -2,8 +2,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const sinon = require('sinon');
 const FriendRequestListService = require('../../../src/game/app/server/services/FriendRequestListService');
-const ServiceTestData = require('./TestData/ServiceTestData.js');                       
-
+const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../src/config/db');
 
@@ -22,12 +21,12 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
         //Promise needed for .then{} block in Service
         if (projection.hasOwnProperty("friendRequestIds.sent")) {
 
-            return Promise.resolve( {friendRequestId: {sent: ["123", "456", "678"]} } );
+            return Promise.resolve({ friendRequestId: { sent: ["123", "456", "678"] } });
         } else if (projection.hasOwnProperty("friendRequestIds.received")) {
 
-            return Promise.resolve( {friendRequestId: {received: ["96", "85", "74"]} } );
+            return Promise.resolve({ friendRequestId: { received: ["96", "85", "74"] } });
         }
-    } else  return Promise.resolve(false);
+    } else return Promise.resolve(false);
 };
 
 dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
@@ -43,7 +42,7 @@ dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
 
             return Promise.resolve(true);
         }
-    } else 
+    } else
         return Promise.resolve(false);
 };
 
@@ -51,44 +50,44 @@ dbStub.deleteFromArrayInCollection = (collectionName, query, queryToPull) => {
     let result = false;
 
     if (collectionName === usedCollectionName && query.participantId === friendRequestListOwner) {
-            
-            if (queryToPull.hasOwnProperty("friendRequestIds.sent")) {
-                if (queryToPull["friendRequestIds.sent"]["$exists"] === true) {
-                    sendFriendRequestListIds = [];
+
+        if (queryToPull.hasOwnProperty("friendRequestIds.sent")) {
+            if (queryToPull["friendRequestIds.sent"]["$exists"] === true) {
+                sendFriendRequestListIds = [];
+
+                result = true;
+            } else {
+                let idx = sendFriendRequestListIds.findIndex(x => x === queryToPull["friendRequestIds.sent"]);
+
+                //-1 indicates that no index was found.
+                if (idx !== -1) {
+                    sendFriendRequestListIds.splice(idx, 1);
 
                     result = true;
-                } else {
-                    let idx = sendFriendRequestListIds.findIndex( x => x === queryToPull["friendRequestIds.sent"]);
-
-                    //-1 indicates that no index was found.
-                    if (idx !== -1) {
-                        sendFriendRequestListIds.splice(idx, 1);
-    
-                        result = true;
-                    }
                 }
-            } else if(queryToPull.hasOwnProperty("friendRequestIds.received")) {
-                if (queryToPull["friendRequestIds.received"]["$exists"] === true) {
-                    receivedFriendRequestListIds = [];
+            }
+        } else if (queryToPull.hasOwnProperty("friendRequestIds.received")) {
+            if (queryToPull["friendRequestIds.received"]["$exists"] === true) {
+                receivedFriendRequestListIds = [];
+
+                result = true;
+            } else {
+                let idx = receivedFriendRequestListIds.findIndex(x => x === queryToPull["friendRequestIds.received"]);
+
+                //-1 indicates that no index was found.
+                if (idx !== -1) {
+                    receivedFriendRequestListIds.splice(idx, 1);
 
                     result = true;
-                } else {
-                    let idx = receivedFriendRequestListIds.findIndex( x => x === queryToPull["friendRequestIds.received"]);
-
-                    //-1 indicates that no index was found.
-                    if (idx !== -1) {
-                        receivedFriendRequestListIds.splice(idx, 1);
-    
-                        result = true;
-                    }
                 }
-            } 
+            }
         }
+    }
     return Promise.resolve(result);
 };
 
 describe("FriendRequestListService Test", () => {
-    beforeEach( () => {
+    beforeEach(() => {
         sendFriendRequestListIds = ["456", "678"];
         receivedFriendRequestListIds = ["322", "0815"];
     });
@@ -110,21 +109,21 @@ describe("FriendRequestListService Test", () => {
         var result = await FriendRequestListService.storeSentFriendRequest(friendRequestListOwner, newSentRequestId, conferenceId, dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.true;
-        expect(sendFriendRequestListIds).to.have.members( ["456", "678", newSentRequestId] ).and.to.have.lengthOf(3);
+        expect(sendFriendRequestListIds).to.have.members(["456", "678", newSentRequestId]).and.to.have.lengthOf(3);
     });
 
-    it('Test store SentFriendRequest with invalid conferenceId', async() => {
+    it('Test store SentFriendRequest with invalid conferenceId', async () => {
         var result = await FriendRequestListService.storeSentFriendRequest(friendRequestListOwner, newSentRequestId, '0', dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.false;
-        expect(sendFriendRequestListIds).to.have.members( ["456", "678"] ).and.to.have.lengthOf(2);
+        expect(sendFriendRequestListIds).to.have.members(["456", "678"]).and.to.have.lengthOf(2);
     });
 
     it('Test remove SentFriendRequest with valid requestId', async () => {
         var result = await FriendRequestListService.removeSentFriendRequest(friendRequestListOwner, "678", conferenceId, dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.true;
-        expect(sendFriendRequestListIds).to.have.members( ["456"] ).and.to.have.lengthOf(1);
+        expect(sendFriendRequestListIds).to.have.members(["456"]).and.to.have.lengthOf(1);
     });
 
     it('Test remove AllSentFriendRequests', async () => {
@@ -140,7 +139,7 @@ describe("FriendRequestListService Test", () => {
 
         expect(receivedFriendRequestList).to.be.an('array').and.to.have.members(["96", "85", "74"]).and.to.have.lengthOf(3);
     });
-    
+
     it('Test getReceivedRequestList with invalid friend request list owner id', async () => {
         var receivedFriendRequestList = await FriendRequestListService.getReceivedRequestList("111", conferenceId, dbStub);
         expect(receivedFriendRequestList).to.be.a('boolean').and.to.be.false;
@@ -150,21 +149,21 @@ describe("FriendRequestListService Test", () => {
         var result = await FriendRequestListService.storeReceivedFriendRequest(friendRequestListOwner, newReceivedRequestId, conferenceId, dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.true;
-        expect(receivedFriendRequestListIds).to.have.members( ["322", "0815", newReceivedRequestId] ).and.to.have.lengthOf(3);
+        expect(receivedFriendRequestListIds).to.have.members(["322", "0815", newReceivedRequestId]).and.to.have.lengthOf(3);
     });
 
     it('Test store ReceivedFriendRequest with invalid conferenceId', async () => {
         var result = await FriendRequestListService.storeReceivedFriendRequest(friendRequestListOwner, newReceivedRequestId, '0', dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.false;
-        expect(receivedFriendRequestListIds).to.have.members( ["322", "0815"] ).and.to.have.lengthOf(2);
+        expect(receivedFriendRequestListIds).to.have.members(["322", "0815"]).and.to.have.lengthOf(2);
     });
 
     it('Test remove ReceivedFriendRequest with valid requestId', async () => {
         var result = await FriendRequestListService.removeReceivedFriendRequest(friendRequestListOwner, "322", conferenceId, dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.true;
-        expect(receivedFriendRequestListIds).to.have.members( ["0815"] ).and.to.have.lengthOf(1);
+        expect(receivedFriendRequestListIds).to.have.members(["0815"]).and.to.have.lengthOf(1);
     });
 
     it('Test remove AllReceivedFriendRequests', async () => {

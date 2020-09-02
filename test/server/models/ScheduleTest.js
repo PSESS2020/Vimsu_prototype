@@ -24,24 +24,24 @@ var schedule = new Schedule(lectureList);
 
 
 describe("Schedule Test constructor", function () {
-    it("Test schedule constructor", function() {
+    it("Test schedule constructor", function () {
         var lectureList2 = [1];
         expect(() => new Schedule(lectureList2)).to.throw(TypeError, "an instance of");
     })
 })
 
-describe("Schedule Test getter", function() {
-    
-    it("Test getLecture", function() {
+describe("Schedule Test getter", function () {
+
+    it("Test getLecture", function () {
         expect(schedule.getLecture(id)).to.eql(lecture);
     })
 
-    it("Test getAllLectures", function() {
+    it("Test getAllLectures", function () {
         var lectures = schedule.getAllLectures();
         expect(lectures).to.be.an('array').and.to.have.lengthOf(3);
     })
 
-    it("Test getCurrentLectures", function() {
+    it("Test getCurrentLectures", function () {
         var currentLectures = schedule.getCurrentLectures();
         expect(currentLectures).to.be.an('array').and.to.have.lengthOf(2);
         expect(currentLectures[0]).to.eql(lecture);

@@ -12,10 +12,10 @@ var isVisible;
 var isModerator;
 var ppant;
 
-describe('ParticipantClient test', function() {
+describe('ParticipantClient test', function () {
 
     //test data
-    beforeEach( function () {
+    beforeEach(function () {
         id = TestUtil.randomString();
         username = TestUtil.randomString();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
@@ -25,7 +25,7 @@ describe('ParticipantClient test', function() {
         ppant = new ParticipantClient(id, username, position, direction, isVisible, isModerator);
     });
 
-    it('test getters', function() {
+    it('test getters', function () {
         expect(ppant.getId()).to.be.a('string').and.to.equal(id);
         expect(ppant.getUsername()).to.be.a('string').and.to.equal(username);
         expect(ppant.getPosition()).to.be.instanceOf(PositionClient).and.to.equal(position);
@@ -34,33 +34,33 @@ describe('ParticipantClient test', function() {
         expect(ppant.getIsModerator()).to.equal(isModerator);
     });
 
-    it('test set new valid position', function() {
+    it('test set new valid position', function () {
         let newPosition = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
         ppant.setPosition(newPosition);
         expect(ppant.getPosition()).to.be.instanceOf(PositionClient).and.to.equal(newPosition);
     });
 
-    it('test set new valid direction', function() {
+    it('test set new valid direction', function () {
         let newDirection = Direction.DOWNRIGHT;
         ppant.setDirection(newDirection);
         expect(ppant.getDirection()).to.equal(newDirection);
     });
 
-    it('test set valid isVisible', function() {
+    it('test set valid isVisible', function () {
         let newIsVisible = !ppant.getIsVisible();
         ppant.setisVisible(newIsVisible);
         expect(ppant.getIsVisible()).to.equal(newIsVisible);
     });
 
-    it('test set new invalid position', function() {
+    it('test set new invalid position', function () {
         expect(() => ppant.setPosition('newPosition')).to.throw(TypeError);
     });
 
-    it('test set new invalid direction', function() {
+    it('test set new invalid direction', function () {
         expect(() => ppant.setDirection('newDirection')).to.throw(TypeError);
     });
 
-    it('test set invalid isVisible', function() {
+    it('test set invalid isVisible', function () {
         expect(() => ppant.setisVisible('isVisible')).to.throw(TypeError);
     });
 });

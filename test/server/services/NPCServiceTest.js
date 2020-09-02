@@ -1,13 +1,12 @@
 const { expect } = require('chai');
 const NPCService = require('../../../src/game/app/server/services/NPCService');
 const NPC = require('../../../src/game/app/server/models/NPC');
-const Settings = require('../../../src/game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../src/game/app/client/shared/Direction');
 
 
 describe('NPCService test', function () {
-    it('test create FoyerHelperNPC', function() {
+    it('test create FoyerHelperNPC', function () {
         let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
@@ -27,7 +26,7 @@ describe('NPCService test', function () {
         });
     });
 
-    it('test create BasicTutorialNPC', function() {
+    it('test create BasicTutorialNPC', function () {
         let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
@@ -47,14 +46,14 @@ describe('NPCService test', function () {
         });
     });
 
-    it('test create ChefNPC', function() {
+    it('test create ChefNPC', function () {
         let npcService = new NPCService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
         let direction = Direction.DOWNRIGHT;
         let chefNPC = npcService.createChefNPC(roomId, cordX, cordY, direction);
-        
+
         expect(chefNPC).to.be.instanceOf(NPC);
         expect(chefNPC.getPosition().getRoomId()).to.equal(roomId);
         expect(chefNPC.getPosition().getCordX()).to.equal(cordX);
@@ -65,5 +64,5 @@ describe('NPCService test', function () {
         chefNPC.getStory().forEach(line => {
             expect(line).to.be.a('string');
         });
-    });   
+    });
 });

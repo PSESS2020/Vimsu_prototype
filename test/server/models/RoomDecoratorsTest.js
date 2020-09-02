@@ -90,7 +90,7 @@ var testRoomReceptionDecorator;
 describe('RoomDecorators Testing', () => {
 
     it('Test abstract RoomDecorator class', () => {
-        expect( () => new RoomDecorator()).to.throw(Error, "Cannot construct abstract RoomDecorator instances directly");
+        expect(() => new RoomDecorator()).to.throw(Error, "Cannot construct abstract RoomDecorator instances directly");
     });
 
     it('Test FoyerRoomDecorator constructor and getters', () => {
@@ -152,12 +152,12 @@ describe('RoomDecorators Testing', () => {
         expect(testRoomDecorator.getRoom()).to.be.eql(testRoom);
         expect(testRoomDecorator.getAssetPaths()).to.be.eql(receptionAssetPaths);
     });
-    
+
 });
 
 describe('test OccMap Init', function () {
-    
-    before( function () {        
+
+    before(function () {
         testRoomFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
         testRoomFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH);
         testRoomReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH);
@@ -166,52 +166,52 @@ describe('test OccMap Init', function () {
         testRoomReceptionDecorator = new ReceptionRoomDecorator(testRoomReception);
 
     });
-    
+
     it('test OccMap Foyer', function () {
         var objects = testRoomFoyer.getListOfGameObjects();
-        for(var i = 0; i < objects.length; i++) {
+        for (var i = 0; i < objects.length; i++) {
             var testPos = objects[i].getPosition();
             assert.equal(testRoomFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
         var NPCs = testRoomFoyer.getListOfNPCs();
-        for(var i = 0; i < NPCs.length; i++) {
+        for (var i = 0; i < NPCs.length; i++) {
             var testPos = NPCs[i].getPosition();
             assert.equal(testRoomFoyer.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoyer.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
     });
-    
+
     it('test OccMap FoodCourt', function () {
         var objects = testRoomFoodcourt.getListOfGameObjects();
-        for(var i = 0; i < objects.length; i++) {
+        for (var i = 0; i < objects.length; i++) {
             var testPos = objects[i].getPosition();
             assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
         var NPCs = testRoomFoodcourt.getListOfNPCs();
-        for(var i = 0; i < NPCs.length; i++) {
+        for (var i = 0; i < NPCs.length; i++) {
             var testPos = NPCs[i].getPosition();
             assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
     });
-    
+
     it('test OccMap Reception', function () {
         var objects = testRoomReception.getListOfGameObjects();
-        for(var i = 0; i < objects.length; i++) {
+        for (var i = 0; i < objects.length; i++) {
             var testPos = objects[i].getPosition();
             assert.equal(testRoomReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
         var NPCs = testRoomReception.getListOfNPCs();
-        for(var i = 0; i < NPCs.length; i++) {
+        for (var i = 0; i < NPCs.length; i++) {
             var testPos = NPCs[i].getPosition();
             assert.equal(testRoomReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
     });
-    
 
-    
+
+
 })

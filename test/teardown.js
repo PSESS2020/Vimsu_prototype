@@ -8,13 +8,6 @@ database.connectDB()
     after(function() {
 
         setTimeout(function(){ 
-            /*.then(result => {
-                database.collection("chats_" + ServiceTestData.conferenceId_1).drop();
-            }).catch(err => {
-                console.log(err);
-            })*/
-            //sdatabase.chats_test_1.drop();
             process.exit(0); 
-
         }, 3000);
 })

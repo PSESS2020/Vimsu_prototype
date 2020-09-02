@@ -15,24 +15,24 @@ var direction = Direction.DOWNLEFT;
 var story = ['Hello'];
 var npc = new NPC(id, name, position, direction, story);
 
-describe('NPCTest getter functions', function() {
-    it('test getId', function() {
+describe('NPCTest getter functions', function () {
+    it('test getId', function () {
         assert.equal(npc.getId(), id);
     });
 
-    it('test getName', function() {
+    it('test getName', function () {
         assert.equal(npc.getName(), name);
     });
 
-    it('test getPosition', function() {
+    it('test getPosition', function () {
         assert.equal(npc.getPosition(), position);
     });
 
-    it('test getDirection', function() {
+    it('test getDirection', function () {
         assert.equal(npc.getDirection(), direction);
     });
 
-    it('test getStory', function() {
+    it('test getStory', function () {
         assert.equal(npc.getStory(), story);
     });
 });

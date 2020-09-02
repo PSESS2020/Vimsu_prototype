@@ -9,24 +9,16 @@ var taskType = TypeOfTask.BEFRIENDOTHER;
 var awardPoints = 15;
 var task1 = new Task(taskId, taskType, awardPoints);
 
-describe('TaskServiceTest getter', function() {
-    it('test getAllTasks', function() {
+describe('TaskServiceTest getter', function () {
+    it('test getAllTasks', function () {
         expect(taskService.getAllTasks()).to.be.an('array').and.to.have.lengthOf(10);
     });
 
-    /*it('test getTask', function() {
-        expect(taskService.getTask(taskId)).to.eql(task1);
-    });
-
-    it('test getTask error', function() {
-        expect(() => taskService.getTask(30)).to.throw(Error);
-    })*/
-
-    it('test getTaskByType', function() {
+    it('test getTaskByType', function () {
         expect(taskService.getTaskByType(taskType)).to.eql(task1);
     });
 
-    it('test getTaskByType error', function() {
+    it('test getTaskByType error', function () {
         expect(() => taskService.getTaskByType(TypeOfTask.SENDALLCHAT)).to.throw(Error);
     })
 });
