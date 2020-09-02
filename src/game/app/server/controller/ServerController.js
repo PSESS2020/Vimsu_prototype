@@ -662,7 +662,7 @@ module.exports = class ServerController {
                     )
                 })
 
-                socket.emit('currentSchedule', lecturesData);
+                socket.emit('currentSchedule', lecturesData, new Date().getTime());
             });
 
             /* handles ppant clicked, show business card */

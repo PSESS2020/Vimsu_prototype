@@ -25,8 +25,9 @@ class ScheduleListView extends WindowView {
      * Sorts lecture according to starting time and then draws schedule window every 1 second
      * 
      * @param {Object[]} lectures all lectures
+     * @param {number} timeOffset offset if client has different local time than the server
      */
-    draw(lectures) {
+    draw(lectures, timeOffset) {
         $('#scheduleModal .modal-body #noschedule').empty();
 
         if (lectures.length < 1) {
@@ -42,7 +43,7 @@ class ScheduleListView extends WindowView {
             this.#drawSchedule();
 
             var interval = setInterval(() => {
-                this.#drawSchedule();
+                this.#drawSchedule(timeOffset);
             }, 1000);
 
             $('#scheduleModal').on('hide.bs.modal', function (e) {
@@ -53,25 +54,31 @@ class ScheduleListView extends WindowView {
 
     /**
      * @private draws schedule window
+     * 
+     * @param {number} timeOffset offset if client has different local time than the server
      */
-    #drawSchedule = function () {
+    #drawSchedule = function (timeOffset) {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
 
         var count = 1;
-        var now = new Date().getTime();
+        var now = Date.now();
 
         this.#lectures.forEach(lecture => {
             var startingTime = lecture.startingTime.getTime();
             var startToShow = startingTime - Settings.SHOWLECTURE;
             var stopToShow = startingTime + lecture.duration * 1000;
 
-            if (startToShow <= now && now < startingTime) {
+            var currentTimeDifferenceStartingTime = now - startingTime - timeOffset;
+            var currentTimeDifferenceStartToShow = now - startToShow - timeOffset;
+            var currentTimeDifferenceStopToShow = now - stopToShow - timeOffset;
+
+            if (currentTimeDifferenceStartToShow >= 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.OPENED;
-                var seconds = Math.round((startingTime - now) / 1000) + " secs";
-            } else if (now >= startingTime && now <= stopToShow) {
+                var seconds = (-1) * Math.round(currentTimeDifferenceStartingTime / 1000) + " secs";
+            } else if (currentTimeDifferenceStartingTime >= 0 && currentTimeDifferenceStopToShow <= 0) {
                 var status = LectureStatus.RUNNING;
-                var seconds = Math.round((now - startingTime) / 1000) + " secs";
-            } else if (now < startToShow) {
+                var seconds = Math.round(currentTimeDifferenceStartingTime / 1000) + " secs";
+            } else if (currentTimeDifferenceStartToShow < 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.PENDING;
                 var seconds = ''
             } else {

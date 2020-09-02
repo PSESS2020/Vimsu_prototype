@@ -522,9 +522,11 @@ class ClientController {
      * @private get the schedule from the server to display in the UI for selection
      * 
      * @param {Object[]} lectures all lectures with the schedule
+     * @param {number} serverTime current server time
      */
-    #handleFromServerCurrentSchedule = function (lectures) {
-        this.#gameView.initCurrentSchedule(lectures);
+    #handleFromServerCurrentSchedule = function (lectures, serverTime) {
+        var offset = new Date().getTime() - serverTime;
+        this.#gameView.initCurrentSchedule(lectures, offset);
     }
 
     /**
