@@ -61,7 +61,10 @@ foodcourtAssetPaths = {
     "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
     "canteencounter_default": "client/assets/other/canteenCounter.png",
     "drinks_default": "client/assets/other/Drinks.png",
-    "koeriWurst_topBottom": "client/assets/food/koeriWurscht_TopAndBottom.png",
+    "koeriWurst_bothSides": "client/assets/food/koeriWurscht_bothSides.png",
+    "koeriWurst_upperSide": "client/assets/food/koeriWurscht_upperSide.png",
+    "koeriWurst_lowerSide": "client/assets/food/koeriWurscht_lowerSide.png",
+    "tea_default": "client/assets/food/tea.png",
 }
 
 receptionAssetPaths = {
