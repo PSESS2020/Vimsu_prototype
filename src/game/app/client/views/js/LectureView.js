@@ -191,17 +191,15 @@ class LectureView extends WindowView {
 
         this.#timerIntervalId = setInterval(() => {
             this.#currentTimeDifference = Date.now() - lectureStartingTime - this.#timeOffset;
-            this.#update(this.#currentTimeDifference);
+            this.#update();
         }, 1000);
     }
 
     /**
      * @private updates lecture view
-     * 
-     * @param {number} currentTimeDifference time difference between now and starting time
      */
-    #update = function (currentTimeDifference) {
-        if (currentTimeDifference < 0) {
+    #update = function () {
+        if (this.#currentTimeDifference < 0) {
             $('#lecturePending').remove();
             $('#lectureVideo').append(`
                 <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
@@ -213,7 +211,7 @@ class LectureView extends WindowView {
 
             this.#lectureStatus = LectureStatus.PENDING;
 
-            var newTimeLeft = (-1) * Math.round(currentTimeDifference / 1000);
+            var newTimeLeft = (-1) * Math.round(this.#currentTimeDifference / 1000);
             if (this.#timeLeft !== newTimeLeft) {
                 this.#timeLeft = newTimeLeft;
                 $('#countdown').empty()
@@ -221,7 +219,7 @@ class LectureView extends WindowView {
             }
         }
 
-        else if (currentTimeDifference >= 0 && currentTimeDifference <= this.#lectureDuration) {
+        else if (this.#currentTimeDifference >= 0 && this.#currentTimeDifference <= this.#lectureDuration) {
             $('#lecturePending').hide();
 
             this.#lectureStatus = LectureStatus.RUNNING;
@@ -230,7 +228,7 @@ class LectureView extends WindowView {
                 this.#eventManager.handleShowVideo(this.#lectureId);
         }
 
-        else if (this.#video !== undefined && currentTimeDifference >= 0 && currentTimeDifference > this.#lectureDuration) {
+        else if (this.#video !== undefined && this.#currentTimeDifference >= 0 && this.#currentTimeDifference > this.#lectureDuration) {
             clearInterval(this.#timerIntervalId);
 
             $('#lecturePending').hide();
