@@ -7,6 +7,7 @@
 class ScheduleListView extends WindowView {
 
     #lectures = [];
+    #timeOffset;
     #interval;
 
     /**
@@ -40,11 +41,12 @@ class ScheduleListView extends WindowView {
 
             const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
             this.#lectures = sortedLectures;
+            this.#timeOffset = timeOffset;
 
-            this.#drawSchedule(timeOffset);
+            this.#drawSchedule();
 
             this.#interval = setInterval(() => {
-                this.#drawSchedule(timeOffset);
+                this.#drawSchedule();
             }, 1000);
 
             $('#scheduleModal').on('hide.bs.modal', (e) => {
@@ -55,10 +57,8 @@ class ScheduleListView extends WindowView {
 
     /**
      * @private draws schedule window
-     * 
-     * @param {number} timeOffset offset if client has different local time than the server
      */
-    #drawSchedule = function (timeOffset) {
+    #drawSchedule = function () {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
         var count = 0;
@@ -69,9 +69,9 @@ class ScheduleListView extends WindowView {
             var startToShow = startingTime - Settings.SHOWLECTURE;
             var stopToShow = startingTime + lecture.duration * 1000;
 
-            var currentTimeDifferenceStartingTime = now - startingTime - timeOffset;
-            var currentTimeDifferenceStartToShow = now - startToShow - timeOffset;
-            var currentTimeDifferenceStopToShow = now - stopToShow - timeOffset;
+            var currentTimeDifferenceStartingTime = now - startingTime - this.#timeOffset;
+            var currentTimeDifferenceStartToShow = now - startToShow - this.#timeOffset;
+            var currentTimeDifferenceStopToShow = now - stopToShow - this.#timeOffset;
 
             if (currentTimeDifferenceStartToShow >= 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.OPENED;
