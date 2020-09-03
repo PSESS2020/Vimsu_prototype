@@ -7,6 +7,7 @@
 class ScheduleListView extends WindowView {
 
     #lectures = [];
+    #interval;
 
     /**
      * @constructor Creates an instance of ScheduleListView
@@ -42,12 +43,12 @@ class ScheduleListView extends WindowView {
 
             this.#drawSchedule(timeOffset);
 
-            var interval = setInterval(() => {
+            this.#interval = setInterval(() => {
                 this.#drawSchedule(timeOffset);
             }, 1000);
 
-            $('#scheduleModal').on('hide.bs.modal', function (e) {
-                clearInterval(interval);
+            $('#scheduleModal').on('hide.bs.modal', (e) => {
+                clearInterval(this.#interval);
             })
         }
     }
@@ -58,9 +59,9 @@ class ScheduleListView extends WindowView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     #drawSchedule = function (timeOffset) {
-        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty()
+        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
-        var count = 1;
+        var count = 0;
         var now = Date.now();
 
         this.#lectures.forEach(lecture => {
@@ -80,7 +81,7 @@ class ScheduleListView extends WindowView {
                 var seconds = Math.round(currentTimeDifferenceStartingTime / 1000) + " secs";
             } else if (currentTimeDifferenceStartToShow < 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.PENDING;
-                var seconds = ''
+                var seconds = '';
             } else {
                 //expired lectures won't be shown
                 return;
@@ -90,7 +91,7 @@ class ScheduleListView extends WindowView {
             
             $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
                 <tr id="${"schedulerow" + lecture.id}">
-                    <th scope="row">${count++}</th>
+                    <th scope="row">${++count}</th>
                     <td>${lecture.title}</td>
                     <td>${lecture.oratorName}</td>
                     <td>${startingTime}</td>
@@ -105,6 +106,11 @@ class ScheduleListView extends WindowView {
                 $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })
+
+        if (count === 0) {
+            $('#scheduleModal .modal-body #noschedule').text("Sorry, all lectures have expired.");
+            clearInterval(this.#interval);
+        }
 
         $('#scheduleModal').modal('show');
     }
