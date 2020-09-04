@@ -45,10 +45,10 @@ In this `.env` file, you will have to store the connection string of the databas
 
 - MongoDB
 
-    You can get the mongoDB connection string by pressing the ‘Connect’ button of your cluster and afterwards the ‘Connect your application’ button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password for your database and `dbname` with the name of your database.
+    You can get the mongoDB connection string by pressing the `Connect` button of your cluster and afterwards the `Connect your application` button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password of your database and `dbname` with the name of your database.
     For more information about how to generate the mongoDB connection string, please visit the [official mongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
 
-After generating the connection strings, save these into the `.env` file using the following command.
+After generating the connection strings, save the strings into the `.env` file using the following command.
 
     $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
     $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
