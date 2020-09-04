@@ -89,7 +89,8 @@ module.exports = class blob {
                     console.log(containerName + " container was created");
                 else
                     console.log(containerName + " container already existed");
-            }
+            } else
+                console.error(error);
         });
     }
 
