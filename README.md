@@ -76,6 +76,8 @@ You should see the following logs if you have successfully hosted VIMSU.
 
       $ npm run coverage
 
-- To print the documentation with JSDoc, use the following command.
+## Generating the documentation
+
+To generate the documentation with JSDoc, use the following command.
     
-      $ npm run docs
+    $ npm run docs
