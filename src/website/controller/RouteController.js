@@ -55,6 +55,9 @@ module.exports = class RouteController {
      */
     #init = function () {
 
+        //creates lectures container in blob storage at the beginning as we will need it to store lecture videos
+        this.#blob.createContainer("lectures");
+
         var username, title, forename, surname, job, company, email;
 
         //sets the view engine to ejs, ejs is required to render templates

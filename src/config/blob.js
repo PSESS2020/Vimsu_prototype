@@ -76,6 +76,24 @@ module.exports = class blob {
     }
 
     /**
+     * Creates container if not exists
+     * 
+     * @param {String} containerName container name
+     */
+    createContainer(containerName) {
+        TypeChecker.isString(containerName);
+
+        this.#blobService.createContainerIfNotExists(containerName, function (error, result, response) {
+            if (!error) {
+                if (result === true)
+                    console.log(containerName + " container was created");
+                else
+                    console.log(containerName + " container already existed");
+            }
+        });
+    }
+
+    /**
      * Deletes file from container
      * 
      * @param {String} containerName container name
