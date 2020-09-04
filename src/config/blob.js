@@ -85,7 +85,7 @@ module.exports = class blob {
 
         this.#blobService.createContainerIfNotExists(containerName, function (error, result, response) {
             if (!error) {
-                if (result === true)
+                if (result)
                     console.log(containerName + " container was created");
                 else
                     console.log(containerName + " container already existed");
