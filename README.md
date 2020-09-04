@@ -25,7 +25,6 @@ You need a mongoDB account and an Atlas cluster to store account and conference 
 ### Azure Blob Storage
 You need an Azure storage account to store uploaded video files before hosting VIMSU. You can find more information about creating a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
 
-
 ## Installing the project
 Use the following command to clone this repository.
 
@@ -65,6 +64,11 @@ You should see the following logs if you have successfully hosted VIMSU.
     Connected to blob storage
     Vimsu-Server listening on port 5000 . . .
     Connected to Database
+
+To run VIMSU locally on browser, open your browser and enter `http://localhost:5000/`. The following browsers are currently supported:
+- Google Chrome Version 84.0.4147.125 or newer
+- Microsoft Edge Version 84.0.522.59 or newer
+- Opera Version 70.0.3728.71 or newer
     
 ## Running the test
 
