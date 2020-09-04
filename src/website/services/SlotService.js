@@ -53,6 +53,15 @@ module.exports = class SlotService {
     }
 
     /**
+     * @static creates video container in the blob storage
+     * 
+     * @param {blob} blob blob instance
+     */
+    static createVideoContainer(blob) {
+        return blob.createContainer("lectures");
+    }
+
+    /**
      * @static creates lecture slot and saves it in the database
      * 
      * @param {String} videoId video ID
