@@ -20,7 +20,7 @@ If the installation was successful, you should be able to run the following comm
     6.14.5
 
 ###
-## Install the project
+## Installing the project
 
     $ git clone https://github.com/PSESS2020/Vimsu_prototype.git
 
