@@ -6,7 +6,7 @@ Welcome to the GitHub repository of VIMSU. This project is developed as part of 
 
 ## Requirements
 
-For development, you will need Node.js installed in your environment. You will also need a MongoDB account for the database and Azure storage account for the cloud storage.
+For development, you will need Node.js installed in your environment. You will also need a mongoDB account for the database and Azure storage account for the cloud storage.
 
 ### Node
 You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
