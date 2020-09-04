@@ -71,7 +71,7 @@ class GameObjectViewFactory {
     /* ##################################################################### */
 
     /**
-     * Im order to make an Object nut tile clickable but pixel clickable a new object type and class needs to be added to 
+     * In order to make an Object not tile clickable but pixel clickable a new object type and class needs to be added to 
      * one of the creation methods and also an if statement to declare on what condition this 
      * new object should be created. Also a click map should be generated with the method getClickMap()
      * and passed to the new clickable Object.
