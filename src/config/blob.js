@@ -30,7 +30,7 @@ module.exports = class blob {
     connectBlob() {
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
         if (!connectionString) {
-            console.log("Cannot connect to blob storage. Please ask the owner of this project for the connection string.");
+            console.log("Cannot connect to blob storage. Did you define a connection string to your blob storage in the .env file?");
             return;
         }
         this.#blobService = azure.createBlobService(connectionString);

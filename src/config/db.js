@@ -27,7 +27,7 @@ module.exports = class db {
     connectDB() {
         const connectionString = process.env.MONGODB_CONNECTION_STRING;
         if(!connectionString) {
-            console.log("Cannot connect to database. Please ask the owner of this project for the connection string.");
+            console.log("Cannot connect to database. Did you define a connection string to your database in the .env file?");
             return;
         }
 
