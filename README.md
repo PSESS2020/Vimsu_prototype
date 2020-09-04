@@ -32,12 +32,12 @@ Use the following command to clone this repository.
     $ git clone https://github.com/PSESS2020/Vimsu_prototype.git
 
 ## Setting up the project
-Before you can host VIMSU, you will need to set up the databases by creating a .env file. Use the following command to create this file.
+Before you can host VIMSU, you will need to set up the databases by creating a `.env` file. Use the following command to create this file.
 
     $ cd path/to/Vimsu_prototype/
     $ touch .env
 
-In this .env file, you will have to store the connection string of the databases. 
+In this `.env` file, you will have to store the connection string of the databases. 
 
 - Azure Blob Storage
 
@@ -48,13 +48,13 @@ In this .env file, you will have to store the connection string of the databases
     You can get the mongoDB connection string by pressing the ‘Connect’ button of your cluster and afterwards the ‘Connect your application’ button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password for your database and `dbname` with the name of your database.
     For more information about how to generate the mongoDB connection string, please visit the [official mongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
 
-After generating the connection strings, save these into the .env file using the following command.
+After generating the connection strings, save these into the `.env` file using the following command.
 
     $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
     $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
 
 ## Running the project
-After setting up the project, use the following command to finally host VIMSU.
+After setting up the project, use the following command to host VIMSU.
 
     $ cd path/to/Vimsu_prototype/
     $ npm install
