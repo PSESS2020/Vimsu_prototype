@@ -575,31 +575,31 @@ body::-webkit-scrollbar-track:hover ~ body::-webkit-scrollbar-thumb:hover{
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e1e1e1;
+  background: rgba(148, 148, 148, 0.8);
   border: 0px none #ffffff;
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffffff;
+  background: rgba(148, 148, 148, 0.8);
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: #000000;
+  background: rgba(148, 148, 148, 0.8);
 }
 
 ::-webkit-scrollbar-track {
-  background: #666666;
+  background: rgb(15, 15, 15);
   border: 0px none #ffffff;
   border-radius: 51px;
 }
 
 ::-webkit-scrollbar-track:hover {
-  background: #666666;
+  background: rgb(15, 15, 15);
 }
 
 ::-webkit-scrollbar-track:active {
-  background: #333333;
+  background: rgb(15, 15, 15);
 }
 
 ::-webkit-scrollbar-corner {
