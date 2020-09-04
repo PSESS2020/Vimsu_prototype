@@ -33,7 +33,8 @@ class ScheduleListView extends WindowView {
         $('#scheduleModal .modal-body #noschedule').empty();
 
         if (lectures.length < 1) {
-            $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.")
+            $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.");
+            $('#scheduleModal').modal('show');
         } else {
             lectures.forEach(lecture => {
                 lecture.startingTime = new Date(lecture.startingTime);
