@@ -82,6 +82,26 @@ To host VIMSU locally on browser, open your browser and enter `http://localhost:
 - Google Chrome Version 84.0.4147.125 or newer
 - Microsoft Edge Version 84.0.522.59 or newer
 - Opera Version 70.0.3728.71 or newer
+
+## Uploading lectures
+After VIMSU is sucessfully hosted, you can upload lectures by doing the following steps:
+
+1. Go to the VIMSU homepage and log into your account.
+2. Press the `Upload` button.
+3. Enter your lecture data and select the video you want to upload.
+4. Press the `Create lecture and upload video` button.
+
+At this point, the lecture should have been uploaded successfully, but it still has to be accepted.
+
+5. Go to your created cluster in MongoDB.
+6. Press the `Collections` button.
+7. Go to the `lectures` collection.
+8. Look for the lecture you just uploaded and set `isAccepted` from `false` to `true`.
+
+After a server restart, the lecture should appear in VIMSU and will start at the just selected starting time.
+
+
+
     
 ## Tests
 
