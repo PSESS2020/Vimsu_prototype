@@ -13,7 +13,7 @@ VIMSU (Virtual Interactive Meeting SimUlator) is a software that was developed i
 For development, you will need Node.js installed in your environment. You will also need a mongoDB account for the database and Azure storage account for the cloud storage.
 
 ### Node
-You can find more information about the installation on the [official Node.js website](https://nodejs.org/) and the [official NPM website](https://npmjs.org/).
+Download and install Node.js from the [official Node.js website](https://nodejs.org/). Usually NPM is automatically installed with the Node.js installation. If not then after installing Node.js, type in `$ npm install npm@latest -g` in your console or visit the [official NPM website](https://npmjs.org/) for more info.
 
 If the installation was successful, you should be able to run the following command.
 
@@ -24,10 +24,10 @@ If the installation was successful, you should be able to run the following comm
     6.14.5
 
 ### MongoDB
-You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can find more information about creating a cluster on the [official mongoDB website](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
+You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a mongoDB account here [official mongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster here [official mongoDB create new cluster site](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
 
 ### Azure Blob Storage
-You need an Azure storage account to store uploaded video files before hosting VIMSU. You can find more information about creating a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
+You need an Azure storage account to store uploaded video files before hosting VIMSU. Please follow the tutorial about creating a storage account here on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
 
 ## Installation
 Use the following command to create a local copy of this software on your computer.
