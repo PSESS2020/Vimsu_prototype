@@ -15,13 +15,13 @@ For development, you will need Node.js installed in your environment. You will a
 ### Node
 You can download and install Node.js from the [official Node.js website](https://nodejs.org/). After the installation, you should normally be able to run this following command.
 
-    $ node --version
+    $ node -v
     v12.18.1
 
-    $ npm --version
-    6.14.5
+    $ npm -v
+    6.14.8
 
-If `npm --version` didn't return a version, you need to install NPM separately. To install NPM, type `$ npm install npm@latest -g` into your console. Afterwards, run the above command again to make sure that NPM is now installed successfully. You can visit the [official NPM website](https://npmjs.org/) for more information about the NPM installation.
+You might need to update the NPM version. Use `$ npm install npm@latest -g` to update the version. Afterwards, run the above command again to make sure that you have the latest version of NPM. For more information, you can visit the [official NPM website](https://www.npmjs.com/get-npm).
 
 ### MongoDB
 You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a mongoDB account on the [official mongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official mongoDB create new cluster site](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
