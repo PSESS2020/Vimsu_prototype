@@ -98,8 +98,7 @@ At this point, the lecture should have been uploaded successfully, but it still 
 7. Go to the `lectures` collection.
 8. Look for the lecture you just uploaded and set `isAccepted` from `false` to `true`.
 
-After a server restart, the lecture should appear in VIMSU and will start at the just selected starting time.
-
+After restarting the server, the lecture should be displayed on the schedule in VIMSU as long as it hasn't expired. It will start at the time you just selected.
 
 
     
