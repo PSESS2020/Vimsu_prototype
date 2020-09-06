@@ -96,11 +96,24 @@ At this point, the lecture should have been uploaded successfully, but it still 
 5. Go to your created cluster in mongoDB.
 6. Press the `Collections` button.
 7. Go to the `lectures` collection.
-8. Look for the lecture you just uploaded and set `isAccepted` from `false` to `true`.
+8. Search for the lecture you just uploaded and set `isAccepted` from `false` to `true`.
 
-After restarting the server, the lecture should be displayed on the schedule in VIMSU as long as it hasn't expired. It will start at the time you just selected.
+After restarting the server, the lecture should be displayed on the `Schedule` in VIMSU as long as it hasn't expired. It will start at the time you just selected.
 
+## Granting participants moderator rights
+After VIMSU is sucessfully hosted, you can grant yourself moderator rights by following the steps below:
 
+1. Go to the VIMSU homepage and log into your account.
+2. Press the `Enter Conference` button.
+
+At this point, your participant entry should have been saved in the database as a normal participant.
+
+3. Go to your created cluster in mongoDB.
+4. Press the `Collections` button.
+5. Go to the `participants_1` collection.
+6. Search for your participant entry and set `isModerator` from `false` to `true`.
+
+After refreshing the page, you should be able to notice the color change on your avatar username and the `Role` on `Profile` should have changed to `Moderator`.
     
 ## Tests
 
