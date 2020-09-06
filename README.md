@@ -114,6 +114,15 @@ At this point, your participant entry should have been saved in the database as 
 6. Search for your participant entry and set `isModerator` from `false` to `true`.
 
 After refreshing the page, you should be able to notice the color change on your avatar username and the `Role` on `Profile` should have changed to `Moderator`.
+
+## Moderator privileges
+TODO
+
+## Decorating room
+TODO
+
+## Adding new rooms
+TODO
     
 ## Tests
 
