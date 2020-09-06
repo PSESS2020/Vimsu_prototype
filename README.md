@@ -19,7 +19,7 @@ Welcome to the GitHub repository of VIMSU. This software is developed as part of
 - [Granting participants moderator rights](#granting-participants-moderator-rights)
 - [Moderator privileges](#moderator-privileges)
 - [Decorating room](#decorating-room)
-- [Adding new room](#adding-new-room)
+- [Adding new rooms](#adding-new-rooms)
 - [Tests](#tests)
 - [Documentation](#documentation)
 
