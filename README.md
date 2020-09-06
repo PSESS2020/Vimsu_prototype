@@ -13,7 +13,7 @@ VIMSU (Virtual Interactive Meeting SimUlator) is a software that was developed i
 For development, you will need Node.js installed in your environment. You will also need a mongoDB account for the database and Azure storage account for the cloud storage.
 
 ### Node
-You can download and install Node.js from the [official Node.js website](https://nodejs.org/). After the installation, you should normally be able to run this following command.
+You can download and install Node.js from the [official Node.js website](https://nodejs.org/). If the installation was successful, you should be able to run this following command.
 
     $ node -v
     v12.18.1
@@ -21,10 +21,10 @@ You can download and install Node.js from the [official Node.js website](https:/
     $ npm -v
     6.14.8
 
-You might need to update the NPM version. Use `$ npm install npm@latest -g` to update the version. Afterwards, run the above command again to make sure that you have the latest version of NPM. For more information, you can visit the [official NPM website](https://www.npmjs.com/get-npm).
+If you need to update NPM, use `$ npm install npm@latest -g` to update it to the latest version. For more information, please visit the [official NPM website](https://www.npmjs.com/get-npm).
 
 ### MongoDB
-You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a mongoDB account on the [official mongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official mongoDB create new cluster site](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
+You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a mongoDB account on the [official mongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official mongoDB website for creating new cluster](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
 
 ### Azure Blob Storage
 You need an Azure storage account to store uploaded video files before hosting VIMSU. Please follow the tutorial on how to create a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
@@ -84,7 +84,7 @@ To host VIMSU locally on browser, open your browser and enter `http://localhost:
 - Opera Version 70.0.3728.71 or newer
 
 ## Uploading lectures
-After VIMSU is sucessfully hosted, you can upload lectures by doing the following steps:
+After VIMSU is sucessfully hosted, you can upload lectures by following the steps below:
 
 1. Go to the VIMSU homepage and log into your account.
 2. Press the `Upload` button.
@@ -93,7 +93,7 @@ After VIMSU is sucessfully hosted, you can upload lectures by doing the followin
 
 At this point, the lecture should have been uploaded successfully, but it still has to be accepted.
 
-5. Go to your created cluster in MongoDB.
+5. Go to your created cluster in mongoDB.
 6. Press the `Collections` button.
 7. Go to the `lectures` collection.
 8. Look for the lecture you just uploaded and set `isAccepted` from `false` to `true`.
