@@ -8,7 +8,6 @@ class ScheduleListView extends WindowView {
 
     #lectures = [];
     #timeOffset;
-    #interval;
 
     /**
      * @constructor Creates an instance of ScheduleListView
@@ -46,12 +45,12 @@ class ScheduleListView extends WindowView {
 
             this.#drawSchedule();
 
-            this.#interval = setInterval(() => {
-                this.#drawSchedule();
+            var interval = setInterval(() => {
+                this.#drawSchedule(interval);
             }, 1000);
 
             $('#scheduleModal').on('hide.bs.modal', (e) => {
-                clearInterval(this.#interval);
+                clearInterval(interval);
             })
         }
     }
@@ -59,7 +58,7 @@ class ScheduleListView extends WindowView {
     /**
      * @private draws schedule window
      */
-    #drawSchedule = function () {
+    #drawSchedule = function (interval) {
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
         var count = 0;
@@ -110,7 +109,7 @@ class ScheduleListView extends WindowView {
 
         if (count === 0) {
             $('#scheduleModal .modal-body #noschedule').text("Sorry, all lectures have expired.");
-            clearInterval(this.#interval);
+            clearInterval(interval);
         }
 
         $('#scheduleModal').modal('show');
