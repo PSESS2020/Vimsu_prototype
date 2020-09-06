@@ -4,6 +4,25 @@
 
 Welcome to the GitHub repository of VIMSU. This software is developed as part of the software engineering practice module in the summer semester 2020 at the Karlsruhe Institute of Technology on the topic 'Virtual conference simulator with telepresence'.
 
+## Table of Contents
+
+- [Description](#description)
+- [Requirements](#requirements)
+    - [Node](#node)
+    - [MongoDB](#mongodb)
+    - [Azure Blob Storage](#azure-blob-storage)
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Database configuration](#database-configuration)
+    - [Hosting](#hosting)
+- [Uploading Lectures](#uploading-lectures)
+- [Granting participants moderator rights](#granting-participants-moderator-rights)
+- [Moderator privileges](#moderator-privileges)
+- [Decorating room](#decorating-room)
+- [Adding new room](#adding-new-room)
+- [Tests](#tests)
+- [Documentation](#documentation)
+
 ## Description
 
 VIMSU (Virtual Interactive Meeting SimUlator) is a software that was developed in response to the corona pandemic and is intended to allow scientific conferences and similar events to be held virtually with telepresence. This takes place in the form of an interactive virtual event area. The virtual conference participants are represented by virtual avatars that can be controlled in real-time. They can attend lectures, interact with other participants, or explore the site. In addition, some gameplay elements have been implemented to motivate active participation in the event. 
