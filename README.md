@@ -45,7 +45,7 @@ If you need to update NPM, use `$ npm install npm@latest -g` to update it to the
 You need a mongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a mongoDB account on the [official mongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official mongoDB website for creating new cluster](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
 
 ### Azure Blob Storage
-You need an Azure storage account to store uploaded video files before hosting VIMSU. Please follow the tutorial on how to create a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
+You need an Azure Storage account to store uploaded video files before hosting VIMSU. Please follow the tutorial on how to create a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
 
 ## Installation
 Use the following command to create a local copy of this software on your computer.
@@ -66,7 +66,7 @@ In this `.env` file, you will need to store the connection string of the databas
 
 - Azure Blob Storage
 
-    Please follow the tutorial on how to get the Azure Storage connection string on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
+    Please follow the tutorial on how to acquire the Azure Storage connection string from your Azure Storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
 
 - MongoDB
 
