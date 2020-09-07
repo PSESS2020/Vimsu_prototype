@@ -5,6 +5,7 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker');
 
 /**
  * The File System
+ * @module FileSystem
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -12,7 +13,8 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker');
 module.exports = class FileSystem {
 
     /**
-     * @static create a directory if not exists
+     * creates a directory if not exists
+     * @static @method module:FileSystem#createDirectory
      * 
      * @param {String} dir directory
      */
@@ -22,7 +24,8 @@ module.exports = class FileSystem {
     }
 
     /**
-     * @static delete a directory with its content
+     * deletes a directory with its content
+     * @static @method module:FileSystem#deleteDirectory
      * 
      * @param {String} dir directory
      */
@@ -35,12 +38,13 @@ module.exports = class FileSystem {
     }
 
     /**
-     * @static moves file to a directory
+     * moves file to a directory
+     * @static @method module:FileSystem#moveFile
      * 
      * @param {Object} file file to be moved
      * @param {String} dir directory to which file should be moved
      * 
-     * @return true if successfully moved, otherwise error
+     * @return {boolean} true if successfully moved, otherwise error
      */
     static moveFile(file, dir) {
         TypeChecker.isString(dir);
@@ -58,7 +62,8 @@ module.exports = class FileSystem {
     }
 
     /**
-     * @static reads file
+     * reads file
+     * @static @method module:FileSystem#createReadStream
      * 
      * @param {String} filePath file path
      */
