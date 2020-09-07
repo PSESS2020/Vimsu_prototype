@@ -66,7 +66,7 @@ In this `.env` file, you will need to store the connection string of the databas
 
 - Azure Blob Storage
 
-    Please follow the tutorial on how to generate the Azure Storage connection string on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
+    Please follow the tutorial on how to get the Azure Storage connection string on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
 
 - MongoDB
 
