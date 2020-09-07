@@ -4,6 +4,7 @@ const Position = require('./Position.js');
 
 /**
  * The Game Object Model
+ * @module GameObject
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -20,7 +21,8 @@ module.exports = class GameObject {
     #isClickable;
 
     /**
-     * @constructor Creates a game object instance
+     * Creates a game object instance
+     * @constructor module:GameObject
      * 
      * @param {number} id game object ID
      * @param {String} name game object name
@@ -56,8 +58,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object id
+     * @method module:GameObject#getId
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -65,8 +68,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object type
+     * @method module:GameObject#getGameObjectType
      * 
-     * @return gameObjectType
+     * @return {GameObjectType} gameObjectType
      */
     getGameObjectType() {
         return this.#gameObjectType;
@@ -74,8 +78,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object name
+     * @method module:GameObject#getName
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -83,8 +88,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object width
+     * @method module:GameObject#getWidth
      * 
-     * @return width
+     * @return {number} width
      */
     getWidth() {
         return this.#width;
@@ -92,8 +98,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object length
+     * @method module:GameObject#getLength
      * 
-     * @return length
+     * @return {number} length
      */
     getLength() {
         return this.#length;
@@ -101,8 +108,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object position
+     * @method module:GameObject#getPosition
      * 
-     * @return position
+     * @return {Position} position
      */
     getPosition() {
         return this.#position;
@@ -110,8 +118,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object solidity
+     * @method module:GameObject#getSolid
      * 
-     * @return true if solid, otherwise false
+     * @return {boolean} true if solid, otherwise false
      */
     getSolid() {
         return this.#isSolid;
@@ -119,8 +128,9 @@ module.exports = class GameObject {
 
     /**
      * Gets game object clickable status
+     * @method module:GameObject#getClickable
      * 
-     * @return true if clickable, otherwise false
+     * @return {boolean} true if clickable, otherwise false
      */
     getClickable() {
         return this.#isClickable;

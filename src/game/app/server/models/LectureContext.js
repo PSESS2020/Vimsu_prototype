@@ -5,6 +5,7 @@ const Lecture = require('./Lecture.js');
 
 /**
  * The Lecture Context Model
+ * @module LectureContext
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class LectureContext extends CommandContext {
     #contextObject
 
     /**
-     * @constructor Creates a lecture context instance
+     * Creates a lecture context instance
+     * @constructor module:LectureContext
      * 
      * @param {ServerController} serverController server controller instance
      * @param {Lecture} lecture lecture instance
@@ -30,8 +32,9 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Gets lecture messages
+     * @method module:LectureContext#getMessages
      * 
-     * @return lecture messages
+     * @return {Object[]} lecture messages
      */
     getMessages() {
         return this.#contextObject.getLectureChat().getMessages();
@@ -39,8 +42,10 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Gets lecture title
+     * @method module:LectureContext#getTitle
      * 
-     * @return lecture title
+     * 
+     * @return {String} lecture title
      */
     getTitle() {
         return this.#contextObject.getTitle();
@@ -48,8 +53,9 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Gets help message
+     * @method module:LectureContext#getHelpMessage
      * 
-     * @return lecture help message
+     * @return {String} lecture help message
      */
     getHelpMessage() {
         return Messages.HELPLECTURECHAT;
@@ -57,6 +63,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Update messages in lecture chat
+     * @method module:LectureContext#updateMessages
      */
     updateMessages() {
         this.#serverController.emitEventIn(this.#contextObject.getId(), 'updateLectureChat', this.getMessages());
@@ -64,6 +71,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Removes participant from lecture
+     * @method module:LectureContext#removeUser
      * 
      * @param {String} userToRemove username of the user to remove
      */
@@ -78,6 +86,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Closes lecture
+     * @method module:LectureContext#close
      */
     close() {
         this.#contextObject.hide();
@@ -90,6 +99,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Mutes participant in the lecture
+     * @method module:LectureContext#muteUser
      * 
      * @param {String} userToMute username of the user to mute
      */
@@ -110,6 +120,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Unmutes participant in the lecture
+     * @method module:LectureContext#unmuteUser
      * 
      * @param {String} userToUnmute username of the user to unmute
      */
@@ -127,6 +138,7 @@ module.exports = class LectureContext extends CommandContext {
 
     /**
      * Removes participant from lecture with its ID
+     * @private @method module:LectureContext#removebyID
      * 
      * @param {String} ppantId participant ID
      * @param {Messages} message notification message

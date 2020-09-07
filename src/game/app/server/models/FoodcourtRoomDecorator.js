@@ -10,6 +10,7 @@ const TypeChecker = require('../../client/shared/TypeChecker');
 
 /**
  * The Food Court Room Decorator Model
+ * @module FoodcourtRoomDecorator
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -43,7 +44,8 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
     }
 
     /**
-     * @constructor Creates a RoomDecorator instance for Food Court
+     * Creates a RoomDecorator instance for Food Court
+     * @constructor module:FoodcourtRoomDecorator 
      * 
      * @param {Room} room food court room instance
      */
@@ -163,8 +165,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
     /**
      * Gets food court room
+     * @method module:FoodcourtRoomDecorator#getRoom
      * 
-     * @return room
+     * @return {Room} room
      */
     getRoom() {
         return this.#room;
@@ -172,8 +175,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
     /**
      * Gets asset paths of food court room objects
+     * @method module:FoodcourtRoomDecorator#getAssetPaths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;
