@@ -19,8 +19,6 @@ Welcome to the GitHub repository of VIMSU. This software is developed as part of
     - [Uploading Lectures](#uploading-lectures)
     - [Granting participants moderator rights](#granting-participants-moderator-rights)
     - [Moderator and orator privileges](#moderator-and-orator-privileges)
-    - [Decorating room](#decorating-room)
-    - [Adding new rooms](#adding-new-rooms)
 - [Tests](#tests)
 - [Documentation](#documentation)
 
@@ -152,13 +150,6 @@ Orators have the following privileges during their own lecture:
 
 3. They have the right to post messages in the `LectureChat` of their own lecture after it has opened, with or without the `QuestionToken`.
 
-
-
-### Decorating room
-TODO
-
-### Adding new rooms
-TODO
     
 ## Tests
 
