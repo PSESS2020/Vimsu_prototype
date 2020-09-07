@@ -5,6 +5,7 @@ const Room = require('./Room.js');
 
 /**
  * The Allchat Context Model
+ * @module AllchatContext
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class AllchatContext extends CommandContext {
     #contextObject
 
     /**
-     * @constructor Creates a allchat context instance
+     * Creates a allchat context instance
+     * @constructor module:AllchatContext
      * 
      * @param {ServerController} serverController server controller instance
      * @param {Room} room room instance
@@ -31,7 +33,7 @@ module.exports = class AllchatContext extends CommandContext {
     /**
      * Gets room messages
      * 
-     * @return messages
+     * @return {Object[]} messages
      */
     getMessages() {
         return this.#contextObject.getMessages();
@@ -40,7 +42,7 @@ module.exports = class AllchatContext extends CommandContext {
     /**
      * Gets room title
      * 
-     * @return title
+     * @return {TypeOfRoom} title
      */
     getTitle() {
         return this.#contextObject.getTypeOfRoom();
@@ -49,7 +51,7 @@ module.exports = class AllchatContext extends CommandContext {
     /**
      * Gets help messages
      * 
-     * @return help messages
+     * @return {Object} help messages
      */
     getHelpMessage() {
         return Messages.HELPALLCHAT;

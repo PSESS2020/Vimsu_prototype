@@ -3,6 +3,7 @@ const Message = require('./Message.js');
 
 /**
  * The Chat Model
+ * @module Chat
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,10 +15,11 @@ module.exports = class Chat {
     #maxNumMessages;
 
     /**
-     * @constructor Creates a Chat instance
+     * Creates a Chat instance
+     * @constructor module:Chat
      * 
      * @param {String} chatId chat ID
-     * @param {?String[]} participantList list of chat participants
+     * @param {String[]} participantList list of chat participants
      * @param {Message[]} messageList list of messages
      * @param {number} maxNumMessages max number of messages
      */
@@ -47,7 +49,7 @@ module.exports = class Chat {
     /**
      * Gets chat ID
      * 
-     * @return chatId
+     * @return {String} chatId
      */
     getId() {
         return this.#chatId;
@@ -56,7 +58,7 @@ module.exports = class Chat {
     /**
      * Gets max number of messages
      * 
-     * @return maxNumMessages
+     * @return {number} maxNumMessages
      */
     getMaxNumMessages() {
         return this.#maxNumMessages;
@@ -65,7 +67,7 @@ module.exports = class Chat {
     /**
      * Gets number of participants
      * 
-     * @return number of participants
+     * @return {number} number of participants
      */
     getNumParticipants() {
         return this.#participantList.length;
@@ -74,7 +76,7 @@ module.exports = class Chat {
     /**
      * Gets list of messages
      * 
-     * @return messageList
+     * @return {Message[]} messageList
      */
     getMessageList() {
         return this.#messageList;
@@ -83,7 +85,7 @@ module.exports = class Chat {
     /**
      * Gets list of chat participants
      * 
-     * @return participantList
+     * @return {String[]} participantList
      */
     getParticipantList() {
         return this.#participantList;
@@ -100,7 +102,8 @@ module.exports = class Chat {
     }
 
     /**
-     * @abstract Add a message to this chat
+     * Add a message to this chat
+     * @abstract @method module:Chat#addMessage
      */
     addMessage() {
         throw new Error('addMessage() has to be implemented!');

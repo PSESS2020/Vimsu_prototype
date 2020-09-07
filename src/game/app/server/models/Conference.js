@@ -3,6 +3,7 @@ const Schedule = require('./Schedule');
 
 /**
  * The Conference Model
+ * @module Conference
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -12,7 +13,8 @@ module.exports = class Conference {
     #schedule;
 
     /**
-     * @constructor Creates a conference instance
+     * Creates a conference instance
+     * @constructor module:Conference
      * 
      * @param {Schedule} schedule lecture schedule
      */
@@ -24,7 +26,7 @@ module.exports = class Conference {
     /**
      * Gets lecture schedule
      * 
-     * @return schedule
+     * @return {Schedule} schedule
      */
     getSchedule() {
         return this.#schedule;
