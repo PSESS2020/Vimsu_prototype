@@ -138,17 +138,17 @@ After entering the conference, there should be a noticeable change in the color 
 Moderators have the following privileges during a conference:
 
 1. They have the right to use commands through the `RoomChat` and through the `LectureChat`. 
-After you granted yourself moderator rights, you can see all commands by typing in `\help` in the respective chat.
+After you granted yourself moderator rights, you can see all commands by typing in `\help` in the `RoomChat` of the current room.
 
-2. They can join every lecture at every time, even if the maximum of listeners is already exceeded.
+2. They can join any lectures any time before the lecture ends, even if the maximum number of listeners is already exceeded.
 
 3. They have the right to post messages in the `LectureChat` after it has opened, with or without the `QuestionToken`.
 
 Orators have the following privileges during their own lecture:
 
-1. They have the right to use commands through the `LectureChat`. As a orator, you can see all commands by typing in `\help` in the `LectureChat` of your own lecture.
+1. They have the right to use commands through the `LectureChat`. As an orator, you can see all commands by typing in `\help` in the `LectureChat` of your own lecture.
 
-2. They can join their own lecture at every time, even if the maximum of listeners is already exceeded.
+2. They can join their own lecture any time before the lecture ends, even if the maximum number of listeners is already exceeded.
 
 3. They have the right to post messages in the `LectureChat` of their own lecture after it has opened, with or without the `QuestionToken`.
 
