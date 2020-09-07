@@ -2,6 +2,7 @@ const TypeChecker = require('../../client/shared/TypeChecker');
 
 /**
  * The Lecture Chat Model
+ * @module LectureChat
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -11,7 +12,8 @@ module.exports = class LectureChat {
     #listOfMessages;
 
     /**
-     * @constructor Creates Lecture Chat instance
+     * Creates Lecture Chat instance
+     * @constructor module:LectureChat
      */
     constructor() {
         this.#listOfMessages = [];
@@ -19,8 +21,9 @@ module.exports = class LectureChat {
 
     /**
      * Gets lecture chat messages
+     * @method module:LectureChat#getMessages
      * 
-     * @return list of messages
+     * @return {Object[]} list of messages
      */
     getMessages() {
         return this.#listOfMessages;
@@ -28,6 +31,7 @@ module.exports = class LectureChat {
 
     /**
      * Appends lecture chat message
+     * @method module:LectureChat#appendMessage
      * 
      * @param {{senderID: String, username: String, messageID: number, timestamp: Date}} message message
      */

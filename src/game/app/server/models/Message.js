@@ -2,6 +2,7 @@ const TypeChecker = require("../../client/shared/TypeChecker")
 
 /**
  * The Message Model
+ * @module Message
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class Message {
     #messageText
 
     /**
-     * @constructor Creates a Message instance
+     * Creates a Message instance
+     * @constructor module:Message
      * 
      * @param {String} messageId message ID
      * @param {String} senderId sender ID
@@ -39,8 +41,9 @@ module.exports = class Message {
 
     /**
      * Gets message ID
+     * @method module:Message#getMessageId
      * 
-     * @return messageId
+     * @return {String} messageId
      */
     getMessageId() {
         return this.#messageId;
@@ -48,8 +51,9 @@ module.exports = class Message {
 
     /**
      * Gets sender ID
+     * @method module:Message#getSenderId
      * 
-     * @return senderId
+     * @return {String} senderId
      */
     getSenderId() {
         return this.#senderId
@@ -57,8 +61,9 @@ module.exports = class Message {
 
     /**
      * Gets sender username
+     * @method module:Message#getUsername
      * 
-     * @return senderUsername
+     * @return {String} enderUsername
      */
     getUsername() {
         return this.#senderUsername;
@@ -66,8 +71,9 @@ module.exports = class Message {
 
     /**
      * Gets message timestamp
+     * @method module:Message#getTimestamp
      * 
-     * @return timestamp
+     * @return {Date} timestamp
      */
     getTimestamp() {
         return this.#timestamp;
@@ -75,8 +81,9 @@ module.exports = class Message {
 
     /**
      * Gets message text
+     * @method module:Message#getMessageText
      * 
-     * @return messageText
+     * @return {String} messageText
      */
     getMessageText() {
         return this.#messageText;
