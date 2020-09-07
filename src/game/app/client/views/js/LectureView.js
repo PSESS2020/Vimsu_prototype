@@ -21,7 +21,6 @@ class LectureView extends WindowView {
 
     /**
      * Creates an instance of LectureView
-     * @constructor LectureView
      * 
      * @param {EventManager} eventManager event manager
      */

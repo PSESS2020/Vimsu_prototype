@@ -41,7 +41,6 @@ class GameView {
 
     /**
      * Creates an instance of GameView
-     * @constructor GameView
      */
     constructor() {
         if (!!GameView.instance) {

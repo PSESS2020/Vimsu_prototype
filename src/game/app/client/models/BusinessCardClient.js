@@ -21,7 +21,6 @@ class BusinessCardClient {
 
     /**
      * Creates an instance of Business Card on client-side
-     * @constructor BusinessCardClient
      * 
      * @param {String} participantId participant ID
      * @param {String} username participant username

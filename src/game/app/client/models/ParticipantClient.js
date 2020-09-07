@@ -21,7 +21,6 @@ class ParticipantClient {
 
     /**
      * Creates an instance of participant on client-side
-     * @constructor ParticipantClient
      * 
      * @param {String} id participant ID
      * @param {String} username participant username

@@ -23,7 +23,6 @@ class MapView extends Views {
 
     /**
      * Creates an instance of MapView
-     * @constructor MapView
      * 
      * @param {Object[]} assetPaths asset paths
      * @param {number[][]} map map array

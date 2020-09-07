@@ -10,7 +10,6 @@ class ProfileView extends WindowView {
 
     /**
      * Creates an instance of ProfileView
-     * @constructor ProfileView
      */
     constructor() {
         super();

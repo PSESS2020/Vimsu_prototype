@@ -19,7 +19,6 @@ class NPCClient {
 
     /**
      * Creates an instance of NPC on client-side
-     * @constructor NPCClient
      * 
      * @param {number} id NPC ID
      * @param {String} name NPC name

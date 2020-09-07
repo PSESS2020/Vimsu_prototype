@@ -15,7 +15,6 @@ class GameObjectViewFactory {
 
     /**
      * Creates an instance of GameObjectViewFactory
-     * @constructor GameObjectViewFactory
      * 
      * @param {Image[]} assetImages asset images
      * @param {IsometricEngine} gameEngine game engine instance

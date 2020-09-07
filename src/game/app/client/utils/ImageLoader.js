@@ -8,7 +8,6 @@ class ImageLoader {
 
     /**
      * Creates an ImageLoader instance
-     * @constructor ImageLoader
      */
     constructor() { }
 

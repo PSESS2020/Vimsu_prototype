@@ -19,7 +19,6 @@ class NPCAvatarView extends AvatarView {
 
     /**
      * Creates an instance of NPCAvatarView
-     * @constructor NPCAvatarView
      * 
      * @param {String} npcId NPC ID
      * @param {String} name NPC name

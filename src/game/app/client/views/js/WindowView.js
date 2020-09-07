@@ -7,8 +7,7 @@
 class WindowView extends Views {
 
     /**
-     * abstract WindowView class
-     * @abstract @constructor WindowView
+     * @abstract abstract WindowView class
      */
     constructor() {
         super();

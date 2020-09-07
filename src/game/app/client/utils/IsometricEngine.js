@@ -16,7 +16,6 @@ class IsometricEngine {
 
     /**
      * Creates an instance of IsometricEngine
-     * @constructor IsometricEngine
      */
     constructor() {
         if (!!IsometricEngine.instance) {
