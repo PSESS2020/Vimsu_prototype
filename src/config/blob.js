@@ -5,6 +5,7 @@ const path = require('path');
 
 /**
  * The Blob Storage
+ * @module blob
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,7 @@ module.exports = class blob {
 
     /**
      * Creates an instance of blob
-     * @constructor blob
+     * @constructor module:blob
      */
     constructor() {
         if (!!blob.instance) {
@@ -27,6 +28,7 @@ module.exports = class blob {
 
     /**
      * Connects to blob service
+     * @method module:blob#connectBlob
      */
     connectBlob() {
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -41,13 +43,14 @@ module.exports = class blob {
 
     /**
      * Uploads file to blob storage
+     * @method module:blob#uploadFile
      * 
      * @param {String} containerName container name
      * @param {String} fileName file name
      * @param {String} dir file directory where the file is to be read
      * @param {String} fileType file type
      * 
-     * @return fileId
+     * @return {String} fileId
      */
     async uploadFile(containerName, fileName, dir, fileType) {
         TypeChecker.isString(containerName);
@@ -78,6 +81,7 @@ module.exports = class blob {
 
     /**
      * Creates container if not exists
+     * @method module:blob#createContainer
      * 
      * @param {String} containerName container name
      */
@@ -97,6 +101,7 @@ module.exports = class blob {
 
     /**
      * Deletes file from container
+     * @method module:blob#deleteFile
      * 
      * @param {String} containerName container name
      * @param {String} fileName file name
@@ -113,12 +118,13 @@ module.exports = class blob {
     }
 
     /**
-     * @private Gets shared access policy of an URL
+     * Gets shared access policy of an URL
+     * @private @method module:blob#getSharedAccessPolicy
      * 
      * @param {Date} startDate access start date
      * @param {number} accessTimeInMinutes access duration in minutes
      * 
-     * @return shared access policy
+     * @return {Object} shared access policy
      */
     #getSharedAccessPolicy = function (startDate, accessTimeInMinutes) {
         TypeChecker.isDate(startDate);
@@ -140,13 +146,14 @@ module.exports = class blob {
 
     /**
      * Generates shared access signature
+     * @method module:blob#getWriteSAS
      * 
      * @param {String} containerName container name
      * @param {String} fileName file name
      * @param {Date} startDate access start date
      * @param {number} accessTimeInMinutes access duration in minutes
      * 
-     * @return file URL
+     * @return {String} file URL
      */
     getWriteSAS(containerName, fileName, startDate, accessTimeInMinutes) {
         TypeChecker.isString(containerName);
