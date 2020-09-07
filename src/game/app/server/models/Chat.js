@@ -48,6 +48,7 @@ module.exports = class Chat {
 
     /**
      * Gets chat ID
+     * @method module:Chat#getId
      * 
      * @return {String} chatId
      */
@@ -57,6 +58,7 @@ module.exports = class Chat {
 
     /**
      * Gets max number of messages
+     * @method module:Chat#getMaxNumMessages
      * 
      * @return {number} maxNumMessages
      */
@@ -66,6 +68,7 @@ module.exports = class Chat {
 
     /**
      * Gets number of participants
+     * @method module:Chat#getNumParticipants
      * 
      * @return {number} number of participants
      */
@@ -75,6 +78,7 @@ module.exports = class Chat {
 
     /**
      * Gets list of messages
+     * @method module:Chat#getMessageList
      * 
      * @return {Message[]} messageList
      */
@@ -84,6 +88,7 @@ module.exports = class Chat {
 
     /**
      * Gets list of chat participants
+     * @method module:Chat#getParticipantList
      * 
      * @return {String[]} participantList
      */
@@ -93,6 +98,7 @@ module.exports = class Chat {
 
     /**
      * Sets max number of messages
+     * @method module:Chat#setMaxNumMessages
      * 
      * @param {number} maxNumMsg max number of messages
      */
@@ -102,8 +108,9 @@ module.exports = class Chat {
     }
 
     /**
-     * Add a message to this chat
-     * @abstract @method module:Chat#addMessage
+     * @method module:Chat#addMessage
+     * 
+     * @abstract Add a message to this chat
      */
     addMessage() {
         throw new Error('addMessage() has to be implemented!');
@@ -111,6 +118,7 @@ module.exports = class Chat {
 
     /**
      * Remove a message from this chat
+     * @method module:Chat#removeMessage
      * 
      * @param {String} msgId message ID
      */
@@ -127,6 +135,7 @@ module.exports = class Chat {
 
     /**
      * Remove a participant from this chat
+     * @method module:Chat#removeParticipant
      * 
      * @param {String} participantId participant ID
      */

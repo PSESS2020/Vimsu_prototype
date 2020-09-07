@@ -53,6 +53,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement ID
+     * @method module:AchievementDefinition#getId
      * 
      * @return {number} id
      */
@@ -62,6 +63,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement task type
+     * @method module:AchievementDefinition#getTaskType
      * 
      * @return {TypeOfTask} taskType
      */
@@ -71,6 +73,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement title
+     * @method module:AchievementDefinition#getTitle
      * 
      * @return {String} title
      */
@@ -80,6 +83,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement icon
+     * @method module:AchievementDefinition#getIcon
      * 
      * @return {String} icon
      */
@@ -89,6 +93,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement description
+     * @method module:AchievementDefinition#getDescription
      * 
      * @return {String} description
      */
@@ -98,6 +103,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement levels
+     * @method module:AchievementDefinition#getLevels
      * 
      * @return {Object} levels
      */
@@ -107,6 +113,7 @@ module.exports = class AchievementDefinition {
 
     /**
      * Creates an achievement instance based on current level
+     * @method module:AchievementDefinition#computeAchievement
      * 
      * @param {number} currentLevel current level
      * 

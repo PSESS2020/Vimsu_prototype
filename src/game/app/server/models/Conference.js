@@ -25,6 +25,7 @@ module.exports = class Conference {
 
     /**
      * Gets lecture schedule
+     * @method module:Conference#getSchedule
      * 
      * @return {Schedule} schedule
      */

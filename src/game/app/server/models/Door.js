@@ -64,6 +64,7 @@ module.exports = class Door {
 
     /**
      * Gets door ID
+     * @method module:Door#getId
      * 
      * @return {number} id
      */
@@ -73,6 +74,7 @@ module.exports = class Door {
 
     /**
      * Gets starting room ID
+     * @method module:Door#getStartingRoomId
      * 
      * @return {number} starting room ID
      */
@@ -82,6 +84,7 @@ module.exports = class Door {
 
     /**
      * Gets target room ID
+     * @method module:Door#getTargetRoomId
      * 
      * @return {number} target room ID if exists, otherwise undefined
      */
@@ -95,6 +98,7 @@ module.exports = class Door {
 
     /**
      * Gets type of door
+     * @method module:Door#getTypeOfDoor
      * 
      * @return {TypeOfDoor} typeOfDoor
      */
@@ -104,6 +108,7 @@ module.exports = class Door {
 
     /**
      * Gets door name
+     * @method module:Door#getName
      * 
      * @return {String} name
      */
@@ -113,6 +118,7 @@ module.exports = class Door {
 
     /**
      * Gets map position
+     * @method module:Door#getMapPosition
      * 
      * @return {Position} mapPosition
      */
@@ -122,6 +128,7 @@ module.exports = class Door {
 
     /**
      * Gets enter position without clicking the door
+     * @method module:Door#getEnterPositionWithoutClick
      * 
      * @return {Position} enterPosition
      */
@@ -131,6 +138,7 @@ module.exports = class Door {
 
     /**
      * Gets enter positions
+     * @method module:Door#getEnterPositions
      * 
      * @return {Position[]} enterPositions
      */
@@ -140,6 +148,7 @@ module.exports = class Door {
 
     /**
      * Gets avatar position on entering the door
+     * @method module:Door#getTargetPosition
      * 
      * @return {Position|undefined} targetPosition if exists, otherwise undefined
      */
@@ -153,6 +162,7 @@ module.exports = class Door {
 
     /**
      * Gets avatar direction on entering the door
+     * @method module:Door#getDirection
      * 
      * @return {Direction|undefined} direction if exists, otherwise undefined
      */
@@ -166,6 +176,7 @@ module.exports = class Door {
 
     /**
      * Checks if position is a valid enter position for this door
+     * @method module:Door#isValidEnterPosition
      * 
      * @param {Position} position avatar's current position
      * 
@@ -186,6 +197,7 @@ module.exports = class Door {
 
     /**
      * Checks if position is a valid enter position for this door without clicking it
+     * @method module:Door#isValidEnterPositionWithoutClick
      * 
      * @param {Position} position avatar's current position
      * @param {Direction} oldDirection avatar's old direction

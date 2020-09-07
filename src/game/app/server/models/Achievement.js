@@ -63,6 +63,7 @@ module.exports = class Achievement {
 
     /**
      * Gets achievement ID
+     * @method module:Achievement#getId
      * 
      * @return {number} id
      */
@@ -72,6 +73,7 @@ module.exports = class Achievement {
 
     /**
      * Gets achievement title
+     * @method module:Achievement#getTitle
      * 
      * @return {String} title
      */
@@ -81,6 +83,7 @@ module.exports = class Achievement {
 
     /**
      * Gets achievement icon
+     * @method module:Achievement#getIcon
      * 
      * @return {String} icon
      */
@@ -90,6 +93,7 @@ module.exports = class Achievement {
 
     /**
      * Gets achievement description
+     * @method module:Achievement#getDescription
      * 
      * @return {String} description
      */
@@ -99,6 +103,7 @@ module.exports = class Achievement {
 
     /**
      * Gets achievement task type
+     * @method module:Achievement#getTaskType
      * 
      * @return {TypeOfTask} taskType
      */
@@ -108,6 +113,7 @@ module.exports = class Achievement {
 
     /**
      * Gets participant's current level of this achievement
+     * @method module:Achievement#getCurrentLevel
      * 
      * @return {number} currentLevel
      */
@@ -117,6 +123,7 @@ module.exports = class Achievement {
 
     /**
      * Gets current award points of this achievement
+     * @method module:Achievement#getAwardPoints
      * 
      * @return {number} awardPoints
      */
@@ -126,6 +133,7 @@ module.exports = class Achievement {
 
     /**
      * Gets current color of this achievement
+     * @method module:Achievement#getColor
      * 
      * @return {String} color
      */
@@ -135,6 +143,7 @@ module.exports = class Achievement {
 
     /**
      * Gets max level of this achievement
+     * @method module:Achievement#getMaxLevel
      * 
      * @return {number} maxLevel
      */
@@ -144,6 +153,7 @@ module.exports = class Achievement {
 
     /**
      * Gets next participant's target to gain this achievement
+     * @method module:Achievement#getNextCount
      * 
      * @return {number} nextCount
      */
@@ -153,6 +163,7 @@ module.exports = class Achievement {
 
     /**
      * Sets current level
+     * @method module:Achievement#setCurrentLevel
      * 
      * @param {number} currentLevel currentLevel
      */
@@ -163,6 +174,7 @@ module.exports = class Achievement {
 
     /**
      * Sets achievement color
+     * @method module:Achievement#setColor
      * 
      * @param {String} color color
      */
@@ -173,6 +185,7 @@ module.exports = class Achievement {
 
     /**
      * Sets current award points
+     * @method module:Achievement#setAwardPoints
      * 
      * @param {number} awardPoints award points
      */
@@ -183,6 +196,7 @@ module.exports = class Achievement {
 
     /**
      * Sets next target
+     * @method module:Achievement#setNextCount
      * 
      * @param {number|undefined} nextCount next target
      */
@@ -195,6 +209,7 @@ module.exports = class Achievement {
 
     /**
      * Checks if task type and current level matches an achievement
+     * @method module:Achievement#equals
      * 
      * @param {Achievement} achievement achievement to compare
      * 

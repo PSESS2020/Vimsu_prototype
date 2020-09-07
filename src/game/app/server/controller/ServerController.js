@@ -95,8 +95,9 @@ module.exports = class ServerController {
     }
 
     /**
-     * initializes all socket events from client
-     * @private @method module:ServerController#init
+     * @private initializes all socket events from client
+     * 
+     * @method module:ServerController#init
      */
     #init = function () {
 
@@ -1819,6 +1820,7 @@ module.exports = class ServerController {
 
     /**
      * Gets socket ID of a participant
+     * @method module:ServerController#getSocketId
      * 
      * @param {String} ppantID participant ID
      * 
@@ -1838,6 +1840,7 @@ module.exports = class ServerController {
 
     /**
      * Gets socket object of a participant
+     * @method module:ServerController#getSocketObject
      * 
      * @param {String} socketId socket ID
      * 
@@ -1857,6 +1860,7 @@ module.exports = class ServerController {
 
     /**
      * Gets ID of username based on its username
+     * @method module:ServerController#getIdOf
      * 
      * @param {String} username username
      * 
@@ -1876,6 +1880,7 @@ module.exports = class ServerController {
 
     /**
      * Called from context class to emits event in a socket room
+     * @method module:ServerController#emitEventIn
      * 
      * @param {(String|number)} [idOfSocketRoomToEmitIn] socket room ID
      * @param {String} eventName event name
@@ -1893,6 +1898,7 @@ module.exports = class ServerController {
 
     /**
      * Called from context class to emits event to an individual socket id
+     * @method module:ServerController#emitEventTo
      * 
      * @param {(String|number)} [idOfSocketRoomToEmitIn] socket id
      * @param {String} eventName event name
@@ -1912,6 +1918,7 @@ module.exports = class ServerController {
 
     /**
      * Sends notification to an individual socket id
+     * @method module:ServerController#sendNotification
      * 
      * @param {String} socketid socket id
      * @param {{header: String, body: String[]}} message message
@@ -1939,6 +1946,7 @@ module.exports = class ServerController {
 
     /**
      * Sends global announcement to all participants
+     * @method module:ServerController#sendGlobalAnnouncement
      * 
      * @param {String} username announcer username
      * @param {String} text announcement text
@@ -1952,8 +1960,9 @@ module.exports = class ServerController {
     }
 
     /**
-     * Checks if account is banned from entering the conference
-     * @private @method module:ServerController#isBanned
+     * @private Checks if account is banned from entering the conference
+     * 
+     * @method module:ServerController#isBanned
      * 
      * @param {String} accountId account ID
      * 
@@ -1967,6 +1976,7 @@ module.exports = class ServerController {
 
     /**
      * Bans account from entering the conference
+     * @method module:ServerController#ban
      * 
      * @param {String} accountId account ID
      */
@@ -1980,6 +1990,7 @@ module.exports = class ServerController {
 
     /**
      * Unbans account from entering the conference. Currently not used
+     * @method module:ServerController#unban
      * 
      * @param {String} accountId account ID
      */
@@ -1992,8 +2003,9 @@ module.exports = class ServerController {
     };
 
     /**
-     * Checks if socket is connected
-     * @private @method module:ServerController#socketIsConnected
+     * @private Checks if socket is connected
+     * 
+     * @method module:ServerController#socketIsConnected
      * 
      * @param {String} socketid socket id
      * 
@@ -2014,6 +2026,7 @@ module.exports = class ServerController {
 
     /**
      * Checks if participant is muted
+     * @method module:ServerController#isMuted
      * 
      * @param {String} accountID account ID
      * 
@@ -2027,6 +2040,7 @@ module.exports = class ServerController {
 
     /**
      * Mutes participant
+     * @method module:ServerController#mute
      * 
      * @param {String} accountID account ID
      */
@@ -2038,6 +2052,7 @@ module.exports = class ServerController {
 
     /**
      * Unmutes participant
+     * @method module:ServerController#unmute
      * 
      * @param {String} accountID account ID
      */
@@ -2048,7 +2063,9 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets current lectures and emit to client
+     * @private Gets current lectures and emit to client
+     * 
+     * @method module:ServerController#getCurrentLectures
      * 
      * @param {Socket.IO} socket 
      */
@@ -2078,7 +2095,9 @@ module.exports = class ServerController {
     }
 
     /**
-     * Emits current lectures to client
+     * @private Emits current lectures to client
+     * 
+     * @method module:ServerController#emitCurrentLectures
      * 
      * @param {Socket.IO} socket 
      */
@@ -2106,7 +2125,9 @@ module.exports = class ServerController {
     }
 
     /**
-     * Handles entering room
+     * @private Handles entering room
+     * 
+     * @method module:ServerController#enterRoom
      * 
      * @param {number} targetRoomId 
      * @param {Socket.IO} socket 
@@ -2296,8 +2317,9 @@ module.exports = class ServerController {
     }
 
     /**
-     * Handle the entire logic of applying achievements and points as well as sending updates to the client
-     * @private @method module:ServerController#applyTaskAndAchievement
+     * @private Handle the entire logic of applying achievements and points as well as sending updates to the client
+     * 
+     * @method module:ServerController#applyTaskAndAchievement
      * 
      * @param {String} participantId participant ID
      * @param {TypeOfTask} taskType task type

@@ -53,6 +53,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant ID
+     * @method module:BusinessCard#getParticipantId
      * 
      * @return {String} participantId
      */
@@ -62,6 +63,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant username
+     * @method module:BusinessCard#getUsername
      * 
      * @return {String} username
      */
@@ -71,6 +73,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant title
+     * @method module:BusinessCard#getTitle
      * 
      * @return {String} title
      */
@@ -80,6 +83,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant surname
+     * @method module:BusinessCard#getSurname
      * 
      * @return {String} surname
      */
@@ -89,6 +93,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant forename
+     * @method module:BusinessCard#getForename
      * 
      * @return {String} forename
      */
@@ -98,6 +103,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant job
+     * @method module:BusinessCard#getJob
      * 
      * @return {String} job
      */
@@ -107,6 +113,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant company
+     * @method module:BusinessCard#getCompany
      * 
      * @return {String} company
      */
@@ -116,6 +123,7 @@ module.exports = class BusinessCard {
 
     /**
      * Gets participant email
+     * @method module:BusinessCard#getEmail
      * 
      * @return {String} email
      */

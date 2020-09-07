@@ -41,6 +41,7 @@ module.exports = class CommandHandler {
     /**
      * handles a command, where context is the room or lecture in which it was send 
      * and socket the socket from which it was send
+     * @method module:CommandHandler#handleCommand
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -82,6 +83,7 @@ module.exports = class CommandHandler {
     /**
      * Sends a global message to all connected participants.
      * Ignores context in which it was send.
+     * @method module:CommandHandler#globalMsg
      * 
      * @param {?SocketIO} socket socket instance
      * @param {?CommandContext} context context instance
@@ -108,6 +110,7 @@ module.exports = class CommandHandler {
     /**
      * Sends a global note from VIMSU to all connected participants.
      * Ignores context in which it was send.
+     * @method module:CommandHandler#globalNote
      * 
      * @param {?SocketIO} socket socket instance
      * @param {?CommandContext} context context instance
@@ -125,6 +128,7 @@ module.exports = class CommandHandler {
 
     /**
      * Prints help message to the user
+     * @method module:CommandHandler#printHelp
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -142,6 +146,7 @@ module.exports = class CommandHandler {
 
     /**
      * Prints list of log messages to the user
+     * @method module:CommandHandler#logMessages
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -168,6 +173,7 @@ module.exports = class CommandHandler {
 
     /**
      * Removes user from the context
+     * @method module:CommandHandler#removeUser
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -188,6 +194,7 @@ module.exports = class CommandHandler {
 
     /**
      * Removes message from the context
+     * @method module:CommandHandler#removeMessage
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -230,6 +237,7 @@ module.exports = class CommandHandler {
 
     /**
      * Removes all messages of a participant
+     * @method module:CommandHandler#removeAllBy
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -248,6 +256,7 @@ module.exports = class CommandHandler {
 
     /**
      * Show all messages of a participant
+     * @method module:CommandHandler#showAllBy
      * 
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -275,6 +284,7 @@ module.exports = class CommandHandler {
 
     /**
      * Mutes participant from this context
+     * @method module:CommandHandler#muteUser
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -294,6 +304,7 @@ module.exports = class CommandHandler {
 
     /**
      * Unmutes participant from this context
+     * @method module:CommandHandler#unmuteUser
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -313,6 +324,7 @@ module.exports = class CommandHandler {
 
     /**
      * Closes context
+     * @method module:CommandHandler#close
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
@@ -329,6 +341,7 @@ module.exports = class CommandHandler {
 
     /**
      * Sends notification on unknown command
+     * @method module:CommandHandler#unknownCommand
      * 
      * @param {SocketIO} socket socket instance
      */
@@ -337,7 +350,9 @@ module.exports = class CommandHandler {
     }
 
     /**
-     * Checks if command is known
+     * @private Checks if command is known
+     * 
+     * @method module:CommandHandler#knowsCommand
      * 
      * @param {Commands.string} commandType command type
      * 
@@ -354,7 +369,9 @@ module.exports = class CommandHandler {
     }
 
     /**
-     * Gets method name based on command type
+     * @private Gets method name based on command type
+     * 
+     * @method module:CommandHandler#getMethodString
      * 
      * @param {Commands.string} commandType command type
      * 
