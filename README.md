@@ -138,7 +138,7 @@ At this point, your participant entry should have been saved in the database as 
 After refreshing the page, you should be able to notice the color change on your avatar username and the `Role` on `Profile` should have changed to `Moderator`.
 
 ### Moderator and orator privileges
-Moderators have certain privileges during a conference. 
+Moderators have the following privileges during a conference:
 
 1. They have the right to use commands through the `RoomChat` and through the `LectureChat`. 
 After you granted yourself moderator rights, you can see all commands by typing in `\help` in the respective chat.
@@ -147,7 +147,15 @@ After you granted yourself moderator rights, you can see all commands by typing 
 
 3. They have the right to post messages in the `LectureChat` after it has opened, with or without the `QuestionToken`.
 
-During their own lecture, orators have the same rights as moderators.
+Orators have the following privileges during their own lecture:
+
+1. They have the right to use commands through the `LectureChat`. As a orator, you can see all commands by typing in `\help` in the `LectureChat` of your own lecture.
+
+2. They can join their own lecture at every time, even if the maximum of listeners is already exceeded.
+
+3. They have the right to post messages in the `LectureChat` of their own lecture after it has opened, with or without the `QuestionToken`.
+
+
 
 ### Decorating room
 TODO
