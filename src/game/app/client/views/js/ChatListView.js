@@ -10,7 +10,8 @@ class ChatListView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of ChatListView
+     * Creates an instance of ChatListView
+     * @constructor ChatListView
      * 
      * @param {EventManager} eventManager event manager
      */

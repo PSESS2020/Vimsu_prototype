@@ -14,7 +14,8 @@ module.exports = class blob {
     #blobService;
 
     /**
-     * @constructor Creates an instance of blob
+     * Creates an instance of blob
+     * @constructor blob
      */
     constructor() {
         if (!!blob.instance) {

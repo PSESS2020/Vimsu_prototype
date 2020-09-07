@@ -22,7 +22,8 @@ class MapView extends Views {
     selectionOnMap = false;
 
     /**
-     * @constructor Creates an instance of MapView
+     * Creates an instance of MapView
+     * @constructor MapView
      * 
      * @param {Object[]} assetPaths asset paths
      * @param {number[][]} map map array

@@ -10,7 +10,8 @@ class ScheduleListView extends WindowView {
     #timeOffset;
 
     /**
-     * @constructor Creates an instance of ScheduleListView
+     * Creates an instance of ScheduleListView
+     * @constructor ScheduleListView
      */
     constructor() {
         super();

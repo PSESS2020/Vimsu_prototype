@@ -20,7 +20,8 @@ class LectureView extends WindowView {
     #timeOffset;
 
     /**
-     * @constructor Creates an instance of LectureView
+     * Creates an instance of LectureView
+     * @constructor LectureView
      * 
      * @param {EventManager} eventManager event manager
      */

@@ -9,7 +9,8 @@ class ScheduleView extends GameMapElementView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of Schedule View
+     * Creates an instance of Schedule View
+     * @constructor ScheduleView
      * 
      * @param {Image} scheduleImage schedule image
      * @param {PositionClient} position schedule position

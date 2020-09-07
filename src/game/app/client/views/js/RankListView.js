@@ -9,7 +9,8 @@ class RankListView extends WindowView {
     #rankList;
 
     /**
-     * @constructor Creates an instance of RankListView
+     * Creates an instance of RankListView
+     * @constructor RankListView
      */
     constructor() {
         super();

@@ -14,7 +14,8 @@ class StatusBar extends Views {
     #fps;
 
     /**
-     * @constructor Creates an instance of StatusBar
+     * Creates an instance of StatusBar
+     * @constructor StatusBar
      */
     constructor() {
         super();

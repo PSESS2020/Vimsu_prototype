@@ -9,7 +9,9 @@ class DateParser {
     #date;
 
     /**
-     * @constructor creates an instance of Date parser
+     * creates an instance of Date parser
+     * @constructor DateParser
+     * 
      * @param {Date} date date
      */
     constructor(date) {

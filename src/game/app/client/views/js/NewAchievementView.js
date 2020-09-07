@@ -9,7 +9,8 @@ class NewAchievementView extends WindowView {
     #confetti;
 
     /**
-     * @constructor Creates an instance of NewAchievementView
+     * Creates an instance of NewAchievementView
+     * @constructor NewAchievementView
      */
     constructor() {
         super();

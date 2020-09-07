@@ -11,7 +11,8 @@ module.exports = class db {
     #vimsudb;
 
     /**
-     * @constructor Creates an instance of db
+     * Creates an instance of db
+     * @constructor db
      */
     constructor() {
         if (!!db.instance) {

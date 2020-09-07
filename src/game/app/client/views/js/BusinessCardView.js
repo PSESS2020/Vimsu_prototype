@@ -12,7 +12,8 @@ class BusinessCardView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of BusinessCardView
+     * Creates an instance of BusinessCardView
+     * @constructor BusinessCardView
      * 
      * @param {EventManager} eventManager event manager
      */

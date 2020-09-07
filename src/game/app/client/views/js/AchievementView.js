@@ -7,7 +7,8 @@
 class AchievementView extends WindowView {
 
     /**
-     * @constructor Creates an instance of Achievement View
+     * Creates an instance of Achievement View
+     * @constructor AchievementView
      */
     constructor() {
         super();

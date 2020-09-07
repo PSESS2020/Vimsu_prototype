@@ -7,7 +7,8 @@
 class NPCStoryView extends WindowView {
 
     /**
-     * @constructor Creates an instance of NPCStoryView
+     * Creates an instance of NPCStoryView
+     * @constructor NPCStoryView
      */
     constructor() {
         super();

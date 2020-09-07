@@ -7,7 +7,8 @@
 class HUDView extends Views {
 
     /**
-     * @constructor Creates an instance of HUDView
+     * Creates an instance of HUDView
+     * @constructor HUDView
      * 
      * @param {EventManager} eventManager event manager
      */

@@ -10,7 +10,8 @@ class FriendListView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of FriendListView
+     * Creates an instance of FriendListView
+     * @constructor FriendListView
      * 
      * @param {EventManager} eventManager event manager
      */

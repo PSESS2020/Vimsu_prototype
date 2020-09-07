@@ -26,7 +26,8 @@ class ParticipantAvatarView extends AvatarView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of ParticipantAvatarView
+     * Creates an instance of ParticipantAvatarView
+     * @constructor ParticipantAvatarView
      * 
      * @param {PositionClient} position avatar position
      * @param {Direction} direction avatar direction

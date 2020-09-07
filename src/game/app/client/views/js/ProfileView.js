@@ -9,7 +9,8 @@ class ProfileView extends WindowView {
     #isModerator;
 
     /**
-     * @constructor Creates an instance of ProfileView
+     * Creates an instance of ProfileView
+     * @constructor ProfileView
      */
     constructor() {
         super();

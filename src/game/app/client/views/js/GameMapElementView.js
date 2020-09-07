@@ -7,7 +7,8 @@
 class GameMapElementView extends GameObjectView {
 
     /**
-     * @constructor Creates an instance of GameMapElementView
+     * Creates an instance of GameMapElementView
+     * @constructor GameMapElementView
      * 
      * @param {Image} mapElementImage map element image
      * @param {PositionClient} position map element position

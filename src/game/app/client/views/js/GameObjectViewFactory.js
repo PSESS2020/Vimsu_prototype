@@ -14,7 +14,8 @@ class GameObjectViewFactory {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of GameObjectViewFactory
+     * Creates an instance of GameObjectViewFactory
+     * @constructor GameObjectViewFactory
      * 
      * @param {Image[]} assetImages asset images
      * @param {IsometricEngine} gameEngine game engine instance

@@ -9,7 +9,8 @@ class DoorView extends GameMapElementView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of DoorView
+     * Creates an instance of DoorView
+     * @constructor DoorView
      * 
      * @param {Image} doorImage door image
      * @param {PositionClient} position door position

@@ -11,7 +11,8 @@ class ChatThreadView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of ChatThreadView
+     * Creates an instance of ChatThreadView
+     * @constructor ChatThreadView
      * 
      * @param {EventManager} eventManager event manager
      */

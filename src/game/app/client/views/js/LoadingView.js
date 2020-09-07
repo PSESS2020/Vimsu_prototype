@@ -7,7 +7,8 @@
 class LoadingView extends Views {
 
     /**
-     * @constructor Creates an instance of LoadingView
+     * Creates an instance of LoadingView
+     * @constructor LoadingView
      */
     constructor() {
         super();
