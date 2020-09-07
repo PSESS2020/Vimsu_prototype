@@ -65,22 +65,22 @@ You will need to store the connection string of the databases in a file called `
 
 - MongoDB
 
-    You can get the mongoDB connection string by pressing the `Connect` button of your cluster and afterwards the `Connect your application` button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password of your database and `dbname` with the name of your database.
-    For more information about generating the mongoDB connection string, please visit the [official mongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
+    You can acquire the mongoDB connection string by pressing the `Connect` button of your cluster and afterwards the `Connect your application` button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password of your database and `dbname` with the name of your database.
+    For more information about acquiring the mongoDB connection string, please visit the [official mongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
 
-Afterwards, save the strings into the `.env` file using the following command.
+After acquiring both connection strings, save these into the `.env` file using the following command.
 
 - Linux / Mac
 
-        $ cd path/to/Vimsu_prototype/
-        $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
-        $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
+    $ cd path/to/Vimsu_prototype/
+    $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
+    $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
 
 - Windows
 
-        $ cd path/to/Vimsu_prototype/
-        $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
-        $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
+    $ cd path/to/Vimsu_prototype/
+    $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
+    $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
 
 You should now see the following lines in the `.env` file on root directory.
 
