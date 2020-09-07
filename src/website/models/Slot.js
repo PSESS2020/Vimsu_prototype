@@ -2,6 +2,7 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 
 /**
  * The Slot Model
+ * @module Slot
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -19,7 +20,8 @@ module.exports = class Slot {
     #maxParticipants;
 
     /**
-     * @constructor Creates an instance of Slot class
+     * Creates an instance of Slot class
+     * @constructor module:Slot
      * 
      * @param {String} id lecture ID
      * @param {String} title lecture title
@@ -55,8 +57,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture ID
+     * @method module:Slot#getId
      * 
-     * @return id
+     * @return {String} id
      */
     getId() {
         return this.#id;
@@ -64,8 +67,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture title
+     * @method module:Slot#getTitle
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -73,8 +77,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture's conference ID
+     * @method module:Slot#getConferenceId
      * 
-     * @return conferenceId
+     * @return {String} conferenceId
      */
     getConferenceId() {
         return this.#conferenceId;
@@ -82,8 +87,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture video duration
+     * @method module:Slot#getDuration
      * 
-     * @return duration
+     * @return {number} duration
      */
     getDuration() {
         return this.#duration;
@@ -91,8 +97,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture video ID
+     * @method module:Slot#getVideoId
      * 
-     * @return videoId
+     * @return {String} videoId
      */
     getVideoId() {
         return this.#videoId;
@@ -100,8 +107,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture remarks
+     * @method module:Slot#getRemarks
      * 
-     * @return remarks
+     * @return {String} remarks
      */
     getRemarks() {
         return this.#remarks;
@@ -109,8 +117,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture starting time
+     * @method module:Slot#getStartingTime
      * 
-     * @return startingTime
+     * @return {Date} startingTime
      */
     getStartingTime() {
         return this.#startingTime;
@@ -118,8 +127,9 @@ module.exports = class Slot {
 
     /**
      * Gets lecture orator ID
+     * @method module:Slot#getOratorId
      * 
-     * @return oratorId
+     * @return {String} oratorId
      */
     getOratorId() {
         return this.#oratorId;
@@ -127,8 +137,9 @@ module.exports = class Slot {
 
     /**
      * Gets max participants of lecture
+     * @method module:Slot#getMaxParticipants
      * 
-     * @return maxParticipants
+     * @return {number} maxParticipants
      */
     getMaxParticipants() {
         return this.#maxParticipants;

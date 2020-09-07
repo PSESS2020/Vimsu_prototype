@@ -11,6 +11,7 @@ const blobClient = require('../../config/blob');
 
 /**
  * The Route Controller
+ * @module RouteController
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -23,7 +24,8 @@ module.exports = class RouteController {
     #blob;
 
     /**
-     * @constructor Creates an instance of RouteController
+     * Creates an instance of RouteController
+     * @constructor module:RouteController
      * 
      * @param {Express} app Express server
      * @param {SocketIO} io Socket.io instance
@@ -48,10 +50,11 @@ module.exports = class RouteController {
     }
 
     /**
-     * @private Initialize the GET and POST methods. 
+     * Initialize the GET and POST methods. 
      * On receiving a GET request, the express server will render the corresponding ejs file.
      * On receiving a POST request, this will call the corresponding service method and
      * the express server will render the appropriate views depending on the failure/success status.
+     * @private @method module:RouteController#init
      */
     #init = function () {
 
