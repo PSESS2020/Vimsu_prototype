@@ -8,7 +8,6 @@ class AllchatView extends Views {
 
     /**
      * Creates an instance of Allchat View
-     * @constructor AllchatView
      * 
      * @param {EventManager} eventManager event manager instance
      */

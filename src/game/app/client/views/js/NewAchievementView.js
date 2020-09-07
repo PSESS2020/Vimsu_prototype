@@ -10,7 +10,6 @@ class NewAchievementView extends WindowView {
 
     /**
      * Creates an instance of NewAchievementView
-     * @constructor NewAchievementView
      */
     constructor() {
         super();

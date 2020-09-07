@@ -4,6 +4,7 @@ const Direction = require('../../client/shared/Direction.js');
 
 /**
  * The NPC Model
+ * @module NPC
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -17,13 +18,14 @@ module.exports = class NPC {
     #story;
 
     /**
-     * @constructor Creates an NPC instance
+     * Creates an NPC instance
+     * @constructor module:NPC
      * 
      * @param {number} id NPC ID
      * @param {String} name NPC name
      * @param {Position} position NPC avatar position
      * @param {Direction} direction NPC avatar direction
-     * @param {String} story NPC story
+     * @param {String[]} story NPC story
      */
     constructor(id, name, position, direction, story) {
         TypeChecker.isInt(id);
@@ -44,8 +46,9 @@ module.exports = class NPC {
 
     /**
      * Gets NPC ID
+     * @method module:NPC#getId
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -53,8 +56,9 @@ module.exports = class NPC {
 
     /**
      * Gets NPC name
+     * @method module:NPC#getName
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -62,8 +66,9 @@ module.exports = class NPC {
 
     /**
      * Gets NPC position
+     * @method module:NPC#getPosition
      * 
-     * @return position
+     * @return {Position} position
      */
     getPosition() {
         return this.#position;
@@ -71,8 +76,9 @@ module.exports = class NPC {
 
     /**
      * Gets NPC direction
+     * @method module:NPC#getDirection
      * 
-     * @return direction
+     * @return {Direction} direction
      */
     getDirection() {
         return this.#direction;
@@ -80,8 +86,9 @@ module.exports = class NPC {
 
     /**
      * Gets NPC story
+     * @method module:NPC#getStory
      * 
-     * @return story
+     * @return {String[]} story
      */
     getStory() {
         return this.#story;

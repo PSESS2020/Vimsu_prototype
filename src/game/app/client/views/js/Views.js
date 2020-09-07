@@ -7,8 +7,7 @@
 class Views {
 
     /**
-     * abstract Views class
-     * @abstract @constructor Views
+     * @abstract abstract Views class
      */
     constructor() {
         if (new.target === Views) {

@@ -10,7 +10,6 @@ class DateParser {
 
     /**
      * creates an instance of Date parser
-     * @constructor DateParser
      * 
      * @param {Date} date date
      */

@@ -14,7 +14,6 @@ class AvatarView extends Views {
 
     /**
      * Creates an instance of AvatarView
-     * @constructor AvatarView
      * 
      * @param {PositionClient} position avatar position
      * @param {Direction} direction avatar direction

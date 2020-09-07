@@ -10,7 +10,6 @@ class NotificationBar extends Views {
     
     /**
      * Creates an instance of NotificationBar
-     * @constructor NotificationBar
      * 
      * @param {EventManager} eventManager event manager
      */

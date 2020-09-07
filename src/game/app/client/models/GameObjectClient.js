@@ -22,7 +22,6 @@ class GameObjectClient {
 
     /**
      * Creates an instance of Game Object on client-side
-     * @constructor GameObjectClient
      * 
      * @param {number} id game object ID
      * @param {GameObjectType} gameObjectType game object type

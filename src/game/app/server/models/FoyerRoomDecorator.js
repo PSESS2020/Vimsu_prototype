@@ -10,6 +10,7 @@ const TypeChecker = require('../../client/shared/TypeChecker');
 
 /**
  * The Foyer Room Decorator Model
+ * @module FoyerRoomDecorator
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -43,7 +44,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
     }
 
     /**
-     * @constructor Creates a RoomDecorator instance for Foyer
+     * Creates a RoomDecorator instance for Foyer
+     * @constructor module:FoyerRoomDecorator
      * 
      * @param {Room} room foyer room instance
      */
@@ -146,8 +148,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
     /**
      * Gets foyer room
+     * @method module:FoyerRoomDecorator#getRoom
      * 
-     * @return room
+     * @return {Room} room
      */
     getRoom() {
         return this.#room;
@@ -155,8 +158,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
 
     /**
      * Gets asset paths of foyer room objects
+     * @method module:FoyerRoomDecorator#getAssetPaths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;

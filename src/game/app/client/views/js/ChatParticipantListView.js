@@ -10,7 +10,6 @@ class ChatParticipantListView extends Views {
 
     /**
      * Creates an instance of ChatParticipantListView
-     * @constructor ChatParticipantListView
      */
     constructor() {
         super();

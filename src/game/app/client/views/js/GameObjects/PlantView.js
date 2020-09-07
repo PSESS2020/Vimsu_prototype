@@ -10,7 +10,6 @@ class PlantView extends GameObjectView {
 
     /**
      * Creates an instance of PlantView
-     * @constructor PlantView
      * 
      * @param {Image} objectImage plant image
      * @param {PositionClient} gridPosition plant position

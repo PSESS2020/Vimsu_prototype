@@ -8,7 +8,6 @@ class SpriteAnimation {
 
     /**
      * Creates an instance of Sprite Animation
-     * @constructor SpriteAnimation
      * 
      * @param {SpriteSheet} spritesheetBody sprite sheet avatar body
      * @param {SpriteSheet} spritesheetTopCloth sprite sheet avatar top cloth

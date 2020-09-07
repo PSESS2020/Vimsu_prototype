@@ -11,7 +11,6 @@ class ScheduleListView extends WindowView {
 
     /**
      * Creates an instance of ScheduleListView
-     * @constructor ScheduleListView
      */
     constructor() {
         super();

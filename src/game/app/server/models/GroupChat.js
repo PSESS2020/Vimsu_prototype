@@ -4,6 +4,7 @@ const Message = require('./Message.js');
 
 /**
  * The Group Chat Model
+ * @module GroupChat
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class GroupChat extends Chat {
     #ownerId;
 
     /**
-     * @constructor Creates group chat instance
+     * Creates group chat instance
+     * @constructor module:GroupChat
      * 
      * @param {String} chatId chat ID
      * @param {String} ownerId group chat owner ID
@@ -39,8 +41,9 @@ module.exports = class GroupChat extends Chat {
 
     /**
      * Gets group chat name
+     * @method module:GroupChat#getChatName
      * 
-     * @return chatName
+     * @return {String} chatName
      */
     getChatName() {
         return this.#chatName;
@@ -48,8 +51,9 @@ module.exports = class GroupChat extends Chat {
 
     /**
      * Gets group chat owner ID
+     * @method module:GroupChat#getOwnerId
      * 
-     * @return ownerId
+     * @return {String} ownerId
      */
     getOwnerId() {
         return this.#ownerId;
@@ -57,6 +61,7 @@ module.exports = class GroupChat extends Chat {
 
     /**
      * Sets group chat name
+     * @method module:GroupChat#setChatName
      * 
      * @param {String} chatName group chat name
      */
@@ -68,6 +73,7 @@ module.exports = class GroupChat extends Chat {
     /**
      * Adds a message to the message list.
      * If message list is full then the half of the message list gets deleted.
+     * @method module:GroupChat#addMessage
      * 
      * @param {Message} msg group chat message
      */
@@ -84,10 +90,11 @@ module.exports = class GroupChat extends Chat {
 
     /**
      * Adds a participant to the participant list if maximum amount of members is not exceeded.
+     * @method module:GroupChat#addParticipant
      * 
      * @param {String} participantId participant ID
      * 
-     * @return true if successfully added, otherwise false
+     * @return {boolean} true if successfully added, otherwise false
      */
     addParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -106,6 +113,7 @@ module.exports = class GroupChat extends Chat {
 
     /**
      * Remove participant from the group chat
+     * @method module:GroupChat#removeParticipant
      * 
      * @param {String} participantId participant ID
      */

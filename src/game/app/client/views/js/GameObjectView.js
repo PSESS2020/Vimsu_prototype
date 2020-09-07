@@ -14,7 +14,6 @@ class GameObjectView extends Views {
 
     /**
      * Creates an instance of GameObjectView
-     * @constructor GameObjectView
      * 
      * @param {Image} objectImage game object image
      * @param {PositionClient} gridPosition game object position

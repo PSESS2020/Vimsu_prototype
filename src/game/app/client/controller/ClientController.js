@@ -16,7 +16,6 @@ class ClientController {
     /**
      * creates an instance of ClientController only if there is not an instance already.
      * Otherwise the existing instance will be returned.
-     * @constructor ClientController
      * 
      * @param {number} port client port
      * @param {GameView} gameView GameView instance

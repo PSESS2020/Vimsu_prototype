@@ -8,7 +8,6 @@ class SuccessesBar extends Views {
 
     /**
      * Creates an instance of SuccessesBar
-     * @constructor SuccessesBar
      */
     constructor() {
         super();

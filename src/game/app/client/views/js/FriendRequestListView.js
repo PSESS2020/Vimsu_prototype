@@ -11,7 +11,6 @@ class FriendRequestListView extends WindowView {
 
     /**
      * Creates an instance of FriendRequestListView
-     * @constructor FriendRequestListView
      * 
      * @param {EventManager} eventManager event manager
      */

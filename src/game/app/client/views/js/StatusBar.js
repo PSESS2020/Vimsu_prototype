@@ -15,7 +15,6 @@ class StatusBar extends Views {
 
     /**
      * Creates an instance of StatusBar
-     * @constructor StatusBar
      */
     constructor() {
         super();
