@@ -153,8 +153,8 @@ module.exports = class AccountService {
     }
 
     /**
-     * gets account by account username from the database
-     * @private @method module:AccountService#getAccountByUsername
+     * @private gets account by account username from the database
+     * @method module:AccountService#getAccountByUsername
      * 
      * @param {String} username account username
      * @param {String} suffix collection name suffix

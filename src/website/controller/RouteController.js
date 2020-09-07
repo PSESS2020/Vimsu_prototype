@@ -50,11 +50,11 @@ module.exports = class RouteController {
     }
 
     /**
-     * Initialize the GET and POST methods. 
+     * @private Initialize the GET and POST methods. 
      * On receiving a GET request, the express server will render the corresponding ejs file.
      * On receiving a POST request, this will call the corresponding service method and
      * the express server will render the appropriate views depending on the failure/success status.
-     * @private @method module:RouteController#init
+     * @method module:RouteController#init
      */
     #init = function () {
 
