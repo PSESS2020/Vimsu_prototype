@@ -59,28 +59,32 @@ Before you can host VIMSU, you will need to set up the databases.
 
 ### Database configuration
 
-First, you will need to store the database configuration in a `.env` file. Use the following command to create this file in root directory.
-
-    $ cd path/to/Vimsu_prototype/
-    $ touch .env
-
-In this `.env` file, you will need to store the connection string of the databases. 
+You will need to store the connection string of the databases in a file called `.env`.
 
 - Azure Blob Storage
 
-    Please follow the tutorial on how to generate the Azure Storage connection string on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
+    Please follow the tutorial on how to get the Azure Storage connection string on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
 
 - MongoDB
 
     You can get the mongoDB connection string by pressing the `Connect` button of your cluster and afterwards the `Connect your application` button. From there, you can just copy the mongoDB connection string. Don’t forget to replace `password` with the password of your database and `dbname` with the name of your database.
     For more information about generating the mongoDB connection string, please visit the [official mongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
 
-After generating the connection strings, save the strings into the `.env` file using the following command.
+Afterwards, save the strings into the `.env` file using the following command.
 
-    $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
-    $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
+- Linux / Mac
 
-You should now see the following lines in the `.env` file.
+        $ cd path/to/Vimsu_prototype/
+        $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
+        $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
+
+- Windows
+
+        $ cd path/to/Vimsu_prototype/
+        $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
+        $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
+
+You should now see the following lines in the `.env` file on root directory.
 
     AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>
     MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>
