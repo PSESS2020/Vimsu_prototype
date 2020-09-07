@@ -1,5 +1,6 @@
 /**
- * @enum Constants of type of task
+ * Constants of type of task
+ * @module TypeOfTask
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0

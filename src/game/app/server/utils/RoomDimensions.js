@@ -1,5 +1,6 @@
 /**
- * @enum Constants of room dimensions
+ * Constants of room dimensions
+ * @module RoomDimensions
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
