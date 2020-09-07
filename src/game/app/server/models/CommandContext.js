@@ -1,5 +1,6 @@
 /**
  * The Command Context Model
+ * @module CommandContext
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -7,7 +8,8 @@
 module.exports = class CommandContext {
 
     /**
-     * @abstract @constructor abstract CommandContext class.
+     * Abstract CommandContext class.
+     * @abstract @constructor module:CommandContext
      * This offers an interface usable by the commandHandler-class for better command abstraction.
      */
     constructor() {

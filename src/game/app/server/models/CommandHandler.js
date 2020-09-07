@@ -5,6 +5,7 @@ const CommandContext = require('./CommandContext');
 
 /**
  * The Command Handler Model
+ * @module CommandHandler
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class CommandHandler {
     #commandList
 
     /**
-     * @constructor Creates a command handler instance
+     * Creates a command handler instance
+     * @constructor module:CommandHandler
      * 
      * @param {ServerController} serverController server controller instance
      */
@@ -339,7 +341,7 @@ module.exports = class CommandHandler {
      * 
      * @param {Commands.string} commandType command type
      * 
-     * @return true if known, otherwise false
+     * @return {boolean} true if known, otherwise false
      */
     #knowsCommand = function (commandType) {
 
@@ -356,7 +358,7 @@ module.exports = class CommandHandler {
      * 
      * @param {Commands.string} commandType command type
      * 
-     * @return method name
+     * @return {String} method name
      */
     #getMethodString = function (commandType) {
 

@@ -3,6 +3,7 @@ const TypeOfTask = require("../utils/TypeOfTask");
 
 /**
  * The Achievement Model
+ * @module Achievement
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -21,7 +22,8 @@ module.exports = class Achievement {
     #nextCount;
 
     /**
-     * @constructor Creates an Achievement instance
+     * Creates an Achievement instance
+     * @constructor module:Achievement
      * 
      * @param {number} id achievement ID
      * @param {String} title achievement title
@@ -32,7 +34,7 @@ module.exports = class Achievement {
      * @param {number} awardPoints current award points of this achievement
      * @param {number} maxLevel max level of this achievement
      * @param {TypeOfTask} taskType task type of achievement
-     * @param {?number} nextCount next participant's target to gain this achievement
+     * @param {number} nextCount next participant's target to gain this achievement
      */
     constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
         TypeChecker.isInt(id);
@@ -62,7 +64,7 @@ module.exports = class Achievement {
     /**
      * Gets achievement ID
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -71,7 +73,7 @@ module.exports = class Achievement {
     /**
      * Gets achievement title
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -80,7 +82,7 @@ module.exports = class Achievement {
     /**
      * Gets achievement icon
      * 
-     * @return icon
+     * @return {String} icon
      */
     getIcon() {
         return this.#icon;
@@ -89,7 +91,7 @@ module.exports = class Achievement {
     /**
      * Gets achievement description
      * 
-     * @return description
+     * @return {String} description
      */
     getDescription() {
         return this.#description;
@@ -98,7 +100,7 @@ module.exports = class Achievement {
     /**
      * Gets achievement task type
      * 
-     * @return taskType
+     * @return {TypeOfTask} taskType
      */
     getTaskType() {
         return this.#taskType;
@@ -107,7 +109,7 @@ module.exports = class Achievement {
     /**
      * Gets participant's current level of this achievement
      * 
-     * @return currentLevel
+     * @return {number} currentLevel
      */
     getCurrentLevel() {
         return this.#currentLevel;
@@ -116,7 +118,7 @@ module.exports = class Achievement {
     /**
      * Gets current award points of this achievement
      * 
-     * @return awardPoints
+     * @return {number} awardPoints
      */
     getAwardPoints() {
         return this.#awardPoints;
@@ -125,7 +127,7 @@ module.exports = class Achievement {
     /**
      * Gets current color of this achievement
      * 
-     * @return color
+     * @return {String} color
      */
     getColor() {
         return this.#color;
@@ -134,7 +136,7 @@ module.exports = class Achievement {
     /**
      * Gets max level of this achievement
      * 
-     * @return maxLevel
+     * @return {number} maxLevel
      */
     getMaxLevel() {
         return this.#maxLevel;
@@ -143,7 +145,7 @@ module.exports = class Achievement {
     /**
      * Gets next participant's target to gain this achievement
      * 
-     * @return nextCount
+     * @return {number} nextCount
      */
     getNextCount() {
         return this.#nextCount;
@@ -182,7 +184,7 @@ module.exports = class Achievement {
     /**
      * Sets next target
      * 
-     * @param {?number} nextCount next target
+     * @param {number|undefined} nextCount next target
      */
     setNextCount(nextCount) {
         if (nextCount !== undefined)
@@ -196,7 +198,7 @@ module.exports = class Achievement {
      * 
      * @param {Achievement} achievement achievement to compare
      * 
-     * @return true if matches, otherwise false
+     * @return {boolean} true if matches, otherwise false
      */
     equals(achievement) {
         TypeChecker.isInstanceOf(achievement, Achievement);

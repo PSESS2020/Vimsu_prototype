@@ -27,6 +27,7 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 
 /**
  * The Server Controller
+ * @module ServerController
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -52,7 +53,8 @@ module.exports = class ServerController {
     #ppants;
 
     /**
-     * @constructor Creates a ServerController instance
+     * Creates an instance of ServerController
+     * @constructor module:ServerController
      * 
      * @param {SocketIO} socket socket instance
      * @param {dbClient} db db instance
@@ -93,7 +95,8 @@ module.exports = class ServerController {
     }
 
     /**
-     * @private initializes all socket events from client
+     * initializes all socket events from client
+     * @private @method module:ServerController#init
      */
     #init = function () {
 
@@ -1819,7 +1822,7 @@ module.exports = class ServerController {
      * 
      * @param {String} ppantID participant ID
      * 
-     * @return socketId
+     * @return {String} socketId
      */
     getSocketId(ppantID) {
         TypeChecker.isString(ppantID);
@@ -1838,7 +1841,7 @@ module.exports = class ServerController {
      * 
      * @param {String} socketId socket ID
      * 
-     * @return socket object
+     * @return {Socket} socket object
      */
     getSocketObject(socketId) {
         TypeChecker.isString(socketId);
@@ -1857,7 +1860,7 @@ module.exports = class ServerController {
      * 
      * @param {String} username username
      * 
-     * @return participantId
+     * @return {String} participantId
      */
     getIdOf(username) {
         TypeChecker.isString(username);
@@ -1890,6 +1893,7 @@ module.exports = class ServerController {
 
     /**
      * Called from context class to emits event to an individual socket id
+     * 
      * @param {(String|number)} [idOfSocketRoomToEmitIn] socket id
      * @param {String} eventName event name
      * @param {*} eventArguments event arguments
@@ -1948,11 +1952,12 @@ module.exports = class ServerController {
     }
 
     /**
-     * @private Checks if account is banned from entering the conference
+     * Checks if account is banned from entering the conference
+     * @private @method module:ServerController#isBanned
      * 
      * @param {String} accountId account ID
      * 
-     * @return true if banned, otherwise false
+     * @return {boolean} true if banned, otherwise false
      */
     #isBanned = function (accountId) {
         TypeChecker.isString(accountId);
@@ -1987,11 +1992,12 @@ module.exports = class ServerController {
     };
 
     /**
-     * @private Checks if socket is connected
+     * Checks if socket is connected
+     * @private @method module:ServerController#socketIsConnected
      * 
      * @param {String} socketid socket id
      * 
-     * @return true if connected, otherwise false
+     * @return {boolean} true if connected, otherwise false
      */
     #socketIsConnected = function (socketid) {
         TypeChecker.isString(socketid);
@@ -2011,7 +2017,7 @@ module.exports = class ServerController {
      * 
      * @param {String} accountID account ID
      * 
-     * @return true if muted, otherwise false
+     * @return {boolean} true if muted, otherwise false
      */
     isMuted(accountID) {
         TypeChecker.isString(accountID);
@@ -2290,7 +2296,8 @@ module.exports = class ServerController {
     }
 
     /**
-     * @private Handle the entire logic of applying achievements and points as well as sending updates to the client
+     * Handle the entire logic of applying achievements and points as well as sending updates to the client
+     * @private @method module:ServerController#applyTaskAndAchievement
      * 
      * @param {String} participantId participant ID
      * @param {TypeOfTask} taskType task type
