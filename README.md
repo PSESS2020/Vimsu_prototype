@@ -102,8 +102,11 @@ To host VIMSU locally on browser, open your browser and enter `http://localhost:
 - Microsoft Edge Version 84.0.522.59 or newer
 - Opera Version 70.0.3728.71 or newer
 
-## Uploading lectures
-After VIMSU is sucessfully hosted, you can upload lectures by following the steps below:
+## Starting a conference with VIMSU
+After VIMSU is sucessfully hosted, there are certain things you need to know before starting a conference.
+
+### Uploading lectures
+You can upload lectures by following the steps below:
 
 1. Go to the VIMSU homepage and log into your account.
 2. Press the `Upload` button.
@@ -119,8 +122,8 @@ At this point, the lecture should have been uploaded successfully, but it still 
 
 After restarting the server, the lecture should be displayed on the `Schedule` in VIMSU as long as it hasn't expired. It will start at the time you just selected.
 
-## Granting participants moderator rights
-After VIMSU is sucessfully hosted, you can grant yourself moderator rights by following the steps below:
+### Granting participants moderator rights
+You can grant yourself moderator rights by following the steps below:
 
 1. Go to the VIMSU homepage and log into your account.
 2. Press the `Enter Conference` button.
@@ -134,13 +137,22 @@ At this point, your participant entry should have been saved in the database as 
 
 After refreshing the page, you should be able to notice the color change on your avatar username and the `Role` on `Profile` should have changed to `Moderator`.
 
-## Moderator privileges
+### Moderator and orator privileges
+Moderators have certain privileges during a conference. 
+
+1. They have the right to use commands through the `RoomChat` and through the `LectureChat`. 
+After you granted yourself moderator rights, you can see all commands by typing in `\help` in the respective chat.
+
+2. They can join every lecture at every time, even if the maximum of listeners is already exceeded.
+
+3. They have the right to post messages in the `LectureChat` after it has opened, with or without the `QuestionToken`.
+
+During their own lecture, orators have the same rights as moderators.
+
+### Decorating room
 TODO
 
-## Decorating room
-TODO
-
-## Adding new rooms
+### Adding new rooms
 TODO
     
 ## Tests
