@@ -138,7 +138,7 @@ After entering the conference, there should be a noticeable change in the color 
 Moderators have the following privileges during a conference:
 
 1. They have the right to use commands through the `RoomChat` and through the `LectureChat`. 
-After you granted yourself moderator rights, you can see all commands by typing in `\help` in the `RoomChat` of the current room.
+After you granted yourself moderator rights, you can see all commands by typing in `\help` in the respective `Chat`.
 
 2. They can join any lectures any time before the lecture ends, even if the maximum number of listeners is already exceeded.
 
