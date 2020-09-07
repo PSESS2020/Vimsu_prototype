@@ -150,7 +150,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
      * Gets foyer room
      * @method module:FoyerRoomDecorator#getRoom
      * 
-     * @return room
+     * @return {Room} room
      */
     getRoom() {
         return this.#room;
@@ -160,7 +160,7 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
      * Gets asset paths of foyer room objects
      * @method module:FoyerRoomDecorator#getAssetPaths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;
