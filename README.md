@@ -72,15 +72,15 @@ After acquiring both connection strings, save these into the `.env` file using t
 
 - Linux / Mac
 
-    $ cd path/to/Vimsu_prototype/
-    $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
-    $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
+        $ cd path/to/Vimsu_prototype/
+        $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
+        $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
 
 - Windows
 
-    $ cd path/to/Vimsu_prototype/
-    $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
-    $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
+        $ cd path/to/Vimsu_prototype/
+        $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
+        $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
 
 You should now see the following lines in the `.env` file on root directory.
 
