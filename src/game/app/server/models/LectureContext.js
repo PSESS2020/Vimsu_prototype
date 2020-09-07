@@ -137,8 +137,9 @@ module.exports = class LectureContext extends CommandContext {
     };
 
     /**
-     * Removes participant from lecture with its ID
-     * @private @method module:LectureContext#removebyID
+     * @private Removes participant from lecture with its ID
+     * 
+     * @method module:LectureContext#removebyID
      * 
      * @param {String} ppantId participant ID
      * @param {Messages} message notification message

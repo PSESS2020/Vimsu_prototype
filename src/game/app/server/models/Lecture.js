@@ -455,8 +455,9 @@ module.exports = class Lecture {
     };
 
     /**
-     * Checks participant's token
-     * @private @method module:Lecture#checkToken
+     * @private Checks participant's token
+     * 
+     * @method module:Lecture#checkToken
      * 
      * @param {String} participantId participant ID
      */
@@ -509,8 +510,9 @@ module.exports = class Lecture {
     }
 
     /**
-     * Gets token index of this participant
-     * @private @method module:Lecture#getTokenIndex
+     * @private Gets token index of this participant
+     * 
+     * @method module:Lecture#getTokenIndex
      * 
      * @param {String} participantId participant ID
      * 
