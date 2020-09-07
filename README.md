@@ -124,19 +124,15 @@ At this point, the lecture should have been uploaded successfully, but it still 
 After restarting the server, the lecture should be displayed on the `Schedule` in VIMSU as long as it hasn't expired. It will start at the time you just selected.
 
 ### Granting participants moderator rights
-You can grant yourself moderator rights by following the steps below:
+You can grant a participant moderator rights by following the steps below:
 
-1. Go to the VIMSU homepage and log into your account.
-2. Press the `Enter Conference` button.
+1. Make sure that the participant has entered the conference before.
+2. Go to your created cluster in mongoDB.
+3. Press the `Collections` button.
+4. Go to the `participants_<conferenceId>` collection.
+5. Search for the participant entry and set `isModerator` from `false` to `true`.
 
-At this point, your participant entry should have been saved in the database as a normal participant.
-
-3. Go to your created cluster in mongoDB.
-4. Press the `Collections` button.
-5. Go to the `participants_1` collection.
-6. Search for your participant entry and set `isModerator` from `false` to `true`.
-
-After refreshing the page, you should be able to notice the color change on your avatar username and the `Role` on `Profile` should have changed to `Moderator`.
+After entering the conference, there should be a noticeable change in the color on the avatar username and the `Role` on the `Profile` should have changed to `Moderator`.
 
 ### Moderator and orator privileges
 Moderators have the following privileges during a conference:
