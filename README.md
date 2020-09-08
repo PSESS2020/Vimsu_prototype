@@ -14,6 +14,7 @@ Welcome to the GitHub repository of VIMSU. This software is developed as part of
 - [Installation](#installation)
 - [Usage](#usage)
     - [Database configuration](#database-configuration)
+    - [Locally Hosted Databases](#locally-hosted-databases)
     - [Hosting](#hosting)
 - [Starting a conference with VIMSU](#starting-a-conference-with-vimsu)
     - [Uploading Lectures](#uploading-lectures)
@@ -86,6 +87,19 @@ You should now see the following lines in the `.env` file on root directory.
 
     AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>
     MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>
+    
+### Locally Hosted Databases
+
+If you want to try out VIMSU without creating an Azure Storage or a MongoDB account, you can use [Azurite](https://github.com/Azure/Azurite) and host [MongoDB locally](https://docs.mongodb.com/guides/server/install/). Note that this configuration has not been exhaustively tested, so while it should work without issues on at least a small scale, we can not guarantee complete functionality. We advise against using this configuration to host a com
+
+- Azurite
+
+    Follow the installation instructions on the [official Azurite GitHub-page.](https://github.com/Azure/Azurite/blob/master/README.md) Note that VIMSU uses the [AzureSDK](https://azure.github.io/azure-sdk/), so you need to setup Azurite for HTTPS connections. This will require the use of additional third-party software such as [mkcert](https://github.com/FiloSottile/mkcert) or [OpenSSL](https://www.openssl.org/) to create your own signed certificates. In the process of installing that software, you might be required to install additional third-party software. Please understand that therefore, we can not offer exhaustive support for this installation process.
+    After you have successfully installed Azurite and started a properly configured instance, paste the default HTTPS-connection string (you can use both either the full one or the Blob-only one) into the .env-file as explained above. You can also create custom sonection strings. Please refer to the [Azurite readme](https://github.com/Azure/Azurite/blob/master/README.md) for further instruction on how to do this.
+    
+- MongoDB
+
+    Follow the installation instructions for your operating system in the official [mongoDB-documentation](https://docs.mongodb.com/guides/server/install/). After you have successfully installed MongoDB, set up [proper authentification and create an account](https://docs.mongodb.com/guides/server/auth/). Finally, create a connection string according to the [official guideline](https://docs.mongodb.com/manual/reference/connection-string/). Add that string to your .env-file as described above.
 
 ### Hosting
 After setting up the databases, use the following command to host VIMSU.
