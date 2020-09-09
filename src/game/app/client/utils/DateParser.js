@@ -21,7 +21,7 @@ class DateParser {
     /**
      * Parse date without seconds
      * 
-     * @return {Date} parsed date
+     * @return {String} parsed date
      */
     parse() {
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -36,7 +36,7 @@ class DateParser {
     /**
      * Parse date with seconds
      * 
-     * @return {Date} parsed date
+     * @return {String} parsed date
      */
     parseWithSeconds() {
         var parsedDate = this.parse() + ":" + this.#printTwoDigitsNumber(this.#date.getSeconds());
@@ -46,7 +46,7 @@ class DateParser {
     /**
      * Parse only time without seconds
      * 
-     * @return {Date} parsed time
+     * @return {String} parsed time
      */
     parseOnlyTime() {
         var parsedDate = this.#printTwoDigitsNumber(this.#date.getHours()) + ":" + this.#printTwoDigitsNumber(this.#date.getMinutes());
