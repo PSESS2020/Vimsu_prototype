@@ -40,7 +40,7 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {number} offset offset
      * 
-     * @return clickMap
+     * @return {number[][]} clickMap
      */
     getClickMap(image, pos, offset) {
         var clickMap = [];
@@ -84,6 +84,8 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if map element is clickable, otherwise false
+     * 
+     * @return {GameMapElementView} GameMapElementView instance
      */
     createGameMapElementView(gameObjectType, pos, objectName, isClickable) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -165,6 +167,8 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if object is clickable, otherwise false
+     *
+     * @return {GameObjectView} GameObjectViw instance
      */
     createGameObjectView(gameObjectType, pos, objectName, isClickable) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -302,6 +306,8 @@ class GameObjectViewFactory {
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {PositionClient} pos position
      * @param {String} objectName door name
+     * 
+     * @return {DoorView} DoorView instance
      */
     createDoorView(typeOfDoor, pos, objectName) {
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);

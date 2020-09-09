@@ -2,6 +2,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 /**
  * The Position Model
+ * @module Position
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -13,7 +14,8 @@ module.exports = class Position {
     #cordY;
 
     /**
-     * @constructor Creates a Position instance
+     * Creates a Position instance
+     * @constructor module:Position
      * 
      * @param {number} roomId room ID
      * @param {number} cordX x coordinate
@@ -31,8 +33,9 @@ module.exports = class Position {
 
     /**
      * Gets Room ID
+     * @method module:Position#getRoomId
      * 
-     * @return roomId
+     * @return {number} roomId
      */
     getRoomId() {
         return this.#roomId;
@@ -40,8 +43,9 @@ module.exports = class Position {
 
     /**
      * Gets x coordinate
+     * @method module:Position#getCordX
      * 
-     * @return cordX
+     * @return {number} cordX
      */
     getCordX() {
         return this.#cordX;
@@ -49,8 +53,9 @@ module.exports = class Position {
 
     /**
      * Gets y coordinate
+     * @method module:Position#getCordY
      * 
-     * @return cordY
+     * @return {number} cordY
      */
     getCordY() {
         return this.#cordY;

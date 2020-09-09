@@ -3,6 +3,7 @@ const Lecture = require('../models/Lecture');
 
 /**
  * The Schedule Model
+ * @module Schedule
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -12,7 +13,8 @@ module.exports = class Schedule {
     #lectureList = [];
 
     /**
-     * @constructor Creates a Schedule instance
+     * Creates a Schedule instance
+     * @constructor module:Schedule
      * 
      * @param {Lecture[]} lectureList list of lectures
      */
@@ -25,10 +27,11 @@ module.exports = class Schedule {
 
     /**
      * Gets a lecture based on its ID
+     * @method module:Schedule#getLecture
      * 
      * @param {String} lectureId lecture ID
      * 
-     * @return Lecture instance
+     * @return {Lecture} lecture with passed id or nothing if no such lecture exists
      */
     getLecture(lectureId) {
         TypeChecker.isString(lectureId);
@@ -43,8 +46,9 @@ module.exports = class Schedule {
 
     /**
      * Gets the lectures that start soon or have started already.
+     * @method module:Schedule#getCurrentLectures
      * 
-     * @return Array of current lectures
+     * @return {Lecture[]} Array of current lectures
      */
     getCurrentLectures() {
         var currentLectures = [];
@@ -61,8 +65,9 @@ module.exports = class Schedule {
 
     /**
      * Gets all lectures
+     * @method module:Schedule#getAllLectures
      * 
-     * @return Array of lectures
+     * @return {Lecture[]} Array of lectures
      */
     getAllLectures() {
         return this.#lectureList;

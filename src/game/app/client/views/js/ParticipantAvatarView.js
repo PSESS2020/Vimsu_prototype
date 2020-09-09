@@ -57,7 +57,7 @@ class ParticipantAvatarView extends AvatarView {
     /**
      * Gets participant ID
      * 
-     * @return participantId
+     * @return {String} participantId
      */
     getId() {
         return this.#participantId;
@@ -75,7 +75,7 @@ class ParticipantAvatarView extends AvatarView {
     /**
      * Gets visibility
      * 
-     * @return isVisible
+     * @return {boolean} true if visible, otherwise false
      */
     getVisibility() {
         return this.#isVisible;

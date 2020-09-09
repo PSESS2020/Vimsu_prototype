@@ -48,7 +48,7 @@ class ParticipantClient {
     /**
      * Gets participant ID
      * 
-     * @return id
+     * @return {String} id
      */
     getId() {
         return this.#id;
@@ -57,7 +57,7 @@ class ParticipantClient {
     /**
      * Gets participant position
      * 
-     * @return position
+     * @return {PositionClient} position
      */
     getPosition() {
         return this.#position;
@@ -66,7 +66,7 @@ class ParticipantClient {
     /**
      * Gets participant moderator status
      * 
-     * @return true if moderator, otherwise false
+     * @return {boolean} true if moderator, otherwise false
      */
     getIsModerator() {
         return this.#isModerator;
@@ -85,7 +85,7 @@ class ParticipantClient {
     /**
      * Gets participant avatar direction
      * 
-     * @return direction
+     * @return {Direction} direction
      */
     getDirection() {
         return this.#direction;
@@ -104,7 +104,7 @@ class ParticipantClient {
     /**
      * Gets participant username
      * 
-     * @return username
+     * @return {String} username
      */
     getUsername() {
         return this.#username;
@@ -113,7 +113,7 @@ class ParticipantClient {
     /**
      * Gets participant avatar visibility
      * 
-     * @return true if avatar is visible, otherwise false
+     * @return {boolean} true if avatar is visible, otherwise false
      */
     getIsVisible() {
         return this.#isVisible;

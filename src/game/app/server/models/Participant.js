@@ -11,6 +11,7 @@ const TypeOfTask = require('../utils/TypeOfTask')
 
 /**
  * The Participant Model
+ * @module Participant
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -33,7 +34,8 @@ module.exports = class Participant {
     #isVisible;
 
     /**
-     * @constructor Creates a participant instance
+     * Creates a participant instance
+     * @constructor module:Participant
      * 
      * @param {String} id participant ID
      * @param {String} accountId account ID
@@ -91,8 +93,9 @@ module.exports = class Participant {
 
     /**
      * Gets participant ID
+     * @method module:Participant#getId
      * 
-     * @return id
+     * @return {String} id
      */
     getId() {
         return this.#id;
@@ -100,8 +103,9 @@ module.exports = class Participant {
 
     /**
      * Gets participant's position
+     * @method module:Participant#getPosition
      * 
-     * @return position
+     * @return {Position} position
      */
     getPosition() {
         return this.#position;
@@ -109,8 +113,9 @@ module.exports = class Participant {
 
     /**
      * Gets avatar's direction
+     * @method module:Participant#getDirection
      * 
-     * @return direction
+     * @return {String} direction
      */
     getDirection() {
         return this.#direction;
@@ -118,8 +123,9 @@ module.exports = class Participant {
 
     /**
      * Gets account ID
+     * @method module:Participant#getAccountId
      * 
-     * @return accountId
+     * @return {String} accountId
      */
     getAccountId() {
         return this.#accountId;
@@ -127,8 +133,9 @@ module.exports = class Participant {
 
     /**
      * Gets business card
+     * @method module:Participant#getBusinessCard
      * 
-     * @return businessCard
+     * @return {BusinessCard} businessCard
      */
     getBusinessCard() {
         return this.#businessCard;
@@ -136,8 +143,9 @@ module.exports = class Participant {
 
     /**
      * Gets list of friends
+     * @method module:Participant#getFriendList
      * 
-     * @return friendList
+     * @return {FriendList} friendList
      */
     getFriendList() {
         return this.#friendList;
@@ -145,8 +153,9 @@ module.exports = class Participant {
 
     /**
      * Gets list of received friend requests
+     * @method module:Participant#getReceivedRequestList
      * 
-     * @return receivedRequestList
+     * @return {FriendList} receivedRequestList
      */
     getReceivedRequestList() {
         return this.#receivedRequestList;
@@ -154,8 +163,9 @@ module.exports = class Participant {
 
     /**
      * Gets list of sent friend requests
+     * @method module:Participant#getSentRequestList
      * 
-     * @return sentRequestList
+     * @return {FriendList} sentRequestList
      */
     getSentRequestList() {
         return this.#sentRequestList;
@@ -163,8 +173,9 @@ module.exports = class Participant {
 
     /**
      * Gets list of achievements
+     * @method module:Participant#getAchievements
      * 
-     * @return achievements
+     * @return {Achievement[]} achievements
      */
     getAchievements() {
         return this.#achievements;
@@ -172,8 +183,9 @@ module.exports = class Participant {
 
     /**
      * Gets avatar's visibility 
+     * @method module:Participant#getIsVisible
      * 
-     * @return true if visible, otherwise false
+     * @return {boolean} true if visible, otherwise false
      */
     getIsVisible() {
         return this.#isVisible;
@@ -181,8 +193,9 @@ module.exports = class Participant {
 
     /**
      * Gets moderator status
+     * @method module:Participant#getIsModerator
      * 
-     * @return true if moderator, otherwise false
+     * @return {boolean} true if moderator, otherwise false
      */
     getIsModerator() {
         return this.#isMod;
@@ -190,8 +203,9 @@ module.exports = class Participant {
 
     /**
      * Gets chat list
+     * @method module:Participant#getChatList
      * 
-     * @return chatList
+     * @return {Chat[]} chatList
      */
     getChatList() {
         return this.#chatList;
@@ -199,6 +213,7 @@ module.exports = class Participant {
 
     /**
      * Adds chat to the chat list
+     * @method module:Participant#addChat
      * 
      * @param {Chat} chat chat instance
      */
@@ -211,6 +226,7 @@ module.exports = class Participant {
 
     /**
      * Sets avatar's position
+     * @method module:Participant#setPosition
      * 
      * @param {Position} position position
      */
@@ -221,6 +237,7 @@ module.exports = class Participant {
 
     /**
      * Sets avatar's direction
+     * @method module:Participant#setDirection
      * 
      * @param {Direction} direction direction
      */
@@ -231,6 +248,7 @@ module.exports = class Participant {
 
     /**
      * Sets visibility
+     * @method module:Participant#setIsVisible
      * 
      * @param {boolean} isVisible visibility
      */
@@ -242,6 +260,7 @@ module.exports = class Participant {
     /**
      * Adds ppant to list of sent friend request.
      * Method called, when this ppant sends a friend request to ppant with this businessCard
+     * @method module:Participant#addSentFriendRequest
      * 
      * @param {BusinessCard} businessCard business card
      */
@@ -255,6 +274,7 @@ module.exports = class Participant {
 
     /**
      * Called when the outgoing friend request to ppant with ppantId was accepted
+     * @method module:Participant#sentFriendRequestAccepted
      * 
      * @param {String} ppantId participant ID
      */
@@ -269,6 +289,7 @@ module.exports = class Participant {
 
     /**
      * Called when outgoing friend request to ppant with ppantId was declined
+     * @method module:Participant#sentFriendRequestDeclined
      * 
      * @param {String} ppantId participant ID
      */
@@ -281,6 +302,7 @@ module.exports = class Participant {
 
     /**
      * Adds a friend request to the received friend request list
+     * @method module:Participant#addFriendRequest
      * 
      * @param {BusinessCard} businessCard business card
      */
@@ -294,6 +316,7 @@ module.exports = class Participant {
 
     /**
      * Accept FriendRequest from ppantId, if a request exists
+     * @method module:Participant#acceptFriendRequest
      * 
      * @param {String} ppantId participant ID
      */
@@ -308,6 +331,7 @@ module.exports = class Participant {
 
     /**
      * Declines FriendRequest from ppantId, if a request exists
+     * @method module:Participant#declineFriendRequest
      * 
      * @param {String} ppantId participant ID
      */
@@ -320,6 +344,7 @@ module.exports = class Participant {
 
     /**
      * Removes ppant with ppantId from FriendList, if he is part of it
+     * @method module:Participant#removeFriend
      * 
      * @param {String} ppantId participant ID
      */
@@ -332,8 +357,10 @@ module.exports = class Participant {
 
     /**
      * Checks if participant has a friend with a participant with ppantId
+     * @method module:Participant#hasFriend
      * 
-     * @param {?String} ppantId participant ID
+     * @param {String} ppantId participant ID
+     * @return {boolean} true if participant has friend with passed id, false otherwise
      */
     hasFriend(ppantId) {
         if (ppantId) {
@@ -344,8 +371,10 @@ module.exports = class Participant {
 
     /**
      * Checks if participant has sent/received a friend request to/from a participant with ppantId
+     * @method module:Participant#hasSentFriendRequest
      * 
-     * @param {?String} ppantId participant ID
+     * @param {String} ppantId participant ID
+     * @return {boolean} true if the participant has sent a friend request to the participant with the passed id, false otherwise
      */
     hasSentFriendRequest(ppantId) {
         if (ppantId) {
@@ -357,6 +386,7 @@ module.exports = class Participant {
 
     /**
      * Removes chat from the chat list
+     * @method module:Participant#removeChat
      * 
      * @param {String} chatId chat ID
      */
@@ -374,8 +404,9 @@ module.exports = class Participant {
 
     /**
      * Gets tasks and its count
+     * @method module:Participant#getTaskTypeMappingCounts
      * 
-     * @return taskTypeMapping
+     * @return {Task[]} taskTypeMapping
      */
     getTaskTypeMappingCounts() {
         return this.#taskTypeMapping;
@@ -383,9 +414,10 @@ module.exports = class Participant {
 
     /**
      * Gets a task based on the task type
+     * @method module:Participant#getTaskTypeMappinCount
      * @param {TypeOfTask} taskType task type
      * 
-     * @return task
+     * @return {Task} task
      */
     getTaskTypeMappingCount(taskType) {
         return this.#taskTypeMapping[taskType];
@@ -393,6 +425,7 @@ module.exports = class Participant {
 
     /**
      * Called if a task is fulfilled to increase the counter and the points
+     * @method module:Participant#addTask
      * 
      * @param {Task} task task instance
      */
@@ -406,6 +439,7 @@ module.exports = class Participant {
 
     /**
      * Adds points of participant
+     * @method module:Participant#addAwardPoints
      * 
      * @param {number} awardPoints points
      */
@@ -416,6 +450,7 @@ module.exports = class Participant {
 
     /**
      * Sets achievements
+     * @method module:Participant#setAchievements
      * 
      * @param {Achievement[]} achievements achievements
      */
@@ -430,8 +465,9 @@ module.exports = class Participant {
 
     /**
      * Gets participant's points
+     * @method module:Participant#getAwardPoints
      * 
-     * @return points
+     * @return {number} points
      */
     getAwardPoints() {
         return this.#awardPoints;
@@ -439,10 +475,11 @@ module.exports = class Participant {
 
     /**
      * Gets a chat from the chat list
+     * @method module:Participant#getChat
      * 
      * @param {String} chatId chat ID
      * 
-     * @return chat
+     * @return {Chat} chat
      */
     getChat(chatId) {
         TypeChecker.isString(chatId);
@@ -456,10 +493,11 @@ module.exports = class Participant {
 
     /**
      * Checks if participant is member of chat with this chatId
+     * @method module:Participant#isMemberOfChat
      * 
      * @param {String} chatId chat ID
      * 
-     * @return true if so, otherwise false
+     * @return {boolean} true if so, otherwise false
      */
     isMemberOfChat(chatId) {
         TypeChecker.isString(chatId);
@@ -474,6 +512,7 @@ module.exports = class Participant {
 
     /**
      * Adds an achievement to the list of achievements
+     * @method module:Participant#addAchievement
      * 
      * @param {Achievement} achievement achievement
      */
@@ -484,6 +523,7 @@ module.exports = class Participant {
 
     /**
      * Removes an achievement from the list of achievements
+     * @method module:Participant#removeAchievement
      * 
      * @param {number} achievementId achievement ID
      */
@@ -501,10 +541,11 @@ module.exports = class Participant {
 
     /**
      * Check if this ppant has a 1:1 chat with chatPartnerID
+     * @method module:Participant#hasChatWith
      * 
      * @param {String} chatPartnerID chat partner ID
      * 
-     * @return true if so, otherwise false
+     * @return {boolean} true if so, otherwise false
      */
     hasChatWith(chatPartnerID) {
         TypeChecker.isString(chatPartnerID);

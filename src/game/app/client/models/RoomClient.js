@@ -42,8 +42,8 @@ class RoomClient {
      * @param {GameObjectClient[]} listOfGameObjects list of game objects
      * @param {NPCClient[]} listOfNPCs list of NPCs
      * @param {DoorClient[]} listOfDoors list of Doors
-     * @param {number} length room length
      * @param {number} width room width
+     * @param {number} length room length
      * @param {number[][]} occupationMap room occupation map
      */
     constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
@@ -59,7 +59,7 @@ class RoomClient {
     /**
      * Gets room ID
      * 
-     * @return roomId
+     * @return {number} roomId
      */
     getRoomId() {
         return this.#roomId;
@@ -68,7 +68,7 @@ class RoomClient {
     /**
      * Gets type of room
      * 
-     * @return typeOfRoom
+     * @return {TypeOfRoom} typeOfRoom
      */
     getTypeOfRoom() {
         return this.#typeOfRoom;
@@ -77,7 +77,7 @@ class RoomClient {
     /**
      * Gets asset paths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;
@@ -86,7 +86,7 @@ class RoomClient {
     /**
      * Gets room width
      * 
-     * @return width
+     * @return {number} width
      */
     getWidth() {
         return this.#width;
@@ -95,7 +95,7 @@ class RoomClient {
     /**
      * Gets room length
      * 
-     * @return length
+     * @return {number} length
      */
     getLength() {
         return this.#length;
@@ -104,7 +104,7 @@ class RoomClient {
     /**
      * Gets list of participants in the room
      * 
-     * @return list of ppants
+     * @return {ParticipantClient[]} list of ppants
      */
     getListOfPPants() {
         return this.#listOfPPants;
@@ -113,7 +113,7 @@ class RoomClient {
     /**
      * Gets list of map elements
      * 
-     * @return list of map elements
+     * @return {GameObjectClient[]} list of map elements
      */
     getListOfMapElements() {
         return this.#listOfMapElements;
@@ -122,7 +122,7 @@ class RoomClient {
     /**
      * Gets list of game objects
      * 
-     * @return list of game objects
+     * @return {GameObjectClient[]} list of game objects
      */
     getListOfGameObjects() {
         return this.#listOfGameObjects;
@@ -131,7 +131,7 @@ class RoomClient {
     /**
      * Gets list of NPCs
      * 
-     * @return list of NPCs
+     * @return {NPCClient[]} list of NPCs
      */
     getListOfNPCs() {
         return this.#listOfNPCs;
@@ -140,7 +140,7 @@ class RoomClient {
     /**
      * Gets list of doors
      * 
-     * @return list of doors
+     * @return {DoorClient[]} list of doors
      */
     getListOfDoors() {
         return this.#listOfDoors;
@@ -192,8 +192,7 @@ class RoomClient {
      * Checks, if there is a collision at this position
      * 
      * @param {PositionClient} position position
-     * @returns true, when collision
-     * @returns false, otherwise
+     * @return {boolean} true, when collision, false otherwise
      */
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
@@ -333,7 +332,7 @@ class RoomClient {
     /**
      * Gets map array
      * 
-     * @return map array
+     * @return {number[][]} map array
      */
     getMap() {
         return this.#map;
@@ -342,7 +341,7 @@ class RoomClient {
     /**
      * Gets object map array
      * 
-     * @return object map array
+     * @return {number[][]} object map array
      */
     getObjectMap() {
         return this.#objectMap;

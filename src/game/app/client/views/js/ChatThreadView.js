@@ -185,7 +185,7 @@ class ChatThreadView extends WindowView {
     /**
      * Gets current chat ID
      * 
-     * @return chatId
+     * @return {String} chatId
      */
     getChatId() {
         return this.#chat.chatId;

@@ -15,8 +15,15 @@ module.exports = class AchievementService {
     #achievementDefinitions;
 
     /**
+<<<<<<< HEAD
      * Creates an AchievementService instance
      * @constructor module: AchievementService
+=======
+     * Creates an AchievementService instance. Singleton, so at most one instance of this class can exist at any given time.
+     * @constructor module:AchievementService
+     * 
+     * @return {AchievementService} If an instance of this class does already exist when this function is called, it is returned and no new instance is created
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      */
     constructor() {
         if (!!AchievementService.instance) {
@@ -31,9 +38,16 @@ module.exports = class AchievementService {
     /**
      * Gets achievement definition based on task type
      * @method module:AchievementService#getAchievementDefinition
+<<<<<<< HEAD
      *  
      * @param {TypeOfTask} achievementTaskType task type
      * @return AchievementDefinition instance
+=======
+     * 
+     * @param {TypeOfTask} achievementTaskType task type
+     * 
+     * @return {AchievementDefinition} AchievementDefinition instance
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      */
     getAchievementDefinition(achievementTaskType) {
         TypeChecker.isEnumOf(achievementTaskType, TypeOfTask);
@@ -43,9 +57,14 @@ module.exports = class AchievementService {
 
     /**
      * Initializes all achievements
+<<<<<<< HEAD
      * @private 
      * @method module:AchievementService#initAllAchievements
      * 
+=======
+     * @private private method
+     * @method module:AchievementService#initAllAchievments
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      */
     #initAllAchievements = function () {
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
@@ -100,7 +119,11 @@ module.exports = class AchievementService {
      * 
      * @param {Participant} participant participant
      * 
+<<<<<<< HEAD
      * @return {Array} Array of achievements
+=======
+     * @return {Achievement[]} Array of achievements
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      */
     getAllAchievements(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
@@ -125,11 +148,19 @@ module.exports = class AchievementService {
 
     /**
      * Computes new possible achievements of a participant. Additionally set achievements in the participant instance if no achievement is found
+<<<<<<< HEAD
      * @method module:AchievementService#computeAchievement
      * 
      * @param {Participant} participant participant
      * 
      * @return {Array} Array of new achievements
+=======
+     * @method module:AchievementService#computeAchievements
+     * 
+     * @param {Participant} participant participant
+     * 
+     * @return {Achievement[]} Array of new achievements
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      */
     computeAchievements(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
@@ -168,7 +199,12 @@ module.exports = class AchievementService {
     }
 
     /**
+<<<<<<< HEAD
      * @private Gets achievement level based on the count
+=======
+     * Gets achievement level based on the count
+     * @private private method
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      * @method module:AchievementService#getLevelFromDefinition
      * 
      * @param {number} count achievement's count 
@@ -194,7 +230,12 @@ module.exports = class AchievementService {
     }
 
     /**
+<<<<<<< HEAD
      * @private Checks if the list of latest achievements contains an achievement
+=======
+     * Checks if the list of latest achievements contains an achievement
+     * @private private method
+>>>>>>> 06d624ff8ed6b989c19448405edf0cc26208a14d
      * @method module:AchievementService#containsAchievement
      * 
      * @param {Achievement} achievement achievement

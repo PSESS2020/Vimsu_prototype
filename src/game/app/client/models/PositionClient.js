@@ -30,7 +30,7 @@ class PositionClient {
     /**
      * Gets x coordinate
      * 
-     * @return cordX
+     * @return {number} cordX
      */
     getCordX() {
         return this.#cordX;
@@ -39,7 +39,7 @@ class PositionClient {
     /**
      * Gets y coordinate
      * 
-     * @return cordY
+     * @return {number} cordY
      */
     getCordY() {
         return this.#cordY;

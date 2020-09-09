@@ -37,7 +37,7 @@ class GameObjectView extends Views {
     /**
      * Gets game object image
      * 
-     * @return objectImage
+     * @return {Image} objectImage
      */
     getObjectImage() {
         return this.#objectImage;
@@ -46,7 +46,7 @@ class GameObjectView extends Views {
     /**
      * Gets grid position
      * 
-     * @return gridPosition
+     * @return {PositionClient} gridPosition
      */
     getGridPosition() {
         return this.#gridPosition;
@@ -55,7 +55,7 @@ class GameObjectView extends Views {
     /**
      * Gets screen position
      * 
-     * @return screenPosition
+     * @return {PositionClient} screenPosition
      */
     getScreenPosition() {
         return this.#screenPosition;
@@ -64,7 +64,7 @@ class GameObjectView extends Views {
     /**
      * Gets screen position offset
      * 
-     * @return screenPositionOffset
+     * @return {number} screenPositionOffset
      */
     getScreenPositionOffset() {
         return this.#screenPositionOffset;
@@ -73,7 +73,7 @@ class GameObjectView extends Views {
     /**
      * Gets game object name
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;

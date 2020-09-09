@@ -3,6 +3,7 @@ const TypeOfTask = require('../utils/TypeOfTask')
 
 /**
  * The Task Model
+ * @module Task
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,7 +15,8 @@ module.exports = class Task {
     #awardPoints;
 
     /**
-     * @constructor Creates a Task instance
+     * Creates a Task instance
+     * @constructor module:Task
      * 
      * @param {number} id task ID
      * @param {TypeOfTask} taskType task type
@@ -32,8 +34,9 @@ module.exports = class Task {
 
     /**
      * Gets task ID
+     * @method module:Task#getId
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id
@@ -41,8 +44,9 @@ module.exports = class Task {
 
     /**
      * Gets task type
+     * @method module:Task#getTaskType
      * 
-     * @return taskType
+     * @return {String} taskType
      */
     getTaskType() {
         return this.#taskType;
@@ -50,8 +54,9 @@ module.exports = class Task {
 
     /**
      * Gets award points
+     * @method module:Task#getAwardPoints
      * 
-     * @return awardPoints
+     * @return {number} awardPoints
      */
     getAwardPoints() {
         return this.#awardPoints;

@@ -39,7 +39,7 @@ class ClientController {
     /**
      * @private checks if there is an existing socket
      * 
-     * @return true if socket is ready, otherwise false
+     * @return {boolean} true if socket is ready, otherwise false
      */
     #socketReady = function () {
         if (!this.#socket) {

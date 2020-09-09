@@ -82,7 +82,7 @@ class IsometricEngine {
     /**
      * Gets tile column width
      * 
-     * @return tileColumnWidth
+     * @return {number} tileColumnWidth
      */
     getTileColumnWidth() {
         return this.#tileColumnWidth;
@@ -91,7 +91,7 @@ class IsometricEngine {
     /**
      * Gets tile row height
      * 
-     * @return tileRowHeight
+     * @return {number} tileRowHeight
      */
     getTileRowHeight() {
         return this.#tileRowHeight;
@@ -100,7 +100,7 @@ class IsometricEngine {
     /**
      * Gets number of x and y tiles
      * 
-     * @return Object of xNumTiles and yNumTiles
+     * @return {Object} Object of xNumTiles and yNumTiles
      */
     getNumMapTilesXY() {
         return {
@@ -112,7 +112,7 @@ class IsometricEngine {
     /**
      * Gets map x and y origin
      * 
-     * @return Object of mapOriginX and mapOriginY
+     * @return {Object} Object of mapOriginX and mapOriginY
      */
     getMapOriginXY() {
         return {
@@ -125,6 +125,8 @@ class IsometricEngine {
      * loads the images that are needed for object view creation.
      * 
      * @param {String[]} assetPaths asset paths
+     * 
+     * @return {Object} Object containing all the images loaded from the asset paths
      */
     async loadImages(assetPaths) {
         for (const [value] of Object.entries(assetPaths)) {
@@ -162,6 +164,8 @@ class IsometricEngine {
      * 
      * @param {number} xPos x position
      * @param {number} yPos y position
+     * 
+     * @return {Object} Object of the coordinates of the screen position
      */
     calculateScreenPosXY(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -180,6 +184,8 @@ class IsometricEngine {
      * 
      * @param {number} xPos x position
      * @param {number} yPos y position
+     * 
+     * @return {number} the x coordinate of the screen position
      */
     calculateScreenPosX(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -194,6 +200,8 @@ class IsometricEngine {
      * 
      * @param {number} xPos x position
      * @param {number} yPos y position
+     *  
+     * @return {number} the y coordinate of the screen position
      */
     calculateScreenPosY(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -209,7 +217,7 @@ class IsometricEngine {
      * @param {Canvas} canvas canvas
      * @param {Event} e event
      * 
-     * @return Object of x and y cursor position
+     * @return {Object} Object of x and y cursor position
      */
     translateMouseToCanvasPos(canvas, e) {
 
@@ -235,7 +243,7 @@ class IsometricEngine {
      * 
      * @param {{x: number, y: number}} newPosition new position
      * 
-     * @return Object of selectedTileX and selectedTileY
+     * @return {Object} Object of selectedTileX and selectedTileY
      */
     translateMouseToTileCord(newPosition) {
         TypeChecker.isNumber(newPosition.x);
