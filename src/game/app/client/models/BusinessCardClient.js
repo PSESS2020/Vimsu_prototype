@@ -58,7 +58,7 @@ class BusinessCardClient {
     /**
      * Gets participant ID
      * 
-     * @return participantId
+     * @return {String} participantId
      */
     getParticipantId() {
         return this.#participantId;
@@ -67,7 +67,7 @@ class BusinessCardClient {
     /**
      * Gets participant username
      * 
-     * @return username
+     * @return {String} username
      */
     getUsername() {
         return this.#username;
@@ -76,7 +76,7 @@ class BusinessCardClient {
     /**
      * Gets participant title
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -85,7 +85,7 @@ class BusinessCardClient {
     /**
      * Gets participant surname
      * 
-     * @return surname
+     * @return {String} surname
      */
     getSurname() {
         return this.#surname;
@@ -94,7 +94,7 @@ class BusinessCardClient {
     /**
      * Gets participant forename
      * 
-     * @return forename
+     * @return {String} forename
      */
     getForename() {
         return this.#forename;
@@ -103,7 +103,7 @@ class BusinessCardClient {
     /**
      * Gets participant job
      * 
-     * @return job
+     * @return {String} job
      */
     getJob() {
         return this.#job;
@@ -112,7 +112,7 @@ class BusinessCardClient {
     /**
      * Gets participant company
      * 
-     * @return company
+     * @return {String} company
      */
     getCompany() {
         return this.#company;
@@ -121,7 +121,7 @@ class BusinessCardClient {
     /**
      * Gets participant email
      * 
-     * @return email
+     * @return {String} email
      */
     getEmail() {
         return this.#email;

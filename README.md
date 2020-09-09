@@ -2,7 +2,7 @@
 
 [![coverage](https://img.shields.io/codecov/c/github/PSESS2020/Vimsu_prototype)](https://codecov.io/gh/PSESS2020/Vimsu_prototype)
 
-Welcome to the GitHub repository of VIMSU. This software was developed as a part of the module 'Practice of Software Engineering' during the the summer semester 2020 at the Karlsruhe Institute of Technology on the topic 'Virtual conference simulator with telepresence'.
+Welcome to the GitHub repository of VIMSU. This software was developed as a part of the module 'Practice of Software Engineering' during the summer semester 2020 at the Karlsruhe Institute of Technology on the topic 'Virtual conference simulator with telepresence'.
 
 ## Table of Contents
 

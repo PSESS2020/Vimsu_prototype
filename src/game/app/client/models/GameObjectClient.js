@@ -28,7 +28,7 @@ class GameObjectClient {
      * @param {String} name game object name
      * @param {number} width game object width
      * @param {number} length game object length
-     * @param {Position} position game object position
+     * @param {PositionClient} position game object position
      * @param {boolean} isClickable game object clickable status
      */
     constructor(id, gameObjectType, name, width, length, position, isClickable) {
@@ -55,7 +55,7 @@ class GameObjectClient {
     /**
      * Gets game object ID
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -64,7 +64,7 @@ class GameObjectClient {
     /**
      * Gets game object type
      * 
-     * @return gameObjectType
+     * @return {GameObjectType} gameObjectType
      */
     getGameObjectType() {
         return this.#gameObjectType;
@@ -73,7 +73,7 @@ class GameObjectClient {
     /**
      * Gets game object name
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -82,7 +82,7 @@ class GameObjectClient {
     /**
      * Gets game object width
      * 
-     * @return width
+     * @return {number} width
      */
     getWidth() {
         return this.#width;
@@ -91,7 +91,7 @@ class GameObjectClient {
     /**
      * Gets game object length
      * 
-     * @return length
+     * @return {number} length
      */
     getLength() {
         return this.#length;
@@ -100,7 +100,7 @@ class GameObjectClient {
     /**
      * Gets game object position
      * 
-     * @return position
+     * @return {PositionClient} position
      */
     getPosition() {
         return this.#position;
@@ -109,7 +109,7 @@ class GameObjectClient {
     /**
      * Gets game object clickable status
      * 
-     * @return true if clickable, otherwise false
+     * @return {boolean} true if clickable, otherwise false
      */
     isClickable() {
         return this.#isClickable;

@@ -22,7 +22,7 @@ class NPCClient {
      * 
      * @param {number} id NPC ID
      * @param {String} name NPC name
-     * @param {Position} position NPC position
+     * @param {PositionClient} position NPC position
      * @param {Direction} direction NPC avatar direction
      */
     constructor(id, name, position, direction) {
@@ -40,7 +40,7 @@ class NPCClient {
     /**
      * Gets NPC ID
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -49,7 +49,7 @@ class NPCClient {
     /**
      * Gets NPC name
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -58,7 +58,7 @@ class NPCClient {
     /**
      * Gets NPC position
      * 
-     * @return position
+     * @return {PositionClient} position
      */
     getPosition() {
         return this.#position;
@@ -67,7 +67,7 @@ class NPCClient {
     /**
      * Gets NPC avatar direction
      * 
-     * @return direction
+     * @return {Direction} direction
      */
     getDirection() {
         return this.#direction;

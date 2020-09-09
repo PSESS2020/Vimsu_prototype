@@ -379,6 +379,15 @@ module.exports = class ServerController {
             /* handles receiving a movement-input from a participant. */
             socket.on('requestMovementStart', (direction, newCordX, newCordY) => {
 
+
+                let ppantID = socket.ppantID;
+                let ppant = this.#ppants.get(ppantID);
+                if (!ppant)
+                    return;
+
+                let oldDir = ppant.getDirection();
+                let oldPos = ppant.getPosition();
+
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isEnumOf(direction, Direction);
@@ -386,18 +395,13 @@ module.exports = class ServerController {
                     TypeChecker.isInt(newCordY);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    //reset position on client
+                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
                     return;
                 }
 
-                let ppantID = socket.ppantID;
-                let ppant = this.#ppants.get(ppantID);
-                if (!ppant)
-                    return;
-
                 let roomId = ppant.getPosition().getRoomId();
 
-                let oldDir = ppant.getDirection();
-                let oldPos = ppant.getPosition();
                 let newPos = new Position(roomId, newCordX, newCordY);
 
                 //check if new position is legit. Prevents manipulation from Client
