@@ -9,6 +9,7 @@ const Settings = require('../utils/Settings.js');
 
 /**
  * The Room Service
+ * @module RoomService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -17,7 +18,8 @@ module.exports = class RoomService {
     #rooms;
 
     /**
-     * @constructor Creates an instance of RoomService
+     * Creates an instance of RoomService
+     * @constructor 
      */
     constructor() {
         if (!!RoomService.instance) {
@@ -31,8 +33,9 @@ module.exports = class RoomService {
 
     /**
      * Gets all rooms
+     * @method module:RoomService#getAllRooms
      * 
-     * @return rooms array
+     * @return {Room[]} rooms array
      */
     getAllRooms() {
         return this.#rooms;
@@ -40,10 +43,11 @@ module.exports = class RoomService {
 
     /**
      * Gets room by its ID
+     * @method module:RoomService#getRoom
      * 
      * @param {number} roomId room ID
      * 
-     * @return RoomDecorator instance
+     * @return {RoomDecorator} RoomDecorator instance
      */
     getRoom(roomId) {
         TypeChecker.isInt(roomId);
@@ -59,6 +63,7 @@ module.exports = class RoomService {
 
     /**
      * @private Initializes all rooms
+     * @method module:RoomService#initAllRooms
      */
     #initAllRooms = function () {
         this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));

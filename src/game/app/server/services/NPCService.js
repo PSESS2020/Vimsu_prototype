@@ -5,6 +5,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 /**
  * The NPC Service
+ * @module NPCService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,7 +15,8 @@ module.exports = class NPCService {
     #npcIDs;
 
     /**
-     * @constructor creates an NPCService instance
+     * creates an NPCService instance
+     * @constructor 
      */
     constructor() {
         if (!!NPCService.instance) {
@@ -46,8 +48,9 @@ module.exports = class NPCService {
 
     /**
      * @private generates a unique NPC ID
+     * @method module:NPCService#generateNpcID
      * 
-     * @return NPC ID
+     * @return {number} NPC ID
      */
     #generateNpcID = function () {
         let idIsGenerated = false;
@@ -63,13 +66,14 @@ module.exports = class NPCService {
 
     /**
      * creates an instance of FoyerHelper NPC
+     * @method module:NPCService#createFoyerHelperNPC
      * 
      * @param {String} roomId room ID of FoyerHelper NPC
      * @param {number} xPos x position of FoyerHelper NPC
      * @param {number} yPos y position of FoyerHelper NPC
      * @param {Direction} direction direction of FoyerHelper NPC
      * 
-     * @return FoyerHelper NPC instance
+     * @return {NPC} FoyerHelper NPC instance
      */
     createFoyerHelperNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
@@ -82,13 +86,14 @@ module.exports = class NPCService {
 
     /**
      * creates an instance of BasicTutorial NPC
+     * @method module:NPCService#createBasicTutorialNPC
      * 
      * @param {String} roomId room ID of BasicTutorial NPC
      * @param {number} xPos x position of BasicTutorial NPC
      * @param {number} yPos y position of BasicTutorial NPC
      * @param {Direction} direction direction of BasicTutorial NPC
      * 
-     * @return BasicTutorial NPC instance
+     * @return {NPC} BasicTutorial NPC instance
      */
     createBasicTutorialNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);
@@ -101,13 +106,14 @@ module.exports = class NPCService {
 
     /**
      * creates an instance of Chef NPC
+     * @method module:NPCService#createChefNPC
      * 
      * @param {String} roomId room ID of Chef NPC
      * @param {number} xPos x position of Chef NPC
      * @param {number} yPos y position of Chef NPC
      * @param {Direction} direction direction of Chef NPC
      * 
-     * @return Chef NPC instance
+     * @return {NPC} Chef NPC instance
      */
     createChefNPC(roomId, xPos, yPos, direction) {
         TypeChecker.isInt(roomId);

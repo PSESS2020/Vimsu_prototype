@@ -4,6 +4,7 @@ const db = require('../../../../config/db');
 
 /**
  * The Rank List Service
+ * @module RankListService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -12,6 +13,7 @@ module.exports = class RankListService {
 
     /**
      * @private @static gets rank list from the database
+     * @method module:RankListService#getRankList
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
@@ -42,6 +44,7 @@ module.exports = class RankListService {
 
     /**
      * @static gets rank list with participant usernames, splices the list until the lastRank
+     * @method module:RankListService#getRankListWithUsername
      * 
      * @param {String} conferenceId conference ID
      * @param {number} lastRank last rank to be shown in the rank list
@@ -78,12 +81,13 @@ module.exports = class RankListService {
 
     /**
      * @static gets rank of a participant
+     * @method module:RankListService#getRank
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return participant's rank
+     * @return {number} participant's rank
      */
     static getRank(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
