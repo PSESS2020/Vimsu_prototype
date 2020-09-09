@@ -135,7 +135,7 @@ You can create an account and access the conference by following the steps below
 4. Fill out the rest of the registration form and click the `Register Now` button
 5. Click the yellow button that says `Enter Conference >>`
 
-After you have created an account, you will be able to use it to log into any VIMSU instance that uses the same database as the once you created your account on.
+After you have created an account, you will be able to use it to log into any VIMSU instance that uses the same database as the one you created your account on.
 
 ### Uploading Lectures
 You can upload lectures by following the steps below:
