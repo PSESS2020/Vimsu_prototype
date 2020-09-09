@@ -20,8 +20,6 @@ module.exports = class LectureService {
      * @param {blobClient} blob blob instance
      * @param {Date} startingTime lecture starting time
      * @param {number} duration lecture video duration
-     * 
-     * @return {String} Video URL
      */
     static getVideoUrl(videoId, blob, startingTime, duration) {
         TypeChecker.isString(videoId);
