@@ -99,7 +99,7 @@ If you want to try out VIMSU without creating an Azure Storage or a MongoDB acco
 
     Please follow the installation instructions on the [official Azurite GitHub-page.](https://github.com/Azure/Azurite/blob/master/README.md) Note that VIMSU uses the [AzureSDK](https://azure.github.io/azure-sdk/), so you need to setup Azurite for HTTPS connections. This will require the use of additional third-party software such as [mkcert](https://github.com/FiloSottile/mkcert) or [OpenSSL](https://www.openssl.org/) to create your own signed certificates. In the process of installing that software, you might be required to install additional third-party software. Please understand that this software is not supplied by us and we can therefore only offer superficial support for this installation process.
     
-    After you have successfully installed Azurite and started a properly configured instance, paste the default HTTPS-connection string (you can use both either the full one or the Blob-only one) into the `.env` file as explained in the section above. You can also create custom sonection strings. Please refer to the [Azurite readme](https://github.com/Azure/Azurite/blob/master/README.md) for further instruction on how to do this.
+    After you have successfully installed Azurite and started a properly configured instance, paste the default HTTPS-connection string (you can use both either the full one or the Blob-only one) into the `.env` file as explained in the section above. You can also create custom connection strings. Please refer to the [Azurite readme](https://github.com/Azure/Azurite/blob/master/README.md) for further instruction on how to do this.
     
 - MongoDB
 
