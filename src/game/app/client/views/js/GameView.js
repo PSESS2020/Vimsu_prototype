@@ -98,7 +98,7 @@ class GameView {
     /**
      * Gets own avatar view
      * 
-     * @return ownAvatarView
+     * @return {ParticipantAvatarView} ownAvatarView
      */
     getOwnAvatarView() {
         return this.#ownAvatarView;
@@ -107,7 +107,7 @@ class GameView {
     /**
      * Get another participant avatar views
      * 
-     * @return anotherParticipantAvatarViews
+     * @return {ParticipantAvatarView[]} anotherParticipantAvatarViews
      */
     getAnotherParticipantAvatarViews() {
         return this.#anotherParticipantAvatarViews;
@@ -739,7 +739,7 @@ class GameView {
     /**
      * Gets chat thread view
      * 
-     * @return chatThreadView
+     * @return {ChatThreadView} chatThreadView
      */
     getChatThreadView() {
         return this.#chatThreadView;
