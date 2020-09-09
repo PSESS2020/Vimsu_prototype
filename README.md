@@ -118,7 +118,7 @@ You should see the following logs if you have successfully hosted VIMSU.
     Vimsu-Server listening on port 5000 . . .
     Connected to Database
 
-To access your locally hosted VIMSU-instance with your browser, open your browser and enter `http://localhost:5000/`. The following browsers are currently supported:
+To access your locally hosted VIMSU instance, open your browser and enter `http://localhost:5000/`. The following browsers are currently supported:
 - Google Chrome Version 84.0.4147.125 or newer
 - Microsoft Edge Version 84.0.522.59 or newer
 - Opera Version 70.0.3728.71 or newer
