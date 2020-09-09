@@ -54,7 +54,7 @@ Use the following command to create a local copy of VIMSU on your computer.
 
     $ git clone https://github.com/PSESS2020/Vimsu_prototype.git
 
-This will create a copy of this repository in whatever folder you're executing the command in. Alternatively, you can download the code as a .zip by clicking the 'Code'-button above the repository. Now you just need to extract the .zip-file into a location of your liking.
+This will create a copy of this repository in whatever folder you're executing the command in. Alternatively, you can download the code as a .zip by clicking the `Code` button above the repository. Now you just need to extract the .zip-file into a location of your liking.
 
 ## Usage
 Before you can host VIMSU, you will need to properly set up the database and the cloud storage.
