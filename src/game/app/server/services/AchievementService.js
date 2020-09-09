@@ -17,8 +17,6 @@ module.exports = class AchievementService {
     /**
      * Creates an AchievementService instance. Singleton, so at most one instance of this class can exist at any given time.
      * @constructor module:AchievementService
-     * 
-     * @return {AchievementService} If an instance of this class does already exist when this function is called, it is returned and no new instance is created
      */
     constructor() {
         if (!!AchievementService.instance) {
