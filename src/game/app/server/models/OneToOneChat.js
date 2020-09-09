@@ -4,6 +4,7 @@ const Message = require('./Message.js');
 
 /**
  * The 1:1 Chat Model
+ * @module OneToOneChat
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,7 +15,8 @@ module.exports = class OneToOneChat extends Chat {
     #chatPartnerUsername;
 
     /**
-     * @constructor Creates an 1:1 Chat instance
+     * Creates an 1:1 Chat instance
+     * @constructor module:OneToOneChat
      * 
      * @param {String} chatId chat ID
      * @param {String} creatorID chat creator ID
@@ -38,6 +40,7 @@ module.exports = class OneToOneChat extends Chat {
     /**
      * Adds a message to the message list.
      * If message list is full then the half of the message list gets deleted.
+     * @method module:OneOnOneChat#addMessage
      * 
      * @param {Message} msg message
      */
@@ -53,10 +56,11 @@ module.exports = class OneToOneChat extends Chat {
 
     /**
      * Get the other username in this 1:1 chat
+     * @method module:OneOnOneChat#getOtherUsername
      * 
      * @param {String} ownUsername own username
      * 
-     * @return chat partner username
+     * @return {String} chat partner username
      */
     getOtherUsername(ownUsername) {
         TypeChecker.isString(ownUsername);
@@ -74,10 +78,11 @@ module.exports = class OneToOneChat extends Chat {
 
     /**
      * Get the other user id in this 1:1 chat
+     * @method module:OneOnOneChat#getOtherUserId
      * 
      * @param {String} ownId own ID
      * 
-     * @return chat partner ID
+     * @return {String} chat partner ID
      */
     getOtherUserId(ownId) {
         TypeChecker.isString(ownId);
@@ -95,6 +100,7 @@ module.exports = class OneToOneChat extends Chat {
 
     /**
      * Removes participant from 1:1 chat
+     * @method module:OneOnOneChat#removeUsername
      * 
      * @param {String} participantId participant ID
      */

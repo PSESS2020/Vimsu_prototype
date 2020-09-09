@@ -6,6 +6,7 @@ const Achievement = require('../models/Achievement');
 
 /**
  * The Achievement Service
+ * @module AchievementService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,7 +15,10 @@ module.exports = class AchievementService {
     #achievementDefinitions;
 
     /**
-     * @constructor Creates an AchievementService instance
+     * Creates an AchievementService instance. Singleton, so at most one instance of this class can exist at any given time.
+     * @constructor module:AchievementService
+     * 
+     * @return {AchievementService} If an instance of this class does already exist when this function is called, it is returned and no new instance is created
      */
     constructor() {
         if (!!AchievementService.instance) {
@@ -28,10 +32,11 @@ module.exports = class AchievementService {
 
     /**
      * Gets achievement definition based on task type
+     * @method module:AchievementService#getAchievementDefinition
      * 
      * @param {TypeOfTask} achievementTaskType task type
      * 
-     * @return AchievementDefinition instance
+     * @return {AchievementDefinition} AchievementDefinition instance
      */
     getAchievementDefinition(achievementTaskType) {
         TypeChecker.isEnumOf(achievementTaskType, TypeOfTask);
@@ -40,7 +45,9 @@ module.exports = class AchievementService {
     }
 
     /**
-     * @private Initializes all achievements
+     * Initializes all achievements
+     * @private private method
+     * @method module:AchievementService#initAllAchievments
      */
     #initAllAchievements = function () {
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
@@ -91,10 +98,11 @@ module.exports = class AchievementService {
 
     /**
      * Gets all achievements of a participant
+     * @method module:AchievementService#getAllAchievements
      * 
      * @param {Participant} participant participant
      * 
-     * @return Array of achievements
+     * @return {Achievement[]} Array of achievements
      */
     getAllAchievements(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
@@ -119,10 +127,11 @@ module.exports = class AchievementService {
 
     /**
      * Computes new possible achievements of a participant. Additionally set achievements in the participant instance if no achievement is found
+     * @method module:AchievementService#computeAchievements
      * 
      * @param {Participant} participant participant
      * 
-     * @return Array of new achievements
+     * @return {Achievement[]} Array of new achievements
      */
     computeAchievements(participant) {
         TypeChecker.isInstanceOf(participant, Participant);
@@ -161,12 +170,14 @@ module.exports = class AchievementService {
     }
 
     /**
-     * @private Gets achievement level based on the count
+     * Gets achievement level based on the count
+     * @private private method
+     * @method module:AchievementService#getLevelFromDefinition
      * 
      * @param {number} count achievement's count 
      * @param {{count: number, color: String, points: number}} levels achievement's levels
      * 
-     * @return level
+     * @return {int} level
      */
     #getLevelFromDefinition = function (count, levels) {
         TypeChecker.isInt(count);
@@ -186,12 +197,14 @@ module.exports = class AchievementService {
     }
 
     /**
-     * @private Checks if the list of latest achievements contains an achievement
+     * Checks if the list of latest achievements contains an achievement
+     * @private private method
+     * @method module:AchievementService#containsAchievement
      * 
      * @param {Achievement} achievement achievement
      * @param {Achievement[]} oldAchievements old achievements
      * 
-     * @return true if the latest achievements contains the achievement, otherwise false
+     * @return {boolean} true if the latest achievements contains the achievement, otherwise false
      */
     #containsAchievement = function (achievement, oldAchievements) {
         TypeChecker.isInstanceOf(achievement, Achievement);
