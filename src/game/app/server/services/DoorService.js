@@ -6,6 +6,7 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 
 /**
  * The Door Service
+ * @module DoorService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class DoorService {
     #doorIDs;
 
     /**
-     * @constructor creates an instance of DoorService
+     * creates an instance of DoorService
+     * @constructor 
      */
     constructor() {
         if (!!DoorService.instance) {
@@ -27,7 +29,11 @@ module.exports = class DoorService {
     }
 
     /**
+     * 
      * @private generates a unique ID for doors
+     * @method module:DoorService#generateDoorID
+     * 
+     * @return {number} unique id
      */
     #generateDoorID = function () {
         let idIsGenerated = false;
@@ -43,10 +49,11 @@ module.exports = class DoorService {
 
     /**
      * @private generates valid enter positions for left door
+     * @method module:DoorService#generateEnterPositionsLeftWall
      * 
      * @param {Position} doorPosition door position
      * 
-     * @return enter position data
+     * @return {Object} enter position data
      */
     #generateEnterPositionsLeftWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
@@ -69,10 +76,11 @@ module.exports = class DoorService {
 
     /**
      * @private generates valid enter positions for right door
+     * @method module:DoorService#generateEnterPositionsRightWall
      * 
      * @param {Position} doorPosition door position
      * 
-     * @return enter position data
+     * @return {Object} enter position data
      */
     #generateEnterPositionsRightWall = function (doorPosition) {
         TypeChecker.isInstanceOf(doorPosition, Position);
@@ -95,10 +103,11 @@ module.exports = class DoorService {
 
     /**
      * creates an instance of lecture door
+     * @method module:DoorService#createLectureDoor
      * 
      * @param {Position} mapPosition lecture door position
      * 
-     * @return lecture door instance
+     * @return {Door} lecture door instance
      */
     createLectureDoor(mapPosition) {
         TypeChecker.isInstanceOf(mapPosition, Position);
@@ -111,12 +120,13 @@ module.exports = class DoorService {
 
     /**
      * creates an instance of foyer door
+     * @method module:DoorService#createFoyerDoor
      * 
      * @param {Position} mapPosition foyer door position
      * @param {Position} targetPosition avatar's position on entering foyer door
      * @param {Direction} direction avatar's direction on entering foyer door
      * 
-     * @return foyer door instance
+     * @return {Door} foyer door instance
      */
     createFoyerDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);
@@ -131,12 +141,13 @@ module.exports = class DoorService {
 
     /**
      * creates an instance of food court door
+     * @method module:DoorService#createFoodCourtDoor
      * 
      * @param {Position} mapPosition food court door position
      * @param {Position} targetPosition avatar's position on entering food court door
      * @param {Direction} direction avatar's direction on entering food court door
      * 
-     * @return food court door instance
+     * @return {Door} food court door instance
      */
     createFoodCourtDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);
@@ -151,12 +162,13 @@ module.exports = class DoorService {
 
     /**
      * creates an instance of reception door
+     * @method module:DoorService#createReceptionDoor
      * 
      * @param {Position} mapPosition reception door position
      * @param {Position} targetPosition avatar's position on entering reception door
      * @param {Direction} direction avatar's direction on entering reception door
      * 
-     * @return reception door instance
+     * @return {Door} reception door instance
      */
     createReceptionDoor(mapPosition, targetPosition, direction) {
         TypeChecker.isInstanceOf(mapPosition, Position);

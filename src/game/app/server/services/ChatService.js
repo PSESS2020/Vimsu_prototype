@@ -8,6 +8,7 @@ const db = require('../../../../config/db')
 
 /**
  * The Chat Service
+ * @module Chatservice
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ const db = require('../../../../config/db')
 module.exports = class Chatservice {
 
     /**
-     * @static creates a new one to one chat instance and saves it in the database
+     * creates a new one to one chat instance and saves it in the database
+     * @static @method module:Chatservice#newOnoToOneChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String} chatPartnerId chat partner ID
@@ -59,7 +61,8 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static creates a new group chat instance and saves it in the database
+     * creates a new group chat instance and saves it in the database
+     * @static @method module:Chatservice#newGroupChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String[]} memberIds array of group chat member ID
@@ -104,6 +107,7 @@ module.exports = class Chatservice {
 
     /**
      * @static checks if a one to one chat between 2 participants is already existed in the database
+     * @method module:Chatservice#existsOneToOneChat
      * 
      * @param {String} ownerId first participant ID
      * @param {String} chatPartnerId second participant ID

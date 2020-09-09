@@ -3,6 +3,7 @@ const db = require('../../../../config/db');
 
 /**
  * The Friend Request List Service
+ * @module FriendRequestListService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -11,13 +12,14 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Stores sent friend request in the database
+     * @method module:FriendRequestListService#storeSentFriendRequest
      * 
      * @param {String} ownParticipantId own participant ID, i.e. the one who sent the request
      * @param {String} receiverId participant ID who got the request
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if data stored successfully, otherwise false
+     * @return {boolean} true if data stored successfully, otherwise false
      */
     static storeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
@@ -35,13 +37,14 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Stores received friend request in the database
+     * @method module:FriendRequestListService#storeReceivedFriendRequest
      * 
      * @param {String} ownParticipantId own participant ID, i.e. the one who got the request
      * @param {String} senderId participant ID who sent the request
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if data stored successfully, otherwise false
+     * @return {boolean} true if data stored successfully, otherwise false
      */
     static storeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
@@ -59,13 +62,14 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Removes sent friend request from the database
+     * @method module:FriendRequestListService#removeSentFriendRequest
      * 
      * @param {String} ownParticipantId own participant ID, i.e. the one who sent the request
      * @param {String} receiverId participant ID who got the request
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if data removed successfully, otherwise false
+     * @return {boolean} true if data removed successfully, otherwise false
      */
     static removeSentFriendRequest(ownParticipantId, receiverId, conferenceId, vimsudb) {
         TypeChecker.isString(receiverId);
@@ -84,12 +88,13 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Removes all sent friend requests of a participant from the database
+     * @method module:FriendRequestListService#removeAllSentFriendRequests
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if data removed successfully, otherwise false
+     * @return {boolean} true if data removed successfully, otherwise false
      */
     static removeAllSentFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -106,13 +111,14 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Removes received friend request from the database
+     * @method module:FriendRequestListService#removeReceivedFriendRequest
      * 
      * @param {String} ownParticipantId own participant ID, i.e. the one who got the request
      * @param {String} senderId participant ID who sent the request
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if data removed successfully, otherwise false
+     * @return {boolean} true if data removed successfully, otherwise false
      */
     static removeReceivedFriendRequest(ownParticipantId, senderId, conferenceId, vimsudb) {
         TypeChecker.isString(senderId);
@@ -130,12 +136,13 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Removes all received friend requests of a participant from the database
+     * @method module:FriendRequestListService#removeAllReceivedFriendRequests
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance 
      * 
-     * @return true if data removed successfully, otherwise false
+     * @return {boolean} true if data removed successfully, otherwise false
      */
     static removeAllReceivedFriendRequests(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -152,12 +159,13 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Gets all received friend requests of a participant
+     * @method module:FriendRequestListService#getReceivedRequestList
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return received friend requests if participant is found, otherwise false
+     * @return {Array | boolean} received friend requests if participant is found, otherwise false
      */
     static getReceivedRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
@@ -180,12 +188,13 @@ module.exports = class FriendRequestListService {
 
     /**
      * @static Gets all sent friend requests of a participant
+     * @method module:FriendRequestListService#getSentRequestList
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return sent friend requests if participant is found, otherwise false
+     * @return {Array | boolean} sent friend requests if participant is found, otherwise false
      */
     static getSentRequestList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
