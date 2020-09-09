@@ -5,6 +5,7 @@ const db = require('../../../../config/db');
 
 /**
  * The Lecture Service
+ * @module LectureService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -13,6 +14,7 @@ module.exports = class LectureService {
 
     /**
      * @static Gets lecture video URL
+     * @method module:LectureService#getVideoUrl
      * 
      * @param {String} videoId video ID
      * @param {blobClient} blob blob instance
@@ -30,11 +32,12 @@ module.exports = class LectureService {
 
     /**
      * @static Creates a lecture instance for all accepted lectures stored in the database
+     * @method module:LectureService#createAllLectures
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return array of Lecture instance
+     * @return {Lecture[]} array of Lecture instance
      */
     static createAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -59,11 +62,12 @@ module.exports = class LectureService {
 
     /**
      * @static Gets all lectures from the database
+     * @method module:LectureService#getAllLectures
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return lectures array if lectures found, otherwise false
+     * @return {Lectures[] | boolean} lectures array if lectures found, otherwise false
      */
     static getAllLectures(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -83,11 +87,12 @@ module.exports = class LectureService {
 
     /**
      * @static @private gets all lectures with the orator personal data from the database
+     * @method module:LectureService#getAllLecturesWithOratorData
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return lectures array if lectures found, otherwise false
+     * @return {Lectures[] | boolean} lectures array if lectures found, otherwise false
      */
     static #getAllLecturesWithOratorData = function (conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
