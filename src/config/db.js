@@ -3,6 +3,7 @@ const TypeChecker = require('../game/app/client/shared/TypeChecker.js');
 
 /**
  * The Database
+ * @module db
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -11,7 +12,8 @@ module.exports = class db {
     #vimsudb;
 
     /**
-     * @constructor Creates an instance of db
+     * Creates an instance of db
+     * @constructor module:db
      */
     constructor() {
         if (!!db.instance) {
@@ -23,12 +25,12 @@ module.exports = class db {
 
     /**
      * Connects to the database
+     * @method module:db#connectDB
      */
     connectDB() {
         const connectionString = process.env.MONGODB_CONNECTION_STRING;
         if(!connectionString) {
-            console.log("Cannot connect to database. Please ask the owner of the database for the connection string. If you are the owner, " +
-                "please consult the readme on how to properly connect your database to VIMSU.");
+            console.log("Cannot connect to database. Did you define a connection string to your database in the .env file?");
             return;
         }
 
@@ -47,10 +49,11 @@ module.exports = class db {
 
     /**
      * Get document count in the collection
+     * @method module:db#getCollectionDocCount
      * 
      * @param {String} collectionName collection name
      * 
-     * @return document count
+     * @return {number} document count
      */
     getCollectionDocCount(collectionName) {
         TypeChecker.isString(collectionName);
@@ -66,6 +69,7 @@ module.exports = class db {
 
     /**
      * Stores a document into a collection
+     * @method module:db#insertOneToCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} object document to be stored
@@ -82,10 +86,11 @@ module.exports = class db {
 
     /**
      * Gets all documents in a collection
+     * @method module:db#findAllInCollection
      * 
      * @param {String} collectionName collection name
      * 
-     * @return documents
+     * @return {Object[]} documents
      */
     findAllInCollection(collectionName) {
         TypeChecker.isString(collectionName);
@@ -102,12 +107,13 @@ module.exports = class db {
 
     /**
      * Gets multiple documents in a collection
+     * @method module:db#findInCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
      * @param {Object} projection projection
      * 
-     * @return documents
+     * @return {Object[]} documents
      */
     findInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
@@ -124,12 +130,13 @@ module.exports = class db {
 
     /**
      * Gets a document in a collection
+     * @method module:db#findOneInCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
      * @param {Object} projection projection
      * 
-     * @return document
+     * @return {Object} document
      */
     findOneInCollection(collectionName, query, projection) {
         TypeChecker.isString(collectionName);
@@ -146,13 +153,14 @@ module.exports = class db {
 
     /**
      * Joins to collection and returns the results
+     * @method module:db#joinCollection
      * 
      * @param {String} localCollName local collection name
      * @param {String} foreignCollName foreign collection name
      * @param {String} localField local field
      * @param {String} foreignField foreign field
      * 
-     * @return joined documents
+     * @return {Object} joined documents
      */
     joinCollection(localCollName, foreignCollName, localField, foreignField) {
         TypeChecker.isString(localCollName);
@@ -182,6 +190,7 @@ module.exports = class db {
 
     /**
      * Updates a document in a collection
+     * @method module:db#updateOneToCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
@@ -199,12 +208,13 @@ module.exports = class db {
 
     /**
      * Inserts a query to an array in a collection
+     * @method module:db#insertToArrayInCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
      * @param {Objcet} queryToPush query to be inserted
      * 
-     * @return true if inserted successfully, otherwise false
+     * @return {boolean} true if inserted successfully, otherwise false
      */
     insertToArrayInCollection(collectionName, query, queryToPush) {
         TypeChecker.isString(collectionName);
@@ -225,12 +235,13 @@ module.exports = class db {
 
     /**
      * Deletes a query from an array in a collection
+     * @method module:db#deleteFromArrayInCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
      * @param {Object} queryToPull query to be deleted
      * 
-     * @return true if deleted successfully, otherwise false
+     * @return {boolean} true if deleted successfully, otherwise false
      */
     deleteFromArrayInCollection(collectionName, query, queryToPull) {
         TypeChecker.isString(collectionName);
@@ -251,11 +262,12 @@ module.exports = class db {
 
     /**
      * Deletes a document from a collection
+     * @method module:db#deleteOneFromCollection
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
      * 
-     * @return true if deleted successfully, otherwise false
+     * @return {boolean} true if deleted successfully, otherwise false
      */
     deleteOneFromCollection(collectionName, query) {
         TypeChecker.isString(collectionName);
@@ -277,10 +289,11 @@ module.exports = class db {
 
     /**
      * Deletes all documents from a collection
+     * @method module:db#deleteAllFromCollection
      * 
      * @param {String} collectionName collection name
      * 
-     * @return true if deleted successfully, otherwise false
+     * @return {boolean} true if deleted successfully, otherwise false
      */
     deleteAllFromCollection(collectionName) {
         TypeChecker.isString(collectionName);

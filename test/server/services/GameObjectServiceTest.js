@@ -1,7 +1,6 @@
 const { expect } = require('chai');
 const GameObjectService = require('../../../src/game/app/server/services/GameObjectService');
 const GameObject = require('../../../src/game/app/server/models/GameObject');
-const Settings = require('../../../src/game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 
 var gameObjectService;
@@ -16,7 +15,7 @@ var clickable;
 describe('GameObjectService test', function () {
 
     //test data
-    beforeEach( function() {
+    beforeEach(function () {
         gameObjectService = new GameObjectService();
         roomId = TestUtil.randomIntWithMin(0);
         width = TestUtil.randomIntWithMin(1);
@@ -27,7 +26,7 @@ describe('GameObjectService test', function () {
         clickable = TestUtil.randomBool();
     });
 
-    it('test create default Tile', function() {
+    it('test create default Tile', function () {
         let defaultTile = gameObjectService.createDefaultTile(roomId, cordX, cordY, solidity, clickable);
 
         expect(defaultTile).to.be.instanceOf(GameObject);
@@ -39,7 +38,7 @@ describe('GameObjectService test', function () {
         expect(defaultTile.getId()).to.be.a('number');
     });
 
-    it('test create default left Tile', function() {
+    it('test create default left Tile', function () {
         let defaultLeftTile = gameObjectService.createDefaultLeftTile(roomId, cordX, cordY, solidity, clickable);
 
         expect(defaultLeftTile).to.be.instanceOf(GameObject);
@@ -51,7 +50,7 @@ describe('GameObjectService test', function () {
         expect(defaultLeftTile.getId()).to.be.a('number');
     });
 
-    it('test create default right Tile', function() {
+    it('test create default right Tile', function () {
         let defaultRightTile = gameObjectService.createDefaultRightTile(roomId, cordX, cordY, solidity, clickable);
 
         expect(defaultRightTile).to.be.instanceOf(GameObject);
@@ -63,7 +62,7 @@ describe('GameObjectService test', function () {
         expect(defaultRightTile.getId()).to.be.a('number');
     });
 
-    it('test create default left Wall', function() {
+    it('test create default left Wall', function () {
         let defaultLeftWall = gameObjectService.createDefaultLeftWall(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(defaultLeftWall).to.be.instanceOf(GameObject);
@@ -77,7 +76,7 @@ describe('GameObjectService test', function () {
         expect(defaultLeftWall.getId()).to.be.a('number');
     });
 
-    it('test create default right Wall', function() {
+    it('test create default right Wall', function () {
         let defaultRightWall = gameObjectService.createDefaultRightWall(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(defaultRightWall).to.be.instanceOf(GameObject);
@@ -91,7 +90,7 @@ describe('GameObjectService test', function () {
         expect(defaultRightWall.getId()).to.be.a('number');
     });
 
-    it('test create Table', function() {
+    it('test create Table', function () {
         let table = gameObjectService.createTable(roomId, cordX, cordY, solidity, clickable);
 
         expect(table).to.be.instanceOf(GameObject);
@@ -103,7 +102,7 @@ describe('GameObjectService test', function () {
         expect(table.getId()).to.be.a('number');
     });
 
-    it('test create Plant', function() {
+    it('test create Plant', function () {
         let plant = gameObjectService.createPlant(roomId, cordX, cordY, solidity, clickable);
 
         expect(plant).to.be.instanceOf(GameObject);
@@ -115,7 +114,7 @@ describe('GameObjectService test', function () {
         expect(plant.getId()).to.be.a('number');
     });
 
-    it('test create left Sofa', function() {
+    it('test create left Sofa', function () {
         let leftSofa = gameObjectService.createLeftSofa(roomId, cordX, cordY, solidity, clickable);
 
         expect(leftSofa).to.be.instanceOf(GameObject);
@@ -127,7 +126,7 @@ describe('GameObjectService test', function () {
         expect(leftSofa.getId()).to.be.a('number');
     });
 
-    it('test create right Sofa', function() {
+    it('test create right Sofa', function () {
         let rightSofa = gameObjectService.createRightSofa(roomId, cordX, cordY, solidity, clickable);
 
         expect(rightSofa).to.be.instanceOf(GameObject);
@@ -139,7 +138,7 @@ describe('GameObjectService test', function () {
         expect(rightSofa.getId()).to.be.a('number');
     });
 
-    it('test create left Window Default', function() {
+    it('test create left Window Default', function () {
         let leftWindowDefault0 = gameObjectService.createLeftWindowDefault(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(leftWindowDefault0).to.be.instanceOf(GameObject);
@@ -153,7 +152,7 @@ describe('GameObjectService test', function () {
         expect(leftWindowDefault0.getId()).to.be.a('number');
     });
 
-    it('test create right Window Default', function() {
+    it('test create right Window Default', function () {
         let rightWindowDefault0 = gameObjectService.createRightWindowDefault(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(rightWindowDefault0).to.be.instanceOf(GameObject);
@@ -167,7 +166,7 @@ describe('GameObjectService test', function () {
         expect(rightWindowDefault0.getId()).to.be.a('number');
     });
 
-    it('test create right Wall Frame', function() {
+    it('test create right Wall Frame', function () {
         //test with length > 1 and width < 1
         width = TestUtil.randomIntWithMaxAndMin(1, 0);
         length = TestUtil.randomIntWithMaxAndMin(5, 2);
@@ -214,7 +213,7 @@ describe('GameObjectService test', function () {
         expect(rightWallFrame.getId()).to.be.a('number');
     });
 
-    it('test create left Schedule', function() {
+    it('test create left Schedule', function () {
         //test with length > 1 and width < 1
         width = TestUtil.randomIntWithMaxAndMin(1, 0);
         length = TestUtil.randomIntWithMaxAndMin(5, 2);
@@ -259,9 +258,9 @@ describe('GameObjectService test', function () {
         expect(leftSchedule.getSolid()).to.equal(solidity);
         expect(leftSchedule.getClickable()).to.equal(clickable);
         expect(leftSchedule.getId()).to.be.a('number');
-    });  
+    });
 
-    it('test create left ConferenceLogo', function() {
+    it('test create left ConferenceLogo', function () {
         //test with length > 1 and width < 1
         width = TestUtil.randomIntWithMaxAndMin(1, 0);
         length = TestUtil.randomIntWithMaxAndMin(5, 2);
@@ -306,9 +305,9 @@ describe('GameObjectService test', function () {
         expect(leftConferenceLogo.getSolid()).to.equal(solidity);
         expect(leftConferenceLogo.getClickable()).to.equal(clickable);
         expect(leftConferenceLogo.getId()).to.be.a('number');
-    });  
+    });
 
-    it('test create leftChair', function() {
+    it('test create leftChair', function () {
         let leftChair = gameObjectService.createLeftChair(roomId, cordX, cordY, solidity, clickable);
 
         expect(leftChair).to.be.instanceOf(GameObject);
@@ -320,7 +319,7 @@ describe('GameObjectService test', function () {
         expect(leftChair.getId()).to.be.a('number');
     });
 
-    it('test create leftChairBack', function() {
+    it('test create leftChairBack', function () {
         let leftChairBack = gameObjectService.createLeftChairBack(roomId, cordX, cordY, solidity, clickable);
 
         expect(leftChairBack).to.be.instanceOf(GameObject);
@@ -332,7 +331,7 @@ describe('GameObjectService test', function () {
         expect(leftChairBack.getId()).to.be.a('number');
     });
 
-    it('test create rightChair', function() {
+    it('test create rightChair', function () {
         let rightChair = gameObjectService.createRightChair(roomId, cordX, cordY, solidity, clickable);
 
         expect(rightChair).to.be.instanceOf(GameObject);
@@ -344,7 +343,7 @@ describe('GameObjectService test', function () {
         expect(rightChair.getId()).to.be.a('number');
     });
 
-    it('test create rightChairBack', function() {
+    it('test create rightChairBack', function () {
         let rightChairBack = gameObjectService.createRightChairBack(roomId, cordX, cordY, solidity, clickable);
 
         expect(rightChairBack).to.be.instanceOf(GameObject);
@@ -356,7 +355,7 @@ describe('GameObjectService test', function () {
         expect(rightChairBack.getId()).to.be.a('number');
     });
 
-    it('test create smallDinnerTable', function() {
+    it('test create smallDinnerTable', function () {
         let smallDinnerTable = gameObjectService.createSmallDinnerTable(roomId, cordX, cordY, solidity, clickable);
 
         expect(smallDinnerTable).to.be.instanceOf(GameObject);
@@ -368,7 +367,7 @@ describe('GameObjectService test', function () {
         expect(smallDinnerTable.getId()).to.be.a('number');
     });
 
-    it('test create rightDinnerTable', function() {
+    it('test create rightDinnerTable', function () {
         let rightDinnerTable = gameObjectService.createRightDinnerTable(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(rightDinnerTable).to.be.instanceOf(GameObject);
@@ -382,7 +381,7 @@ describe('GameObjectService test', function () {
         expect(rightDinnerTable.getId()).to.be.a('number');
     });
 
-    it('test create canteenCounter', function() {
+    it('test create canteenCounter', function () {
         let canteenCounter = gameObjectService.createCanteenCounter(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(canteenCounter).to.be.instanceOf(GameObject);
@@ -396,7 +395,7 @@ describe('GameObjectService test', function () {
         expect(canteenCounter.getId()).to.be.a('number');
     });
 
-    it('test create drinkingMachine', function() {
+    it('test create drinkingMachine', function () {
         let drinkingMachine = gameObjectService.createDrinkingMachine(roomId, width, length, cordX, cordY, solidity, clickable);
 
         expect(drinkingMachine).to.be.instanceOf(GameObject);

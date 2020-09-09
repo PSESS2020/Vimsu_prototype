@@ -3,6 +3,7 @@ const Message = require('./Message.js');
 
 /**
  * The Chat Model
+ * @module Chat
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -14,10 +15,11 @@ module.exports = class Chat {
     #maxNumMessages;
 
     /**
-     * @constructor Creates a Chat instance
+     * Creates a Chat instance
+     * @constructor module:Chat
      * 
      * @param {String} chatId chat ID
-     * @param {?String[]} participantList list of chat participants
+     * @param {String[]} participantList list of chat participants
      * @param {Message[]} messageList list of messages
      * @param {number} maxNumMessages max number of messages
      */
@@ -46,8 +48,9 @@ module.exports = class Chat {
 
     /**
      * Gets chat ID
+     * @method module:Chat#getId
      * 
-     * @return chatId
+     * @return {String} chatId
      */
     getId() {
         return this.#chatId;
@@ -55,8 +58,9 @@ module.exports = class Chat {
 
     /**
      * Gets max number of messages
+     * @method module:Chat#getMaxNumMessages
      * 
-     * @return maxNumMessages
+     * @return {number} maxNumMessages
      */
     getMaxNumMessages() {
         return this.#maxNumMessages;
@@ -64,8 +68,9 @@ module.exports = class Chat {
 
     /**
      * Gets number of participants
+     * @method module:Chat#getNumParticipants
      * 
-     * @return number of participants
+     * @return {number} number of participants
      */
     getNumParticipants() {
         return this.#participantList.length;
@@ -73,8 +78,9 @@ module.exports = class Chat {
 
     /**
      * Gets list of messages
+     * @method module:Chat#getMessageList
      * 
-     * @return messageList
+     * @return {Message[]} messageList
      */
     getMessageList() {
         return this.#messageList;
@@ -82,8 +88,9 @@ module.exports = class Chat {
 
     /**
      * Gets list of chat participants
+     * @method module:Chat#getParticipantList
      * 
-     * @return participantList
+     * @return {String[]} participantList
      */
     getParticipantList() {
         return this.#participantList;
@@ -91,6 +98,7 @@ module.exports = class Chat {
 
     /**
      * Sets max number of messages
+     * @method module:Chat#setMaxNumMessages
      * 
      * @param {number} maxNumMsg max number of messages
      */
@@ -100,6 +108,8 @@ module.exports = class Chat {
     }
 
     /**
+     * @method module:Chat#addMessage
+     * 
      * @abstract Add a message to this chat
      */
     addMessage() {
@@ -108,6 +118,7 @@ module.exports = class Chat {
 
     /**
      * Remove a message from this chat
+     * @method module:Chat#removeMessage
      * 
      * @param {String} msgId message ID
      */
@@ -124,6 +135,7 @@ module.exports = class Chat {
 
     /**
      * Remove a participant from this chat
+     * @method module:Chat#removeParticipant
      * 
      * @param {String} participantId participant ID
      */

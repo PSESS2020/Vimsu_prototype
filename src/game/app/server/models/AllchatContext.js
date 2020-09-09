@@ -5,6 +5,7 @@ const Room = require('./Room.js');
 
 /**
  * The Allchat Context Model
+ * @module AllchatContext
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ module.exports = class AllchatContext extends CommandContext {
     #contextObject
 
     /**
-     * @constructor Creates a allchat context instance
+     * Creates a allchat context instance
+     * @constructor module:AllchatContext
      * 
      * @param {ServerController} serverController server controller instance
      * @param {Room} room room instance
@@ -32,8 +34,9 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Gets room messages
+     * @method module:AllchatContext#getMessages
      * 
-     * @return messages
+     * @return {Object[]} messages
      */
     getMessages() {
         return this.#contextObject.getMessages();
@@ -41,8 +44,9 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Gets room title
+     * @method module:AllchatContext#getTitle
      * 
-     * @return title
+     * @return {TypeOfRoom} title
      */
     getTitle() {
         return this.#contextObject.getTypeOfRoom();
@@ -50,8 +54,9 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Gets help messages
+     * @method module:AllchatContext#getHelpMessage
      * 
-     * @return help messages
+     * @return {Object} help messages
      */
     getHelpMessage() {
         return Messages.HELPALLCHAT;
@@ -59,6 +64,7 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Updates messages in allchat
+     * @method module:AllchatContext#updateMessages
      */
     updateMessages() {
         this.#serverController.emitEventIn(this.#contextObject.getRoomId(), 'initAllchat', this.getMessages());
@@ -66,6 +72,7 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Removes participant from conference
+     * @method module:AllchatContext#removeUser
      * 
      * @param {String} userToRemove username of the user to remove
      */
@@ -104,6 +111,7 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Not closing anything
+     * @method module:AllchatContext#close
      */
     close() {
         return;
@@ -111,6 +119,7 @@ module.exports = class AllchatContext extends CommandContext {
 
     /**
      * Mutes participant from allchat
+     * @method module:AllchatContext#muteUser
      * 
      * @param {String} userToMute username of the user to mute
      */
@@ -129,7 +138,8 @@ module.exports = class AllchatContext extends CommandContext {
     };
 
     /**
-     * Unmutes participant from allchat 
+     * Unmutes participant from allchat
+     * @method module:AllchatContext#unmuteUser
      * 
      * @param {String} userToUnmute username of the user to unmute
      */

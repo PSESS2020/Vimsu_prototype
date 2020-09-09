@@ -8,6 +8,7 @@ const { getVideoDurationInSeconds } = require('get-video-duration');
 
 /**
  * The Slot Service
+ * @module SlotService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,12 +16,13 @@ const { getVideoDurationInSeconds } = require('get-video-duration');
 module.exports = class SlotService {
 
     /**
-     * @static stores video in the blob storage
+     * stores video in the blob storage
+     * @static @method module:SlotService#storeVideo
      * 
      * @param {Object} video video data
      * @param {blobClient} blob blob instance
      * 
-     * @return videoData if successful, otherwise false
+     * @return {Object|boolean} videoData if successful, otherwise false
      */
     static storeVideo(video, blob) {
         TypeChecker.isInstanceOf(blob, blobClient);
@@ -53,7 +55,18 @@ module.exports = class SlotService {
     }
 
     /**
-     * @static creates lecture slot and saves it in the database
+     * creates video container in the blob storage
+     * @static @method module:SlotService#createVideoContainer
+     * 
+     * @param {blob} blob blob instance
+     */
+    static createVideoContainer(blob) {
+        return blob.createContainer("lectures");
+    }
+
+    /**
+     * creates lecture slot and saves it in the database
+     * @static @method module:SlotService#createSlot
      * 
      * @param {String} videoId video ID
      * @param {number} duration video duration
@@ -99,7 +112,8 @@ module.exports = class SlotService {
     }
 
     /**
-     * @static deletes video from the blob storage
+     * deletes video from the blob storage
+     * @static @method module:SlotService#deleteVideo
      * 
      * @param {String} videoId video ID
      * @param {blobClient} blob blob instance
@@ -112,7 +126,8 @@ module.exports = class SlotService {
     }
 
     /**
-     * @static deletes all lecture slots from the database
+     * deletes all lecture slots from the database
+     * @static @method module:SlotService#deleteAllSlots
      * 
      * @param {db} vimsudb db instance
      */
@@ -128,7 +143,8 @@ module.exports = class SlotService {
     }
 
     /**
-     * @static deletes a slot from the database
+     * deletes a slot from the database
+     * @static @method module:SlotService#deleteSlot
      * 
      * @param {String} lectureId lecture ID
      * @param {db} vimsudb db instance

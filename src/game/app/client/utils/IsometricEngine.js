@@ -15,7 +15,7 @@ class IsometricEngine {
     #loader;
 
     /**
-     * @constructor Creates an instance of IsometricEngine
+     * Creates an instance of IsometricEngine
      */
     constructor() {
         if (!!IsometricEngine.instance) {
@@ -217,11 +217,15 @@ class IsometricEngine {
         var rect = canvas.getBoundingClientRect();
         var scaleX = canvas.width / rect.width;
         var scaleY = canvas.height / rect.height;
-
+        
+        //gets the scrolling offset which indicates how much distance was scrolled in down and right direction of viewpage.
+        var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        var scrollLeft = window.pageXOffset || (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+        
         //Apply scaling factor to cursor position
         return {
-            x: (e.pageX - rect.left) * scaleX,
-            y: (e.pageY - rect.top) * scaleY,
+            x: (e.pageX - rect.left - scrollLeft) * scaleX,
+            y: (e.pageY - rect.top - scrollTop) * scaleY,
 
         }
     }

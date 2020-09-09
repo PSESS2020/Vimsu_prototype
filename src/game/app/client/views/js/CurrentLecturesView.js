@@ -9,7 +9,7 @@ class CurrentLecturesView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of CurrentLecturesView
+     * Creates an instance of CurrentLecturesView
      * 
      * @param {EventManager} eventManager event manager
      */

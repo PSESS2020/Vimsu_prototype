@@ -13,7 +13,7 @@ class GameObjectView extends Views {
     #screenPosition;
 
     /**
-     * @constructor Creates an instance of GameObjectView
+     * Creates an instance of GameObjectView
      * 
      * @param {Image} objectImage game object image
      * @param {PositionClient} gridPosition game object position

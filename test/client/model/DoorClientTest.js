@@ -11,10 +11,10 @@ var name;
 var position;
 var targetRoomID;
 
-describe('DoorClient test', function() {
+describe('DoorClient test', function () {
 
     //test data
-    beforeEach( function () {
+    beforeEach(function () {
         id = TestUtil.randomInt();
         typeOfDoor = TypeOfDoor.LEFT_DOOR;
         name = 'door';
@@ -22,7 +22,7 @@ describe('DoorClient test', function() {
         targetRoomID = TestUtil.randomInt();
     });
 
-    it('test constructor and getters', function() {
+    it('test constructor and getters', function () {
         let door = new DoorClient(id, typeOfDoor, name, position, targetRoomID);
 
         assert.equal(id, door.getId());
@@ -32,16 +32,16 @@ describe('DoorClient test', function() {
         assert.equal(targetRoomID, door.getTargetRoomId());
     });
 
-    it('test constructor with undefined targetRoomID', function() {
+    it('test constructor with undefined targetRoomID', function () {
         let door = new DoorClient(id, typeOfDoor, name, position, undefined);
         assert.equal(door.getTargetRoomId(), undefined);
     });
 
-    it('test invalid input', function() {
+    it('test invalid input', function () {
         expect(() => new DoorClient('id', typeOfDoor, name, mapPosition, argetRoomID));
         expect(() => new DoorClient(id, 'typeOfDoor', name, mapPosition, targetRoomID));
         expect(() => new DoorClient(id, typeOfDoor, 42, mapPosition, targetRoomID));
         expect(() => new DoorClient(id, typeOfDoor, name, 'mapPosition', targetRoomID));
-        expect(() => new DoorClient(id, typeOfDoor, name, mapPosition,'targetRoomID'));
+        expect(() => new DoorClient(id, typeOfDoor, name, mapPosition, 'targetRoomID'));
     });
 });

@@ -3,6 +3,7 @@ const BusinessCard = require("./BusinessCard.js");
 
 /**
  * The Friend List Model
+ * @module FriendList
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -12,9 +13,10 @@ module.exports = class FriendList {
     #memberList;
 
     /**
-     * @constructor Creates FriendList Instance
+     * Creates FriendList Instance
+     * @constructor module:FriendList
      * 
-     * @param {BusinessCard[]} memberList 
+     * @param {BusinessCard[]} memberList list of member businesscards
      */
     constructor(memberList) {
         TypeChecker.isInstanceOf(memberList, Array);
@@ -27,8 +29,9 @@ module.exports = class FriendList {
 
     /**
      * Adds BusinessCard of other ppant to FriendList
+     * @method module:FriendList#addBusinessCard
      * 
-     * @param {BusinessCard} businessCardOfOther 
+     * @param {BusinessCard} businessCardOfOther businessCard of other ppant
      */
     addBusinessCard(businessCardOfOther) {
         TypeChecker.isInstanceOf(businessCardOfOther, BusinessCard);
@@ -38,8 +41,9 @@ module.exports = class FriendList {
 
     /**
      * Removes BusinessCard of ppant with ppantID from FriendList, if the BusinessCard is part of it
+     * @method module:FriendList#removeBusinessCard
      * 
-     * @param {String} ppantID 
+     * @param {String} ppantID ppantID 
      */
     removeBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
@@ -53,10 +57,11 @@ module.exports = class FriendList {
 
     /**
      * Checks if ppant with ppantID is part of the friendList
+     * @method module:FriendList#includes
      * 
-     * @param {String} ppantID
+     * @param {String} ppantID ppantID
      * 
-     * @return true if found, otherwise false
+     * @return {boolean} true if found, otherwise false
      */
     includes(ppantID) {
         TypeChecker.isString(ppantID);
@@ -71,10 +76,11 @@ module.exports = class FriendList {
 
     /**
      * Gives BusinessCard from ppant with ppantID, if he is part of the friendList
+     * @method module:FriendList#getBusinessCard
      * 
      * @param {String} ppantID 
      * 
-     * @return business card
+     * @return {BusinessCard} business card
      */
     getBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
@@ -89,8 +95,9 @@ module.exports = class FriendList {
 
     /**
      * Gets all business cards
+     * @method module:FriendList#getAllBusinessCards
      * 
-     * @return Array of business cards
+     * @return {BusinessCard[]} Array of business cards
      */
     getAllBusinessCards() {
         return this.#memberList;

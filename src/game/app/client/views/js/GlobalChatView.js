@@ -7,7 +7,7 @@
 class GlobalChatView extends WindowView {
 
     /**
-     * @constructor Creates an instance of GlobalChatView
+     * Creates an instance of GlobalChatView
      */
     constructor() {
         super();

@@ -1,4 +1,3 @@
-const AccountService = require('../../../src/website/services/AccountService');
 const ParticipantService = require('../../../src/game/app/server/services/ParticipantService');
 const TaskService = require('../../../src/game/app/server/services/TaskService.js');
 const ServiceTestData = require('./TestData/ServiceTestData.js');
@@ -6,25 +5,11 @@ const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
-const { assert } = require('chai');
 const sinon = require('sinon');
 
 var conferenceId = ServiceTestData.conferenceId_1;
 
 var account;
-var account1 = {
-    username: "maxmustertaler",
-    title: "Prof.",
-    surname: "Mustermann",
-    forename: "Max",
-    job: "Professor",
-    company: "KIT",
-    email: "maxmustertaler@kit.edu",
-    password: "maxpassword1234"
-}
-var suffix = "_test"
-var participant;
-
 
 const db = require('../../../src/config/db');
 const Position = require('../../../src/game/app/server/models/Position');
@@ -61,16 +46,14 @@ function generateAchievements() {
 
 
 var participantCollectionName = "participants_" + conferenceId;
-var chatCollectionName = "chats_" + conferenceId;
 var account = new Account("accountId", "asdf", "prof", "", "", "", "", "");
-var participant = new Participant("asd", account.getAccountID(), new BusinessCard("", "", "", "", "", "", "", ""), new Position(0, 0, 0), Direction.UPRIGHT, new FriendList([]), new FriendList([]), new FriendList([]), [], [], false, 0, []);
 
 
 const dbStub = sinon.createStubInstance(db);
 dbStub.findOneInCollection = (collectionName, query, projection) => {
 
     if (collectionName === participantCollectionName && (query.accountId === "accountId" || query.participantId === "asdf12345")) {
-        return Promise.resolve({ 
+        return Promise.resolve({
             participantId: "asdf12345",
             chatIDList: [],
             friendIds: [],
@@ -89,7 +72,7 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
             taskCount: generateTasks(),
             isModerator: false,
             points: 10
-         });
+        });
     } else if (collectionName === "accounts" && query.accountId === "accountId") {
         return Promise.resolve({
             username: account.getUsername(),
@@ -113,7 +96,7 @@ dbStub.updateOneToCollection = (collectionName, query, update) => {
 dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
     if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
         return Promise.resolve(true);
-    } else 
+    } else
         return Promise.resolve(false);
 };
 
@@ -159,7 +142,7 @@ describe('Participant Service Test', () => {
 
     it('test getBusinessCard', async () => {
         var businessCard = await ParticipantService.getBusinessCard("asdf12345", conferenceId, dbStub);
-        expect(businessCard).to.eql(new BusinessCard("asdf12345", "asdf", "prof", "", "", "", "", ""));     
+        expect(businessCard).to.eql(new BusinessCard("asdf12345", "asdf", "prof", "", "", "", "", ""));
     })
 
     it('test updateParticipantPosition', async () => {
@@ -168,8 +151,8 @@ describe('Participant Service Test', () => {
     })
 
     it('test updateParticipantDirection', async () => {
-       var updatedParticipant = await ParticipantService.updateParticipantDirection("asdf12345", conferenceId, Direction.DOWNLEFT, dbStub);
-       expect(updatedParticipant).to.eql(true);
+        var updatedParticipant = await ParticipantService.updateParticipantDirection("asdf12345", conferenceId, Direction.DOWNLEFT, dbStub);
+        expect(updatedParticipant).to.eql(true);
     })
 
     it('test getPoints', async () => {
@@ -208,7 +191,7 @@ describe('Participant Service Test', () => {
     it('test getTaskCount', async () => {
         taskCount = await ParticipantService.getTaskCount("asdf12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
         expect(taskCount).to.eql(0);
-        invalidIdTaskCount =  await ParticipantService.getTaskCount("12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
+        invalidIdTaskCount = await ParticipantService.getTaskCount("12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
         expect(invalidIdTaskCount).to.eql(false);
     })
 

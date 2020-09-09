@@ -7,7 +7,7 @@
 class SpriteAnimation {
 
     /**
-     * @constructor Creates an instance of Sprite Animation
+     * Creates an instance of Sprite Animation
      * 
      * @param {SpriteSheet} spritesheetBody sprite sheet avatar body
      * @param {SpriteSheet} spritesheetTopCloth sprite sheet avatar top cloth

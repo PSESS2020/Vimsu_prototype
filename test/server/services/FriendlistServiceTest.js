@@ -2,82 +2,71 @@ const chai = require("chai");
 const expect = chai.expect;
 const sinon = require('sinon');
 const FriendListService = require('../../../src/game/app/server/services/FriendListService');
-const ChatService = require('../../../src/game/app/server/services/ChatService');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
-const ServiceTestData = require('./TestData/ServiceTestData.js');                       
-
+const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../src/config/db');
 const FriendList = require("../../../src/game/app/server/models/FriendList");
-const database = new db();
-//var dbStub = sinon.stub(db, 'getFriendList');
-//dbStub.resolves({response: 'ok'});1
 var conferenceId = ServiceTestData.conferenceId_1;
 var friendListIds;
 var usedCollectionName = "participants_" + conferenceId;
 var friendListOwner = "42";
 var newFriend = "37";
-var friendListOwnerAccountId = "69";
 
 var participants = {
-    "123": {participantId: "123", accountId: "accountID123"},
-    "456": {participantId: "456", accountId: "accountID456"},
-    "678": {participantId: "678", accountId: "accountID678"}
+    "123": { participantId: "123", accountId: "accountID123" },
+    "456": { participantId: "456", accountId: "accountID456" },
+    "678": { participantId: "678", accountId: "accountID678" }
 }
 
-var accounts = { 
+var accounts = {
     accountID123: {
-    username: "maxmust",
-    title: "Prof.",
-    surname: "Mustermann",
-    forename: "Max",
-    job: "Professor",
-    company: "KIT",
-    email: "maxmustermann@kit.edu",
-    password: "maxpassword"
-},
+        username: "maxmust",
+        title: "Prof.",
+        surname: "Mustermann",
+        forename: "Max",
+        job: "Professor",
+        company: "KIT",
+        email: "maxmustermann@kit.edu",
+        password: "maxpassword"
+    },
 
     accountID456: {
-    username: "alice",
-    title: "Prof.",
-    surname: "Alice",
-    forename: "Alice",
-    job: "Professor",
-    company: "KIT",
-    email: "alice@kit.edu",
-    password: "alice"
-},
+        username: "alice",
+        title: "Prof.",
+        surname: "Alice",
+        forename: "Alice",
+        job: "Professor",
+        company: "KIT",
+        email: "alice@kit.edu",
+        password: "alice"
+    },
 
     accountID678: {
-    username: "bob",
-    title: "Prof.",
-    surname: "Bob",
-    forename: "Bob",
-    job: "Professor",
-    company: "KIT",
-    email: "bob@kit.edu",
-    password: "bob"
+        username: "bob",
+        title: "Prof.",
+        surname: "Bob",
+        forename: "Bob",
+        job: "Professor",
+        company: "KIT",
+        email: "bob@kit.edu",
+        password: "bob"
     }
 }
-
-/*var findOneInCollectionGetFriendList =  {
-    findOneInCollection: (collectionName, query, projection) => {
-        return {friendIds: ["123", "456", "678", "9"]};
-}};*/
 
 const dbStub = sinon.createStubInstance(db);
 dbStub.findOneInCollection = (collectionName, query, projection) => {
     if (collectionName === usedCollectionName && query.participantId === friendListOwner) {
 
         //Promise needed for .then{} block in Service
-        return Promise.resolve({friendIds: ["123", "456", "678"]});
+        return Promise.resolve({ friendIds: ["123", "456", "678"] });
     } else if (collectionName.startsWith("accounts")) {
 
         return Promise.resolve(accounts[query.accountId]);
     } else if (projection === "") {
 
         return Promise.resolve(participants[query.participantId]);
-    } else  return Promise.resolve(false);
+    } else return Promise.resolve(false);
 };
 
 dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
@@ -85,7 +74,7 @@ dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
         friendListIds.push(queryToPush.friendIds);
 
         return Promise.resolve(true);
-    } else 
+    } else
         return Promise.resolve(false);
 };
 
@@ -93,16 +82,16 @@ dbStub.deleteFromArrayInCollection = (collectionName, query, queryToPull) => {
     let result = false;
 
     if (collectionName === usedCollectionName && query.participantId === friendListOwner) {
-        if (queryToPull.friendIds instanceof Object && 
-            queryToPull.friendIds.hasOwnProperty("$exists") && 
+        if (queryToPull.friendIds instanceof Object &&
+            queryToPull.friendIds.hasOwnProperty("$exists") &&
             queryToPull.friendIds["$exists"] === true) {
 
             friendListIds = [];
 
             result = true;
         } else {
-        
-            let idx = friendListIds.findIndex( x => x === queryToPull.friendIds);
+
+            let idx = friendListIds.findIndex(x => x === queryToPull.friendIds);
 
             //-1 indicates that no index was found.
             if (idx !== -1) {
@@ -116,19 +105,19 @@ dbStub.deleteFromArrayInCollection = (collectionName, query, queryToPull) => {
 };
 
 describe("FriendListService Test", () => {
-    beforeEach( () => {
+    beforeEach(() => {
         friendListIds = ["456", "678"];
     });
 
     it('Test load FriendList', async () => {
         var friendList = await FriendListService.loadFriendList(friendListOwner, conferenceId, dbStub);
         expect(friendList).to.be.instanceOf(FriendList);
-        
+
         var businessCards = friendList.getAllBusinessCards();
         var businessCardIds = [];
-        
+
         expect(businessCards).to.be.an('array').and.to.have.lengthOf(3);
-        
+
         businessCards.forEach(card => {
             businessCardIds.push(card.getParticipantId());
         });
@@ -148,7 +137,7 @@ describe("FriendListService Test", () => {
         expect(friendListIds).to.have.members(["456", "678", newFriend]).and.to.have.lengthOf(3);
     });
 
-    it('Test store Friend with invalid conferenceId', async() => {
+    it('Test store Friend with invalid conferenceId', async () => {
         var result = await FriendListService.storeFriend(friendListOwner, newFriend, '0', dbStub);
 
         expect(result).to.be.a('boolean').and.to.be.false;

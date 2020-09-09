@@ -40,7 +40,7 @@ class GameView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of GameView
+     * Creates an instance of GameView
      */
     constructor() {
         if (!!GameView.instance) {
@@ -557,9 +557,10 @@ class GameView {
      * Draws schedule window
      * 
      * @param {Object[]} lectures all lectures
+     * @param {number} timeOffset offset if client has different local time than the server
      */
-    initCurrentSchedule(lectures) {
-        this.#scheduleListView.draw(lectures);
+    initCurrentSchedule(lectures, timeOffset) {
+        this.#scheduleListView.draw(lectures, timeOffset);
     }
 
     /**

@@ -2,6 +2,7 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
 
 /**
  * The Account Model
+ * @module Account
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -18,7 +19,8 @@ module.exports = class Account {
     #email;
 
     /**
-     * @constructor Creates an instance of Account class
+     * Creates an instance of Account class
+     * @constructor module:Account
      * 
      * @param {String} accountID account ID
      * @param {String} username account username
@@ -51,8 +53,9 @@ module.exports = class Account {
 
     /**
      * Gets account ID
+     * @method module:Account#getAccountID
      * 
-     * @return accountID
+     * @return {String} accountID
      */
     getAccountID() {
         return this.#accountID;
@@ -60,8 +63,9 @@ module.exports = class Account {
 
     /**
      * Gets account username
+     * @method module:Account#getUsername
      * 
-     * @return username
+     * @return {String} username
      */
     getUsername() {
         return this.#username;
@@ -69,8 +73,9 @@ module.exports = class Account {
 
     /**
      * Gets user's title
+     * @method module:Account#getTitle
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -78,8 +83,9 @@ module.exports = class Account {
 
     /**
      * Gets user's surname
+     * @method module:Account#getSurname
      * 
-     * @return surname
+     * @return {String} surname
      */
     getSurname() {
         return this.#surname;
@@ -87,8 +93,9 @@ module.exports = class Account {
 
     /**
      * Gets user's forename
+     * @method module:Account#getForename
      * 
-     * @return forename
+     * @return {String} forename
      */
     getForename() {
         return this.#forename;
@@ -96,8 +103,9 @@ module.exports = class Account {
 
     /**
      * Gets user's job
+     * @method module:Account#getJob
      * 
-     * @return job
+     * @return {String} job
      */
     getJob() {
         return this.#job;
@@ -105,8 +113,9 @@ module.exports = class Account {
 
     /**
      * Gets user's company
+     * @method module:Account#getCompany
      * 
-     * @return company
+     * @return {String} company
      */
     getCompany() {
         return this.#company;
@@ -114,8 +123,9 @@ module.exports = class Account {
 
     /**
      * Gets user's email
+     * @method module:Account#getEmail
      * 
-     * @return email
+     * @return {String} email
      */
     getEmail() {
         return this.#email;

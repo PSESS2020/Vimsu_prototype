@@ -7,7 +7,7 @@
 class SpriteSheet {
 
     /**
-     * @constructor Creates an instance of SpriteSheet
+     * Creates an instance of SpriteSheet
      * 
      * @param {String} path Sprite sheet path
      * @param {number} frameWidth frame width

@@ -11,7 +11,7 @@ class ChatThreadView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of ChatThreadView
+     * Creates an instance of ChatThreadView
      * 
      * @param {EventManager} eventManager event manager
      */
@@ -140,6 +140,7 @@ class ChatThreadView extends WindowView {
         }
 
         $('#chatThreadModal').modal('show');
+        $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     };
 
     /**

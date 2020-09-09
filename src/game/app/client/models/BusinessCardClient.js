@@ -20,7 +20,8 @@ class BusinessCardClient {
     #email;
 
     /**
-     * @constructor Creates an instance of Business Card on client-side
+     * Creates an instance of Business Card on client-side
+     * 
      * @param {String} participantId participant ID
      * @param {String} username participant username
      * @param {String} title participant title

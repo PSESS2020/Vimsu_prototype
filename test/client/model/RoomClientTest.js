@@ -18,7 +18,7 @@ var roomId;
 var typeOfRoom;
 var assetPaths;
 var listOfGameObjects;
-var mapElements;
+var listOfMapElements;
 var listOfNPCs;
 var listOfDoors;
 var width;

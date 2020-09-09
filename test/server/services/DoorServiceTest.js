@@ -2,20 +2,19 @@ const { expect } = require('chai');
 const DoorService = require('../../../src/game/app/server/services/DoorService');
 const Door = require('../../../src/game/app/server/models/Door');
 const Position = require('../../../src/game/app/server/models/Position.js');
-const Settings = require('../../../src/game/app/server/utils/Settings');
 const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../src/game/app/client/shared/Direction');
 
 
 describe('DoorService test', function () {
-    it('test create LectureDoor', function() {
+    it('test create LectureDoor', function () {
         let doorService = new DoorService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
         let mapPosition = new Position(roomId, cordX, cordY);
         let lectureDoor = doorService.createLectureDoor(mapPosition);
-        
+
         let expectedEnterPositions = [];
         let lastEnterPosition;
         for (var i = mapPosition.getCordX() - 2; i <= mapPosition.getCordX() + 2; i++) {
@@ -33,7 +32,7 @@ describe('DoorService test', function () {
         expect(lectureDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
     });
 
-    it('test create FoyerDoor', function() {
+    it('test create FoyerDoor', function () {
         let doorService = new DoorService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
@@ -60,7 +59,7 @@ describe('DoorService test', function () {
         expect(foyerDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
     });
 
-    it('test create FoodCourtDoor', function() {
+    it('test create FoodCourtDoor', function () {
         let doorService = new DoorService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
@@ -87,7 +86,7 @@ describe('DoorService test', function () {
         expect(foodCourtDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
     });
 
-    it('test create ReceptionDoor', function() {
+    it('test create ReceptionDoor', function () {
         let doorService = new DoorService();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);

@@ -10,6 +10,7 @@ const TypeChecker = require('../../client/shared/TypeChecker');
 
 /**
  * The Food Court Room Decorator Model
+ * @module FoodcourtRoomDecorator
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -36,11 +37,15 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
         "canteencounter_default": "client/assets/other/canteenCounter.png",
         "drinks_default": "client/assets/other/Drinks.png",
-        "koeriWurst_default": "client/assets/food/koeriWurscht.png"
+        "koeriWurst_bothSides": "client/assets/food/koeriWurscht_bothSides.png",
+        "koeriWurst_upperSide": "client/assets/food/koeriWurscht_upperSide.png",
+        "koeriWurst_lowerSide": "client/assets/food/koeriWurscht_lowerSide.png",
+        "tea_default": "client/assets/food/tea.png",
     }
 
     /**
-     * @constructor Creates a RoomDecorator instance for Food Court
+     * Creates a RoomDecorator instance for Food Court
+     * @constructor module:FoodcourtRoomDecorator 
      * 
      * @param {Room} room food court room instance
      */
@@ -78,18 +83,27 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (var i = 2; i <= 12; i += 5) {
             listOfGameObjects.push(objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 3, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 3, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 4, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 5, true, false),
                 objService.createRightDinnerTable(Settings.FOODCOURT_ID, 1, 3, i, 9, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 9, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 10, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 11, true, false),
                 objService.createSmallDinnerTable(Settings.FOODCOURT_ID, i, 16, true, false),
-                objService.createKoeriWurst(Settings.FOODCOURT_ID, i, 16, true, false),
                 objService.createLeftChair(Settings.FOODCOURT_ID, i, 15, true, false),
                 objService.createLeftChairBack(Settings.FOODCOURT_ID, i, 17, true, false));
         }
+
+        //food
+        listOfGameObjects.push(objService.createBothSidesKoeriWurst(Settings.FOODCOURT_ID, 2, 3, true, false), 
+            objService.createUpperSideKoeriWurst(Settings.FOODCOURT_ID, 2, 5, true, false),
+            objService.createBothSidesKoeriWurst(Settings.FOODCOURT_ID, 2, 10, true, false),
+            objService.createTea(Settings.FOODCOURT_ID, 2, 11, true, false),
+            objService.createTea(Settings.FOODCOURT_ID, 7, 3, true, false),
+            objService.createLowerSideKoeriWurst(Settings.FOODCOURT_ID, 7, 4, true, false),
+            objService.createBothSidesKoeriWurst(Settings.FOODCOURT_ID, 7, 9, true, false),
+            objService.createTea(Settings.FOODCOURT_ID, 7, 11, true, false),
+            objService.createTea(Settings.FOODCOURT_ID, 7, 16, true, false),
+            objService.createUpperSideKoeriWurst(Settings.FOODCOURT_ID, 12, 3, true, false),
+            objService.createBothSidesKoeriWurst(Settings.FOODCOURT_ID, 12, 4, true, false), 
+            objService.createLowerSideKoeriWurst(Settings.FOODCOURT_ID, 12, 9, true, false),
+            objService.createBothSidesKoeriWurst(Settings.FOODCOURT_ID, 12, 10, true, false),
+            objService.createTea(Settings.FOODCOURT_ID, 12, 16, true, false));
 
         for (var i = 1; i <= 11; i += 5) {
             listOfGameObjects.push(
@@ -151,8 +165,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
     /**
      * Gets food court room
+     * @method module:FoodcourtRoomDecorator#getRoom
      * 
-     * @return room
+     * @return {Room} room
      */
     getRoom() {
         return this.#room;
@@ -160,8 +175,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
     /**
      * Gets asset paths of food court room objects
+     * @method module:FoodcourtRoomDecorator#getAssetPaths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;

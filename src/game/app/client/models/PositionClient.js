@@ -14,7 +14,8 @@ class PositionClient {
     #cordY;
 
     /**
-     * @constructor Creates an instance of Position on client-side
+     * Creates an instance of Position on client-side
+     * 
      * @param {number} cordX x coordinate
      * @param {number} cordY y coordinate
      */

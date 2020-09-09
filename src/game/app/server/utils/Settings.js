@@ -1,7 +1,8 @@
 const Direction = require('../../client/shared/Direction');
 
 /**
- * @enum other constants
+ * other constants
+ * @module Settings
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0

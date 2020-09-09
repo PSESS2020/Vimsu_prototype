@@ -1,5 +1,6 @@
 /**
- * @enum Messages that will be emitted from a command input by a moderator/orator
+ * Messages that will be emitted from a command input by a moderator/orator
+ * @module Messages
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0

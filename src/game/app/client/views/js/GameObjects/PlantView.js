@@ -9,7 +9,7 @@ class PlantView extends GameObjectView {
               'Seriously, DON\'T TOUCH ME!!'];
 
     /**
-     * @constructor Creates an instance of PlantView
+     * Creates an instance of PlantView
      * 
      * @param {Image} objectImage plant image
      * @param {PositionClient} gridPosition plant position

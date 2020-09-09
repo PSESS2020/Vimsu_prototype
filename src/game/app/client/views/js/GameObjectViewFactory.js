@@ -14,7 +14,7 @@ class GameObjectViewFactory {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of GameObjectViewFactory
+     * Creates an instance of GameObjectViewFactory
      * 
      * @param {Image[]} assetImages asset images
      * @param {IsometricEngine} gameEngine game engine instance
@@ -71,7 +71,7 @@ class GameObjectViewFactory {
     /* ##################################################################### */
 
     /**
-     * Im order to make an Object nut tile clickable but pixel clickable a new object type and class needs to be added to 
+     * In order to make an Object not tile clickable but pixel clickable a new object type and class needs to be added to 
      * one of the creation methods and also an if statement to declare on what condition this 
      * new object should be created. Also a click map should be generated with the method getClickMap()
      * and passed to the new clickable Object.
@@ -197,6 +197,16 @@ class GameObjectViewFactory {
 
                 break;
             case GameObjectType.SMALLDINNERTABLEFOOD:
+                gameObjectImage = this.#assetImages[objectName];
+
+                var tableOffset = { x: -4, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                else throw new Error("The image for the food view could not be found in the cache for images. Did you reload the images after cache clear?");
+
+                break;
+
             case GameObjectType.SMALLDINNERTABLE:
                 gameObjectImage = this.#assetImages[objectName];
 
@@ -211,7 +221,7 @@ class GameObjectViewFactory {
             case GameObjectType.RIGHTTABLE:
                     gameObjectImage = this.#assetImages[objectName];
     
-                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 52 };
     
                     if (gameObjectImage !== undefined)
                         gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);

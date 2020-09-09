@@ -19,7 +19,7 @@ class DoorClient {
     #targetRoomId;
 
     /**
-     * @constructor Creates an instance of Door on client-side
+     * Creates an instance of Door on client-side
      * 
      * @param {number} id door ID
      * @param {TypeOfDoor} typeOfDoor type of door

@@ -105,7 +105,7 @@ database.connectDB().then(res => {
                 return acc;
             })
     }
-    
+
     describe('AccountService methods', function () {
         var globalResults;
 
@@ -115,7 +115,7 @@ database.connectDB().then(res => {
             var verifyLoginDataValid_result = await verifyLoginDataValid();
             var verifyLoginDataPasswordInvalid_result = await verifyLoginDataPasswordInvalid();
             var verifyLoginDataUsernameInvalid_result = await verifyLoginDataUsernameInvalid();
-            
+
             var usernameNotValid_result = await usernameNotValid();
             var usernameValid_result = await usernameValid();
 
@@ -124,7 +124,7 @@ database.connectDB().then(res => {
 
             var getAccountById_result = await getAccountById();
             var getAccountByIdNotFound_result = await getAccountByIdNotFound();
-            
+
             var getAccountUsername_result = await getAccountUsername();
             var getAccountUsernameNotFound_result = await getAccountUsernameNotFound();
 

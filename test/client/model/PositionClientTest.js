@@ -1,12 +1,11 @@
-
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
 const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
 
-describe('PositionClient test', function() {
+describe('PositionClient test', function () {
 
-    it('test constructor and getters', function() {
+    it('test constructor and getters', function () {
         var testCordX = TestUtil.randomInt();
         var testCordY = TestUtil.randomInt();
 

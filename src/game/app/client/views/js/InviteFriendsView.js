@@ -14,7 +14,7 @@ class InviteFriendsView extends WindowView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of InviteFriendsView
+     * Creates an instance of InviteFriendsView
      * 
      * @param {EventManager} eventManager event manager
      */

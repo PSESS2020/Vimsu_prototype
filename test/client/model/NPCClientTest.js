@@ -1,4 +1,3 @@
-
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
@@ -12,8 +11,8 @@ var position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
 var name = TestUtil.randomString();
 var direction = Direction.DOWNLEFT;
 
-describe('NPCClient test', function() {
-    it('test constructor and getters', function() {
+describe('NPCClient test', function () {
+    it('test constructor and getters', function () {
         let npc = new NPCClient(id, name, position, direction);
 
         assert.equal(id, npc.getId());
@@ -22,7 +21,7 @@ describe('NPCClient test', function() {
         assert.equal(direction, npc.getDirection());
     });
 
-    it('test constructor invalid input', function() {
+    it('test constructor invalid input', function () {
         expect(() => new NPCClient('fehler', name, position, direction)).to.throw(TypeError);
         expect(() => new NPCClient(id, 42, position, direction)).to.throw(TypeError);
         expect(() => new NPCClient(id, name, 'fehler', direction)).to.throw(TypeError);

@@ -4,6 +4,7 @@ const Achievement = require('./Achievement.js');
 
 /**
  * The Achievement Definition Model
+ * @module AchievementDefinition
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -18,7 +19,8 @@ module.exports = class AchievementDefinition {
     #levels;
 
     /**
-     * @constructor Creates an AchievementDefinition instance
+     * Creates an instance of AchievementDefinition
+     * @constructor module:AchievementDefinition 
      * 
      * @param {number} id achievement ID
      * @param {TypeOfTask} taskType achievement task type
@@ -51,8 +53,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement ID
+     * @method module:AchievementDefinition#getId
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -60,8 +63,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement task type
+     * @method module:AchievementDefinition#getTaskType
      * 
-     * @return taskType
+     * @return {TypeOfTask} taskType
      */
     getTaskType() {
         return this.#taskType;
@@ -69,8 +73,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement title
+     * @method module:AchievementDefinition#getTitle
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -78,8 +83,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement icon
+     * @method module:AchievementDefinition#getIcon
      * 
-     * @return icon
+     * @return {String} icon
      */
     getIcon() {
         return this.#icon;
@@ -87,8 +93,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement description
+     * @method module:AchievementDefinition#getDescription
      * 
-     * @return description
+     * @return {String} description
      */
     getDescription() {
         return this.#description;
@@ -96,8 +103,9 @@ module.exports = class AchievementDefinition {
 
     /**
      * Gets achievement levels
+     * @method module:AchievementDefinition#getLevels
      * 
-     * @return levels
+     * @return {Object} levels
      */
     getLevels() {
         return this.#levels;
@@ -105,10 +113,11 @@ module.exports = class AchievementDefinition {
 
     /**
      * Creates an achievement instance based on current level
+     * @method module:AchievementDefinition#computeAchievement
      * 
      * @param {number} currentLevel current level
      * 
-     * @return Achievement instance
+     * @return {Achievement} Achievement instance
      */
     computeAchievement(currentLevel) {
         TypeChecker.isInt(currentLevel);

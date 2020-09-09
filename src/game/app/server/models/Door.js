@@ -5,6 +5,7 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 
 /**
  * The Door Model
+ * @module Door
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -21,7 +22,8 @@ module.exports = class Door {
     #direction;
 
     /**
-     * @constructor Creates a door instance
+     * Creates an instance of door
+     * @constructor module:Door
      * 
      * @param {number} id door ID
      * @param {String} name door name
@@ -62,8 +64,9 @@ module.exports = class Door {
 
     /**
      * Gets door ID
+     * @method module:Door#getId
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -71,8 +74,9 @@ module.exports = class Door {
 
     /**
      * Gets starting room ID
+     * @method module:Door#getStartingRoomId
      * 
-     * @return starting room ID
+     * @return {number} starting room ID
      */
     getStartingRoomId() {
         return this.#mapPosition.getRoomId();
@@ -80,8 +84,9 @@ module.exports = class Door {
 
     /**
      * Gets target room ID
+     * @method module:Door#getTargetRoomId
      * 
-     * @return target room ID if exists, otherwise undefined
+     * @return {number} target room ID if exists, otherwise undefined
      */
     getTargetRoomId() {
         if (this.#targetPosition) {
@@ -93,8 +98,9 @@ module.exports = class Door {
 
     /**
      * Gets type of door
+     * @method module:Door#getTypeOfDoor
      * 
-     * @return typeOfDoor
+     * @return {TypeOfDoor} typeOfDoor
      */
     getTypeOfDoor() {
         return this.#typeOfDoor;
@@ -102,8 +108,9 @@ module.exports = class Door {
 
     /**
      * Gets door name
+     * @method module:Door#getName
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -111,8 +118,9 @@ module.exports = class Door {
 
     /**
      * Gets map position
+     * @method module:Door#getMapPosition
      * 
-     * @return mapPosition
+     * @return {Position} mapPosition
      */
     getMapPosition() {
         return this.#mapPosition;
@@ -120,8 +128,9 @@ module.exports = class Door {
 
     /**
      * Gets enter position without clicking the door
+     * @method module:Door#getEnterPositionWithoutClick
      * 
-     * @return enterPosition
+     * @return {Position} enterPosition
      */
     getEnterPositionWithoutClick() {
         return this.#enterPositionWithoutClick;
@@ -129,8 +138,9 @@ module.exports = class Door {
 
     /**
      * Gets enter positions
+     * @method module:Door#getEnterPositions
      * 
-     * @return enterPositions
+     * @return {Position[]} enterPositions
      */
     getEnterPositions() {
         return this.#enterPositions;
@@ -138,8 +148,9 @@ module.exports = class Door {
 
     /**
      * Gets avatar position on entering the door
+     * @method module:Door#getTargetPosition
      * 
-     * @return targetPosition if exists, otherwise undefined
+     * @return {Position|undefined} targetPosition if exists, otherwise undefined
      */
     getTargetPosition() {
         if (this.#targetPosition) {
@@ -151,8 +162,9 @@ module.exports = class Door {
 
     /**
      * Gets avatar direction on entering the door
+     * @method module:Door#getDirection
      * 
-     * @return direction if exists, otherwise undefined
+     * @return {Direction|undefined} direction if exists, otherwise undefined
      */
     getDirection() {
         if (this.#direction) {
@@ -164,10 +176,11 @@ module.exports = class Door {
 
     /**
      * Checks if position is a valid enter position for this door
+     * @method module:Door#isValidEnterPosition
      * 
      * @param {Position} position avatar's current position
      * 
-     * @return true if valid, otherwise false
+     * @return {boolean} true if valid, otherwise false
      */
     isValidEnterPosition(position) {
         TypeChecker.isInstanceOf(position, Position);
@@ -184,12 +197,13 @@ module.exports = class Door {
 
     /**
      * Checks if position is a valid enter position for this door without clicking it
+     * @method module:Door#isValidEnterPositionWithoutClick
      * 
      * @param {Position} position avatar's current position
      * @param {Direction} oldDirection avatar's old direction
      * @param {Direction} newDirection avatar's new direction
      * 
-     * @return true if valid, otherwise false
+     * @return {boolean} true if valid, otherwise false
      */
     isValidEnterPositionWithoutClick(position, oldDirection, newDirection) {
         TypeChecker.isInstanceOf(position, Position);

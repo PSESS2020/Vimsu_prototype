@@ -18,7 +18,7 @@ class NPCAvatarView extends AvatarView {
     #eventManager;
 
     /**
-     * @constructor Creates an instance of NPCAvatarView
+     * Creates an instance of NPCAvatarView
      * 
      * @param {String} npcId NPC ID
      * @param {String} name NPC name

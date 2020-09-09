@@ -7,7 +7,7 @@
 class InputGroupNameView extends WindowView {
 
     /**
-     * @constructor Creates an instance of InputGroupNameView
+     * Creates an instance of InputGroupNameView
      * 
      * @param {EventManager} eventManager event manager
      */

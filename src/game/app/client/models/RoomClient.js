@@ -33,7 +33,7 @@ class RoomClient {
     #objectMap;
 
     /**
-     * @constructor Creates an instance of Room on client-side
+     * Creates an instance of Room on client-side
      * 
      * @param {number} roomId room ID
      * @param {TypeOfRoom} typeOfRoom type of room

@@ -4,6 +4,7 @@ const Settings = require('../utils/Settings.js');
 
 /**
  * The Lecture Model
+ * @module Lecture
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -27,7 +28,8 @@ module.exports = class Lecture {
     #hideThis;
 
     /**
-     * @constructor Creates a lecture instance
+     * Creates a lecture instance
+     * @constructor module:Lecture
      * 
      * @param {String} id lecture ID
      * @param {String} title lecture title
@@ -83,8 +85,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture ID
+     * @method module:Lecture#getId
      * 
-     * @return id
+     * @return {String} id
      */
     getId() {
         return this.#id;
@@ -92,8 +95,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture title
+     * @method module:Lecture#getTitle
      * 
-     * @return title
+     * @return {String} title
      */
     getTitle() {
         return this.#title;
@@ -101,8 +105,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture video ID
+     * @method module:Lecture#getVideoId
      * 
-     * @return videoId
+     * @return {String} videoId
      */
     getVideoId() {
         return this.#videoId;
@@ -110,8 +115,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture duration
+     * @method module:Lecture#getDuration
      * 
-     * @return duration
+     * @return {number} duration
      */
     getDuration() {
         return this.#duration;
@@ -119,8 +125,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture remarks
+     * @method module:Lecture#getRemarks
      * 
-     * @return remarks
+     * @return {String} remarks
      */
     getRemarks() {
         return this.#remarks;
@@ -128,8 +135,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture starting time
+     * @method module:Lecture#getStartingTime
      * 
-     * @return startingTime
+     * @return {Date} startingTime
      */
     getStartingTime() {
         return this.#startingTime;
@@ -137,8 +145,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture orator name
+     * @method module:Lecture#getOratorName
      * 
-     * @return oratorName
+     * @return {String} oratorName
      */
     getOratorName() {
         return this.#oratorName;
@@ -146,8 +155,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture orator username
+     * @method module:Lecture#getOratorUsername
      * 
-     * @return oratorUsername
+     * @return {String} oratorUsername
      */
     getOratorUsername() {
         return this.#oratorUsername;
@@ -155,8 +165,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture max participants
+     * @method module:Lecture#getMaxParticipants
      * 
-     * @return maxParticipants
+     * @return {number} maxParticipants
      */
     getMaxParticipants() {
         return this.#maxParticipants
@@ -164,8 +175,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture chat instance
+     * @method module:Lecture#getLectureChat
      * 
-     * @return lecture chat instance
+     * @return {LectureChat} lecture chat instance
      */
     getLectureChat() {
         return this.#lectureChat;
@@ -173,8 +185,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture active participants
+     * @method module:Lecture#getActiveParticipants
      * 
-     * @return activeParticipants
+     * @return {String[]} activeParticipants
      */
     getActiveParticipants() {
         return this.#activeParticipants;
@@ -182,8 +195,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture hide status
+     * @method module:Lecture#isHidden
      * 
-     * @return true if lecture is hidden, otherwise false
+     * @return {boolean} true if lecture is hidden, otherwise false
      */
     isHidden() {
         return this.#hideThis;
@@ -191,6 +205,7 @@ module.exports = class Lecture {
 
     /**
      * Hides the lecture, so that it will no longer be displayed in the currentLecturesView 
+     * @method module:Lecture#hide
      */
     hide() {
         if (!this.#hideThis) {
@@ -200,8 +215,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture token list
+     * @method module:Lecture#getTokenList
      * 
-     * @return tokenList
+     * @return {Object[]} tokenList
      */
     getTokenList() {
         return this.#tokenList;
@@ -209,13 +225,13 @@ module.exports = class Lecture {
 
     /**
      * Is called when a participant with this ID joins a lecture
+     * @method module:Lecture#enter
      * 
      * @param {String} participantId participant ID
      * @param {String} ppantUsername participant username
      * @param {boolean} isModerator true if participant is moderator, otherwise false
      * 
-     * @returns true, if the joining was successful
-     *          false, otherwise
+     * @returns {boolean} true, if the joining was successful, false otherwise
      */
     enter(participantId, ppantUsername, isModerator) {
         TypeChecker.isString(participantId);
@@ -246,6 +262,7 @@ module.exports = class Lecture {
 
     /**
      * Is called when a participant with this ID leaves a lecture
+     * @method module:Lecture#leave
      * 
      * @param {String} participantId participant ID
      */
@@ -284,8 +301,9 @@ module.exports = class Lecture {
 
     /**
      * checks if lecture is already opened
+     * @method module:Lecture#isOpened
      * 
-     * @return true if opened, otherwise false
+     * @return {boolean} true if opened, otherwise false
      */
     isOpened() {
         var now = new Date().getTime();
@@ -295,8 +313,9 @@ module.exports = class Lecture {
 
     /**
      * checks if lecture is already ended
+     * @method module:Lecture#isEnded
      * 
-     * @return true if ended, otherwise false
+     * @return {boolean} true if ended, otherwise false
      */
     isEnded() {
         var now = new Date().getTime();
@@ -305,8 +324,9 @@ module.exports = class Lecture {
 
     /**
      * Gets lecture end time
+     * @method module:Lecture#getEndTime
      * 
-     * @return end time
+     * @return {Date} end time
      */
     getEndTime() {
         return (this.#startingTime.getTime() + this.#duration * 1000);
@@ -314,8 +334,9 @@ module.exports = class Lecture {
 
     /**
      * checks if lecture is accessible
+     * @method module:Lecture#isAccessible
      * 
-     * @return true if accessible, otherwise false
+     * @return {boolean} true if accessible, otherwise false
      */
     isAccessible() {
         var now = new Date().getTime();
@@ -324,10 +345,11 @@ module.exports = class Lecture {
 
     /**
      * checks if this participant is in list of active participants
+     * @method module:Lecture#hasPPant
      * 
      * @param {String} participantId participant ID
      * 
-     * @return true if found, otherwise false
+     * @return {boolean} true if found, otherwise false
      */
     hasPPant(participantId) {
         TypeChecker.isString(participantId);
@@ -336,6 +358,7 @@ module.exports = class Lecture {
 
     /**
      * bans user from this lecture
+     * @method module:Lecture#ban
      * 
      * @param {String} accountId account ID
      */
@@ -346,10 +369,11 @@ module.exports = class Lecture {
 
     /**
      * checks if user is banned from this lecture
+     * @method module:Lecture#isBanned
      * 
      * @param {String} accountId account ID
      * 
-     * @return true if banned, otherwise false
+     * @return {boolean} true if banned, otherwise false
      */
     isBanned(accountId) {
         TypeChecker.isString(accountId)
@@ -358,13 +382,13 @@ module.exports = class Lecture {
 
     /**
      * Checks if participant with this ID has a token for this lecture
+     * @method module:Lecture#hasToken
      * 
      * @param {String} participantId participant ID
      * @param {String} ppantUsername participant username
      * @param {boolean} isModerator true if participant is moderator, otherwise false
      * 
-     * @returns true, if so
-     *          false, otherwise
+     * @returns {boolean} true, if so, false otherwise
      */
     hasToken(participantId, ppantUsername, isModerator) {
         TypeChecker.isString(participantId);
@@ -393,6 +417,7 @@ module.exports = class Lecture {
      * that belongs to the passed participant. If it finds such a token,
      * and the token has not already run out, it revokes it by setting 
      * the counter to zero. 
+     * @method module:Lecture#revokeToken
      * 
      * @param {String} participantId participant ID
      */
@@ -411,10 +436,11 @@ module.exports = class Lecture {
 
     /**
      * Grants token to a participant
+     * @method module:Lecture#grantToken
      * 
      * @param {String} participantID participant ID
      * 
-     * @return true if token is granted, otherwise false
+     * @return {boolean} true if token is granted, otherwise false
      */
     grantToken(participantID) {
         TypeChecker.isString(participantID);
@@ -430,6 +456,8 @@ module.exports = class Lecture {
 
     /**
      * @private Checks participant's token
+     * 
+     * @method module:Lecture#checkToken
      * 
      * @param {String} participantId participant ID
      */
@@ -482,11 +510,13 @@ module.exports = class Lecture {
     }
 
     /**
-     * Gets token index of this participant
+     * @private Gets token index of this participant
+     * 
+     * @method module:Lecture#getTokenIndex
      * 
      * @param {String} participantId participant ID
      * 
-     * @return token index
+     * @return {number} token index
      */
     #getTokenIndex = function (participantId) {
         TypeChecker.isString(participantId);

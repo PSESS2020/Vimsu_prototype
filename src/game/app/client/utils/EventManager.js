@@ -9,7 +9,7 @@ class EventManager {
     #clientController;
 
     /**
-     * @constructor creates an instance of EventManager.
+     * creates an instance of EventManager.
      * Handles Events from View and emits it to ClientController
      * 
      * @param {ClientController} clientController ClientController instance
