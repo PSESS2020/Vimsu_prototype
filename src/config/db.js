@@ -27,7 +27,8 @@ module.exports = class db {
     connectDB() {
         const connectionString = process.env.MONGODB_CONNECTION_STRING;
         if(!connectionString) {
-            console.log("Cannot connect to database. Please ask the owner of this project for the connection string.");
+            console.log("Cannot connect to database. Please ask the owner of the database for the connection string. If you are the owner, " +
+                "please consult the readme on how to properly connect your database to VIMSU.");
             return;
         }
 
