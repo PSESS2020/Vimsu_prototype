@@ -55,7 +55,7 @@ class MapView extends Views {
     /**
      * Gets map array
      * 
-     * @return map
+     * @return {number[][]} map
      */
     getMap() {
         return this.#map;
@@ -64,7 +64,7 @@ class MapView extends Views {
     /**
      * Gets object map array
      * 
-     * @return objectMap
+     * @return {number[][]} objectMap
      */
     getObjectMap() {
         return this.#objectMap;
@@ -73,7 +73,7 @@ class MapView extends Views {
     /**
      * Gets tiles
      * 
-     * @return tiles
+     * @return {GameObjectView[]} tiles
      */
     getTiles() {
         return this.#tiles;
@@ -82,7 +82,7 @@ class MapView extends Views {
     /**
      * Gets selected tile
      * 
-     * @return selectedTile
+     * @return {GameObjectView} the selectedTile
      */
     getSelectedTile() {
         return this.#selectedTile;
@@ -91,7 +91,7 @@ class MapView extends Views {
     /**
      * Gets game objects
      * 
-     * @return gameObjects
+     * @return {GameObjectClient[]} gameObjects
      */
     getGameObjects() {
         return this.#gameObjects;
@@ -203,6 +203,8 @@ class MapView extends Views {
      * checks if tile or object is clickable at the selected position 
      * 
      * @param {Object} selectedTileCords selected tile coordinates
+     * 
+     * @return {boolean} true if the selected tile or object is clickable, false otherwise
      */
     checkTileOrObjectIsClickable(selectedTileCords) {
         let tile = this.#map[selectedTileCords.x][selectedTileCords.y];
@@ -323,6 +325,8 @@ class MapView extends Views {
      * 
      * @param {number} cordX x coordinate
      * @param {number} cordY y coordinate
+     * 
+     * @return {boolean} true if the cursor is on the floor of the game map, false otherwise
      */
     isCursorOnPlayGround(cordX, cordY) {
         if (cordX >= 0 && cordY >= 2 && cordX < (this.#xNumTiles - 2) && cordY < this.#yNumTiles) {
@@ -355,6 +359,8 @@ class MapView extends Views {
      * 
      * @param {number} cordX x coordinate
      * @param {number} cordY y coordinate
+     * 
+     * @return {boolean} true if the mouse cursor is out of the bounds of the game map, false otherwise
      */
     isCursorOutsidePlayGround(cordX, cordY) {
         if ((cordY >= -1 && cordX <= this.#xNumTiles && ((cordY <= 2 && cordX >= 0) || (cordY < this.#yNumTiles && cordX >= (this.#xNumTiles - 3)))))
