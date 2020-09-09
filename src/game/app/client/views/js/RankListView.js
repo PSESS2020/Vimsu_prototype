@@ -27,6 +27,7 @@ class RankListView extends WindowView {
      * @param {Object[]} rankList rank list
      */
     draw(rankList) {
+        $('#ranklistwait').hide();
         $('#rankListModal .modal-body .card-columns').empty();
         this.#rankList = rankList;
 
