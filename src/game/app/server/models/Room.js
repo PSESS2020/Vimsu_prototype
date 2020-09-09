@@ -128,7 +128,7 @@ module.exports = class Room {
      * Gets room ID
      * @method module:Room#getRoomId
      * 
-     * @return {int} roomId
+     * @return {number} roomId
      */
     getRoomId() {
         return this.#roomId;
@@ -158,7 +158,7 @@ module.exports = class Room {
      * Gets room width
      * @method module:Room#getWidth
      * 
-     * @return {int} width
+     * @return {number} width
      */
     getWidth() {
         return this.#width;
@@ -168,7 +168,7 @@ module.exports = class Room {
      * Gets room length
      * @method module:Room#getLength
      * 
-     * @return {int} length
+     * @return {number} length
      */
     getLength() {
         return this.#length;
@@ -228,7 +228,7 @@ module.exports = class Room {
      * Gets occupation map
      * @method module:Room#getOccMap
      * 
-     * @return {int[][]} occupationMap
+     * @return {number[][]} occupationMap
      */
     getOccMap() {
         return this.#occupationMap;

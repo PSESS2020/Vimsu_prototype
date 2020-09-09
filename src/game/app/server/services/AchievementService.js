@@ -177,7 +177,7 @@ module.exports = class AchievementService {
      * @param {number} count achievement's count 
      * @param {{count: number, color: String, points: number}} levels achievement's levels
      * 
-     * @return {int} level
+     * @return {number} level
      */
     #getLevelFromDefinition = function (count, levels) {
         TypeChecker.isInt(count);

@@ -36,7 +36,7 @@ module.exports = class Task {
      * Gets task ID
      * @method module:Task#getId
      * 
-     * @return {int} id
+     * @return {number} id
      */
     getId() {
         return this.#id
@@ -56,7 +56,7 @@ module.exports = class Task {
      * Gets award points
      * @method module:Task#getAwardPoints
      * 
-     * @return {int} awardPoints
+     * @return {number} awardPoints
      */
     getAwardPoints() {
         return this.#awardPoints;

@@ -40,7 +40,7 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {number} offset offset
      * 
-     * @return {int[][]} clickMap
+     * @return {number[][]} clickMap
      */
     getClickMap(image, pos, offset) {
         var clickMap = [];

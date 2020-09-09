@@ -64,7 +64,7 @@ class GameObjectView extends Views {
     /**
      * Gets screen position offset
      * 
-     * @return {Number} screenPositionOffset
+     * @return {number} screenPositionOffset
      */
     getScreenPositionOffset() {
         return this.#screenPositionOffset;

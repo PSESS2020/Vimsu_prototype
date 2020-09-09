@@ -35,7 +35,7 @@ module.exports = class Position {
      * Gets Room ID
      * @method module:Position#getRoomId
      * 
-     * @return {int} roomId
+     * @return {number} roomId
      */
     getRoomId() {
         return this.#roomId;
@@ -45,7 +45,7 @@ module.exports = class Position {
      * Gets x coordinate
      * @method module:Position#getCordX
      * 
-     * @return {int} cordX
+     * @return {number} cordX
      */
     getCordX() {
         return this.#cordX;
@@ -55,7 +55,7 @@ module.exports = class Position {
      * Gets y coordinate
      * @method module:Position#getCordY
      * 
-     * @return {int} cordY
+     * @return {number} cordY
      */
     getCordY() {
         return this.#cordY;

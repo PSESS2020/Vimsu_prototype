@@ -467,7 +467,7 @@ module.exports = class Participant {
      * Gets participant's points
      * @method module:Participant#getAwardPoints
      * 
-     * @return {int} points
+     * @return {number} points
      */
     getAwardPoints() {
         return this.#awardPoints;

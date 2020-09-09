@@ -82,7 +82,7 @@ class IsometricEngine {
     /**
      * Gets tile column width
      * 
-     * @return {int} tileColumnWidth
+     * @return {number} tileColumnWidth
      */
     getTileColumnWidth() {
         return this.#tileColumnWidth;
@@ -91,7 +91,7 @@ class IsometricEngine {
     /**
      * Gets tile row height
      * 
-     * @return {int} tileRowHeight
+     * @return {number} tileRowHeight
      */
     getTileRowHeight() {
         return this.#tileRowHeight;
@@ -185,7 +185,7 @@ class IsometricEngine {
      * @param {number} xPos x position
      * @param {number} yPos y position
      * 
-     * @return {int} the x coordinate of the screen position
+     * @return {number} the x coordinate of the screen position
      */
     calculateScreenPosX(xPos, yPos) {
         TypeChecker.isInt(xPos);
@@ -201,7 +201,7 @@ class IsometricEngine {
      * @param {number} xPos x position
      * @param {number} yPos y position
      *  
-     * @return {int} the y coordinate of the screen position
+     * @return {number} the y coordinate of the screen position
      */
     calculateScreenPosY(xPos, yPos) {
         TypeChecker.isInt(xPos);
