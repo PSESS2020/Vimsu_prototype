@@ -44,17 +44,17 @@ You can download and install Node.js from the [official Node.js website](https:/
 If you need to update NPM, use `$ npm install npm@latest -g` to update it to the latest version. For more information, please visit the [official NPM website](https://www.npmjs.com/get-npm).
 
 ### MongoDB
-In order to host a conference using VIMSU, some data, such as accounts, lecture times etc., needs to saved in a MongoDB database. Therefore, you need a MongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a MongoDB account on the [official ongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official MongoDB website for creating a new cluster](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
+In order to host a conference using VIMSU, some data, such as accounts, lecture times etc., needs to be saved in a MongoDB database. Therefore, you need a MongoDB account and an Atlas cluster to store account and conference data before hosting VIMSU. You can create a MongoDB account on the [official MongoDB registration site](https://account.mongodb.com/account/register/). Please follow the tutorial on how to create and setup an Atlas cluster on the [official MongoDB website for creating a new cluster](https://docs.atlas.mongodb.com/tutorial/create-new-cluster/).
 
 ### Azure Blob Storage
 VIMSU does not offer live stream for talks and lectures. Instead, they are pre-recorded and uploaded before the conference is set to start. Due to this, you need an Azure Storage account to store uploaded video files before hosting VIMSU. Please follow the tutorial on how to create a storage account on the [official Microsoft website](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
 
 ## Installation
-Use the following command to create a local copy of VIMSU on your computer.
+Use the following command to create a local copy of VIMSU on your machine.
 
     $ git clone https://github.com/PSESS2020/Vimsu_prototype.git
 
-This will create a copy of this repository in whatever folder you're executing the command in. Alternatively, you can download the code as a .zip by clicking the `Code` button above the repository. Now you just need to extract the .zip-file into a location of your liking.
+This will create a copy of this repository in whatever folder you're executing the command in. Alternatively, you can download the code as a `.zip` by clicking the `Code` button above the repository. Now you just need to extract the `.zip` file into a location of your liking.
 
 ## Usage
 Before you can host VIMSU, you will need to properly set up the database and the cloud storage.
@@ -97,13 +97,13 @@ If you want to try out VIMSU without creating an Azure Storage or a MongoDB acco
 
 - Azurite
 
-    Follow the installation instructions on the [official Azurite GitHub-page.](https://github.com/Azure/Azurite/blob/master/README.md) Note that VIMSU uses the [AzureSDK](https://azure.github.io/azure-sdk/), so you need to setup Azurite for HTTPS connections. This will require the use of additional third-party software such as [mkcert](https://github.com/FiloSottile/mkcert) or [OpenSSL](https://www.openssl.org/) to create your own signed certificates. In the process of installing that software, you might be required to install additional third-party software. Please understand that since this software is not supplied by us and we can therefore only offer superficial support for this installation process.
+    Please follow the installation instructions on the [official Azurite GitHub-page.](https://github.com/Azure/Azurite/blob/master/README.md) Note that VIMSU uses the [AzureSDK](https://azure.github.io/azure-sdk/), so you need to setup Azurite for HTTPS connections. This will require the use of additional third-party software such as [mkcert](https://github.com/FiloSottile/mkcert) or [OpenSSL](https://www.openssl.org/) to create your own signed certificates. In the process of installing that software, you might be required to install additional third-party software. Please understand that this software is not supplied by us and we can therefore only offer superficial support for this installation process.
     
-    After you have successfully installed Azurite and started a properly configured instance, paste the default HTTPS-connection string (you can use both either the full one or the Blob-only one) into the .env-file as explained in the section above. You can also create custom sonection strings. Please refer to the [Azurite readme](https://github.com/Azure/Azurite/blob/master/README.md) for further instruction on how to do this.
+    After you have successfully installed Azurite and started a properly configured instance, paste the default HTTPS-connection string (you can use both either the full one or the Blob-only one) into the `.env` file as explained in the section above. You can also create custom sonection strings. Please refer to the [Azurite readme](https://github.com/Azure/Azurite/blob/master/README.md) for further instruction on how to do this.
     
 - MongoDB
 
-    Follow the installation instructions for your operating system in the official [mongoDB-documentation](https://docs.mongodb.com/guides/server/install/). After you have successfully installed MongoDB, set up [proper authentification and create an account](https://docs.mongodb.com/guides/server/auth/) for your local instance. Finally, create a connection string according to the [official guideline](https://docs.mongodb.com/manual/reference/connection-string/). Add that string to your .env-file as described in the section above.
+    Please follow the installation instructions for your operating system in the official [MongoDB-documentation](https://docs.mongodb.com/guides/server/install/). After you have successfully installed MongoDB, set up [proper authentification and create an account](https://docs.mongodb.com/guides/server/auth/) for your local instance. Finally, create a connection string according to the [official guideline](https://docs.mongodb.com/manual/reference/connection-string/). Add that string to your `.env` file as described in the section above.
 
 ### Hosting
 After setting up the database and the cloud storage, use the following command to host VIMSU on your local machine.
@@ -129,11 +129,11 @@ After VIMSU is sucessfully hosted, there are certain things you need to know bef
 ### Creating an Account and Accessing the Conference
 You can create an account and access the conference by following the steps below:
 
-1. Go to the VIMSU homepage
-2. Click the `Register` button
-3. Enter your username and e-mail address and click the `Verify` button (the entered information will not actualy be verified)
-4. Fill out the rest of the registration form and click the `Register Now` button
-5. Click the yellow button that says `Enter Conference >>`
+1. Go to the VIMSU homepage.
+2. Click the `Register` button.
+3. Enter your username and e-mail address and click the `Verify` button.
+4. Fill out the rest of the registration form and click the `Register Now` button.
+5. Click the yellow button that says `Enter Conference >>`.
 
 After you have created an account, you will be able to use it to log into any VIMSU instance that uses the same database as the one you created your account on.
 
@@ -157,7 +157,7 @@ After restarting the server, the lecture should be displayed on the `Schedule` i
 ### Granting Participants Moderator Rights
 You can grant a participant moderator rights by following the steps below:
 
-1. Make sure that the participant has entered the conference before.
+1. Make sure that the participant has accessed the conference before.
 2. Go to your created cluster in mongoDB.
 3. Press the `Collections` button.
 4. Go to the `participants_<conferenceId>` collection.
@@ -169,7 +169,7 @@ After entering the conference, there should be a noticeable change in the color 
 Moderators have the following privileges during a conference:
 
 1. They have the right to use commands through the `RoomChat` and through the `LectureChat`. 
-After you granted yourself moderator rights, you can see all commands available to you by typing in `\help` in the respective `Chat`.
+After you granted yourself moderator rights, you can see all commands available to you by typing in `\help` in the respective chat.
 
 2. They can join any lecture at any time before the lecture ends, even if the maximum number of listeners has already been exceeded.
 
@@ -177,9 +177,9 @@ After you granted yourself moderator rights, you can see all commands available 
 
 Orators have the following privileges during their own lecture:
 
-1. They have the right to use commands through the `LectureChat`. As an orator, you can see all commands avaialable to you by typing in `\help` in the `LectureChat` of your own lecture.
+1. They have the right to use commands through the `LectureChat`. As an orator, you can see all commands available to you by typing in `\help` in the `LectureChat` of your own lecture.
 
-2. They can join their own lecture any time before the lecture ends, even if the maximum number of listeners is already exceeded.
+2. They can join their own lecture any time before the lecture ends, even if the maximum number of listeners has already been exceeded.
 
 3. They have the right to post messages in the `LectureChat` of their own lecture after it has opened, with or without the `QuestionToken`.
 
