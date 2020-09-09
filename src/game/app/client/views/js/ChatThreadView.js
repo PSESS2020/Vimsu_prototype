@@ -140,6 +140,7 @@ class ChatThreadView extends WindowView {
         }
 
         $('#chatThreadModal').modal('show');
+        $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     };
 
     /**
