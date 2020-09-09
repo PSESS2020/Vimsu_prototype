@@ -18,7 +18,7 @@ module.exports = class RankListService {
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return rank list
+     * @return {Object} rank list
      */
     static #getRankList = function (conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -50,7 +50,7 @@ module.exports = class RankListService {
      * @param {number} lastRank last rank to be shown in the rank list
      * @param {db} vimsudb db instance
      * 
-     * @return rank list until place lastRank
+     * @return {Object} rank list until place lastRank
      */
     static getRankListWithUsername(conferenceId, lastRank, vimsudb) {
         TypeChecker.isString(conferenceId);
