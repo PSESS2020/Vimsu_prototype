@@ -25,7 +25,7 @@ class DoorClient {
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {String} name door name
      * @param {PositionClient} mapPosition door position
-     * @param {Number} targetRoomId target room ID
+     * @param {number} targetRoomId target room ID
      */
     constructor(id, typeOfDoor, name, mapPosition, targetRoomId) {
         TypeChecker.isInt(id);
@@ -46,7 +46,7 @@ class DoorClient {
     /**
      * Gets door ID
      * 
-     * @return id
+     * @return {number} id
      */
     getId() {
         return this.#id;
@@ -55,7 +55,7 @@ class DoorClient {
     /**
      * Gets type of door
      * 
-     * @return typeOfDoor
+     * @return {TypeOfDoor} typeOfDoor
      */
     getTypeOfDoor() {
         return this.#typeOfDoor;
@@ -64,7 +64,7 @@ class DoorClient {
     /**
      * Gets door name
      * 
-     * @return name
+     * @return {String} name
      */
     getName() {
         return this.#name;
@@ -73,7 +73,7 @@ class DoorClient {
     /**
      * Gets door position
      * 
-     * @return mapPosition
+     * @return {PositionClient} mapPosition
      */
     getMapPosition() {
         return this.#mapPosition;
@@ -82,7 +82,7 @@ class DoorClient {
     /**
      * Gets target room ID
      * 
-     * @return targetRoomId
+     * @return {number} targetRoomId
      */
     getTargetRoomId() {
         return this.#targetRoomId;
