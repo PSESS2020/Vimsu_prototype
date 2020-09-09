@@ -17,8 +17,7 @@ module.exports = class Chatservice {
 
     /**
      * creates a new one to one chat instance and saves it in the database
-     * @static static method
-     * @method module:ChatService#newOneToOneChat
+     * @static @method module:ChatService#newOneToOneChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String} chatPartnerId chat partner ID
@@ -63,8 +62,7 @@ module.exports = class Chatservice {
 
     /**
      * creates a new group chat instance and saves it in the database
-     * @static static method
-     * @method module:ChatService#newGroupChat
+     * @static @method module:ChatService#newGroupChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String[]} memberIds array of group chat member ID
@@ -109,8 +107,7 @@ module.exports = class Chatservice {
 
     /**
      * checks if a one to one chat between 2 participants is already existed in the database
-     * @static static method
-     * @method module:ChatService#existsOneToOneChat
+     * @static @method module:ChatService#existsOneToOneChat
      * 
      * @param {String} ownerId first participant ID
      * @param {String} chatPartnerId second participant ID
@@ -141,8 +138,7 @@ module.exports = class Chatservice {
 
     /**
      * loads all chats of the specified participant from the database
-     * @static static method
-     * @method module:ChatService#loadChatList
+     * @static @method module:ChatService#loadChatList
      * 
      * @param {String[]} chatIDList array of chat ID
      * @param {String} conferenceId conference ID
@@ -190,8 +186,7 @@ module.exports = class Chatservice {
 
     /**
      * gets a chat with the specified chat ID from the database
-     * @static static method
-     * @method module:ChatService#loadChat
+     * @static @method module:ChatService#loadChat
      * 
      * @param {String} chatId chat ID
      * @param {String} conferenceId conference ID
@@ -244,8 +239,7 @@ module.exports = class Chatservice {
 
     /**
      * stores a participant in the chat member list in the database
-     * @static static method
-     * @method module:ChatService#storeParticipant
+     * @static @method module:ChatService#storeParticipant
      * 
      * @param {String} chatId chat ID
      * @param {String} participantId participant ID
@@ -275,8 +269,7 @@ module.exports = class Chatservice {
 
     /**
      * removes participant from a chat from the database
-     * @static static method
-     * @method module:ChatService#removeParticipant
+     * @static @method module:ChatService#removeParticipant
      * 
      * @param {String} chatId chat ID
      * @param {String} participantId participant ID
@@ -332,8 +325,7 @@ module.exports = class Chatservice {
 
     /**
      * creates a chat message
-     * @static static method
-     * @method module:ChatService#createChatMessage
+     * @static @method module:ChatService#createChatMessage
      * 
      * @param {String} chatId chat ID
      * @param {String} senderId sender ID
@@ -401,8 +393,7 @@ module.exports = class Chatservice {
 
     /**
      * removes a chat from the database
-     * @static static method
-     * @method module:ChatService#removeChat
+     * @static @method module:ChatService#removeChat
      * 
      * @param {String} participantId participant ID
      * @param {String} chatId chat ID
