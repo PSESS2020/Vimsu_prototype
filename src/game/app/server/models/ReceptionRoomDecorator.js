@@ -30,7 +30,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
         "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
         "plant_default": "client/assets/plants/plant.png",
-        "table_default": "client/assets/tables/table.png",
+        "receptionCounterFrontPart_default": "client/assets/other/ReceptionCounterFrontPart.png",
+        "receptionCounterLeftPart_default": "client/assets/other/ReceptionCounterBackPartLeft.png",
+        "receptionCounterRightPart_default": "client/assets/other/ReceptionCounterBackPartRight.png",
     }
 
     /**
@@ -71,13 +73,10 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
-        for (var i = 3; i <= 9; i++) {
-            listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 10, i, true, false));
-        }
-        listOfGameObjects.push(objService.createTable(Settings.RECEPTION_ID, 11, 9, true, false),
-            objService.createTable(Settings.RECEPTION_ID, 12, 9, true, false),
-            objService.createTable(Settings.RECEPTION_ID, 11, 3, true, false),
-            objService.createTable(Settings.RECEPTION_ID, 12, 3, true, false));
+        //Reception Counter
+        listOfGameObjects.push(objService.createReceptionCounterLeftPart(Settings.RECEPTION_ID, 1, 1, 11, 3, true, false),
+                               objService.createReceptionCounterRightPart(Settings.RECEPTION_ID, 1, 1, 11, 9, true, false),
+                               objService.createReceptionCounterFrontPart(Settings.RECEPTION_ID, 1, 7, 10, 3, true, false));
 
         let conferenceLogos = objService.createLeftConferenceLogo(Settings.RECEPTION_ID, 1, 5, 5, -1, false, false);
         conferenceLogos.forEach(conferenceLogo => {

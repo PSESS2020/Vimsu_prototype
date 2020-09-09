@@ -242,8 +242,27 @@ class GameObjectViewFactory {
                     gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
                 else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
 
-                break; 
+                break;
+            
+            case GameObjectType.RECEPTIONCOUNTER:
+                gameObjectImage = this.#assetImages[objectName];
+                var receptionCounterOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 146};
+    
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, receptionCounterOffset, objectName);
+                else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
+    
+                break;
 
+            case GameObjectType.RECEPTIONCOUNTERSIDEPART:
+                gameObjectImage = this.#assetImages[objectName];
+                var receptionCounterOffset = { x: -9, y: this.#tileRowHeight - gameObjectImage.height + 28};
+    
+                if (gameObjectImage !== undefined)
+                    gameObjectView = new GameObjectView(gameObjectImage, pos, receptionCounterOffset, objectName);
+                else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
+    
+                break;
             case GameObjectType.DRINKS:
                 gameObjectImage = this.#assetImages[objectName];
 

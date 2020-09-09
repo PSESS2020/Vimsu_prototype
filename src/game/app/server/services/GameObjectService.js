@@ -226,6 +226,65 @@ module.exports = class GameObjectService {
         return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTABLE, "righttable_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
+    //Reception
+
+    /**
+     * creates reception counter front part
+     * @method module:GameObjectService#createReceptionCounterFrontPart
+     * 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     * 
+     * @return {GameObject} reception counter front part
+     */
+    createReceptionCounterFrontPart(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTER, "receptionCounterFrontPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * creates reception counter left part
+     * @method module:GameObjectService#createReceptionCounterLeftPart
+     * 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     * 
+     * @return {GameObject} reception counter front part
+     */
+    createReceptionCounterLeftPart(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterLeftPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+    /**
+     * creates reception counter front part
+     * @method module:GameObjectService#createReceptionCounterRightPart
+     * 
+     * @param {number} roomId room ID
+     * @param {number} width room width
+     * @param {number} length room length
+     * @param {number} xPos x position
+     * @param {number} yPos y position
+     * @param {boolean} solidity true if solid, otherwise false
+     * @param {boolean} clickable true if clickable, otherwise false
+     * 
+     * @return {GameObject} reception counter right part
+     */
+    createReceptionCounterRightPart(roomId, width, length, xPos, yPos, solidity, clickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterRightPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
     //Canteen
 
     /**
