@@ -28,7 +28,7 @@ class DoorView extends GameMapElementView {
     /**
      * Gets door type
      * 
-     * @return door type
+     * @return {TypeOfDoor} door type
      */
     getDoorType() {
         return this.#DOORTYPE;

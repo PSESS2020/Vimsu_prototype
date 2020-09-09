@@ -41,7 +41,7 @@ class AvatarView extends Views {
     /**
      * Gets avatar position
      * 
-     * @return position
+     * @return {PositionClient} position
      */
     getGridPosition() {
         return this.#position;
@@ -60,7 +60,7 @@ class AvatarView extends Views {
     /**
      * Gets avatar direction
      * 
-     * @return direction
+     * @return {Direction} direction
      */
     getDirection() {
         return this.#direction;
@@ -78,7 +78,7 @@ class AvatarView extends Views {
     /**
      * Gets avatar spritesheet
      * 
-     * @return spriteSheet
+     * @return {SpriteSheet} spriteSheet
      */
     getSpriteSheet() {
         return this.#spriteSheet;
@@ -87,7 +87,7 @@ class AvatarView extends Views {
     /**
      * Gets avatar isWalking status
      * 
-     * @return true if the Avatar is currently walking, otherwise false
+     * @return {boolean} true if the Avatar is currently walking, otherwise false
      */
     isWalking() {
         return this.#walking;
@@ -96,7 +96,7 @@ class AvatarView extends Views {
     /**
      * Gets avatar visibility
      * 
-     * @return true if avatar is visible, otherwise false
+     * @return {boolean} true if avatar is visible, otherwise false
      */
     getVisibility() {
         return this.#isVisible;

@@ -21,7 +21,7 @@ class DateParser {
     /**
      * Parse date without seconds
      * 
-     * @return parsed date
+     * @return {Date} parsed date
      */
     parse() {
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -36,7 +36,7 @@ class DateParser {
     /**
      * Parse date with seconds
      * 
-     * @return parsed date
+     * @return {Date} parsed date
      */
     parseWithSeconds() {
         var parsedDate = this.parse() + ":" + this.#printTwoDigitsNumber(this.#date.getSeconds());
@@ -46,7 +46,7 @@ class DateParser {
     /**
      * Parse only time without seconds
      * 
-     * @return parsed time
+     * @return {Date} parsed time
      */
     parseOnlyTime() {
         var parsedDate = this.#printTwoDigitsNumber(this.#date.getHours()) + ":" + this.#printTwoDigitsNumber(this.#date.getMinutes());
@@ -57,7 +57,7 @@ class DateParser {
      * @private adds 0 in front of the number if number is less than 10
      * @param {number} number number
      * 
-     * @return two digits number
+     * @return {String} two digits number
      */
     #printTwoDigitsNumber = function (number) {
         return (number < 10 ? '0' : '') + number;
