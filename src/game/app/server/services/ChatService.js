@@ -8,6 +8,7 @@ const db = require('../../../../config/db')
 
 /**
  * The Chat Service
+ * @module ChatService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -15,7 +16,8 @@ const db = require('../../../../config/db')
 module.exports = class Chatservice {
 
     /**
-     * @static creates a new one to one chat instance and saves it in the database
+     * creates a new one to one chat instance and saves it in the database
+     * @static @method module:ChatService#newOneToOneChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String} chatPartnerId chat partner ID
@@ -24,7 +26,7 @@ module.exports = class Chatservice {
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return OneToOneChat instance
+     * @return {OneToOneChat} OneToOneChat instance
      */
     static newOneToOneChat(ownerId, chatPartnerId, ownerUsername, chatPartnerUsername, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -59,7 +61,8 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static creates a new group chat instance and saves it in the database
+     * creates a new group chat instance and saves it in the database
+     * @static @method module:ChatService#newGroupChat
      * 
      * @param {String} ownerId chat initializer ID
      * @param {String[]} memberIds array of group chat member ID
@@ -67,7 +70,7 @@ module.exports = class Chatservice {
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return GroupChat instance
+     * @return {GroupChat} GroupChat instance
      */
     static newGroupChat(ownerId, memberIds, groupName, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -103,14 +106,15 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static checks if a one to one chat between 2 participants is already existed in the database
+     * checks if a one to one chat between 2 participants is already existed in the database
+     * @static @method module:ChatService#existsOneToOneChat
      * 
      * @param {String} ownerId first participant ID
      * @param {String} chatPartnerId second participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return chat data if existed, otherwise false
+     * @return {Chat} chat data if existed, otherwise false
      */
     static existsOneToOneChat(ownerId, chatPartnerId, conferenceId, vimsudb) {
         TypeChecker.isString(ownerId);
@@ -133,13 +137,14 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static loads all chats of the specified participant from the database
+     * loads all chats of the specified participant from the database
+     * @static @method module:ChatService#loadChatList
      * 
      * @param {String[]} chatIDList array of chat ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return array of Chat instances
+     * @return {Chat[]} array of Chat instances
      */
     static loadChatList(chatIDList, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(chatIDList, Array);
@@ -180,13 +185,14 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static gets a chat with the specified chat ID from the database
+     * gets a chat with the specified chat ID from the database
+     * @static @method module:ChatService#loadChat
      * 
      * @param {String} chatId chat ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return Chat instance if found, otherwise false
+     * @return {Chat} Chat instance if found, otherwise false
      */
     static loadChat(chatId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -232,14 +238,15 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static stores a participant in the chat member list in the database
+     * stores a participant in the chat member list in the database
+     * @static @method module:ChatService#storeParticipant
      * 
      * @param {String} chatId chat ID
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if stored successfully, otherwise false
+     * @return {boolean} true if stored successfully, otherwise false
      */
     static storeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -261,14 +268,15 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static removes participant from a chat from the database
+     * removes participant from a chat from the database
+     * @static @method module:ChatService#removeParticipant
      * 
      * @param {String} chatId chat ID
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if successfully removed, otherwise false
+     * @return {boolean} true if successfully removed, otherwise false
      */
     static removeParticipant(chatId, participantId, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -316,7 +324,8 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static creates a chat message
+     * creates a chat message
+     * @static @method module:ChatService#createChatMessage
      * 
      * @param {String} chatId chat ID
      * @param {String} senderId sender ID
@@ -325,7 +334,7 @@ module.exports = class Chatservice {
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return Message instance
+     * @return {Message} Message instance
      */
     static createChatMessage(chatId, senderId, senderUsername, msgText, conferenceId, vimsudb) {
         TypeChecker.isString(chatId);
@@ -356,12 +365,14 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static removes all chats from the database
+     * removes all chats from the database
+     * @static static method
+     * @method module:ChatService#removedAllChats
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if deleted successfully
+     * @return {boolean} true if deleted successfully
      */
     static removeAllChats(conferenceId, vimsudb) {
         TypeChecker.isString(conferenceId);
@@ -381,14 +392,15 @@ module.exports = class Chatservice {
     }
 
     /**
-     * @static removes a chat from the database
+     * removes a chat from the database
+     * @static @method module:ChatService#removeChat
      * 
      * @param {String} participantId participant ID
      * @param {String} chatId chat ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return true if deleted successfully
+     * @return {boolean} true if deleted successfully
      */
     static removeChat(participantId, chatId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);

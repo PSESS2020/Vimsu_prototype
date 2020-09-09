@@ -9,6 +9,7 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 
 /**
  * The Room Model
+ * @module Room
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -28,7 +29,8 @@ module.exports = class Room {
     #listOfMapElements;
 
     /**
-     * @constructor Creates a Room instance
+     * Creates a Room instance
+     * @constructor module:Room
      * 
      * @param {number} roomId room ID
      * @param {TypeOfRoom} typeOfRoom type of room
@@ -64,6 +66,7 @@ module.exports = class Room {
 
     /**
      * Sets map elements
+     * @method module:Room#setMapElements
      * 
      * @param {GameObject[]} lisOfMapElements list of map elements
      */
@@ -78,6 +81,7 @@ module.exports = class Room {
 
     /**
      * Sets game objects
+     * @method module:Room#setGameObjects
      * 
      * @param {GameObject[]} listOfGameObjects list of game objects
      */
@@ -92,6 +96,7 @@ module.exports = class Room {
 
     /**
      * Sets NPCs
+     * @method module:Room#setNPCs
      * 
      * @param {NPC[]} listOfNPCs list of NPCs
      */
@@ -106,6 +111,7 @@ module.exports = class Room {
 
     /**
      * Sets doors 
+     * @method module:Room#setDoors
      * 
      * @param {Door[]} listOfDoors list of doors
      */
@@ -120,8 +126,9 @@ module.exports = class Room {
 
     /**
      * Gets room ID
+     * @method module:Room#getRoomId
      * 
-     * @return roomId
+     * @return {int} roomId
      */
     getRoomId() {
         return this.#roomId;
@@ -129,8 +136,9 @@ module.exports = class Room {
 
     /**
      * Gets type of room
+     * @method module:Room#getTypeOfRoom
      * 
-     * @return typeOfRoom
+     * @return {String} typeOfRoom
      */
     getTypeOfRoom() {
         return this.#typeOfRoom;
@@ -138,8 +146,9 @@ module.exports = class Room {
 
     /**
      * Gets room chat messages
+     * @method module:Room#getMessages
      * 
-     * @return listOfMessages
+     * @return {Object[]} listOfMessages
      */
     getMessages() {
         return this.#listOfMessages;
@@ -147,8 +156,9 @@ module.exports = class Room {
 
     /**
      * Gets room width
+     * @method module:Room#getWidth
      * 
-     * @return width
+     * @return {int} width
      */
     getWidth() {
         return this.#width;
@@ -156,8 +166,9 @@ module.exports = class Room {
 
     /**
      * Gets room length
+     * @method module:Room#getLength
      * 
-     * @return length
+     * @return {int} length
      */
     getLength() {
         return this.#length;
@@ -165,8 +176,9 @@ module.exports = class Room {
 
     /**
      * Gets list of participants in the room
+     * @method module:Room#getListOfPPants
      * 
-     * @return listOfPpants
+     * @return {Participant[]} listOfPpants
      */
     getListOfPPants() {
         return this.#listOfPPants;
@@ -174,8 +186,9 @@ module.exports = class Room {
 
     /**
      * Gets list of map elements
+     * @method module:Room#getListOfMapElements
      * 
-     * @return listOfMapElements
+     * @return {GameObject[]} listOfMapElements
      */
     getListOfMapElements() {
         return this.#listOfMapElements;
@@ -183,8 +196,9 @@ module.exports = class Room {
 
     /**
      * Gets list of game objects
+     * @method module:Room#getListOfGameObjects
      * 
-     * @return listOfGameObjects
+     * @return {GameObject[]} listOfGameObjects
      */
     getListOfGameObjects() {
         return this.#listOfGameObjects;
@@ -192,8 +206,9 @@ module.exports = class Room {
 
     /**
      * Gets list of NPCs
+     * @method module:Room#getListOfNPCs
      * 
-     * @return listOfNPCs
+     * @return {NPC[]} listOfNPCs
      */
     getListOfNPCs() {
         return this.#listOfNPCs;
@@ -201,8 +216,9 @@ module.exports = class Room {
 
     /**
      * Gets list of doors
+     * @method module:Room#getListOfDoors
      * 
-     * @return listOfDoors
+     * @return {Door[]} listOfDoors
      */
     getListOfDoors() {
         return this.#listOfDoors;
@@ -210,8 +226,9 @@ module.exports = class Room {
 
     /**
      * Gets occupation map
+     * @method module:Room#getOccMap
      * 
-     * @return occupationMap
+     * @return {int[][]} occupationMap
      */
     getOccMap() {
         return this.#occupationMap;
@@ -219,8 +236,10 @@ module.exports = class Room {
 
     /**
      * Gets a NPC with this id
+     * @method module:Room#getNPC
      * 
      * @param {number} id NPC ID
+     * @return {NPC} the NPC with the passed id or undefined if no NPC if the passed id exists in the room
      */
     getNPC(id) {
         TypeChecker.isInt(id);
@@ -236,6 +255,7 @@ module.exports = class Room {
 
     /**
      * Adds ppant into room
+     * @method module:Room#enterParticipant
      * 
      * @param {Participant} participant participant
      */
@@ -248,8 +268,9 @@ module.exports = class Room {
 
     /**
     * Deletes ppant from room
+    * @method module:Room#exitParticipant
     * 
-    * @param {Participant} participant participant
+    * @param {String} String participantId
     */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
@@ -264,8 +285,10 @@ module.exports = class Room {
 
     /**
      * Checks if ppant with ppantID is currently in this room
+     * @method module:Room#includesParticipant
      * 
      * @param {String} ppantID participant ID
+     * @return {boolean} true if participant with passed id exists in room, false otherwise
      */
     includesParticipant(ppantID) {
         TypeChecker.isString(ppantID);
@@ -280,8 +303,10 @@ module.exports = class Room {
 
     /**
      * Get a participant who is currently in this room
+     * @method module:Room#getParticipant
      * 
      * @param {String} ppantID participant ID
+     * @return {Participant} the participant with the pass id, or undefined if no such participant exists in the room
      */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
@@ -296,10 +321,10 @@ module.exports = class Room {
 
     /**
      * Checks, if there is a collision at this position
+     * @method module:Room#checkForCollision
      * 
      * @param {Position} position avatar position
-     * @returns true, when collision
-     * @returns false, otherwise
+     * @returns {boolean} true, when collision, false otherwise
      */
     checkForCollision(position) {
         TypeChecker.isInstanceOf(position, Position);
@@ -325,6 +350,7 @@ module.exports = class Room {
 
     /**
      * Adds message to the room chat
+     * @method module:Room#addMessage
      * 
      * @param {String} ppantID participant ID
      * @param {String} username participant username
@@ -343,6 +369,7 @@ module.exports = class Room {
 
     /**
      * Builds occupation map. Array is occupied by 1 if there is a solid game object or a NPC in this position
+     * @method module:Room#buildOccMap
      */
     buildOccMap() {
         //Goes through each gameObject
@@ -376,10 +403,11 @@ module.exports = class Room {
 
     /**
      * Gets Door to room with roomId if it exists
+     * @method module:Room#getDoorTo
      * 
      * @param {number} targetId target room ID
      * 
-     * @return door
+     * @return {Door} door
      */
     getDoorTo(targetId) {
         TypeChecker.isInt(targetId);
@@ -392,8 +420,9 @@ module.exports = class Room {
 
     /**
      * Return Lecture Door if it exists in this room
+     * @method module:Room#getLectureDoor
      * 
-     * @return lecture door
+     * @return {Door} lecture door
      */
     getLectureDoor() {
         if (this.#typeOfRoom !== TypeOfRoom.FOYER) {

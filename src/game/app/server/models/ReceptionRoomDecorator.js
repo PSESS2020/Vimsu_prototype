@@ -10,6 +10,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 /**
  * The Reception Room Decorator Model
+ * @module ReceptionRoomDecorator
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -33,7 +34,8 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
     }
 
     /**
-     * @constructor Creates a RoomDecorator instance for Reception
+     * Creates a RoomDecorator instance for Reception
+     * @constructor module:ReceptionRoomDecorator
      * 
      * @param {Room} room reception room instance
      */
@@ -112,8 +114,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
 
     /**
      * Gets reception room
+     * @method module:ReceptionRoomDecorator#getRoom
      * 
-     * @return room
+     * @return {Room} room
      */
     getRoom() {
         return this.#room;
@@ -121,8 +124,9 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
 
     /**
      * Gets asset paths of reception room objects
+     * @method module:ReceptionRoomDecorator#getAssetPaths
      * 
-     * @return assetPaths
+     * @return {Object} assetPaths
      */
     getAssetPaths() {
         return this.#assetPaths;

@@ -26,6 +26,8 @@ module.exports = class AllchatContext extends CommandContext {
         super();
 
         TypeChecker.isInstanceOf(room, Room);
+        // probably should type-check serverController
+        // not done yet to not interfere w/ dummy-solution from test-class
         this.#serverController = serverController;
         this.#contextObject = room;
     }
@@ -100,6 +102,7 @@ module.exports = class AllchatContext extends CommandContext {
                  * is to be removed is currently in and remove the socket from all those rooms */
                 Object.keys(socket.rooms).forEach((room) => {
                     socket.leave(room);
+                    // this needs to remove the ppant from the room-Instance
                     this.#serverController.emitEventIn(room, "remove player", ppantID);
                 });
             }
