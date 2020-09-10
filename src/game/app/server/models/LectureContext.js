@@ -150,7 +150,6 @@ module.exports = class LectureContext extends CommandContext {
 
         var socketClient = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantId));
         this.#contextObject.leave(ppantId);
-        this.#contextObject.revokeToken(ppantId);
         this.#contextObject.ban(socketClient.request.session.accountId);
         socketClient.leave(socketClient.currentLecture);
         socketClient.currentLecture = undefined;
