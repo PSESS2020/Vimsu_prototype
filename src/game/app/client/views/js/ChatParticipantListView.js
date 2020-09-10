@@ -56,8 +56,10 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     addToChatParticipantList(username) {
-        this.#usernames.push(username);
-        this.draw(this.#usernames);
+        if (!this.#usernames.includes(username)) {
+            this.#usernames.push(username);
+            this.draw(this.#usernames);
+        }
     }
 
     /**

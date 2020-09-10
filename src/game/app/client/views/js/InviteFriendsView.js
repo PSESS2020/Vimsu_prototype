@@ -145,8 +145,10 @@ class InviteFriendsView extends WindowView {
         }
 
         if (businessCard) {
-            this.#businessCards.push(businessCard);
-            this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+            if (!this.#businessCards.includes(businessCard)) {
+                this.#businessCards.push(businessCard);
+                this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+            }
         }
     }
 

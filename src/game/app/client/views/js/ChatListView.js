@@ -113,8 +113,10 @@ class ChatListView extends WindowView {
      * @param {Object} chat chat
      */
     addNewChat(chat) {
-        this.#chats.push(chat);
-        this.draw(this.#chats);
+        if (!this.#chats.includes(chat)) {
+            this.#chats.push(chat);
+            this.draw(this.#chats);
+        }
     };
 
     /**

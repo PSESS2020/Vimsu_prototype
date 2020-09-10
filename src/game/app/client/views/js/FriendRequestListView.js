@@ -135,7 +135,9 @@ class FriendRequestListView extends WindowView {
      * @param {BusinessCardClient} businessCard requester's business card
      */
     addToFriendRequestList(businessCard) {
-        this.#businessCards.push(businessCard);
-        this.draw(this.#businessCards);
+        if (!this.#businessCards.includes(businessCard)) {
+            this.#businessCards.push(businessCard);
+            this.draw(this.#businessCards);
+        }   
     }
 }
