@@ -42,6 +42,7 @@ class InviteFriendsView extends WindowView {
         $('#inviteFriendsModal .modal-body .list-group').empty();
         $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
         $('#createGroupChat').show();
+        this.#invitedFriends = [];
 
         if (businessCards) {
             if (businessCards.length < 1) {
