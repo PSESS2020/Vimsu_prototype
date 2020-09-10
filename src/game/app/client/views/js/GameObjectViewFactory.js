@@ -246,7 +246,7 @@ class GameObjectViewFactory {
             
             case GameObjectType.RECEPTIONCOUNTER:
                 gameObjectImage = this.#assetImages[objectName];
-                var receptionCounterOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 146};
+                var receptionCounterOffset = { x: 0, y: -this.#tileRowHeight + 8};
     
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, pos, receptionCounterOffset, objectName);
