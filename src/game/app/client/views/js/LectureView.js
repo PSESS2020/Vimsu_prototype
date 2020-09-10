@@ -342,7 +342,7 @@ class LectureView extends WindowView {
         if (this.#hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
-                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" placeholder="Enter message ...">
+                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" autocomplete="off" placeholder="Enter message ...">
                     <div class="input-group-append">
                         <button id="lectureChatButton" class="btn btn-accept mr-3" type="button">Send</button>
                     </div>
