@@ -404,16 +404,43 @@ module.exports = class ServerController {
 
                 let newPos = new Position(roomId, newCordX, newCordY);
 
-                //check if new position is legit. Prevents manipulation from Client
-                if (oldPos.getCordX() - newPos.getCordX() >= 2 || newPos.getCordX() - oldPos.getCordX() >= 2) {
-                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
-                    return;
-                }
+                /* Check if new position is legit. Prevents manipulation from Client */
 
-                if (oldPos.getCordY() - newPos.getCordY() >= 2 || newPos.getCordY() - oldPos.getCordY() >= 2) {
-                    this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
-                    return;
-                }
+                //Expected new position with direction DOWNRIGHT
+                if (direction === Direction.DOWNRIGHT) {
+                    if (!((oldPos.getCordX() - newPos.getCordX() === 0) &&
+                        (newPos.getCordY() - oldPos.getCordY() === Settings.MOVEMENTSPEED_Y || newPos.getCordY() - oldPos.getCordY() === 0))) {
+                        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
+                        return;
+                    }
+                } 
+
+                //Expected new position with direction DOWNLEFT
+                else if (direction === Direction.DOWNLEFT) {
+                    if (!((oldPos.getCordX() - newPos.getCordX() === Settings.MOVEMENTSPEED_X || oldPos.getCordX() - newPos.getCordX() === 0) &&
+                        (newPos.getCordY() - oldPos.getCordY() === 0))) {
+                        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
+                        return;
+                    }
+                } 
+
+                //Expected new position with direction UPRIGHT
+                else if (direction === Direction.UPRIGHT) {
+                    if (!((newPos.getCordX() - oldPos.getCordX() === Settings.MOVEMENTSPEED_X || newPos.getCordX() - oldPos.getCordX() === 0) &&
+                        (newPos.getCordY() - oldPos.getCordY() === 0))) {
+                        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
+                        return;
+                    }
+                } 
+
+                //Expected new position with direction UPLEFT
+                else if (direction === Direction.UPLEFT) {
+                    if (!((oldPos.getCordX() - newPos.getCordX() === 0) &&
+                        (oldPos.getCordY() - newPos.getCordY() === Settings.MOVEMENTSPEED_Y || oldPos.getCordY() - newPos.getCordY() === 0))) {
+                        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: oldPos.getCordX(), cordY: oldPos.getCordY(), dir: oldDir });
+                        return;
+                    }
+                } 
 
                 let currentRoom = this.#rooms[roomId - 1].getRoom();
 
@@ -1016,14 +1043,14 @@ module.exports = class ServerController {
             });
 
             /* Called whenever a participant creates a new group chat */
-            socket.on('createNewGroupChat', (chatName, chatPartnerIDList, chatId) => {
+            socket.on('createNewGroupChat', (chatName, chatPartnerIDListInput, chatId) => {
 
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(chatName);
-                    TypeChecker.isInstanceOf(chatPartnerIDList, Array);
-                    for (let i = 0; i < chatPartnerIDList.length; i++) {
-                        TypeChecker.isString(chatPartnerIDList[i]);
+                    TypeChecker.isInstanceOf(chatPartnerIDListInput, Array);
+                    for (let i = 0; i < chatPartnerIDListInput.length; i++) {
+                        TypeChecker.isString(chatPartnerIDListInput[i]);
                     }
                     if (chatId !== undefined)
                         TypeChecker.isString(chatId);
@@ -1032,6 +1059,14 @@ module.exports = class ServerController {
                     return;
                 }
 
+                //check if there is a chatPartner twice in list for some reason
+                let chatPartnerIDList = [];
+                for (let i = 0; i < chatPartnerIDListInput.length; i++) {
+                    if (!chatPartnerIDList.includes(chatPartnerIDListInput[i])) {
+                        chatPartnerIDList.push(chatPartnerIDListInput[i]);
+                    }
+                }
+                
                 let creatorID = socket.ppantID;
                 let creator = this.#ppants.get(creatorID);
                 if (!creator)

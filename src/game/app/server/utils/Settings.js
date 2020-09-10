@@ -38,6 +38,10 @@ module.exports = Object.freeze({
     TOKENCOUNTERSTART: 5 * 60 * 1000,
 
     /* Moderator-Settings */
-    CMDSTARTCHAR: "\\", // moved the actual commands into a separate file for easier handling
+    CMDSTARTCHAR: "\\", // moved the actual commands into a separate file for easier handling,
+
+    /* Movement-Speed Constants */
+    MOVEMENTSPEED_X: 1,
+    MOVEMENTSPEED_Y: 1
 
 });
