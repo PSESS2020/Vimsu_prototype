@@ -311,7 +311,7 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/account', (request, response) => {
-            if (request.session.loggedin = true) {
+            if (request.session.loggedin === true) {
                 username = request.session.username;
                 email = request.session.email;
                 title = request.session.title;
@@ -323,12 +323,12 @@ module.exports = class RouteController {
             }
 
             else {
-                response.render('/');
+                response.redirect('/');
             }
         })
 
         this.#app.get('/editAccount', (request, response) => {
-            if (request.session.loggedin = true) {
+            if (request.session.loggedin === true) {
                 title = request.session.title;
                 forename = request.session.forename;
                 surname = request.session.surname;
@@ -337,7 +337,7 @@ module.exports = class RouteController {
                 response.render('editAccount', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company })
             }
             else {
-                response.render('/');
+                response.redirect('/');
             }
         })
 
