@@ -1,10 +1,10 @@
 /**
- * The Cache Images
+ * The Image Cache
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class CacheImages {
+class ImageCache {
 
     static images = new Map();
     static enabled = true;

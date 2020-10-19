@@ -9,7 +9,7 @@ class GameView {
     #updateList = [];
     #gameViewInit;
 
-    #currentMap;
+    #currentMapView;
 
     #currentLecturesView;
     #lectureView;
@@ -127,7 +127,7 @@ class GameView {
      * Initialize canvas events
      */
     initCanvasEvents() {
-        if (this.#currentMap === null || this.#currentMap === undefined)
+        if (this.#currentMapView === null || this.#currentMapView === undefined)
             return;
 
         var canvas = document.getElementById('avatarCanvas');
@@ -140,8 +140,8 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
-            if (selectedTileCords !== undefined && this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                canvas.style.cursor = (this.#currentMap.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
+            if (selectedTileCords !== undefined && this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                canvas.style.cursor = (this.#currentMapView.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
 
                 this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
@@ -157,16 +157,16 @@ class GameView {
                     }
                 });
 
-                this.#currentMap.selectionOnMap = true;
-            } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.selectionOnMap = false;
-                this.#currentMap.findClickableElementOutsideMap(newPosition, false, canvas);
+                this.#currentMapView.selectionOnMap = true;
+            } else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMapView.selectionOnMap = false;
+                this.#currentMapView.findClickableElementOutsideMap(newPosition, false, canvas);
             } else {
-                this.#currentMap.selectionOnMap = false;
+                this.#currentMapView.selectionOnMap = false;
                 canvas.style.cursor = "default";
             }
 
-            this.#currentMap.updateSelectedTile(selectedTileCords);
+            this.#currentMapView.updateSelectedTile(selectedTileCords);
         });
 
         //Handles mouse click on canvas
@@ -177,16 +177,17 @@ class GameView {
 
             var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
 
+               
             //check if clicked tile is a valid walkable tile
-            if (this.#currentMap.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-
+            if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+             
                 //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMap.findAndClickTileOrObject(selectedTileCords, true, canvas);
+                this.#currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
 
                 //then, check if there is an avatar at this position
                 this.getAnotherParticipantAvatarViews().forEach(ppantView => {
                     if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
-                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
                         ppantView.onClick();
                     }
                 });
@@ -194,15 +195,27 @@ class GameView {
                 //then, check if there is an NPC at this position
                 this.#npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
-                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
+                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
                         npcView.onClick();
                     }
                 })
-
-                //check if clicked tile is outside the walkable area
-            } else if (this.#currentMap.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMap.findClickableElementOutsideMap(newPosition, true, canvas);
+            }//check if clicked tile is outside the walkable area
+            else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.#currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
             }
+        });
+
+        $('#avatarCanvas').dblclick((e) => {
+            //Translates the current mouse position to the mouse position on the canvas.
+            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+
+            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+
+            let avatarCords = this.#ownAvatarView.getGridPosition();
+            let startCords = {x: avatarCords.getCordX(), y: avatarCords.getCordY() + Settings.MAP_BLANK_TILES_WIDTH};
+
+            //Point&Click movement event
+            this.#eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
         });
     }
 
@@ -250,12 +263,12 @@ class GameView {
     draw() {
         //check if game view is already initalized
         if (this.#gameViewInit) {
-            if (this.#currentMap.selectionOnMap) {
-                let selectedTile = this.#currentMap.getSelectedTile();
+            if (this.#currentMapView.selectionOnMap) {
+                let selectedTile = this.#currentMapView.getSelectedTile();
                 if (selectedTile !== undefined) selectedTile.draw();
             }
 
-            var gameObjects = this.#currentMap.getGameObjects();
+            var gameObjects = this.#currentMapView.getGameObjects();
 
             //put all AvatarViews and all GameObjects in one list
             var allDrawElements = (gameObjects !== undefined) ? gameObjects.concat(this.#ownAvatarView)
@@ -362,7 +375,7 @@ class GameView {
             this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), this.#gameEngine, this.#eventManager));
         });
 
-        this.#currentMap = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
+        this.#currentMapView = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
         this.#statusBar.updateLocation(typeOfRoom);
     }
 

@@ -16,8 +16,8 @@ class PlantView extends GameObjectView {
      * @param {number} screenPositionOffset platn screen position offset
      * @param {String} name plant name
      */
-    constructor(objectImage, gridPosition, screenPositionOffset, name) {
-        super(objectImage, gridPosition, screenPositionOffset, name);
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name) {
+        super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
     }
 
     /**

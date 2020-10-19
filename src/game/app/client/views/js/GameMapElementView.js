@@ -14,8 +14,8 @@ class GameMapElementView extends GameObjectView {
      * @param {number} screenPositionOffset screen position offset
      * @param {String} name map element name
      */
-    constructor(mapElementImage, position, screenPositionOffset, name) {
-        super(mapElementImage, position, screenPositionOffset, name);
+    constructor(mapElementImage, clickMap, position, screenPositionOffset, name) {
+        super(mapElementImage, clickMap, position, screenPositionOffset, name);
     }
 
     /**

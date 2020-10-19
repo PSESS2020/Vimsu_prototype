@@ -6,6 +6,7 @@ const Position = require('./Position.js');
 const Door = require('./Door.js');
 const NPC = require('./NPC.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
+const Settings = require('../../client/utils/Settings.js');
 
 /**
  * The Room Model
@@ -57,11 +58,18 @@ module.exports = class Room {
         this.#length = length;
         this.#width = width;
 
-        //Initialized with width*length Array full of 0
-        this.#occupationMap = new Array(this.#width);
-        for (var i = 0; i < this.#width; i++) {
-            this.#occupationMap[i] = new Array(this.#length).fill(0);
+        //Initialized with width*length Array full of 0 and 1 for fields that are not walkable.
+        this.#occupationMap = [];
+        let rightMapBlankTiles = new Array(Settings.MAP_BLANK_TILES_LENGTH).fill(new Array(this.#length + Settings.MAP_BLANK_TILES_WIDTH).fill(1));
+        let leftMapBlankTiles = new Array(Settings.MAP_BLANK_TILES_LENGTH).fill(1);
+        
+        for (var i = 0; i < (this.#width); i++) {
+            this.#occupationMap.push( leftMapBlankTiles.concat(new Array(this.#length).fill(0)) );
         }
+
+        rightMapBlankTiles.forEach(array=>{
+            this.#occupationMap.push(array);
+        });
     }
 
     /**
@@ -340,7 +348,7 @@ module.exports = class Room {
             return true;
         }
 
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        if (this.#occupationMap[cordX][cordY + Settings.MAP_BLANK_TILES_WIDTH] == 1) {
             return true;
         }
         else {
@@ -386,7 +394,7 @@ module.exports = class Room {
                 for (var j = objectPosition.getCordX(); j < objectPosition.getCordX() + objectWidth; j++) {
 
                     for (var k = objectPosition.getCordY(); k < objectPosition.getCordY() + objectLength; k++) {
-                        this.#occupationMap[j][k] = 1;
+                        this.#occupationMap[j][k + Settings.MAP_BLANK_TILES_WIDTH] = 1;
                     }
                 }
             }
@@ -397,7 +405,7 @@ module.exports = class Room {
             let npcPosition = this.#listOfNPCs[i].getPosition();
             let cordX = npcPosition.getCordX();
             let cordY = npcPosition.getCordY();
-            this.#occupationMap[cordX][cordY] = 1;
+            this.#occupationMap[cordX][cordY + Settings.MAP_BLANK_TILES_WIDTH] = 1;
         }
     }
 

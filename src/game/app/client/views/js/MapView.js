@@ -53,6 +53,24 @@ class MapView extends Views {
     }
 
     /**
+     * Gets the amount of tiles of the map in x direction.
+     * 
+     * @return {number} xNumTiles
+     */
+    getXNumTiles() {
+        return this.#xNumTiles;
+    }
+
+    /**
+     * Gets the amount of tiles of the map in y direction.
+     * 
+     * @return {number} yNumTiles
+     */
+    getYNumTiles() {
+        return this.#yNumTiles;
+    }
+
+    /**
      * Gets map array
      * 
      * @return {number[][]} map
@@ -281,14 +299,13 @@ class MapView extends Views {
      */
     #findObjectAndClick = function(object) {
         if (object !== null && object.isClickable()) {
-            this.#clickableObjects.forEach(viewObject => {
-                let objectName = object.getName();
-                let viewObjectName = viewObject.getName();
 
-                if (object instanceof GameObjectClient && objectName === viewObjectName) {
-                    viewObject.onclick();
-                }
+            //the returned object is not unambiguous because no identifier for model and view provided.
+            let viewObject = this.#clickableObjects.find(viewObject => {
+                return object instanceof GameObjectClient && object.getName() === viewObject.getName();
             });
+
+            if (viewObject != undefined) viewObject.onclick();
         }
     }
 

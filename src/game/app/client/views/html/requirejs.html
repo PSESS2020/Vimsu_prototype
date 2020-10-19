@@ -25,11 +25,12 @@
 
                         requirejs([
                             'client/utils/ImageLoader',
-                            'client/utils/CacheImages',
+                            'client/utils/ImageCache',
                             'client/utils/IsometricEngine',
                             'client/utils/SpriteAnimation',
                             'client/views/js/GameObjectView',
-                            'client/utils/SpriteSheet',], () => {
+                            'client/utils/SpriteSheet',
+                            'client/utils/algorithms/AStar',], () => {
 
                                 requirejs(['client/views/js/WindowView',
                                     'client/views/js/MapView',

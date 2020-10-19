@@ -5,7 +5,7 @@
  * @version 1.0.0
  */
 class EventManager {
-
+    #handlingPlaygroundClicked = false;
     #clientController;
 
     /**
@@ -23,6 +23,75 @@ class EventManager {
 
         TypeChecker.isInstanceOf(clientController, ClientController);
         this.#clientController = clientController;
+    }
+
+    /**
+     * called frow View when the tiles on the playground are clicked
+     */
+    handlePlayGroundClicked(startPos, goalPos) {
+        
+        if(startPos.x == goalPos.x && startPos.y == goalPos.y)
+            return;
+
+        if (this.#handlingPlaygroundClicked)
+            return;
+            
+        this.#handlingPlaygroundClicked = true;
+       
+        var currentRoom = this.#clientController.getCurrentRoom();
+
+        let occupationMap = JSON.parse(JSON.stringify(currentRoom.getOccupationMap()));
+
+        occupationMap[goalPos.x][goalPos.y] = 3;
+        occupationMap[startPos.x][startPos.y] = 2;
+
+        var walkPath = AStar.astarSearch(occupationMap, "manhattan", false);
+
+        if ( walkPath == null) this.#handlingPlaygroundClicked = false;
+        else
+        {
+            var prev = startPos;
+
+            walkPath.forEach( (next, i, array) => {
+                let xDiff = prev.x - next.x;
+                let yDiff = prev.y - next.y;
+                if ( xDiff < 0 ) {
+                    setTimeout(()=>{
+                    this.handleUpArrowDown();
+
+                    }, i * 40);
+                }
+                else if ( xDiff > 0 ) {
+                    setTimeout(()=>{
+                    this.handleDownArrowDown();
+                    }, i * 40);
+                }
+                else if ( yDiff < 0){
+                    setTimeout(()=>{
+                    this.handleRightArrowDown();
+                    }, i * 40);
+                }
+                else if ( yDiff > 0 ){
+                    setTimeout(()=>{
+                        this.handleLeftArrowDown();
+                    }, i * 40);
+                }
+
+                //wait till the animation for walk path has ended
+                if ( i === array.length - 1) {
+                    setTimeout(()=>{
+                        this.handleArrowUp();
+                    }, i * 40 + 80);
+
+                    setTimeout(()=>{
+                        this.#handlingPlaygroundClicked = false;
+                    }, i * 40);
+                }
+
+                prev = next;
+
+            })
+        }
     }
 
     /**

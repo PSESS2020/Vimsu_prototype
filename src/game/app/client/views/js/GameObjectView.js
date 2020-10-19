@@ -7,6 +7,7 @@
 class GameObjectView extends Views {
 
     #objectImage;
+    #clickMap;
     #gridPosition;
     #screenPositionOffset;
     #name;
@@ -16,19 +17,22 @@ class GameObjectView extends Views {
      * Creates an instance of GameObjectView
      * 
      * @param {Image} objectImage game object image
+     * @param {number[][]} clickMap schedule clickMap
      * @param {PositionClient} gridPosition game object position
      * @param {number} screenPositionOffset screen position offset
      * @param {String} name game object name
      */
-    constructor(objectImage, gridPosition, screenPositionOffset, name) {
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name) {
         super();
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
         TypeChecker.isInstanceOf(objectImage, Image);
+        TypeChecker.isInstanceOf(clickMap, Array);
         TypeChecker.isInstanceOf(screenPositionOffset, Object);
         TypeChecker.isString(name);
 
 
         this.#objectImage = objectImage;
+        this.#clickMap = clickMap;
         this.#gridPosition = gridPosition;
         this.#screenPositionOffset = screenPositionOffset;
         this.#name = name;
@@ -68,6 +72,21 @@ class GameObjectView extends Views {
      */
     getScreenPositionOffset() {
         return this.#screenPositionOffset;
+    }
+
+    /**
+     * gets click map with grid coordinates
+     * 
+     * @param {number} mousePos mouse position
+     */
+    getClickMapValueWithGridCoords(mousePos) {
+        var screenPos = this.getScreenPosition();
+
+        var clickImgCordX = Math.abs(Math.abs(screenPos.getCordX() - Math.round(mousePos.x)));
+        
+        var clickImgCordY = Math.abs((screenPos.getCordY() + this.getScreenPositionOffset().y) - Math.round(mousePos.y));
+
+        return this.#clickMap[clickImgCordY][clickImgCordX];
     }
 
     /**

@@ -18,8 +18,8 @@ class DoorView extends GameMapElementView {
      * @param {String} name door name
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(doorImage, position, doorType, doorScreenPositionOffset, name, eventManager) {
-        super(doorImage, position, doorScreenPositionOffset, name);
+    constructor(doorImage, clickMap, position, doorType, doorScreenPositionOffset, name, eventManager) {
+        super(doorImage, clickMap, position, doorScreenPositionOffset, name);
 
         this.#DOORTYPE = doorType;
         this.#eventManager = eventManager;

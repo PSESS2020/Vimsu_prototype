@@ -102,7 +102,7 @@ class GameObjectViewFactory {
                 gameMapElementImage = this.#assetImages[objectName];
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -114,9 +114,9 @@ class GameObjectViewFactory {
 
                 if (gameMapElementImage !== undefined) {
                     if (gameObjectType === GameObjectType.LEFTSCHEDULE)
-                        gameMapElementView = new ScheduleView(gameMapElementImage, pos, wallOffset, objectName, this.getClickMap(gameMapElementImage, pos, wallOffset), this.#eventManager);
+                        gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, wallOffset), pos, wallOffset, objectName, this.#eventManager);
                     else
-                        gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
+                        gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
                 } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -127,7 +127,7 @@ class GameObjectViewFactory {
                 var wallOffset = { x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1 };
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, wallOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
                 else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -138,7 +138,7 @@ class GameObjectViewFactory {
                 pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -149,7 +149,7 @@ class GameObjectViewFactory {
                 pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -185,7 +185,7 @@ class GameObjectViewFactory {
                 gameObjectImage = this.#assetImages[objectName];
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, this.#defaultOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, this.#defaultOffset, objectName);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -196,7 +196,7 @@ class GameObjectViewFactory {
                 var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 7 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -206,7 +206,7 @@ class GameObjectViewFactory {
                 var tableOffset = { x: -4, y: this.#tileRowHeight - gameObjectImage.height + 20 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                 else throw new Error("The image for the food view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -217,7 +217,7 @@ class GameObjectViewFactory {
                 var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 20 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -228,7 +228,7 @@ class GameObjectViewFactory {
                     var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 52 };
     
                     if (gameObjectImage !== undefined)
-                        gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                     else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
     
                     break; 
@@ -239,7 +239,7 @@ class GameObjectViewFactory {
                 var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                 else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -249,7 +249,7 @@ class GameObjectViewFactory {
                 var receptionCounterOffset = { x: 0, y: -this.#tileRowHeight + 8};
     
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, receptionCounterOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
                 else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
     
                 break;
@@ -259,7 +259,7 @@ class GameObjectViewFactory {
                 var receptionCounterOffset = { x: -9, y: this.#tileRowHeight - gameObjectImage.height + 28};
     
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, receptionCounterOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
                 else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
     
                 break;
@@ -269,7 +269,7 @@ class GameObjectViewFactory {
                 var tableOffset = { x: 14, y: this.#tileRowHeight - gameObjectImage.height + 12 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, tableOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
                 else throw new Error("The image for the drinking machine could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break; 
@@ -280,7 +280,7 @@ class GameObjectViewFactory {
                 var chairOffset = { x: 15, y: this.#tileRowHeight - gameObjectImage.height - 6 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, chairOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
                 else throw new Error("The image for the chair view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -291,7 +291,7 @@ class GameObjectViewFactory {
                 var sofaOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4 };
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, pos, sofaOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
                 else throw new Error("The image for the sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -303,9 +303,9 @@ class GameObjectViewFactory {
                 if (gameObjectImage !== undefined) {
 
                     if (isClickable) {
-                        gameObjectView = new PlantView(gameObjectImage, pos, plantOffset, objectName);
+                        gameObjectView = new PlantView(gameObjectImage, [], pos, plantOffset, objectName);
                     } else
-                        gameObjectView = new GameObjectView(gameObjectImage, pos, plantOffset, objectName);
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, plantOffset, objectName);
 
                 }
                 else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
@@ -346,7 +346,7 @@ class GameObjectViewFactory {
                 var leftDoorOffset = { x: 0, y: this.#tileRowHeight / 2 - doorImage.width + 1 };
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, pos, typeOfDoor, leftDoorOffset, objectName, this.#eventManager);
+                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, leftDoorOffset, objectName, this.#eventManager);
                 else throw new Error("The image for lefthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -358,7 +358,7 @@ class GameObjectViewFactory {
                 var rightDoorOffset = { x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - doorImage.width + 1 };
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, pos, typeOfDoor, rightDoorOffset, objectName, this.#eventManager);
+                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, rightDoorOffset, objectName, this.#eventManager);
                 else throw new Error("The image for righthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
