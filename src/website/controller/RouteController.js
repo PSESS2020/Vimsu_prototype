@@ -103,6 +103,7 @@ module.exports = class RouteController {
 
         });
 
+        /** 
         this.#app.get('/upload', (request, response) => {
             if (request.session.loggedin === true) {
                 response.render('upload', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
@@ -153,6 +154,8 @@ module.exports = class RouteController {
                 return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             }
         });
+        */
+        
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {

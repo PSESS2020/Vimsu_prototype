@@ -53,6 +53,8 @@ module.exports = class blob {
      * @return {String} fileId
      */
     async uploadFile(containerName, fileName, dir, fileType) {
+        console.log('Do nothing');
+        /*
         TypeChecker.isString(containerName);
         TypeChecker.isString(fileName);
         TypeChecker.isString(dir);
@@ -77,6 +79,7 @@ module.exports = class blob {
                     reject();
                 });
         });
+        */
     }
 
     /**
