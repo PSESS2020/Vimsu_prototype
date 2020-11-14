@@ -176,6 +176,14 @@ module.exports = class RouteController {
             }
         })
 
+        this.#app.get('/loaderio-8114a4c141f35c6eb02712e07510a6bb', (request,response) => {
+            if (request.session.loggedin === true) {
+                response.redirect('/');
+            } else {
+                response.render('loaderio-8114a4c141f35c6eb02712e07510a6bb');
+            }
+        });
+        
         this.#app.post('/login', (request, response) => {
             username = request.body.username;
             var password = request.body.password;
