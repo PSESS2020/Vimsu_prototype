@@ -158,11 +158,8 @@ module.exports = class RouteController {
         
 
         this.#app.get('/login', (request, response) => {
-            if (request.session.loggedin === true) {
-                response.redirect('/');
-            } else {
+            
                 response.render('login');
-            }
 
         });
 
