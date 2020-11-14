@@ -144,11 +144,11 @@ module.exports = class ServerController {
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {
 
                     //Don't allow user to join the conference more than once with the same account
-                    if (this.#ppants.has(ppant.getId())) {
-                        console.log("Participant already joined the conference");
-                        this.#io.to(socket.id).emit('gameEntered');
-                        return;
-                    }
+                    // if (this.#ppants.has(ppant.getId())) {
+                    //     console.log("Participant already joined the conference");
+                    //     this.#io.to(socket.id).emit('gameEntered');
+                    //     return;
+                    // }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let currentRoom = this.#rooms[currentRoomId - 1].getRoom();

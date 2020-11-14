@@ -183,7 +183,7 @@ module.exports = class RouteController {
                 response.render('loaderio-8114a4c141f35c6eb02712e07510a6bb');
             }
         });
-        
+
         this.#app.post('/login', (request, response) => {
             username = request.body.username;
             var password = request.body.password;
@@ -200,7 +200,7 @@ module.exports = class RouteController {
                     request.session.job = user.getJob();
                     request.session.company = user.getCompany();
                     request.session.email = user.getEmail();
-                    response.redirect('/');
+                    response.redirect('/game');
                 }
                 else {
                     return response.render('login', { wrongLoginData: true });
