@@ -42,13 +42,6 @@ class EventManager {
 
         let occupationMap = JSON.parse(JSON.stringify(currentRoom.getOccupationMap()));
 
-        if (occupationMap[goalPos.x] === undefined || occupationMap[startPos.x] === undefined
-                || occupationMap[goalPos.x][goalPos.y] === undefined
-                || occupationMap[startPos.x][startPos.y] === undefined) {
-            this.#handlingPlaygroundClicked = false;
-            return;
-        }
-
         occupationMap[goalPos.x][goalPos.y] = 3;
         occupationMap[startPos.x][startPos.y] = 2;
 

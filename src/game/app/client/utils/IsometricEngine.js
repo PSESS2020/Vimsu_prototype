@@ -234,7 +234,6 @@ class IsometricEngine {
         return {
             x: (e.pageX - rect.left - scrollLeft) * scaleX,
             y: (e.pageY - rect.top - scrollTop) * scaleY,
-
         }
     }
 

@@ -171,54 +171,102 @@ class GameView {
 
         //Handles mouse click on canvas
         $('#avatarCanvas').on('click', (e) => {
-
-            //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
-
-            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
-
-               
-            //check if clicked tile is a valid walkable tile
-            if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-             
-                //first check if click is on door or clickable object in room (not existing at this point)
-                this.#currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
-
-                //then, check if there is an avatar at this position
-                this.getAnotherParticipantAvatarViews().forEach(ppantView => {
-                    if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
-                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
-                        ppantView.onClick();
-                    }
-                });
-
-                //then, check if there is an NPC at this position
-                this.#npcAvatarViews.forEach(npcView => {
-                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x
-                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
-                        npcView.onClick();
-                    }
-                })
-            }//check if clicked tile is outside the walkable area
-            else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
-            }
+            this.#clickHandler(canvas, e);
         });
 
         $('#avatarCanvas').dblclick((e) => {
-            //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+            this.#dblclickHandler(canvas, e);
+        });
 
-            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+        var timeout;
+        var lastTap = 0;
+        canvas.addEventListener('touchend', (e) => {
+            let currentTime = new Date().getTime();
+            let tapLength = currentTime - lastTap;
+
+            clearTimeout(timeout);
+            if (tapLength < 500 && tapLength > 0) {
+                this.#currentMapView.selectionOnMap = true;
+                e.pageX = e.changedTouches[e.changedTouches.length-1].pageX;
+                e.pageY = e.changedTouches[e.changedTouches.length-1].pageY;
+
+                e.preventDefault();
+                this.#dblclickHandler(canvas, e);
+            }
+                timeout = setTimeout(()=> {
+                    this.#currentMapView.selectionOnMap = false;
+                    clearTimeout(timeout);
+                }, 500);
+
+            lastTap = currentTime;
+        });
+    }
+    
+    /**
+     * Handles a click Event on the canvas
+     * @param {Canvas} canvas canvas
+     * @param {Event} e click Event
+     */
+    #clickHandler = function(canvas, e) {
+
+        //Translates the current mouse position to the mouse position on the canvas.
+        var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+
+        var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+
+           
+        //check if clicked tile is a valid walkable tile
+        if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+         
+            //first check if click is on door or clickable object in room (not existing at this point)
+            this.#currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
+
+            //then, check if there is an avatar at this position
+            this.getAnotherParticipantAvatarViews().forEach(ppantView => {
+                if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
+                    && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
+                    ppantView.onClick();
+                }
+            });
+
+            //then, check if there is an NPC at this position
+            this.#npcAvatarViews.forEach(npcView => {
+                if (npcView.getGridPosition().getCordX() === selectedTileCords.x
+                    && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
+                    npcView.onClick();
+                }
+            })
+        }//check if clicked tile is outside the walkable area
+        else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+            this.#currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
+        }
+    }
+
+    /**
+     * Handles a double click Event on the canvas.
+     * @param {Canvas} canvas canvas
+     * @param {Event} e dblclick Event
+     */
+    #dblclickHandler = function(canvas, e) {
+
+        //Translates the current mouse position to the mouse position on the canvas.
+        var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+
+        var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+
+        //check if clicked tile is a valid walkable tile
+        if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+            //update Position of tile selection marker. Needed for double touch event.
+            this.#currentMapView.updateSelectedTile(selectedTileCords);
 
             let avatarCords = this.#ownAvatarView.getGridPosition();
             let startCords = {x: avatarCords.getCordX(), y: avatarCords.getCordY() + Settings.MAP_BLANK_TILES_WIDTH};
 
             //Point&Click movement event
             this.#eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
-        });
+        }
     }
-
+    
     /**
      * Adds view instance to list of views to be updated steadily
      * 
