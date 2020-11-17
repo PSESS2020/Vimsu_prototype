@@ -37,6 +37,15 @@ class ClientController {
     }
 
     /**
+     * Gets the current room
+     * 
+     * @return {RoomClient}
+     */
+    getCurrentRoom() {
+       return this.#currentRoom; 
+    }
+
+    /**
      * @private checks if there is an existing socket
      * 
      * @return {boolean} true if socket is ready, otherwise false

@@ -205,7 +205,7 @@ class RoomClient {
         }
 
         //GAMEOBJECTS in room
-        if (this.#occupationMap[cordX][cordY] == 1) {
+        if (this.#occupationMap[cordX][cordY + Settings.MAP_BLANK_TILES_WIDTH] == 1) {
             return true;
         }
         else {
@@ -345,6 +345,15 @@ class RoomClient {
      */
     getObjectMap() {
         return this.#objectMap;
+    }
+
+    /**
+     * Gets occupation map array
+     * 
+     * @return {number[][]} occupation map array
+     */
+    getOccupationMap() {
+        return this.#occupationMap;
     }
 }
 
