@@ -29,6 +29,12 @@ class RankListView extends WindowView {
     draw(rankList) {
         $('#ranklistwait').hide();
         $('#rankListModal .modal-body .card-columns').empty();
+
+        if (rankList.length < 1) {
+            $('#noranklist').text("There are no participants in this conference yet.");
+            return;
+        }
+
         this.#rankList = rankList;
 
         this.#rankList.forEach(ppant => {
