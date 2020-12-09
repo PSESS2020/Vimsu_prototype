@@ -1,5 +1,6 @@
 const fileUpload = require('express-fileupload');
 const expressSession = require('express-session');
+const MemoryStore = require('memorystore')(expressSession);
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
@@ -78,6 +79,9 @@ module.exports = class RouteController {
 
         var sessionMiddleware = expressSession({
             secret: 'secret',
+            store: new MemoryStore({
+                checkPeriod: 86400000 // prune expired entries every 24h
+            }),
             resave: true,
             saveUninitialized: true
         });

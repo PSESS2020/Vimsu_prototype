@@ -39,6 +39,7 @@
     "jquery": "^3.5.1",
     "jsdoc": "^3.6.5",
     "jsdom": "^16.4.0",
+    "memorystore": "^1.6.4",
     "merge-images": "^2.0.0",
     "mkdirp": "^1.0.4",
     "mongodb": "^3.5.9",
