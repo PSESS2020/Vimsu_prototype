@@ -42,6 +42,7 @@ module.exports = class ServerController {
     #banList;
     #muteList;
     #roomDecorators;
+    #allDoors;
     #roomService;
     #interval;
     #currentLecturesData;
@@ -85,6 +86,13 @@ module.exports = class ServerController {
         //Array to hold all Rooms
         this.#roomDecorators = this.#roomService.getAllRooms();
 
+        //Array to hold all Doors
+        this.#allDoors = [];
+        this.#roomDecorators.forEach(decorator => {
+            let room = decorator.getRoom();
+            this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
+        });
+        
         this.#banList = [];
         this.#muteList = [];
 
@@ -1921,11 +1929,22 @@ module.exports = class ServerController {
      * Gets all roomDecorators
      * @method module:ServerController#getRoomDecorators
      * 
-     * @return {RoomDecorator[]} rooms
+     * @return {RoomDecorator[]} roomDecorators
      * 
      */
     getRoomDecorators() {
         return this.#roomDecorators;
+    }
+
+    /**
+     * Gets all currently available doors in this conference
+     * @method module:ServerController#getAllDoors
+     * 
+     * @return {Door[]} allDoors
+     * 
+     */
+    getAllDoors() {
+        return this.#allDoors;
     }
 
     /**

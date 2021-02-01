@@ -65,7 +65,9 @@ module.exports = Object.freeze({
                 "\\unmute <list of usernames>  --  Takes a list of usernames, each one " +
                 "separated from the next by a whitespace-character, and unmutes them, meaning they " +
                 "will be able to post messages into the allchat again if they were previously muted.",
-                "\\logdoors -- Will show a log of all available doors with ID and status information."]
+                "\\logdoors -- Will show a log of all available doors with ID and status information.", 
+                "\\opendoor <doorID> -- Opens the door with ID <doorID>.", 
+                "\\closedoor <doorID> -- Closes the door with ID <doorID>."]
     },
     WARNING: {
         header: "Warning",
@@ -118,5 +120,9 @@ module.exports = Object.freeze({
                "Finally, we will test the 'Lecture' feature. Please proceed to the lecture door, pick out a lecture to watch and enter it. Once the lecture has concluded, please take a short while to spam messages into the lecture chat.",
                "To conclude the test, we would like to ask you to just wildly spam clicks all over the graphical interface for the next minute.",
                "Thank you for participating in this test! Please take a couple of minutes to fill out the survey and share your user experience with us."]
+    },
+    UNKNOWNDOORID: {
+        header: "Unknown Door ID",
+        body: "You entered a wrong DoorID. Please check it again with '\\logdoors'."
     }
 });

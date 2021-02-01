@@ -2,6 +2,7 @@ const Commands = require('../utils/Commands.js');
 const Messages = require('../utils/Messages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext');
+const { openDelimiter } = require('ejs');
 
 /**
  * The Command Handler Model
@@ -366,6 +367,72 @@ module.exports = class CommandHandler {
             }
         }
         this.#serverController.sendNotification(socket.id, { header: header, body: body });
+    }
+
+    /**
+     * Closes the door with the passed ID
+     * @method module:CommandHandler#closeDoor
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    closeDoor(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let doors = this.#serverController.getAllDoors();
+        let closed = false;
+        doors.forEach(door => {
+            if (door.getId().toString() === commandArgs[0]) {
+                door.closeDoor();
+                closed = true;
+            }
+        });  
+
+        if (closed) {
+            let header = "Successfully closed door";
+            let body = "You successfully closed the door with the ID " + commandArgs[0] + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+        }
+    }
+
+    /**
+     * Opens the door with the passed ID
+     * @method module:CommandHandler#openDoor
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    openDoor(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let doors = this.#serverController.getAllDoors();
+        let opened = false;
+        doors.forEach(door => {
+            if (door.getId().toString() === commandArgs[0]) {
+                door.openDoor();
+                opened = true;
+            }
+        });  
+
+        if (opened) {
+            let header = "Successfully opened door";
+            let body = "You successfully opened the door with the ID " + commandArgs[0] + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+        }
     }
 
     /**

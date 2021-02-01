@@ -65,5 +65,13 @@ module.exports = Object.freeze({
     LOGDOORS: {
         string: "logdoors",
         method: "logAllDoors"
+    },
+    CLOSEDOOR: {
+        string: "closedoor",
+        method: "closeDoor"
+    }, 
+    OPENDOOR: {
+        string: "opendoor",
+        method: "openDoor"
     }
 });
