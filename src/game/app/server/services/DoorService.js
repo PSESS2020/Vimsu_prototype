@@ -38,7 +38,7 @@ module.exports = class DoorService {
     #generateDoorID = function () {
         let idIsGenerated = false;
         while (!idIsGenerated) {
-            let id = Math.floor((Math.random() * 1000000) - 500000);
+            let id = Math.floor((Math.random() * 1000) - 1);
             if (!this.#doorIDs.includes(id)) {
                 idIsGenerated = true;
                 this.#doorIDs.push(id);
