@@ -340,6 +340,34 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Gives all available doors with ID to Moderator
+     * @method module:CommandHandler#logAllDoors
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    logAllDoors(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let roomDecorators = this.#serverController.getRoomDecorators();
+        let header = "List of all exisiting Doors";
+        let body = [];
+        for (let i = 0; i < roomDecorators.length; i++) {
+            let room = roomDecorators[i].getRoom();
+            let doors = room.getListOfDoors();
+            for (let j = 0; j < doors.length; j++) {
+                body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId());
+            }
+        }
+        this.#serverController.sendNotification(socket.id, { header: header, body: body });
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 

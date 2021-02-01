@@ -61,5 +61,9 @@ module.exports = Object.freeze({
     HELP: {
         string: "help",
         method: "printHelp"
+    },
+    LOGDOORS: {
+        string: "logdoors",
+        method: "logAllDoors"
     }
 });

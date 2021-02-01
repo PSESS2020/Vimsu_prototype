@@ -64,7 +64,8 @@ module.exports = Object.freeze({
                 "will no longer be able to post messages into the allchat.",
                 "\\unmute <list of usernames>  --  Takes a list of usernames, each one " +
                 "separated from the next by a whitespace-character, and unmutes them, meaning they " +
-                "will be able to post messages into the allchat again if they were previously muted."]
+                "will be able to post messages into the allchat again if they were previously muted.",
+                "\\logdoors -- Will show a log of all available doors with ID and status information."]
     },
     WARNING: {
         header: "Warning",
