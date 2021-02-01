@@ -41,7 +41,7 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     #muteList;
-    #rooms;
+    #roomDecorators;
     #roomService;
     #interval;
     #currentLecturesData;
@@ -83,7 +83,7 @@ module.exports = class ServerController {
         this.#roomService = new RoomService();
 
         //Array to hold all Rooms
-        this.#rooms = this.#roomService.getAllRooms();
+        this.#roomDecorators = this.#roomService.getAllRooms();
 
         this.#banList = [];
         this.#muteList = [];
@@ -151,12 +151,12 @@ module.exports = class ServerController {
                     }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
-                    let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
+                    let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
 
                     let typeOfCurrentRoom;
-                    for (var i = 0, n = this.#rooms.length; i < n; i++) {
-                        if (this.#rooms[i].getRoom().getRoomId() === currentRoomId) {
-                            typeOfCurrentRoom = this.#rooms[i].getRoom().getTypeOfRoom();
+                    for (var i = 0, n = this.#roomDecorators.length; i < n; i++) {
+                        if (this.#roomDecorators[i].getRoom().getRoomId() === currentRoomId) {
+                            typeOfCurrentRoom = this.#roomDecorators[i].getRoom().getTypeOfRoom();
                             break;
                         }
                     }
@@ -179,7 +179,7 @@ module.exports = class ServerController {
                     this.#ppants.set(ppant.getId(), ppant);
 
                     //Gets asset paths of the starting room
-                    let assetPaths = this.#rooms[currentRoomId - 1].getAssetPaths();
+                    let assetPaths = this.#roomDecorators[currentRoomId - 1].getAssetPaths();
 
                     //Gets MapElements of the starting room
                     let mapElements = currentRoom.getListOfMapElements();
@@ -336,7 +336,7 @@ module.exports = class ServerController {
                     return;
 
                 let roomID = participant.getPosition().getRoomId();
-                let room = this.#rooms[roomID - 1].getRoom();
+                let room = this.#roomDecorators[roomID - 1].getRoom();
                 let username = participant.getBusinessCard().getUsername();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -442,7 +442,7 @@ module.exports = class ServerController {
                     }
                 } 
 
-                let currentRoom = this.#rooms[roomId - 1].getRoom();
+                let currentRoom = this.#roomDecorators[roomId - 1].getRoom();
 
                 //Collision Checking
 
@@ -1781,7 +1781,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let npc = this.#rooms[currentRoomId - 1].getRoom().getNPC(npcID);
+                let npc = this.#roomDecorators[currentRoomId - 1].getRoom().getNPC(npcID);
 
                 //prevents server to crash when client emits wrong NPC ID
                 if (!npc) {
@@ -1824,7 +1824,7 @@ module.exports = class ServerController {
                 ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
-                this.#rooms[currentRoomId - 1].getRoom().exitParticipant(ppantID);
+                this.#roomDecorators[currentRoomId - 1].getRoom().exitParticipant(ppantID);
 
                 this.#socketMap.delete(socket.id);
                 this.#ppants.delete(ppantID);
@@ -1916,6 +1916,17 @@ module.exports = class ServerController {
         });
         return id;
     };
+
+    /**
+     * Gets all roomDecorators
+     * @method module:ServerController#getRoomDecorators
+     * 
+     * @return {RoomDecorator[]} rooms
+     * 
+     */
+    getRoomDecorators() {
+        return this.#roomDecorators;
+    }
 
     /**
      * Called from context class to emits event in a socket room
@@ -2116,7 +2127,7 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let lectureDoor = this.#rooms[currentRoomId - 1].getRoom().getLectureDoor();
+        let lectureDoor = this.#roomDecorators[currentRoomId - 1].getRoom().getLectureDoor();
 
         //check if participant is in right position to enter room
         if (!lectureDoor.isValidEnterPosition(enterPosition)) {
@@ -2187,15 +2198,15 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let currentRoom = this.#rooms[currentRoomId - 1].getRoom();
+        let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
 
         //prevents server to crash when client emits a non existing room ID
-        if (!this.#rooms[targetRoomId - 1]) {
+        if (!this.#roomDecorators[targetRoomId - 1]) {
             console.log('Client emitted wrong Room-ID!');
             return;
         }
 
-        let targetRoom = this.#rooms[targetRoomId - 1].getRoom();
+        let targetRoom = this.#roomDecorators[targetRoomId - 1].getRoom();
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         //get door from current room to target room
@@ -2237,7 +2248,7 @@ module.exports = class ServerController {
         currentRoom.exitParticipant(ppantID);
 
         //Get asset paths of target room
-        let assetPaths = this.#rooms[targetRoomId - 1].getAssetPaths();
+        let assetPaths = this.#roomDecorators[targetRoomId - 1].getAssetPaths();
 
         //Get MapElements of target room
         let mapElements = targetRoom.getListOfMapElements();
@@ -2343,7 +2354,7 @@ module.exports = class ServerController {
         //switch socket channel
         socket.leave(currentRoomId.toString());
         socket.join(targetRoomId.toString());
-        this.#io.to(socket.id).emit('initAllchat', this.#rooms[targetRoomId - 1].getRoom().getMessages());
+        this.#io.to(socket.id).emit('initAllchat', this.#roomDecorators[targetRoomId - 1].getRoom().getMessages());
 
         //applies achievement when entering a room
         if (targetRoomId === Settings.FOYER_ID) {
