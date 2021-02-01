@@ -2,7 +2,6 @@ const Commands = require('../utils/Commands.js');
 const Messages = require('../utils/Messages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext');
-const { openDelimiter } = require('ejs');
 
 /**
  * The Command Handler Model
