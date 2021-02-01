@@ -361,7 +361,8 @@ module.exports = class CommandHandler {
             let room = roomDecorators[i].getRoom();
             let doors = room.getListOfDoors();
             for (let j = 0; j < doors.length; j++) {
-                body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId());
+                body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId() + ". Door is currently " + 
+                ((doors[j].isOpen()) ? "open." : "closed."));
             }
         }
         this.#serverController.sendNotification(socket.id, { header: header, body: body });
