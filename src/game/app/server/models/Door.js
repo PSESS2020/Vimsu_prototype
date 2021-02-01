@@ -20,6 +20,8 @@ module.exports = class Door {
     #enterPositions;
     #targetPosition;
     #direction;
+    #isOpen;
+    #isOpenFor;
 
     /**
      * Creates an instance of door
@@ -60,6 +62,12 @@ module.exports = class Door {
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
+
+        //door is open for everbody by default
+        this.#isOpen = true;
+
+        //list of ppantIDs, for which the door is explicitly open
+        this.#isOpenFor = [];
     }
 
     /**
@@ -218,5 +226,77 @@ module.exports = class Door {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if door is open for everybody
+     * @method module:Door#isOpen
+     * 
+     * @return {boolean} true if open, false if closed
+     */
+    isOpen() {
+        return this.#isOpen;
+    }
+
+    /**
+     * Checks if door is open for the ppant with this ppantID
+     * @method module:Door#isOpenFor
+     * 
+     * @param {String} ppantID 
+     * 
+     * @return {boolean} true if open, false if closed
+     */
+    isOpenFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        return (this.#isOpen || this.#isOpenFor.includes(ppantID));
+    }
+
+    /**
+     * Close Door for everybody
+     * @method module:Door#closeDoor
+     */
+    closeDoor() {
+        this.#isOpen = false;
+    }
+    
+    /**
+     * Open Door for everybody
+     * @method module:Door#openDoor
+     */
+    openDoor() {
+        this.#isOpen = true;
+    }
+
+    /**
+     * Close Door for ppant with this ppantID
+     * @method module:Door#closeDoorFor
+     * 
+     * @param {String} ppantID 
+     * 
+     */
+    closeDoorFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        this.#isOpenFor.forEach(id => {
+            if (id === ppantID) {
+                let index = this.#isOpenFor.indexOf(ppantID);
+                this.#isOpenFor.splice(index, 1);
+            }
+        });
+    }
+    
+    /**
+     * Open Door for ppant with this ppantID
+     * @method module:Door#openDoorFor
+     * 
+     * @param {String} ppantID
+     */
+    openDoorFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        if (!this.#isOpenFor.includes(ppantID)) {
+            this.#isOpenFor.push(ppantID);
+        }
     }
 }

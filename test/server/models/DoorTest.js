@@ -136,6 +136,38 @@ describe('test Door class functionality', function () {
         expect(testDoor.isValidEnterPositionWithoutClick(testEnterPosition.position, testEnterPosition.direction, testEnterPosition.direction)).to.be.true;
     });
 
+    it('test isOpen, open and close Door', function () {
+        let testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, testEnterPosition, testEnterPositions, testTargetPosition, testDirection);
+
+        let ppantID = TestUtil.randomString();
+
+        //Door should be open by default for everyone
+        expect(testDoor.isOpen()).to.be.true;
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+
+        testDoor.closeDoor();
+
+        //Door should be now closed for everyone
+        expect(testDoor.isOpen()).to.be.false;
+        expect(testDoor.isOpenFor(ppantID)).to.be.false;
+
+        testDoor.openDoorFor(ppantID);
+
+        //Door should be now open for ppant with ppantID
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+
+        testDoor.closeDoorFor(ppantID);
+
+        //Door should be now closed for ppant with ppantID
+        expect(testDoor.isOpenFor(ppantID)).to.be.false;
+
+        testDoor.openDoor();
+
+        //Door should be now open for everyone
+        expect(testDoor.isOpen()).to.be.true;
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+    });
+
 });
 
 
