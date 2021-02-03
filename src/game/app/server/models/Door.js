@@ -28,7 +28,7 @@ module.exports = class Door {
      * Creates an instance of door
      * @constructor module:Door
      * 
-     * @param {number} id door ID
+     * @param {String} id door ID
      * @param {String} name door name
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {Position} mapPosition door position on the map
@@ -38,7 +38,7 @@ module.exports = class Door {
      * @param {Direction} direction avatar direction on entering the door
      */
     constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction) {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, Position);
@@ -78,7 +78,7 @@ module.exports = class Door {
      * Gets door ID
      * @method module:Door#getId
      * 
-     * @return {number} id
+     * @return {String} id
      */
     getId() {
         return this.#id;

@@ -15,7 +15,7 @@ describe('DoorClient test', function () {
 
     //test data
     beforeEach(function () {
-        id = TestUtil.randomInt();
+        id = TestUtil.randomString();
         typeOfDoor = TypeOfDoor.LEFT_DOOR;
         name = 'door';
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
@@ -38,7 +38,7 @@ describe('DoorClient test', function () {
     });
 
     it('test invalid input', function () {
-        expect(() => new DoorClient('id', typeOfDoor, name, mapPosition, argetRoomID));
+        expect(() => new DoorClient(42, typeOfDoor, name, mapPosition, targetRoomID));
         expect(() => new DoorClient(id, 'typeOfDoor', name, mapPosition, targetRoomID));
         expect(() => new DoorClient(id, typeOfDoor, 42, mapPosition, targetRoomID));
         expect(() => new DoorClient(id, typeOfDoor, name, 'mapPosition', targetRoomID));

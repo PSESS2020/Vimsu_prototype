@@ -13,8 +13,6 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
  */
 module.exports = class DoorService {
 
-    #doorIDs;
-
     /**
      * creates an instance of DoorService
      * @constructor 
@@ -25,26 +23,6 @@ module.exports = class DoorService {
         }
 
         DoorService.instance = this;
-        this.#doorIDs = [];
-    }
-
-    /**
-     * 
-     * @private generates a unique ID for doors
-     * @method module:DoorService#generateDoorID
-     * 
-     * @return {number} unique id
-     */
-    #generateDoorID = function () {
-        let idIsGenerated = false;
-        while (!idIsGenerated) {
-            let id = Math.floor((Math.random() * 1000) - 1);
-            if (!this.#doorIDs.includes(id)) {
-                idIsGenerated = true;
-                this.#doorIDs.push(id);
-                return id;
-            }
-        }
     }
 
     /**
@@ -115,7 +93,7 @@ module.exports = class DoorService {
         let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined);
+        return new Door('L' + mapPosition.getRoomId(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined);
     }
 
     /**
@@ -136,7 +114,7 @@ module.exports = class DoorService {
         let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -157,7 +135,7 @@ module.exports = class DoorService {
         let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 
     /**
@@ -178,6 +156,6 @@ module.exports = class DoorService {
         let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
     }
 } 

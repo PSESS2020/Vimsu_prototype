@@ -41,7 +41,7 @@ describe('RoomClient test', function() {
         listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool())];
         listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false)];
         listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT)];
-        listOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
+        listOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
         width = TestUtil.randomIntWithMaxAndMin(1000, 1);
         length = TestUtil.randomIntWithMaxAndMin(1000, 1);
 
@@ -135,7 +135,7 @@ describe('RoomClient test', function() {
         //npc at (1,1)
         let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT)];
 
-        let newListOfDoors = [new DoorClient(TestUtil.randomInt(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomInt())];
+        let newListOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomInt())];
         let newAssetPaths = {"tile_default": "client/assets/tile_default.png"};
         let newListOfMapElements = [];
         

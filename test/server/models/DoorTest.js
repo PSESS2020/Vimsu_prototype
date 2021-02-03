@@ -19,7 +19,7 @@ describe('test Door class functionality', function () {
 
 
     beforeEach(function () {
-        testDoorId = TestUtil.randomInt();
+        testDoorId = TestUtil.randomString();
         testDoorType = TestUtil.randomObjectValue(TypeOfDoor);
         testDoorName = TestUtil.randomString();
         testMapPosition = TestUtil.randomPosition();
