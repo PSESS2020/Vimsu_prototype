@@ -66,8 +66,12 @@ module.exports = Object.freeze({
                 "separated from the next by a whitespace-character, and unmutes them, meaning they " +
                 "will be able to post messages into the allchat again if they were previously muted.",
                 "\\logdoors -- Will show a log of all available doors with ID and status information.", 
-                "\\opendoor <doorID> -- Opens the door with ID <doorID>.", 
-                "\\closedoor <doorID> -- Closes the door with ID <doorID>."]
+                "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
+                "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
+                "\\opendoorfor <doorID> <list of usernames> -- Opens the door with <doorID> for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\closedoorfor <doorID> <list of usernames> -- Closes the door with <doorID> for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character."]
     },
     WARNING: {
         header: "Warning",
@@ -124,5 +128,10 @@ module.exports = Object.freeze({
     UNKNOWNDOORID: {
         header: "Unknown Door ID",
         body: "You entered a wrong DoorID. Please check it again with '\\logdoors'."
-    }
+    },
+    UNKNOWNUSERNAME: {
+        header: "Unknown Username",
+        body: "Entered username does not exist or user with that username is currently not online."
+    },
+    
 });

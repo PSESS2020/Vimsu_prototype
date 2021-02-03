@@ -161,6 +161,11 @@ describe('test Door class functionality', function () {
         //Door should be now closed for ppant with ppantID
         expect(testDoor.isOpenFor(ppantID)).to.be.false;
 
+        testDoor.openDoorFor(ppantID);
+
+        //Door should be now open again for ppant with this ppantID
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+
         testDoor.openDoor();
 
         //Door should be now open for everyone

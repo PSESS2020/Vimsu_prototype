@@ -22,6 +22,7 @@ module.exports = class Door {
     #direction;
     #isOpen;
     #isOpenFor;
+    #isClosedFor;
 
     /**
      * Creates an instance of door
@@ -68,6 +69,9 @@ module.exports = class Door {
 
         //list of ppantIDs, for which the door is explicitly open
         this.#isOpenFor = [];
+
+        //list of ppantIDs, for which the door is explicitly closed
+        this.#isClosedFor = [];
     }
 
     /**
@@ -249,7 +253,7 @@ module.exports = class Door {
     isOpenFor(ppantID) {
         TypeChecker.isString(ppantID);
 
-        return (this.#isOpen || this.#isOpenFor.includes(ppantID));
+        return ((this.#isOpen || this.#isOpenFor.includes(ppantID)) && !this.#isClosedFor.includes(ppantID));
     }
 
     /**
@@ -258,6 +262,7 @@ module.exports = class Door {
      */
     closeDoor() {
         this.#isOpen = false;
+        this.#isOpenFor = [];
     }
     
     /**
@@ -266,6 +271,7 @@ module.exports = class Door {
      */
     openDoor() {
         this.#isOpen = true;
+        this.#isClosedFor = [];
     }
 
     /**
@@ -284,6 +290,10 @@ module.exports = class Door {
                 this.#isOpenFor.splice(index, 1);
             }
         });
+
+        if (!this.#isClosedFor.includes(ppantID)) {
+            this.#isClosedFor.push(ppantID);
+        }
     }
     
     /**
@@ -294,6 +304,13 @@ module.exports = class Door {
      */
     openDoorFor(ppantID) {
         TypeChecker.isString(ppantID);
+
+        this.#isClosedFor.forEach(id => {
+            if (id === ppantID) {
+                let index = this.#isClosedFor.indexOf(ppantID);
+                this.#isClosedFor.splice(index, 1);
+            }
+        });
 
         if (!this.#isOpenFor.includes(ppantID)) {
             this.#isOpenFor.push(ppantID);
