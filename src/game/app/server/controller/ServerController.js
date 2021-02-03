@@ -2153,6 +2153,12 @@ module.exports = class ServerController {
             return;
         }
 
+        //check if lecture door is open for this participant
+        if (!lectureDoor.isOpenFor(ppantID)) {
+            this.sendNotification(socket.id, Messages.DOORCURRENTLYCLOSED);
+            return;
+        }
+
         clearInterval(this.#interval);
 
         this.#emitCurrentLectures(socket);
@@ -2236,8 +2242,14 @@ module.exports = class ServerController {
             return;
         }
 
-        //check if participant is in right position to enter room and if the door is open for him
-        if (!door.isValidEnterPosition(enterPosition) || !door.isOpenFor(ppantID)) {
+        //check if participant is in right position to enter room 
+        if (!door.isValidEnterPosition(enterPosition)) {
+            return;
+        }
+
+        //check if the door is open for this participant
+        if (!door.isOpenFor(ppantID)) {
+            this.sendNotification(socket.id, Messages.DOORCURRENTLYCLOSED);
             return;
         }
 

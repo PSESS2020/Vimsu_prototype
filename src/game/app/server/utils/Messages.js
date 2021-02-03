@@ -133,5 +133,8 @@ module.exports = Object.freeze({
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
     },
-    
+    DOORCURRENTLYCLOSED: {
+        header: "Door closed",
+        body: "This door is currently closed for you."
+    }
 });

@@ -395,7 +395,7 @@ module.exports = class CommandHandler {
 
         if (closed) {
             let header = "Successfully closed door";
-            let body = "You successfully closed the door with the ID " + doorID + ".";
+            let body = "You successfully closed the door with the ID " + doorID + " for all users.";
             this.#serverController.sendNotification(socket.id, { header: header, body: body });
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
@@ -429,7 +429,7 @@ module.exports = class CommandHandler {
 
         if (opened) {
             let header = "Successfully opened door";
-            let body = "You successfully opened the door with the ID " + doorID + ".";
+            let body = "You successfully opened the door with the ID " + doorID + " for all users.";
             this.#serverController.sendNotification(socket.id, { header: header, body: body });
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
