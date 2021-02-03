@@ -2236,8 +2236,8 @@ module.exports = class ServerController {
             return;
         }
 
-        //check if participant is in right position to enter room
-        if (!door.isValidEnterPosition(enterPosition)) {
+        //check if participant is in right position to enter room and if the door is open for him
+        if (!door.isValidEnterPosition(enterPosition) || !door.isOpenFor(ppantID)) {
             return;
         }
 
