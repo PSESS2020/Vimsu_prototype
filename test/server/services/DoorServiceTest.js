@@ -13,7 +13,9 @@ describe('DoorService test', function () {
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
         let mapPosition = new Position(roomId, cordX, cordY);
-        let lectureDoor = doorService.createLectureDoor(mapPosition);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let lectureDoor = doorService.createLectureDoor(mapPosition, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -40,7 +42,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let foyerDoor = doorService.createFoyerDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let foyerDoor = doorService.createFoyerDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -67,7 +71,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let foodCourtDoor = doorService.createFoodCourtDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let foodCourtDoor = doorService.createFoodCourtDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -94,7 +100,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let receptionDoor = doorService.createReceptionDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let receptionDoor = doorService.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;

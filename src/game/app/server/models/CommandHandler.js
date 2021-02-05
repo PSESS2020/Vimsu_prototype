@@ -384,14 +384,13 @@ module.exports = class CommandHandler {
         });
 
         let doorID = commandArgs[0];
-        let doors = this.#serverController.getAllDoors();
+        let door = this.#serverController.getDoorByID(doorID);
         let closed = false;
-        doors.forEach(door => {
-            if (door.getId().toString() === doorID) {
-                door.closeDoor();
-                closed = true;
-            }
-        });  
+
+        if (door !== undefined) {
+            door.closeDoor();
+            closed = true;
+        }
 
         if (closed) {
             let header = "Successfully closed door";
@@ -418,14 +417,14 @@ module.exports = class CommandHandler {
         });
 
         let doorID = commandArgs[0];
-        let doors = this.#serverController.getAllDoors();
+        let door = this.#serverController.getDoorByID(doorID);
         let opened = false;
-        doors.forEach(door => {
-            if (door.getId().toString() === doorID) {
-                door.openDoor();
-                opened = true;
-            }
-        });  
+
+        if (door !== undefined) {
+            door.openDoor();
+            opened = true;
+        }
+
 
         if (opened) {
             let header = "Successfully opened door";
@@ -464,16 +463,15 @@ module.exports = class CommandHandler {
             ppantIDs.push(ppantID);
         }
        
-        let doors = this.#serverController.getAllDoors();
+        let door = this.#serverController.getDoorByID(doorID);
         let closed = false;
-        doors.forEach(door => {
-            if (door.getId().toString() === doorID) {
-                ppantIDs.forEach(ppantID => {
-                    door.closeDoorFor(ppantID);
-                });
-                closed = true;
-            }
-        });  
+
+        if (door !== undefined) {
+            ppantIDs.forEach(ppantID => {
+                door.closeDoorFor(ppantID);
+            });
+            closed = true;
+        }
 
         if (closed) {
             let header = "Successfully closed door";
@@ -512,16 +510,15 @@ module.exports = class CommandHandler {
             ppantIDs.push(ppantID);
         }
 
-        let doors = this.#serverController.getAllDoors();
+        let door = this.#serverController.getDoorByID(doorID);
         let opened = false;
-        doors.forEach(door => {
-            if (door.getId().toString() === doorID) {
-                ppantIDs.forEach(ppantID => {
-                    door.openDoorFor(ppantID);
-                });
-                opened = true;
-            }
-        });  
+
+        if (door !== undefined) {
+            ppantIDs.forEach(ppantID => {
+                door.openDoorFor(ppantID);
+            });
+            opened = true;
+        }
 
         if (opened) {
             let header = "Successfully opened door";

@@ -186,6 +186,19 @@ module.exports = class ServerController {
                     this.#socketMap.set(socket.id, ppant.getId());
                     this.#ppants.set(ppant.getId(), ppant);
 
+                    //Open all doors this ppant achieved to open through his achievements before
+                    let achievements = ppant.getAchievements();
+
+                    achievements.forEach(ach => {
+                        let opensDoorID = ach.getOpensDoorID();
+                        if (opensDoorID !== undefined && ach.getCurrentLevel() === ach.getMaxLevel()) {
+                            let door = this.getDoorByID(opensDoorID);
+                            if (door !== undefined) {
+                                door.openDoorFor(ppant.getId());
+                            }
+                        }
+                    });
+
                     //Gets asset paths of the starting room
                     let assetPaths = this.#roomDecorators[currentRoomId - 1].getAssetPaths();
 
@@ -300,19 +313,6 @@ module.exports = class ServerController {
                      * This should send to all other connected sockets but not to the one
                      * that just connected */
                     socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
-
-                    /*
-                    * Check if this is the first conference visit of this ppant 
-                    * if so, reminds him to click the BasicTutorial NPC
-                    */
-                    if (ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
-                        let messageHeader = 'Welcome to VIMSU!';
-                        let messageBody = 'Please talk to our BasicTutorial NPC by clicking' +
-                            ' the tile he is standing on. He will give you a' +
-                            ' short introduction that will help you to learn the basics of using VIMSU.';
-
-                        this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
-                    }
 
                     /* Sends current points and rank to client */
                     socket.emit('updatePoints', ppant.getAwardPoints());
@@ -1948,6 +1948,20 @@ module.exports = class ServerController {
     }
 
     /**
+     * Gets door with doorID if it exists, otherwise undefined
+     * @method module:ServerController#getDoorByID
+     * 
+     * @return {String} doorID
+     */
+    getDoorByID(doorID) {
+        for (let i = 0; i < this.#allDoors.length; i++) {
+            if (this.#allDoors[i].getId() === doorID) {
+                return this.#allDoors[i];
+            }
+        }
+    }
+
+    /**
      * Called from context class to emits event in a socket room
      * @method module:ServerController#emitEventIn
      * 
@@ -2155,7 +2169,7 @@ module.exports = class ServerController {
 
         //check if lecture door is open for this participant
         if (!lectureDoor.isOpenFor(ppantID)) {
-            this.sendNotification(socket.id, Messages.DOORCURRENTLYCLOSED);
+            this.sendNotification(socket.id, lectureDoor.getClosedMessage());
             return;
         }
 
@@ -2249,24 +2263,7 @@ module.exports = class ServerController {
 
         //check if the door is open for this participant
         if (!door.isOpenFor(ppantID)) {
-            this.sendNotification(socket.id, Messages.DOORCURRENTLYCLOSED);
-            return;
-        }
-
-        /*
-        * Check if ppant clicked BasicTutorial before leaving reception at his first visit
-        * He should read it before he is allowed to visit other rooms
-        */
-        if (currentRoomId === Settings.RECEPTION_ID && targetRoomId === Settings.FOYER_ID
-            && ppant.getTaskTypeMappingCount(TypeOfTask.BASICTUTORIALCLICK) === 0) {
-
-            let messageHeader = 'Welcome to VIMSU!';
-            let messageBody = 'Before you can start exploring this conference,' +
-                ' please talk to our BasicTutorial NPC by clicking' +
-                ' the tile he is standing on. He will give you a' +
-                ' short introduction that will help you to learn the basics of using VIMSU.';
-
-            this.#io.to(socket.id).emit('New notification', messageHeader, messageBody);
+            this.sendNotification(socket.id, door.getClosedMessage());
             return;
         }
 
@@ -2429,6 +2426,15 @@ module.exports = class ServerController {
                     icon: ach.getIcon(),
                     title: ach.getTitle(),
                     description: ach.getDescription()
+                }
+
+                //if this new achievement opens a door, open it for this ppant
+                let opensDoorID = ach.getOpensDoorID();
+                if (opensDoorID !== undefined && ach.getCurrentLevel() === ach.getMaxLevel()) {
+                    let door = this.getDoorByID(opensDoorID);
+                    if (door !== undefined) {
+                        door.openDoorFor(participantId);
+                    }
                 }
 
                 this.#io.to(this.getSocketId(participantId)).emit('newAchievement', achData);

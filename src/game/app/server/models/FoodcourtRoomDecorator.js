@@ -7,6 +7,7 @@ const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const Room = require('./Room.js');
 const TypeChecker = require('../../client/shared/TypeChecker');
+const Messages = require('../utils/Messages.js');
 
 /**
  * The Food Court Room Decorator Model
@@ -152,7 +153,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, true, Messages.STANDARDDOORCLOSED));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map

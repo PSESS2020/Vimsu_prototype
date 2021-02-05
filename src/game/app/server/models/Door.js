@@ -23,6 +23,7 @@ module.exports = class Door {
     #isOpen;
     #isOpenFor;
     #isClosedFor;
+    #closedMessage;
 
     /**
      * Creates an instance of door
@@ -36,8 +37,10 @@ module.exports = class Door {
      * @param {Position[]} enterPositions door valid enter positions from the map
      * @param {Position} targetPosition avatar position on entering the door
      * @param {Direction} direction avatar direction on entering the door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
      */
-    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction) {
+    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage) {
         TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
@@ -55,6 +58,11 @@ module.exports = class Door {
             TypeChecker.isEnumOf(direction, Direction);
         }
 
+        TypeChecker.isBoolean(isOpen);
+        TypeChecker.isInstanceOf(closedMessage, Object);
+        TypeChecker.isString(closedMessage.header);
+        TypeChecker.isString(closedMessage.body);
+
         this.#id = id;
         this.#typeOfDoor = typeOfDoor;
         this.#name = name;
@@ -63,9 +71,8 @@ module.exports = class Door {
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
-
-        //door is open for everbody by default
-        this.#isOpen = true;
+        this.#isOpen = isOpen;
+        this.#closedMessage = closedMessage;
 
         //list of ppantIDs, for which the door is explicitly open
         this.#isOpenFor = [];
@@ -315,5 +322,15 @@ module.exports = class Door {
         if (!this.#isOpenFor.includes(ppantID)) {
             this.#isOpenFor.push(ppantID);
         }
+    }
+
+    /**
+     * Gets the message a user receives if he tries to enter this door while it is closed
+     * @method module:Door#getClosedMessage
+     * 
+     * @return {Object} closedMessage
+     */
+    getClosedMessage() {
+        return this.#closedMessage;
     }
 }

@@ -133,8 +133,14 @@ module.exports = Object.freeze({
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
     },
-    DOORCURRENTLYCLOSED: {
+    STANDARDDOORCLOSED: {
         header: "Door closed",
         body: "This door is currently closed for you."
+    },
+    FIRSTDOORCLOSED: {
+        header: 'Welcome to VIMSU!',
+        body: "Please talk to our BasicTutorial NPC by clicking" +
+               " the tile he is standing on. He will give you a" +
+               " short introduction that will help you to learn the basics of using VIMSU."
     }
 });
