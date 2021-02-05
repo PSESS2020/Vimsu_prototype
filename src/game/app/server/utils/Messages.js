@@ -142,5 +142,9 @@ module.exports = Object.freeze({
         body: "Please talk to our BasicTutorial NPC by clicking" +
                " the tile he is standing on. He will give you a" +
                " short introduction that will help you to learn the basics of using VIMSU."
+    },
+    FOODCOURTDOORCLOSED: {
+        header: "Door closed",
+        body: "Greet our Chef before you leave!"
     }
 });

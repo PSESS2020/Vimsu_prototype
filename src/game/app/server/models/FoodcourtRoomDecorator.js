@@ -153,7 +153,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, true, Messages.STANDARDDOORCLOSED));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, false, Messages.FOODCOURTDOORCLOSED));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map
