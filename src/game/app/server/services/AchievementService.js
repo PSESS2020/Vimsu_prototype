@@ -51,46 +51,46 @@ module.exports = class AchievementService {
         this.#achievementDefinitions[TypeOfTask.ASKQUESTIONINLECTURE] = new AchievementDefinition(1, TypeOfTask.ASKQUESTIONINLECTURE, "Inquisitive", "question", "Ask questions in lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 15 },
             { count: 10, color: '#C9B037', points: 15 }
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.BEFRIENDOTHER] = new AchievementDefinition(2, TypeOfTask.BEFRIENDOTHER, "Network Guru", "user-plus", "Befriend others to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 100 },
             { count: 10, color: '#C9B037', points: 100 }
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.FOODCOURTVISIT] = new AchievementDefinition(3, TypeOfTask.FOODCOURTVISIT, "Coffee Time", "coffee", "Visit food court room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 10 },
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.FOYERVISIT] = new AchievementDefinition(4, TypeOfTask.FOYERVISIT, "New World", "globe", "Visit foyer room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 10 },
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.INITPERSONALCHAT] = new AchievementDefinition(5, TypeOfTask.INITPERSONALCHAT, "Walky Talky", "comment", "Start a private conversation with others to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 50 },
             { count: 10, color: '#C9B037', points: 50 }
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.LECTUREVISIT] = new AchievementDefinition(6, TypeOfTask.LECTUREVISIT, "Good Listener", "headphones", "Stay till the end of lectures to gain this achievement.", [
             { count: 5, color: '#D7D7D7', points: 200 },
             { count: 10, color: '#C9B037', points: 200 }
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.BASICTUTORIALCLICK] = new AchievementDefinition(7, TypeOfTask.BASICTUTORIALCLICK, "First Greeting", "info", "Click on the NPC in the reception room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
-        ]);
+        ], 'F3T1');
 
         this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 10 },
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "utensils", "Click on the NPC in the food court room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
-        ]);
+        ], undefined);
 
         this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(10, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
-        ]);
+        ], undefined);
 
     }
 

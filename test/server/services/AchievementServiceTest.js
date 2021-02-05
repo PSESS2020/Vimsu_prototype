@@ -23,7 +23,7 @@ var receivedRequestList = new FriendList([]);
 var sentRequestList = new FriendList([]);
 var awardPoints = 20;
 var chatList = [];
-var achievements = []
+var achievements = [];
 
 function generateTasks() {
     var tasks = {};
