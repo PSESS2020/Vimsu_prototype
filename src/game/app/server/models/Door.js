@@ -24,6 +24,8 @@ module.exports = class Door {
     #isOpenFor;
     #isClosedFor;
     #closedMessage;
+    #hasCodeToOpen;
+    #codeToOpen;
 
     /**
      * Creates an instance of door
@@ -39,8 +41,9 @@ module.exports = class Door {
      * @param {Direction} direction avatar direction on entering the door
      * @param {boolean} isOpen decides if door is initially open or closed
      * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      */
-    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage) {
+    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
         TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
@@ -63,6 +66,11 @@ module.exports = class Door {
         TypeChecker.isString(closedMessage.header);
         TypeChecker.isString(closedMessage.body);
 
+        if(codeToOpen !== undefined) {
+            TypeChecker.isString(codeToOpen);
+            this.#hasCodeToOpen = true;
+        }
+
         this.#id = id;
         this.#typeOfDoor = typeOfDoor;
         this.#name = name;
@@ -73,6 +81,7 @@ module.exports = class Door {
         this.#direction = direction;
         this.#isOpen = isOpen;
         this.#closedMessage = closedMessage;
+        this.#codeToOpen = codeToOpen;
 
         //list of ppantIDs, for which the door is explicitly open
         this.#isOpenFor = [];
@@ -261,6 +270,60 @@ module.exports = class Door {
         TypeChecker.isString(ppantID);
 
         return ((this.#isOpen || this.#isOpenFor.includes(ppantID)) && !this.#isClosedFor.includes(ppantID));
+    }
+
+    /**
+     * Checks if door has a code to open it
+     * @method module:Door#hasCodeToOpen
+     * 
+     * @return {boolean} true if door has a code to open it, false otherwise
+     */
+    hasCodeToOpen() {
+        return this.#hasCodeToOpen;
+    }
+
+    /**
+     * Returns code to open for this door if there is such a Code, otherwise undefined
+     * @method module:Door#getCodeToOpen
+     * 
+     * @return {String|undefined} codeToOpen 
+     */
+    getCodeToOpen() {
+        return this.#codeToOpen;
+    }
+
+    /**
+     * Set code to open
+     * @method module:Door#setCodeToOpen
+     * 
+     * @param {String} codeToOpen 
+     */
+    setCodeToOpen(codeToOpen) {
+        TypeChecker.isString(codeToOpen);
+
+        this.#hasCodeToOpen = true;
+        this.#codeToOpen = codeToOpen;
+    }
+
+    /**
+     * Called when a ppant enters a code to enter this door. If the code is correct, he will be added to the isOpenFor list
+     * @method module:Door#enterCodeToOpen
+     * 
+     * @param {String} ppantID 
+     * @param {String} codeToOpen 
+     * 
+     * @return {boolean} true, if code was correct, false otherwise
+     */
+    enterCodeToOpen(ppantID, codeToOpen) {
+        TypeChecker.isString(codeToOpen);
+        TypeChecker.isString(codeToOpen);
+
+        if (this.#hasCodeToOpen && this.#codeToOpen === codeToOpen) {
+            this.openDoorFor(ppantID);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

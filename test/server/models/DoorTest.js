@@ -31,6 +31,7 @@ describe('test Door class functionality', function () {
         testDirection = TestUtil.randomObjectValue(Direction);
         testIsOpen = TestUtil.randomBool();
         testClosedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        testCodeToOpen = TestUtil.randomString();
 
         testEnterPosition = {
             position: testEnterPos,
@@ -43,48 +44,52 @@ describe('test Door class functionality', function () {
         testDoorType = TypeOfDoor.LEFT_DOOR;
 
         expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined, testCodeToOpen)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, undefined)).not.to.throw();
 
         testDoorType = TypeOfDoor.RIGHT_DOOR;
 
         expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined, testCodeToOpen)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, undefined)).not.to.throw();
     });
 
 
@@ -92,30 +97,32 @@ describe('test Door class functionality', function () {
     it('test LectureDoor constructor', function () {
         testDoorType = TypeOfDoor.LECTURE_DOOR;
         expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, undefined, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, undefined,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            undefined, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, undefined, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage)).not.to.throw();
+            testEnterPosition, testEnterPositions, undefined, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).not.to.throw();
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage)).not.to.throw();
+            testEnterPosition, testEnterPositions, testTargetPosition, undefined, testIsOpen, testClosedMessage, testCodeToOpen)).not.to.throw();
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, undefined, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined)).to.throw(TypeError);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, undefined, testCodeToOpen)).to.throw(TypeError);
+        expect(() => new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, undefined)).not.to.throw();
     });
 
     it('test getters', function () {
         var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen);
         assert.strictEqual(testDoor.getId(), testDoorId);
         assert.strictEqual(testDoor.getTypeOfDoor(), testDoorType);
         assert.strictEqual(testDoor.getName(), testDoorName);
@@ -127,12 +134,14 @@ describe('test Door class functionality', function () {
         assert.strictEqual(testDoor.getEnterPositions(), testEnterPositions);
         assert.strictEqual(testDoor.getDirection(), testDirection);
         assert.strictEqual(testDoor.getClosedMessage(), testClosedMessage);
+        assert.strictEqual(testDoor.getCodeToOpen(), testCodeToOpen);
+        assert.equal(testDoor.hasCodeToOpen(), true);
     });
 
     it('test ValidEnterPosition check', function () {
         var testIllegalPositions = TestUtil.randomPositionList();
         var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen);
         testIllegalPositions.forEach((position) => {
             expect(testDoor.isValidEnterPosition(position)).to.be.false;
         });
@@ -147,13 +156,13 @@ describe('test Door class functionality', function () {
         var illegalNewDir = TestUtil.randomObjectValue(Direction);
 
         var testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition,
-            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage);
+            testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen);
         expect(testDoor.isValidEnterPositionWithoutClick(illegalPos, illegalOldDir, illegalNewDir)).to.be.false;
         expect(testDoor.isValidEnterPositionWithoutClick(testEnterPosition.position, testEnterPosition.direction, testEnterPosition.direction)).to.be.true;
     });
 
     it('test isOpen, open and close Door', function () {
-        let testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, testEnterPosition, testEnterPositions, testTargetPosition, testDirection, true, testClosedMessage);
+        let testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, testEnterPosition, testEnterPositions, testTargetPosition, testDirection, true, testClosedMessage, testCodeToOpen);
 
         let ppantID = TestUtil.randomString();
 
@@ -186,6 +195,52 @@ describe('test Door class functionality', function () {
 
         //Door should be now open for everyone
         expect(testDoor.isOpen()).to.be.true;
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+    });
+
+    it('test set and enter codeToOpen', function () {
+        //Create a closed door with code
+        let testDoor = new Door(testDoorId, testDoorType, testDoorName, testMapPosition, testEnterPosition, testEnterPositions, testTargetPosition, testDirection, false, testClosedMessage, testCodeToOpen);
+
+        let ppantID = TestUtil.randomString();
+
+        //Door is closed for everyone
+        expect(testDoor.isOpenFor(ppantID)).to.be.false;
+
+        //Wrong code entered
+        let firstEnteredCode = testCodeToOpen + 'wrong';
+        let isCodeCorrect = testDoor.enterCodeToOpen(ppantID, firstEnteredCode);
+
+        expect(isCodeCorrect).to.be.false;
+        expect(testDoor.isOpenFor(ppantID)).to.be.false;
+
+        //Correct code entered
+        let secondEnteredCode = testCodeToOpen;
+        isCodeCorrect = testDoor.enterCodeToOpen(ppantID, secondEnteredCode);
+
+        expect(isCodeCorrect).to.be.true;
+        expect(testDoor.isOpenFor(ppantID)).to.be.true;
+
+        //Change Code && close door for ppant with ppantID
+        let newCode = TestUtil.randomString();
+        testDoor.setCodeToOpen(newCode);
+        testDoor.closeDoorFor(ppantID);
+
+        expect(testDoor.getCodeToOpen()).to.equal(newCode);
+        expect(testDoor.hasCodeToOpen()).to.be.true;
+
+        //Old code entered
+        firstEnteredCode = testCodeToOpen;
+        isCodeCorrect = testDoor.enterCodeToOpen(ppantID, firstEnteredCode);
+
+        expect(isCodeCorrect).to.be.false;
+        expect(testDoor.isOpenFor(ppantID)).to.be.false;
+
+        //Correct code
+        secondEnteredCode = newCode;
+        isCodeCorrect = testDoor.enterCodeToOpen(ppantID, secondEnteredCode);
+
+        expect(isCodeCorrect).to.be.true;
         expect(testDoor.isOpenFor(ppantID)).to.be.true;
     });
 
