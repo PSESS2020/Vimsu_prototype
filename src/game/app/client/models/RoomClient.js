@@ -279,13 +279,13 @@ class RoomClient {
      */
     #buildMapArray = function () {
 
-        var mapLength = this.#width + Settings.MAP_BLANK_TILES_LENGTH;
+        var mapLength = this.#length + Settings.MAP_BLANK_TILES_LENGTH;
         this.#map = new Array(mapLength);
         this.#objectMap = new Array(mapLength);
 
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i] = new Array(this.#length + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
-            this.#objectMap[i] = new Array(this.#length + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
+            this.#map[i] = new Array(this.#width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
+            this.#objectMap[i] = new Array(this.#width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
         }
 
         this.#listOfMapElements.forEach(mapElement => {
