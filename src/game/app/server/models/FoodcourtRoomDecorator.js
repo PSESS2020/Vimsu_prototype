@@ -138,7 +138,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
 
         for (i = 3; i <= 4; i++) {
             for (j = 0; j <= 11; j += 11) {
-                listOfMapElements.push(objService.createRightWindowDefault(Settings.FOYER_ID, 1, 1, this.#room.getLength(), i + j, false, false))
+                listOfMapElements.push(objService.createRightWindowDefault(Settings.FOODCOURT_ID, 1, 1, this.#room.getLength(), i + j, false, false))
             }
         }
 
