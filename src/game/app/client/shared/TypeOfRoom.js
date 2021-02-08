@@ -7,7 +7,8 @@
 const TypeOfRoom = Object.freeze({
     FOYER: "Foyer",
     FOODCOURT: "Food Court",
-    RECEPTION: "Reception"
+    RECEPTION: "Reception",
+    ESCAPEROOM: "Escape Room"
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

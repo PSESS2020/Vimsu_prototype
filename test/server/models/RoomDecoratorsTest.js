@@ -39,7 +39,6 @@ foyerAssetPaths = {
     "leftsofa_default": "client/assets/chairs/sofa_left.png",
     "rightsofa_default": "client/assets/chairs/sofa_right.png",
     "plant_default": "client/assets/plants/plant.png",
-
 }
 
 foodcourtAssetPaths = {
@@ -47,6 +46,7 @@ foodcourtAssetPaths = {
     "leftwall_default": "client/assets/walls/wall1.png",
     "rightwall_default": "client/assets/walls/wall2.png",
     "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
+    "rightreceptiondoor_default": "client/assets/doors/door_reception.png",                 /* Needed because Escape Room Door currently uses this asset */
     "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
     "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
     "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
@@ -79,7 +79,9 @@ receptionAssetPaths = {
     "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
     "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
     "plant_default": "client/assets/plants/plant.png",
-    "table_default": "client/assets/tables/table.png",
+    "receptionCounterFrontPart_default": "client/assets/other/ReceptionCounterFrontPart.png",
+    "receptionCounterLeftPart_default": "client/assets/other/ReceptionCounterBackPartLeft.png",
+    "receptionCounterRightPart_default": "client/assets/other/ReceptionCounterBackPartRight.png",
 }
 
 var testRoomFoyer;

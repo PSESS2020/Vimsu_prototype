@@ -8,6 +8,8 @@ const Position = require('./Position.js');
 const Room = require('./Room.js');
 const TypeChecker = require('../../client/shared/TypeChecker');
 const Messages = require('../utils/Messages.js');
+const RoomDimensions = require('../utils/RoomDimensions.js');
+
 
 /**
  * The Food Court Room Decorator Model
@@ -24,6 +26,7 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         "leftwall_default": "client/assets/walls/wall1.png",
         "rightwall_default": "client/assets/walls/wall2.png",
         "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
+        "rightreceptiondoor_default": "client/assets/doors/door_reception.png",                 /* Needed because Escape Room Door currently uses this asset */
         "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
         "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
         "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
@@ -153,8 +156,13 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, false, Messages.FOODCOURTDOORCLOSED));
-        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, false, Messages.FOODCOURTDOORCLOSED),
+            doorService.createEscapeRoomDoor(new Position(Settings.FOODCOURT_ID, this.#room.getLength(), this.#room.getWidth() - 2), 
+                new Position(Settings.ESCAPEROOM_ID, RoomDimensions.ESCAPEROOM_LENGTH - 1, RoomDimensions.ESCAPEROOM_WIDTH - 5), Direction.DOWNLEFT, true, Messages.STANDARDDOORCLOSED));
+
+        listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false), 
+            objService.createDefaultRightTile(Settings.FOODCOURT_ID, this.#room.getLength() + 1, this.#room.getWidth() - 2, false, false));
+
 
         //Assign lists to room and build occupation map
         this.#room.setMapElements(listOfMapElements);

@@ -182,4 +182,24 @@ module.exports = class DoorService {
         let enterPositions = enterPositionData.enterPositions;
         return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage);
     }
+
+    /**
+     * creates an instance of escape room door
+     * @method module:DoorService#createEscapeRoomDoor
+     * 
+     * @param {Position} mapPosition escape room door position
+     * @param {Position} targetPosition avatar's position on entering escape room door
+     * @param {Direction} direction avatar's direction on entering escape room door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * 
+     * @return {Door} escape room door instance
+     */
+    createEscapeRoomDoor(mapPosition, targetPosition, direction, isOpen, closedMessage) {
+        //Assets for this door are still missing, so for now it's just a reception door
+
+        return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
+    }
+
+
 } 

@@ -5,6 +5,7 @@ const RoomDimensions = require('../utils/RoomDimensions.js');
 const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
 const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
+const EscapeRoomDecorator = require('../models/EscapeRoomDecorator.js');
 const Settings = require('../utils/Settings.js');
 
 /**
@@ -69,5 +70,6 @@ module.exports = class RoomService {
         this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));
         this.#rooms.push(new FoodcourtRoomDecorator(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)));
         this.#rooms.push(new ReceptionRoomDecorator(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)));
+        this.#rooms.push(new EscapeRoomDecorator(new Room(Settings.ESCAPEROOM_ID, TypeOfRoom.ESCAPEROOM, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)));
     }
 } 
