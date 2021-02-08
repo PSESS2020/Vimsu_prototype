@@ -63,8 +63,8 @@ module.exports = class Room {
         let rightMapBlankTiles = new Array(Settings.MAP_BLANK_TILES_LENGTH).fill(new Array(this.#length + Settings.MAP_BLANK_TILES_WIDTH).fill(1));
         let leftMapBlankTiles = new Array(Settings.MAP_BLANK_TILES_LENGTH).fill(1);
         
-        for (var i = 0; i < (this.#width); i++) {
-            this.#occupationMap.push( leftMapBlankTiles.concat(new Array(this.#length).fill(0)) );
+        for (var i = 0; i < (this.#length); i++) {
+            this.#occupationMap.push( leftMapBlankTiles.concat(new Array(this.#width).fill(0)) );
         }
 
         rightMapBlankTiles.forEach(array=>{
@@ -344,7 +344,7 @@ module.exports = class Room {
         }
 
         //WALLS
-        if (cordX < 0 || cordY < 0 || cordX >= this.#width || cordY >= this.#length) {
+        if (cordX < 0 || cordY < 0 || cordX >= this.#length || cordY >= this.#width) {
             return true;
         }
 
