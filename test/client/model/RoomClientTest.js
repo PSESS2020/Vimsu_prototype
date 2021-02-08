@@ -68,8 +68,8 @@ describe('RoomClient test', function() {
         expect(room.getListOfPPants()).to.be.an('array').and.to.have.lengthOf(0);
         expect(room.getWidth()).to.equal(width);
         expect(room.getLength()).to.equal(length);
-        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(width + SettingsClient.MAP_BLANK_TILES_LENGTH);
-        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(width + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(length + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(length + SettingsClient.MAP_BLANK_TILES_LENGTH);
 
         //test singleton constructor
         let newRoom = new RoomClient(roomId + 1, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
