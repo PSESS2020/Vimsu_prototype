@@ -196,6 +196,13 @@ class EventManager {
     };
 
     /**
+     * called from view on meeting list click
+     */
+    handleMeetingListClicked() {
+        this.#clientController.handleFromViewShowMeetingList();
+    };
+
+    /**
      * 
      * @param {String} chatId chat ID
      */

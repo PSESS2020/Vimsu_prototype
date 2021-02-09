@@ -910,6 +910,15 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server after clicking jitsi meeting list
+     * 
+     * @param {Object[]} meetings jitsi meeting list
+     */
+    #handleFromServerShowChatList = function (meetings) {
+        this.#gameView.initMeetingListView(meetings);
+    };
+
+    /**
      * @private Receives from server after clicking chat list
      * 
      * @param {Object[]} chats chat list
@@ -1313,6 +1322,15 @@ class ClientController {
     handleFromViewShowChatList() {
         if (this.#socketReady()) {
             this.#socket.emit('getChatList');
+        }
+    };
+
+    /**
+     * Gets the list of jitsi meetings the user is in from the server. 
+     */
+    handleFromViewShowChatList() {
+        if (this.#socketReady()) {
+            this.#socket.emit('getMeetingList');
         }
     };
 
