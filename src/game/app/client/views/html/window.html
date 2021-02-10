@@ -291,6 +291,30 @@
         </div>
     </div>
 
+    <div class="modal" id="inputEnterCodeModal" tabindex="-1" role="dialog" aria-labelledby="inputEnterCodeModalTitle"
+        data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow: auto; height: 500px;">
+                    <form id="enteredCode" action="" style="text-align: center; margin-top: 35%">
+                        <input id="codeInput" autocomplete="off"
+                            style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                            placeholder="Enter code" required autocomplete="off"/>
+                        <button class="btn btn-accept mt-3"
+                            title="Sends the code you entered in the input field" style=" width: auto;"> Send Code
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
         aria-hidden="true" data-focus-on="input:first">
         <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">

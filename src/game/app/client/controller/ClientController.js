@@ -201,6 +201,7 @@ class ClientController {
         this.#socket.on('chatThread', this.#handleFromServerShowChatThread.bind(this));
         this.#socket.on('newChatMessage', this.#handleFromServerNewChatMessage.bind(this));
         this.#socket.on('inviteFriends', this.#handleFromServerInviteFriends.bind(this));
+        this.#socket.on('enterCode', this.#handleFromServerEnterCode.bind(this));
     }
 
     /* #################################################### */
@@ -996,6 +997,16 @@ class ClientController {
         window.location.href = redirect;
     }
 
+    /**
+     * @private Receives from server that user tries to enter a door where a code is required
+     * 
+     * @param {String} doorId id of door user tried to enter
+     */
+    #handleFromServerEnterCode = function (doorId) {
+        TypeChecker.isString(doorId);
+        this.#gameView.initEnterCodeWindow(doorId);
+    }
+
     /* #################################################### */
     /* ################# HANDLE FROM VIEW ################# */
     /* #################################################### */
@@ -1397,6 +1408,21 @@ class ClientController {
     handleFromViewClearInterval() {
         if (this.#socketReady()) {
             this.#socket.emit('clearInterval');
+        }
+    }
+
+    /**
+     * Sends to server the entered code for door with id doorId
+     * 
+     * @param {String} doorId 
+     * @param {String} enteredCode 
+     */
+    handleFromViewCodeEntered(doorId, enteredCode) {
+        TypeChecker.isString(doorId);
+        TypeChecker.isString(enteredCode);
+
+        if (this.#socketReady()) {
+            this.#socket.emit('codeEntered', doorId, enteredCode);
         }
     }
 

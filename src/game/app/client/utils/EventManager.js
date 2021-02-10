@@ -369,4 +369,14 @@ class EventManager {
     handleRightArrowDown() {
         this.#clientController.handleRightArrowDown();
     }
+
+    /**
+     * called from View when user entered a door code on door with doorId
+     * 
+     * @param {String} doorId if of door for which user entered a code
+     * @param {String} enteredCode code the user entered
+     */
+    handleCodeEntered(doorId, enteredCode) {
+        this.#clientController.handleFromViewCodeEntered(doorId, enteredCode);
+    }
 }

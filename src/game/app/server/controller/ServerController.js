@@ -1810,6 +1810,39 @@ module.exports = class ServerController {
                 socket.emit('showNPCStory', name, story);
             });
 
+            /* handles entered code from client for door with doorId */
+            socket.on('codeEntered', (doorId, enteredCode) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isString(doorId);
+                    TypeChecker.isString(enteredCode);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                }
+
+                let ppantID = socket.ppantID;
+                let ppant = this.#ppants.get(ppantID);
+
+                //user went offline
+                if (ppant === undefined) {
+                    return;
+                }
+                
+                let door = this.getDoorByID(doorId);
+
+                //door does not exist, client emitted wrong data
+                if (door === undefined) {
+                    return;
+                }
+
+                if (door.enterCodeToOpen(ppantID, enteredCode)) {
+                    this.sendNotification(socket.id, Messages.CORRECTCODE);
+                } else {
+                    this.sendNotification(socket.id, Messages.WRONGCODE);
+                }
+            });
+
             socket.on('disconnect', (reason) => {
                 //Prevents server crash because client sends sometimes disconnect event on connection to server.
                 if (!this.#socketMap.has(socket.id)) {
@@ -2171,6 +2204,9 @@ module.exports = class ServerController {
         if (!lectureDoor.isOpenFor(ppantID)) {
             this.sendNotification(socket.id, lectureDoor.getClosedMessage());
             return;
+        } else if (!lectureDoor.isOpenFor(ppantID) && lectureDoor.hasCodeToOpen()) {
+            socket.emit('enterCode', door.getId());
+            return;
         }
 
         clearInterval(this.#interval);
@@ -2262,8 +2298,11 @@ module.exports = class ServerController {
         }
 
         //check if the door is open for this participant
-        if (!door.isOpenFor(ppantID)) {
+        if (!door.isOpenFor(ppantID) && !door.hasCodeToOpen()) {
             this.sendNotification(socket.id, door.getClosedMessage());
+            return;
+        } else if (!door.isOpenFor(ppantID) && door.hasCodeToOpen()) {
+            socket.emit('enterCode', door.getId());
             return;
         }
 

@@ -147,5 +147,13 @@ module.exports = Object.freeze({
     FOODCOURTDOORCLOSED: {
         header: "Door closed",
         body: "Greet our Chef before you leave!"
+    },
+    CORRECTCODE: {
+        header: "Code was correct!",
+        body: "The code you entered was correct! The door is now open for you."
+    },
+    WRONGCODE: {
+        header: "Code was wrong!",
+        body: "The code you entered was wrong! Try again."
     }
 });

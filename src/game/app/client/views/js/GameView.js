@@ -35,6 +35,7 @@ class GameView {
     #newAchievementView;
     #achievementView;
     #businessCardView;
+    #enterCodeView;
 
     #gameEngine;
     #eventManager;
@@ -93,6 +94,7 @@ class GameView {
         this.#achievementView = new AchievementView();
         this.#businessCardView = new BusinessCardView(this.#eventManager);
         this.#successesBar = new SuccessesBar();
+        this.#enterCodeView = new EnterCodeView(this.#eventManager);
     }
 
     /**
@@ -1209,4 +1211,15 @@ class GameView {
             this.#lectureView.close();
         }
     };
+
+    /**
+     * init enter code window
+     * 
+     * @param {String} doorId door id for which the code is entered
+     */
+    initEnterCodeWindow(doorId) {
+        TypeChecker.isString(doorId);
+        
+        this.#enterCodeView.draw(doorId);
+    }
 }
