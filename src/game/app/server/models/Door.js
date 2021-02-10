@@ -69,6 +69,8 @@ module.exports = class Door {
         if(codeToOpen !== undefined) {
             TypeChecker.isString(codeToOpen);
             this.#hasCodeToOpen = true;
+        } else {
+            this.#hasCodeToOpen = false;
         }
 
         this.#id = id;
