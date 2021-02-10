@@ -68,10 +68,11 @@ module.exports = Object.freeze({
                 "\\logdoors -- Will show a log of all available doors with ID and status information.", 
                 "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
                 "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
-                "\\opendoorfor <doorID> <list of usernames> -- Opens the door with <doorID> for all passed usernames in <list of usernames>" + 
+                "\\opendoorfor <doorID> <list of usernames> -- Opens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
                 ", each one seperated from the next one by a whitespace character.",
-                "\\closedoorfor <doorID> <list of usernames> -- Closes the door with <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character."]
+                "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>."]
     },
     WARNING: {
         header: "Warning",

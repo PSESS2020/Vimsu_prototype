@@ -361,7 +361,6 @@ module.exports = class CommandHandler {
             let room = roomDecorators[i].getRoom();
             let doors = room.getListOfDoors();
             for (let j = 0; j < doors.length; j++) {
-                console.log(doors[j].hasCodeToOpen());
                 body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId() + ". Door is currently " + 
                 ((doors[j].isOpen()) ? "open" : "closed") + 
                 ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
@@ -531,6 +530,35 @@ module.exports = class CommandHandler {
         }
     }
 
+    /**
+     * Sets the door code of the door with the passed ID to the passed String
+     * @method module:CommandHandler#setDoorCode
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    setDoorCode(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let doorID = commandArgs[0];
+        let code = commandArgs[1];
+
+        let door = this.#serverController.getDoorByID(doorID);
+
+        if (door !== undefined) {
+            door.setCodeToOpen(code);
+            let header = "Code set successfully";
+            let body = "You successfully set the door code of the door with the ID " + doorID + " to " + code + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+        }
+    }
     /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
