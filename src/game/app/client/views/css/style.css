@@ -470,6 +470,13 @@ body::-webkit-scrollbar-track:hover ~ body::-webkit-scrollbar-thumb:hover{
   box-shadow: 0px 0px 0px transparent;
  }
 
+.modal-body-center {
+  overflow: auto; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
  .close {
   background-color: transparent !important; 
   border-color: transparent !important; 
