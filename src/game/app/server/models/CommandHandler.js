@@ -531,6 +531,82 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Closes all existing doors for all passed users
+     * @method module:CommandHandler#closeAllDoorsFor
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    closeAllDoorsFor(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let usernames = commandArgs;
+        let ppantIDs = [];
+   
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            ppantIDs.push(ppantID);
+        }
+       
+        let doors = this.#serverController.getAllDoors();
+      
+        doors.forEach(door => {
+            ppantIDs.forEach(ppantID => {
+                door.closeDoorFor(ppantID);
+            });
+        });
+
+        this.#serverController.sendNotification(socket.id, Messages.CLOSEDALLDOORS)
+    }
+
+    /**
+     * Opens all existing doors for all passed users
+     * @method module:CommandHandler#openAllDoorsFor
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    openAllDoorsFor(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let usernames = commandArgs;
+        let ppantIDs = [];
+   
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            ppantIDs.push(ppantID);
+        }
+       
+        let doors = this.#serverController.getAllDoors();
+      
+        doors.forEach(door => {
+            ppantIDs.forEach(ppantID => {
+                door.openDoorFor(ppantID);
+            });
+        });
+
+        this.#serverController.sendNotification(socket.id, Messages.OPENEDALLDOORS)
+    }
+
+    /**
      * Sets the door code of the door with the passed ID to the passed String
      * @method module:CommandHandler#setDoorCode
      * 

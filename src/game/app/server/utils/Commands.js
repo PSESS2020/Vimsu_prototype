@@ -82,6 +82,14 @@ module.exports = Object.freeze({
         string: "opendoorfor",
         method: "openDoorFor"
     },
+    CLOSEALLDOORSFOR: {
+        string: "closealldoorsfor",
+        method: "closeAllDoorsFor"
+    },
+    OPENALLDOORSFOR: {
+        string: "openalldoorsfor",
+        method: "openAllDoorsFor"
+    },
     SETDOORCODE: {
         string: "setdoorcode",
         method: "setDoorCode"

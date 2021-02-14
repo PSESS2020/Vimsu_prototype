@@ -72,6 +72,10 @@ module.exports = Object.freeze({
                 ", each one seperated from the next one by a whitespace character.",
                 "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
                 ", each one seperated from the next one by a whitespace character.",
+                "\\openalldoorsfor <list of usernames> -- Opens all existing doors for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
                 "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>."]
     },
     WARNING: {
@@ -133,6 +137,14 @@ module.exports = Object.freeze({
     UNKNOWNUSERNAME: {
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
+    },
+    CLOSEDALLDOORS: {
+        header: "Successfully closed all doors",
+        body: "You successfully closed all doors for all passed users."
+    },
+    OPENEDALLDOORS: {
+        header: "Successfully opened all doors",
+        body: "You successfully opened all doors for all passed users."
     },
     STANDARDDOORCLOSED: {
         header: "Door closed",
