@@ -13,6 +13,7 @@ module.exports = Object.freeze({
     FOYER_ID: 1,
     FOODCOURT_ID: 2,
     RECEPTION_ID: 3,
+    ESCAPEROOM_ID:4,
     STARTROOM_ID: 3,
     STARTPOSITION_X: 3,
     STARTPOSITION_Y: 12,

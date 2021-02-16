@@ -13,8 +13,6 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
  */
 module.exports = class DoorService {
 
-    #doorIDs;
-
     /**
      * creates an instance of DoorService
      * @constructor 
@@ -25,25 +23,33 @@ module.exports = class DoorService {
         }
 
         DoorService.instance = this;
-        this.#doorIDs = [];
     }
 
     /**
+     * @private checks parameters' data type
+     * @method module:DoorService#checkParamTypes
      * 
-     * @private generates a unique ID for doors
-     * @method module:DoorService#generateDoorID
-     * 
-     * @return {number} unique id
+     * @param {TypeOfDoor} typeOfDoor type of checked door
+     * @param {Position} mapPosition foyer door position
+     * @param {Position} targetPosition avatar's position on entering foyer door
+     * @param {Direction} direction avatar's direction on entering foyer door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      */
-    #generateDoorID = function () {
-        let idIsGenerated = false;
-        while (!idIsGenerated) {
-            let id = Math.floor((Math.random() * 1000000) - 500000);
-            if (!this.#doorIDs.includes(id)) {
-                idIsGenerated = true;
-                this.#doorIDs.push(id);
-                return id;
-            }
+    #checkParamTypes = function (typeOfDoor, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor)
+        TypeChecker.isInstanceOf(mapPosition, Position);
+        TypeChecker.isBoolean(isOpen);
+        TypeChecker.isInstanceOf(closedMessage, Object);
+        TypeChecker.isString(closedMessage.header);
+        TypeChecker.isString(closedMessage.body);
+        if (codeToOpen !== undefined)
+            TypeChecker.isString(codeToOpen);
+
+        if (typeOfDoor !== TypeOfDoor.LECTURE_DOOR) {
+            TypeChecker.isInstanceOf(targetPosition, Position);
+            TypeChecker.isEnumOf(direction, Direction);
         }
     }
 
@@ -106,16 +112,19 @@ module.exports = class DoorService {
      * @method module:DoorService#createLectureDoor
      * 
      * @param {Position} mapPosition lecture door position
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      * 
      * @return {Door} lecture door instance
      */
-    createLectureDoor(mapPosition) {
-        TypeChecker.isInstanceOf(mapPosition, Position);
+    createLectureDoor(mapPosition, isOpen, closedMessage, codeToOpen) {
+        this.#checkParamTypes(TypeOfDoor.LECTURE_DOOR, mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
 
         let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined);
+        return new Door('L' + mapPosition.getRoomId(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined, isOpen, closedMessage, codeToOpen);
     }
 
     /**
@@ -125,18 +134,19 @@ module.exports = class DoorService {
      * @param {Position} mapPosition foyer door position
      * @param {Position} targetPosition avatar's position on entering foyer door
      * @param {Direction} direction avatar's direction on entering foyer door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      * 
      * @return {Door} foyer door instance
      */
-    createFoyerDoor(mapPosition, targetPosition, direction) {
-        TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(targetPosition, Position);
-        TypeChecker.isEnumOf(direction, Direction);
+    createFoyerDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        this.#checkParamTypes(TypeOfDoor.LEFT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
 
         let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
 
     /**
@@ -146,18 +156,19 @@ module.exports = class DoorService {
      * @param {Position} mapPosition food court door position
      * @param {Position} targetPosition avatar's position on entering food court door
      * @param {Direction} direction avatar's direction on entering food court door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      * 
      * @return {Door} food court door instance
      */
-    createFoodCourtDoor(mapPosition, targetPosition, direction) {
-        TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(targetPosition, Position);
-        TypeChecker.isEnumOf(direction, Direction);
+    createFoodCourtDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        this.#checkParamTypes(TypeOfDoor.RIGHT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
 
         let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
 
     /**
@@ -167,17 +178,39 @@ module.exports = class DoorService {
      * @param {Position} mapPosition reception door position
      * @param {Position} targetPosition avatar's position on entering reception door
      * @param {Direction} direction avatar's direction on entering reception door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      * 
      * @return {Door} reception door instance
      */
-    createReceptionDoor(mapPosition, targetPosition, direction) {
-        TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isInstanceOf(targetPosition, Position);
-        TypeChecker.isEnumOf(direction, Direction);
+    createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        this.#checkParamTypes(TypeOfDoor.RIGHT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
 
         let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door(this.#generateDoorID(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction);
+        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
+
+    /**
+     * creates an instance of escape room door
+     * @method module:DoorService#createEscapeRoomDoor
+     * 
+     * @param {Position} mapPosition escape room door position
+     * @param {Position} targetPosition avatar's position on entering escape room door
+     * @param {Direction} direction avatar's direction on entering escape room door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
+     * 
+     * @return {Door} escape room door instance
+     */
+    createEscapeRoomDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        //Assets for this door are still missing, so for now it's just a reception door
+
+        return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
+    }
+
+
 } 

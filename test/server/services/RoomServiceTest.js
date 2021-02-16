@@ -19,7 +19,7 @@ describe('RoomService constructor test', function () {
     });
 
     it('test right amount of rooms init', function () {
-        expect(testRoomService.getAllRooms()).to.be.an('array').of.length(3);
+        expect(testRoomService.getAllRooms()).to.be.an('array').of.length(4);
     });
 
 });

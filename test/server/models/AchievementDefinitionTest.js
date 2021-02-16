@@ -15,9 +15,10 @@ var levels = [
     { count: 5, color: '#D7D7D7', points: 200 },
     { count: 10, color: '#C9B037', points: 200 }
 ];
+var opensDoorID = "doorID";
 
-var achievementDefinition = new AchievementDefinition(id, taskType, title, icon, description, levels);
-var achievement = new Achievement(id, title, icon, description, 1, '#D7D7D7', 200, 2, taskType, 1);
+var achievementDefinition = new AchievementDefinition(id, taskType, title, icon, description, levels, opensDoorID);
+var achievement = new Achievement(id, title, icon, description, 1, '#D7D7D7', 200, 2, taskType, 1, opensDoorID);
 
 describe('AchievementDefinition getter funtions', function () {
     it('test getId', function () {
@@ -42,6 +43,10 @@ describe('AchievementDefinition getter funtions', function () {
 
     it('test getLevels', function () {
         assert.equal(achievementDefinition.getLevels(), levels);
+    })
+
+    it('test getOpensDoorID', function () {
+        assert.equal(achievementDefinition.getOpensDoorID(), opensDoorID);
     })
 })
 

@@ -13,7 +13,9 @@ describe('DoorService test', function () {
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
         let mapPosition = new Position(roomId, cordX, cordY);
-        let lectureDoor = doorService.createLectureDoor(mapPosition);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let lectureDoor = doorService.createLectureDoor(mapPosition, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -30,6 +32,7 @@ describe('DoorService test', function () {
         expect(lectureDoor.getDirection()).to.equal(undefined);
         expect(lectureDoor.getEnterPositions()).to.eql(expectedEnterPositions);
         expect(lectureDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
+        expect(lectureDoor.hasCodeToOpen()).to.be.false;
     });
 
     it('test create FoyerDoor', function () {
@@ -40,7 +43,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let foyerDoor = doorService.createFoyerDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let foyerDoor = doorService.createFoyerDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -57,6 +62,7 @@ describe('DoorService test', function () {
         expect(foyerDoor.getDirection()).to.equal(direction);
         expect(foyerDoor.getEnterPositions()).to.eql(expectedEnterPositions);
         expect(foyerDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
+        expect(foyerDoor.hasCodeToOpen()).to.be.false;
     });
 
     it('test create FoodCourtDoor', function () {
@@ -67,7 +73,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let foodCourtDoor = doorService.createFoodCourtDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let foodCourtDoor = doorService.createFoodCourtDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -84,6 +92,7 @@ describe('DoorService test', function () {
         expect(foodCourtDoor.getDirection()).to.equal(direction);
         expect(foodCourtDoor.getEnterPositions()).to.eql(expectedEnterPositions);
         expect(foodCourtDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
+        expect(foodCourtDoor.hasCodeToOpen()).to.be.false;
     });
 
     it('test create ReceptionDoor', function () {
@@ -94,7 +103,9 @@ describe('DoorService test', function () {
         let mapPosition = new Position(roomId, cordX, cordY);
         let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
         let direction = Direction.DOWNRIGHT;
-        let receptionDoor = doorService.createReceptionDoor(mapPosition, targetPosition, direction);
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let receptionDoor = doorService.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage);
 
         let expectedEnterPositions = [];
         let lastEnterPosition;
@@ -111,6 +122,39 @@ describe('DoorService test', function () {
         expect(receptionDoor.getDirection()).to.equal(direction);
         expect(receptionDoor.getEnterPositions()).to.eql(expectedEnterPositions);
         expect(receptionDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
+        expect(receptionDoor.hasCodeToOpen()).to.be.false;
+    });
+
+    it('test create EscapeRoomDoor', function () {
+        let doorService = new DoorService();
+        let roomId = TestUtil.randomIntWithMin(0);
+        let cordX = TestUtil.randomIntWithMin(0);
+        let cordY = TestUtil.randomIntWithMin(0);
+        let mapPosition = new Position(roomId, cordX, cordY);
+        let targetPosition = new Position(TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0), TestUtil.randomIntWithMin(0));
+        let direction = Direction.DOWNRIGHT;
+        let isOpen = TestUtil.randomBool();
+        let closedMessage = { header: TestUtil.randomString(), body: TestUtil.randomString() };
+        let codeToOpen = TestUtil.randomString();
+        let escapeRoomDoor = doorService.createEscapeRoomDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
+
+        let expectedEnterPositions = [];
+        let lastEnterPosition;
+        for (var i = mapPosition.getCordX() - 3; i <= mapPosition.getCordX() - 1; i++) {
+            for (var j = mapPosition.getCordY() - 2; j <= mapPosition.getCordY() + 2; j++) {
+                lastEnterPosition = new Position(roomId, i, j);
+                expectedEnterPositions.push(new Position(roomId, i, j));
+            }
+        }
+
+        expect(escapeRoomDoor).to.be.instanceOf(Door);
+        expect(escapeRoomDoor.getMapPosition()).to.equal(mapPosition);
+        expect(escapeRoomDoor.getTargetPosition()).to.equal(targetPosition);
+        expect(escapeRoomDoor.getDirection()).to.equal(direction);
+        expect(escapeRoomDoor.getEnterPositions()).to.eql(expectedEnterPositions);
+        expect(escapeRoomDoor.isValidEnterPosition(lastEnterPosition)).to.be.true;
+        expect(escapeRoomDoor.hasCodeToOpen()).to.be.true;
+        expect(escapeRoomDoor.getCodeToOpen()).to.equal(codeToOpen);
     });
 
 });

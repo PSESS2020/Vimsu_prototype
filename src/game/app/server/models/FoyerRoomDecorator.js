@@ -7,6 +7,7 @@ const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const Room = require('./Room.js');
 const TypeChecker = require('../../client/shared/TypeChecker');
+const Messages = require('../utils/Messages.js');
 
 /**
  * The Foyer Room Decorator Model
@@ -129,9 +130,9 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1)),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT),
-            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT));
+        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, Messages.STANDARDDOORCLOSED),
+            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED),
+            doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED));
 
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID, 2, -2, false, false),

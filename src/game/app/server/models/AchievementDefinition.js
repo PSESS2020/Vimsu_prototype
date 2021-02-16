@@ -17,6 +17,7 @@ module.exports = class AchievementDefinition {
     #icon;
     #description;
     #levels;
+    #opensDoorID;
 
     /**
      * Creates an instance of AchievementDefinition
@@ -28,8 +29,9 @@ module.exports = class AchievementDefinition {
      * @param {String} icon achievement icon
      * @param {String} description achievement description
      * @param {{count: number, color: String, points: number}} levels achievement levels
+     * @param {String} opensDoorID achieving this achievment opens door with this doorID
      */
-    constructor(id, taskType, title, icon, description, levels) {
+    constructor(id, taskType, title, icon, description, levels, opensDoorID) {
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
         TypeChecker.isString(title);
@@ -42,6 +44,8 @@ module.exports = class AchievementDefinition {
             TypeChecker.isString(element.color);
             TypeChecker.isInt(element.points);
         });
+        if (opensDoorID !== undefined)
+            TypeChecker.isString(opensDoorID);
 
         this.#id = id;
         this.#taskType = taskType;
@@ -49,6 +53,7 @@ module.exports = class AchievementDefinition {
         this.#icon = icon;
         this.#description = description;
         this.#levels = levels;
+        this.#opensDoorID = opensDoorID;
     }
 
     /**
@@ -112,6 +117,16 @@ module.exports = class AchievementDefinition {
     }
 
     /**
+     * If this achieving this achievement opens a door, returns doorID of this door. Otherwise undefined
+     * @method module:AchievmentDefinition#getOpensDoorID
+     * 
+     * @return {String} opensDoorID
+     */
+    getOpensDoorID() {
+        return this.#opensDoorID;
+    }
+
+    /**
      * Creates an achievement instance based on current level
      * @method module:AchievementDefinition#computeAchievement
      * 
@@ -124,6 +139,6 @@ module.exports = class AchievementDefinition {
         var color = (currentLevel != 0) ? this.#levels[currentLevel - 1].color : 'darkslategray';
         var awardPoints = (currentLevel != 0) ? this.#levels[currentLevel - 1].points : 0;
         var nextCount = (currentLevel != this.#levels.length) ? this.#levels[currentLevel].count : undefined;
-        return new Achievement(this.#id, this.#title, this.#icon, this.#description, currentLevel, color, awardPoints, this.#levels.length, this.#taskType, nextCount);
+        return new Achievement(this.#id, this.#title, this.#icon, this.#description, currentLevel, color, awardPoints, this.#levels.length, this.#taskType, nextCount, this.#opensDoorID);
     }
 }

@@ -61,5 +61,37 @@ module.exports = Object.freeze({
     HELP: {
         string: "help",
         method: "printHelp"
+    },
+    LOGDOORS: {
+        string: "logdoors",
+        method: "logAllDoors"
+    },
+    CLOSEDOOR: {
+        string: "closedoor",
+        method: "closeDoor"
+    }, 
+    OPENDOOR: {
+        string: "opendoor",
+        method: "openDoor"
+    },
+    CLOSEDOORFOR: {
+        string: "closedoorfor",
+        method: "closeDoorFor",
+    },
+    OPENDOORFOR: {
+        string: "opendoorfor",
+        method: "openDoorFor"
+    },
+    CLOSEALLDOORSFOR: {
+        string: "closealldoorsfor",
+        method: "closeAllDoorsFor"
+    },
+    OPENALLDOORSFOR: {
+        string: "openalldoorsfor",
+        method: "openAllDoorsFor"
+    },
+    SETDOORCODE: {
+        string: "setdoorcode",
+        method: "setDoorCode"
     }
 });

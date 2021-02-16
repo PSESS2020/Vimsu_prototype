@@ -20,12 +20,18 @@ module.exports = class Door {
     #enterPositions;
     #targetPosition;
     #direction;
+    #isOpen;
+    #isOpenFor;
+    #isClosedFor;
+    #closedMessage;
+    #hasCodeToOpen;
+    #codeToOpen;
 
     /**
      * Creates an instance of door
      * @constructor module:Door
      * 
-     * @param {number} id door ID
+     * @param {String} id door ID
      * @param {String} name door name
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {Position} mapPosition door position on the map
@@ -33,9 +39,12 @@ module.exports = class Door {
      * @param {Position[]} enterPositions door valid enter positions from the map
      * @param {Position} targetPosition avatar position on entering the door
      * @param {Direction} direction avatar direction on entering the door
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      */
-    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction) {
-        TypeChecker.isInt(id);
+    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+        TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, Position);
@@ -52,6 +61,18 @@ module.exports = class Door {
             TypeChecker.isEnumOf(direction, Direction);
         }
 
+        TypeChecker.isBoolean(isOpen);
+        TypeChecker.isInstanceOf(closedMessage, Object);
+        TypeChecker.isString(closedMessage.header);
+        TypeChecker.isString(closedMessage.body);
+
+        if(codeToOpen !== undefined) {
+            TypeChecker.isString(codeToOpen);
+            this.#hasCodeToOpen = true;
+        } else {
+            this.#hasCodeToOpen = false;
+        }
+
         this.#id = id;
         this.#typeOfDoor = typeOfDoor;
         this.#name = name;
@@ -60,13 +81,22 @@ module.exports = class Door {
         this.#enterPositions = enterPositions;
         this.#targetPosition = targetPosition;
         this.#direction = direction;
+        this.#isOpen = isOpen;
+        this.#closedMessage = closedMessage;
+        this.#codeToOpen = codeToOpen;
+
+        //list of ppantIDs, for which the door is explicitly open
+        this.#isOpenFor = [];
+
+        //list of ppantIDs, for which the door is explicitly closed
+        this.#isClosedFor = [];
     }
 
     /**
      * Gets door ID
      * @method module:Door#getId
      * 
-     * @return {number} id
+     * @return {String} id
      */
     getId() {
         return this.#id;
@@ -218,5 +248,154 @@ module.exports = class Door {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if door is open for everybody
+     * @method module:Door#isOpen
+     * 
+     * @return {boolean} true if open, false if closed
+     */
+    isOpen() {
+        return this.#isOpen;
+    }
+
+    /**
+     * Checks if door is open for the ppant with this ppantID
+     * @method module:Door#isOpenFor
+     * 
+     * @param {String} ppantID 
+     * 
+     * @return {boolean} true if open, false if closed
+     */
+    isOpenFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        return ((this.#isOpen || this.#isOpenFor.includes(ppantID)) && !this.#isClosedFor.includes(ppantID));
+    }
+
+    /**
+     * Checks if door has a code to open it
+     * @method module:Door#hasCodeToOpen
+     * 
+     * @return {boolean} true if door has a code to open it, false otherwise
+     */
+    hasCodeToOpen() {
+        return this.#hasCodeToOpen;
+    }
+
+    /**
+     * Returns code to open for this door if there is such a Code, otherwise undefined
+     * @method module:Door#getCodeToOpen
+     * 
+     * @return {String|undefined} codeToOpen 
+     */
+    getCodeToOpen() {
+        return this.#codeToOpen;
+    }
+
+    /**
+     * Set code to open
+     * @method module:Door#setCodeToOpen
+     * 
+     * @param {String} codeToOpen 
+     */
+    setCodeToOpen(codeToOpen) {
+        TypeChecker.isString(codeToOpen);
+
+        this.#hasCodeToOpen = true;
+        this.#codeToOpen = codeToOpen;
+    }
+
+    /**
+     * Called when a ppant enters a code to enter this door. If the code is correct, he will be added to the isOpenFor list
+     * @method module:Door#enterCodeToOpen
+     * 
+     * @param {String} ppantID 
+     * @param {String} codeToOpen 
+     * 
+     * @return {boolean} true, if code was correct, false otherwise
+     */
+    enterCodeToOpen(ppantID, codeToOpen) {
+        TypeChecker.isString(codeToOpen);
+        TypeChecker.isString(codeToOpen);
+
+        if (this.#hasCodeToOpen && this.#codeToOpen === codeToOpen) {
+            this.openDoorFor(ppantID);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Close Door for everybody
+     * @method module:Door#closeDoor
+     */
+    closeDoor() {
+        this.#isOpen = false;
+        this.#isOpenFor = [];
+    }
+    
+    /**
+     * Open Door for everybody
+     * @method module:Door#openDoor
+     */
+    openDoor() {
+        this.#isOpen = true;
+        this.#isClosedFor = [];
+    }
+
+    /**
+     * Close Door for ppant with this ppantID
+     * @method module:Door#closeDoorFor
+     * 
+     * @param {String} ppantID 
+     * 
+     */
+    closeDoorFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        this.#isOpenFor.forEach(id => {
+            if (id === ppantID) {
+                let index = this.#isOpenFor.indexOf(ppantID);
+                this.#isOpenFor.splice(index, 1);
+            }
+        });
+
+        if (!this.#isClosedFor.includes(ppantID)) {
+            this.#isClosedFor.push(ppantID);
+        }
+    }
+    
+    /**
+     * Open Door for ppant with this ppantID
+     * @method module:Door#openDoorFor
+     * 
+     * @param {String} ppantID
+     */
+    openDoorFor(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        this.#isClosedFor.forEach(id => {
+            if (id === ppantID) {
+                let index = this.#isClosedFor.indexOf(ppantID);
+                this.#isClosedFor.splice(index, 1);
+            }
+        });
+
+        if (!this.#isOpenFor.includes(ppantID)) {
+            this.#isOpenFor.push(ppantID);
+        }
+    }
+
+    /**
+     * Gets the message a user receives if he tries to enter this door while it is closed
+     * @method module:Door#getClosedMessage
+     * 
+     * @return {Object} closedMessage
+     */
+    getClosedMessage() {
+        return this.#closedMessage;
     }
 }

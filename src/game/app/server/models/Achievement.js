@@ -20,6 +20,7 @@ module.exports = class Achievement {
     #awardPoints;
     #taskType;
     #nextCount;
+    #opensDoorID;
 
     /**
      * Creates an Achievement instance
@@ -35,8 +36,9 @@ module.exports = class Achievement {
      * @param {number} maxLevel max level of this achievement
      * @param {TypeOfTask} taskType task type of achievement
      * @param {number} nextCount next participant's target to gain this achievement
+     * @param {String} opensDoorID achieving this achievment at max level opens door with this doorID
      */
-    constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount) {
+    constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount, opensDoorID) {
         TypeChecker.isInt(id);
         TypeChecker.isString(title);
         TypeChecker.isString(icon);
@@ -48,6 +50,8 @@ module.exports = class Achievement {
         TypeChecker.isEnumOf(taskType, TypeOfTask);
         if (nextCount !== undefined)
             TypeChecker.isInt(nextCount);
+        if (opensDoorID !== undefined)
+            TypeChecker.isString(opensDoorID);
 
         this.#id = id;
         this.#title = title;
@@ -59,6 +63,7 @@ module.exports = class Achievement {
         this.#maxLevel = maxLevel;
         this.#taskType = taskType;
         this.#nextCount = nextCount;
+        this.#opensDoorID = opensDoorID;
     }
 
     /**
@@ -159,6 +164,16 @@ module.exports = class Achievement {
      */
     getNextCount() {
         return this.#nextCount;
+    }
+
+    /**
+     * If this achieving this achievement opens a door, returns doorID of this door. Otherwise undefined
+     * @method module:Achievment#getOpensDoorID
+     * 
+     * @return {String} opensDoorID
+     */
+    getOpensDoorID() {
+        return this.#opensDoorID;
     }
 
     /**

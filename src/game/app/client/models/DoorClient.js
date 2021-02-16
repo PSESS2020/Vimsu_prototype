@@ -21,14 +21,14 @@ class DoorClient {
     /**
      * Creates an instance of Door on client-side
      * 
-     * @param {number} id door ID
+     * @param {String} id door ID
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {String} name door name
      * @param {PositionClient} mapPosition door position
      * @param {number} targetRoomId target room ID
      */
     constructor(id, typeOfDoor, name, mapPosition, targetRoomId) {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(mapPosition, PositionClient);
@@ -46,7 +46,7 @@ class DoorClient {
     /**
      * Gets door ID
      * 
-     * @return {number} id
+     * @return {String} id
      */
     getId() {
         return this.#id;

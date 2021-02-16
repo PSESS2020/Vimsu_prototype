@@ -14,8 +14,9 @@ var awardPoints = 10;
 var maxLevel = 3;
 var taskType = TypeOfTask.RECEPTIONVISIT;
 var nextCount = 5;
+var opensDoorID = "doorID";
 
-achievement = new Achievement(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount);
+achievement = new Achievement(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount, opensDoorID);
 
 describe('Achievement getter functions', function () {
     it('test getId', function () {
@@ -50,7 +51,10 @@ describe('Achievement getter functions', function () {
     it('test getNextCount', function () {
         assert.equal(achievement.getNextCount(), nextCount);
     })
-})
+    it('test getOpensDoorID', function () {
+        assert.equal(achievement.getOpensDoorID(), opensDoorID);
+    })
+}) 
 
 describe('Achievement setter functions', function () {
     it('test setCurrentLevel', function () {

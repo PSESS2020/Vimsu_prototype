@@ -64,7 +64,19 @@ module.exports = Object.freeze({
                 "will no longer be able to post messages into the allchat.",
                 "\\unmute <list of usernames>  --  Takes a list of usernames, each one " +
                 "separated from the next by a whitespace-character, and unmutes them, meaning they " +
-                "will be able to post messages into the allchat again if they were previously muted."]
+                "will be able to post messages into the allchat again if they were previously muted.",
+                "\\logdoors -- Will show a log of all available doors with ID and status information.", 
+                "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
+                "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
+                "\\opendoorfor <doorID> <list of usernames> -- Opens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\openalldoorsfor <list of usernames> -- Opens all existing doors for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
+                ", each one seperated from the next one by a whitespace character.",
+                "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>."]
     },
     WARNING: {
         header: "Warning",
@@ -117,5 +129,43 @@ module.exports = Object.freeze({
                "Finally, we will test the 'Lecture' feature. Please proceed to the lecture door, pick out a lecture to watch and enter it. Once the lecture has concluded, please take a short while to spam messages into the lecture chat.",
                "To conclude the test, we would like to ask you to just wildly spam clicks all over the graphical interface for the next minute.",
                "Thank you for participating in this test! Please take a couple of minutes to fill out the survey and share your user experience with us."]
+    },
+    UNKNOWNDOORID: {
+        header: "Unknown Door ID",
+        body: "You entered a wrong DoorID. Please check it again with '\\logdoors'."
+    },
+    UNKNOWNUSERNAME: {
+        header: "Unknown Username",
+        body: "Entered username does not exist or user with that username is currently not online."
+    },
+    CLOSEDALLDOORS: {
+        header: "Successfully closed all doors",
+        body: "You successfully closed all doors for all passed users."
+    },
+    OPENEDALLDOORS: {
+        header: "Successfully opened all doors",
+        body: "You successfully opened all doors for all passed users."
+    },
+    STANDARDDOORCLOSED: {
+        header: "Door closed",
+        body: "This door is currently closed for you."
+    },
+    FIRSTDOORCLOSED: {
+        header: 'Welcome to VIMSU!',
+        body: "Please talk to our BasicTutorial NPC by clicking" +
+               " the tile he is standing on. He will give you a" +
+               " short introduction that will help you to learn the basics of using VIMSU."
+    },
+    FOODCOURTDOORCLOSED: {
+        header: "Door closed",
+        body: "Greet our Chef before you leave!"
+    },
+    CORRECTCODE: {
+        header: "Code was correct!",
+        body: "The code you entered was correct! The door is now open for you."
+    },
+    WRONGCODE: {
+        header: "Code was wrong!",
+        body: "The code you entered was wrong! Try again."
     }
 });
