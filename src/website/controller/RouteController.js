@@ -9,6 +9,7 @@ const Settings = require('../../game/app/server/utils/Settings');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
+const UAParser = require('ua-parser-js');
 
 /**
  * The Route Controller
@@ -169,9 +170,36 @@ module.exports = class RouteController {
 
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
-                const ServerController = require('../../game/app/server/controller/ServerController');
-                new ServerController(this.#io, this.#db, this.#blob);
-                response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
+                let parser = new UAParser();
+                let ua = request.headers['user-agent'];
+                let device = parser.setUA(ua).getDevice().type;
+                let os = parser.setUA(ua).getOS().name;
+                let browserName = parser.setUA(ua).getBrowser().name;
+                let fullBrowserVersion = parser.setUA(ua).getBrowser().version;
+                let browserVersion = fullBrowserVersion.split(".",1).toString();
+                let browserVersionNumber = Number(browserVersion);
+                let isSupported = false;
+
+                /* supported browsers */
+                if ((device === 'mobile' || device === 'tablet') && os === 'Android') {
+                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 53)) {
+                        isSupported = true;
+                    }
+                } else if (device === undefined) {
+                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 62) 
+                    || (browserName === 'Edge' && browserVersionNumber >= 79)) {
+                        isSupported = true;
+                    }
+                }
+                
+                if (isSupported) {
+                    const ServerController = require('../../game/app/server/controller/ServerController');
+                    new ServerController(this.#io, this.#db, this.#blob);
+                    response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
+                } else {
+                    response.send("Your browser does not support private class fields in JavaScript, which are required to use VIMSU." +
+                    " Check out https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields to see which browsers are currently supported.");
+                }
             } else {
                 response.redirect('/');
             }
