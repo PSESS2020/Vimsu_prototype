@@ -46,6 +46,6 @@ module.exports = Object.freeze({
     MOVEMENTSPEED_Y: 1,
 
     /* Decides wheter video storage is needed or not */
-    VIDEOSTORAGE_ACTIVATED: true
+    VIDEOSTORAGE_ACTIVATED: false
 
 });
