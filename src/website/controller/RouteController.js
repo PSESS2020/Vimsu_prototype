@@ -31,7 +31,7 @@ module.exports = class RouteController {
      * @param {Express} app Express server
      * @param {SocketIO} io Socket.io instance
      * @param {dbClient} db db instance
-     * @param {blobClient} blob blob instance
+     * @param {blobClient || undefined} blob blob instance if video storage is required, otherwise undefined
      */
     constructor(app, io, db, blob) {
         if (!!RouteController.instance) {
@@ -41,7 +41,9 @@ module.exports = class RouteController {
         RouteController.instance = this;
 
         TypeChecker.isInstanceOf(db, dbClient);
-        TypeChecker.isInstanceOf(blob, blobClient);
+
+        if (Settings.VIDEOSTORAGE_ACTIVATED)
+            TypeChecker.isInstanceOf(blob, blobClient);
 
         this.#app = app;
         this.#io = io;
@@ -59,8 +61,11 @@ module.exports = class RouteController {
      */
     #init = function () {
 
-        //creates video container in blob storage at the beginning as we will need it to store lecture videos
-        SlotService.createVideoContainer(this.#blob);
+        /* Only needed when video storage is required for this conference */
+        if (Settings.VIDEOSTORAGE_ACTIVATED) {
+            //creates video container in blob storage at the beginning as we will need it to store lecture videos
+            SlotService.createVideoContainer(this.#blob);
+        }
 
         var username, title, forename, surname, job, company, email;
 
@@ -72,10 +77,14 @@ module.exports = class RouteController {
 
         this.#app.use(bodyParser.urlencoded({ extended: true }));
         this.#app.use(bodyParser.json());
-        this.#app.use(fileUpload({
-            useTempFiles: true,
-            tempFileDir: '/tmp/'
-        }));
+
+        /* Only needed when video storage is required for this conference */
+        if (Settings.VIDEOSTORAGE_ACTIVATED) {
+            this.#app.use(fileUpload({
+                useTempFiles: true,
+                tempFileDir: '/tmp/'
+            }));
+        }
 
         var sessionMiddleware = expressSession({
             secret: 'secret',
@@ -100,63 +109,67 @@ module.exports = class RouteController {
                 title = request.session.title;
                 forename = request.session.forename;
                 surname = request.session.surname;
-                response.render('index', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                response.render('index', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
             } else {
                 response.render('index');
             }
 
         });
 
-        this.#app.get('/upload', (request, response) => {
-            if (request.session.loggedin === true) {
-                response.render('upload', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
-            } else {
+        /* Only needed when video storage is required for this conference */
+        if (Settings.VIDEOSTORAGE_ACTIVATED) {
+            this.#app.get('/upload', (request, response) => {
+                if (request.session.loggedin === true) {
+                    response.render('upload', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                } else {
                 response.redirect('/');
-            }
-        });
-
-        this.#app.post('/upload', (request, response) => {
-            if (!request.files || Object.keys(request.files).length === 0) {
-                return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
-            }
-
-            var maxParticipants = parseInt(request.body.maxParticipants);
-            if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                return response.render('upload', { notInt: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
-            }
-
-            var startingTime = new Date(request.body.startingTime);
-            if (startingTime == "Invalid Date") {
-                return response.render('upload', { notDate: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
-            }
-
-            var lectureTitle = request.body.title;
-            var remarks = request.body.remarks;
-            var oratorId = request.session.accountId;
-            var video = request.files.video;
-
-            if (path.parse(video.name).ext === '.mp4') {
-                if (video.size > 50 * 1024 * 1024) {
-                    return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
-                else {
-                    response.render('upload', { uploading: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname })
-                    return SlotService.storeVideo(video, this.#blob).then(videoData => {
-                        if (videoData) {
-                            return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
-                                response.end();
-                            }).catch(err => {
-                                console.error(err);
-                            })
-                        }
-                    }).catch(err => {
-                        console.error(err);
-                    })
+            });
+        
+
+            this.#app.post('/upload', (request, response) => {
+                if (!request.files || Object.keys(request.files).length === 0) {
+                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
                 }
-            } else {
-                return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
-            }
-        });
+
+                var maxParticipants = parseInt(request.body.maxParticipants);
+                if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
+                    return response.render('upload', { notInt: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                }
+
+                var startingTime = new Date(request.body.startingTime);
+                if (startingTime == "Invalid Date") {
+                    return response.render('upload', { notDate: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                }
+
+                var lectureTitle = request.body.title;
+                var remarks = request.body.remarks;
+                var oratorId = request.session.accountId;
+                var video = request.files.video;
+
+                if (path.parse(video.name).ext === '.mp4') {
+                    if (video.size > 50 * 1024 * 1024) {
+                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    }
+                    else {
+                        response.render('upload', { uploading: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname })
+                        return SlotService.storeVideo(video, this.#blob).then(videoData => {
+                            if (videoData) {
+                                return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
+                                    response.end();
+                                }).catch(err => {
+                                    console.error(err);
+                                })
+                            }
+                        }).catch(err => {
+                            console.error(err);
+                        })
+                    }
+                } else {
+                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                }
+            });
+        }
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {

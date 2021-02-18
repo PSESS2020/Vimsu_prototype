@@ -13,6 +13,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
+const Settings = require('./game/app/server/utils/Settings.js');
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */
@@ -43,16 +44,27 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 /* Allows reading from a .env file */
 require('dotenv').config();
 
-/* Initializes db and blob instances */
+
+/* Initializes blob instance if video storage is needed for this conference */
+var blob; 
+var blobClient;
+
+if (Settings.VIDEOSTORAGE_ACTIVATED) {
+    blob = require('./config/blob');
+
+    blobClient = new blob();
+
+    /* Connects to blob */
+    blobClient.connectBlob();
+}
+
+/* Initializes db instance */
 const db = require('./config/db');
-const blob = require('./config/blob')
 
 const database = new db();
-const blobClient = new blob();
 
-/* Connects to blob and db before initializing the RouteController */
-blobClient.connectBlob();
+/* Connects to db before initializing the RouteController */
 database.connectDB().then(() => {
     const RouteController = require('./website/controller/RouteController');
     new RouteController(app, io, database, blobClient);
-})
+});

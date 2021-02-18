@@ -59,7 +59,7 @@ module.exports = class ServerController {
      * 
      * @param {SocketIO} socket socket instance
      * @param {dbClient} db db instance
-     * @param {blobClient} blob blob instance
+     * @param {blobClient || undefined} blob blob instance if video storage is required, otherwise undefined
      */
     constructor(socket, db, blob) {
         if (!!ServerController.instance) {
@@ -69,7 +69,9 @@ module.exports = class ServerController {
         ServerController.instance = this;
 
         TypeChecker.isInstanceOf(db, dbClient);
-        TypeChecker.isInstanceOf(blob, blobClient);
+
+        if (Settings.VIDEOSTORAGE_ACTIVATED) 
+            TypeChecker.isInstanceOf(blob, blobClient);
 
         this.#io = socket;
         this.#db = db;
@@ -109,13 +111,15 @@ module.exports = class ServerController {
      */
     #init = function () {
 
-        LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
-            var schedule = new Schedule(lectures);
-            var conference = new Conference(schedule);
-            this.#conference = conference;
-        }).catch(err => {
-            console.error(err);
-        });
+        if (Settings.VIDEOSTORAGE_ACTIVATED) {
+            LectureService.createAllLectures(Settings.CONFERENCE_ID, this.#db).then(lectures => {
+                var schedule = new Schedule(lectures);
+                var conference = new Conference(schedule);
+                this.#conference = conference;
+            }).catch(err => {
+                console.error(err);
+            });
+        }
 
         this.#io.on('connection', (socket) => {
 
@@ -499,6 +503,11 @@ module.exports = class ServerController {
             /* handles lecture message input */
             socket.on('lectureMessage', (text) => {
 
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(text);
@@ -559,6 +568,11 @@ module.exports = class ServerController {
             /* handles entering lecture */
             socket.on('enterLecture', (lectureId) => {
 
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(lectureId);
@@ -611,6 +625,12 @@ module.exports = class ServerController {
 
             /* handles getting video on lecture start */
             socket.on('getVideoUrl', (lectureId) => {
+
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
                     TypeChecker.isString(lectureId);
@@ -640,6 +660,11 @@ module.exports = class ServerController {
 
             /* handles leaving lecture */
             socket.on('leaveLecture', (lectureId) => {
+
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
 
                 //prevents server to crash when client purposely sends wrong type of data to server
                 try {
@@ -677,16 +702,34 @@ module.exports = class ServerController {
 
             /* handles clicking lecture door, show current lectures */
             socket.on('getCurrentLectures', () => {
+
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 this.#getCurrentLectures(socket);
             });
 
             /* handles clearing interval for emiting current lectures */
             socket.on('clearInterval', () => {
+
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 clearInterval(this.#interval);
             })
 
             /* handles schedule list clicked, show schedule */
             socket.on('getSchedule', () => {
+
+                //if video storage is deactivated, there is nothing to do here 
+                if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+                    return;
+                }
+
                 var schedule = this.#conference.getSchedule();
                 var lectures = schedule.getAllLectures();
 
@@ -2186,6 +2229,12 @@ module.exports = class ServerController {
      * @param {Socket.IO} socket 
      */
     #getCurrentLectures = function (socket) {
+
+        //if video storage is deactivated, there is nothing to do here 
+        if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+            return;
+        }
+
         let ppantID = socket.ppantID;
         let ppant = this.#ppants.get(ppantID);
         if (!ppant)
@@ -2227,6 +2276,12 @@ module.exports = class ServerController {
      * @param {Socket.IO} socket 
      */
     #emitCurrentLectures = function (socket) {
+
+        //if video storage is deactivated, there is nothing to do here 
+        if (!Settings.VIDEOSTORAGE_ACTIVATED) {
+            return;
+        }
+
         var schedule = this.#conference.getSchedule();
         let currentLectures = schedule.getCurrentLectures();
 
