@@ -93,5 +93,13 @@ module.exports = Object.freeze({
     SETDOORCODE: {
         string: "setdoorcode",
         method: "setDoorCode"
+    },
+    PORTTO: {
+        string: "portto",
+        method: "portTo"
+    },
+    PORTTOUSER: {
+        string: "porttouser",
+        method: "portToUser"
     }
 });

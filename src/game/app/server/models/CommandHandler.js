@@ -1,7 +1,8 @@
 const Commands = require('../utils/Commands.js');
 const Messages = require('../utils/Messages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const CommandContext = require('./CommandContext');
+const CommandContext = require('./CommandContext.js');
+const Position = require('../models/Position.js');
 
 /**
  * The Command Handler Model
@@ -635,6 +636,70 @@ module.exports = class CommandHandler {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
     }
+
+    /**
+     * Ports moderator who executed this command to passed position
+     * @method module:CommandHandler#portTo
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    portTo(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let roomID = parseInt(commandArgs[0], 10);
+        let cordX = parseInt(commandArgs[1], 10);
+        let cordY = parseInt(commandArgs[2], 10);
+
+        //moderator sent invalid position data
+        if (isNaN(roomID) || isNaN(cordX) || isNaN(cordY)) {
+            this.#serverController.sendNotification(socket.id, Messages.TELEPORTFAIL);
+            return;
+        }
+
+        let moderatorID = socket.ppantID;
+
+        //teleport was successful
+        if (this.#serverController.teleportParticipantToPosition(moderatorID, new Position(roomID, cordX, cordY))) {
+            this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.TELEPORTFAIL);
+        }
+    }
+
+    /**
+     * Ports moderator who executed this command to user with passed username
+     * @method module:CommandHandler#portToUser
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    portToUser(socket, context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
+
+        let username = commandArgs[0];
+        let moderatorID = socket.ppantID;
+
+        //teleport was successful
+        if (this.#serverController.teleportParticipantToParticipant(moderatorID, username)) {
+            this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.TELEPORTUSERFAIL);
+        }
+
+    
+    }
+
     /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand

@@ -76,7 +76,9 @@ module.exports = Object.freeze({
                 ", each one seperated from the next one by a whitespace character.",
                 "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
                 ", each one seperated from the next one by a whitespace character.",
-                "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>."]
+                "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>.",
+                "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
+                "\\porttouser <username> -- Teleports you to user with <username>."]
     },
     WARNING: {
         header: "Warning",
@@ -167,5 +169,17 @@ module.exports = Object.freeze({
     WRONGCODE: {
         header: "Code was wrong!",
         body: "The code you entered was wrong! Try again."
+    },
+    TELEPORTSUCCESS: {
+        header: "Teleport was successful",
+        body: "Your Teleport was successful."
+    },
+    TELEPORTFAIL: {
+        header: "Your teleport failed",
+        body: "Your teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+    },
+    TELEPORTUSERFAIL: {
+        header: "Your teleport failed",
+        body: "Your teleport failed. Please check the passed username again."
     }
 });
