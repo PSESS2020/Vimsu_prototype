@@ -24,6 +24,7 @@ const dbClient = require('../../../../config/db');
 const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
+const Participant = require('../models/Participant.js');
 
 /**
  * The Server Controller
@@ -2119,6 +2120,83 @@ module.exports = class ServerController {
     }
 
     /**
+     * Teleports ppant with ppantID to passed position if possible
+     * @method module:ServerController#moveParticipantToPosition
+     * 
+     * @param {String} ppantID ID of moved ppant
+     * @param {Position} position new position of user
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    
+    teleportParticipantToPosition(ppantID, position) {
+        TypeChecker.isString(ppantID);
+        TypeChecker.isInstanceOf(position, Position);
+
+        let ppant = this.#ppants.get(ppantID);
+        let newRoomID = position.getRoomId();
+        let direction = ppant.getDirection();
+
+        //ppant went offline
+        if (!ppant) {
+            return false; 
+        }
+
+        //room does not exist
+        if (this.#roomDecorators[newRoomID - 1] === undefined) {
+            return false;
+        }
+
+        let newRoom = this.#roomDecorators[newRoomID - 1].getRoom();
+
+        //passed position is invalid
+        if (newRoom.checkForCollision(position)) {
+            return false;
+        //passed position is valid
+        } else {
+            this.#changeParticipantPosition(ppant, position, direction);
+            return true;
+        }
+    }
+
+    /**
+     * Teleports ppant with ppantID to ppant with passed username
+     * @method module:ServerController#moveParticipantToParticipant
+     * 
+     * @param {String} ppantID ID of moved ppant
+     * @param {String} username username of other ppant
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    
+    teleportParticipantToParticipant(ppantID, username) {
+        TypeChecker.isString(ppantID);
+        TypeChecker.isString(username);
+
+        let ppant = this.#ppants.get(ppantID);
+
+        //ppant went offline
+        if (!ppant) {
+            return false; 
+        }
+
+        let otherPPantID = this.getIdOf(username);
+
+        //other ppant does not exist or is offline
+        if (otherPPantID === undefined) {
+            return false;
+        } 
+
+        let otherPPant = this.#ppants.get(otherPPantID);
+
+        let newPosition = otherPPant.getPosition();
+        let direction = ppant.getDirection();
+
+        this.#changeParticipantPosition(ppant, newPosition, direction);
+        return true;
+    }
+
+    /**
      * @private Checks if account is banned from entering the conference
      * 
      * @method module:ServerController#isBanned
@@ -2362,15 +2440,56 @@ module.exports = class ServerController {
         }
 
         let newPos = door.getTargetPosition();
-        let x = newPos.getCordX();
-        let y = newPos.getCordY();
         let d = door.getDirection();
 
-        targetRoom.enterParticipant(ppant);
+        this.#changeParticipantPosition(ppant, newPos, d);
+
+        //applies achievement when entering a room
+        if (targetRoomId === Settings.FOYER_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
+        } else if (targetRoomId === Settings.FOODCOURT_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
+        } else if (targetRoomId === Settings.RECEPTION_ID) {
+            this.#applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
+        }
+    }
+
+    /**
+     * @private Handles changing a ppants position
+     * 
+     * @method module:ServerController#changeParticipantPosition
+     * 
+     * @param {Participant} ppant
+     * @param {Position} newPosition 
+     * @param {direction} Direction
+     */
+    #changeParticipantPosition = function(ppant, newPos, direction)  {
+        TypeChecker.isInstanceOf(ppant, Participant);
+        TypeChecker.isInstanceOf(newPos, Position);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        let ppantID = ppant.getId();
+
+        let currentPosition = ppant.getPosition();
+        let currentRoomId = currentPosition.getRoomId();
+        let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
+
+        let targetRoomId = newPos.getRoomId();
+        let targetRoomDecorator = this.#roomDecorators[targetRoomId - 1];
+
+        //room does not exist
+        if (targetRoomDecorator === undefined) {
+            return;
+        }
+
+        let targetRoom = targetRoomDecorator.getRoom();
+        let targetRoomType = targetRoom.getTypeOfRoom();
+
         currentRoom.exitParticipant(ppantID);
+        targetRoom.enterParticipant(ppant);
 
         //Get asset paths of target room
-        let assetPaths = this.#roomDecorators[targetRoomId - 1].getAssetPaths();
+        let assetPaths = targetRoomDecorator.getAssetPaths();
 
         //Get MapElements of target room
         let mapElements = targetRoom.getListOfMapElements();
@@ -2437,27 +2556,33 @@ module.exports = class ServerController {
             });
         });
 
+        let socketID = this.getSocketId(ppantID);
+        let socket = this.getSocketObject(socketID);
+
         //emit new room data to client
-        this.#io.to(socket.id).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
+        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
             assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
 
         //set new position in server model
         ppant.setPosition(newPos);
-        ppant.setDirection(d);
+        ppant.setDirection(direction);
 
         //Get username, isModerator, isVisible
         let username = ppant.getBusinessCard().getUsername();
         let isModerator = ppant.getIsModerator();
         let isVisible = ppant.getIsVisible();
 
+        let x = newPos.getCordX();
+        let y = newPos.getCordY();
+
         //Emit new position to participant
-        this.#io.to(socket.id).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: d });
+        this.#io.to(socketID).emit('currentGameStateYourPosition', { cordX: x, cordY: y, dir: direction });
 
         //Emit to all participants in old room, that participant is leaving
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: d, isVisible: isVisible, isModerator: isModerator });
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator });
 
         //Emit to participant all participant positions, that were in new room before him
         this.#ppants.forEach((ppant, id, map) => {
@@ -2469,23 +2594,18 @@ module.exports = class ServerController {
                 let tempDir = ppant.getDirection();
                 let isVisible = ppant.getIsVisible();
                 let isModerator = ppant.getIsModerator();
-                this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
             }
         });
 
         //switch socket channel
-        socket.leave(currentRoomId.toString());
-        socket.join(targetRoomId.toString());
-        this.#io.to(socket.id).emit('initAllchat', this.#roomDecorators[targetRoomId - 1].getRoom().getMessages());
-
-        //applies achievement when entering a room
-        if (targetRoomId === Settings.FOYER_ID) {
-            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERVISIT);
-        } else if (targetRoomId === Settings.FOODCOURT_ID) {
-            this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOODCOURTVISIT);
-        } else if (targetRoomId === Settings.RECEPTION_ID) {
-            this.#applyTaskAndAchievement(ppantID, TypeOfTask.RECEPTIONVISIT);
+        if (currentRoomId !== targetRoomId) {
+            socket.leave(currentRoomId.toString());
+            socket.join(targetRoomId.toString());
         }
+
+        this.#io.to(socketID).emit('initAllchat', this.#roomDecorators[targetRoomId - 1].getRoom().getMessages());
+
     }
 
     /**
