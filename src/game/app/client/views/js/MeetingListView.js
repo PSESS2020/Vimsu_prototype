@@ -85,7 +85,7 @@ class MeetingListView extends WindowView {
             `)
 
             $('#meeting' + meeting.meetingId).off();
-            $('#meeting' + meeting.meetingId).click((event) => {
+            $('#meeting' + meeting.meetingId).on('click', (event) => {
                 this.#eventManager.handleMeetingThreadClicked(meeting.meetingId);
             })
         })

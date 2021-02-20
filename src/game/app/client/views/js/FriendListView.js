@@ -26,7 +26,7 @@ class FriendListView extends WindowView {
         this.#eventManager = eventManager;
 
         $('#friendRequestList').off();
-        $('#friendRequestList').click((event) => {
+        $('#friendRequestList').on('click', (event) => {
             this.#eventManager.handleFriendRequestListClicked();
         })
     }
@@ -79,14 +79,14 @@ class FriendListView extends WindowView {
             `)
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
-            $('#chatfriend' + businessCard.getParticipantId()).click((event) => {
+            $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
                 this.#eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })
 
             $('#delete' + businessCard.getParticipantId()).off();
-            $('#delete' + businessCard.getParticipantId()).click((event) => {
+            $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
 

@@ -69,7 +69,7 @@ class FriendRequestListView extends WindowView {
             `)
 
             $('#accept' + businessCard.getParticipantId()).off();
-            $('#accept' + businessCard.getParticipantId()).click((event) => {
+            $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 
@@ -78,7 +78,7 @@ class FriendRequestListView extends WindowView {
             })
 
             $('#reject' + businessCard.getParticipantId()).off();
-            $('#reject' + businessCard.getParticipantId()).click((event) => {
+            $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 

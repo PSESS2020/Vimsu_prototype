@@ -92,13 +92,13 @@ class InviteFriendsView extends WindowView {
                     </ul>
                 `)
 
-                $('#invite' + businessCard.getParticipantId()).click((event) => {
+                $('#invite' + businessCard.getParticipantId()).on('click', (event) => {
                     this.#invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
                 })
 
-                $('#selected' + businessCard.getParticipantId()).click((event) => {
+                $('#selected' + businessCard.getParticipantId()).on('click', (event) => {
                     let index = this.#invitedFriends.indexOf(businessCard.getParticipantId());
                     this.#invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
@@ -106,7 +106,7 @@ class InviteFriendsView extends WindowView {
                 })
 
                 $('#createGroupChat').off();
-                $('#createGroupChat').click((event) => {
+                $('#createGroupChat').on('click', (event) => {
                     if (this.#invitedFriends.length > 0 && this.#invitedFriends.length < this.#limit + 1) {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
