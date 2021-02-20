@@ -21,32 +21,41 @@ class HUDView extends Views {
         HUDView.instance = this;
 
         $('#rankListButton').off();
-        $('#rankListButton').click(() => {
+        $('#rankListButton').on('click', (event) => {
             eventManager.handleRankListClicked();
         })
 
         $('#scheduleListButton').off();
-        $('#scheduleListButton').click(() => {
+        $('#scheduleListButton').on('click', (event) => {
             eventManager.handleScheduleClicked();
         })
 
         $('#achievementListButton').off();
-        $('#achievementListButton').click(() => {
+        $('#achievementListButton').on('click', (event) => {
             eventManager.handleAchievementsClicked();
         })
 
         $('#friendListButton').off();
-        $('#friendListButton').click(() => {
+        $('#friendListButton').on('click', (event) => {
             eventManager.handleFriendListClicked();
         })
 
+<<<<<<< HEAD
+=======
+        $('#meetingListButton').off();
+        $('#meetingListButton').on('click', (event) => {
+            eventManager.handleMeetingListClicked();
+        })
+
+
+>>>>>>> 62e25351... .click() deprecated
         $('#chatListButton').off();
-        $('#chatListButton').click(() => {
+        $('#chatListButton').on('click', (event) => {
             eventManager.handleChatListClicked();
         })
 
         $('#profileButton').off();
-        $('#profileButton').click(() => {
+        $('#profileButton').on('click', (event) => {
             eventManager.handleProfileClicked();
         })
     }
