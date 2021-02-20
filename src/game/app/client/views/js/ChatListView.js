@@ -37,6 +37,8 @@ class ChatListView extends WindowView {
 
         if (chats.length < 1) {
             $('#chatListModal .modal-body #nochat').text("No chats found. Let's connect with others!")
+            $('#chatListModal').modal('show');
+            return;
         }
 
         chats.forEach(chat => {
@@ -87,6 +89,7 @@ class ChatListView extends WindowView {
                 this.#eventManager.handleChatThreadClicked(chat.chatId);
             })
         })
+
         $('#chatListModal').modal('show');
     }
 

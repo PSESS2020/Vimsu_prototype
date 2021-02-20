@@ -37,6 +37,8 @@ class FriendRequestListView extends WindowView {
 
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
+            $('#friendRequestListModal').modal('show');
+            return;
         }
 
         this.#businessCards = businessCards;

@@ -48,6 +48,8 @@ class InviteFriendsView extends WindowView {
             if (businessCards.length < 1) {
                 $('#inviteFriendsModal .modal-body #nofriendtoinvite').text("No friends to invite.");
                 $('#createGroupChat').hide();
+                $('#inviteFriendsModal').modal('show');
+                return;
             }
 
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
