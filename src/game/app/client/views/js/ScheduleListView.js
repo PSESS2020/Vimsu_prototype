@@ -34,25 +34,27 @@ class ScheduleListView extends WindowView {
         if (lectures.length < 1) {
             $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.");
             $('#scheduleModal').modal('show');
-        } else {
-            lectures.forEach(lecture => {
-                lecture.startingTime = new Date(lecture.startingTime);
-            });
-
-            const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
-            this.#lectures = sortedLectures;
-            this.#timeOffset = timeOffset;
-
-            this.#drawSchedule();
-
-            var interval = setInterval(() => {
-                this.#drawSchedule(interval);
-            }, 1000);
-
-            $('#scheduleModal').on('hide.bs.modal', (e) => {
-                clearInterval(interval);
-            })
+            return;
         }
+
+        lectures.forEach(lecture => {
+            lecture.startingTime = new Date(lecture.startingTime);
+        });
+
+        const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
+        this.#lectures = sortedLectures;
+        this.#timeOffset = timeOffset;
+
+        this.#drawSchedule();
+
+        var interval = setInterval(() => {
+            this.#drawSchedule(interval);
+        }, 1000);
+
+        $('#scheduleModal').on('hide.bs.modal', (e) => {
+            clearInterval(interval);
+        })
+
     }
 
     /**

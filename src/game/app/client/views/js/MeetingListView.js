@@ -37,6 +37,8 @@ class MeetingListView extends WindowView {
 
         if (meetings.length < 1) {
             $('#meetingListModal .modal-body #nomeeting').text("No meetings found. Let's connect with others!")
+            $('#meetingListModal').modal('show');
+            return;
         }
 
         meetings.forEach(meeting => {
@@ -87,6 +89,7 @@ class MeetingListView extends WindowView {
                 this.#eventManager.handleMeetingThreadClicked(meeting.meetingId);
             })
         })
+
         $('#meetingListModal').modal('show');
     }
 

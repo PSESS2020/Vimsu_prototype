@@ -44,7 +44,10 @@ class CurrentLecturesView extends WindowView {
 
         if (lectures.length < 1) {
             $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
+            $('#currentLectures').show();
+            return;
         }
+
         lectures.forEach(lecture => {
             var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
 

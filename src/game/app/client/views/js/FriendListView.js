@@ -41,7 +41,9 @@ class FriendListView extends WindowView {
         $('#friendListModal .modal-body .list-group').empty();
 
         if (businessCards.length < 1) {
-            $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")
+            $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!");
+            $('#friendListModal').modal('show');
+            return;
         }
 
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
