@@ -24,6 +24,7 @@ class GameView {
     #allchatView;
     #scheduleListView;
     #globalChatView;
+    #largerGlobalChatView;
     #profileView;
     #ownAvatarView;
     #anotherParticipantAvatarViews = [];
@@ -87,6 +88,7 @@ class GameView {
         this.#chatParticipantListView = new ChatParticipantListView();
         this.#scheduleListView = new ScheduleListView();
         this.#globalChatView = new GlobalChatView();
+        this.#largerGlobalChatView = new LargerGlobalChatView();
         this.#profileView = new ProfileView();
         this.#rankListView = new RankListView();
         this.#npcStoryView = new NPCStoryView();
@@ -658,6 +660,26 @@ class GameView {
         }
 
         this.#globalChatView.draw(messageHeader, messageText);
+    };
+
+    /**
+     * Draws a larger global chat window
+     * 
+     * @param {String} messageHeader message header
+     * @param {String[]} messageText message text
+     */
+    initLargerGlobalChatView(messageHeader, messageText) {
+        TypeChecker.isString(messageHeader);
+        if (messageText instanceof Array) {
+            TypeChecker.isInstanceOf(messageText, Array);
+            messageText.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(messageText);
+        }
+
+        this.#largerGlobalChatView.draw(messageHeader, messageText);
     };
 
     /**

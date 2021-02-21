@@ -142,7 +142,7 @@ module.exports = class CommandHandler {
         });
         TypeChecker.isInstanceOf(context, CommandContext);
 
-        this.#serverController.sendNotification(socket.id, context.getHelpMessage());
+        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage());
     };
 
     /**
