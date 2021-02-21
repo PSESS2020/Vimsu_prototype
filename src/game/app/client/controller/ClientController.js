@@ -171,6 +171,7 @@ class ClientController {
         this.#socket.on('update token', this.#handleFromServerUpdateToken.bind(this));
         this.#socket.on('force close lecture', this.#handleFromServerForceCloseLecture.bind(this));
         this.#socket.on('New notification', this.#handleFromServerNewNotification.bind(this));
+        this.#socket.on('New large notification', this.#handleFromServerNewLargerNotification.bind(this));
         this.#socket.on('New global announcement', this.#handleFromServerNewGlobalAnnouncement.bind(this));
         this.#socket.on('remove yourself', this.#handleFromServerRemoved.bind(this));
         this.#socket.on('hideAvatar', this.#handleFromServerHideAvatar.bind(this));
@@ -818,7 +819,7 @@ class ClientController {
     }
 
     /**
-     * @private Receives from server for a new notification
+     * @private Receives from server a new notification where a normal sized global chat view is needed
      * 
      * @param {String} messageHeader message header
      * @param {String[]} messageText message text
@@ -834,6 +835,25 @@ class ClientController {
             TypeChecker.isString(messageText);
         }
         this.#gameView.initGlobalChatView(messageHeader, messageText);
+    }
+
+    /**
+     * @private Receives from server a new notification where a larger global chat view is needed
+     * 
+     * @param {String} messageHeader message header
+     * @param {String[]} messageText message text
+     */
+    #handleFromServerNewLargerNotification = function (messageHeader, messageText) {
+        TypeChecker.isString(messageHeader);
+        if (messageText instanceof Array) {
+            TypeChecker.isInstanceOf(messageText, Array);
+            messageText.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(messageText);
+        }
+        this.#gameView.initLargerGlobalChatView(messageHeader, messageText);
     }
 
     /**
