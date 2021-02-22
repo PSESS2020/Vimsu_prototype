@@ -45,6 +45,7 @@ module.exports = class Participant {
      * @param {FriendList} friendList list of friends
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
+     * @param {MeetingList} meetingList List of jitsi meetings
      * @param {Achievement[]} achievements list of achievements
      * @param {Task[]} taskMapping list of tasks and its counts
      * @param {boolean} isMod moderator status
