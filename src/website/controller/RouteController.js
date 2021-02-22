@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
-const Settings = require('../../game/app/server/utils/Settings');
+const Settings = require('../../game/app/server/utils/Settings.js');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
@@ -68,7 +68,7 @@ module.exports = class RouteController {
             SlotService.createVideoContainer(this.#blob);
         }
 
-        var username, title, forename, surname, job, company, email;
+        var username, forename;
 
         //sets the view engine to ejs, ejs is required to render templates
         this.#app.set('view engine', 'ejs');
@@ -106,11 +106,8 @@ module.exports = class RouteController {
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
                 forename = request.session.forename;
-                surname = request.session.surname;
-                response.render('index', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                response.render('index', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username, forename: forename });
             } else {
                 response.render('index');
             }
@@ -121,7 +118,7 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    response.render('upload', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    response.render('upload', { loggedIn: true, username: username, forename: forename });
                 } else {
                 response.redirect('/');
                 }
@@ -130,17 +127,17 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, forename: forename });
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', { notInt: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    return response.render('upload', { notInt: true, loggedIn: true, username: username, forename: forename });
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', { notDate: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    return response.render('upload', { notDate: true, loggedIn: true, username: username, forename: forename });
                 }
 
                 var lectureTitle = request.body.title;
@@ -150,10 +147,10 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, forename: forename });
                     }
                     else {
-                        response.render('upload', { uploading: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname })
+                        response.render('upload', { uploading: true, loggedIn: true, username: username, forename: forename })
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
@@ -167,7 +164,7 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname });
+                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, forename: forename });
                 }
             });
         }
@@ -222,18 +219,13 @@ module.exports = class RouteController {
             username = request.body.username;
             var password = request.body.password;
 
-            return AccountService.verifyLoginData(username, password, '', this.#db).then(user => {
+            return AccountService.verifyLoginData(username, password, Settings.CONFERENCE_ID, this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
                     request.session.username = username;
-                    request.session.title = user.getTitle();
-                    request.session.surname = user.getSurname();
                     request.session.forename = user.getForename();
-                    request.session.job = user.getJob();
-                    request.session.company = user.getCompany();
-                    request.session.email = user.getEmail();
                     response.redirect('/');
                 }
                 else {
@@ -249,8 +241,7 @@ module.exports = class RouteController {
         this.#app.get('/register', (request, response) => {
             if (request.session.registerValid === true) {
                 username = request.session.username;
-                email = request.session.email;
-                response.render('register', { registerValid: true, username: username, email: email });
+                response.render('register', { registerValid: true, username: username });
             }
             else if (request.session.loggedin === true) {
                 response.redirect('/');
@@ -267,31 +258,15 @@ module.exports = class RouteController {
                 return response.render('register', { invalidUsernameString: true });
             }
 
-            username = request.body.username;
-            email = request.body.email;
+            username = request.body.username
 
-            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailRegex.test(String(email).toLowerCase())) {
-                return response.render('register', { invalidEmail: true });
-            }
-
-            return AccountService.isUsernameValid(username, '', this.#db).then(res => {
-                if (res) {
-                    return AccountService.isEmailValid(email, '', this.#db).then(res => {
-                        if (res) {
-                            request.session.registerValid = true;
-                            request.session.username = username;
-                            request.session.email = email;
-                            response.redirect('/register');
-                        }
-                        else {
-                            return response.render('register', { emailTaken: true })
-                        }
-                        response.end();
-                    }).catch(err => {
-                        console.error(err);
-                        return response.render('register', { verifyDataFailed: true })
-                    })
+            return AccountService.isUsernameValid(username, Settings.CONFERENCE_ID, this.#db).then(res => {
+                if (res) {    
+                    request.session.registerValid = true;
+                    request.session.username = username;
+                    response.redirect('/register');
+                           
+                    response.end();
                 }
                 else {
                     return response.render('register', { usernameTaken: true });
@@ -304,36 +279,18 @@ module.exports = class RouteController {
 
         this.#app.post('/registerValid', (request, response) => {
             username = request.session.username;
-            title = request.body.title;
-
-            if (title === "Title") {
-                title = "";
-            }
-            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('register', { invalidTitle: true });
-            }
-
-            surname = request.body.surname;
             forename = request.body.forename;
-            job = request.body.job;
-            company = request.body.company;
-            email = request.session.email;
             var password = request.body.password;
 
-            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
+            return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
                 if (res) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
                     request.session.loggedin = true;
-                    request.session.title = res.getTitle();
-                    request.session.surname = res.getSurname();
                     request.session.forename = res.getForename();
 
                     //Needed for creating business card during entering the conference.
                     request.session.username = res.getUsername();
-                    request.session.job = res.getJob();
-                    request.session.company = res.getCompany();
-                    request.session.email = res.getEmail();
                 }
                 
                 response.redirect('/');
@@ -358,13 +315,8 @@ module.exports = class RouteController {
         this.#app.get('/account', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
                 forename = request.session.forename;
-                surname = request.session.surname;
-                job = request.session.job;
-                company = request.session.company;
-                response.render('account', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
+                response.render('account', { loggedIn: true, username: username, forename: forename });
             }
 
             else {
@@ -374,12 +326,8 @@ module.exports = class RouteController {
 
         this.#app.get('/editAccount', (request, response) => {
             if (request.session.loggedin === true) {
-                title = request.session.title;
                 forename = request.session.forename;
-                surname = request.session.surname;
-                job = request.session.job;
-                company = request.session.company;
-                response.render('editAccount', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company })
+                response.render('editAccount', { loggedIn: true, username: username, forename: forename })
             }
             else {
                 response.redirect('/');
@@ -387,36 +335,19 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/saveAccountChanges', (request, response) => {
-            title = request.body.title;
 
-            if (title === "Title") {
-                title = "";
-            }
-            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('editAccount', { invalidTitle: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
-            }
-
-            surname = request.body.surname;
             forename = request.body.forename;
-            job = request.body.job;
-            company = request.body.company;
             var accountId = request.session.accountId;
             username = request.session.username;
-            email = request.session.email;
 
-            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, '', this.#db).then(res => {
+            return AccountService.updateAccountData(accountId, username, forename, Settings.CONFERENCE_ID, this.#db).then(res => {
                 request.session.accountId = res.getAccountID();
-                request.session.title = res.getTitle();
-                request.session.surname = res.getSurname();
                 request.session.forename = res.getForename();
                 request.session.username = res.getUsername();
-                request.session.job = res.getJob();
-                request.session.company = res.getCompany();
-                request.session.email = res.getEmail();
                 response.redirect('/account');
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company });
+                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, forename: forename });
             })
         })
     }

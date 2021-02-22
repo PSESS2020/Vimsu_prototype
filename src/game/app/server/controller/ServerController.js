@@ -144,14 +144,9 @@ module.exports = class ServerController {
 
                 //variables for creating account instance
                 let username = socket.request.session.username;
-                let title = socket.request.session.title;
-                let surname = socket.request.session.surname;
                 let forename = socket.request.session.forename;
-                let job = socket.request.session.job;
-                let company = socket.request.session.company;
-                let email = socket.request.session.email;
 
-                let account = new Account(accountId, username, title, surname, forename, job, company, email);
+                let account = new Account(accountId, username, forename);
 
                 //create Participant
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {
@@ -277,12 +272,7 @@ module.exports = class ServerController {
                     let businessCardObject = {
                         id: ppant.getId(),
                         username: username,
-                        title: title,
-                        surname: surname,
-                        forename: forename,
-                        job: job,
-                        company: company,
-                        email: email
+                        forename: forename
                     };
 
                     //Sends Room ID, typeOfRoom and listOfGameObjects to Client
@@ -780,27 +770,13 @@ module.exports = class ServerController {
                 let businessCardObject = {
                     id: businessCard.getParticipantId(),
                     username: businessCard.getUsername(),
-                    title: businessCard.getTitle(),
-                    surname: businessCard.getSurname(),
-                    forename: businessCard.getForename(),
-                    job: businessCard.getJob(),
-                    company: businessCard.getCompany(),
-                    email: undefined
+                    forename: businessCard.getForename()
                 }
 
-                let targetRank = undefined;
-
-                //Check if ppant with targetID is a friend
-                //if so, emit the email. if not, emit the rank
-                if (ppant.hasFriend(targetID)) {
-                    businessCardObject.email = businessCard.getEmail();
-                    socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
-                } else {
-                    RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
-                        targetRank = rank;
-                        socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
-                    })
-                }
+                RankListService.getRank(targetID, Settings.CONFERENCE_ID, this.#db).then(rank => {
+                    socket.emit('businessCard', businessCardObject, rank, target.getIsModerator());
+                });
+                
             });
 
             /* handles achievements clicked, show achievements */
@@ -851,13 +827,7 @@ module.exports = class ServerController {
                         {
                             friendId: businessCard.getParticipantId(),
                             username: businessCard.getUsername(),
-                            title: businessCard.getTitle(),
-                            surname: businessCard.getSurname(),
-                            forename: businessCard.getForename(),
-                            surname: businessCard.getSurname(),
-                            job: businessCard.getJob(),
-                            company: businessCard.getCompany(),
-                            email: businessCard.getEmail()
+                            forename: businessCard.getForename()
                         }
                     )
                 });
@@ -931,13 +901,7 @@ module.exports = class ServerController {
                             {
                                 friendId: businessCard.getParticipantId(),
                                 username: businessCard.getUsername(),
-                                title: businessCard.getTitle(),
-                                surname: businessCard.getSurname(),
-                                forename: businessCard.getForename(),
-                                surname: businessCard.getSurname(),
-                                job: businessCard.getJob(),
-                                company: businessCard.getCompany(),
-                                email: businessCard.getEmail()
+                                forename: businessCard.getForename()
                             }
                         )
                     });
@@ -961,13 +925,7 @@ module.exports = class ServerController {
                         {
                             friendId: businessCard.getParticipantId(),
                             username: businessCard.getUsername(),
-                            title: businessCard.getTitle(),
-                            surname: businessCard.getSurname(),
-                            forename: businessCard.getForename(),
-                            surname: businessCard.getSurname(),
-                            job: businessCard.getJob(),
-                            company: businessCard.getCompany(),
-                            email: businessCard.getEmail()
+                            forename: businessCard.getForename()
                         }
                     )
                 });
@@ -1589,13 +1547,7 @@ module.exports = class ServerController {
                     let requesterBusCardData = {
                         friendId: requesterBusCard.getParticipantId(),
                         username: requesterBusCard.getUsername(),
-                        title: requesterBusCard.getTitle(),
-                        surname: requesterBusCard.getSurname(),
                         forename: requesterBusCard.getForename(),
-                        surname: requesterBusCard.getSurname(),
-                        job: requesterBusCard.getJob(),
-                        company: requesterBusCard.getCompany(),
-                        email: requesterBusCard.getEmail()
                     }
 
                     this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
@@ -1617,13 +1569,7 @@ module.exports = class ServerController {
                         let requesterBusCardData = {
                             friendId: requesterBusCard.getParticipantId(),
                             username: requesterBusCard.getUsername(),
-                            title: requesterBusCard.getTitle(),
-                            surname: requesterBusCard.getSurname(),
-                            forename: requesterBusCard.getForename(),
-                            surname: requesterBusCard.getSurname(),
-                            job: requesterBusCard.getJob(),
-                            company: requesterBusCard.getCompany(),
-                            email: requesterBusCard.getEmail()
+                            forename: requesterBusCard.getForename()
                         }
 
                         this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
@@ -1667,13 +1613,7 @@ module.exports = class ServerController {
                         let targetBusCardData = {
                             friendId: targetBusCard.getParticipantId(),
                             username: targetBusCard.getUsername(),
-                            title: targetBusCard.getTitle(),
-                            surname: targetBusCard.getSurname(),
-                            forename: targetBusCard.getForename(),
-                            surname: targetBusCard.getSurname(),
-                            job: targetBusCard.getJob(),
-                            company: targetBusCard.getCompany(),
-                            email: targetBusCard.getEmail()
+                            forename: targetBusCard.getForename()
                         }
 
                         ChatService.existsOneToOneChat(targetID, requesterID, Settings.CONFERENCE_ID, this.#db).then(chat => {
@@ -1780,13 +1720,7 @@ module.exports = class ServerController {
                                         var removerBusinessCardData = {
                                             friendId: removerBusinessCard.getParticipantId(),
                                             username: removerUsername,
-                                            title: removerBusinessCard.getTitle(),
-                                            surname: removerBusinessCard.getSurname(),
-                                            forename: removerBusinessCard.getForename(),
-                                            surname: removerBusinessCard.getSurname(),
-                                            job: removerBusinessCard.getJob(),
-                                            company: removerBusinessCard.getCompany(),
-                                            email: removerBusinessCard.getEmail()
+                                            forename: removerBusinessCard.getForename()
                                         }
 
                                         this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', removerBusinessCardData, true)

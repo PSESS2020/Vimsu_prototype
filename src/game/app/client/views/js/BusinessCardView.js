@@ -6,7 +6,6 @@
  */
 class BusinessCardView extends WindowView {
     #businessCard;
-    #isFriend;
     #rank;
     #isModerator;
     #eventManager;
@@ -36,13 +35,11 @@ class BusinessCardView extends WindowView {
      * Draws business card window
      * 
      * @param {BusinessCardClient} businessCard business card
-     * @param {boolean} isFriend true if friend, otherwise false
      * @param {?number} rank rank
      * @param {boolean} isModerator true if moderator, otherwise false
      */
-    draw(businessCard, isFriend, rank, isModerator) {
+    draw(businessCard, rank, isModerator) {
         this.#businessCard = businessCard;
-        this.#isFriend = isFriend;
         this.#rank = rank;
         this.#isModerator = isModerator;
 
@@ -50,23 +47,12 @@ class BusinessCardView extends WindowView {
                 
                 <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">
                 <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-                ${this.#businessCard.getTitle() + " " + this.#businessCard.getForename() + " " + this.#businessCard.getSurname() + " (@" + this.#businessCard.getUsername() + ")"}</h5>
+                ${this.#businessCard.getForename() + " " + " (@" + this.#businessCard.getUsername() + ")"}</h5>
                 </br>
                 <table id="${"profile" + this.#businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
-                    <tr>
-                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                        <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
-                    </tr>
         `)
 
-        if (this.#isFriend) {
-            $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                    <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
-                </tr>
-            `)
-        } else if (!this.#isFriend && !this.#isModerator) {
+        if (!this.#isModerator) {
             $('#businessCardModal .modal-body #profile' + this.#businessCard.getParticipantId()).append(`
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Rank</td>

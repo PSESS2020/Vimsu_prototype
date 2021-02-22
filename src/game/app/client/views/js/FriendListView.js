@@ -55,13 +55,7 @@ class FriendListView extends WindowView {
                             <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                         </div>
                         <div class="col-12 col-md-9 text-center text-sm-left">
-                            <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                            <br> 
-                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                            <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                            <br>
-                            <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                            <span class="small">${businessCard.getEmail()}</span>
+                            <label class="name lead">${businessCard.getForename() + " " + " (@" + businessCard.getUsername() + ")"}</label>
                         </div>
                         <div class="col-12 col-md-1">
                                     <a class="action_button nav-item nav-link" href="" style="position: absolute; margin-top: -20px; margin-left: 15px" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
