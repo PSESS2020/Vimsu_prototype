@@ -178,7 +178,7 @@ class GameView {
             this.#clickHandler(canvas, e);
         });
 
-        $('#avatarCanvas').on('dblclick', (event) => {
+        $('#avatarCanvas').on('dblclick', (e) => {
             this.#dblclickHandler(canvas, e);
         });
 
