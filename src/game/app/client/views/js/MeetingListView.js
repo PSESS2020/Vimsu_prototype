@@ -39,12 +39,14 @@ class MeetingListView extends WindowView {
             $('#meetingListModal .modal-body #nomeeting').text("No meetings found. Let's connect with others!")
         }
 
+        this.#meetings = meetings;
+
         this.#meetings.forEach(meeting => {
 
             // Now we want to append each meeting as a clickable element
             $('#meetingListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent meetingthread">
-                    <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.meetingId}" role="button" data-toggle="modal" href="">
+                    <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                             <div class="row w-100">
                                 <div class="col-12 col-sm-2 px-0">
                                     <i class="fa fa-video fa-5x navbarIcons" style="margin-left: 5px" ></i>
@@ -57,9 +59,9 @@ class MeetingListView extends WindowView {
                 </li>
             `)
 
-            $('#meeting' + meeting.meetingId).off();
-            $('#meeting' + meeting.meetingId).click((event) => {
-                this.#eventManager.handleMeetingThreadClicked(meeting.meetingId);
+            $('#meeting' + meeting.id).off();
+            $('#meeting' + meeting.id).click((event) => {
+                this.#eventManager.handleMeetingJoined(meeting.id);
             })
         })
         $('#meetingListModal').modal('show');

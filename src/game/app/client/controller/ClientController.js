@@ -12,6 +12,7 @@ class ClientController {
     #ownParticipant;
     #ownBusinessCard;
     #gameView;
+    #jitsi;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -1342,6 +1343,27 @@ class ClientController {
         if (this.#socketReady()) {
             this.#socket.emit('requestModMeeting');
         }
+    }
+
+    /**
+     * Calls the Jitsi-API to join a meeting
+     * 
+     * might move the code into a seperate class?
+     * @param {*} meetingId 
+     */
+    handleFromViewJoinMeeting(meetingId) {
+        // domain name should not be hard-coded
+        this.#jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
+            roomName: meetingId,
+            width: '60%',
+            height: '80%',
+            // Add JWT
+            // parentNode: , REQUIRED
+            userInfo: {
+                email: 'place', // These will be the correct values from
+                displayName: 'holder' // the participants data
+            }
+        })
     }
 
     /**

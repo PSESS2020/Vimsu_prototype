@@ -1381,11 +1381,11 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('meetingList', meetListData);
             });
 
-            socket.on(requestModMeeting){
+            socket.on('requestModMeeting', () => {
                 // Check for available moderators
                 // as soon as one is available, add him to meeting with requester
                 // add requester to meeting
-            }
+            });
 
             /* Gets the necessary information to display a chat and sends it to the client.
              * First checks if the participant is actually a member of the chat he wants to see.
