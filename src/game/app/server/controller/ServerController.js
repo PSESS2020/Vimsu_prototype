@@ -142,6 +142,9 @@ module.exports = class ServerController {
 
                 console.log('Participant ' + socket.id + ' has connected to the game . . . ');
 
+                /* Informs ppant if this is a conference with or without video storage */
+                this.#io.to(socket.id).emit('isVideoConference', Settings.VIDEOSTORAGE_ACTIVATED);
+
                 //variables for creating account instance
                 let username = socket.request.session.username;
                 let title = socket.request.session.title;

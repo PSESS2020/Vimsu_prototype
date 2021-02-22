@@ -60,4 +60,11 @@ class HUDView extends Views {
         $('#profilePlaceholder').empty();
         $('#profilePlaceholder').text(username);
     }
+
+    /**
+     * Removes Schedule Button from HUD
+     */
+    removeScheduleButton() {
+        document.getElementById('scheduleListButton').style.display = 'none';
+    }
 }
