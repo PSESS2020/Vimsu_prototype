@@ -20,7 +20,7 @@ class GlobalChatView extends WindowView {
 
         $(document).ready(() => {
             $('#closeGlobalChatButton').off();
-            $('#closeGlobalChatButton').click(() => {
+            $('#closeGlobalChatButton').on('click', (event) => {
                 $('#globalChat').hide();
             })
         })

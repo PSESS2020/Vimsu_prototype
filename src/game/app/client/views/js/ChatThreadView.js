@@ -39,13 +39,13 @@ class ChatThreadView extends WindowView {
         });
 
         $('#chatMessageButton').off();
-        $('#chatMessageButton').click((event) => {
+        $('#chatMessageButton').on('click', (event) => {
             event.preventDefault();
             this.#sendMessage();
         });
 
         $('#chatLeaveButton').off();
-        $('#chatLeaveButton').click((event) => {
+        $('#chatLeaveButton').on('click', (event) => {
             event.preventDefault();
 
             var result = confirm(`Are you sure you want to leave from the chat with ${this.#chat.title}?`)
@@ -59,7 +59,7 @@ class ChatThreadView extends WindowView {
         });
 
         $('#chatFriendRequestButton').off();
-        $('#chatFriendRequestButton').click((event) => {
+        $('#chatFriendRequestButton').on('click', (event) => {
             event.preventDefault();
 
             if (!this.#chat.partnerId) {
@@ -72,7 +72,7 @@ class ChatThreadView extends WindowView {
         });
 
         $('#chatParticipantListBtn').off()
-        $('#chatParticipantListBtn').click((event) => {
+        $('#chatParticipantListBtn').on('click', (event) => {
             event.preventDefault();
 
             if (this.#chat.partnerId) {
@@ -83,7 +83,7 @@ class ChatThreadView extends WindowView {
         })
 
         $('#inviteFriendsBtn').off()
-        $('#inviteFriendsBtn').click((event) => {
+        $('#inviteFriendsBtn').on('click', (event) => {
             event.preventDefault();
 
             if (this.#chat.partnerId) {

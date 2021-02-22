@@ -37,6 +37,8 @@ class MeetingListView extends WindowView {
 
         if (meetings.length < 1) {
             $('#meetingListModal .modal-body #nomeeting').text("No meetings found. Let's connect with others!")
+            $('#meetingListModal').modal('show');
+            return;
         }
 
         this.#meetings = meetings;
@@ -60,10 +62,11 @@ class MeetingListView extends WindowView {
             `)
 
             $('#meeting' + meeting.id).off();
-            $('#meeting' + meeting.id).click((event) => {
-                this.#eventManager.handleMeetingJoined(meeting.id);
+            $('#meeting' + meeting.id).on('click', (event) => {
+                this.#eventManager.handleMeetingThreadClicked(meeting.id);
             })
         })
+
         $('#meetingListModal').modal('show');
     }
 

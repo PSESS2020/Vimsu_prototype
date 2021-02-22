@@ -26,7 +26,7 @@ class FriendListView extends WindowView {
         this.#eventManager = eventManager;
 
         $('#friendRequestList').off();
-        $('#friendRequestList').click((event) => {
+        $('#friendRequestList').on('click', (event) => {
             this.#eventManager.handleFriendRequestListClicked();
         })
     }
@@ -41,7 +41,9 @@ class FriendListView extends WindowView {
         $('#friendListModal .modal-body .list-group').empty();
 
         if (businessCards.length < 1) {
-            $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!")
+            $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!");
+            $('#friendListModal').modal('show');
+            return;
         }
 
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
@@ -77,14 +79,14 @@ class FriendListView extends WindowView {
             `)
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
-            $('#chatfriend' + businessCard.getParticipantId()).click((event) => {
+            $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
                 this.#eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })
 
             $('#delete' + businessCard.getParticipantId()).off();
-            $('#delete' + businessCard.getParticipantId()).click((event) => {
+            $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).hide();
 

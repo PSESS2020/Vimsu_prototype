@@ -26,7 +26,7 @@ class CurrentLecturesView extends WindowView {
 
         $(document).ready(() => {
             $('#closeCurrentLecturesButton').off();
-            $('#closeCurrentLecturesButton').click(() => {
+            $('#closeCurrentLecturesButton').on('click', (event) => {
                 this.#eventManager.handleClearInterval();
                 $('#currentLectures').hide();
             })
@@ -44,7 +44,10 @@ class CurrentLecturesView extends WindowView {
 
         if (lectures.length < 1) {
             $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.")
+            $('#currentLectures').show();
+            return;
         }
+
         lectures.forEach(lecture => {
             var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
 
@@ -60,7 +63,7 @@ class CurrentLecturesView extends WindowView {
                 </div>
             `)
 
-            $('#show' + lecture.id).click((event) => {
+            $('#show' + lecture.id).on('click', (event) => {
                 $('#show' + lecture.id).hide();
                 this.#eventManager.handleLectureClicked(lecture.id);
             })

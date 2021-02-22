@@ -37,6 +37,8 @@ class FriendRequestListView extends WindowView {
 
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
+            $('#friendRequestListModal').modal('show');
+            return;
         }
 
         this.#businessCards = businessCards;
@@ -67,7 +69,7 @@ class FriendRequestListView extends WindowView {
             `)
 
             $('#accept' + businessCard.getParticipantId()).off();
-            $('#accept' + businessCard.getParticipantId()).click((event) => {
+            $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 
@@ -76,7 +78,7 @@ class FriendRequestListView extends WindowView {
             })
 
             $('#reject' + businessCard.getParticipantId()).off();
-            $('#reject' + businessCard.getParticipantId()).click((event) => {
+            $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
 
