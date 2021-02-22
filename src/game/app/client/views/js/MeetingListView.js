@@ -39,28 +39,7 @@ class MeetingListView extends WindowView {
             $('#meetingListModal .modal-body #nomeeting').text("No meetings found. Let's connect with others!")
         }
 
-        meetings.forEach(meeting => {
-            if (meeting.timestamp) {
-                meeting.timestamp = new Date(meeting.timestamp);
-            }
-        });
-
-        this.#meetings = meetings.sort((meetingA, meetingB) => meetingB.timestamp - meetingA.timestamp);
-
         this.#meetings.forEach(meeting => {
-            var timestamp, previewMessage;
-
-            if (meeting.timestamp && meeting.timestamp instanceof Date) {
-                timestamp = new DateParser(meeting.timestamp).parse();
-            } else {
-                timestamp = 'no messages';
-            }
-
-            if (meeting.previewUsername) {
-                previewMessage = meeting.previewUsername + ": " + meeting.previewMessage;
-            } else {
-                previewMessage = meeting.previewMessage;
-            }
 
             // Now we want to append each meeting as a clickable element
             $('#meetingListModal .modal-body .list-group').append(`
@@ -68,14 +47,10 @@ class MeetingListView extends WindowView {
                     <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.meetingId}" role="button" data-toggle="modal" href="">
                             <div class="row w-100">
                                 <div class="col-12 col-sm-2 px-0">
-                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                                    <i class="fa fa-video fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
                                 <div class="col-12 col-md-10 text-center text-sm-left">
-                                    <label class="name lead">${meeting.title}</label>
-                                    <br>
-                                    <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
-                                    <br>
-                                    <span class ="small p-0 wrapword" style="opacity: 0.8">${previewMessage}</span>                                
+                                    <label class="name lead">${meeting.name}</label>
                                 </div>  
                             </div>
                     </a>
@@ -119,25 +94,4 @@ class MeetingListView extends WindowView {
         }
     };
 
-    /**
-     * Add new message to meeting list window
-     * 
-     * @param {String} meetingID meeting ID
-     * @param {Object} message meeting message
-     */
-    addNewMessage(meetingID, message) {
-        this.#meetings.forEach(meeting => {
-            if (meeting.meetingId === meetingID) {
-                if (message.msgText.length > 35) {
-                    var msgText = message.msgText.slice(0, 35) + "...";
-                } else {
-                    var msgText = message.msgText;
-                }
-                meeting.timestamp = message.timestamp;
-                meeting.previewUsername = message.senderUsername;
-                meeting.previewMessage = msgText;
-                this.draw(this.#meetings);
-            }
-        })
-    };
 }

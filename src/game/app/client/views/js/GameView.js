@@ -781,7 +781,7 @@ class GameView {
     /**
      * Draws jitsi meeting list window
      * 
-     * @param {Object[]} chats chats
+     * @param {Object[]} meetings meetings
      */
     initMeetingListView(meetings) {
         this.#meetingListView.draw(meetings);

@@ -1353,7 +1353,7 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('chatList', chatListData);
             });
 
-            socket.on(getMeetingList){
+            socket.on('getMeetingList', () => {
                 // get the participant
                 let ppantID = socket.ppantID;
                 let ppant = this.#ppants.get(ppantID);
@@ -1379,7 +1379,7 @@ module.exports = class ServerController {
 
                 // send everything to client
                 this.#io.to(socket.id).emit('meetingList', meetListData);
-            }
+            });
 
             socket.on(requestModMeeting){
                 // Check for available moderators
