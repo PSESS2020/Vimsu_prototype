@@ -84,8 +84,8 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         //Get all gameObjects from service
         let listOfGameObjects = [];
 
-        //Get schedule elements
-        let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1, false, true);
+        //Get schedule elements, only clickable when Video Storage is needed
+        let schedules = objService.createLeftSchedule(Settings.FOYER_ID, 1, 3, 5, -1, false, Settings.VIDEOSTORAGE_ACTIVATED);
         schedules.forEach(schedule => {
 
             listOfMapElements.push(schedule);
@@ -130,9 +130,12 @@ module.exports = class FoyerRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, Messages.STANDARDDOORCLOSED),
-            doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED),
+        listOfDoors.push(doorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED),
             doorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED));
+        
+        //Lecture door is only needed when videostorage is activated
+        if (Settings.VIDEOSTORAGE_ACTIVATED)
+            listOfDoors.push(doorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, Messages.STANDARDDOORCLOSED));
 
         //Get door tiles
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOYER_ID, 2, -2, false, false),
