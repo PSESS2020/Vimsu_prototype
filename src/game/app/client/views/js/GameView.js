@@ -293,13 +293,19 @@ class GameView {
     }
 
     /**
-     * Draws profile username
+     * Draws profile in HUD. If this is not a video conference, removes schedule button from HUD
      * 
      * @param {String} username username
+     * @param {boolean} isVideoConference isVideoConference
      */
-    drawProfile(username) {
+    drawHUD(username, isVideoConference) {
         TypeChecker.isString(username);
-        this.#hudView.drawProfile(username)
+        TypeChecker.isBoolean(isVideoConference);
+
+        this.#hudView.drawProfile(username);
+
+        if (!isVideoConference) 
+            this.#hudView.removeScheduleButton();
     }
 
     /**

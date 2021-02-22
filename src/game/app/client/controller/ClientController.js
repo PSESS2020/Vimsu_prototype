@@ -12,6 +12,7 @@ class ClientController {
     #ownParticipant;
     #ownBusinessCard;
     #gameView;
+    #isVideoConference;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -72,7 +73,7 @@ class ClientController {
         }
 
         this.#gameView.drawStatusBar();
-        this.#gameView.drawProfile(this.#ownParticipant.getUsername())
+        this.#gameView.drawHUD(this.#ownParticipant.getUsername(), this.#isVideoConference);
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         this.#gameView.initCanvasEvents();
 
@@ -148,6 +149,7 @@ class ClientController {
      * @private Initializes the events to be handled
      */
     #setUpSocket = function () {
+        this.#socket.on('isVideoConference', this.#handleFromServerSetIsVideoConference.bind(this));
         this.#socket.on('initOwnParticipantState', this.#handleFromServerInitOwnParticipant.bind(this));
         this.#socket.on('currentGameStateYourRoom', this.#handleFromServerUpdateRoom.bind(this));
         this.#socket.on('currentGameStateYourPosition', this.#handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
@@ -225,6 +227,17 @@ class ClientController {
     /* #################################################### */
     /* ############### RECEIVE FROM SERVER ################ */
     /* #################################################### */
+
+    /**
+     * @private Message from server, gives you information if this conference is with video storage or without video storage
+     * 
+     * @param {boolean} isVideoConference
+     */
+    #handleFromServerSetIsVideoConference = function (isVideoConference) {
+        TypeChecker.isBoolean(isVideoConference);
+
+        this.#isVideoConference = isVideoConference;
+    }
 
     /**
      * @private Second message from server, gives you information of starting position, business card and participant id.
