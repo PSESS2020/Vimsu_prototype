@@ -201,6 +201,7 @@ class ClientController {
         this.#socket.on('chatThread', this.#handleFromServerShowChatThread.bind(this));
         this.#socket.on('newChatMessage', this.#handleFromServerNewChatMessage.bind(this));
         this.#socket.on('inviteFriends', this.#handleFromServerInviteFriends.bind(this));
+        this.#socket.on('meetingList', this.#handleFromServerShowMeetingList.bind(this));
     }
 
     /* #################################################### */
@@ -914,7 +915,7 @@ class ClientController {
      * 
      * @param {Object[]} meetings jitsi meeting list
      */
-    #handleFromServerShowChatList = function (meetings) {
+    #handleFromServerShowMeetingList = function (meetings) {
         this.#gameView.initMeetingListView(meetings);
     };
 
@@ -1328,11 +1329,20 @@ class ClientController {
     /**
      * Gets the list of jitsi meetings the user is in from the server. 
      */
-    handleFromViewShowChatList() {
+    handleFromViewShowMeetingList() {
         if (this.#socketReady()) {
             this.#socket.emit('getMeetingList');
         }
     };
+
+    /**
+     * Requests a personal one-on-one meeting with a moderator 
+     */
+    handleFromViewRequestModMeeting() {
+        if (this.#socketReady()) {
+            this.#socket.emit('requestModMeeting');
+        }
+    }
 
     /**
      * Gets chat thread from server

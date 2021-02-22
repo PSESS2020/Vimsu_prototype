@@ -1,36 +1,36 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const db = require('../../../../config/db');
-const FriendList = require('../models/MeetingList.js');
+const MeetingList = require('../models/MeetingList.js');
 const ParticipantService = require('./ParticipantService');
 
 
 /**
- * The Friend List Service
- * @module FriendListService
+ * The Meeting List Service
+ * @module MeetingListService
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class FriendListService {
+module.exports = class MeetingListService {
 
     /**
-     * @static Gets all friends of a participant from the database
-     * @method module:FriendListService#loadFriendList
+     * @static Gets all meetings of a participant from the database
+     * @method module:MeetingListService#loadMeetingList
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
-     * @return {FriendList | boolean} Friendlist instance if participant is found, otherwise false
+     * @return {MeetingList | boolean} Meetinglist instance if participant is found, otherwise false
      */
-    static loadFriendList(participantId, conferenceId, vimsudb) {
+    static loadMeetingList(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: 1 }).then(async par => {
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIds: 1 }).then(async par => {
             if (par) {
-                let memberList = par.friendIds;
+                let memberList = par.meetingIds;
                 let memberBusinessCards = [];
                 
                 await memberList.forEach(async memberId => {
@@ -40,7 +40,7 @@ module.exports = class FriendListService {
                 });
                 
                 return Promise.all(memberBusinessCards).then( () => {
-                    return new FriendList(memberBusinessCards);
+                    return new MeetingList(memberBusinessCards);
                 })
             }
             else {
@@ -53,23 +53,23 @@ module.exports = class FriendListService {
     }
 
     /**
-     * @static store friend in the database
-     * @method module:FriendListService#storeFriend
+     * @static store meeting in the database
+     * @method module:MeetingListService#storeMeeting
      * 
      * @param {String} participantId participant ID
-     * @param {String} friendId friend ID
+     * @param {String} meetingId meeting ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
      * @return {boolean} true if stored successfully, otherwise false
      */
-    static storeFriend(participantId, friendId, conferenceId, vimsudb) {
+    static storeMeeting(participantId, meetingId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
-        TypeChecker.isString(friendId);
+        TypeChecker.isString(meetingId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
+        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIds: meetingId }).then(res => {
             return res;
         }).catch(err => {
             console.error(err);
@@ -78,23 +78,23 @@ module.exports = class FriendListService {
     }
 
     /**
-     * @static remove friend from the database
-     * @method module:FriendListService#removeFriend
+     * @static remove meeting from the database
+     * @method module:MeetingListService#removeMeeting
      * 
      * @param {String} participantId participant ID
-     * @param {String} friendId friend ID
+     * @param {String} meetingId meeting ID
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
      * @return {boolean} true if removed successfully, otherwise false
      */
-    static removeFriend(participantId, friendId, conferenceId, vimsudb) {
+    static removeMeeting(participantId, meetingId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
-        TypeChecker.isString(friendId);
+        TypeChecker.isString(meetingId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIds: meetingId }).then(res => {
             return res;
         }).catch(err => {
             console.error(err);
@@ -103,8 +103,8 @@ module.exports = class FriendListService {
     }
 
     /**
-     * @static remove all friends from the database
-     * @method module:FriendListService#removeAllFriends
+     * @static remove all meetings from the database
+     * @method module:MeetingListService#removeAllMeetings
      * 
      * @param {String} participantId participant ID
      * @param {String} conferenceId conference ID
@@ -112,12 +112,12 @@ module.exports = class FriendListService {
      * 
      * @return {boolean} true if removed successfully, otherwise false
      */
-    static removeAllFriends(participantId, conferenceId, vimsudb) {
+    static removeAllMeetings(participantId, conferenceId, vimsudb) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: { $exists: true } }).then(res => {
+        return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIds: { $exists: true } }).then(res => {
             return res;
         }).catch(err => {
             console.error(err);
