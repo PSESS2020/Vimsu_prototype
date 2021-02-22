@@ -50,11 +50,7 @@ class FriendRequestListView extends WindowView {
                             <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                         </div>
                         <div class="col-12 col-md-8 text-center text-sm-left">
-                            <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                            <br> 
-                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                            <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                            <br>
+                            <label class="name lead">${businessCard.getForename() + " " + " (@" + businessCard.getUsername() + ")"}</label>
                         </div>
                         <div class="col-12 col-sm-2 col-md-2")>
                             <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-accept ">Accept</button>

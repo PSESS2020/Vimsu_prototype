@@ -39,87 +39,43 @@ module.exports = class AccountService {
     }
 
     /**
-     * checks if email is valid
-     * @static @method module:AccountService#isEmailValid
-     * 
-     * @param {String} email email
-     * @param {String} suffix collection name suffix
-     * @param {db} vimsudb db instance
-     * 
-     * @return {boolean} true if valid, i.e. there's no user with this email found in the database, otherwise false
-     */
-    static isEmailValid(email, suffix, vimsudb) {
-        TypeChecker.isString(email);
-        TypeChecker.isString(suffix);
-        TypeChecker.isInstanceOf(vimsudb, db)
-
-        return vimsudb.findInCollection("accounts" + suffix, { email: email }, { email: email }).then(results => {
-            if (results.length > 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        })
-    }
-
-    /**
      * creates a user account and saves it in the database.
      * @static @method module:AccountService#createAccount
      * 
      * @param {String} username account username
-     * @param {String} title user's title
-     * @param {String} surname user's surname
      * @param {String} forename user's forename
-     * @param {String} job user's job
-     * @param {String} company user's company
-     * @param {String} email user's email
      * @param {String} password user's password
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return {Account} Account instance
      */
-    static createAccount(username, title, surname, forename, job, company, email, password, suffix, vimsudb) {
+    static createAccount(username, forename, password, suffix, vimsudb) {
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
-        TypeChecker.isString(email);
         TypeChecker.isString(password);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.isUsernameValid(username, '', vimsudb).then(res => {
+        return this.isUsernameValid(username, suffix, vimsudb).then(res => {
             if (!res)
                 return res;
             
-            return this.isEmailValid(email, '', vimsudb).then(res => {
-                if (!res)
-                    return res;
-
-                var accountId = new ObjectId().toString();
-                var account = new Account(accountId, username, title, surname, forename, job, company, email);
+            var accountId = new ObjectId().toString();
+            var account = new Account(accountId, username, forename);
         
-                var acc = {
-                    accountId: account.getAccountID(),
-                    username: account.getUsername(),
-                    title: account.getTitle(),
-                    surname: account.getSurname(),
-                    forename: account.getForename(),
-                    job: account.getJob(),
-                    company: account.getCompany(),
-                    email: account.getEmail(),
-                    passwordHash: passwordHash.generate(password)
-                }
+            var acc = {
+                accountId: account.getAccountID(),
+                username: account.getUsername(),
+                forename: account.getForename(),
+                passwordHash: passwordHash.generate(password),
+                registrationTime: new Date()
+            }
         
-                return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-                    return account;
-                }).catch(err => {
-                    console.error(err);
-                })
+             return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
+                return account;
+            }).catch(err => {
+                console.error(err);
             })
         })
     }
@@ -213,32 +169,22 @@ module.exports = class AccountService {
      * 
      * @param {String} accountId account ID
      * @param {String} username account username
-     * @param {String} newTitle new user title
-     * @param {String} newSurname new user surname
      * @param {String} newForename new user forename
-     * @param {String} newJob new user job
-     * @param {String} newCompany new user company
-     * @param {String} email user email
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return {Account} Account instance
      */
-    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, suffix, vimsudb) {
+    static updateAccountData(accountId, username, newForename, suffix, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(username);
-        TypeChecker.isString(newTitle);
-        TypeChecker.isString(newSurname);
         TypeChecker.isString(newForename);
-        TypeChecker.isString(newJob);
-        TypeChecker.isString(newCompany);
-        TypeChecker.isString(email);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
+        var account = new Account(accountId, username, newForename);
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { forename: newForename }).then(res => {
             return account;
         }).catch(err => {
             console.error(err)
@@ -264,7 +210,7 @@ module.exports = class AccountService {
 
         return this.#getAccountByUsername(username, suffix, vimsudb).then(user => {
             if (user && passwordHash.verify(password, user.passwordHash)) {
-                var account = new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email);
+                var account = new Account(user.accountId, user.username, user.forename);
                 return account;
             } else {
                 return false;

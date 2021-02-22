@@ -12,47 +12,23 @@ class BusinessCardClient {
 
     #participantId;
     #username;
-    #title;
-    #surname;
     #forename;
-    #job;
-    #company;
-    #email;
 
     /**
      * Creates an instance of Business Card on client-side
      * 
      * @param {String} participantId participant ID
      * @param {String} username participant username
-     * @param {String} title participant title
-     * @param {String} surname participant surname
      * @param {String} forename participant forename
-     * @param {String} job participant job
-     * @param {String} company participant company
-     * @param {String} email participant email
      */
-    constructor(participantId, username, title, surname, forename, job, company, email) {
+    constructor(participantId, username, forename) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
-
-        //email is only defined when ppant is a friend
-        if (email !== undefined) {
-            TypeChecker.isString(email);
-        }
 
         this.#participantId = participantId;
         this.#username = username;
-        this.#title = title;
-        this.#surname = surname;
         this.#forename = forename;
-        this.#job = job;
-        this.#company = company;
-        this.#email = email;
     }
 
     /**
@@ -74,24 +50,6 @@ class BusinessCardClient {
     }
 
     /**
-     * Gets participant title
-     * 
-     * @return {String} title
-     */
-    getTitle() {
-        return this.#title;
-    }
-
-    /**
-     * Gets participant surname
-     * 
-     * @return {String} surname
-     */
-    getSurname() {
-        return this.#surname;
-    }
-
-    /**
      * Gets participant forename
      * 
      * @return {String} forename
@@ -100,32 +58,6 @@ class BusinessCardClient {
         return this.#forename;
     }
 
-    /**
-     * Gets participant job
-     * 
-     * @return {String} job
-     */
-    getJob() {
-        return this.#job;
-    }
-
-    /**
-     * Gets participant company
-     * 
-     * @return {String} company
-     */
-    getCompany() {
-        return this.#company;
-    }
-
-    /**
-     * Gets participant email
-     * 
-     * @return {String} email
-     */
-    getEmail() {
-        return this.#email;
-    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

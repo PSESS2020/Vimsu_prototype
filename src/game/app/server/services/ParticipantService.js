@@ -84,12 +84,7 @@ module.exports = class ParticipantService {
                         accountId,
                         new BusinessCard(par.participantId,
                             account.getUsername(),
-                            account.getTitle(),
-                            account.getSurname(),
-                            account.getForename(),
-                            account.getJob(),
-                            account.getCompany(),
-                            account.getEmail()),
+                            account.getForename()),
                         new Position(par.position.roomId,
                             par.position.cordX,
                             par.position.cordY),
@@ -129,7 +124,7 @@ module.exports = class ParticipantService {
                                     id: achievement.getId(),
                                     currentLevel: achievement.getCurrentLevel(),
                                 }]
-                            const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
+                            const res = await this.#storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
                     })).then(res => {
                         return participant;
@@ -172,12 +167,7 @@ module.exports = class ParticipantService {
                         accountId,
                         new BusinessCard(par.participantId,
                             account.getUsername(),
-                            account.getTitle(),
-                            account.getSurname(),
-                            account.getForename(),
-                            account.getJob(),
-                            account.getCompany(),
-                            account.getEmail()),
+                            account.getForename()),
                         new Position(par.position.roomId,
                             par.position.cordX,
                             par.position.cordY),
@@ -258,7 +248,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
             if (par) {
-                return AccountService.getAccountUsername(par.accountId, '', vimsudb).then(username => {
+                return AccountService.getAccountUsername(par.accountId, conferenceId, vimsudb).then(username => {
                     return username;
                 }).catch(err => {
                     console.error(err);
@@ -290,15 +280,10 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
-                return AccountService.getAccountById(par.accountId, '', vimsudb).then(account => {
+                return AccountService.getAccountById(par.accountId, conferenceId, vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
                         account.username,
-                        account.title,
-                        account.surname,
-                        account.forename,
-                        account.job,
-                        account.company,
-                        account.email);
+                        account.forename);
                 });
             }
             else {

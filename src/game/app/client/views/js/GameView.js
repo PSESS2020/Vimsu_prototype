@@ -705,13 +705,11 @@ class GameView {
      * Draws business card window
      * 
      * @param {BusinessCardClient} businessCard other participant business card
-     * @param {boolean} isFriend true if friend, otherwise false
      * @param {?number} rank other participant rank
      * @param {boolean} isModerator other participant moderator status
      */
-    initBusinessCardView(businessCard, isFriend, rank, isModerator) {
+    initBusinessCardView(businessCard, rank, isModerator) {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
-        TypeChecker.isBoolean(isFriend);
 
         //case when ppant with this businessCard is a friend or is a moderator
         if (rank) {
@@ -720,7 +718,7 @@ class GameView {
 
         TypeChecker.isBoolean(isModerator);
 
-        this.#businessCardView.draw(businessCard, isFriend, rank, isModerator);
+        this.#businessCardView.draw(businessCard, rank, isModerator);
     }
 
     /**

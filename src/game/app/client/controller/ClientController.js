@@ -252,12 +252,7 @@ class ClientController {
         TypeChecker.isInstanceOf(initInfo.businessCard, Object);
         TypeChecker.isString(initInfo.businessCard.id);
         TypeChecker.isString(initInfo.businessCard.username);
-        TypeChecker.isString(initInfo.businessCard.title);
-        TypeChecker.isString(initInfo.businessCard.surname);
         TypeChecker.isString(initInfo.businessCard.forename);
-        TypeChecker.isString(initInfo.businessCard.job);
-        TypeChecker.isString(initInfo.businessCard.company);
-        TypeChecker.isString(initInfo.businessCard.email);
         TypeChecker.isInt(initInfo.cordX);
         TypeChecker.isInt(initInfo.cordY);
         TypeChecker.isEnumOf(initInfo.dir, Direction);
@@ -269,12 +264,7 @@ class ClientController {
         this.#ownBusinessCard = new BusinessCardClient(
             initInfo.businessCard.id,
             initInfo.businessCard.username,
-            initInfo.businessCard.title,
-            initInfo.businessCard.surname,
-            initInfo.businessCard.forename,
-            initInfo.businessCard.job,
-            initInfo.businessCard.company,
-            initInfo.businessCard.email
+            initInfo.businessCard.forename
         );
 
         this.#ownParticipant = new ParticipantClient(
@@ -561,17 +551,9 @@ class ClientController {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     #handleFromServerBusinessCard = function (businessCardObject, rank, isModerator) {
-        let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
-            businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
-            businessCardObject.job, businessCardObject.company, businessCardObject.email);
+        let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username, businessCardObject.forename);
 
-        //check if ppant is a friend or not
-        if (businessCard.getEmail() === undefined) {
-            this.#gameView.initBusinessCardView(businessCard, false, rank, isModerator);
-        } else {
-            //rank is undefined because it is not drawn on friendBusinessCards
-            this.#gameView.initBusinessCardView(businessCard, true, rank, isModerator);
-        }
+        this.#gameView.initBusinessCardView(businessCard, rank, isModerator);
     }
 
     /**
@@ -586,7 +568,7 @@ class ClientController {
         if (friendListData) {
             var friendList = [];
             friendListData.forEach(data => {
-                friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+                friendList.push(new BusinessCardClient(data.friendId, data.username, data.forename));
             });
         } else {
             var friendList = undefined;
@@ -610,7 +592,7 @@ class ClientController {
     #handleFromServerFriendList = function (friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
-            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.forename));
         });
         this.#gameView.initFriendListView(friendList);
     }
@@ -623,7 +605,7 @@ class ClientController {
     #handleFromServerFriendRequestList = function (friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
-            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.forename));
         });
 
         this.#gameView.initFriendRequestListView(friendRequestList);
@@ -636,7 +618,7 @@ class ClientController {
      * @param {String} chatId chat ID with the requester
      */
     #handleFromServerNewFriendRequest = function (data, chatId) {
-        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.forename);
         this.#gameView.addFriendRequest(friendRequest);
         this.#gameView.updateChatThread(chatId, false, true);
         this.#gameView.drawNewFriendRequest(data.username);
@@ -649,7 +631,7 @@ class ClientController {
      * @param {String} chatId chat ID with this friend
      */
     #handleFromServerAcceptedFriendRequest = function (data, chatId) {
-        var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        var friend = new BusinessCardClient(data.friendId, data.username, data.forename);
         this.#gameView.addFriend(friend);
         this.#gameView.updateChatThread(chatId, true, false);
         this.#gameView.drawNewFriend(data.username);
@@ -733,7 +715,7 @@ class ClientController {
      */
     #handleFromServerAddToInviteFriends = function (data, hasLeftChat) {
         if (data) {
-            var businessCard = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+            var businessCard = new BusinessCardClient(data.friendId, data.username, data.forename);
         } else
             var businessCard = undefined;
 
