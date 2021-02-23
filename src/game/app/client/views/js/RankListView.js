@@ -28,7 +28,7 @@ class RankListView extends WindowView {
      */
     draw(rankList) {
         $('#ranklistwait').hide();
-        $('#rankListModal .modal-body .card-columns').empty();
+        $('#rankListModal .modal-body #ranklistrow').empty();
 
         if (rankList.length < 1) {
             $('#noranklist').text("There are no participants in this conference yet.");
@@ -42,33 +42,36 @@ class RankListView extends WindowView {
             var color;
 
             if (ppant.rank == 1)
-                color = 'gold';           
+                color = 'gold';
             else if (ppant.rank == 2)
                 color = 'antiquewhite';
             else if (ppant.rank == 3)
                 color = '#f79736';
             else
                 color = '#A9A9A9';
-            
 
-            $('#rankListModal .modal-body .card-columns').append(`
-                <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: ${color}; color: ${color}; border-style: groove;">
-                    <div class="card-body">
-                        <div class="row card-text" id="${"cardtext" + ppant.participantId}">
-                            <div class="col-lg">${ppant.rank}</div>
-                            <div class="col-lg-6">${ppant.username}</div>
-                            <div class="col-lg">${ppant.points + "P"}</div>
+
+            $('#rankListModal .modal-body #ranklistrow').append(`
+                <div class="col-sm-4 mb-2 mt-2">
+                    <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: ${color}; color: ${color}; border-style: groove;">
+                        <div class="card-body">
+                            <div class="card-text" id="${"cardtext" + ppant.participantId}">
+                                <div class="row">
+                                    <div class="col-md-auto">${ppant.rank}</div>
+                                    <div class="col-md-auto">${ppant.username}</div>
+                                    <div class="col text-right">${ppant.points + "P"}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             `)
 
-            if (ppant.rank == 1 || ppant.rank == 2 || ppant.rank == 3) 
+            if (ppant.rank == 1 || ppant.rank == 2 || ppant.rank == 3)
                 $('#cardtext' + ppant.participantId)[0].style.fontWeight = "bold";
 
-            if (ppant.self) {
+            if (ppant.self)
                 $('#rank' + ppant.participantId)[0].style.boxShadow = '0 0 4px 4px ' + color;
-            }
         })
     }
 }
