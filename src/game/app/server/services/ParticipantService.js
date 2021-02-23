@@ -129,7 +129,7 @@ module.exports = class ParticipantService {
                                     id: achievement.getId(),
                                     currentLevel: achievement.getCurrentLevel(),
                                 }]
-                            const res = await this.storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
+                            const res = await this.#storeAchievements(participant.getId(), conferenceId, achievementData, vimsudb);
                         }
                     })).then(res => {
                         return participant;
