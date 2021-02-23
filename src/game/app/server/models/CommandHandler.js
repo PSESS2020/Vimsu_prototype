@@ -50,11 +50,7 @@ module.exports = class CommandHandler {
      * @param {String} username participant username
      */
     handleCommand(socket, context, commandArgs, username) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         //only defined by allchat commands
         if (username !== undefined) {
@@ -93,10 +89,7 @@ module.exports = class CommandHandler {
      */
     globalMsg(socket, context, commandArgs, username) {
         // maybe make sure context is allchat?
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
         TypeChecker.isString(username);
 
         if (commandArgs.length > 0) {
@@ -118,10 +111,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     globalNote(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         var arg = Number.parseInt(commandArgs[0], 10);
         this.#serverController.sendGlobalAnnouncement("VIMSU", Messages.TESTMESSAGES.body[arg]);
@@ -136,11 +126,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     printHelp(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
-        TypeChecker.isInstanceOf(context, CommandContext);
+        this.#checkParamTypes(context, commandArgs);
 
         this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage());
     };
@@ -154,11 +140,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     logMessages(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         // refactor?
         // commandArgs will be empty
@@ -182,11 +164,7 @@ module.exports = class CommandHandler {
      * @param {?String} username participant username
      */
     removeUser(socket, context, commandArgs, username) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         commandArgs.forEach((username) => {
             context.removeUser(username);
@@ -205,11 +183,7 @@ module.exports = class CommandHandler {
         // refactor?
         // can we do something here that we can remove messages both by id and by sender?
 
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         var criterion;
         if (commandArgs[0] == Commands.REMOVEMESSAGESBYPLAYER.string) {
@@ -245,11 +219,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     removeAllBy(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         commandArgs.splice(0, 0, Commands.REMOVEMESSAGESBYPLAYER.string);
         this.removeMessage(socket, context, commandArgs);
@@ -265,11 +235,7 @@ module.exports = class CommandHandler {
      */
     showAllBy(socket, context, commandArgs) {
         // refactor?
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         var msg = context.getMessages();
         var messageHeader = "List of messages posted in " + context.getTitle();
@@ -292,11 +258,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     muteUser(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         commandArgs.forEach((username) => {
             context.muteUser(username);
@@ -312,11 +274,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     unmuteUser(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         commandArgs.forEach((username) => {
             context.unmuteUser(username);
@@ -332,11 +290,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     close(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
         context.close();
     };
 
@@ -349,11 +303,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     logAllDoors(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let roomDecorators = this.#serverController.getRoomDecorators();
         let header = "List of all exisiting Doors";
@@ -379,11 +329,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     closeDoor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let doorID = commandArgs[0];
         let door = this.#serverController.getDoorByID(doorID);
@@ -412,11 +358,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     openDoor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let doorID = commandArgs[0];
         let door = this.#serverController.getDoorByID(doorID);
@@ -446,11 +388,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     closeDoorFor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
@@ -493,11 +431,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     openDoorFor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
@@ -540,11 +474,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     closeAllDoorsFor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let usernames = commandArgs;
         let ppantIDs = [];
@@ -578,11 +508,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     openAllDoorsFor(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let usernames = commandArgs;
         let ppantIDs = [];
@@ -616,11 +542,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     setDoorCode(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let doorID = commandArgs[0];
         let code = commandArgs[1];
@@ -646,11 +568,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     portTo(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let roomID = parseInt(commandArgs[0], 10);
         let cordX = parseInt(commandArgs[1], 10);
@@ -681,11 +599,7 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     portToUser(socket, context, commandArgs) {
-        TypeChecker.isInstanceOf(context, CommandContext);
-        TypeChecker.isInstanceOf(commandArgs, Array);
-        commandArgs.forEach(arg => {
-            TypeChecker.isString(arg);
-        });
+        this.#checkParamTypes(context, commandArgs);
 
         let username = commandArgs[0];
         let moderatorID = socket.ppantID;
@@ -695,9 +609,7 @@ module.exports = class CommandHandler {
             this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
         } else {
             this.#serverController.sendNotification(socket.id, Messages.TELEPORTUSERFAIL);
-        }
-
-    
+        }    
     }
 
     /**
@@ -727,6 +639,21 @@ module.exports = class CommandHandler {
             }
         }
         return false
+    }
+
+    /**
+     * @private Checks parameters' data type
+     * @method module:CommandHandler#checkParamTypes
+     * 
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    #checkParamTypes = function (context, commandArgs) {
+        TypeChecker.isInstanceOf(context, CommandContext);
+        TypeChecker.isInstanceOf(commandArgs, Array);
+        commandArgs.forEach(arg => {
+            TypeChecker.isString(arg);
+        });
     }
 
     /**
