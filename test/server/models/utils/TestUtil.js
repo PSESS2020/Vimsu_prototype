@@ -1,5 +1,5 @@
 const Position = require('../../../../src/game/app/server/models/Position.js');
-const BusinessCard = require('../../../../src/game/app/server/models/BusinessCard.js');
+const BusinessCard = require('../../../../src/game/app/client/shared/BusinessCard.js');
 const FriendList = require('../../../../src/game/app/server/models/FriendList.js');
 const Achievement = require('../../../../src/game/app/server/models/Achievement.js');
 const Message = require('../../../../src/game/app/server/models/Message.js');
@@ -104,8 +104,7 @@ class TestUtil {
     };
 
     static randomBusinessCard() {
-        return (new BusinessCard(this.randomString(), this.randomString(), this.randomString(), this.randomString(),
-            this.randomString(), this.randomString(), this.randomString(), this.randomString()));
+        return (new BusinessCard(this.randomString(), this.randomString(), this.randomString()));
     };
 
     static randomAchievement() {
