@@ -857,7 +857,6 @@ module.exports = class ServerController {
                             title: businessCard.getTitle(),
                             surname: businessCard.getSurname(),
                             forename: businessCard.getForename(),
-                            surname: businessCard.getSurname(),
                             job: businessCard.getJob(),
                             company: businessCard.getCompany(),
                             email: businessCard.getEmail()
@@ -937,7 +936,6 @@ module.exports = class ServerController {
                                 title: businessCard.getTitle(),
                                 surname: businessCard.getSurname(),
                                 forename: businessCard.getForename(),
-                                surname: businessCard.getSurname(),
                                 job: businessCard.getJob(),
                                 company: businessCard.getCompany(),
                                 email: businessCard.getEmail()
@@ -967,7 +965,6 @@ module.exports = class ServerController {
                             title: businessCard.getTitle(),
                             surname: businessCard.getSurname(),
                             forename: businessCard.getForename(),
-                            surname: businessCard.getSurname(),
                             job: businessCard.getJob(),
                             company: businessCard.getCompany(),
                             email: businessCard.getEmail()
@@ -1595,7 +1592,6 @@ module.exports = class ServerController {
                         title: requesterBusCard.getTitle(),
                         surname: requesterBusCard.getSurname(),
                         forename: requesterBusCard.getForename(),
-                        surname: requesterBusCard.getSurname(),
                         job: requesterBusCard.getJob(),
                         company: requesterBusCard.getCompany(),
                         email: requesterBusCard.getEmail()
@@ -1623,7 +1619,6 @@ module.exports = class ServerController {
                             title: requesterBusCard.getTitle(),
                             surname: requesterBusCard.getSurname(),
                             forename: requesterBusCard.getForename(),
-                            surname: requesterBusCard.getSurname(),
                             job: requesterBusCard.getJob(),
                             company: requesterBusCard.getCompany(),
                             email: requesterBusCard.getEmail()
@@ -1673,7 +1668,6 @@ module.exports = class ServerController {
                             title: targetBusCard.getTitle(),
                             surname: targetBusCard.getSurname(),
                             forename: targetBusCard.getForename(),
-                            surname: targetBusCard.getSurname(),
                             job: targetBusCard.getJob(),
                             company: targetBusCard.getCompany(),
                             email: targetBusCard.getEmail()
@@ -1786,7 +1780,6 @@ module.exports = class ServerController {
                                             title: removerBusinessCard.getTitle(),
                                             surname: removerBusinessCard.getSurname(),
                                             forename: removerBusinessCard.getForename(),
-                                            surname: removerBusinessCard.getSurname(),
                                             job: removerBusinessCard.getJob(),
                                             company: removerBusinessCard.getCompany(),
                                             email: removerBusinessCard.getEmail()
