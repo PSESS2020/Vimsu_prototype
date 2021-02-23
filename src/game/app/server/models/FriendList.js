@@ -1,5 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const BusinessCard = require("./BusinessCard.js");
+const BusinessCard = require("../../client/shared/BusinessCard.js");
 
 /**
  * The Friend List Model

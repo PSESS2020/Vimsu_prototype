@@ -1,7 +1,7 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction');
-const BusinessCard = require('../models/BusinessCard');
+const BusinessCard = require('../../client/shared/BusinessCard');
 const Participant = require('../models/Participant');
 const Settings = require('../utils/Settings.js');
 const ObjectId = require('mongodb').ObjectID;
@@ -281,9 +281,7 @@ module.exports = class ParticipantService {
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
                 return AccountService.getAccountById(par.accountId, conferenceId, vimsudb).then(account => {
-                    return new BusinessCard(par.participantId,
-                        account.username,
-                        account.forename);
+                    return new BusinessCard(par.participantId, account.username, account.forename);
                 });
             }
             else {

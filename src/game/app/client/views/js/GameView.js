@@ -691,11 +691,11 @@ class GameView {
     /**
      * Draws profile window
      * 
-     * @param {BusinessCardClient} businessCard own business card
+     * @param {BusinessCard} businessCard own business card
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     initProfileView(businessCard, isModerator) {
-        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
         TypeChecker.isBoolean(isModerator);
 
         this.#profileView.draw(businessCard, isModerator);
@@ -704,12 +704,12 @@ class GameView {
     /**
      * Draws business card window
      * 
-     * @param {BusinessCardClient} businessCard other participant business card
+     * @param {BusinessCard} businessCard other participant business card
      * @param {?number} rank other participant rank
      * @param {boolean} isModerator other participant moderator status
      */
     initBusinessCardView(businessCard, rank, isModerator) {
-        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
 
         //case when ppant with this businessCard is a friend or is a moderator
         if (rank) {
@@ -724,12 +724,12 @@ class GameView {
     /**
      * Draws friend list window
      * 
-     * @param {BusinessCardClient[]} businessCards friends' business card
+     * @param {BusinessCard[]} businessCards friends' business card
      */
     initFriendListView(businessCards) {
         TypeChecker.isInstanceOf(businessCards, Array);
         businessCards.forEach(busCard => {
-            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+            TypeChecker.isInstanceOf(busCard, BusinessCard);
         })
 
         this.#friendListView.draw(businessCards)
@@ -738,7 +738,7 @@ class GameView {
     /**
      * Draws invite friends window
      * 
-     * @param {?BusinessCardClient[]} businessCards friends' business card
+     * @param {?BusinessCard[]} businessCards friends' business card
      * @param {String} groupName group chat name
      * @param {?number} limit group chat limit
      * @param {?String} chatId group chat ID
@@ -747,7 +747,7 @@ class GameView {
         if (businessCards !== undefined) {
             TypeChecker.isInstanceOf(businessCards, Array);
             businessCards.forEach(busCard => {
-                TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+                TypeChecker.isInstanceOf(busCard, BusinessCard);
             })
         }
 
@@ -953,10 +953,10 @@ class GameView {
     /**
      * Add friends to friend list window and invite friends window
      * 
-     * @param {BusinessCardClient} businessCard friend's business card
+     * @param {BusinessCard} businessCard friend's business card
      */
     addFriend(businessCard) {
-        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
 
         if ($('#friendListModal').is(':visible')) {
             this.#friendListView.addToFriendList(businessCard);
@@ -968,12 +968,12 @@ class GameView {
     /**
      * Add friends to invite friends window
      * 
-     * @param {?BusinessCardClient} businessCard friend's business card
+     * @param {?BusinessCard} businessCard friend's business card
      * @param {boolean} hasLeftChat true if friend has left chat, otherwise false
      */
     addToInviteFriends(businessCard, hasLeftChat) {
         if (businessCard)
-            TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+            TypeChecker.isInstanceOf(businessCard, BusinessCard);
 
         TypeChecker.isBoolean(hasLeftChat);
 
@@ -1103,12 +1103,12 @@ class GameView {
     /**
      * Draws friend request list window
      * 
-     * @param {BusinessCardClient[]} businessCards requester's business cards
+     * @param {BusinessCard[]} businessCards requester's business cards
      */
     initFriendRequestListView(businessCards) {
         TypeChecker.isInstanceOf(businessCards, Array);
         businessCards.forEach(busCard => {
-            TypeChecker.isInstanceOf(busCard, BusinessCardClient);
+            TypeChecker.isInstanceOf(busCard, BusinessCard);
         })
 
         this.#friendRequestListView.draw(businessCards);
@@ -1132,10 +1132,10 @@ class GameView {
     /**
      * Adds request to friend request window
      * 
-     * @param {BusinessCardClient} businessCard requester business card
+     * @param {BusinessCard} businessCard requester business card
      */
     addFriendRequest(businessCard) {
-        TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
+        TypeChecker.isInstanceOf(businessCard, BusinessCard);
 
         if ($('#friendRequestListModal').is(':visible')) {
             this.#friendRequestListView.addToFriendRequestList(businessCard);

@@ -34,7 +34,7 @@ class BusinessCardView extends WindowView {
     /**
      * Draws business card window
      * 
-     * @param {BusinessCardClient} businessCard business card
+     * @param {BusinessCard} businessCard business card
      * @param {?number} rank rank
      * @param {boolean} isModerator true if moderator, otherwise false
      */

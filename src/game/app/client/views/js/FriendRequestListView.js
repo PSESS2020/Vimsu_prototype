@@ -29,7 +29,7 @@ class FriendRequestListView extends WindowView {
     /**
      * Draws friend request list window
      * 
-     * @param {BusinessCardClient[]} businessCards requesters' business card
+     * @param {BusinessCard[]} businessCards requesters' business card
      */
     draw(businessCards) {
         $('#friendRequestListModal .modal-body #nofriendrequest').empty();
@@ -130,7 +130,7 @@ class FriendRequestListView extends WindowView {
     /**
      * Adds request to friend request list window
      * 
-     * @param {BusinessCardClient} businessCard requester's business card
+     * @param {BusinessCard} businessCard requester's business card
      */
     addToFriendRequestList(businessCard) {
         if (!this.#businessCards.includes(businessCard)) {

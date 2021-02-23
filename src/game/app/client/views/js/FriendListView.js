@@ -34,7 +34,7 @@ class FriendListView extends WindowView {
     /**
      * Draws friend list window
      * 
-     * @param {BusinessCardClient[]} businessCards friends' business card
+     * @param {BusinessCard[]} businessCards friends' business card
      */
     draw(businessCards) {
         $('#friendListModal .modal-body #nofriend').empty();
@@ -115,7 +115,7 @@ class FriendListView extends WindowView {
     /**
      * Adds friend to friend list window
      * 
-     * @param {BusinessCardClient} businessCard friend's business card
+     * @param {BusinessCard} businessCard friend's business card
      */
     addToFriendList(businessCard) {
         if (!this.#businessCards.includes(businessCard)) {

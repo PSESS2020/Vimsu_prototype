@@ -29,7 +29,7 @@ class ProfileView extends WindowView {
     /**
      * Draws profile window
      * 
-     * @param {BusinessCardClient} businessCard own business card
+     * @param {BusinessCard} businessCard own business card
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isModerator) {
