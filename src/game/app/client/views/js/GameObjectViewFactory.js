@@ -216,8 +216,14 @@ class GameObjectViewFactory {
 
                 var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 20 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable) {
+                        gameObjectView = new SmallDinerTableView(gameObjectImage, [], pos, tableOffset, objectName);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+
+                }
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
