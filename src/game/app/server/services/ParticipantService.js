@@ -673,4 +673,29 @@ module.exports = class ParticipantService {
         })
 
     }
+
+    /**
+     * @static Changes the moderator state of this participant to the passed modState
+     * @method module:ParticipantService#changeModState
+     * 
+     * @param {String} participantId participant ID
+     * @param {String} conferenceId conference ID
+     * @param {boolean} modState moderator state
+     * @param {db} vimsudb db instance
+     * 
+     *  @return {boolean} true if updated successfully, otherwise false
+     */
+    static changeModState(participantId, conferenceId, modState, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isBoolean(modState);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { isModerator: modState }).then(res => {
+            return true;
+        }).catch(err => {
+            console.error(err);
+            return false;
+        })
+    }
 } 

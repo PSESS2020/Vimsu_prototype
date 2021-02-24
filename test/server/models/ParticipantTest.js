@@ -130,6 +130,12 @@ describe('Participant test', function () {
         assert.equal(ppant.getIsVisible(), newVisibility);
     })
 
+    it('test setIsModerator', function () {
+        let newIsMod = !ppant.getIsModerator();
+        ppant.setIsModerator(newIsMod);
+        assert.equal(ppant.getIsModerator(), newIsMod);
+    })
+
     it('test set achievements', function () {
         let exampleAch = [new Achievement(55, 'achievement', 'icon', 'description', 1, 'color', 4444, 3, TypeOfTask.FOODCOURTVISIT, 1)];
         assert.equal(ppant.getAchievements(), achievements);

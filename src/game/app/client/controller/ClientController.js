@@ -205,6 +205,8 @@ class ClientController {
         this.#socket.on('newChatMessage', this.#handleFromServerNewChatMessage.bind(this));
         this.#socket.on('inviteFriends', this.#handleFromServerInviteFriends.bind(this));
         this.#socket.on('enterCode', this.#handleFromServerEnterCode.bind(this));
+        this.#socket.on('your mod state changed', this.#handleFromServerChangeYourModState.bind(this));
+        this.#socket.on('other mod state changed', this.#handleFromServerChangeOtherModState.bind(this));
     }
 
     /* #################################################### */
@@ -1038,6 +1040,36 @@ class ClientController {
     #handleFromServerEnterCode = function (doorId) {
         TypeChecker.isString(doorId);
         this.#gameView.initEnterCodeWindow(doorId);
+    }
+
+    /**
+     * @private Receives from server that your own mod state changed
+     * 
+     * @param {boolean} modState true if you become a moderator, false otherwise
+     */
+    #handleFromServerChangeYourModState = function(modState) {
+        TypeChecker.isBoolean(modState);
+
+        this.#gameView.setOwnModState(modState);
+        this.#ownParticipant.setIsModerator(modState);
+    }
+
+    /**
+     * @private Receives from server that an other ppants mod state changed
+     * 
+     * @param {boolean} modState true if the user becomes a moderator, false otherwise
+     * @param {String} ppantID ID of that ppant
+     */
+    #handleFromServerChangeOtherModState = function(modState, ppantID) {
+        TypeChecker.isBoolean(modState);
+        TypeChecker.isString(ppantID);
+
+        let ppant = this.#currentRoom.getParticipant(ppantID);
+        if (ppant !== undefined) {
+            ppant.setIsModerator(modState);
+        }
+
+        this.#gameView.setOtherModState(modState, ppantID);
     }
 
     /* #################################################### */

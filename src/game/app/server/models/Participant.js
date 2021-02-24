@@ -202,6 +202,17 @@ module.exports = class Participant {
     }
 
     /**
+     * Sets moderator status
+     * @method module:Participant#setIsModerator
+     * 
+     * @param {boolean} isMod moderator status
+     */
+    setIsModerator(isMod) {
+        TypeChecker.isBoolean(isMod);
+        this.#isMod = isMod;
+    }
+
+    /**
      * Gets chat list
      * @method module:Participant#getChatList
      * 

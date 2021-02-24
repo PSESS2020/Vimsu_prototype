@@ -20,7 +20,7 @@ const Account = require('../../../src/website/models/Account');
 const Participant = require('../../../src/game/app/server/models/Participant');
 const BusinessCard = require('../../../src/game/app/server/models/BusinessCard');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
-const { deleteParticipant, deleteAllParticipants, updateTaskCount } = require('../../../src/game/app/server/services/ParticipantService');
+const { deleteParticipant, deleteAllParticipants, updateTaskCount, changeModState } = require('../../../src/game/app/server/services/ParticipantService');
 
 function generateTasks() {
     var tasks = {};
@@ -52,9 +52,9 @@ var account = new Account("accountId", "asdf", "prof", "", "", "", "", "");
 const dbStub = sinon.createStubInstance(db);
 dbStub.findOneInCollection = (collectionName, query, projection) => {
 
-    if (collectionName === participantCollectionName && (query.accountId === "accountId" || query.participantId === "asdf12345")) {
+    if (collectionName === participantCollectionName && (query.accountId === "accountId" || query.participantId === "participantId")) {
         return Promise.resolve({
-            participantId: "asdf12345",
+            participantId: "participantId",
             chatIDList: [],
             friendIds: [],
             friendRequestIds: {
@@ -88,20 +88,20 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
 };
 
 dbStub.updateOneToCollection = (collectionName, query, update) => {
-    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+    if (collectionName === participantCollectionName && query.participantId === "participantId") {
         return Promise.resolve(true);
     }
 }
 
 dbStub.insertToArrayInCollection = (collectionName, query, queryToPush) => {
-    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+    if (collectionName === participantCollectionName && query.participantId === "participantId") {
         return Promise.resolve(true);
     } else
         return Promise.resolve(false);
 };
 
 dbStub.deleteFromArrayInCollection = (collectionName, query, toDelete) => {
-    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+    if (collectionName === participantCollectionName && query.participantId === "participantId") {
         return Promise.resolve(true);
     } else {
         return Promise.resolve(false);
@@ -109,7 +109,7 @@ dbStub.deleteFromArrayInCollection = (collectionName, query, toDelete) => {
 }
 
 dbStub.deleteOneFromCollection = (collectionName, query) => {
-    if (collectionName === participantCollectionName && query.participantId === "asdf12345") {
+    if (collectionName === participantCollectionName && query.participantId === "participantId") {
         return Promise.resolve(true);
     } else {
         return Promise.resolve(false);
@@ -133,7 +133,7 @@ describe('Participant Service Test', () => {
     });
 
     it('test getUsername', async () => {
-        var username = await ParticipantService.getUsername("asdf12345", conferenceId, dbStub);
+        var username = await ParticipantService.getUsername("participantId", conferenceId, dbStub);
         expect(username).to.eql("asdf");
 
         var noneUser = await ParticipantService.getUsername("1234556", conferenceId, dbStub);
@@ -141,70 +141,75 @@ describe('Participant Service Test', () => {
     })
 
     it('test getBusinessCard', async () => {
-        var businessCard = await ParticipantService.getBusinessCard("asdf12345", conferenceId, dbStub);
-        expect(businessCard).to.eql(new BusinessCard("asdf12345", "asdf", "prof", "", "", "", "", ""));
+        var businessCard = await ParticipantService.getBusinessCard("participantId", conferenceId, dbStub);
+        expect(businessCard).to.eql(new BusinessCard("participantId", "asdf", "prof", "", "", "", "", ""));
     })
 
     it('test updateParticipantPosition', async () => {
-        var updatedParticipant = await ParticipantService.updateParticipantPosition("asdf12345", conferenceId, new Position(2, 2, 2), dbStub);
+        var updatedParticipant = await ParticipantService.updateParticipantPosition("participantId", conferenceId, new Position(2, 2, 2), dbStub);
         expect(updatedParticipant).to.eql(true);
     })
 
     it('test updateParticipantDirection', async () => {
-        var updatedParticipant = await ParticipantService.updateParticipantDirection("asdf12345", conferenceId, Direction.DOWNLEFT, dbStub);
+        var updatedParticipant = await ParticipantService.updateParticipantDirection("participantId", conferenceId, Direction.DOWNLEFT, dbStub);
         expect(updatedParticipant).to.eql(true);
     })
 
     it('test getPoints', async () => {
-        var points = await ParticipantService.getPoints("asdf12345", conferenceId, dbStub);
+        var points = await ParticipantService.getPoints("participantId", conferenceId, dbStub);
         expect(points).to.eql(10);
     })
 
     it('test updatePoints', async () => {
-        var updatedPoints = await ParticipantService.updatePoints("asdf12345", conferenceId, 19, dbStub);
+        var updatedPoints = await ParticipantService.updatePoints("participantId", conferenceId, 19, dbStub);
         expect(updatedPoints).to.eql(true);
 
     })
 
     it('test deleteAchievement', async () => {
-        var deletedAchievement = await ParticipantService.deleteAchievement("asdf12345", conferenceId, 0, dbStub);
+        var deletedAchievement = await ParticipantService.deleteAchievement("participantId", conferenceId, 0, dbStub);
         expect(deletedAchievement).to.eql(true);
     })
 
     it('test getAchievements', async () => {
-        var achievements = await ParticipantService.getAchievements("asdf12345", conferenceId, dbStub);
+        var achievements = await ParticipantService.getAchievements("participantId", conferenceId, dbStub);
         expect(achievements).to.eql(generateAchievements());
         invalidIdAchievments = await ParticipantService.getAchievements("1234", conferenceId, dbStub);
         expect(invalidIdAchievments).to.eql(false);
     })
 
     it('test updateAchievementLevel', async () => {
-        var updatedAchievement = await ParticipantService.updateAchievementLevel("asdf12345", conferenceId, 0, 1, dbStub);
+        var updatedAchievement = await ParticipantService.updateAchievementLevel("participantId", conferenceId, 0, 1, dbStub);
         expect(updatedAchievement).to.eql(true);
     })
 
     it('test updateTaskCounts', async () => {
-        var updatedTaskCounts = await ParticipantService.updateTaskCounts("asdf12345", conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
+        var updatedTaskCounts = await ParticipantService.updateTaskCounts("participantId", conferenceId, [new Task(0, TypeOfTask.FOODCOURTVISIT, 10)], dbStub);
         expect(updatedTaskCounts).to.eql(true);
     })
 
     it('test getTaskCount', async () => {
-        taskCount = await ParticipantService.getTaskCount("asdf12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
+        taskCount = await ParticipantService.getTaskCount("participantId", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
         expect(taskCount).to.eql(0);
         invalidIdTaskCount = await ParticipantService.getTaskCount("12345", conferenceId, TypeOfTask.FOODCOURTVISIT, dbStub);
         expect(invalidIdTaskCount).to.eql(false);
     })
 
     it('test updateTaskCount', async () => {
-        var updatedTaskCount = await ParticipantService.updateTaskCount("asdf12345", conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
+        var updatedTaskCount = await ParticipantService.updateTaskCount("participantId", conferenceId, TypeOfTask.FOODCOURTVISIT, 1, dbStub);
         expect(updatedTaskCount).to.eql(true);
     })
 
     it('test addChatID', async () => {
-        updatesChatId = await ParticipantService.addChatID("asdf12345", "0", conferenceId, dbStub);
+        updatesChatId = await ParticipantService.addChatID("participantId", "0", conferenceId, dbStub);
         expect(updatesChatId).to.eql(true);
         invalidIdChatId = await ParticipantService.addChatID("12345", "0", conferenceId, dbStub);
         expect(invalidIdChatId).to.eql(false);
+    })
+
+    it('test changeModState', async () => {
+        let changeModState = await ParticipantService.changeModState("participantId", conferenceId, true, dbStub);
+        expect(changeModState).to.eql(true);
     })
 
     it('test deleteAllParticipants', async () => {
@@ -213,7 +218,7 @@ describe('Participant Service Test', () => {
     })
 
     it('test deleteParticipant', async () => {
-        var deletedParticipant = await ParticipantService.deleteParticipant("asdf12345", conferenceId, dbStub);
+        var deletedParticipant = await ParticipantService.deleteParticipant("participantId", conferenceId, dbStub);
         expect(deletedParticipant).to.eql(true);
     })
 });

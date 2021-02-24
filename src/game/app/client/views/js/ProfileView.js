@@ -79,4 +79,6 @@ class ProfileView extends WindowView {
 
         $('#profileModal').modal('show');
     }
+
+    update
 }

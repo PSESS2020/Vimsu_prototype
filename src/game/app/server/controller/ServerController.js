@@ -2152,7 +2152,6 @@ module.exports = class ServerController {
      * 
      * @return {boolean} true by success, false otherwise
      */
-    
     teleportParticipantToPosition(ppantID, position) {
         TypeChecker.isString(ppantID);
         TypeChecker.isInstanceOf(position, Position);
@@ -2191,8 +2190,7 @@ module.exports = class ServerController {
      * @param {String} username username of other ppant
      * 
      * @return {boolean} true by success, false otherwise
-     */
-    
+     */    
     teleportParticipantToParticipant(ppantID, username) {
         TypeChecker.isString(ppantID);
         TypeChecker.isString(username);
@@ -2218,6 +2216,53 @@ module.exports = class ServerController {
 
         this.#changeParticipantPosition(ppant, newPosition, direction);
         return true;
+    }
+
+    /**
+     * Changes moderator state of this ppant
+     * @method module:ServerController#setModState
+     * 
+     * @param {String} username username of this ppant
+     * @param {boolean} modState moderator state
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    setModState(username, modState) {
+        TypeChecker.isString(username);
+        TypeChecker.isBoolean(modState);
+
+        let ppantID = this.getIdOf(username);
+
+        //user does not exist or is offline
+        if (ppantID === undefined) {
+            return false;
+        }
+
+        let ppant = this.#ppants.get(ppantID);
+        let socketID = this.getSocketId(ppantID);
+
+        //user went offline
+        if (ppant === undefined || socketID === undefined) {
+            return false;
+        }
+
+        ppant.setIsModerator(modState);
+
+        let socket = this.getSocketObject(socketID);
+
+        //Emit to ppant that his mod state changed and notfiy him
+        if (modState) {
+            this.sendNotification(socketID, Messages.YOUARENOWMOD);
+        } else {
+            this.sendNotification(socketID, Messages.YOUARENOLONGERMOD);
+        }
+        socket.emit('your mod state changed', modState);
+        
+        //Emit to all other ppants in room that mod state of this ppant changed
+        let currentRoomId = ppant.getPosition().getRoomId();
+        socket.to(currentRoomId.toString()).emit('other mod state changed', modState, ppantID);
+
+        return ParticipantService.changeModState(ppantID, Settings.CONFERENCE_ID, modState, this.#db);
     }
 
     /**
