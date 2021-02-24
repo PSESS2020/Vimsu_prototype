@@ -52,23 +52,32 @@ class FriendListView extends WindowView {
         this.#businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent chatthread" >
-                    <div class="row w-100">
-                        <div class="col-12 col-sm-2 px-0">
-                            <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                    <div class="d-flex justify-content-between">
+                        <div class="row w-100">
+                            <div class="col-12 col-sm-2 px-0">
+                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                            </div>
+                            <div class="col-12 col-md-9 text-center text-sm-left">
+                                <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
+                                <br> 
+                                <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
+                                <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                <br>
+                                <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
+                                <span class="small">${businessCard.getEmail()}</span>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-9 text-center text-sm-left">
-                            <label class="name lead">${businessCard.getForename() + " " + " (@" + businessCard.getUsername() + ")"}</label>
-                        </div>
-                        <div class="col-12 col-md-1">
-                                    <a class="action_button nav-item nav-link" href="" style="position: absolute; margin-top: -20px; margin-left: 15px" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px; margin-right: 15px; margin-top: -10px" aria-labelledby="dropdownFriendOption">
-                                    <button class="dropdown-item btn btn-accept" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
-                                    <button class="dropdown-item btn btn-reject" style=" width: auto" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
-                                </div>
-                        </div>    
-                    </div>
+                    
+                        <span class="mr-4 mt-n3">
+                            <a class="action_button nav-item nav-link" href="" style="position: absolute;" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
+                                <button class="dropdown-item btn btn-accept" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
+                                <button class="dropdown-item btn btn-reject" style=" width: auto" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                            </div>
+                        </span>
+                    </div>  
                 </li>
             `)
 
