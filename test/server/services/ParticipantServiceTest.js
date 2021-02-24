@@ -20,7 +20,7 @@ const Account = require('../../../src/website/models/Account');
 const Participant = require('../../../src/game/app/server/models/Participant');
 const BusinessCard = require('../../../src/game/app/client/shared/BusinessCard.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
-const { deleteParticipant, deleteAllParticipants, updateTaskCount } = require('../../../src/game/app/server/services/ParticipantService');
+const { deleteParticipant, deleteAllParticipants, updateTaskCount, changeModState } = require('../../../src/game/app/server/services/ParticipantService');
 
 function generateTasks() {
     var tasks = {};
@@ -200,6 +200,11 @@ describe('Participant Service Test', () => {
         expect(updatesChatId).to.eql(true);
         invalidIdChatId = await ParticipantService.addChatID("12345", "0", conferenceId, dbStub);
         expect(invalidIdChatId).to.eql(false);
+    })
+
+    it('test changeModState', async () => {
+        let changeModState = await ParticipantService.changeModState("participantId", conferenceId, true, dbStub);
+        expect(changeModState).to.eql(true);
     })
 
     it('test deleteAllParticipants', async () => {

@@ -101,5 +101,13 @@ module.exports = Object.freeze({
     PORTTOUSER: {
         string: "porttouser",
         method: "portToUser"
-    }
+    },
+    MODUSER: {
+        string: "mod",
+        method: "modUser"
+    },
+    UNMODUSER: {
+        string: "unmod",
+        method: "unmodUser"
+    }  
 });

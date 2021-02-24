@@ -606,6 +606,35 @@ class GameView {
     }
 
     /**
+     * Updates own avatars moderator state
+     * 
+     * @param {boolean} modState true if moderator, false otherwise
+     */
+    setOwnModState(modState) {
+        TypeChecker.isBoolean(modState);
+
+        this.#ownAvatarView.setIsModerator(modState);
+    }
+
+    /**
+     * Updates other avatars moderator state
+     * 
+     * @param {boolean} modState true if moderator, false otherwise
+     */
+    setOtherModState(modState, ppantID) {
+        TypeChecker.isBoolean(modState);
+        TypeChecker.isString(ppantID);
+
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
+
+        if (index < 0) {
+            throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].setIsModerator(modState);
+    }
+
+    /**
      * Draws current lectures window
      * 
      * @param {Object[]} lectures current lectures

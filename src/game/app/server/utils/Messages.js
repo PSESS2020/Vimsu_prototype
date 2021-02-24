@@ -78,7 +78,9 @@ module.exports = Object.freeze({
                 ", each one seperated from the next one by a whitespace character.",
                 "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>.",
                 "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
-                "\\porttouser <username> -- Teleports you to user with <username>."]
+                "\\porttouser <username> -- Teleports you to user with <username>.", 
+                "\\mod <username> -- Sets a normal user with <username> to a moderator.",
+                "\\unmod <username> -- Sets a moderator with <username> to a normal user."]
     },
     WARNING: {
         header: "Warning",
@@ -181,5 +183,13 @@ module.exports = Object.freeze({
     TELEPORTUSERFAIL: {
         header: "Your teleport failed",
         body: "Your teleport failed. Please check the passed username again."
+    },
+    YOUARENOWMOD: {
+        header: "Your mod state changed",
+        body: "You are now a moderator. Type in \\help to see all commands.",
+    },
+    YOUARENOLONGERMOD: {
+        header: "Your mod state changed",
+        body: "You are no longer a moderator."  
     }
 });

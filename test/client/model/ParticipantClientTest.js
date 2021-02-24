@@ -52,6 +52,12 @@ describe('ParticipantClient test', function () {
         expect(ppant.getIsVisible()).to.equal(newIsVisible);
     });
 
+    it('test set valid isModerator', function () {
+        let newIsModerator = !ppant.getIsModerator();
+        ppant.setIsModerator(newIsModerator);
+        expect(ppant.getIsModerator()).to.equal(newIsModerator);
+    });
+
     it('test set new invalid position', function () {
         expect(() => ppant.setPosition('newPosition')).to.throw(TypeError);
     });
@@ -62,5 +68,9 @@ describe('ParticipantClient test', function () {
 
     it('test set invalid isVisible', function () {
         expect(() => ppant.setisVisible('isVisible')).to.throw(TypeError);
+    });
+
+    it('test set invalid isModerator', function () {
+        expect(() => ppant.setisModerator('isModerator')).to.throw(TypeError);
     });
 });

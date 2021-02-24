@@ -91,6 +91,16 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     /**
+     * Sets moderator state
+     * 
+     * @param {boolean} isModerator true if moderator, otherwise false
+     */
+    setIsModerator(isModerator) {
+        this.#isModerator = isModerator;
+    }
+
+
+    /**
      * Updates current animation
      */
     update() {

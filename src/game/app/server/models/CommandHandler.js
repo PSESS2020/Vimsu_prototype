@@ -613,6 +613,50 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Mods user with passed username
+     * @method module:CommandHandler#modUser
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    modUser(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let username = commandArgs[0];
+
+        if (this.#serverController.setModState(username, true)) {
+            let header = "Mod status set successfully";
+            let body = username + " is now a moderator.";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+        }
+    }
+
+    /**
+     * Unmods user with passed username
+     * @method module:CommandHandler#unmodUser
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    unmodUser(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let username = commandArgs[0];
+
+        if (this.#serverController.setModState(username, false)) {
+            let header = "Mod status set successfully";
+            let body = username + " is no longer a moderator.";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+        }
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 

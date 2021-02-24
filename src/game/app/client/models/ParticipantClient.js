@@ -73,6 +73,16 @@ class ParticipantClient {
     }
 
     /**
+     * Sets moderator status
+     * 
+     * @param {boolean} isMod moderator status
+     */
+    setIsModerator(isMod) {
+        TypeChecker.isBoolean(isMod);
+        this.#isModerator = isMod;
+    }
+
+    /**
      * Sets participant position
      * 
      * @param {PositionClient} position position
