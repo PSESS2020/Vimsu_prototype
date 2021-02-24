@@ -20,7 +20,6 @@ const Account = require('../../../src/website/models/Account');
 const Participant = require('../../../src/game/app/server/models/Participant');
 const BusinessCard = require('../../../src/game/app/client/shared/BusinessCard.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
-const { deleteParticipant, deleteAllParticipants, updateTaskCount, changeModState } = require('../../../src/game/app/server/services/ParticipantService');
 
 function generateTasks() {
     var tasks = {};
