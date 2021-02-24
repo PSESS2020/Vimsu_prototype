@@ -61,7 +61,7 @@ Before you can host VIMSU, you will need to properly set up the database and the
 
 ### Database configuration
 
-You will need to store connection strings for both the database and the cloud storage in a file called `.env`.
+You will need to store connection strings for both the database and the cloud storage in a file called `.env`. First, rename the `.env.example` file into `.env`. Next, replace the sample connection strings with your connection strings.
 
 - Azure Blob Storage
 
@@ -71,25 +71,6 @@ You will need to store connection strings for both the database and the cloud st
 
     You can acquire the MongoDB connection string by pressing the `Connect` button of your cluster and afterwards the `Connect your application` button. From there, you can just copy the MongoDB connection string. Don’t forget to replace `password` with the password of your database and `dbname` with the name of your database.
     For more information about acquiring the MongoDB connection string, please visit the [official MongoDB website](https://docs.mongodb.com/manual/reference/connection-string/).
-
-After acquiring both connection strings, save them into the `.env` file using the following command.
-
-- Linux / Mac
-
-      $ cd path/to/Vimsu_prototype/
-      $ echo $'AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>' > .env
-      $ echo $'MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>' >> .env
-
-- Windows
-
-      $ cd path/to/Vimsu_prototype/
-      $ echo AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string> > .env
-      $ echo MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string> >> .env
-
-You should now see the following lines in the `.env` file on root directory.
-
-    AZURE_STORAGE_CONNECTION_STRING = <your_azure_storage_connection_string>
-    MONGODB_CONNECTION_STRING = <your_mongoDB_connection_string>
     
 ### Locally Hosted Databases
 
