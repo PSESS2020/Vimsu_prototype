@@ -374,8 +374,8 @@ body::-webkit-scrollbar-track:hover ~ body::-webkit-scrollbar-thumb:hover{
   left: 30%; 
   border-radius: 10px; 
   z-index: 1100;
-  width: 600;
-  height: 400;
+  width: 40%;
+  height: 50%;
 }
 
 .viewBlockerWindow {
