@@ -26,7 +26,8 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
         "rightwall_default": "client/assets/walls/wall2.png",
         "rightfoodcourtdoor_default": "client/assets/doors/door_foodcourt.png",
         "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-        "plant_default": "client/assets/plants/plant.png"
+        "plant_default": "client/assets/plants/plant.png",
+        "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png"
     }
 
     /**
@@ -69,6 +70,9 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
 
         listOfGameObjects.push(objService.createPlant(Settings.ESCAPEROOM_ID, this.#room.getLength() - 1, 0, true, false));
         listOfGameObjects.push(objService.createPlant(Settings.ESCAPEROOM_ID, this.#room.getLength() - 1, this.#room.getWidth() - 1, true, false));
+
+        /* This Object is here for IFrame-Testing */
+        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 0, true, true));
 
         //Get all npcs from service
         let npcService = new NPCService();

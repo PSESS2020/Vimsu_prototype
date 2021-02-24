@@ -350,6 +350,21 @@ vertical-align: middle;
   height: 80%;
 }
 
+.externalWebsiteWindow {
+  background-color:rgba(34, 43, 46, 0.8) !important;
+  color: antiquewhite;
+  padding: 0px !important;
+  overflow-y: auto;
+  display: none; 
+  position: fixed; 
+  top: 10%; 
+  left: 30%; 
+  border-radius: 10px; 
+  z-index: 1100;
+  width: 600;
+  height: 400;
+}
+
 .viewBlockerWindow {
   background-color:rgba(15, 15, 15, 1) !important;
   color: antiquewhite;
