@@ -61,7 +61,7 @@ Before you can host VIMSU, you will need to properly set up the database and the
 
 ### Database configuration
 
-You will need to store connection strings for both the database and the cloud storage in a file called `.env`. First, rename the `.env.example` file into `.env`. Next, replace the sample connection strings with your connection strings.
+You will need to store connection strings for both the database and the cloud storage in a file called `.env`. First, create a copy of `.env.example` file and rename it into `.env`. Next, replace the sample connection strings in this file with your connection strings.
 
 - Azure Blob Storage
 
