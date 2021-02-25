@@ -40,7 +40,7 @@ class AllchatView extends Views {
             event.stopPropagation();
         });
 
-        $('#allchat').submit(function (event) {
+        $('#allchat').on('submit', (event) => {
 
             event.preventDefault();
             //Replace needed to replace html tags.

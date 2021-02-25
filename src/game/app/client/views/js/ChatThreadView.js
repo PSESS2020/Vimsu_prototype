@@ -33,7 +33,7 @@ class ChatThreadView extends WindowView {
             event.stopPropagation();
         });
 
-        $('#chatMessageInputGroup').submit((event) => {
+        $('#chatMessageInputGroup').on('submit', (event) => {
             event.preventDefault();
             this.#sendMessage();
         });
