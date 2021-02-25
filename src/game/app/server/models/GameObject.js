@@ -19,6 +19,7 @@ module.exports = class GameObject {
     #isSolid;
     #gameObjectType;
     #isClickable;
+    #url;
 
     /**
      * Creates a game object instance
@@ -32,8 +33,9 @@ module.exports = class GameObject {
      * @param {Position} position game object position
      * @param {boolean} isSolid game object solidity
      * @param {boolean} isClickable game object clickable status
+     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, url) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -43,6 +45,9 @@ module.exports = class GameObject {
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
+
+        if (url !== undefined) 
+            TypeChecker.isString(url);
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -54,6 +59,7 @@ module.exports = class GameObject {
         this.#position = position;
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;
+        this.#url = url;
     }
 
     /**
@@ -134,5 +140,15 @@ module.exports = class GameObject {
      */
     getClickable() {
         return this.#isClickable;
+    }
+
+    /**
+     * Gets game object url
+     * @method module:GameObject#getURL
+     * 
+     * @return {?String} returns URL if there clicking this object opens an external website, otherwise undefined
+     */
+    getURL() {
+        return this.#url;
     }
 }

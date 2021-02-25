@@ -54,8 +54,9 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
+     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
      */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, url) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -63,6 +64,9 @@ module.exports = class GameObjectService {
         TypeChecker.isInt(yPos);
         TypeChecker.isBoolean(solidity);
         TypeChecker.isBoolean(clickable);
+
+        if (url !== undefined) 
+            TypeChecker.isString(url);
     }
 
     /* ##################################################################### */
@@ -199,12 +203,13 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
+     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
      * 
      * @return {GameObject} default small dinner table
      */
-    createSmallDinnerTable(roomId, xPos, yPos, solidity, clickable) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLE, "smalldinnertable_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable);
+    createSmallDinnerTable(roomId, xPos, yPos, solidity, clickable, url) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLE, "smalldinnertable_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
     }
 
     /**

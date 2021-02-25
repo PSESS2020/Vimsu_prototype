@@ -167,15 +167,20 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if object is clickable, otherwise false
+     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
      *
      * @return {GameObjectView} GameObjectViw instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, url) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
         TypeChecker.isBoolean(isClickable);
 
+        if (url !== undefined) 
+            TypeChecker.isString(url);
+
+        
         var gameObjectView;
         var gameObjectImage;
 
@@ -219,7 +224,7 @@ class GameObjectViewFactory {
                 if (gameObjectImage !== undefined) {
 
                     if (isClickable) {
-                        gameObjectView = new SmallDinerTableView(gameObjectImage, [], pos, tableOffset, objectName);
+                        gameObjectView = new SmallDinerTableView(gameObjectImage, [], pos, tableOffset, objectName, url);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 

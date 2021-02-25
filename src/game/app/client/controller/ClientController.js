@@ -375,7 +375,7 @@ class ClientController {
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.url));
         });
 
         //transform NPCs to NPCClients

@@ -357,12 +357,12 @@ vertical-align: middle;
   overflow-y: auto;
   display: none; 
   position: fixed; 
-  top: 10%; 
+  top: 20%; 
   left: 30%; 
   border-radius: 10px; 
   z-index: 1100;
   width: 40%;
-  height: 50%;
+  height: 45%;
 }
 
 .viewBlockerWindow {

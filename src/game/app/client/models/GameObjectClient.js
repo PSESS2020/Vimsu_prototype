@@ -19,6 +19,7 @@ class GameObjectClient {
     position;
     gameObjectType;
     isClickable;
+    url;
 
     /**
      * Creates an instance of Game Object on client-side
@@ -30,8 +31,9 @@ class GameObjectClient {
      * @param {number} length game object length
      * @param {PositionClient} position game object position
      * @param {boolean} isClickable game object clickable status
+     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
      */
-    constructor(id, gameObjectType, name, width, length, position, isClickable) {
+    constructor(id, gameObjectType, name, width, length, position, isClickable, url) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -40,6 +42,9 @@ class GameObjectClient {
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isBoolean(isClickable);
+
+        if (url !== undefined) 
+            TypeChecker.isString(url);
 
         this.id = id;
         this.gameObjectType = gameObjectType;
@@ -50,6 +55,7 @@ class GameObjectClient {
         //Position of left down corner of gameObject
         this.position = position;
         this.isClickable = isClickable;
+        this.url = url;
     }
 
     /**
@@ -113,6 +119,15 @@ class GameObjectClient {
      */
     getIsClickable() {
         return this.isClickable;
+    }
+
+    /**
+     * Gets game object url
+     * 
+     * @return {?String} returns URL if there clicking this object opens an external website, otherwise undefined
+     */
+    getURL() {
+        return this.url;
     }
 }
 
