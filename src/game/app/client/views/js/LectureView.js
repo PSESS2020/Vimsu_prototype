@@ -74,7 +74,7 @@ class LectureView extends WindowView {
         if (messageVal !== '') {
             this.#eventManager.handleLectureChatMessageInput(messageVal);
             $('#lectureChatInput').val('');
-            $('#lectureChatInput').focus();
+            $('#lectureChatInput').trigger('focus');
         }
     }
 

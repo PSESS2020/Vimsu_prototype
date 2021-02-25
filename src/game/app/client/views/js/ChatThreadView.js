@@ -103,7 +103,7 @@ class ChatThreadView extends WindowView {
         if (messageVal !== '') {
             this.#eventManager.handleChatMessageInput(this.#chat.chatId, messageVal);
             $('#chatMessageInput').val('');
-            $('#chatMessageInput').focus();
+            $('#chatMessageInput').trigger('focus');
         }
     }
 
