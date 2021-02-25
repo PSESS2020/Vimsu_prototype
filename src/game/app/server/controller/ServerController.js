@@ -236,7 +236,8 @@ module.exports = class ServerController {
                             length: gameObject.getLength(),
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
-                            isClickable: gameObject.getClickable()
+                            isClickable: gameObject.getClickable(),
+                            url: gameObject.getURL()
                         });
                     });
 
@@ -2532,7 +2533,8 @@ module.exports = class ServerController {
                 length: gameObject.getLength(),
                 cordX: gameObject.getPosition().getCordX(),
                 cordY: gameObject.getPosition().getCordY(),
-                isClickable: gameObject.getClickable()
+                isClickable: gameObject.getClickable(),
+                url: gameObject.getURL()
             });
         });
 

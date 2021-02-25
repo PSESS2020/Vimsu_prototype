@@ -12,6 +12,7 @@ var width;
 var length;
 var position;
 var isClickable;
+var url;
 
 describe('GameObjectClient test', function () {
 
@@ -24,10 +25,11 @@ describe('GameObjectClient test', function () {
         length = TestUtil.randomInt();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
         isClickable = TestUtil.randomBool();
+        url = TestUtil.randomString();
     });
 
     it('test constructor and getters', function () {
-        let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable);
+        let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable, url);
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -36,6 +38,7 @@ describe('GameObjectClient test', function () {
         assert.equal(length, gameObject.getLength());
         assert.equal(position, gameObject.getPosition());
         assert.equal(isClickable, gameObject.isClickable());
+        assert.equal(url, gameObject.getURL());
     });
 
     it('test constructor invalid input', function () {
@@ -46,5 +49,7 @@ describe('GameObjectClient test', function () {
         expect(() => new GameObjectClient(id, gameObjectType, name, width, 'length', position, isClickable)).to.throw(TypeError);
         expect(() => new GameObjectClient(id, gameObjectType, name, width, length, 'position', isClickable)).to.throw(TypeError);
         expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, 'isClickable')).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable, 42)).to.throw(TypeError);
+        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable, undefined)).to.not.throw(TypeError);
     });
 })

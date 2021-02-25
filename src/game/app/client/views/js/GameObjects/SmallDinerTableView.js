@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 class SmallDinerTableView extends GameObjectView {
+
+    #url;
     
     /**
      * Creates an instance of SmallDinerTableView
@@ -13,27 +15,25 @@ class SmallDinerTableView extends GameObjectView {
      * @param {PositionClient} gridPosition smallDinerTable position
      * @param {number} screenPositionOffset smallDinerTable screen position offset
      * @param {String} name smallDinerTable name
+     * @param {String} url external website url
      */
-    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name) {
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, url) {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
+        TypeChecker.isString(url);
+
+        this.#url = url;
     }
 
     /**
      * Called if participant clicks the smallDinerTable
      */
     onclick() {
-
-        $('#externalWebsiteHeaderText').text("Table Video");
-        document.getElementById('iframe').src = "https://www.youtube.com/embed/x51zMg7roIs?enablejsapi=1";
-        document.getElementById('iframe').width = 560;
-        document.getElementById('iframe').height = 315;
-        document.getElementById('iframe').allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-        $('#externalWebsite').show();
-
+        
         $(function () {
             $('#closeExternalWebsiteButton').off();
             $('#closeExternalWebsiteButton').on('click', (event) => {
                 $('#externalWebsite').hide();
+                document.getElementById('iframe').src = "";
 
                 /* Needed to stop video after close button click */
                 $('.iframeclass').each(function() {
@@ -41,5 +41,8 @@ class SmallDinerTableView extends GameObjectView {
                 });
             });
         });
+
+        document.getElementById('iframe').src = this.#url;
+        $('#externalWebsite').show();
     }
 }
