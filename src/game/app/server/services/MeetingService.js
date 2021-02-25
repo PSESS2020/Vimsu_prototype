@@ -17,12 +17,12 @@ module.exports = class Meetingservice {
     /**
      * To implement:
      * - New Meeting                        [X]
-     * - Check for Meeting                  [ ]
+     * - Check for Meeting                  [X]
      * - Load all meetings of ppant         [ ]
      * - Load specific meeting              [X]
      * - Add participant to meeting         [X]
      * - remove ppant                       [X]
-     * - remove all meetings (clean db)     [ ]
+     * - remove all meetings (clean db)     [X]
      */
 
     /**
@@ -62,6 +62,18 @@ module.exports = class Meetingservice {
         
     }
 
+    /**
+     * Check if a meeting with the specified name and memberlist already
+     * exists in the database.
+     * @static @method module:MeetingService#existsMeeting
+     * 
+     * @param {String[]} memberIdList 
+     * @param {String} meetingName 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb
+     * 
+     * @returns {Meeting} Returns the meeting if it exists or false if not 
+     */
     static existsMeeting(memberIdList, meetingName, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(memberIdList, Array);
         memberIdList.forEach(id => {
@@ -71,14 +83,26 @@ module.exports = class Meetingservice {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, {
-            // TODO
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, 
+            { name: meetingName, members: memberIdList }).then(meeting => {
+            if (meeting) {
+                return meeting;
+            } else {
+                console.log("No meeting with id " + meetingId + " could be found in database.");
+                return false;
+            }
         }).catch(err => {
             console.error(err);
         })
     }
 
-    static loadMeetingList
+    static loadMeetingList(participantId, conferenceId, vimsudb) {
+        TypeChecker.isString(participantId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        // TODO
+    }
     
     /**
      * Checks whether a meeting-entry with the passed id already exists
