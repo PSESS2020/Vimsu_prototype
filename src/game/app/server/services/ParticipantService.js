@@ -77,6 +77,7 @@ module.exports = class ParticipantService {
                         });
                     });
 
+
                     var achievements = [];
 
 
@@ -161,6 +162,7 @@ module.exports = class ParticipantService {
                     isModerator: false,
                     points: 0,
                     chatIDList: [],
+                    meetingIDList: [],
                     taskCount: emptyTaskCount
                 }
 
@@ -189,7 +191,8 @@ module.exports = class ParticipantService {
                         par.taskCount,
                         par.isModerator,
                         par.points,
-                        []);
+                        [], // ChatList
+                        []);// MeetingList
 
                     new AchievementService().computeAchievements(participant);
 
