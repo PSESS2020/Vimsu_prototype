@@ -31,7 +31,7 @@ class EnterCodeView extends WindowView {
      * @param {String} doorId 
      */
     draw(doorId) {
-        $('#enteredCode').submit((event) => {
+        $('#enteredCode').on('submit', (event) => {
             event.preventDefault();
             let enteredCode = $('#codeInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
         
