@@ -1,4 +1,5 @@
 const Direction = require('../../client/shared/Direction');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
 
 /**
  * other constants
@@ -44,6 +45,10 @@ module.exports = Object.freeze({
     /* Movement-Speed Constants */
     MOVEMENTSPEED_X: 1,
     MOVEMENTSPEED_Y: 1,
+
+    /* Shirt Color Default Settings */
+    DEFAULT_SHIRTCOLOR_PPANT: ShirtColor.BLUE,
+    DEFAULT_SHIRTCOLOR_NPC: ShirtColor.RED,
 
     /* Decides wheter video storage is needed or not */
     VIDEOSTORAGE_ACTIVATED: true

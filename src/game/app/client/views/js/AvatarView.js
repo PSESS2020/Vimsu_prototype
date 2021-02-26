@@ -9,20 +9,35 @@ class AvatarView extends Views {
     #position;
     #direction;
     #walking = false;
-    #spriteSheet;
     #isVisible;
+    #shirtColor;
+    #spriteSheet;
+    #topClothing;
+    #bottomClothing;
+    #shoes;
 
     /**
      * Creates an instance of AvatarView
      * 
      * @param {PositionClient} position avatar position
      * @param {Direction} direction avatar direction
+     * @param {ShirtColor} shirtColor avatar shirt color
      */
-    constructor(position, direction) {
+    constructor(position, direction, shirtColor) {
         super();
+
+        TypeChecker.isInstanceOf(position, PositionClient);
+        TypeChecker.isEnumOf(direction, Direction);
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.#position = position;
         this.#direction = direction;
+        this.#shirtColor = shirtColor;
+
+        this.#spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.#topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.#bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.#shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
 
         if (new.target === AvatarView) {
             throw new Error("Cannot construct abstract AvatarView instances directly");
@@ -85,6 +100,33 @@ class AvatarView extends Views {
     }
 
     /**
+     * Gets top clothing spritesheet
+     * 
+     * @return {SpriteSheet} topClothing
+     */
+    getTopClothing() {
+        return this.#topClothing;
+    }
+
+    /**
+     * Gets bottom clothing spritesheet
+     * 
+     * @return {SpriteSheet} bottomClothing
+     */
+    getBottomClothing() {
+        return this.#bottomClothing;
+    }
+
+    /**
+     * Gets shoes spritesheet
+     * 
+     * @return {SpriteSheet} shoes
+     */
+    getShoes() {
+        return this.#shoes;
+    }
+
+    /**
      * Gets avatar isWalking status
      * 
      * @return {boolean} true if the Avatar is currently walking, otherwise false
@@ -109,6 +151,15 @@ class AvatarView extends Views {
      */
     setVisibility(visible) {
         this.#isVisible = visible;
+    }
+
+    /**
+     * Gets avatar shirt color
+     * 
+     * @return {ShirtColor} avatar shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
     }
 
     /**

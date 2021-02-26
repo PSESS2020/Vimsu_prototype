@@ -12,6 +12,8 @@ const Task = require('../../../src/game/app/server/models/Task.js');
 const assert = chai.assert;
 const expect = chai.expect;
 const TestUtil = require('./utils/TestUtil.js');
+const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
+const Settings = require('../../../src/game/app/server/utils/Settings.js');
 
 var id;
 var accountId;
@@ -66,6 +68,7 @@ describe('Participant test', function () {
         assert.equal(ppant.getAwardPoints(), awardPoints);
         assert.equal(ppant.getIsVisible(), true);
         assert.equal(ppant.getTaskTypeMappingCounts(), taskMapping);
+        assert.equal(ppant.getShirtColor(), Settings.DEFAULT_SHIRTCOLOR_PPANT);
     });
 
     it('test adding and removing a chat', function () {
@@ -134,6 +137,12 @@ describe('Participant test', function () {
         let newIsMod = !ppant.getIsModerator();
         ppant.setIsModerator(newIsMod);
         assert.equal(ppant.getIsModerator(), newIsMod);
+    })
+
+    it('test setShirtColor', function () {
+        let newShirtColor = ShirtColor.RED;
+        ppant.setShirtColor(newShirtColor);
+        assert.equal(ppant.getShirtColor(), newShirtColor);
     })
 
     it('test set achievements', function () {

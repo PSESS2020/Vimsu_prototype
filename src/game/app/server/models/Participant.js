@@ -7,7 +7,9 @@ const Achievement = require('./Achievement.js');
 const Chat = require('./Chat.js');
 const Task = require('./Task.js');
 const OneToOneChat = require('./OneToOneChat.js');
-const TypeOfTask = require('../utils/TypeOfTask')
+const TypeOfTask = require('../utils/TypeOfTask');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
+const Settings = require('../utils/Settings.js');
 
 /**
  * The Participant Model
@@ -32,6 +34,7 @@ module.exports = class Participant {
     #awardPoints;
     #chatList;
     #isVisible;
+    #shirtColor;
 
     /**
      * Creates a participant instance
@@ -89,6 +92,7 @@ module.exports = class Participant {
         this.#awardPoints = awardPoints;
         this.#chatList = chatList;
         this.#isVisible = true;
+        this.#shirtColor = Settings.DEFAULT_SHIRTCOLOR_PPANT;
     }
 
     /**
@@ -199,6 +203,28 @@ module.exports = class Participant {
      */
     getIsModerator() {
         return this.#isMod;
+    }
+
+    /**
+     * Gets avatar shirt color
+     * @method module:Participant#getShirtColor
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
+    }
+
+    /**
+     * Sets avatar shirt color
+     * @method module:Participant#setShirtColor
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#shirtColor = shirtColor;
     }
 
     /**

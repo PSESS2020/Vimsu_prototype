@@ -24,14 +24,16 @@ class NPCAvatarView extends AvatarView {
      * @param {String} name NPC name
      * @param {PositionClient} position NPC position
      * @param {Direction} direction NPC avatar direction
+     * @param {ShirtColor} shirtColor NPC avatar shirt color
      * @param {IsometricEngine} gameEngine game engine instance
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(npcId, name, position, direction, gameEngine, eventManager) {
-        super(position, direction);
+    constructor(npcId, name, position, direction, shirtColor, gameEngine, eventManager) {
+        super(position, direction, shirtColor);
         TypeChecker.isInt(npcId);
         TypeChecker.isString(name);
-        this.#initSpriteAnimation();
+
+        this.initSpriteAnimation();
         this.#npcId = npcId;
         this.#name = name;
 
@@ -72,13 +74,14 @@ class NPCAvatarView extends AvatarView {
     }
 
     /**
-     * @private initializes sprite animation
+     * Initializes sprite animation
      */
-    #initSpriteAnimation = function () {
-        var spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var topClothing = new SpriteSheet('client/assets/avatar/TopClothingRedShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+    initSpriteAnimation() {
+        let spriteSheet = super.getSpriteSheet();
+        let topClothing = super.getTopClothing();
+        let bottomClothing = super.getBottomClothing();
+        let shoes = super.getShoes();
+        
         this.#standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
         this.#standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
         this.#standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);

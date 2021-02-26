@@ -265,6 +265,7 @@ class ClientController {
         TypeChecker.isEnumOf(initInfo.dir, Direction);
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
+        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
@@ -285,7 +286,8 @@ class ClientController {
             initPos,
             initInfo.dir,
             initInfo.isVisible,
-            initInfo.isModerator
+            initInfo.isModerator,
+            initInfo.shirtColor
         );
         this.#currentRoom.enterParticipant(this.#ownParticipant);
         this.#initGameView();
@@ -342,6 +344,7 @@ class ClientController {
             TypeChecker.isInt(npc.cordX);
             TypeChecker.isInt(npc.cordY);
             TypeChecker.isEnumOf(npc.direction, Direction);
+            TypeChecker.isEnumOf(npc.shirtColor, ShirtColor);
         });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -370,7 +373,7 @@ class ClientController {
         //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
-            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
+            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction, npc.shirtColor));
         });
 
         //transform Doors to DoorClients
@@ -507,9 +510,10 @@ class ClientController {
         TypeChecker.isEnumOf(initInfo.dir, Direction);
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
+        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
+        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator, initInfo.shirtColor);
         this.#currentRoom.enterParticipant(participant);
         this.#gameView.initAnotherAvatarViews(participant);
     }

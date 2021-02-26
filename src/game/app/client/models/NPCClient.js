@@ -2,6 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     Direction = require('../shared/Direction.js');
+    ShirtColor = require('../shared/ShirtColor.js');
 }
 
 /**
@@ -16,6 +17,7 @@ class NPCClient {
     #name;
     #position;
     #direction;
+    #shirtColor;
 
     /**
      * Creates an instance of NPC on client-side
@@ -24,17 +26,20 @@ class NPCClient {
      * @param {String} name NPC name
      * @param {PositionClient} position NPC position
      * @param {Direction} direction NPC avatar direction
+     * @param {ShirtColor} shirtColor NPC shirt color
      */
-    constructor(id, name, position, direction) {
+    constructor(id, name, position, direction, shirtColor) {
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.#id = id;
         this.#name = name;
         this.#position = position;
         this.#direction = direction;
+        this.#shirtColor = shirtColor;
     }
 
     /**
@@ -71,6 +76,15 @@ class NPCClient {
      */
     getDirection() {
         return this.#direction;
+    }
+
+    /**
+     * Gets NPC shirt color
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
     }
 }
 

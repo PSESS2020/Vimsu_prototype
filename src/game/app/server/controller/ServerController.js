@@ -256,7 +256,8 @@ module.exports = class ServerController {
                             name: npc.getName(),
                             cordX: npc.getPosition().getCordX(),
                             cordY: npc.getPosition().getCordY(),
-                            direction: npc.getDirection()
+                            direction: npc.getDirection(),
+                            shirtColor: npc.getShirtColor()
                         });
                     });
 
@@ -293,7 +294,7 @@ module.exports = class ServerController {
                         assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength(), currentRoom.getOccMap());
 
                     //Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
 
                     //Initializes Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
@@ -310,8 +311,9 @@ module.exports = class ServerController {
                             let tempDir = participant.getDirection();
                             let isVisible = participant.getIsVisible();
                             let isModerator = participant.getIsModerator();
+                            let shirtColor = participant.getShirtColor();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
                         }
                     });
 
@@ -320,7 +322,7 @@ module.exports = class ServerController {
                      * participant-instance corresponding to it.
                      * This should send to all other connected sockets but not to the one
                      * that just connected */
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
 
                     /* Sends current points and rank to client */
                     socket.emit('updatePoints', ppant.getAwardPoints());
@@ -2605,7 +2607,8 @@ module.exports = class ServerController {
                 name: npc.getName(),
                 cordX: npc.getPosition().getCordX(),
                 cordY: npc.getPosition().getCordY(),
-                direction: npc.getDirection()
+                direction: npc.getDirection(),
+                shirtColor: npc.getShirtColor()
             });
         });
 
@@ -2636,10 +2639,11 @@ module.exports = class ServerController {
         ppant.setPosition(newPos);
         ppant.setDirection(direction);
 
-        //Get username, isModerator, isVisible
+        //Get username, isModerator, isVisible, shirtColor
         let username = ppant.getBusinessCard().getUsername();
         let isModerator = ppant.getIsModerator();
         let isVisible = ppant.getIsVisible();
+        let shirtColor = ppant.getShirtColor();
 
         let x = newPos.getCordX();
         let y = newPos.getCordY();
@@ -2651,7 +2655,7 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator });
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
 
         //Emit to participant all participant positions, that were in new room before him
         this.#ppants.forEach((ppant, id, map) => {
@@ -2663,7 +2667,8 @@ module.exports = class ServerController {
                 let tempDir = ppant.getDirection();
                 let isVisible = ppant.getIsVisible();
                 let isModerator = ppant.getIsModerator();
-                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+                let shirtColor = ppant.getShirtColor();
+                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
             }
         });
 
