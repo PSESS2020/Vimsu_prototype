@@ -430,7 +430,7 @@ class GameView {
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), this.#gameEngine, this.#eventManager));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.#gameEngine, this.#eventManager));
         });
 
         this.#currentMapView = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
@@ -457,6 +457,7 @@ class GameView {
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
+                participant.getShirtColor(),
                 participant.getId(),
                 participant.getUsername(),
                 participant.getIsVisible(),
@@ -565,11 +566,12 @@ class GameView {
 
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
+        let shirtColor = ownParticipant.getShirtColor();
         let id = ownParticipant.getId();
         let username = ownParticipant.getUsername();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
         this.#addToUpdateList(this.#ownAvatarView);
     }
 

@@ -1,6 +1,8 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Position = require("./Position.js");
 const Direction = require('../../client/shared/Direction.js');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
+const Settings = require('../utils/Settings.js');
 
 /**
  * The NPC Model
@@ -16,6 +18,7 @@ module.exports = class NPC {
     #position;
     #direction;
     #story;
+    #shirtColor;
 
     /**
      * Creates an NPC instance
@@ -42,6 +45,7 @@ module.exports = class NPC {
         this.#position = position;
         this.#direction = direction;
         this.#story = story;
+        this.#shirtColor = Settings.DEFAULT_SHIRTCOLOR_NPC;
     }
 
     /**
@@ -92,5 +96,15 @@ module.exports = class NPC {
      */
     getStory() {
         return this.#story;
+    }
+
+    /**
+     * Gets NPC shirt color
+     * @method module:NPC#getShirtColor
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
     }
 }
