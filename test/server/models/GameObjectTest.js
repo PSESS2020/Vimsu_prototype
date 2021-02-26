@@ -13,6 +13,7 @@ var length;
 var position;
 var isSolid;
 var isClickable;
+var url;
 
 describe('GameObject test', function () {
 
@@ -26,10 +27,11 @@ describe('GameObject test', function () {
         position = new Position(TestUtil.randomInt(), TestUtil.randomInt(), TestUtil.randomInt());
         isSolid = TestUtil.randomBool();
         isClickable = TestUtil.randomBool();
+        url = TestUtil.randomString();
     });
 
     it('test constructor and getters', function () {
-        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable);
+        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, url);
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -39,6 +41,7 @@ describe('GameObject test', function () {
         assert.equal(position, gameObject.getPosition());
         assert.equal(isSolid, gameObject.getSolid());
         assert.equal(isClickable, gameObject.getClickable());
+        assert.equal(url, gameObject.getURL());
     });
 
     it('test constructor invalid input', function () {
@@ -50,5 +53,7 @@ describe('GameObject test', function () {
         expect(() => new GameObject(id, gameObjectType, name, width, length, 'position', isSolid, isClickable)).to.throw(TypeError);
         expect(() => new GameObject(id, gameObjectType, name, width, length, position, 'isSolid', isClickable)).to.throw(TypeError);
         expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, 'isClickable')).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, 42)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, undefined)).to.not.throw(TypeError);
     });
 })

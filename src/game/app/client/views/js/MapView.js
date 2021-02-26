@@ -207,7 +207,7 @@ class MapView extends Views {
      */
     #createObjectView = function(gameObject, position) {
         var objectType = gameObject.getGameObjectType();
-        var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.isClickable());
+        var object = this.#gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.isClickable(), gameObject.getURL());
 
         if (object != null) {
             this.#gameObjects.push(object);
@@ -300,9 +300,10 @@ class MapView extends Views {
     #findObjectAndClick = function(object) {
         if (object !== null && object.isClickable()) {
 
-            //the returned object is not unambiguous because no identifier for model and view provided.
             let viewObject = this.#clickableObjects.find(viewObject => {
-                return object instanceof GameObjectClient && object.getName() === viewObject.getName();
+                return object instanceof GameObjectClient && object.getName() === viewObject.getName() 
+                    && object.getPosition().getCordX() === viewObject.getGridPosition().getCordX() 
+                    && object.getPosition().getCordY() + Settings.MAP_BLANK_TILES_WIDTH === viewObject.getGridPosition().getCordY();
             });
 
             if (viewObject != undefined) viewObject.onclick();
