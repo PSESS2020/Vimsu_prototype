@@ -80,7 +80,9 @@ module.exports = Object.freeze({
                 "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
                 "\\porttouser <username> -- Teleports you to user with <username>.", 
                 "\\mod <username> -- Sets a normal user with <username> to a moderator.",
-                "\\unmod <username> -- Sets a moderator with <username> to a normal user."]
+                "\\unmod <username> -- Sets a moderator with <username> to a normal user.",
+                "\\creategroup <groupName> <groupColor> <list of usernames> -- Creates a group with the unique name <groupName>. All group members will wear " +
+                " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username seperated from the next one by a whitespace character."]
     },
     WARNING: {
         header: "Warning",
@@ -191,5 +193,13 @@ module.exports = Object.freeze({
     YOUARENOLONGERMOD: {
         header: "Your mod state changed",
         body: "You are no longer a moderator."  
+    },
+    UNKNOWNCOLOR: {
+        header: "Unknown color",
+        body: "Entered color does not exist. Currently available colors are blue, red, green, yellow and white."
+    },
+    INVALIDGROUPNAME: {
+        header: "Invalid group name",
+        body: "The entered group name is already used by another group. Please try again."
     }
 });
