@@ -207,6 +207,8 @@ class ClientController {
         this.#socket.on('enterCode', this.#handleFromServerEnterCode.bind(this));
         this.#socket.on('your mod state changed', this.#handleFromServerChangeYourModState.bind(this));
         this.#socket.on('other mod state changed', this.#handleFromServerChangeOtherModState.bind(this));
+        this.#socket.on('your shirt color changed', this.#handleFromServerChangeYourShirtColor.bind(this));
+        this.#socket.on('other shirt color changed', this.#handleFromServerChangeOtherShirtColor.bind(this));
     }
 
     /* #################################################### */
@@ -1074,6 +1076,36 @@ class ClientController {
         }
 
         this.#gameView.setOtherModState(modState, ppantID);
+    }
+
+    /**
+     * @private Receives from server that your own shirt color changed
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    #handleFromServerChangeYourShirtColor = function(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#gameView.setOwnShirtColor(shirtColor);
+        this.#ownParticipant.setShirtColor(shirtColor);
+    }
+
+    /**
+     * @private Receives from server that an other ppants shirt color changed
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     * @param {String} ppantID ID of that ppant
+     */
+    #handleFromServerChangeOtherShirtColor = function(shirtColor, ppantID) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+        TypeChecker.isString(ppantID);
+
+        let ppant = this.#currentRoom.getParticipant(ppantID);
+        if (ppant !== undefined) {
+            ppant.setShirtColor(shirtColor);
+        }
+
+        this.#gameView.setOtherShirtColor(shirtColor, ppantID);
     }
 
     /* #################################################### */

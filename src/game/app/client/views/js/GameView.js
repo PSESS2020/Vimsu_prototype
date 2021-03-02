@@ -622,6 +622,7 @@ class GameView {
      * Updates other avatars moderator state
      * 
      * @param {boolean} modState true if moderator, false otherwise
+     * @param {String} ppantID ID of that ppant
      */
     setOtherModState(modState, ppantID) {
         TypeChecker.isBoolean(modState);
@@ -634,6 +635,36 @@ class GameView {
         }
 
         this.#anotherParticipantAvatarViews[index].setIsModerator(modState);
+    }
+
+    /**
+     * Updates own avatars shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setOwnShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#ownAvatarView.updateShirtColor(shirtColor);
+    }
+
+    /**
+     * Updates other avatars shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     * @param {String} ppantID ID of that ppant
+     */
+    setOtherShirtColor(shirtColor, ppantID) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+        TypeChecker.isString(ppantID);
+
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
+
+        if (index < 0) {
+            throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].updateShirtColor(shirtColor);
     }
 
     /**

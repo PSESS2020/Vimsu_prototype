@@ -87,7 +87,7 @@ class AvatarView extends Views {
      * @param {SpriteSheet} spriteSheet sprite sheet
      */
     setSpriteSheet(spriteSheet) {
-        this.#spriteSheet = spriteSheet
+        this.#spriteSheet = spriteSheet;
     }
 
     /**
@@ -160,6 +160,26 @@ class AvatarView extends Views {
      */
     getShirtColor() {
         return this.#shirtColor;
+    }
+
+    /**
+     * Updates avatar shirt color
+     * 
+     * @param {ShirtColor} shirtColor 
+     */
+    updateShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+        
+        this.#shirtColor = shirtColor;
+        this.#topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.initSpriteAnimation();
+    }
+
+    /**
+     * @abstract Initializes sprite animation
+     */
+    initSpriteAnimation() {
+        throw new Error('initSpriteAnimation() has to be implemented!')
     }
 
     /**

@@ -25,6 +25,8 @@ const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const Participant = require('../models/Participant.js');
+const Group = require('../models/Group.js');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
 
 /**
  * The Server Controller
@@ -53,6 +55,9 @@ module.exports = class ServerController {
 
     //map from ppant-id to ppant-instance
     #ppants;
+
+    //map from group-name to group-instance
+    #groups;
 
     /**
      * Creates an instance of ServerController
@@ -101,6 +106,9 @@ module.exports = class ServerController {
 
         // Array to hold all participants
         this.#ppants = new Map();
+
+        // Array to hold all groups
+        this.#groups = new Map();
 
         this.#init();
     }
@@ -194,6 +202,16 @@ module.exports = class ServerController {
                     this.#socketMap.set(socket.id, ppant.getId());
                     this.#ppants.set(ppant.getId(), ppant);
 
+                    //Checks if ppant was member of a still exisitng group
+                    this.#groups.forEach((group, groupName, map) => {
+
+                        /* Sets all things that are group depending to group value
+                         * Chats and Meetings (and possibly other things) will be handled here as well */
+                        if (group.includesGroupMember(ppant.getId())) {
+                            ppant.setShirtColor(group.getShirtColor());
+                        }
+                    });
+                        
                     //Open all doors this ppant achieved to open through his achievements before
                     let achievements = ppant.getAchievements();
 
@@ -2265,6 +2283,60 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('other mod state changed', modState, ppantID);
 
         return ParticipantService.changeModState(ppantID, Settings.CONFERENCE_ID, modState, this.#db);
+    }
+
+    /**
+     * Creates a new group in this conference
+     * @method module:ServerController#createGroup
+     * 
+     * @param {String} groupName unique name of group
+     * @param {ShirtColor} groupColor group color
+     * @param {String[]} memberIDs IDs of starting members
+     * 
+     * @return {boolean} true by success, false if group name is already used
+     */
+    createGroup(groupName, groupColor, memberIDs) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isEnumOf(groupColor, ShirtColor);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(groupMemberID => {
+            TypeChecker.isString(groupMemberID);
+        });
+
+        //group name already exists
+        if (this.#groups.get(groupName) !== undefined) {
+            return false;
+        }
+
+        let group = new Group(groupName, groupColor, memberIDs);
+        this.#groups.set(groupName, group);
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            let socketID = this.getSocketId(memberID);
+
+            if (member !== undefined || socketID !== undefined) {
+
+                //If user was member of another group before, leave that group
+                this.#groups.forEach((otherGroup, otherGroupName, map) => {
+                    if (otherGroupName !== groupName && otherGroup.includesGroupMember(memberID)) {
+                        otherGroup.removeGroupMember(memberID);
+                    }
+                });
+
+                /* Group Chat and Meeting will be added here as well*/
+                member.setShirtColor(groupColor);
+
+                let socket = this.getSocketObject(socketID);
+                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+
+                //Notify all users that shirt color changed
+                socket.emit('your shirt color changed', groupColor);
+                let currentRoomId = member.getPosition().getRoomId();
+                socket.to(currentRoomId.toString()).emit('other shirt color changed', groupColor, memberID);
+            }
+        });
+        return true;
     }
 
     /**
