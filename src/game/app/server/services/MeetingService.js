@@ -2,7 +2,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const ObjectId = require('mongodb').ObjectID;
 const Settings = require('../utils/Settings.js');
 const db = require('../../../../config/db');
-const Meeting = requirerequire('../models/Meeting.js');
+const Meeting = require('../models/Meeting.js');
 
 /**
  * The Meeting Service

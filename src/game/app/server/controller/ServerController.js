@@ -1365,7 +1365,7 @@ module.exports = class ServerController {
                 /* get participants meetings and prepare data object
                  * that we are going to send to client. */
                 let meetList = ppant.getMeetingList();
-                let meetListDate = [];
+                let meetListData = [];
 
                 /* for each meeting get (randomly generated) id, which
                  * we need to generate the URL as well as the name, which

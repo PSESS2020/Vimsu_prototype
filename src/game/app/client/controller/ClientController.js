@@ -1353,17 +1353,27 @@ class ClientController {
      */
     handleFromViewJoinMeeting(meetingId) {
         // domain name should not be hard-coded
+
         this.#jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
-            roomName: meetingId,
-            width: '60%',
-            height: '80%',
+            roomName: 'maybenottestidontknowseemsawkward',
+            width: '100%',
+            height: window.innerHeight * 0.7,
             // Add JWT
-            // parentNode: , REQUIRED
+            parentNode: document.getElementById('meetingModal-body'),
             userInfo: {
                 email: 'place', // These will be the correct values from
                 displayName: 'holder' // the participants data
             }
         })
+        /*
+        document.getElementById("meetingModalClose").addEventListener("click", function() {
+            this.#jitsi.dispose;         
+        });*/
+        $('#meetingModal').modal('show');
+        $('#meetingModal').on(hidden.bs.modal, function() {
+            this.#jitsi.dispose;
+        })
+
     }
 
     /**
