@@ -83,7 +83,11 @@ module.exports = Object.freeze({
                 "\\unmod <username> -- Sets a moderator with <username> to a normal user.",
                 "\\creategroup <groupName> <groupColor> <list of usernames> -- Creates a group with the unique name <groupName>. All group members will wear " +
                 " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
-                "\\deletegroup <groupName> -- Deletes group with the unique name <groupName>."]
+                "\\deletegroup <groupName> -- Deletes group with the unique name <groupName>.",
+                "\\addtogroup <groupName> <list of usernames> -- Adds all users with username in <list of usernames> to group with name <groupName>" + 
+                ", each username separated from the next one by a whitespace character.",
+                "\\rmfromgroup <groupName> <list of usernames> -- Removes all users with username in <list of usernames> from group with name <groupName>" + 
+                ", each username separated from the next one by a whitespace character."]
     },
     WARNING: {
         header: "Warning",

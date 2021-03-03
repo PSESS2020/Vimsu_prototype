@@ -724,6 +724,74 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Adds all passed users to group with passed groupName
+     * @method module:CommandHandler#addGroupMember
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    addGroupMember(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+        let usernames = commandArgs.slice(1);
+
+        let memberIDs = [];
+        
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            memberIDs.push(ppantID);
+        }
+
+        if (this.#serverController.addGroupMember(groupName, memberIDs)) {
+            let header = "Added users to group";
+            let body = "Successfully added users to group " + groupName + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
+    }
+
+    /**
+     * Removes all passed users from group with passed groupName
+     * @method module:CommandHandler#removeGroupMember
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    removeGroupMember(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+        let usernames = commandArgs.slice(1);
+
+        let memberIDs = [];
+        
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            memberIDs.push(ppantID);
+        }
+
+        if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
+            let header = "Removed users from group";
+            let body = "Successfully removed users from group " + groupName + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 
