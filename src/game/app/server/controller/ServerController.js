@@ -2256,7 +2256,7 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
-            if (member !== undefined || socketID !== undefined) {
+            if (member !== undefined && socketID !== undefined) {
 
                 //If user was member of another group before, leave that group
                 this.#groups.forEach((otherGroup, otherGroupName, map) => {
@@ -2277,6 +2277,49 @@ module.exports = class ServerController {
                 socket.to(currentRoomId.toString()).emit('other shirt color changed', groupColor, memberID);
             }
         });
+        return true;
+    }
+
+    /**
+     * Deletes an existing group from this conference
+     * @method module:ServerController#deleteGroup
+     * 
+     * @param {String} groupName unique name of group
+     * 
+     * @return {boolean} true by success, false if group with passed group name does not exist
+     */
+    deleteGroup(groupName) {
+        TypeChecker.isString(groupName);
+
+        let group = this.#groups.get(groupName);
+
+        //group with that name does not exist
+        if (group === undefined) {
+            return false;
+        }
+
+        let memberIDs = group.getGroupMemberIDs();
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            let socketID = this.getSocketId(memberID);
+
+            if (member !== undefined && socketID !== undefined) {
+
+                /* Group Chat and Meeting will be deleted here as well*/
+                member.setShirtColor(Settings.DEFAULT_SHIRTCOLOR_PPANT);
+
+                let socket = this.getSocketObject(socketID);
+                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                //Notify all users that shirt color changed
+                socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
+                let currentRoomId = member.getPosition().getRoomId();
+                socket.to(currentRoomId.toString()).emit('other shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT, memberID);
+            }
+        });
+
+        this.#groups.delete(groupName);
         return true;
     }
 
