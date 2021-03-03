@@ -1364,15 +1364,15 @@ class ClientController {
                 email: 'place', // These will be the correct values from
                 displayName: 'holder' // the participants data
             }
-        })
-        /*
-        document.getElementById("meetingModalClose").addEventListener("click", function() {
+        });
+        $('#meetingModalClose').onclick = function() {
             this.#jitsi.dispose;         
-        });*/
+        };
         $('#meetingModal').modal('show');
-        $('#meetingModal').on(hidden.bs.modal, function() {
+        /*
+        $('#meetingModal').on(hide.bs.modal, function() {
             this.#jitsi.dispose;
-        })
+        })*/
 
     }
 
