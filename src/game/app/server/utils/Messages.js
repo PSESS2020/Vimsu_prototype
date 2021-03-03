@@ -69,20 +69,21 @@ module.exports = Object.freeze({
                 "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
                 "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
                 "\\opendoorfor <doorID> <list of usernames> -- Opens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\openalldoorsfor <list of usernames> -- Opens all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>.",
                 "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
                 "\\porttouser <username> -- Teleports you to user with <username>.", 
                 "\\mod <username> -- Sets a normal user with <username> to a moderator.",
                 "\\unmod <username> -- Sets a moderator with <username> to a normal user.",
                 "\\creategroup <groupName> <groupColor> <list of usernames> -- Creates a group with the unique name <groupName>. All group members will wear " +
-                " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username seperated from the next one by a whitespace character."]
+                " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                "\\deletegroup <groupName> -- Deletes group with the unique name <groupName>."]
     },
     WARNING: {
         header: "Warning",
@@ -201,5 +202,9 @@ module.exports = Object.freeze({
     INVALIDGROUPNAME: {
         header: "Invalid group name",
         body: "The entered group name is already used by another group. Please try again."
+    },
+    GROUPNOTEXISTS: {
+        header: "Group does not exist",
+        body: "A group with this name does not exist. Please try again."
     }
 });

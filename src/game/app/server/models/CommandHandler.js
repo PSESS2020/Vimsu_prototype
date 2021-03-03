@@ -702,6 +702,28 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Deletes an existing group
+     * @method module:CommandHandler#deleteGroup
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    deleteGroup(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+
+        if (this.#serverController.deleteGroup(groupName)) {
+            let header = "Group successfully deleted";
+            let body = "Successfully deleted group " + groupName + ".";
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 
