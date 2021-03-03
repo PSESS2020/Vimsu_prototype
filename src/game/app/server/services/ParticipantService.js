@@ -9,6 +9,7 @@ const Account = require('../../../../website/models/Account');
 const AccountService = require('../../../../website/services/AccountService');
 const AchievementService = require('./AchievementService');
 const ChatService = require('./ChatService.js');
+const MeetingService = require('./MeetingService.js');
 const FriendList = require('../models/FriendList.js');
 const TaskService = require('./TaskService');
 const Task = require('../models/Task');
@@ -52,6 +53,8 @@ module.exports = class ParticipantService {
                     let friendList = [];
                     let friendRequestListReceived = [];
                     let friendRequestListSent = [];
+
+                    let meetingList = await MeetingService.loadMeetingList(par.meetingIDList, conferenceId, vimsudb);
 
                     await par.friendIds.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
@@ -102,7 +105,8 @@ module.exports = class ParticipantService {
                         par.taskCount,
                         par.isModerator,
                         par.points,
-                        chatList);
+                        chatList,
+                        meetingList);
 
                     let achievementService = new AchievementService();
 

@@ -20,7 +20,7 @@ module.exports = class Meeting{
      * 
      * 
      */
-    constructor() {
+    constructor(id, name, members) {
 
     } 
 
