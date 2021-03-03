@@ -203,7 +203,7 @@ module.exports = class ServerController {
                     this.#ppants.set(ppant.getId(), ppant);
 
                     //Checks if ppant was member of a still exisitng group
-                    this.#groups.forEach((group, groupName, map) => {
+                    this.#groups.forEach(group => {
 
                         /* Sets all things that are group depending to group value
                          * Chats and Meetings (and possibly other things) will be handled here as well */
@@ -2318,13 +2318,12 @@ module.exports = class ServerController {
             if (member !== undefined && socketID !== undefined) {
 
                 //If user was member of another group before, leave that group
-                this.#groups.forEach((otherGroup, otherGroupName, map) => {
+                this.#groups.forEach((otherGroup, otherGroupName) => {
                     if (otherGroupName !== groupName && otherGroup.includesGroupMember(memberID)) {
                         otherGroup.removeGroupMember(memberID);
                     }
                 });
 
-                /* Group Chat and Meeting will be added here as well*/
                 member.setShirtColor(groupColor);
 
                 let socket = this.getSocketObject(socketID);
@@ -2365,7 +2364,6 @@ module.exports = class ServerController {
 
             if (member !== undefined && socketID !== undefined) {
 
-                /* Group Chat and Meeting will be deleted here as well*/
                 member.setShirtColor(Settings.DEFAULT_SHIRTCOLOR_PPANT);
 
                 let socket = this.getSocketObject(socketID);
@@ -2379,6 +2377,103 @@ module.exports = class ServerController {
         });
 
         this.#groups.delete(groupName);
+        return true;
+    }
+
+    /**
+     * Adds users to an existing group 
+     * @method module:ServerController#addGroupMember
+     * 
+     * @param {String} groupName unique name of group
+     * @param {String[]} memberIDs IDs of users that will be added
+     * 
+     * @return {boolean} true by success, false if group with passed group name does not exist
+     */
+    addGroupMember(groupName, memberIDs) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(groupMemberID => {
+            TypeChecker.isString(groupMemberID);
+        });
+
+        let group = this.#groups.get(groupName);
+
+        //group with that name does not exist
+        if (group === undefined) {
+            return false;
+        }
+
+        let groupColor = group.getShirtColor();
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            let socketID = this.getSocketId(memberID);
+
+            if (member !== undefined && socketID !== undefined) {
+
+                //If user was member of another group before, leave that group
+                this.#groups.forEach((otherGroup, otherGroupName) => {
+                    if (otherGroupName !== groupName && otherGroup.includesGroupMember(memberID)) {
+                        otherGroup.removeGroupMember(memberID);
+                    }
+                });
+
+                group.addGroupMember(memberID);
+                member.setShirtColor(groupColor);
+
+                let socket = this.getSocketObject(socketID);
+                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+
+                //Notify all users that shirt color changed
+                socket.emit('your shirt color changed', groupColor);
+                let currentRoomId = member.getPosition().getRoomId();
+                socket.to(currentRoomId.toString()).emit('other shirt color changed', groupColor, memberID);
+            }
+        });
+        return true;
+    }
+
+    /**
+     * Removes users from an existing group 
+     * @method module:ServerController#removeGroupMember
+     * 
+     * @param {String} groupName unique name of group
+     * @param {String[]} memberIDs IDs of users that will be removed
+     * 
+     * @return {boolean} true by success, false if group with passed group name does not exist
+     */
+    removeGroupMember(groupName, memberIDs) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(groupMemberID => {
+            TypeChecker.isString(groupMemberID);
+        });
+
+        let group = this.#groups.get(groupName);
+
+        //group with that name does not exist
+        if (group === undefined) {
+            return false;
+        }
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            let socketID = this.getSocketId(memberID);
+
+            if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
+
+                group.removeGroupMember(memberID);
+                member.setShirtColor(Settings.DEFAULT_SHIRTCOLOR_PPANT);
+
+                let socket = this.getSocketObject(socketID);
+                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                //Notify all users that shirt color changed
+                socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
+                let currentRoomId = member.getPosition().getRoomId();
+                socket.to(currentRoomId.toString()).emit('other shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT, memberID);
+            }
+        });
         return true;
     }
 
