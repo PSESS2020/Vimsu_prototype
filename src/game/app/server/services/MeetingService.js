@@ -18,7 +18,7 @@ module.exports = class Meetingservice {
      * To implement:
      * - New Meeting                        [X]
      * - Check for Meeting                  [X]
-     * - Load all meetings of ppant         [ ]
+     * - Load all meetings of ppant         [X]
      * - Load specific meeting              [X]
      * - Add participant to meeting         [X]
      * - remove ppant                       [X]
@@ -96,12 +96,40 @@ module.exports = class Meetingservice {
         })
     }
 
-    static loadMeetingList(participantId, conferenceId, vimsudb) {
-        TypeChecker.isString(participantId);
+    /**
+     * Loads all meetings a specific participant 
+     * is a member of from the database. The way
+     * this works is without a ppantId, as this
+     * method is called with a list of meetingIds
+     * from the ppant's database entry.
+     * @static @method module:MeetingService#loadMeetingList
+     * 
+     * @param {String[]} meetingIDList 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     * 
+     * @return {Meetings} The list of meetings the participant is in.
+     */
+    static loadMeetingList(meetingIDList, conferenceId, vimsudb) {
+        TypeChecker.isInstanceOf(meetingIDList, Array);
+        meetingIDList.forEach(id => {
+            TypeChecker.isString(id);
+        })
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        // TODO
+        let meetings = [];
+        return Promise.all(meetingIDList.map(async meetingId => {
+            var meeting = await vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId });
+            meetings.push(new Meeting(
+                meeting.id,
+                meeting.name,
+                meeting.members
+            ));
+        })).then(res => {
+            return meetings;
+        })
+
     }
     
     /**
