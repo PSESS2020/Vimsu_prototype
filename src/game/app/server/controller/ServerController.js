@@ -204,6 +204,9 @@ module.exports = class ServerController {
                          * Chats and Meetings (and possibly other things) will be handled here as well */
                         if (group.includesGroupMember(ppant.getId())) {
                             ppant.setShirtColor(group.getShirtColor());
+
+                            //Notify user that he is part of a group (right now only for status bar)
+                            socket.emit('join group', group.getName());
                         }
                     });
                         
@@ -2270,6 +2273,9 @@ module.exports = class ServerController {
                 let socket = this.getSocketObject(socketID);
                 this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
 
+                //Notify user that he joined a new group (right now only for status bar)
+                socket.emit('join group', groupName);
+
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', groupColor);
                 let currentRoomId = member.getPosition().getRoomId();
@@ -2309,6 +2315,9 @@ module.exports = class ServerController {
 
                 let socket = this.getSocketObject(socketID);
                 this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                //Notify user that he left a group (right now only for status bar)
+                socket.emit('leave group', groupName);
 
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
@@ -2365,6 +2374,9 @@ module.exports = class ServerController {
                 let socket = this.getSocketObject(socketID);
                 this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
 
+                //Notify user that he joined a new group (right now only for status bar)
+                socket.emit('join group', groupName);
+
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', groupColor);
                 let currentRoomId = member.getPosition().getRoomId();
@@ -2408,6 +2420,9 @@ module.exports = class ServerController {
 
                 let socket = this.getSocketObject(socketID);
                 this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                //Notify user that he left a group (right now only for status bar)
+                socket.emit('leave group', groupName);
 
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);

@@ -209,6 +209,8 @@ class ClientController {
         this.#socket.on('other mod state changed', this.#handleFromServerChangeOtherModState.bind(this));
         this.#socket.on('your shirt color changed', this.#handleFromServerChangeYourShirtColor.bind(this));
         this.#socket.on('other shirt color changed', this.#handleFromServerChangeOtherShirtColor.bind(this));
+        this.#socket.on('join group', this.#handleFromServerJoinGroup.bind(this));
+        this.#socket.on('leave group', this.#handleFromServerLeaveGroup.bind(this));
     }
 
     /* #################################################### */
@@ -1088,6 +1090,24 @@ class ClientController {
         }
 
         this.#gameView.setOtherShirtColor(shirtColor, ppantID);
+    }
+
+    /**
+     * @private Receives from server that you joined a group
+     * 
+     * @param {String} groupName name of joined group
+     */
+    #handleFromServerJoinGroup = function(groupName) {
+        TypeChecker.isString(groupName);
+
+        this.#gameView.addGroupName(groupName);
+    }
+
+    /**
+     * @private Receives from server that you left a group
+     */
+    #handleFromServerLeaveGroup = function() {
+        this.#gameView.removeGroupName();
     }
 
     /* #################################################### */
