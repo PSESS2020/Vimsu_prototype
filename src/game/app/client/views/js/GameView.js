@@ -415,6 +415,23 @@ class GameView {
     }
 
     /**
+     * Updates group name in status bar
+     * 
+     * @param {String} groupName group name
+     */
+    addGroupName(groupName) {
+        TypeChecker.isString(groupName);
+        this.#statusBar.addGroupName(groupName);
+    }
+
+    /**
+     * Remove group name from status bar
+     */
+    removeGroupName() {
+        this.#statusBar.removeGroupName();
+    }
+
+    /**
      * Initializes room view when participant enters Room
      * 
      * @param {Object[]} assetPaths asset paths
