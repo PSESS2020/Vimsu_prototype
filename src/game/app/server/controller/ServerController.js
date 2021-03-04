@@ -2317,7 +2317,7 @@ module.exports = class ServerController {
                 this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
 
                 //Notify user that he left a group (right now only for status bar)
-                socket.emit('leave group', groupName);
+                socket.emit('leave group');
 
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
@@ -2422,7 +2422,7 @@ module.exports = class ServerController {
                 this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
 
                 //Notify user that he left a group (right now only for status bar)
-                socket.emit('leave group', groupName);
+                socket.emit('leave group');
 
                 //Notify all users that shirt color changed
                 socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
