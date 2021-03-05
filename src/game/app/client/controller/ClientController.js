@@ -35,6 +35,8 @@ class ClientController {
         this.#openSocketConnection();
         this.#gameView = gameView;
         this.#gameView.initEventManager(this);
+
+
     }
 
     /**
@@ -1365,14 +1367,13 @@ class ClientController {
                 displayName: 'holder' // the participants data
             }
         });
-        $('#meetingModalClose').onclick = function() {
-            this.#jitsi.dispose;         
-        };
+
         $('#meetingModal').modal('show');
-        /*
-        $('#meetingModal').on(hide.bs.modal, function() {
-            this.#jitsi.dispose;
-        })*/
+        
+
+        $('#meetingModal').on('hidden.bs.modal', function() { 
+            this.#jitsi.dispose();
+        }.bind(this));
 
     }
 
