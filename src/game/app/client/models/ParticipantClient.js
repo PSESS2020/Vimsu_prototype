@@ -15,7 +15,7 @@ class ParticipantClient {
     #id;
     #position;
     #direction;
-    #username;
+    #forename;
     #isVisible;
     #isModerator;
 
@@ -23,24 +23,24 @@ class ParticipantClient {
      * Creates an instance of participant on client-side
      * 
      * @param {String} id participant ID
-     * @param {String} username participant username
+     * @param {String} forename participant forename
      * @param {PositionClient} position participant position
      * @param {Direction} direction participant avatar direction
      * @param {boolean} isVisible participant avatar visibility
      * @param {boolean} isModerator participant avatar moderator status
      */
-    constructor(id, username, position, direction, isVisible, isModerator) {
+    constructor(id, forename, position, direction, isVisible, isModerator) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
-        TypeChecker.isString(username);
+        TypeChecker.isString(forename);
         TypeChecker.isBoolean(isVisible);
         TypeChecker.isBoolean(isModerator);
 
         this.#id = id;
         this.#position = position;
         this.#direction = direction;
-        this.#username = username;
+        this.#forename = forename;
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
     }
@@ -112,12 +112,12 @@ class ParticipantClient {
     }
 
     /**
-     * Gets participant username
+     * Gets participant forename
      * 
-     * @return {String} username
+     * @return {String} forename
      */
-    getUsername() {
-        return this.#username;
+    getForename() {
+        return this.#forename;
     }
 
     /**

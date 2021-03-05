@@ -458,7 +458,7 @@ class GameView {
                 participant.getPosition(),
                 participant.getDirection(),
                 participant.getId(),
-                participant.getUsername(),
+                participant.getForename(),
                 participant.getIsVisible(),
                 participant.getIsModerator(),
                 false,
@@ -566,10 +566,10 @@ class GameView {
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
         let id = ownParticipant.getId();
-        let username = ownParticipant.getUsername();
+        let forename = ownParticipant.getForename();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, forename, true, isModerator, true, this.#gameEngine, this.#eventManager);
         this.#addToUpdateList(this.#ownAvatarView);
     }
 

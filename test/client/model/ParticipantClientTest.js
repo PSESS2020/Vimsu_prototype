@@ -5,7 +5,7 @@ const PositionClient = require('../../../src/game/app/client/models/PositionClie
 const ParticipantClient = require('../../../src/game/app/client/models/ParticipantClient.js');
 
 var id;
-var username;
+var forename;
 var position;
 var direction;
 var isVisible;
@@ -17,17 +17,17 @@ describe('ParticipantClient test', function () {
     //test data
     beforeEach(function () {
         id = TestUtil.randomString();
-        username = TestUtil.randomString();
+        forename = TestUtil.randomString();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
         direction = Direction.DOWNLEFT;
         isVisible = TestUtil.randomBool();
         isModerator = TestUtil.randomBool();
-        ppant = new ParticipantClient(id, username, position, direction, isVisible, isModerator);
+        ppant = new ParticipantClient(id, forename, position, direction, isVisible, isModerator);
     });
 
     it('test getters', function () {
         expect(ppant.getId()).to.be.a('string').and.to.equal(id);
-        expect(ppant.getUsername()).to.be.a('string').and.to.equal(username);
+        expect(ppant.getForename()).to.be.a('string').and.to.equal(forename);
         expect(ppant.getPosition()).to.be.instanceOf(PositionClient).and.to.equal(position);
         expect(ppant.getDirection()).to.equal(direction);
         expect(ppant.getIsVisible()).to.equal(isVisible);

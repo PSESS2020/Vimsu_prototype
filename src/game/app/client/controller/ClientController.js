@@ -73,7 +73,7 @@ class ClientController {
         }
 
         this.#gameView.drawStatusBar();
-        this.#gameView.drawHUD(this.#ownParticipant.getUsername(), this.#isVideoConference);
+        this.#gameView.drawHUD(this.#ownBusinessCard.getUsername(), this.#isVideoConference);
         this.#gameView.initOwnAvatarView(this.#ownParticipant);
         this.#gameView.initCanvasEvents();
 
@@ -271,7 +271,7 @@ class ClientController {
 
         this.#ownParticipant = new ParticipantClient(
             initInfo.id,
-            this.#ownBusinessCard.getUsername(),
+            this.#ownBusinessCard.getForename(),
             initPos,
             initInfo.dir,
             initInfo.isVisible,
@@ -491,7 +491,7 @@ class ClientController {
 
         TypeChecker.isInstanceOf(initInfo, Object);
         TypeChecker.isString(initInfo.id);
-        TypeChecker.isString(initInfo.username);
+        TypeChecker.isString(initInfo.forename);
         TypeChecker.isInt(initInfo.cordX);
         TypeChecker.isInt(initInfo.cordY);
         TypeChecker.isEnumOf(initInfo.dir, Direction);
@@ -499,7 +499,7 @@ class ClientController {
         TypeChecker.isBoolean(initInfo.isModerator);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
+        var participant = new ParticipantClient(initInfo.id, initInfo.forename, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
         this.#currentRoom.enterParticipant(participant);
         this.#gameView.initAnotherAvatarViews(participant);
     }

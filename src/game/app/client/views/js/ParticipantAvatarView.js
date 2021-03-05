@@ -18,7 +18,7 @@ class ParticipantAvatarView extends AvatarView {
     #currentAnimation;
     #walking = false;
     #isVisible;
-    #username;
+    #forename;
     #isModerator;
     #isOwnAvatar;
 
@@ -31,20 +31,20 @@ class ParticipantAvatarView extends AvatarView {
      * @param {PositionClient} position avatar position
      * @param {Direction} direction avatar direction
      * @param {String} participantId participant ID
-     * @param {String} username username
+     * @param {String} forename forename
      * @param {boolean} isVisible true if visible, otherwise false
      * @param {boolean} isModerator true if moderator, otherwise false
      * @param {boolean} isOwnAvatar true if own avatar, otherwise false
      * @param {IsometricEngine} gameEngine game engine instance
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(position, direction, participantId, username, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
+    constructor(position, direction, participantId, forename, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
         super(position, direction);
         TypeChecker.isString(participantId);
         this.#participantId = participantId;
         this.#initSpriteAnimation();
         this.#currentAnimation = this.#standingDownRightAnimation;
-        this.#username = username;
+        this.#forename = forename;
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
         this.#isOwnAvatar = isOwnAvatar;
@@ -177,7 +177,7 @@ class ParticipantAvatarView extends AvatarView {
             ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 1, Settings.AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
             ctx_avatar.fillStyle = "black";
-            ctx_avatar.fillText(this.#username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
+            ctx_avatar.fillText(this.#forename, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
             this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }

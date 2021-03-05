@@ -293,7 +293,7 @@ module.exports = class ServerController {
 
                         if (id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
 
-                            let username = participant.getBusinessCard().getUsername();
+                            let forename = participant.getBusinessCard().getForename();
 
                             let tempPos = participant.getPosition();
                             let tempX = tempPos.getCordX();
@@ -302,7 +302,7 @@ module.exports = class ServerController {
                             let isVisible = participant.getIsVisible();
                             let isModerator = participant.getIsModerator();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, forename: forename, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
                         }
                     });
 
@@ -311,7 +311,7 @@ module.exports = class ServerController {
                      * participant-instance corresponding to it.
                      * This should send to all other connected sockets but not to the one
                      * that just connected */
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), forename: businessCardObject.forename, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator() });
 
                     /* Sends current points and rank to client */
                     socket.emit('updatePoints', ppant.getAwardPoints());
@@ -2579,8 +2579,8 @@ module.exports = class ServerController {
         ppant.setPosition(newPos);
         ppant.setDirection(direction);
 
-        //Get username, isModerator, isVisible
-        let username = ppant.getBusinessCard().getUsername();
+        //Get forename, isModerator, isVisible
+        let forename = ppant.getBusinessCard().getForename();
         let isModerator = ppant.getIsModerator();
         let isVisible = ppant.getIsVisible();
 
@@ -2594,19 +2594,19 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator });
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, forename: forename, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator });
 
         //Emit to participant all participant positions, that were in new room before him
         this.#ppants.forEach((ppant, id, map) => {
             if (id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
-                let username = ppant.getBusinessCard().getUsername();
+                let forename = ppant.getBusinessCard().getForename();
                 let tempPos = ppant.getPosition();
                 let tempX = tempPos.getCordX();
                 let tempY = tempPos.getCordY();
                 let tempDir = ppant.getDirection();
                 let isVisible = ppant.getIsVisible();
                 let isModerator = ppant.getIsModerator();
-                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
+                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, forename: forename, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator });
             }
         });
 
