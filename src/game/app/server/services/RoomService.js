@@ -7,6 +7,8 @@ const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
 const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
 const EscapeRoomDecorator = require('../models/EscapeRoomDecorator.js');
 const Settings = require('../utils/Settings.js');
+const Floorplan = require('../utils/Floorplan.js');
+const RoomDecorator = require('../models/RoomDecorator.js');
 
 /**
  * The Room Service
@@ -17,6 +19,7 @@ const Settings = require('../utils/Settings.js');
  */
 module.exports = class RoomService {
     #rooms;
+    #floorplan;
 
     /**
      * Creates an instance of RoomService
@@ -28,6 +31,7 @@ module.exports = class RoomService {
         }
 
         this.#rooms = [];
+        this.#floorplan;
         this.#initAllRooms();
         RoomService.instance = this;
     }
@@ -71,5 +75,13 @@ module.exports = class RoomService {
         this.#rooms.push(new FoodcourtRoomDecorator(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)));
         this.#rooms.push(new ReceptionRoomDecorator(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)));
         this.#rooms.push(new EscapeRoomDecorator(new Room(Settings.ESCAPEROOM_ID, TypeOfRoom.ESCAPEROOM, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)));
+
+        for(const [room,data] of Object.entries(Floorplan)) {
+            this.#rooms.push(
+                new RoomDecorator(
+                    new Room(/*id, type, width, length*/)
+                )
+            )
+        };
     }
 } 
