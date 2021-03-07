@@ -1167,118 +1167,8 @@ module.exports = class ServerController {
                     if (chat instanceof OneToOneChat)
                         return false;
 
-
-                    let existingChatPartnerIDList = chat.getParticipantList();
-                    let existingChatPartnerLength = existingChatPartnerIDList.length;
-
-                    var limit = Settings.MAXGROUPPARTICIPANTS - existingChatPartnerLength;
-
-                    if (chatPartnerIDList.length > limit || chatPartnerIDList.length < 1) {
-                        return false;
-                    }
-
-                    Promise.all(chatPartnerIDList.map(async newChatPartnerID => {
-
-                        if (newChatPartnerID !== creatorID && !existingChatPartnerIDList.includes(newChatPartnerID)) {
-
-                            ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
-
-                            await ChatService.storeParticipant(chatId, newChatPartnerID, Settings.CONFERENCE_ID, this.#db);
-
-                            var newChatPartnerUsername = await ParticipantService.getUsername(newChatPartnerID, Settings.CONFERENCE_ID, this.#db)
-                            let msgText = newChatPartnerUsername + " has joined the chat";
-                            var msg = await ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db);
-                            let newChatPartner = this.#ppants.get(newChatPartnerID);
-                            var loadedChat = await ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db);
-
-                            if (newChatPartner !== undefined) {
-                                newChatPartner.addChat(loadedChat);
-                                let socketPartner = this.getSocketObject(this.getSocketId(newChatPartner.getId()));
-                                socketPartner.join(loadedChat.getId());
-                                var messageInfoData = [];
-
-                                loadedChat.getMessageList().forEach((message) => {
-                                    messageInfoData.push({
-                                        senderUsername: message.getUsername(),
-                                        timestamp: message.getTimestamp(),
-                                        msgText: message.getMessageText()
-                                    });
-                                });
-
-                                if (loadedChat.getMessageList().length > 0) {
-                                    var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
-                                    var previewText = lastMessage.getMessageText();
-
-                                    if (previewText.length > 35) {
-                                        previewText = previewText.slice(0, 35) + "...";
-                                    }
-
-                                    var chatData = {
-                                        chatId: loadedChat.getId(),
-                                        title: loadedChat.getChatName(),
-                                        timestamp: lastMessage.getTimestamp(),
-                                        previewUsername: lastMessage.getUsername(),
-                                        previewMessage: previewText,
-                                        areFriends: true,
-                                        friendRequestSent: true,
-                                        partnerId: undefined,
-                                        groupChat: true,
-                                        messages: messageInfoData
-                                    }
-
-                                } else {
-                                    var chatData = {
-                                        chatId: loadedChat.getId(),
-                                        title: loadedChat.getChatName(),
-                                        timestamp: '',
-                                        previewUsername: '',
-                                        previewMessage: '',
-                                        areFriends: true,
-                                        friendRequestSent: true,
-                                        partnerId: undefined,
-                                        groupChat: true,
-                                        messages: messageInfoData
-                                    }
-                                }
-
-                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername, chatData.chatId);
-                                this.#io.to(this.getSocketId(newChatPartner.getId())).emit('newChat', chatData, false);
-                            }
-
-                            existingChatPartnerIDList.forEach(existingChatParticipantID => {
-                                if (!chatPartnerIDList.includes(existingChatParticipantID)) {
-
-                                    let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
-
-                                    if (existingChatParticipant !== undefined && existingChatParticipant.isMemberOfChat(chatId)) {
-                                        let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
-
-                                        existingChatParticipantChat.addParticipant(newChatPartnerID);
-                                        existingChatParticipantChat.addMessage(msg);
-
-                                        if (existingChatParticipantChat instanceof GroupChat) {
-                                            this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
-
-                                            if (existingChatParticipant.hasFriend(newChatPartnerID))
-                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
-                                            else
-                                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
-                                        }
-                                    }
-                                }
-                            })
-
-                            var msgToEmit = {
-                                senderUsername: msg.getUsername(),
-                                msgId: msg.getMessageId(),
-                                senderId: msg.getSenderId(),
-                                timestamp: msg.getTimestamp(),
-                                msgText: msg.getMessageText()
-                            };
-
-                            this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-                        }
-                    }))
+                    this.#handleJoinGroupChat(newChatPartnerID, chat, creatorUsername);
+                    
 
                 } else {
 
@@ -1326,36 +1216,9 @@ module.exports = class ServerController {
                          * so that the creator can start sending messages. */
                         this.#io.to(socket.id).emit('newChat', chatData, true);
 
-                        return chat.getId();
-
-                    }).then(chatId => {
-
-                        chatPartnerIDList.forEach(chatPartnerID => {
-                            if (chatPartnerID !== creatorID) {
-
-                                ParticipantService.addChatID(chatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
-
-                                let chatPartner = this.#ppants.get(chatPartnerID);
-
-                                if (chatPartner !== undefined) {
-
-                                    ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
-
-                                        chatPartner.addChat(loadedChat);
-
-                                        //chat partner joins chat channel
-                                        let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
-
-                                        socketPartner.join(loadedChat.getId());
-
-                                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername, loadedChat.getId());
-                                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
-
-                                    });
-                                }
-                            }
-                        });
-                    })
+                        // Handles Group Chat creation for chatPartners 
+                        this.#handleGroupChatCreation(chatPartnerIDList, chat, creatorUsername);
+                    });
                 }
             });
 
@@ -1773,67 +1636,8 @@ module.exports = class ServerController {
                 }
 
                 let removerId = socket.ppantID;
-                let remover = this.#ppants.get(removerId);
-                let removerBusinessCard = remover.getBusinessCard();
-                let removerUsername = removerBusinessCard.getUsername();
-
-                if (remover !== undefined && remover.isMemberOfChat(chatId)) {
-                    let chatPartnerIDList = remover.getChat(chatId).getParticipantList();
-
-                    let msgText = removerUsername + " has left the chat";
-
-                    ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
-                        chatPartnerIDList.forEach(chatPartnerID => {
-                            let chatPartner = this.#ppants.get(chatPartnerID);
-
-                            //Checks if receiver of message is online
-                            if (chatPartnerID !== removerId && chatPartner !== undefined) {
-
-                                let chatPartnerChat = chatPartner.getChat(chatId);
-                                chatPartnerChat.removeParticipant(removerId);
-                                chatPartnerChat.addMessage(msg);
-
-                                if (chatPartnerChat instanceof GroupChat) {
-                                    this.#io.in(chatId).emit('removeFromChatParticipantList', removerUsername);
-
-                                    if (chatPartner.hasFriend(removerId)) {
-                                        var removerBusinessCardData = {
-                                            friendId: removerBusinessCard.getParticipantId(),
-                                            username: removerUsername,
-                                            title: removerBusinessCard.getTitle(),
-                                            surname: removerBusinessCard.getSurname(),
-                                            forename: removerBusinessCard.getForename(),
-                                            job: removerBusinessCard.getJob(),
-                                            company: removerBusinessCard.getCompany(),
-                                            email: removerBusinessCard.getEmail()
-                                        }
-
-                                        this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', removerBusinessCardData, true)
-                                    } else
-                                        this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
-
-                                }
-                            }
-                        })
-
-                        var msgToEmit = {
-                            senderUsername: msg.getUsername(),
-                            msgId: msg.getMessageId(),
-                            senderId: msg.getSenderId(),
-                            timestamp: msg.getTimestamp(),
-                            msgText: msg.getMessageText()
-                        };
-
-                        //distribute chat messages after leaving chat
-                        this.#io.in(chatId).emit('newChatMessage', chatId, msgToEmit);
-
-                    })
-
-                    remover.removeChat(chatId);
-                    socket.leave(chatId);
-                }
-
-                ChatService.removeParticipant(chatId, removerId, Settings.CONFERENCE_ID, this.#db);
+            
+                this.#handleLeaveGroupChat(removerId, chatId, socket);
             });
 
             /* handles npc clicked, show story */
@@ -2310,36 +2114,30 @@ module.exports = class ServerController {
         if (this.#groups.get(groupName) !== undefined) {
             return false;
         }
+        
+        let groupOwnerID = 'groupChat: ' + groupName;
+        ChatService.newGroupChat(groupOwnerID, memberIDs, 'Group: ' + groupName, Settings.CONFERENCE_ID, this.#db).then(groupChat => {
+            let group = new Group(groupName, groupColor, memberIDs, groupChat);
+            this.#groups.set(groupName, group);
+            this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
 
-        let group = new Group(groupName, groupColor, memberIDs);
-        this.#groups.set(groupName, group);
+            memberIDs.forEach(memberID => {
+                let member = this.#ppants.get(memberID);
+                let socketID = this.getSocketId(memberID);
+    
+                if (member !== undefined && socketID !== undefined) {
+    
+                    let socket = this.getSocketObject(socketID);
 
-        memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            let socketID = this.getSocketId(memberID);
+                    this.#handleLeaveOldGroup(member, groupName, socket);
+                    this.#handleChangeShirtColor(member, groupColor, socket);
 
-            if (member !== undefined && socketID !== undefined) {
+                    //Notify user that he joined a new group (right now only for status bar)
+                    socket.emit('join group', groupName);
+                    this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+                }
+            });
 
-                //If user was member of another group before, leave that group
-                this.#groups.forEach((otherGroup, otherGroupName) => {
-                    if (otherGroupName !== groupName && otherGroup.includesGroupMember(memberID)) {
-                        otherGroup.removeGroupMember(memberID);
-                    }
-                });
-
-                member.setShirtColor(groupColor);
-
-                let socket = this.getSocketObject(socketID);
-                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
-
-                //Notify user that he joined a new group (right now only for status bar)
-                socket.emit('join group', groupName);
-
-                //Notify all users that shirt color changed
-                socket.emit('your shirt color changed', groupColor);
-                let currentRoomId = member.getPosition().getRoomId();
-                socket.to(currentRoomId.toString()).emit('other shirt color changed', groupColor, memberID);
-            }
         });
         return true;
     }
@@ -2362,6 +2160,8 @@ module.exports = class ServerController {
             return false;
         }
 
+        let groupChat = group.getGroupChat();
+        let groupChatID = groupChat.getId();
         let memberIDs = group.getGroupMemberIDs();
 
         memberIDs.forEach(memberID => {
@@ -2370,18 +2170,14 @@ module.exports = class ServerController {
 
             if (member !== undefined && socketID !== undefined) {
 
-                member.setShirtColor(Settings.DEFAULT_SHIRTCOLOR_PPANT);
-
                 let socket = this.getSocketObject(socketID);
-                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                this.#handleLeaveGroupChat(memberID, groupChatID, socket);
+                this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group (right now only for status bar)
                 socket.emit('leave group');
-
-                //Notify all users that shirt color changed
-                socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
-                let currentRoomId = member.getPosition().getRoomId();
-                socket.to(currentRoomId.toString()).emit('other shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT, memberID);
+                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
             }
         });
 
@@ -2413,6 +2209,8 @@ module.exports = class ServerController {
         }
 
         let groupColor = group.getShirtColor();
+        let groupChat = group.getGroupChat();
+        this.#handleJoinGroupChat(memberIDs, groupChat, "GroupCreator");
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
@@ -2420,26 +2218,16 @@ module.exports = class ServerController {
 
             if (member !== undefined && socketID !== undefined) {
 
-                //If user was member of another group before, leave that group
-                this.#groups.forEach((otherGroup, otherGroupName) => {
-                    if (otherGroupName !== groupName && otherGroup.includesGroupMember(memberID)) {
-                        otherGroup.removeGroupMember(memberID);
-                    }
-                });
-
-                group.addGroupMember(memberID);
-                member.setShirtColor(groupColor);
-
                 let socket = this.getSocketObject(socketID);
-                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+                
+                group.addGroupMember(memberID);
+
+                this.#handleLeaveOldGroup(member, socket);
+                this.#handleChangeShirtColor(member, groupColor, socket);
 
                 //Notify user that he joined a new group (right now only for status bar)
                 socket.emit('join group', groupName);
-
-                //Notify all users that shirt color changed
-                socket.emit('your shirt color changed', groupColor);
-                let currentRoomId = member.getPosition().getRoomId();
-                socket.to(currentRoomId.toString()).emit('other shirt color changed', groupColor, memberID);
+                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
             }
         });
         return true;
@@ -2468,28 +2256,330 @@ module.exports = class ServerController {
             return false;
         }
 
+        let groupChat = group.getGroupChat();
+        let groupChatID = groupChat.getId();
+
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
+            console.log(member !== undefined);
+            console.log(socketID !== undefined);
+            console.log(group.includesGroupMember(memberID));
             if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
 
-                group.removeGroupMember(memberID);
-                member.setShirtColor(Settings.DEFAULT_SHIRTCOLOR_PPANT);
-
                 let socket = this.getSocketObject(socketID);
-                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+
+                group.removeGroupMember(memberID);
+                
+                this.#handleLeaveGroupChat(memberID, groupChatID, socket);
+                this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group (right now only for status bar)
                 socket.emit('leave group');
-
-                //Notify all users that shirt color changed
-                socket.emit('your shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT);
-                let currentRoomId = member.getPosition().getRoomId();
-                socket.to(currentRoomId.toString()).emit('other shirt color changed', Settings.DEFAULT_SHIRTCOLOR_PPANT, memberID);
+                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
             }
         });
         return true;
+    }
+
+    /**
+     * @private Handle ppant leaving an old group if he joined a new one
+     * 
+     * @method module:ServerController#handleLeaveOldGroup
+     * 
+     * @param {Participant} member new member instance
+     * @param {String} newGroupName name of new group
+     * @param {Socket.IO} socket socket of this client
+     */
+    #handleLeaveOldGroup = function(member, newGroupName, socket) {
+        let memberID = member.getId();
+
+        this.#groups.forEach((otherGroup, otherGroupName) => {
+            if (otherGroupName !== newGroupName && otherGroup.includesGroupMember(memberID)) {
+                otherGroup.removeGroupMember(memberID);
+                let otherGroupChat = otherGroup.getGroupChat();
+                let otherGroupChatID = otherGroupChat.getId();
+
+                this.#handleLeaveGroupChat(memberID, otherGroupChatID, socket);
+            }
+        });
+    }
+
+    /**
+     * @private Handles group chat creation
+     * 
+     * @method module:ServerController#handleGroupChatCreation
+     * 
+     * @param {String[]} chatPartnerIDList list of ppantIDs that join groupChat
+     * @param {GroupChat} chat group chat
+     * @param {String} creatorUsername chatCreator username
+     */
+    #handleGroupChatCreation = function(chatPartnerIDList, chat, creatorUsername) {
+        let chatId = chat.getId();
+        let chatName = chat.getChatName();
+        let creatorID = chat.getOwnerId();
+
+        /* Chat Data that will be sent to client */
+        let chatData = {
+            title: chatName,
+            chatId: chatId,
+            timestamp: '', //please dont change the timestamp here
+            previewUsername: '',
+            previewMessage: '',
+            areFriends: true,
+            friendRequestSent: true,
+            partnerId: undefined,
+            groupChat: true,
+            messages: []
+        };
+
+        chatPartnerIDList.forEach(chatPartnerID => {
+            if (chatPartnerID !== creatorID) {
+
+                ParticipantService.addChatID(chatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
+
+                let chatPartner = this.#ppants.get(chatPartnerID);
+
+                if (chatPartner !== undefined) {
+
+                    ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db).then(loadedChat => {
+
+                        chatPartner.addChat(loadedChat);
+
+                        //chat partner joins chat channel
+                        let socketPartner = this.getSocketObject(this.getSocketId(chatPartner.getId()));
+
+                        socketPartner.join(loadedChat.getId());
+
+                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatName, creatorUsername, loadedChat.getId());
+                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
+
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * @private Handle ppant joining group chat 
+     * 
+     * @method module:ServerController#handleJoinGroupChat
+     * 
+     * @param {String[]} chatPartnerIDList list of ppantIDs that join groupChat
+     * @param {GroupChat} chat group chat
+     * @param {String} creatorUsername chatCreator username
+     */
+    #handleJoinGroupChat = function(chatPartnerIDList, chat, creatorUsername) {
+        let chatId = chat.getId();
+        let creatorID = chat.getOwnerId();
+        let existingChatPartnerIDList = chat.getParticipantList();
+        let existingChatPartnerLength = existingChatPartnerIDList.length;
+                
+        var limit = Settings.MAXGROUPPARTICIPANTS - existingChatPartnerLength;
+                
+        if (chatPartnerIDList.length > limit || chatPartnerIDList.length < 1) {
+            return;
+        }
+
+        Promise.all(chatPartnerIDList.map(async newChatPartnerID => {
+                
+            if (newChatPartnerID !== creatorID && !existingChatPartnerIDList.includes(newChatPartnerID)) {
+
+
+                ParticipantService.addChatID(newChatPartnerID, chatId, Settings.CONFERENCE_ID, this.#db);
+
+                await ChatService.storeParticipant(chatId, newChatPartnerID, Settings.CONFERENCE_ID, this.#db);
+        
+                var newChatPartnerUsername = await ParticipantService.getUsername(newChatPartnerID, Settings.CONFERENCE_ID, this.#db);
+                let msgText = newChatPartnerUsername + " has joined the chat";
+                var msg = await ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db);
+                let newChatPartner = this.#ppants.get(newChatPartnerID);
+                var loadedChat = await ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db);
+        
+                if (newChatPartner !== undefined) {
+                    newChatPartner.addChat(loadedChat);
+                    let socketPartner = this.getSocketObject(this.getSocketId(newChatPartner.getId()));
+                    socketPartner.join(loadedChat.getId());
+                    var messageInfoData = [];
+        
+                    loadedChat.getMessageList().forEach((message) => {
+                        messageInfoData.push({
+                            senderUsername: message.getUsername(),
+                            timestamp: message.getTimestamp(),
+                            msgText: message.getMessageText()
+                        });
+                    });
+        
+                    if (loadedChat.getMessageList().length > 0) {
+                        var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
+                        var previewText = lastMessage.getMessageText();
+        
+                        if (previewText.length > 35) {
+                            previewText = previewText.slice(0, 35) + "...";
+                        }
+        
+                        var chatData = {
+                            chatId: loadedChat.getId(),
+                            title: loadedChat.getChatName(),
+                            timestamp: lastMessage.getTimestamp(),
+                            previewUsername: lastMessage.getUsername(),
+                            previewMessage: previewText,
+                            areFriends: true,
+                            friendRequestSent: true,
+                            partnerId: undefined,
+                            groupChat: true,
+                            messages: messageInfoData
+                        }
+        
+                    } else {
+                        var chatData = {
+                            chatId: loadedChat.getId(),
+                            title: loadedChat.getChatName(),
+                            timestamp: '',
+                            previewUsername: '',
+                            previewMessage: '',
+                            areFriends: true,
+                            friendRequestSent: true,
+                            partnerId: undefined,
+                            groupChat: true,
+                            messages: messageInfoData
+                        }
+                    }
+        
+                    this.#io.to(this.getSocketId(newChatPartner.getId())).emit('gotNewGroupChat', chatData.title, creatorUsername, chatData.chatId);
+                    this.#io.to(this.getSocketId(newChatPartner.getId())).emit('newChat', chatData, false);
+                }
+        
+                existingChatPartnerIDList.forEach(existingChatParticipantID => {
+                    if (newChatPartnerID !== existingChatParticipantID) {
+        
+                        let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
+        
+                        if (existingChatParticipant !== undefined && existingChatParticipant.isMemberOfChat(chatId)) {
+                            let existingChatParticipantChat = existingChatParticipant.getChat(chatId);
+        
+                            existingChatParticipantChat.addParticipant(newChatPartnerID);
+                            existingChatParticipantChat.addMessage(msg);
+        
+                            if (existingChatParticipantChat instanceof GroupChat) {
+                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
+        
+                                if (existingChatParticipant.hasFriend(newChatPartnerID))
+                                    this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
+                                else
+                                    this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', undefined, true);
+                            }
+                        }
+                    }
+                });
+        
+                var msgToEmit = {
+                    senderUsername: msg.getUsername(),
+                    msgId: msg.getMessageId(),
+                    senderId: msg.getSenderId(),
+                    timestamp: msg.getTimestamp(),
+                    msgText: msg.getMessageText()
+                };
+        
+                this.#io.to(chatId).emit('newChatMessage', chatId, msgToEmit);                
+                            
+            }
+        }));
+    
+
+    }
+       
+    /**
+     * @private Handle ppant leaving group chat 
+     * 
+     * @method module:ServerController#handleLeaveGroupChat
+     * 
+     * @param {Participant} member new member instance
+     * @param {GroupChat} groupChat group chat
+     * @param {Socket.IO} socket socket of this client
+     */
+     #handleLeaveGroupChat = function(memberID, groupChatID, socket) {
+    
+        let member = this.#ppants.get(memberID);
+        let memberBusinessCard = member.getBusinessCard();
+        let memberUsername = memberBusinessCard.getUsername();
+
+        if (member !== undefined && member.isMemberOfChat(groupChatID)) {
+
+            let chatPartnerIDList = member.getChat(groupChatID).getParticipantList();
+
+            let msgText = memberUsername + " has left the chat";
+
+            ChatService.createChatMessage(groupChatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
+                chatPartnerIDList.forEach(chatPartnerID => {
+                    let chatPartner = this.#ppants.get(chatPartnerID);
+
+                    //Checks if receiver of message is online
+                    if (chatPartnerID !== memberID && chatPartner !== undefined) {
+
+                        let chatPartnerChat = chatPartner.getChat(groupChatID);
+
+                        if (chatPartnerChat instanceof GroupChat) {
+                            chatPartnerChat.removeParticipant(memberID);
+                            chatPartnerChat.addMessage(msg);
+                            this.#io.in(groupChatID).emit('removeFromChatParticipantList', memberUsername);
+                        }
+                        
+                        if (chatPartner.hasFriend(memberID)) {
+                            var memberBusinessCardData = {
+                                friendId: memberBusinessCard.getParticipantId(),
+                                username: memberUsername,
+                                title: memberBusinessCard.getTitle(),
+                                surname: memberBusinessCard.getSurname(),
+                                forename: memberBusinessCard.getForename(),
+                                job: memberBusinessCard.getJob(),
+                                company: memberBusinessCard.getCompany(),
+                                email: memberBusinessCard.getEmail()
+                            }
+
+                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', memberBusinessCardData, true)
+                        } else
+                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
+
+                    }
+                });
+
+                var msgToEmit = {
+                    senderUsername: msg.getUsername(),
+                    msgId: msg.getMessageId(),
+                    senderId: msg.getSenderId(),
+                    timestamp: msg.getTimestamp(),
+                    msgText: msg.getMessageText()
+                };
+
+                //distribute chat messages after leaving chat
+                this.#io.in(groupChatID).emit('newChatMessage', groupChatID, msgToEmit);
+
+            });
+            member.removeChat(groupChatID);
+            socket.leave(groupChatID);
+        }
+        ChatService.removeParticipant(groupChatID, memberID, Settings.CONFERENCE_ID, this.#db);
+    }
+
+    /**
+     * @private Handle ppant changing shirt color 
+     * 
+     * @method module:ServerController#handleChangeShirtColor
+     * 
+     * @param {Participant} ppant ppant instance
+     * @param {ShirtColor} color new shirt color
+     * @param {Socket.IO} socket socket of this client
+     */
+    #handleChangeShirtColor = function(ppant, color, socket) {
+        let ppantID = ppant.getId();
+        ppant.setShirtColor(color);
+
+        //Notify all users that shirt color changed
+        socket.emit('your shirt color changed', color);
+        let currentRoomId = ppant.getPosition().getRoomId();
+        socket.to(currentRoomId.toString()).emit('other shirt color changed', color, ppantID);
     }
 
     /**
