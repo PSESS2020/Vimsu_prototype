@@ -78,7 +78,7 @@ module.exports = class RoomService {
 
         for(const [room,data] of Object.entries(Floorplan)) {
             this.#rooms.push(
-                new RoomDecorator(
+                new Room(
                     new Room(/*id, type, width, length*/)
                 )
             )
