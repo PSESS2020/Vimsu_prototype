@@ -1,5 +1,6 @@
 const ShirtColor = require("../../client/shared/ShirtColor.js");
 const TypeChecker = require("../../client/shared/TypeChecker.js");
+const GroupChat = require("../models/GroupChat.js");
 
 /**
  * The Group Model
@@ -13,8 +14,9 @@ module.exports = class Group {
     #name;
     #shirtColor;
     #groupMemberIDs;
+    #groupChat;
 
-    /* TODO: Chat and Meeting functionality is still missing */
+    /* TODO: Meeting functionality is still missing */
 
 
     /**
@@ -24,18 +26,21 @@ module.exports = class Group {
      * @param {String} name unique name of this group
      * @param {ShirtColor} shirtColor shirtColor every group member wears
      * @param {String[]} groupMemberIDs array of starting group member IDs
+     * @param {GroupChat} groupChat chat of this group
      */
-    constructor(name, shirtColor, groupMemberIDs) {
+    constructor(name, shirtColor, groupMemberIDs, groupChat) {
         TypeChecker.isString(name);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isInstanceOf(groupMemberIDs, Array);
         groupMemberIDs.forEach(groupMemberID => {
             TypeChecker.isString(groupMemberID);
         });
+        TypeChecker.isInstanceOf(groupChat, GroupChat)
 
         this.#name = name;
         this.#shirtColor = shirtColor;
         this.#groupMemberIDs = groupMemberIDs;
+        this.#groupChat = groupChat;
     }
 
     /**
@@ -69,6 +74,16 @@ module.exports = class Group {
     }
 
     /**
+     * Gets group chat
+     * @method module:Group#getGroupChat
+     * 
+     * @return {GroupChat} groupChat
+     */
+     getGroupChat() {
+        return this.#groupChat;
+    }
+
+    /**
      * Adds ppantID to groupMemberIDs
      * @method module:Group#addGroupMember
      * 
@@ -79,6 +94,7 @@ module.exports = class Group {
 
         if (!this.#groupMemberIDs.includes(ppantID)) {
             this.#groupMemberIDs.push(ppantID);
+            this.#groupChat.addParticipant(ppantID);
         }
     }
 
@@ -94,7 +110,9 @@ module.exports = class Group {
         let index = this.#groupMemberIDs.indexOf(ppantID);
 
         if (index !== -1)
-            this.#groupMemberIDs.splice(index, 1);      
+            this.#groupMemberIDs.splice(index, 1);     
+            
+        this.#groupChat.removeParticipant(ppantID);
     }
 
     /**

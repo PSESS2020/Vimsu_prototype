@@ -689,7 +689,10 @@ module.exports = class CommandHandler {
                 this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
                 return; 
             }
-            memberIDs.push(ppantID);
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
         }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
@@ -745,7 +748,10 @@ module.exports = class CommandHandler {
                 this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
                 return; 
             }
-            memberIDs.push(ppantID);
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
         }
 
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
@@ -779,7 +785,10 @@ module.exports = class CommandHandler {
                 this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
                 return; 
             }
-            memberIDs.push(ppantID);
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {

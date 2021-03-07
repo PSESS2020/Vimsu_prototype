@@ -3,11 +3,12 @@ const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const TestUtil = require('./utils/TestUtil.js');
 const chai = require('chai');
 const { expect } = require('chai');
+const GroupChat = require('../../../src/game/app/server/models/GroupChat.js');
 
 var name;
 var shirtColor;
 var groupMemberIDs;
-
+var groupChat;
 
 describe('test Group class functionality', function() {
 
@@ -16,18 +17,20 @@ describe('test Group class functionality', function() {
         name = TestUtil.randomString();
         shirtColor = TestUtil.randomObjectValue(ShirtColor);
         groupMemberIDs = TestUtil.randomStringList();
+        groupChat = new GroupChat('chatId', 'ownerId', 'chatName', [], [], 42, 42);
     });
 
     it('test constructor and getters', function() {
-        let group = new Group(name, shirtColor, groupMemberIDs);
+        let group = new Group(name, shirtColor, groupMemberIDs, groupChat);
 
         expect(group.getName()).to.equal(name);
         expect(group.getShirtColor()).to.equal(shirtColor);
         expect(group.getGroupMemberIDs()).to.equal(groupMemberIDs);
+        expect(group.getGroupChat()).to.equal(groupChat);
     });
 
     it('test add, remove and includes group members', function() {
-        let group = new Group(name, shirtColor, []);
+        let group = new Group(name, shirtColor, [], groupChat);
         let memberID = TestUtil.randomString();
 
         expect(group.includesGroupMember(memberID)).to.equal(false);
