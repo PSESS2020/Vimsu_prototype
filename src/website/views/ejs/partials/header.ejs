@@ -50,19 +50,19 @@
                         </li>
                     <% } %>
                     <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/logout">
-                            <div class="octicons octicon octicon-sign-out">
+                        <a class="action_button nav-link navbar-brand" href="/account">
+                            <div class="octicons octicon octicon-gear">
                                 <p id="octicon_text">
-                                    Log out
+                                    Account Settings
                                 </p>
                             </div>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/account">
-                            <div class="octicons octicon octicon-gear">
+                        <a class="action_button nav-link navbar-brand" href="/logout">
+                            <div class="octicons octicon octicon-sign-out">
                                 <p id="octicon_text">
-                                    Account Settings
+                                    Log out
                                 </p>
                             </div>
                         </a>
@@ -90,7 +90,7 @@
         </ul>
         <% if (locals.loggedIn === true) { %>
             <form class="form-inline">
-                <a class="btn btn-outline-warning" type="button" href="/game">Enter Conference >></a>
+                <a class="btn btn-outline-warning mr-5" type="button" href="/game">Enter Conference >></a>
             </form>
         <% } %>
     </div>
