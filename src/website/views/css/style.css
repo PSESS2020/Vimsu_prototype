@@ -86,7 +86,7 @@ ul {
 }
 
 .action_button {
-  width: 50px;
+  min-width: 50px;
   height: 50px;
   border-radius: 25px;
   text-align: center;
@@ -241,4 +241,8 @@ ul {
 .editAccountOcticon {
   color: #028090;
   height: 30px;
+}
+
+.navbar-nav > li{
+  margin-right:-50px;
 }
