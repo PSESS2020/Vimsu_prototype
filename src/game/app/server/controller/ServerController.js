@@ -27,6 +27,7 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const Participant = require('../models/Participant.js');
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
+const GroupService = require('../services/GroupService');
 
 /**
  * The Server Controller
@@ -107,8 +108,6 @@ module.exports = class ServerController {
         // Array to hold all participants
         this.#ppants = new Map();
 
-        // Array to hold all groups
-        this.#groups = new Map();
 
         this.#init();
     }
@@ -129,6 +128,13 @@ module.exports = class ServerController {
                 console.error(err);
             });
         }
+
+        // Array to hold all groups
+        GroupService.getGroupMap(Settings.CONFERENCE_ID, this.#db).then(groupMap => {
+            this.#groups = groupMap;
+        }).catch(err => {
+            console.error(err);
+        });;
 
         this.#io.on('connection', (socket) => {
 
@@ -197,11 +203,8 @@ module.exports = class ServerController {
                     this.#socketMap.set(socket.id, ppant.getId());
                     this.#ppants.set(ppant.getId(), ppant);
 
-                    //Checks if ppant was member of a still exisitng group
+                    //Checks if ppant is member of a still exisitng group
                     this.#groups.forEach(group => {
-
-                        /* Sets all things that are group depending to group value
-                         * Chats and Meetings (and possibly other things) will be handled here as well */
                         if (group.includesGroupMember(ppant.getId())) {
                             ppant.setShirtColor(group.getShirtColor());
 
@@ -1583,7 +1586,7 @@ module.exports = class ServerController {
 
                 let removerId = socket.ppantID;
             
-                this.#handleLeaveGroupChat(removerId, chatId, socket);
+                this.#handleLeaveGroupChat(removerId, chatId);
             });
 
             /* handles npc clicked, show story */
@@ -2063,27 +2066,27 @@ module.exports = class ServerController {
         
         let groupOwnerID = 'groupChat: ' + groupName;
         ChatService.newGroupChat(groupOwnerID, memberIDs, 'Group: ' + groupName, Settings.CONFERENCE_ID, this.#db).then(groupChat => {
-            let group = new Group(groupName, groupColor, memberIDs, groupChat);
-            this.#groups.set(groupName, group);
-            this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
-
-            memberIDs.forEach(memberID => {
-                let member = this.#ppants.get(memberID);
-                let socketID = this.getSocketId(memberID);
+            GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, Settings.CONFERENCE_ID, this.#db).then(group => {
+                this.#groups.set(groupName, group);
+                this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
     
-                if (member !== undefined && socketID !== undefined) {
+                memberIDs.forEach(memberID => {
+                    let member = this.#ppants.get(memberID);
+                    let socketID = this.getSocketId(memberID);
+        
+                    if (member !== undefined && socketID !== undefined) {
+        
+                        let socket = this.getSocketObject(socketID);
     
-                    let socket = this.getSocketObject(socketID);
-
-                    this.#handleLeaveOldGroup(member, groupName, socket);
-                    this.#handleChangeShirtColor(member, groupColor, socket);
-
-                    //Notify user that he joined a new group (right now only for status bar)
-                    socket.emit('join group', groupName);
-                    this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
-                }
-            });
-
+                        this.#handleLeaveOldGroup(member, groupName);
+                        this.#handleChangeShirtColor(member, groupColor, socket);
+    
+                        //Notify user that he joined a new group (right now only for status bar)
+                        socket.emit('join group', groupName);
+                        this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+                    }
+                });    
+            })
         });
         return true;
     }
@@ -2113,12 +2116,12 @@ module.exports = class ServerController {
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
+            this.#handleLeaveGroupChat(memberID, groupChatID);
 
             if (member !== undefined && socketID !== undefined) {
 
                 let socket = this.getSocketObject(socketID);
 
-                this.#handleLeaveGroupChat(memberID, groupChatID, socket);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group (right now only for status bar)
@@ -2128,6 +2131,7 @@ module.exports = class ServerController {
         });
 
         this.#groups.delete(groupName);
+        GroupService.deleteGroup(groupName, Settings.CONFERENCE_ID, this.#db);
         return true;
     }
 
@@ -2162,13 +2166,14 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
-            if (member !== undefined && socketID !== undefined) {
+            if (member !== undefined && socketID !== undefined && !group.includesGroupMember(memberID)) {
 
                 let socket = this.getSocketObject(socketID);
                 
                 group.addGroupMember(memberID);
+                GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
 
-                this.#handleLeaveOldGroup(member, socket);
+                this.#handleLeaveOldGroup(member, groupName);
                 this.#handleChangeShirtColor(member, groupColor, socket);
 
                 //Notify user that he joined a new group (right now only for status bar)
@@ -2209,16 +2214,14 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
-            console.log(member !== undefined);
-            console.log(socketID !== undefined);
-            console.log(group.includesGroupMember(memberID));
             if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
 
                 let socket = this.getSocketObject(socketID);
 
                 group.removeGroupMember(memberID);
+                GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
                 
-                this.#handleLeaveGroupChat(memberID, groupChatID, socket);
+                this.#handleLeaveGroupChat(memberID, groupChatID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group (right now only for status bar)
@@ -2226,6 +2229,14 @@ module.exports = class ServerController {
                 this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
             }
         });
+
+        let newMemberIDs = group.getGroupMemberIDs();
+
+        //if group has no longer members, delete it from map
+        if (newMemberIDs.length < 1) {
+            this.#groups.delete(groupName);
+        }
+
         return true;
     }
 
@@ -2236,18 +2247,27 @@ module.exports = class ServerController {
      * 
      * @param {Participant} member new member instance
      * @param {String} newGroupName name of new group
-     * @param {Socket.IO} socket socket of this client
      */
-    #handleLeaveOldGroup = function(member, newGroupName, socket) {
+    #handleLeaveOldGroup = function(member, newGroupName) {
+        TypeChecker.isInstanceOf(member, Participant);
+        TypeChecker.isString(newGroupName);
+
         let memberID = member.getId();
 
         this.#groups.forEach((otherGroup, otherGroupName) => {
             if (otherGroupName !== newGroupName && otherGroup.includesGroupMember(memberID)) {
                 otherGroup.removeGroupMember(memberID);
+                let newMemberIDs = otherGroup.getGroupMemberIDs();
+
+                //if other group has no longer members, delete it from map
+                if (newMemberIDs.length < 1) {
+                    this.#groups.delete(groupName);
+                }
+                GroupService.removeGroupMember(otherGroupName, memberID, Settings.CONFERENCE_ID, this.#db);
+
                 let otherGroupChat = otherGroup.getGroupChat();
                 let otherGroupChatID = otherGroupChat.getId();
-
-                this.#handleLeaveGroupChat(memberID, otherGroupChatID, socket);
+                this.#handleLeaveGroupChat(memberID, otherGroupChatID);
             }
         });
     }
@@ -2262,6 +2282,13 @@ module.exports = class ServerController {
      * @param {String} creatorUsername chatCreator username
      */
     #handleGroupChatCreation = function(chatPartnerIDList, chat, creatorUsername) {
+        TypeChecker.isInstanceOf(chatPartnerIDList, Array);
+        chatPartnerIDList.forEach(partnerID => {
+            TypeChecker.isString(partnerID);
+        })
+        TypeChecker.isInstanceOf(chat, GroupChat);
+        TypeChecker.isString(creatorUsername);
+
         let chatId = chat.getId();
         let chatName = chat.getChatName();
         let creatorID = chat.getOwnerId();
@@ -2317,6 +2344,13 @@ module.exports = class ServerController {
      * @param {String} creatorUsername chatCreator username
      */
     #handleJoinGroupChat = function(chatPartnerIDList, chat, creatorUsername) {
+        TypeChecker.isInstanceOf(chatPartnerIDList, Array);
+        chatPartnerIDList.forEach(partnerID => {
+            TypeChecker.isString(partnerID);
+        })
+        TypeChecker.isInstanceOf(chat, GroupChat);
+        TypeChecker.isString(creatorUsername);
+
         let chatId = chat.getId();
         let creatorID = chat.getOwnerId();
         let existingChatPartnerIDList = chat.getParticipantList();
@@ -2441,18 +2475,21 @@ module.exports = class ServerController {
      * 
      * @method module:ServerController#handleLeaveGroupChat
      * 
-     * @param {Participant} member new member instance
-     * @param {GroupChat} groupChat group chat
-     * @param {Socket.IO} socket socket of this client
+     * @param {String} memberID memberID
+     * @param {String} groupChatID group chat ID
      */
-     #handleLeaveGroupChat = function(memberID, groupChatID, socket) {
+     #handleLeaveGroupChat = function(memberID, groupChatID) {
+        TypeChecker.isString(memberID);
+        TypeChecker.isString(groupChatID);
     
+        let socketID = this.getSocketId(memberID);
         let member = this.#ppants.get(memberID);
-        let memberBusinessCard = member.getBusinessCard();
-        let memberUsername = memberBusinessCard.getUsername();
 
-        if (member !== undefined && member.isMemberOfChat(groupChatID)) {
+        if (member !== undefined && socketID !== undefined && member.isMemberOfChat(groupChatID)) {
 
+            let memberBusinessCard = member.getBusinessCard();
+            let memberUsername = memberBusinessCard.getUsername();
+            let socket = this.getSocketObject(socketID);
             let chatPartnerIDList = member.getChat(groupChatID).getParticipantList();
 
             let msgText = memberUsername + " has left the chat";

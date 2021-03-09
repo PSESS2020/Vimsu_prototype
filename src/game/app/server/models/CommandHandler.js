@@ -694,6 +694,11 @@ module.exports = class CommandHandler {
                 memberIDs.push(ppantID);
             }
         }
+        
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
+        }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
             let header = "Group successfully created";
@@ -754,6 +759,11 @@ module.exports = class CommandHandler {
             }
         }
 
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
+        }
+
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
             let header = "Added users to group";
             let body = "Successfully added users to group " + groupName + ".";
@@ -789,6 +799,11 @@ module.exports = class CommandHandler {
             if (!memberIDs.includes(ppantID)) {
                 memberIDs.push(ppantID);
             }
+        }
+
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {

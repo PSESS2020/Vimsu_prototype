@@ -210,5 +210,9 @@ module.exports = Object.freeze({
     GROUPNOTEXISTS: {
         header: "Group does not exist",
         body: "A group with this name does not exist. Please try again."
+    },
+    NOUSERSFOUND: {
+        header: "No Users found",
+        body: "No Users were found. Don't forget to pass valid usernames!"
     }
 });
