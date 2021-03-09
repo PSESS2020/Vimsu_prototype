@@ -13,7 +13,7 @@ const db = require('../../../../config/db')
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class Chatservice {
+module.exports = class ChatService {
 
     /**
      * creates a new one to one chat instance and saves it in the database
