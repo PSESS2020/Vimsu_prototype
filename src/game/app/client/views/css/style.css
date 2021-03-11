@@ -499,8 +499,7 @@ body::-webkit-scrollbar-track:hover ~ body::-webkit-scrollbar-thumb:hover{
   opacity: 1 !important;
   outline: none !important;
   box-shadow: none !important;
-  position: absolute; 
-  right: 1rem;
+  position: relative; 
 }
 
 .close:hover {
