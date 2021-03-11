@@ -877,6 +877,11 @@ module.exports = class ServerController {
                     return;
                 }
 
+                //client should not be able to add new chat members to chat from an existing group
+                if (this.#isChatFromGroup(chatId)) {
+                    return;
+                }
+
                 let ppantID = socket.ppantID;
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
@@ -1014,6 +1019,8 @@ module.exports = class ServerController {
                                     friendRequestSent: friendRequestSent,
                                     partnerId: chatPartnerID,
                                     groupChat: false,
+                                    inviteButton: false, 
+                                    leaveButton: true,
                                     messages: [],
 
                                 };
@@ -1047,6 +1054,8 @@ module.exports = class ServerController {
                                             friendRequestSent: friendRequestSent,
                                             partnerId: chatPartnerID,
                                             groupChat: false,
+                                            inviteButton: false,
+                                            leaveButton: true,
                                             messages: [],
 
                                         };
@@ -1071,6 +1080,8 @@ module.exports = class ServerController {
                                     friendRequestSent: friendRequestSent,
                                     partnerId: chatPartnerID,
                                     groupChat: false,
+                                    inviteButton: false,
+                                    leaveButton: true,
                                     messages: chat.messageList,
                                 }
 
@@ -1095,6 +1106,11 @@ module.exports = class ServerController {
                         TypeChecker.isString(chatId);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
+                //client should not be able to add new chat members to chat from an existing group
+                if (this.#isChatFromGroup(chatId)) {
                     return;
                 }
 
@@ -1131,7 +1147,7 @@ module.exports = class ServerController {
                     if (chat instanceof OneToOneChat)
                         return false;
 
-                    this.#handleJoinGroupChat(newChatPartnerID, chat, creatorUsername);
+                    this.#handleJoinGroupChat(chatPartnerIDList, chat, creatorUsername);
                     
 
                 } else {
@@ -1170,6 +1186,8 @@ module.exports = class ServerController {
                             friendRequestSent: true,
                             partnerId: undefined,
                             groupChat: true,
+                            inviteButton: true,
+                            leaveButton: true,
                             messages: []
                         };
 
@@ -1295,6 +1313,8 @@ module.exports = class ServerController {
                                 friendRequestSent: participant.hasSentFriendRequest(partnerId),
                                 partnerId: partnerId,
                                 groupChat: false,
+                                inviteButton: false,
+                                leaveButton: true,
                                 messages: messageInfoData
                             }
 
@@ -1308,11 +1328,21 @@ module.exports = class ServerController {
                                 friendRequestSent: true,
                                 partnerId: undefined,
                                 groupChat: false,
+                                inviteButton: false,
+                                leaveButton: true,
                                 messages: messageInfoData
                             }
                         }
 
                     } else {
+                        let leaveButton = true;
+                        let inviteButton = true;
+
+                        if (this.#isChatFromGroup(chat.getId())) {
+                            leaveButton = false;
+                            inviteButton = false;
+                        }
+
                         var chatData = {
                             chatId: chat.getId(),
                             title: chat.getChatName(),
@@ -1320,6 +1350,8 @@ module.exports = class ServerController {
                             friendRequestSent: true,
                             partnerId: undefined,
                             groupChat: true,
+                            inviteButton: inviteButton,
+                            leaveButton: leaveButton,
                             messages: messageInfoData
                         }
                     }
@@ -1549,6 +1581,7 @@ module.exports = class ServerController {
                     TypeChecker.isString(removedFriendID);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    return;
                 }
 
                 let removerID = socket.ppantID;
@@ -1582,8 +1615,14 @@ module.exports = class ServerController {
                     TypeChecker.isString(chatId);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    return;
                 }
 
+                //client should not be able to leave a chat from a group without leaving the group entirely
+                if (this.#isChatFromGroup(chatId)) {
+                    return;
+                }
+                    
                 let removerId = socket.ppantID;
             
                 this.#handleLeaveGroupChat(removerId, chatId);
@@ -1597,6 +1636,7 @@ module.exports = class ServerController {
                     TypeChecker.isInt(npcID);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    return;
                 }
 
                 let ppantID = socket.ppantID;
@@ -1635,6 +1675,7 @@ module.exports = class ServerController {
                     TypeChecker.isString(enteredCode);
                 } catch (e) {
                     console.log('Client emitted wrong type of data! ' + e);
+                    return;
                 }
 
                 let ppantID = socket.ppantID;
@@ -2293,6 +2334,14 @@ module.exports = class ServerController {
         let chatName = chat.getChatName();
         let creatorID = chat.getOwnerId();
 
+        let inviteButton = true;
+        let leaveButton = true;
+
+        if (this.#isChatFromGroup(chatId)) {
+            inviteButton = false;
+            leaveButton = false;
+        }
+
         /* Chat Data that will be sent to client */
         let chatData = {
             title: chatName,
@@ -2304,6 +2353,8 @@ module.exports = class ServerController {
             friendRequestSent: true,
             partnerId: undefined,
             groupChat: true,
+            inviteButton: inviteButton,
+            leaveButton: leaveButton,
             messages: []
         };
 
@@ -2398,6 +2449,14 @@ module.exports = class ServerController {
                         if (previewText.length > 35) {
                             previewText = previewText.slice(0, 35) + "...";
                         }
+
+                        let inviteButton = true;
+                        let leaveButton = false;
+
+                        if (this.#isChatFromGroup(loadedChat.getId())) {
+                            inviteButton = false;
+                            leaveButton = false;
+                        }
         
                         var chatData = {
                             chatId: loadedChat.getId(),
@@ -2409,6 +2468,8 @@ module.exports = class ServerController {
                             friendRequestSent: true,
                             partnerId: undefined,
                             groupChat: true,
+                            inviteButton: inviteButton,
+                            leaveButton: leaveButton,
                             messages: messageInfoData
                         }
         
@@ -2423,6 +2484,8 @@ module.exports = class ServerController {
                             friendRequestSent: true,
                             partnerId: undefined,
                             groupChat: true,
+                            inviteButton: inviteButton,
+                            leaveButton: leaveButton,
                             messages: messageInfoData
                         }
                     }
@@ -2558,6 +2621,24 @@ module.exports = class ServerController {
         socket.emit('your shirt color changed', color);
         let currentRoomId = ppant.getPosition().getRoomId();
         socket.to(currentRoomId.toString()).emit('other shirt color changed', color, ppantID);
+    }
+
+    /**
+     * @private Checks if chat with chatId is a chat from an existing group
+     * 
+     * @method module:ServerController#isChatFromGroup
+     * 
+     * @param {String} chatId chatId
+     * 
+     * @return {boolean} true if chat is a chat from an existing group, false otherwise
+     */
+    #isChatFromGroup = function(chatId) {
+        for (let [groupName, group] of this.#groups) {
+            if (group.getGroupChat().getId() === chatId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
