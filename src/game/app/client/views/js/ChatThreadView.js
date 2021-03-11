@@ -133,10 +133,20 @@ class ChatThreadView extends WindowView {
 
         if (chat.groupChat) {
             $('#chatParticipantListBtn').show();
-            $('#inviteFriendsBtn').show();
         } else {
             $('#chatParticipantListBtn').hide();
+        }
+
+        if (chat.inviteButton) {
+            $('#inviteFriendsBtn').show();
+        } else {
             $('#inviteFriendsBtn').hide();
+        }
+
+        if (chat.leaveButton) {
+            $('#chatLeaveButton').show();
+        } else {
+            $('#chatLeaveButton').hide();
         }
 
         $('#chatThreadModal').modal('show');
