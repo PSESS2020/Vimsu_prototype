@@ -907,6 +907,15 @@ class GameView {
     };
 
     /**
+     * Closes chat thread window with chatId if it is currently open 
+     * 
+     * @param {String} chatId chatId
+     */
+     closeChatThreadView(chatId) {
+        this.#chatThreadView.close(chatId);
+    };
+
+    /**
      * Gets chat thread view
      * 
      * @return {ChatThreadView} chatThreadView

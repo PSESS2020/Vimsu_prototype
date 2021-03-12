@@ -1123,9 +1123,15 @@ class ClientController {
 
     /**
      * @private Receives from server that you left a group
+     * 
+     * @param {String} groupChatID chatID of left group
      */
-    #handleFromServerLeaveGroup = function() {
+    #handleFromServerLeaveGroup = function(groupChatID) {
+        TypeChecker.isString(groupChatID);
+
         this.#gameView.removeGroupName();
+        this.#gameView.closeChatThreadView(groupChatID);
+        this.#gameView.removeChat(groupChatID);
     }
 
     /* #################################################### */

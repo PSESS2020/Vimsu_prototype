@@ -192,6 +192,18 @@ class ChatThreadView extends WindowView {
     };
 
     /**
+     * Closes chat thread window with chatId if it is currently open 
+     * 
+     * @param {String} chatId chat ID
+     * @param {Object} message chat message
+     */
+    close(chatId) {
+        if (this.#chat.chatId === chatId) {
+            $('#chatThreadModal').modal('hide');
+        }
+    }
+
+    /**
      * Gets current chat ID
      * 
      * @return {String} chatId
