@@ -71,7 +71,13 @@ class InviteFriendsView extends WindowView {
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
                                 <div class="col-12 col-md-9 text-center text-sm-left">
-                                    <label class="name lead">${businessCard.getForename() + " (@" + businessCard.getUsername() + ")"}</label>
+                                    <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
+                                    <br> 
+                                    <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
+                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                    <br>
+                                    <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
+                                    <span class="small">${businessCard.getEmail()}</span>
                                 </div>
                                 <div class="col-12 col-md-1">
                                     <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">
