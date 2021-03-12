@@ -230,6 +230,9 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     }
 
+    /**
+     * @private disables friend request button
+     */
     #disableFriendRequestBtn = () => {
         document.getElementById("chatFriendRequestButton").disabled = true
         document.getElementById("chatFriendRequestButton").style.opacity = "0.5"
@@ -237,6 +240,9 @@ class ChatThreadView extends WindowView {
         document.getElementById("chatFriendRequestButton").title = "Friend request sent"
     }
 
+    /**
+     * @private enables friend request button
+     */
     #enableFriendRequestBtn = () => {
         document.getElementById("chatFriendRequestButton").disabled = false
         document.getElementById("chatFriendRequestButton").style.opacity = "1"
