@@ -23,15 +23,19 @@ class ChatParticipantListView extends Views {
 
     /**
      * Draws chat participant list window
+     * 
+     * @param {String} chatId chat id
      * @param {String[]} usernames usernames
      */
-    draw(usernames) {
-        $('#chatParticipantListWait').hide();
+    draw(chatId, usernames) {
+        $('#chatParticipantListWait' + chatId).hide();
+        $(`#chatParticipantListModal${chatId} .modal-body .list-group`).empty();
+
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
         this.#usernames = sortedUsernames;
 
         this.#usernames.forEach(username => {
-            $('#chatParticipantListModal .modal-body .list-group').append(`
+            $(`#chatParticipantListModal${chatId} .modal-body .list-group`).append(`
                 <li class="list-group-item bg-transparent chatthread" >
                     <div class="row w-100">
                         <div class="col-12 col-sm-1 px-0">
@@ -42,7 +46,6 @@ class ChatParticipantListView extends Views {
                         </div>
                     </div>
                 </li>
-
             `)
         })
     }

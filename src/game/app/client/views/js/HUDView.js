@@ -22,6 +22,7 @@ class HUDView extends Views {
 
         $('#rankListButton').off();
         $('#rankListButton').on('click', (event) => {
+            $('#rankListModal').modal('show');
             eventManager.handleRankListClicked();
         })
 
