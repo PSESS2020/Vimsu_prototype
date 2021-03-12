@@ -17,10 +17,6 @@ class AchievementView extends WindowView {
         }
 
         AchievementView.instance = this;
-
-        $('#achievementsModal').on('hidden.bs.modal', function (e) {
-            $('#achievementModalContent').empty();
-        })
     }
 
     /**
@@ -29,6 +25,8 @@ class AchievementView extends WindowView {
      * @param {Object[]} achievements achievements
      */
     draw(achievements) {
+        $('#achievementWait').hide()
+        $('#achievementModalContent').empty();
 
         achievements.forEach(achievement => {
             var level = achievement.currentLevel;
@@ -58,8 +56,5 @@ class AchievementView extends WindowView {
                 </div>
             `)
         })
-
-        $('#achievementsModal').modal('show');
-
     }
 }

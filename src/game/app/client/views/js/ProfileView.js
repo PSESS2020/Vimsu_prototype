@@ -19,11 +19,6 @@ class ProfileView extends WindowView {
         }
 
         ProfileView.instance = this;
-
-        $('#profileModal').on('hidden.bs.modal', function (e) {
-            $('#profileModal .modal-header').empty()
-            $('#profileModal .modal-body').empty()
-        })
     }
 
     /**
@@ -33,6 +28,10 @@ class ProfileView extends WindowView {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isModerator) {
+        $('#profileWait').hide();
+        $('#profileModal .modal-header').empty()
+        $('#profileModal .modal-body').empty()
+
         this.#businessCard = businessCard;
         this.#isModerator = isModerator;
 
@@ -77,6 +76,6 @@ class ProfileView extends WindowView {
             </table>
         `)
 
-        $('#profileModal').modal('show');
+        
     }
 }

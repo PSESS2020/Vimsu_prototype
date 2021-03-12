@@ -79,6 +79,10 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
+            $('#chatParticipantListModal .modal-body .list-group').empty()
+            $('#chatParticipantListModal').modal('show');
+            $('#chatParticipantListWait').show();
+
             this.#eventManager.handleShowChatParticipantList(this.#chat.chatId);
         })
 
@@ -89,6 +93,15 @@ class ChatThreadView extends WindowView {
             if (this.#chat.partnerId) {
                 return;
             }
+
+            $('#inviteFriendsModal .modal-body .list-group').empty();
+            $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
+            $('#noinvitedfriends').hide();
+            $('#toomanyinvitedfriends').hide();
+            $('#toomanyinvitedfriends').empty();
+            $('#createGroupChat').hide();
+            $('#inviteFriendsModal').modal('show');
+            $('#inviteFriendsWait').show();
 
             this.#eventManager.handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
@@ -113,10 +126,11 @@ class ChatThreadView extends WindowView {
      * @param {Object} chat chat
      */
     draw(chat) {
+        $('#chatThreadWait').hide();
+
         this.#chat = chat;
         this.#messages = chat.messages;
-        $('#chatThreadModalTitle').empty();
-        $('#chatThreadModal .modal-body .list-group').empty();
+        
         $('#chatThreadModalTitle').text(chat.title);
 
         if ($('#notifChatDiv' + this.#chat.chatId).length)
@@ -149,7 +163,6 @@ class ChatThreadView extends WindowView {
             $('#chatLeaveButton').hide();
         }
 
-        $('#chatThreadModal').modal('show');
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
     };
 
@@ -246,19 +259,21 @@ class ChatThreadView extends WindowView {
      * @private disables friend request button
      */
     #disableFriendRequestBtn = () => {
-        document.getElementById("chatFriendRequestButton").disabled = true
-        document.getElementById("chatFriendRequestButton").style.opacity = "0.5"
-        document.getElementById("chatFriendRequestButton").style.cursor = "not-allowed"
-        document.getElementById("chatFriendRequestButton").title = "Friend request sent"
+        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton");
+        chatFriendRequestButton.disabled = true
+        chatFriendRequestButton.style.opacity = "0.5"
+        chatFriendRequestButton.style.cursor = "not-allowed"
+        chatFriendRequestButton.title = "Friend request sent"
     }
 
     /**
      * @private enables friend request button
      */
     #enableFriendRequestBtn = () => {
-        document.getElementById("chatFriendRequestButton").disabled = false
-        document.getElementById("chatFriendRequestButton").style.opacity = "1"
-        document.getElementById("chatFriendRequestButton").style.cursor = "pointer"
-        document.getElementById("chatFriendRequestButton").title = "Send friend request"
+        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton");
+        chatFriendRequestButton.disabled = false
+        chatFriendRequestButton.style.opacity = "1"
+        chatFriendRequestButton.style.cursor = "pointer"
+        chatFriendRequestButton.title = "Send friend request"
     }
 }

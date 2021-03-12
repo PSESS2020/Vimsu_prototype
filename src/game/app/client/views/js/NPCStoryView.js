@@ -17,11 +17,6 @@ class NPCStoryView extends WindowView {
         }
 
         NPCStoryView.instance = this;
-
-        $('#npcStoryModal').on('hidden.bs.modal', function (e) {
-            $('#npcStoryModal .modal-header').empty()
-            $('#npcStoryModal .modal-body').empty();
-        });
     }
 
     /**
@@ -31,6 +26,8 @@ class NPCStoryView extends WindowView {
      * @param {String[]} story NPC story
      */
     draw(name, story) {
+        $('#npcStoryWait').hide()
+        
         $('#npcStoryModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle">${name + " says..."}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -79,7 +76,5 @@ class NPCStoryView extends WindowView {
                 $('#forwardStory' + i).show();
             };
         }
-
-        $('#npcStoryModal').modal('show');
     }
 }

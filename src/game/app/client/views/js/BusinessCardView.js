@@ -46,6 +46,8 @@ class BusinessCardView extends WindowView {
         this.#rank = rank;
         this.#isModerator = isModerator;
 
+        $('#businessCardWait' + this.#businessCard.getParticipantId()).remove();
+
         $('#businessCardModal .modal-body').append(`
                 
                 <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">

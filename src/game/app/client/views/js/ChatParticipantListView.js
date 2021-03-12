@@ -26,8 +26,7 @@ class ChatParticipantListView extends Views {
      * @param {String[]} usernames usernames
      */
     draw(usernames) {
-        $('#chatParticipantListModal .modal-body .list-group').empty()
-
+        $('#chatParticipantListWait').hide();
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
         this.#usernames = sortedUsernames;
 
@@ -46,8 +45,6 @@ class ChatParticipantListView extends Views {
 
             `)
         })
-
-        $('#chatParticipantListModal').modal('show');
     }
 
     /**

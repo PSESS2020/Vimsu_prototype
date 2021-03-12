@@ -27,6 +27,10 @@ class FriendListView extends WindowView {
 
         $('#friendRequestList').off();
         $('#friendRequestList').on('click', (event) => {
+            $('#friendRequestListModal .modal-body #nofriendrequest').empty();
+            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal').modal('show');
+            $('#friendRequestListWait').show();
             this.#eventManager.handleFriendRequestListClicked();
         })
     }
@@ -37,12 +41,12 @@ class FriendListView extends WindowView {
      * @param {BusinessCardClient[]} businessCards friends' business card
      */
     draw(businessCards) {
+        $('#friendlistWait').hide();
         $('#friendListModal .modal-body #nofriend').empty();
         $('#friendListModal .modal-body .list-group').empty();
 
         if (businessCards.length < 1) {
             $('#friendListModal .modal-body #nofriend').text("No friend is found. Chat with others and send some friend requests!");
-            $('#friendListModal').modal('show');
             return;
         }
 
@@ -100,8 +104,6 @@ class FriendListView extends WindowView {
                     event.stopImmediatePropagation();
             })
         })
-
-        $('#friendListModal').modal('show');
     }
 
     /**

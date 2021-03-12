@@ -29,11 +29,10 @@ class ScheduleListView extends WindowView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     draw(lectures, timeOffset) {
-        $('#scheduleModal .modal-body #noschedule').empty();
+        $('#scheduleWait').hide()
 
         if (lectures.length < 1) {
             $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.");
-            $('#scheduleModal').modal('show');
             return;
         }
 
@@ -54,15 +53,12 @@ class ScheduleListView extends WindowView {
         $('#scheduleModal').on('hide.bs.modal', (e) => {
             clearInterval(interval);
         })
-
     }
 
     /**
      * @private draws schedule window
      */
     #drawSchedule = function (interval) {
-        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
-
         var count = 0;
         var now = Date.now();
 
@@ -113,7 +109,5 @@ class ScheduleListView extends WindowView {
             $('#scheduleModal .modal-body #noschedule').text("Sorry, all lectures have expired.");
             clearInterval(interval);
         }
-
-        $('#scheduleModal').modal('show');
     }
 }

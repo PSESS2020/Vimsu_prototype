@@ -39,16 +39,12 @@ class InviteFriendsView extends WindowView {
      * @param {?String} chatId group chat ID
      */
     draw(businessCards, groupName, limit, chatId) {
-        $('#inviteFriendsModal .modal-body .list-group').empty();
-        $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
-        $('#createGroupChat').show();
+        $('#inviteFriendsWait').hide();
         this.#invitedFriends = [];
 
         if (businessCards) {
             if (businessCards.length < 1) {
                 $('#inviteFriendsModal .modal-body #nofriendtoinvite').text("No friends to invite.");
-                $('#createGroupChat').hide();
-                $('#inviteFriendsModal').modal('show');
                 return;
             }
 
@@ -57,10 +53,6 @@ class InviteFriendsView extends WindowView {
             this.#groupName = groupName;
             this.#limit = limit;
             this.#chatId = chatId;
-
-            $('#noinvitedfriends').hide();
-            $('#toomanyinvitedfriends').hide();
-            $('#toomanyinvitedfriends').empty();
 
             this.#businessCards.forEach(businessCard => {
                 $('#inviteFriendsModal .modal-body .list-group').append(`
@@ -123,16 +115,13 @@ class InviteFriendsView extends WindowView {
                         $('#toomanyinvitedfriends').text("You may only invite " + this.#limit + " friend(s)! Please unselect " + diff + " friend(s).");
                         $('#toomanyinvitedfriends').show();
                     }
-
                 })
-
             });
 
+            $('#createGroupChat').show();
         } else {
             $('#inviteFriendsModal .modal-body').text("Group name was empty!")
         }
-
-        $('#inviteFriendsModal').modal('show');
     }
 
     /**

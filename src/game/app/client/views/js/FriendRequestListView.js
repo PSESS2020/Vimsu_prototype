@@ -32,12 +32,10 @@ class FriendRequestListView extends WindowView {
      * @param {BusinessCardClient[]} businessCards requesters' business card
      */
     draw(businessCards) {
-        $('#friendRequestListModal .modal-body #nofriendrequest').empty();
-        $('#friendRequestListModal .modal-body .list-group').empty()
+        $('#friendRequestListWait').hide();
 
         if (businessCards.length < 1) {
             $('#friendRequestListModal .modal-body #nofriendrequest').text("No friend request received.")
-            $('#friendRequestListModal').modal('show');
             return;
         }
 
@@ -86,8 +84,6 @@ class FriendRequestListView extends WindowView {
                 this.#eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
             })
         })
-
-        $('#friendRequestListModal').modal('show');
     }
 
     /**

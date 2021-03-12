@@ -92,6 +92,10 @@ class NPCAvatarView extends AvatarView {
      * called if npc is clicked
      */
     onClick() {
+        $('#npcStoryModal .modal-header').empty()
+        $('#npcStoryModal .modal-body').empty();
+        $('#npcStoryModal').modal('show');
+        $('#npcStoryWait').show();
         this.#eventManager.handleNPCClick(this.#npcId);
     }
 }

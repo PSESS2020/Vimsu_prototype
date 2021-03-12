@@ -191,8 +191,14 @@ class ParticipantAvatarView extends AvatarView {
      */
     onClick() {
         if (this.#isVisible) {
-
-            $('#businessCardModal').modal('toggle');
+            $('#businessCardModal').modal('show');
+            $('#businessCardModal .modal-body').append(`
+                <div id=${"businessCardWait" + this.#participantId} style="text-align: center;">
+                    <i class="fas fa-cog fa-spin fa-2x"></i>
+                    <i class="fas fa-cog fa-spin fa-2x"></i>
+                    <i class="fas fa-cog fa-spin fa-2x"></i>
+                </div>
+            `)
             this.#eventManager.handleAvatarClick(this.#participantId);
         }
     }
