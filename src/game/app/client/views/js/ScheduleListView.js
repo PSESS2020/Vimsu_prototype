@@ -101,7 +101,7 @@ class ScheduleListView extends WindowView {
             `)
 
             if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
-                $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
+                document.getElementById("schedulerow" + lecture.id).style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })
 

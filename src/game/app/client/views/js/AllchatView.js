@@ -21,17 +21,19 @@ class AllchatView extends Views {
         AllchatView.instance = this;
 
         $('#hideRoomChat').hide();
-        $('#allchatWindow')[0].style.visibility = "hidden";
+
+        const allchatWindow = document.getElementById("allchatWindow")
+        allchatWindow.style.visibility = "hidden";
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-            $('#allchatWindow')[0].style.visibility = "visible";
+            allchatWindow.style.visibility = "visible";
             $('#showRoomChat').hide();
             $('#hideRoomChat').show();
         })
         $('#hideRoomChat').on('click', (event) => {
             event.preventDefault();
-            $('#allchatWindow')[0].style.visibility = "hidden";
+            allchatWindow.style.visibility = "hidden";
             $('#hideRoomChat').hide();
             $('#showRoomChat').show();
         })
