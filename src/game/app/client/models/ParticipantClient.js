@@ -2,6 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     Direction = require('../shared/Direction.js');
+    ShirtColor = require('../shared/ShirtColor.js');
 }
 
 /**
@@ -18,6 +19,7 @@ class ParticipantClient {
     #forename;
     #isVisible;
     #isModerator;
+    #shirtColor;
 
     /**
      * Creates an instance of participant on client-side
@@ -28,14 +30,16 @@ class ParticipantClient {
      * @param {Direction} direction participant avatar direction
      * @param {boolean} isVisible participant avatar visibility
      * @param {boolean} isModerator participant avatar moderator status
+     * @param {ShirtColor} shirtColor participant avatar shirt color
      */
-    constructor(id, forename, position, direction, isVisible, isModerator) {
+    constructor(id, forename, position, direction, isVisible, isModerator, shirtColor) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isString(forename);
         TypeChecker.isBoolean(isVisible);
         TypeChecker.isBoolean(isModerator);
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.#id = id;
         this.#position = position;
@@ -43,6 +47,7 @@ class ParticipantClient {
         this.#forename = forename;
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
+        this.#shirtColor = shirtColor;
     }
 
     /**
@@ -137,6 +142,26 @@ class ParticipantClient {
     setisVisible(isVisible) {
         TypeChecker.isBoolean(isVisible);
         this.#isVisible = isVisible;
+    }
+
+    /**
+     * Gets avatar shirt color
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
+    }
+
+    /**
+     * Sets avatar shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#shirtColor = shirtColor;
     }
 }
 

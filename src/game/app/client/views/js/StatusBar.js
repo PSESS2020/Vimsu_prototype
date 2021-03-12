@@ -26,6 +26,7 @@ class StatusBar extends Views {
         StatusBar.instance = this;
 
         this.#connectionStatus = ConnectionState.CONNECTED;
+        $('#group').hide();
     }
 
     /**
@@ -124,5 +125,25 @@ class StatusBar extends Views {
         } else
             if (status === ConnectionState.DISCONNECTED)
                 this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
+    }
+
+    /**
+     * Adds and updates group status 
+     * 
+     * @param {String} groupName group name
+     */
+    addGroupName(groupName) {
+        TypeChecker.isString(groupName);
+        $('#group').empty();
+        $('#group').text("Group: " + groupName);
+        $('#group').show();
+    }
+
+    /**
+     * Removes group status from status bar
+     */
+    removeGroupName() {
+        $('#group').empty();
+        $('#group').hide();
     }
 }

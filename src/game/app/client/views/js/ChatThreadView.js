@@ -66,8 +66,8 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
-            $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').show();
+            this.updateFriendRequestButton(this.#chat.chatId, false, true)
+
             this.#eventManager.handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
         });
 
@@ -133,10 +133,20 @@ class ChatThreadView extends WindowView {
 
         if (chat.groupChat) {
             $('#chatParticipantListBtn').show();
-            $('#inviteFriendsBtn').show();
         } else {
             $('#chatParticipantListBtn').hide();
+        }
+
+        if (chat.inviteButton) {
+            $('#inviteFriendsBtn').show();
+        } else {
             $('#inviteFriendsBtn').hide();
+        }
+
+        if (chat.leaveButton) {
+            $('#chatLeaveButton').show();
+        } else {
+            $('#chatLeaveButton').hide();
         }
 
         $('#chatThreadModal').modal('show');
@@ -157,12 +167,11 @@ class ChatThreadView extends WindowView {
 
         if (areFriends) {
             $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').hide();
         } else if (friendRequestSent) {
-            $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').show();
+            this.#disableFriendRequestBtn()
+            $('#chatFriendRequestButton').show();
         } else {
-            $('#friendRequestSent').hide();
+            this.#enableFriendRequestBtn()
             $('#chatFriendRequestButton').show();
         }
     }
@@ -181,6 +190,18 @@ class ChatThreadView extends WindowView {
         this.#messages.push(message);
         this.#appendMessage(message);
     };
+
+    /**
+     * Closes chat thread window with chatId if it is currently open 
+     * 
+     * @param {String} chatId chat ID
+     * @param {Object} message chat message
+     */
+    close(chatId) {
+        if (this.#chat.chatId === chatId) {
+            $('#chatThreadModal').modal('hide');
+        }
+    }
 
     /**
      * Gets current chat ID
@@ -219,5 +240,25 @@ class ChatThreadView extends WindowView {
 
         $('#chatThreadModalList').append(messageDiv);
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
+    }
+
+    /**
+     * @private disables friend request button
+     */
+    #disableFriendRequestBtn = () => {
+        document.getElementById("chatFriendRequestButton").disabled = true
+        document.getElementById("chatFriendRequestButton").style.opacity = "0.5"
+        document.getElementById("chatFriendRequestButton").style.cursor = "not-allowed"
+        document.getElementById("chatFriendRequestButton").title = "Friend request sent"
+    }
+
+    /**
+     * @private enables friend request button
+     */
+    #enableFriendRequestBtn = () => {
+        document.getElementById("chatFriendRequestButton").disabled = false
+        document.getElementById("chatFriendRequestButton").style.opacity = "1"
+        document.getElementById("chatFriendRequestButton").style.cursor = "pointer"
+        document.getElementById("chatFriendRequestButton").title = "Send friend request"
     }
 }

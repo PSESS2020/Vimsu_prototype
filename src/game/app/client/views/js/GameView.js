@@ -415,6 +415,23 @@ class GameView {
     }
 
     /**
+     * Updates group name in status bar
+     * 
+     * @param {String} groupName group name
+     */
+    addGroupName(groupName) {
+        TypeChecker.isString(groupName);
+        this.#statusBar.addGroupName(groupName);
+    }
+
+    /**
+     * Remove group name from status bar
+     */
+    removeGroupName() {
+        this.#statusBar.removeGroupName();
+    }
+
+    /**
      * Initializes room view when participant enters Room
      * 
      * @param {Object[]} assetPaths asset paths
@@ -430,7 +447,7 @@ class GameView {
 
         this.#npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), this.#gameEngine, this.#eventManager));
+            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.#gameEngine, this.#eventManager));
         });
 
         this.#currentMapView = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
@@ -457,6 +474,7 @@ class GameView {
             this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
+                participant.getShirtColor(),
                 participant.getId(),
                 participant.getForename(),
                 participant.getIsVisible(),
@@ -565,11 +583,12 @@ class GameView {
 
         let startingPos = ownParticipant.getPosition();
         let startingDir = ownParticipant.getDirection();
+        let shirtColor = ownParticipant.getShirtColor();
         let id = ownParticipant.getId();
         let forename = ownParticipant.getForename();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, id, forename, true, isModerator, true, this.#gameEngine, this.#eventManager);
+        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, forename, true, isModerator, true, this.#gameEngine, this.#eventManager);
         this.#addToUpdateList(this.#ownAvatarView);
     }
 
@@ -620,6 +639,7 @@ class GameView {
      * Updates other avatars moderator state
      * 
      * @param {boolean} modState true if moderator, false otherwise
+     * @param {String} ppantID ID of that ppant
      */
     setOtherModState(modState, ppantID) {
         TypeChecker.isBoolean(modState);
@@ -632,6 +652,36 @@ class GameView {
         }
 
         this.#anotherParticipantAvatarViews[index].setIsModerator(modState);
+    }
+
+    /**
+     * Updates own avatars shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setOwnShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#ownAvatarView.updateShirtColor(shirtColor);
+    }
+
+    /**
+     * Updates other avatars shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     * @param {String} ppantID ID of that ppant
+     */
+    setOtherShirtColor(shirtColor, ppantID) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+        TypeChecker.isString(ppantID);
+
+        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
+
+        if (index < 0) {
+            throw new Error(participantId + " is not in list of participants")
+        }
+
+        this.#anotherParticipantAvatarViews[index].updateShirtColor(shirtColor);
     }
 
     /**
@@ -852,6 +902,15 @@ class GameView {
         if (openNow) {
             this.#chatThreadView.draw(chat);
         }
+    };
+
+    /**
+     * Closes chat thread window with chatId if it is currently open 
+     * 
+     * @param {String} chatId chatId
+     */
+     closeChatThreadView(chatId) {
+        this.#chatThreadView.close(chatId);
     };
 
     /**

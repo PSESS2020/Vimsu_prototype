@@ -207,6 +207,10 @@ class ClientController {
         this.#socket.on('enterCode', this.#handleFromServerEnterCode.bind(this));
         this.#socket.on('your mod state changed', this.#handleFromServerChangeYourModState.bind(this));
         this.#socket.on('other mod state changed', this.#handleFromServerChangeOtherModState.bind(this));
+        this.#socket.on('your shirt color changed', this.#handleFromServerChangeYourShirtColor.bind(this));
+        this.#socket.on('other shirt color changed', this.#handleFromServerChangeOtherShirtColor.bind(this));
+        this.#socket.on('join group', this.#handleFromServerJoinGroup.bind(this));
+        this.#socket.on('leave group', this.#handleFromServerLeaveGroup.bind(this));
     }
 
     /* #################################################### */
@@ -260,6 +264,7 @@ class ClientController {
         TypeChecker.isEnumOf(initInfo.dir, Direction);
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
+        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
@@ -275,7 +280,8 @@ class ClientController {
             initPos,
             initInfo.dir,
             initInfo.isVisible,
-            initInfo.isModerator
+            initInfo.isModerator,
+            initInfo.shirtColor
         );
         this.#currentRoom.enterParticipant(this.#ownParticipant);
         this.#initGameView();
@@ -332,6 +338,7 @@ class ClientController {
             TypeChecker.isInt(npc.cordX);
             TypeChecker.isInt(npc.cordY);
             TypeChecker.isEnumOf(npc.direction, Direction);
+            TypeChecker.isEnumOf(npc.shirtColor, ShirtColor);
         });
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -360,7 +367,7 @@ class ClientController {
         //transform NPCs to NPCClients
         var listOfNPCs = [];
         npcData.forEach(npc => {
-            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction));
+            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction, npc.shirtColor));
         });
 
         //transform Doors to DoorClients
@@ -497,9 +504,10 @@ class ClientController {
         TypeChecker.isEnumOf(initInfo.dir, Direction);
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
+        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initInfo.forename, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator);
+        var participant = new ParticipantClient(initInfo.id, initInfo.forename, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator, initInfo.shirtColor);
         this.#currentRoom.enterParticipant(participant);
         this.#gameView.initAnotherAvatarViews(participant);
     }
@@ -1052,6 +1060,60 @@ class ClientController {
         }
 
         this.#gameView.setOtherModState(modState, ppantID);
+    }
+
+    /**
+     * @private Receives from server that your own shirt color changed
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    #handleFromServerChangeYourShirtColor = function(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#gameView.setOwnShirtColor(shirtColor);
+        this.#ownParticipant.setShirtColor(shirtColor);
+    }
+
+    /**
+     * @private Receives from server that an other ppants shirt color changed
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     * @param {String} ppantID ID of that ppant
+     */
+    #handleFromServerChangeOtherShirtColor = function(shirtColor, ppantID) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+        TypeChecker.isString(ppantID);
+
+        let ppant = this.#currentRoom.getParticipant(ppantID);
+        if (ppant !== undefined) {
+            ppant.setShirtColor(shirtColor);
+        }
+
+        this.#gameView.setOtherShirtColor(shirtColor, ppantID);
+    }
+
+    /**
+     * @private Receives from server that you joined a group
+     * 
+     * @param {String} groupName name of joined group
+     */
+    #handleFromServerJoinGroup = function(groupName) {
+        TypeChecker.isString(groupName);
+
+        this.#gameView.addGroupName(groupName);
+    }
+
+    /**
+     * @private Receives from server that you left a group
+     * 
+     * @param {String} groupChatID chatID of left group
+     */
+    #handleFromServerLeaveGroup = function(groupChatID) {
+        TypeChecker.isString(groupChatID);
+
+        this.#gameView.removeGroupName();
+        this.#gameView.closeChatThreadView(groupChatID);
+        this.#gameView.removeChat(groupChatID);
     }
 
     /* #################################################### */

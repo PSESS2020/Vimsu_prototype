@@ -30,6 +30,7 @@ class ParticipantAvatarView extends AvatarView {
      * 
      * @param {PositionClient} position avatar position
      * @param {Direction} direction avatar direction
+     * @param {ShirtColor} shirtColor avatar shirt color
      * @param {String} participantId participant ID
      * @param {String} forename forename
      * @param {boolean} isVisible true if visible, otherwise false
@@ -38,11 +39,13 @@ class ParticipantAvatarView extends AvatarView {
      * @param {IsometricEngine} gameEngine game engine instance
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(position, direction, participantId, forename, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
-        super(position, direction);
+    constructor(position, direction, shirtColor, participantId, forename, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
+        super(position, direction, shirtColor);
         TypeChecker.isString(participantId);
+
         this.#participantId = participantId;
-        this.#initSpriteAnimation();
+        this.initSpriteAnimation();
+
         this.#currentAnimation = this.#standingDownRightAnimation;
         this.#forename = forename;
         this.#isVisible = isVisible;
@@ -246,13 +249,14 @@ class ParticipantAvatarView extends AvatarView {
     }
 
     /**
-     * @private initializes sprite animation
+     * Initializes sprite animation
      */
-    #initSpriteAnimation = function () {
-        var spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var topClothing = new SpriteSheet('client/assets/avatar/TopClothingBlueShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        var shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+    initSpriteAnimation() {
+        let spriteSheet = super.getSpriteSheet();
+        let topClothing = super.getTopClothing();
+        let bottomClothing = super.getBottomClothing();
+        let shoes = super.getShoes();
+
         this.#walkingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 1, 4);
         this.#walkingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 11, 14);
         this.#walkingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 6, 9);

@@ -184,15 +184,6 @@ form button:hover {
   font-size: 15px;
 }
 
-.navbarIconsDisabled {
-  background-color: transparent !important; 
-  border-color: transparent !important; 
-  color: antiquewhite; 
-  opacity: .5 !important;
-  box-shadow: 0px 0px 0px transparent;
-  transform: scale(0.8);
-}
-
 .friendRequestListButton:hover {
   opacity: .5 !important;
 }
@@ -511,11 +502,10 @@ body::-webkit-scrollbar-track:hover ~ body::-webkit-scrollbar-thumb:hover{
   background-color: transparent !important; 
   border-color: transparent !important; 
   color: antiquewhite; 
-  opacity: 1 !important;
+  opacity: 1;
   outline: none !important;
   box-shadow: none !important;
-  position: absolute; 
-  right: 1rem;
+  position: relative; 
 }
 
 .close:hover {
