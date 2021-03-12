@@ -66,8 +66,8 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
-            $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').show();
+            this.updateFriendRequestButton(this.#chat.chatId, false, true)
+
             this.#eventManager.handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
         });
 
@@ -167,12 +167,11 @@ class ChatThreadView extends WindowView {
 
         if (areFriends) {
             $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').hide();
         } else if (friendRequestSent) {
-            $('#chatFriendRequestButton').hide();
-            $('#friendRequestSent').show();
+            this.#disableFriendRequestBtn()
+            $('#chatFriendRequestButton').show();
         } else {
-            $('#friendRequestSent').hide();
+            this.#enableFriendRequestBtn()
             $('#chatFriendRequestButton').show();
         }
     }
@@ -229,5 +228,19 @@ class ChatThreadView extends WindowView {
 
         $('#chatThreadModalList').append(messageDiv);
         $('#chatThreadModalList').scrollTop($('#chatThreadModalList')[0].scrollHeight);
+    }
+
+    #disableFriendRequestBtn = () => {
+        document.getElementById("chatFriendRequestButton").disabled = true
+        document.getElementById("chatFriendRequestButton").style.opacity = "0.5"
+        document.getElementById("chatFriendRequestButton").style.cursor = "not-allowed"
+        document.getElementById("chatFriendRequestButton").title = "Friend request sent"
+    }
+
+    #enableFriendRequestBtn = () => {
+        document.getElementById("chatFriendRequestButton").disabled = false
+        document.getElementById("chatFriendRequestButton").style.opacity = "1"
+        document.getElementById("chatFriendRequestButton").style.cursor = "pointer"
+        document.getElementById("chatFriendRequestButton").title = "Send friend request"
     }
 }
