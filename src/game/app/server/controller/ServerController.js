@@ -1440,7 +1440,7 @@ module.exports = class ServerController {
                         const username = await ParticipantService.getUsername(chatPartnerID, Settings.CONFERENCE_ID, this.#db)
                         chatParticipantList.push(username);
                     })).then(res => {
-                        this.#io.to(socket.id).emit('chatParticipantList', chatParticipantList);
+                        this.#io.to(socket.id).emit('chatParticipantList', chatId, chatParticipantList);
                     })
                 }
             })
@@ -2507,7 +2507,7 @@ module.exports = class ServerController {
                             existingChatParticipantChat.addMessage(msg);
         
                             if (existingChatParticipantChat instanceof GroupChat) {
-                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', newChatPartnerUsername);
+                                this.#io.to(this.getSocketId(existingChatParticipantID)).emit('addToChatParticipantList', chatId, newChatPartnerUsername);
         
                                 if (existingChatParticipant.hasFriend(newChatPartnerID))
                                     this.#io.to(this.getSocketId(existingChatParticipantID)).emit('removeFromInviteFriends', newChatPartnerID, true);
@@ -2570,7 +2570,7 @@ module.exports = class ServerController {
                         if (chatPartnerChat instanceof GroupChat) {
                             chatPartnerChat.removeParticipant(memberID);
                             chatPartnerChat.addMessage(msg);
-                            this.#io.in(groupChatID).emit('removeFromChatParticipantList', memberUsername);
+                            this.#io.in(groupChatID).emit('removeFromChatParticipantList', groupChatID, memberUsername);
                         }
                         
                         if (chatPartner.hasFriend(memberID)) {

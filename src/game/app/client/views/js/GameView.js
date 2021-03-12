@@ -963,7 +963,7 @@ class GameView {
             this.#chatListView.addNewMessage(chatId, message);
         }
 
-        if ($('#chatThreadModal').is(':visible')) {
+        if ($('#chatThreadModal' + chatId).is(':visible')) {
             this.#chatThreadView.addNewMessage(chatId, message);
         }
     };
@@ -1073,11 +1073,13 @@ class GameView {
     /**
      * Add username to group chat participant list
      * 
+     * @param {String} chatId chat id
      * @param {String} username username
      */
-    addToChatParticipantList(username) {
+    addToChatParticipantList(chatId, username) {
+        TypeChecker.isString(chatId);
         TypeChecker.isString(username);
-        if ($('#chatParticipantListModal').is(':visible')) {
+        if ($('#chatParticipantListModal' + chatId).is(':visible')) {
             this.#chatParticipantListView.addToChatParticipantList(username);
         }
     }
@@ -1085,11 +1087,13 @@ class GameView {
     /**
      * Removes username from group chat participant list
      * 
+     * @param {String} chatId chat id
      * @param {String} username username
      */
-    removeFromChatParticipantList(username) {
+    removeFromChatParticipantList(chatId, username) {
+        TypeChecker.isString(chatId);
         TypeChecker.isString(username);
-        if ($('#chatParticipantListModal').is(':visible')) {
+        if ($('#chatParticipantListModal' + chatId).is(':visible')) {
             this.#chatParticipantListView.removeFromChatParticipantList(username);
         }
     }
@@ -1114,14 +1118,16 @@ class GameView {
     /**
      * Draws group chat participant list
      * 
+     * @param {String} chatId chat id
      * @param {String[]} usernames list of usernames
      */
-    drawChatParticipantList(usernames) {
+    drawChatParticipantList(chatId, usernames) {
+        TypeChecker.isString(chatId)
         TypeChecker.isInstanceOf(usernames, Array);
         usernames.forEach(username => {
             TypeChecker.isString(username);
         })
-        this.#chatParticipantListView.draw(usernames);
+        this.#chatParticipantListView.draw(chatId, usernames);
     }
 
     /**

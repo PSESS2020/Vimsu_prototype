@@ -687,34 +687,40 @@ class ClientController {
     /**
      * @private Is called after server send the answer of group chat participant list click
      * 
+     * @param {String} chatId chat id
      * @param {String[]} usernames list of usernames
      */
-    #handleFromServerChatParticipantList = function (usernames) {
+    #handleFromServerChatParticipantList = function (chatId, usernames) {
+        TypeChecker.isString(chatId);
         TypeChecker.isInstanceOf(usernames, Array);
         usernames.forEach(username => {
             TypeChecker.isString(username);
         })
-        this.#gameView.drawChatParticipantList(usernames);
+        this.#gameView.drawChatParticipantList(chatId, usernames);
     }
 
     /**
      * @private Receives from server to add participant to chat participant list
      * 
+     * @param {String} chatId chat id
      * @param {String} username username
      */
-    #handleFromServerAddToChatParticipantList = function (username) {
+    #handleFromServerAddToChatParticipantList = function (chatId, username) {
+        TypeChecker.isString(chatId);
         TypeChecker.isString(username);
-        this.#gameView.addToChatParticipantList(username);
+        this.#gameView.addToChatParticipantList(chatId, username);
     }
 
     /**
      * @private Receives from server to remove participant from chat participant list
      * 
+     * @param {String} chatId chat id
      * @param {String} username username
      */
-    #handleFromServerRemoveFromChatParticipantList = function (username) {
+    #handleFromServerRemoveFromChatParticipantList = function (chatId, username) {
+        TypeChecker.isString(chatId);
         TypeChecker.isString(username);
-        this.#gameView.removeFromChatParticipantList(username);
+        this.#gameView.removeFromChatParticipantList(chatId, username);
     }
 
     /**

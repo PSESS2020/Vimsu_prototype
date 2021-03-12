@@ -11,7 +11,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: auto; height: 500px">
                     <table id="schedule" class="table" style="width:100%">
                         <thead>
                             <tr>
@@ -161,7 +161,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: auto; height: 500px">
                     <div id="achievementWait" style="text-align: center;">
                         <i class="fas fa-cog fa-spin fa-2x"></i>
                         <i class="fas fa-cog fa-spin fa-2x"></i>
@@ -209,7 +209,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: auto; height: 500px">
                     <div id="ranklistwait" style="text-align: center;">
                         <i class="fas fa-cog fa-spin fa-2x"></i>
                         <i class="fas fa-cog fa-spin fa-2x"></i>
@@ -260,66 +260,8 @@
         </div>
     </div>
 
-    <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="chatThreadModalTitle"></h5>
-                    <div class="d-flex flex-row justify-content-end">
-                        <div>
-                            <button id="chatLeaveButton" class="close btn" title="Leave chat">
-                                <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                            </button>
-                        </div>
-                        <div>
-                            <button id="chatFriendRequestButton" class="close btn">
-                                <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div>
-                            <a class="action_button nav-item nav-link close btn" title="Show chat participant list"
-                                role="button" id="chatParticipantListBtn" data-toggle="modal">
-                                <i class="fa fa-info-circle navbarIcons"
-                                    style="transform: scale(0.8); margin-top: 1px;"></i>
-                            </a>
-                        </div>
-                        <div>
-                            <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
-                                role="button" id="inviteFriendsBtn" data-toggle="modal">
-                                <i class="fa fa-plus-square navbarIcons"
-                                    style="transform: scale(0.8); margin-top: 1px;"></i>
-                            </a>
-                        </div>
-                        <div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
-                    <div id="chatThreadWait" style="text-align: center;">
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                    </div>
-                    <div id="chatThreadModalList" class="list-group mb-3"
-                        style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
-                    </div>
-                    <div class="d-flex">
-                        <form id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
-                            <input id="chatMessageInput" type="text"
-                                style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
-                                class="form-control" placeholder="Enter message ..." autocomplete="off">
-                            <div class="input-group-append">
-                                <button id="chatMessageButton" class="btn btn-accept" type="button">Send</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="chatThreadModalCollection">
+        
     </div>
 
     <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
@@ -399,29 +341,7 @@
         </div>
     </div>
 
-    <div class="modal" id="chatParticipantListModal" tabindex="-1" role="dialog"
-        aria-labelledby="chatParticipantListModalTitle" aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="chatParticipantListModalTitle">Chat Participant List</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto; height: 500px;">
-                    <div id="chatParticipantListWait" style="text-align: center;">
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                    </div>
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="chatParticipantListModalCollection"></div>
 
     <div class="lectureVideoWindow" id="lectureVideoWindow">
         <div class="container-fluid p-1">
