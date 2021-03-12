@@ -2633,7 +2633,7 @@ module.exports = class ServerController {
      * @return {boolean} true if chat is a chat from an existing group, false otherwise
      */
     #isChatFromGroup = function(chatId) {
-        for (let [groupName, group] of this.#groups) {
+        for (let group of this.#groups.values()) {
             if (group.getGroupChat().getId() === chatId) {
                 return true;
             }
