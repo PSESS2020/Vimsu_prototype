@@ -90,7 +90,6 @@ class ChatListView extends WindowView {
 
       $("#chat" + chat.chatId).off();
       $("#chat" + chat.chatId).on("click", () => {
-        this.addNewChatThreadWindow(chat.chatId)
         this.#eventManager.handleChatThreadClicked(chat.chatId);
       });
     });

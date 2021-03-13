@@ -149,6 +149,10 @@ class NotificationBar extends Views {
 
         $('#notifFriendRequest' + senderUsername).on('click', (e) => {
             $('#notifFriendRequestDiv' + senderUsername).remove();
+            $('#nofriendrequest').empty();
+            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal').modal('show');
+            $('#friendRequestListWait').show();
             return this.#eventManager.handleFriendRequestListClicked();
         })
     }
@@ -180,6 +184,7 @@ class NotificationBar extends Views {
         })
         $('#notifFriend' + friendUsername).on('click', (e) => {
             $('#notifFriendDiv' + friendUsername).remove();
+            $('#friendListModal').modal('show');
             return this.#eventManager.handleFriendListClicked();
         })
     }
