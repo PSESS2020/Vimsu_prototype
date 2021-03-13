@@ -122,7 +122,7 @@ class StatusBar extends Views {
         if (status === ConnectionState.CONNECTED) {
             $('#connectionStatus').empty();
         } else if (status === ConnectionState.DISCONNECTED) {
-            var result = confirm(`The connection to the server is lost and you won't be automatically reconnected. However, you can still look around. You will be automatically redirected to the homepage in ${Settings.TIME_UNTIL_LEAVE} seconds. Would you like to stay?`)
+            var result = confirm(`The connection to the server is lost and you won't be automatically reconnected. You will be automatically redirected to the homepage in ${Settings.TIME_UNTIL_LEAVE} seconds. However, you can still look around. Would you like to stay?`)
 
             if (result) {
                 return;
