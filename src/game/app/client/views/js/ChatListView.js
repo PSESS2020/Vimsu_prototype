@@ -92,10 +92,8 @@ class ChatListView extends WindowView {
 
       $("#chat" + chat.chatId).off();
       $("#chat" + chat.chatId).on("click", () => {
-        if (!($('#chatThreadModal' + chat.chatId).length)) {
-          this.#addNewChatThreadWindow(chat.chatId)
-        }
-          
+
+        this.addNewChatThreadWindow(chat.chatId)
         $("#chatThreadModal" + chat.chatId).modal("show");
 
         this.#eventManager.handleChatThreadClicked(chat.chatId);
@@ -153,67 +151,69 @@ class ChatListView extends WindowView {
     });
   }
 
-  #addNewChatThreadWindow = (chatID) => {
-    $("#chatThreadModalCollection").append(`
-        <div class="modal" id=${"chatThreadModal" + chatID} tabindex="-1" role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
-        aria-hidden="true" data-focus-on="input:first">
-          <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
-              <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
-                      <div class="d-flex flex-row justify-content-end">
-                          <div>
-                              <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
-                                  <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                              </button>
-                          </div>
-                          <div>
-                              <button id=${"chatFriendRequestButton" + chatID} class="close btn">
-                                  <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
-                              </button>
-                          </div>
-                          <div>
-                              <a class="action_button nav-item nav-link close btn" title="Show chat participant list"
-                                  role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
-                                  <i class="fa fa-info-circle navbarIcons"
-                                      style="transform: scale(0.8); margin-top: 1px;"></i>
-                              </a>
-                          </div>
-                          <div>
-                              <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
-                                  role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
-                                  <i class="fa fa-plus-square navbarIcons"
-                                      style="transform: scale(0.8); margin-top: 1px;"></i>
-                              </a>
-                          </div>
-                          <div>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
-                      <div id=${"chatThreadWait" + chatID} style="text-align: center;">
-                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
-                      </div>
-                      <div id=${"chatThreadModalList" + chatID} class="list-group mb-3"
-                          style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
-                      </div>
-                      <div class="d-flex">
-                          <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
-                              <input id=${"chatMessageInput" + chatID} type="text"
-                                  style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
-                                  class="form-control" placeholder="Enter message ..." autocomplete="off">
-                              <div class="input-group-append">
-                                  <button id=${"chatMessageButton" + chatID} class="btn btn-accept" type="button">Send</button>
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-    `);
+  addNewChatThreadWindow(chatID) {
+    if (!($('#chatThreadModal' + chatID).length)) {
+      $("#chatThreadModalCollection").append(`
+          <div class="modal" id=${"chatThreadModal" + chatID} tabindex="-1" role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
+          aria-hidden="true" data-focus-on="input:first">
+            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+                <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
+                        <div class="d-flex flex-row justify-content-end">
+                            <div>
+                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
+                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <button id=${"chatFriendRequestButton" + chatID} class="close btn">
+                                    <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <a class="action_button nav-item nav-link close btn" title="Show chat participant list"
+                                    role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
+                                    <i class="fa fa-info-circle navbarIcons"
+                                        style="transform: scale(0.8); margin-top: 1px;"></i>
+                                </a>
+                            </div>
+                            <div>
+                                <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
+                                    role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
+                                    <i class="fa fa-plus-square navbarIcons"
+                                        style="transform: scale(0.8); margin-top: 1px;"></i>
+                                </a>
+                            </div>
+                            <div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
+                        <div id=${"chatThreadWait" + chatID} style="text-align: center;">
+                          <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                        </div>
+                        <div id=${"chatThreadModalList" + chatID} class="list-group mb-3"
+                            style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
+                        </div>
+                        <div class="d-flex">
+                            <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
+                                <input id=${"chatMessageInput" + chatID} type="text"
+                                    style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
+                                    class="form-control" placeholder="Enter message ..." autocomplete="off">
+                                <div class="input-group-append">
+                                    <button id=${"chatMessageButton" + chatID} class="btn btn-accept" type="button">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      `);
+    }
   }
 }

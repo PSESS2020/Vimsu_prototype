@@ -27,6 +27,8 @@ class NPCStoryView extends WindowView {
      */
     draw(name, story) {
         $('#npcStoryWait').hide()
+        $('#npcStoryModal .modal-header').empty()
+        $('#npcStoryModal .modal-body').empty();
         
         $('#npcStoryModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle">${name + " says..."}</h5>

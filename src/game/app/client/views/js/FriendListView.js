@@ -88,14 +88,14 @@ class FriendListView extends WindowView {
             $('#chatfriend' + businessCard.getParticipantId()).off();
             $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendDiv' + businessCard.getUsername()).hide();
+                    $('#notifFriendDiv' + businessCard.getUsername()).remove();
                 this.#eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })
 
             $('#delete' + businessCard.getParticipantId()).off();
             $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendDiv' + businessCard.getUsername()).hide();
+                    $('#notifFriendDiv' + businessCard.getUsername()).remove();
 
                 var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
                 if (result)

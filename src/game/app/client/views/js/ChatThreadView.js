@@ -58,10 +58,10 @@ class ChatThreadView extends WindowView {
         $('#chatThreadModalTitle' + this.#chat.chatId).text(chat.title);
 
         if ($('#notifChatDiv' + this.#chat.chatId).length)
-            $('#notifChatDiv' + this.#chat.chatId).hide();
+            $('#notifChatDiv' + this.#chat.chatId).remove();
 
         if ($('#notifGroupChatDiv' + this.#chat.chatId).length)
-            $('#notifGroupChatDiv' + this.#chat.chatId).hide();
+            $('#notifGroupChatDiv' + this.#chat.chatId).remove();
 
         this.#messages.forEach((message) => {
             this.#appendMessage(message);
@@ -156,7 +156,7 @@ class ChatThreadView extends WindowView {
      */
     #appendMessage = (message) => {
         if ($('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).length) {
-            $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).hide();
+            $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).remove();
         }
 
         var timestamp = new DateParser(new Date(message.timestamp)).parse();

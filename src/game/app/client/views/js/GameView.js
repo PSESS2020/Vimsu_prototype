@@ -902,6 +902,8 @@ class GameView {
      */
     initChatThreadView(chat, openNow) {
         if (openNow) {
+            this.#chatListView.addNewChatThreadWindow(chat.chatId);
+            $("#chatThreadModal" + chat.chatId).modal("show");
             this.#chatThreadView.draw(chat);
         }
     };
