@@ -30,8 +30,9 @@ class ChatListView extends WindowView {
    * Draws chat list window
    *
    * @param {Object[]} chats chats
+   * @param {String} ownUsername current participant's username
    */
-  draw(chats) {
+  draw(chats, ownUsername) {
     $("#chatListWait").hide();
     $("#nochat").empty();
     $("#chatListModal .modal-body .list-group").empty();
@@ -62,7 +63,7 @@ class ChatListView extends WindowView {
         timestamp = "no messages";
       }
 
-      if (chat.previewUsername) {
+      if (chat.previewUsername && chat.previewUsername !== ownUsername) {
         previewMessage = chat.previewUsername + ": " + chat.previewMessage;
       } else {
         previewMessage = chat.previewMessage;

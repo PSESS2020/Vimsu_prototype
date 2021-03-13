@@ -889,9 +889,10 @@ class GameView {
      * Draws chat list window
      * 
      * @param {Object[]} chats chats
+     * @param {String} ownUsername current participant's username
      */
-    initChatListView(chats) {
-        this.#chatListView.draw(chats);
+    initChatListView(chats, ownUsername) {
+        this.#chatListView.draw(chats, ownUsername);
     };
 
     /**
@@ -899,11 +900,12 @@ class GameView {
      * 
      * @param {Object} chat chat
      * @param {boolean} openNow true if open window now, otherwise false
+     * @param {String} ownUsername current participant's username
      */
-    initChatThreadView(chat, openNow) {
+    initChatThreadView(chat, openNow, ownUsername) {
         if (openNow) {
             this.addChatThreadWindow(chat.chatId);
-            this.#chatThreadView.draw(chat);
+            this.#chatThreadView.draw(chat, ownUsername);
         }
     };
 

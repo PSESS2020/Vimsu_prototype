@@ -965,7 +965,7 @@ class ClientController {
      * @param {Object[]} chats chat list
      */
     #handleFromServerShowChatList = function (chats) {
-        this.#gameView.initChatListView(chats);
+        this.#gameView.initChatListView(chats, this.#ownBusinessCard.getUsername());
     };
 
     /**
@@ -974,7 +974,7 @@ class ClientController {
      * @param {Object} chat chat
      */
     #handleFromServerShowChatThread = function (chat) {
-        this.#gameView.initChatThreadView(chat, true);
+        this.#gameView.initChatThreadView(chat, true, this.#ownBusinessCard.getUsername());
     };
 
     /**

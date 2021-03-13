@@ -9,6 +9,7 @@ class ChatThreadView extends WindowView {
     #chat;
     #messages;
     #eventManager;
+    #ownUsername;
 
     /**
      * Creates an instance of ChatThreadView
@@ -44,10 +45,12 @@ class ChatThreadView extends WindowView {
      * Draws chat thread window
      * 
      * @param {Object} chat chat
+     * @param {String} ownUsername current participant's username
      */
-    draw(chat) {
+    draw(chat, ownUsername) {
         this.#chat = chat;
         this.#messages = chat.messages;
+        this.#ownUsername = ownUsername
 
         this.#initButtons();
 
@@ -167,13 +170,20 @@ class ChatThreadView extends WindowView {
             senderUsername = "";
         }
 
-        var messageDiv = `
-        <div style="padding-bottom: 10px">
-            <small style="opacity: 0.3; float: right; margin-right: 5px">${timestamp}</small><br>
-            <small><b>${senderUsername}</b></small>
-            <small class="wrapword">${message.msgText}</small>
-        </div>
-        `;
+        let messageDiv = `<div style="padding-bottom: 10px;">`
+
+        if (message.senderUsername === this.#ownUsername) {
+            messageDiv += 
+                `
+                        <small style="opacity: 0.3; float: right; margin-right: 5px">${timestamp}</small><br>
+                        <small class="wrapword" style="text-align: right; float: right; margin-right: 5px">${message.msgText}</small>
+                    </div>
+                `
+        } else {
+            messageDiv += `<small style="opacity: 0.3; margin-right: 5px">${timestamp}</small><br>`
+            messageDiv += this.#chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``
+            messageDiv += `<small class="wrapword">${message.msgText}</small></div>`
+        }
 
         $('#chatThreadModalList' + this.#chat.chatId).append(messageDiv);
         $('#chatThreadModalList' + this.#chat.chatId).scrollTop($('#chatThreadModalList' + this.#chat.chatId)[0].scrollHeight);
