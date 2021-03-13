@@ -32,7 +32,7 @@ class StatusBar extends Views {
     /**
      * @private draws game clock
      */
-    #drawClock = function() {
+    #drawClock = function () {
         $('#time').empty()
         let now = new DateParser(new Date()).parseWithSeconds();
         $('#time').text(now);
@@ -41,19 +41,18 @@ class StatusBar extends Views {
     /**
      * @private draws connection status
      */
-    #drawConnectionStatus = function() {
+    #drawConnectionStatus = function () {
         if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
-
             if (this.#timeLeft < 0) {
                 var redirect = $('#nav_leave_button').attr('href');
                 window.location.href = redirect;
             } else {
                 $('#connectionStatus').empty();
-                $('#connectionStatus').text(`Lost connection to the server. Time left until leave: ${this.#timeLeft}s.`);
+                $('#connectionStatus').text(`Lost connection to the server. ${isNaN(this.#timeLeft) ? `` : `Time left until leave: ${this.#timeLeft}s.`}`);
                 $('#connectionStatus').show();
-                this.#timeLeft--;
-            }
 
+                if (!isNaN(this.#timeLeft)) this.#timeLeft--;
+            }
         }
     }
 
@@ -122,9 +121,15 @@ class StatusBar extends Views {
 
         if (status === ConnectionState.CONNECTED) {
             $('#connectionStatus').empty();
-        } else
-            if (status === ConnectionState.DISCONNECTED)
-                this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
+        } else if (status === ConnectionState.DISCONNECTED) {
+            var result = confirm(`The connection to the server is lost and you won't be automatically reconnected. However, you can still look around. You will be automatically redirected to the homepage in ${Settings.TIME_UNTIL_LEAVE} seconds. Would you like to stay?`)
+
+            if (result) {
+                return;
+            }
+
+            this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
+        }
     }
 
     /**
