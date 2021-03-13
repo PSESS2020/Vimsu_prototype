@@ -8,6 +8,7 @@ class ChatListView extends WindowView {
 
   #chats;
   #eventManager;
+  #ownUsername;
 
   /**
    * Creates an instance of ChatListView
@@ -44,6 +45,8 @@ class ChatListView extends WindowView {
       return;
     }
 
+    this.#ownUsername = ownUsername
+
     chats.forEach((chat) => {
       if (chat.timestamp) {
         chat.timestamp = new Date(chat.timestamp);
@@ -63,7 +66,7 @@ class ChatListView extends WindowView {
         timestamp = "no messages";
       }
 
-      if (chat.previewUsername && chat.previewUsername !== ownUsername) {
+      if (chat.previewUsername && chat.previewUsername !== this.#ownUsername) {
         previewMessage = chat.previewUsername + ": " + chat.previewMessage;
       } else {
         previewMessage = chat.previewMessage;
@@ -109,7 +112,7 @@ class ChatListView extends WindowView {
       }
     });
 
-    this.draw(this.#chats);
+    this.draw(this.#chats, this.#ownUsername);
   }
 
   /**
@@ -120,7 +123,7 @@ class ChatListView extends WindowView {
   addNewChat(chat) {
     if (!this.#chats.includes(chat)) {
       this.#chats.push(chat);
-      this.draw(this.#chats);
+      this.draw(this.#chats, this.#ownUsername);
     }
   }
 
@@ -141,7 +144,7 @@ class ChatListView extends WindowView {
         chat.timestamp = message.timestamp;
         chat.previewUsername = message.senderUsername;
         chat.previewMessage = msgText;
-        this.draw(this.#chats);
+        this.draw(this.#chats, this.#ownUsername);
       }
     });
   }
