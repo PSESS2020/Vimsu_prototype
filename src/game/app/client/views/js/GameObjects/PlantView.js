@@ -8,6 +8,8 @@ class PlantView extends GameObjectView {
     #story = ['Hey I\'m a beautiful plant. Don\'t touch me!',
               'Seriously, DON\'T TOUCH ME!!'];
 
+    #id = 'plant'
+
     /**
      * Creates an instance of PlantView
      * 
@@ -24,6 +26,8 @@ class PlantView extends GameObjectView {
      * Called if participant clicks the plant
      */
     onclick() {
-        new NPCStoryView().draw("Beautiful Plant", this.#story);
+        const npcStoryView = new NPCStoryView()
+        npcStoryView.addNewNPCStoryWindow(this.#id)
+        npcStoryView.draw("Beautiful Plant", this.#story);
     }
 }
