@@ -901,7 +901,7 @@ class GameView {
     initChatThreadView(chat, openNow) {
         if (openNow) {
             this.#chatListView.addNewChatThreadWindow(chat.chatId);
-            $("#chatThreadModal" + chat.chatId).modal("show");
+            
             this.#chatThreadView.draw(chat);
         }
     };
@@ -949,7 +949,7 @@ class GameView {
         TypeChecker.isBoolean(areFriends);
         TypeChecker.isBoolean(friendRequestSent);
 
-        if ($('#chatThreadModal').is(':visible')) {
+        if ($('#chatThreadModal' + chatId).is(':visible')) {
             this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
         }
     }
@@ -1169,7 +1169,7 @@ class GameView {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(chatId);
 
-        if ($('#chatThreadModal').is(':visible') && this.#chatThreadView.getChatId() === chatId) {
+        if ($('#chatThreadModal' + chatId).is(':visible') && this.#chatThreadView.getChatId() === chatId) {
             return;
         }
 

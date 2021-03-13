@@ -70,32 +70,27 @@ class ChatListView extends WindowView {
 
       // Now we want to append each chat as a clickable element
       $("#chatListModal .modal-body .list-group").append(`
-                <li class="list-group-item bg-transparent chatthread">
-                    <a class="" style="color: antiquewhite" title="Open chat" id="${
-                      "chat" + chat.chatId
-                    }" role="button" data-toggle="modal" href="">
-                        <div class="row w-100">
-                            <div class="col-12 col-sm-2 px-0">
-                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
-                            </div>
-                            <div class="col-12 col-md-10 text-center text-sm-left">
-                                <label class="name lead">${chat.title}</label>
-                                <br>
-                                <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
-                                <br>
-                                <span class ="small p-0 wrapword" style="opacity: 0.8">${previewMessage}</span>                                
-                            </div>  
-                        </div>
-                    </a>
-                </li>
-            `);
+        <li class="list-group-item bg-transparent chatthread">
+          <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
+            <div class="row w-100">
+              <div class="col-12 col-sm-2 px-0">
+                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+              </div>
+              <div class="col-12 col-md-10 text-center text-sm-left">
+                <label class="name lead">${chat.title}</label>
+                <br>
+                <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
+                <br>
+                <span class ="small p-0 wrapword" style="opacity: 0.8">${previewMessage}</span>                                
+              </div>  
+            </div>
+          </a>
+        </li>
+      `);
 
       $("#chat" + chat.chatId).off();
       $("#chat" + chat.chatId).on("click", () => {
-
         this.addNewChatThreadWindow(chat.chatId)
-        $("#chatThreadModal" + chat.chatId).modal("show");
-
         this.#eventManager.handleChatThreadClicked(chat.chatId);
       });
     });
@@ -215,5 +210,7 @@ class ChatListView extends WindowView {
         </div>
       `);
     }
+
+    $("#chatThreadModal" + chatID).modal("show");
   }
 }
