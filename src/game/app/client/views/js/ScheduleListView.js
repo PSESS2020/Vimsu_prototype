@@ -32,7 +32,7 @@ class ScheduleListView extends WindowView {
         $('#scheduleWait').hide()
 
         if (lectures.length < 1) {
-            $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.");
+            $('#noschedule').text("Sorry, no lecture is found.");
             return;
         }
 
@@ -106,7 +106,7 @@ class ScheduleListView extends WindowView {
         })
 
         if (count === 0) {
-            $('#scheduleModal .modal-body #noschedule').text("Sorry, all lectures have expired.");
+            $('#noschedule').text("Sorry, all lectures have expired.");
             clearInterval(interval);
         }
     }

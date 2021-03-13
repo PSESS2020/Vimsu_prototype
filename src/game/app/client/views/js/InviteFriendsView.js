@@ -44,7 +44,7 @@ class InviteFriendsView extends WindowView {
 
         if (businessCards) {
             if (businessCards.length < 1) {
-                $('#inviteFriendsModal .modal-body #nofriendtoinvite').text("No friends to invite.");
+                $('#nofriendtoinvite').text("No friends to invite.");
                 return;
             }
 
