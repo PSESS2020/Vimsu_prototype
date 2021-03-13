@@ -194,9 +194,7 @@ class ParticipantAvatarView extends AvatarView {
             $('#businessCardModal').modal('show');
             $('#businessCardModal .modal-body').append(`
                 <div id=${"businessCardWait" + this.#participantId} style="text-align: center;">
-                    <i class="fas fa-cog fa-spin fa-2x"></i>
-                    <i class="fas fa-cog fa-spin fa-2x"></i>
-                    <i class="fas fa-cog fa-spin fa-2x"></i>
+                    <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                 </div>
             `)
             this.#eventManager.handleAvatarClick(this.#participantId);

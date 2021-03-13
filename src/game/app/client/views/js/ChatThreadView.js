@@ -275,7 +275,7 @@ class ChatThreadView extends WindowView {
             }
 
             $('#inviteFriendsModal .modal-body .list-group').empty();
-            $('#inviteFriendsModal .modal-body #nofriendtoinvite').empty();
+            $('#nofriendtoinvite').empty();
             $('#noinvitedfriends').hide();
             $('#toomanyinvitedfriends').hide();
             $('#toomanyinvitedfriends').empty();
@@ -301,9 +301,7 @@ class ChatThreadView extends WindowView {
                         </div>
                         <div class="modal-body" style="overflow: auto; height: 500px;">
                             <div id=${"chatParticipantListWait" + this.#chat.chatId} style="text-align: center;">
-                                <i class="fas fa-cog fa-spin fa-2x"></i>
-                                <i class="fas fa-cog fa-spin fa-2x"></i>
-                                <i class="fas fa-cog fa-spin fa-2x"></i>
+                                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                             </div>
                             <ul class="list-group bg-transparent">
 

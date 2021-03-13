@@ -33,11 +33,11 @@ class ChatListView extends WindowView {
    */
   draw(chats) {
     $("#chatListWait").hide();
-    $("#chatListModal .modal-body #nochat").empty();
+    $("#nochat").empty();
     $("#chatListModal .modal-body .list-group").empty();
 
     if (chats.length < 1) {
-      $("#chatListModal .modal-body #nochat").text(
+      $("#nochat").text(
         "No chats found. Let's connect with others!"
       );
       return;
@@ -195,9 +195,7 @@ class ChatListView extends WindowView {
                   </div>
                   <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
                       <div id=${"chatThreadWait" + chatID} style="text-align: center;">
-                          <i class="fas fa-cog fa-spin fa-2x"></i>
-                          <i class="fas fa-cog fa-spin fa-2x"></i>
-                          <i class="fas fa-cog fa-spin fa-2x"></i>
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                       </div>
                       <div id=${"chatThreadModalList" + chatID} class="list-group mb-3"
                           style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">

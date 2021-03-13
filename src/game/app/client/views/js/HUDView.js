@@ -28,7 +28,7 @@ class HUDView extends Views {
 
         $('#scheduleListButton').off();
         $('#scheduleListButton').on('click', (event) => {
-            $('#scheduleModal .modal-body #noschedule').empty();
+            $('#noschedule').empty();
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
             $('#scheduleModal').modal('show');
             $('#scheduleWait').show()
