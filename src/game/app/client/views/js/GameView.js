@@ -900,11 +900,19 @@ class GameView {
      */
     initChatThreadView(chat, openNow) {
         if (openNow) {
-            this.#chatListView.addNewChatThreadWindow(chat.chatId);
-            
+            this.addChatThreadWindow(chat.chatId);
             this.#chatThreadView.draw(chat);
         }
     };
+
+    /**
+     * Add chat thread window and show
+     * 
+     * @param {Stirng} chatId chat id
+     */
+    addChatThreadWindow(chatId) {
+        this.#chatListView.addNewChatThreadWindow(chatId);
+    }
 
     /**
      * Closes chat thread window with chatId if it is currently open 

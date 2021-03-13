@@ -1449,6 +1449,7 @@ class ClientController {
      */
     handleFromViewShowChatThread(chatID) {
         TypeChecker.isString(chatID);
+        this.#gameView.addChatThreadWindow(chatID)
 
         if (this.#socketReady()) {
             this.#socket.emit('getChatThread', chatID);
