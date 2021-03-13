@@ -6,6 +6,8 @@
  */
 class NPCStoryView extends WindowView {
 
+    #npcId;
+
     /**
      * Creates an instance of NPCStoryView
      */
@@ -26,11 +28,11 @@ class NPCStoryView extends WindowView {
      * @param {String[]} story NPC story
      */
     draw(name, story) {
-        $('#npcStoryWait').hide()
-        $('#npcStoryModal .modal-header').empty()
-        $('#npcStoryModal .modal-body').empty();
+        $('#npcStoryWait' + this.#npcId).hide()
+        $(`#npcStoryModal${this.#npcId} .modal-header`).empty()
+        $('#npcStory' + this.#npcId).empty();
         
-        $('#npcStoryModal .modal-header').append(`
+        $(`#npcStoryModal${this.#npcId} .modal-header`).append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle">${name + " says..."}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -38,7 +40,7 @@ class NPCStoryView extends WindowView {
         `)
 
         for (var i = 0; i < story.length; i++) {
-            $('#npcStoryModal .modal-body').append(`
+            $('#npcStory' + this.#npcId).append(`
                 <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + i.toString()}'>${story[i]}</h5>
                 <button style="float:left; display: none; outline: none; box-shadow: none" class="btn" id='${"backwardStory" + i.toString()}'>
                     <i class="fa fa-arrow-left fa-3x navbarIcons"></i>
@@ -78,5 +80,31 @@ class NPCStoryView extends WindowView {
                 $('#forwardStory' + i).show();
             };
         }
+    }
+
+    addNewNPCStoryWindow(npcId) {
+        this.#npcId = npcId;
+
+        if (!($('#npcStoryModal' + npcId).length)) {
+            $('#npcStoryModalCollection').append(`
+                <div class="modal fade" id="npcStoryModal${npcId}" tabindex="-1" role="dialog" aria-labelledby="npcStoryTitle${npcId}"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            </div>
+                            <div class="modal-body">
+                                <div id="npcStoryWait${npcId}" style="text-align: center;">
+                                    <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                                </div>
+                                <div id="npcStory${npcId}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `)
+        }
+
+        $('#npcStoryModal' + npcId).modal('show');
     }
 }

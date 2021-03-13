@@ -1436,6 +1436,8 @@ class ClientController {
      */
     handleFromViewGetNPCStory(npcId) {
         TypeChecker.isInt(npcId);
+        
+        this.#gameView.addNPCStoryWindow(npcId)
 
         if (this.#socketReady()) {
             this.#socket.emit('getNPCStory', npcId);

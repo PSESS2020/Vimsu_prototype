@@ -877,6 +877,15 @@ class GameView {
     }
 
     /**
+     * Add NPC story window and show
+     * 
+     * @param {Stirng} npcId NPC id
+     */
+     addNPCStoryWindow(npcId) {
+        this.#npcStoryView.addNewNPCStoryWindow(npcId);
+    }
+
+    /**
      * Draws rank list window
      * 
      * @param {Object[]} rankList rank list
