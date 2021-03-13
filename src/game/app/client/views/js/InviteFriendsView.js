@@ -40,6 +40,13 @@ class InviteFriendsView extends WindowView {
      */
     draw(businessCards, groupName, limit, chatId) {
         $('#inviteFriendsWait').hide();
+        $('#inviteFriendsModal .modal-body .list-group').empty();
+        $('#nofriendtoinvite').empty();
+        $('#noinvitedfriends').hide();
+        $('#toomanyinvitedfriends').hide();
+        $('#toomanyinvitedfriends').empty();
+        $('#createGroupChat').hide();
+        
         this.#invitedFriends = [];
 
         if (businessCards) {

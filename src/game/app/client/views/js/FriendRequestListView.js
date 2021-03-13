@@ -33,6 +33,8 @@ class FriendRequestListView extends WindowView {
      */
     draw(businessCards) {
         $('#friendRequestListWait').hide();
+        $('#nofriendrequest').empty();
+        $('#friendRequestListModal .modal-body .list-group').empty()
 
         if (businessCards.length < 1) {
             $('#nofriendrequest').text("No friend request received.")
@@ -65,7 +67,7 @@ class FriendRequestListView extends WindowView {
             $('#accept' + businessCard.getParticipantId()).off();
             $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
+                    $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
                 event.stopPropagation();
                 this.#eventManager.handleAcceptRequestClicked(businessCard);
@@ -74,7 +76,7 @@ class FriendRequestListView extends WindowView {
             $('#reject' + businessCard.getParticipantId()).off();
             $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendRequestDiv' + businessCard.getUsername()).hide();
+                    $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
                 event.stopPropagation();
                 this.#eventManager.handleRejectRequestClicked(businessCard.getParticipantId());

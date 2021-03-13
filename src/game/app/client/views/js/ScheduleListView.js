@@ -30,6 +30,8 @@ class ScheduleListView extends WindowView {
      */
     draw(lectures, timeOffset) {
         $('#scheduleWait').hide()
+        $('#noschedule').empty();
+        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
         if (lectures.length < 1) {
             $('#noschedule').text("Sorry, no lecture is found.");
