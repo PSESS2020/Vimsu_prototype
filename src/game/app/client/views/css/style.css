@@ -400,6 +400,24 @@ vertical-align: middle;
   border-radius: 3px !important;
 }
 
+.messageBubbleMyself {
+  max-width: 40vh;
+  background-color: rgb(0, 135, 153);
+  color: antiquewhite;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 5px 8px;
+}
+
+.messageBubbleOthers {
+  max-width: 40vh;
+  background-color: rgb(214, 199, 181);
+  color: rgba(34, 43, 46);
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 5px 8px;
+}
+
 .modal-header {
   text-align: center;
   background-color: rgba(24, 30, 32, 0.699);
