@@ -411,8 +411,8 @@ vertical-align: middle;
 
 .messageBubbleOthers {
   max-width: 40vh;
-  background-color: rgb(214, 199, 181);
-  color: rgba(34, 43, 46);
+  background-color: rgb(68, 68, 68);
+  color: antiquewhite;
   border: none !important;
   border-radius: 5px !important;
   padding: 5px 8px;
