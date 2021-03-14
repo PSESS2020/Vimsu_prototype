@@ -56,7 +56,7 @@ class ChatThreadView extends WindowView {
 
         $('#chatThreadWait' + this.#chat.chatId).hide();
         $("#chatThreadModalTitle" + this.#chat.chatId).empty();
-        $(`#chatThreadModal${this.#chat.chatId} .modal-body .list-group`).empty();
+        $(`#chatThreadModalList${this.#chat.chatId}`).empty();
 
         $('#chatThreadModalTitle' + this.#chat.chatId).text(chat.title);
 
