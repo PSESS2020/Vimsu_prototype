@@ -931,7 +931,9 @@ class GameView {
      * @param {String} chatId chatId
      */
      closeChatThreadView(chatId) {
-        this.#chatThreadView.close(chatId);
+        if ($('#chatThreadModal' + chatId).is(':visible')) {
+            this.#chatThreadView.close(chatId);
+        }
     };
 
     /**
