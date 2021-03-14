@@ -940,14 +940,15 @@ class ClientController {
      * 
      * @param {String} name NPC name
      * @param {String[]} story NPC story
+     * @param {number} npcId NPC id
      */
-    #handleFromServerShowNPCStory = function (name, story) {
+    #handleFromServerShowNPCStory = function (name, story, npcId) {
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(story, Array);
         story.forEach(element => {
             TypeChecker.isString(element);
         })
-        this.#gameView.initNPCStoryView(name, story);
+        this.#gameView.initNPCStoryView(name, story, npcId.toString());
     }
 
     /**
@@ -1432,12 +1433,10 @@ class ClientController {
     /**
      * Gets NPC story from server
      * 
-     * @param {number} npcId NPC ID
+     * @param {number} npcId NPC id
      */
-    handleFromViewGetNPCStory(npcId) {
-        TypeChecker.isInt(npcId);
-        
-        this.#gameView.addNPCStoryWindow(npcId)
+    handleFromViewGetNPCStory(npcId) {        
+        this.#gameView.addNPCStoryWindow(npcId.toString())
 
         if (this.#socketReady()) {
             this.#socket.emit('getNPCStory', npcId);

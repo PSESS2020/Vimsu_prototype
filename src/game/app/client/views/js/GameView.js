@@ -865,21 +865,22 @@ class GameView {
      * 
      * @param {String} name NPC name
      * @param {String[]} story NPC story
+     * @param {String} npcId NPC id
      */
-    initNPCStoryView(name, story) {
+    initNPCStoryView(name, story, npcId) {
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(story, Array);
         story.forEach(element => {
             TypeChecker.isString(element);
         })
 
-        this.#npcStoryView.draw(name, story);
+        this.#npcStoryView.draw(name, story, npcId);
     }
 
     /**
      * Add NPC story window and show
      * 
-     * @param {Stirng} npcId NPC id
+     * @param {String} npcId NPC id
      */
      addNPCStoryWindow(npcId) {
         this.#npcStoryView.addNewNPCStoryWindow(npcId);
