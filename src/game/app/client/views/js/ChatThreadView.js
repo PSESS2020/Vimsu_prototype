@@ -170,19 +170,29 @@ class ChatThreadView extends WindowView {
             senderUsername = "";
         }
 
-        let messageDiv = `<div style="padding-bottom: 10px;">`
+        let messageDiv = ``
 
         if (message.senderUsername === this.#ownUsername) {
-            messageDiv += 
-                `
-                        <small style="opacity: 0.3; float: right; margin-right: 5px">${timestamp}</small><br>
-                        <small class="wrapword" style="text-align: right; float: right; margin-right: 5px">${message.msgText}</small>
+            messageDiv =
+            `
+                <div class="d-flex flex-column align-items-end mr-2">
+                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <div class="messageBubbleMyself">
+                        <small class="wrapword" style="text-align: right; float: right;">${message.msgText}</small>
                     </div>
-                `
+                </div>
+            `
         } else {
-            messageDiv += `<small style="opacity: 0.3; margin-right: 5px">${timestamp}</small><br>`
-            messageDiv += this.#chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``
-            messageDiv += `<small class="wrapword">${message.msgText}</small></div>`
+            messageDiv = 
+            `
+                <div class="d-flex flex-column align-items-start ml-2">
+                    <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <div class="messageBubbleOthers">
+                        ${this.#chat.groupChat? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        <small class="wrapword" style="text-align: left;">${message.msgText}</small>
+                    </div>
+                </div>
+            `
         }
 
         $('#chatThreadModalList' + this.#chat.chatId).append(messageDiv);

@@ -194,11 +194,11 @@ class ChatListView extends WindowView {
                         <div id=${"chatThreadWait" + chatID} style="text-align: center;">
                           <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                         </div>
-                        <div id=${"chatThreadModalList" + chatID} class="list-group mb-3"
+                        <div id=${"chatThreadModalList" + chatID} class="mb-3"
                             style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
                         </div>
                         <div class="d-flex">
-                            <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
+                            <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
                                 <input id=${"chatMessageInput" + chatID} type="text"
                                     style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
