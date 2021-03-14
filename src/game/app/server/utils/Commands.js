@@ -118,6 +118,10 @@ module.exports = Object.freeze({
         string: "deletegroup",
         method: "deleteGroup"
     },
+    DELETEALLGROUPS: {
+        string: "deleteallgroups",
+        method: "deleteAllGroups"
+    },
     ADDGROUPMEMBER: {
         string: "addtogroup",
         method: "addGroupMember"
