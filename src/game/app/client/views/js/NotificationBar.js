@@ -24,10 +24,9 @@ class NotificationBar extends Views {
 
         this.#eventManager = eventManager;
 
-        $('#hideNotifBar').hide();
+        $('#showNotifBar').hide();
 
         const notifBar = document.getElementById("notifBar")
-        notifBar.style.visibility = "hidden";
 
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();

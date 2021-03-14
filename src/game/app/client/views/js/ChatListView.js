@@ -190,7 +190,7 @@ class ChatListView extends WindowView {
                             </div>
                         </div>
                     </div>
-                    <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
+                    <div class="modal-body d-flex flex-column modal-body-large">
                         <div id=${"chatThreadWait" + chatID} style="text-align: center;">
                           <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                         </div>
