@@ -23,6 +23,24 @@ class NotificationBar extends Views {
         NotificationBar.instance = this;
 
         this.#eventManager = eventManager;
+
+        $('#hideNotifBar').hide();
+
+        const notifBar = document.getElementById("notifBar")
+        notifBar.style.visibility = "hidden";
+
+        $('#showNotifBar').on('click', (event) => {
+            event.preventDefault();
+            notifBar.style.visibility = "visible";
+            $('#showNotifBar').hide();
+            $('#hideNotifBar').show();
+        })
+        $('#hideNotifBar').on('click', (event) => {
+            event.preventDefault();
+            notifBar.style.visibility = "hidden";
+            $('#hideNotifBar').hide();
+            $('#showNotifBar').show();
+        })
     }
 
     /**
@@ -39,7 +57,7 @@ class NotificationBar extends Views {
                 <div id="${"notifMessageDiv" + senderUsername + chatId}" style="display:flex">
                     <button class="self-align-end closeBtn" id="${"closeNotifMessage" + senderUsername + chatId}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${"notifMessage" + senderUsername + chatId}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarDiv">
+                        <div class="notifBarDiv wrapword">
                             <small>New message from ${senderUsername}.</small>
                         </div>
                     </a>
@@ -71,7 +89,7 @@ class NotificationBar extends Views {
                 <div id="${"notifChatDiv" + chatId}" style="display:flex">
                     <button class="self-align-end closeBtn" id="${"closeNotifChat" + chatId}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${"notifChat" + chatId}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarDiv">
+                        <div class="notifBarDiv wrapword">
                             <small>${senderUsername} init chat with you.</small>
                         </div>
                     </a>
@@ -104,7 +122,7 @@ class NotificationBar extends Views {
                 <div id="${"notifGroupChatDiv" + chatId}" style="display:flex">
                     <button class="self-align-end closeBtn" id="${"closeNotifGroupChat" + chatId}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${"notifGroupChat" + chatId}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarDiv">
+                        <div class="notifBarDiv wrapword">
                             <small>${creatorUsername} invited you to the group chat '${groupName}'.</small>
                         </div>
                     </a>
@@ -135,7 +153,7 @@ class NotificationBar extends Views {
                 <div id="${"notifFriendRequestDiv" + senderUsername}" style="display:flex">
                     <button class="self-align-end closeBtn" id="${"closeNotifFriendRequest" + senderUsername}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${"notifFriendRequest" + senderUsername}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarDiv">
+                        <div class="notifBarDiv wrapword">
                             <small>New friend request from ${senderUsername}.</small>
                         </div>
                     </a>
@@ -170,7 +188,7 @@ class NotificationBar extends Views {
                 <div id="${"notifFriendDiv" + friendUsername}" style="display:flex">
                     <button class="self-align-end closeBtn" id="${"closeNotifFriend" + friendUsername}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${"notifFriend" + friendUsername}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarDiv">
+                        <div class="notifBarDiv wrapword">
                             <small>${friendUsername} accepted your friend request.</small>
                         </div>
                     </a>

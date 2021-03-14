@@ -121,18 +121,35 @@ form button:hover {
   opacity: 0.8;
 }
 
-.messageBar {
-  font-size: 15px;
-  background:none;
-  overflow-y: scroll;
-  margin: 0;
-  padding: 0;
-  z-index: 1;
-  height: 125px;
-  max-width: 16vw;
+
+#connectionStatus {
+  background-color: rgba(255, 255, 255, 0.8); 
+  padding: 5px; 
+  border-radius: 10px; 
+  color: firebrick; 
+  z-index: 10000;
+  text-align: center;
 }
 
-.allChatBar {
+#notifBar {
+  font-size: 15px;
+  background: rgba(15, 15, 15, 0.8);
+  border-radius: 5px;
+  overflow-y: scroll;
+  margin: 0;
+  padding-left: 10px;
+  max-height: 60vh;
+}
+
+.notifBarDiv {
+  background-color: none; 
+  color: antiquewhite;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+}
+
+#allChatBox {
   font-size: 15px;
   background:rgba(15, 15, 15, 0.8);
   overflow-y: scroll;
@@ -140,8 +157,16 @@ form button:hover {
   margin: 0;
   padding: 0;
   z-index: 1;
-  height: 29vw;
-  max-width: 20vw;
+  height: 60vh;
+}
+
+#allChatHeader {
+  width: 20vw; 
+  background-color: rgba(15, 15, 15, 0.8); 
+  border-radius: 0px 5px 0px 0px; 
+  border-bottom: 1px solid antiquewhite; 
+  color: antiquewhite; 
+  font-size: medium;
 }
 
 #allchatMessageInput {
@@ -156,15 +181,6 @@ form button:hover {
   background: none;
   color: antiquewhite;
 
-}
-
-.notifBarDiv {
-  background: rgb(221, 221, 221, 0.2);
-  color: antiquewhite;
-  border-radius: 5px;
-  border: none;
-  padding: 5px 10px;
-  overflow-wrap: break-word;
 }
 
 .navbarIcons {
