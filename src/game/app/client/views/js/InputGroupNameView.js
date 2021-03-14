@@ -29,6 +29,7 @@ class InputGroupNameView extends WindowView {
 
             if (groupName !== '') {
                 $('#inputGroupNameModal').modal('hide');
+                $('#inviteFriendsModal').modal('show');
                 eventManager.handleInviteFriendsClicked(groupName, "");
                 $('#groupNameInput').val('');
             }
