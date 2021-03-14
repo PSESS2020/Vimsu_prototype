@@ -568,11 +568,15 @@ vertical-align: middle;
 }
 
 ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active {
-  background: rgba(221, 221, 221, 0.3);
+  background: rgba(221, 221, 221, 0.4);
 }
 
-::-webkit-scrollbar-track:hover, ::-webkit-scrollbar-track:active, ::-webkit-scrollbar-corner {
-  background: transparent;
+::-webkit-scrollbar-track:hover, ::-webkit-scrollbar-track:active {
+  background: rgba(221, 221, 221, 0.2);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent
 }
 
 .wrapword {
