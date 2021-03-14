@@ -2178,7 +2178,7 @@ module.exports = class ServerController {
     
                         //Notify user that he joined a new group (right now only for status bar)
                         socket.emit('join group', groupName);
-                        this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+                        this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
                     }
                 });    
             })
@@ -2221,7 +2221,7 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group', groupChatID);
-                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
             }
         });
 
@@ -2283,7 +2283,7 @@ module.exports = class ServerController {
 
                 //Notify user that he joined a new group (right now only for status bar)
                 socket.emit('join group', groupName);
-                this.sendNotification(socketID, { header: "Group joined", body: "You joined group " + groupName + "." });
+                this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
             }
         });
         return true;
@@ -2331,7 +2331,7 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group', groupChatID);
-                this.sendNotification(socketID, { header: "Group left", body: "You left group " + groupName + "." });
+                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
             }
         });
 
