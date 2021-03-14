@@ -28,6 +28,6 @@ class PlantView extends GameObjectView {
     onclick() {
         const npcStoryView = new NPCStoryView()
         npcStoryView.addNewNPCStoryWindow(this.#id)
-        npcStoryView.draw("Beautiful Plant", this.#story);
+        npcStoryView.draw("Beautiful Plant", this.#story, this.#id);
     }
 }

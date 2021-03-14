@@ -1664,7 +1664,7 @@ module.exports = class ServerController {
                     this.#applyTaskAndAchievement(ppantID, TypeOfTask.FOYERHELPERCLICK);
                 }
 
-                socket.emit('showNPCStory', name, story);
+                socket.emit('showNPCStory', name, story, npcID);
             });
 
             /* handles entered code from client for door with doorId */
