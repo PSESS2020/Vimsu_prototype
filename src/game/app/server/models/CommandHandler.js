@@ -342,9 +342,7 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            let header = "Successfully closed door";
-            let body = "You successfully closed the door with the ID " + doorID + " for all users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOORFORALL(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -372,9 +370,7 @@ module.exports = class CommandHandler {
 
 
         if (opened) {
-            let header = "Successfully opened door";
-            let body = "You successfully opened the door with the ID " + doorID + " for all users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOORFORALL(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -415,9 +411,7 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            let header = "Successfully closed door";
-            let body = "You successfully closed the door with the ID " + doorID + " for all passed users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOOR(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -458,9 +452,7 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            let header = "Successfully opened door";
-            let body = "You successfully opened the door with the ID " + doorID + " for all passed users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOOR(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -552,9 +544,7 @@ module.exports = class CommandHandler {
 
         if (door !== undefined) {
             door.setCodeToOpen(code);
-            let header = "Code set successfully";
-            let body = "You successfully set the door code of the door with the ID " + doorID + " to " + code + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETCODE(doorID, code));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -627,9 +617,7 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (this.#serverController.setModState(username, true)) {
-            let header = "Mod status set successfully";
-            let body = username + " is now a moderator.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETMOD(username));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
         }
@@ -649,9 +637,7 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (this.#serverController.setModState(username, false)) {
-            let header = "Mod status set successfully";
-            let body = username + " is no longer a moderator.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETUNMOD(username));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
         }
@@ -701,9 +687,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
-            let header = "Group successfully created";
-            let body = "Successfully created group " + groupName + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.CREATEDGROUP(groupName));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.INVALIDGROUPNAME);
         } 
@@ -723,9 +707,7 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
 
         if (this.#serverController.deleteGroup(groupName)) {
-            let header = "Group successfully deleted";
-            let body = "Successfully deleted group " + groupName + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.DELETEDGROUP(groupName));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
         } 
@@ -781,9 +763,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
-            let header = "Added users to group";
-            let body = "Successfully added users to group " + groupName + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.ADDEDUSERSTOGROUP(groupName));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
         } 
@@ -823,9 +803,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
-            let header = "Removed users from group";
-            let body = "Successfully removed users from group " + groupName + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.RMUSERSFROMGROUP(groupName));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
         } 

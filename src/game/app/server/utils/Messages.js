@@ -150,6 +150,30 @@ module.exports = Object.freeze({
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
     },
+    OPEPNEDDOOR(doorID) {
+        return {
+            header: "Successfully opened door",
+            body: "You successfully opened the door with the ID " + doorID + " for all passed users."
+        }
+    },
+    CLOSEDDOOR(doorID) {
+        return {
+            header: "Successfully closed door",
+            body: "You successfully closed the door with the ID " + doorID + " for all passed users."
+        }
+    },
+    OPEPNEDDOORFORALL(doorID) {
+        return {
+            header: "Successfully opened door",
+            body: "You successfully opened the door with the ID " + doorID + " for all users."
+        }
+    },
+    CLOSEDDOORFORALL(doorID) {
+        return {
+            header: "Successfully closed door",
+            body: "You successfully closed the door with the ID " + doorID + " for all users."
+        }
+    },
     CLOSEDALLDOORS: {
         header: "Successfully closed all doors",
         body: "You successfully closed all doors for all passed users."
@@ -172,6 +196,12 @@ module.exports = Object.freeze({
         header: "Door closed",
         body: "Greet our Chef before you leave!"
     },
+    SETCODE(doorID, code) {
+        return {
+            header: "Code set successfully",
+            body: "You successfully set the door code of the door with the ID " + doorID + " to " + code + "."
+        }
+    },
     CORRECTCODE: {
         header: "Code was correct!",
         body: "The code you entered was correct! The door is now open for you."
@@ -191,6 +221,18 @@ module.exports = Object.freeze({
     TELEPORTUSERFAIL: {
         header: "Your teleport failed",
         body: "Your teleport failed. Please check the passed username again."
+    },
+    SETMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is now a moderator.",
+        }
+    },
+    SETUNMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is no longer a moderator.",
+        }
     },
     YOUARENOWMOD: {
         header: "Your mod state changed",
@@ -219,5 +261,41 @@ module.exports = Object.freeze({
     DELETEDALLGROUPS: {
         header: "Successfully deleted all groups",
         body: "All exisiting groups were sucessfully deleted."
+    },
+    CREATEDGROUP(groupName) {
+        return {
+            header: "Group successfully created",
+            body: "Successfully created group " + groupName + "."
+        }
+    },
+    DELETEDGROUP(groupName) {
+        return {
+            header: "Group successfully deleted",
+            body: "Successfully deleted group " + groupName + "."
+        }
+    },
+    ADDEDUSERSTOGROUP(groupName) {
+        return {
+            header: "Added users to group",
+            body: "Successfully added users to group " + groupName + "."
+        }
+    },
+    RMUSERSFROMGROUP(groupName) {
+        return {
+            header: "Removed users from group",
+            body: "Successfully removed users from group " + groupName + "."
+        }
+    }, 
+    YOUJOINEDGROUP(groupName) {
+        return {
+            header: "Group joined",
+            body: "You joined group " + groupName + "."
+        }
+    },
+    YOULEFTGROUP(groupName) {
+        return {
+            header: "Group left",
+            body: "You left group " + groupName +  "."
+        }
     }
 });
