@@ -2231,6 +2231,16 @@ module.exports = class ServerController {
     }
 
     /**
+     * Deletes all existing group from this conferenc
+     * @method module:ServerController#deleteAllGroups
+     */
+     deleteAllGroups() {
+        this.#groups.forEach((group, groupName) => {
+            this.deleteGroup(groupName); 
+        });
+    }
+
+    /**
      * Adds users to an existing group 
      * @method module:ServerController#addGroupMember
      * 

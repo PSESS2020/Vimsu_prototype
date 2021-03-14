@@ -732,6 +732,22 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Deletes all existing groups
+     * @method module:CommandHandler#deleteAllGroups
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+     deleteAllGroups(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        this.#serverController.deleteAllGroups();
+        this.#serverController.sendNotification(socket.id, Messages.DELETEDALLGROUPS);
+    } 
+    
+
+    /**
      * Adds all passed users to group with passed groupName
      * @method module:CommandHandler#addGroupMember
      * 
