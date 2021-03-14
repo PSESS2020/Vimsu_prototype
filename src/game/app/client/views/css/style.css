@@ -18,6 +18,10 @@ body.modal-open {
   overflow: hidden;
 }
 
+.modal-backdrop {
+  background: none;
+}
+
 input,
 textarea {
      -moz-user-select: text;
