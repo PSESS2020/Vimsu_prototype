@@ -220,7 +220,6 @@ ul {
 
 .accountLabel {
   display: inline-block;
-  vertical-align: top;
   font-size: large;
   font-weight: bold;
   color: #028090;
@@ -233,7 +232,6 @@ ul {
 
 .accountData {
   display: inline-block;
-  vertical-align: top;
   margin-top: 3px;
   margin-left: auto;
 }
@@ -245,4 +243,10 @@ ul {
 
 .navbar-nav > li{
   margin-right:-50px;
+}
+
+.list-group-item { 
+  background: none;
+  padding: 5px 20px;
+  border: none;
 }
