@@ -376,14 +376,10 @@ module.exports = class RouteController {
             if (request.session.loggedin === true) {
                 title = request.session.title;
                 forename = request.session.forename;
-<<<<<<< HEAD
                 surname = request.session.surname;
                 job = request.session.job;
                 company = request.session.company;
                 response.render('editAccount', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
-=======
-                response.render('editAccount', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
->>>>>>> 34d1d166... fix upload button disappear after clicking account settings
             }
             else {
                 response.redirect('/');
