@@ -13,6 +13,7 @@ class ClientController {
     #ownBusinessCard;
     #gameView;
     #isVideoConference;
+    #jitsi;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -35,6 +36,8 @@ class ClientController {
         this.#openSocketConnection();
         this.#gameView = gameView;
         this.#gameView.initEventManager(this);
+
+
     }
 
     /**
@@ -211,6 +214,7 @@ class ClientController {
         this.#socket.on('other shirt color changed', this.#handleFromServerChangeOtherShirtColor.bind(this));
         this.#socket.on('join group', this.#handleFromServerJoinGroup.bind(this));
         this.#socket.on('leave group', this.#handleFromServerLeaveGroup.bind(this));
+        this.#socket.on('meetingList', this.#handleFromServerShowMeetingList.bind(this));
     }
 
     /* #################################################### */
@@ -961,6 +965,15 @@ class ClientController {
     }
 
     /**
+     * @private Receives from server after clicking jitsi meeting list
+     * 
+     * @param {Object[]} meetings jitsi meeting list
+     */
+    #handleFromServerShowMeetingList = function (meetings) {
+        this.#gameView.initMeetingListView(meetings);
+    };
+
+    /**
      * @private Receives from server after clicking chat list
      * 
      * @param {Object[]} chats chat list
@@ -1460,6 +1473,54 @@ class ClientController {
             this.#socket.emit('getChatList');
         }
     };
+
+    /**
+     * Gets the list of jitsi meetings the user is in from the server. 
+     */
+    handleFromViewShowMeetingList() {
+        if (this.#socketReady()) {
+            this.#socket.emit('getMeetingList');
+        }
+    };
+
+    /**
+     * Requests a personal one-on-one meeting with a moderator 
+     */
+    handleFromViewRequestModMeeting() {
+        if (this.#socketReady()) {
+            this.#socket.emit('requestModMeeting');
+        }
+    }
+
+    /**
+     * Calls the Jitsi-API to join a meeting
+     * 
+     * might move the code into a seperate class?
+     * @param {*} meetingId 
+     */
+    handleFromViewJoinMeeting(meetingId) {
+        // domain name should not be hard-coded
+
+        this.#jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
+            roomName: 'maybenottestidontknowseemsawkward',
+            width: '100%',
+            height: window.innerHeight * 0.7,
+            // Add JWT
+            parentNode: document.getElementById('meetingModal-body'),
+            userInfo: {
+                email: 'place', // These will be the correct values from
+                displayName: 'holder' // the participants data
+            }
+        });
+
+        $('#meetingModal').modal('show');
+        
+
+        $('#meetingModal').on('hidden.bs.modal', function() { 
+            this.#jitsi.dispose();
+        }.bind(this));
+
+    }
 
     /**
      * Gets chat thread from server

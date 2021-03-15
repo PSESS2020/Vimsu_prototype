@@ -47,6 +47,12 @@ class HUDView extends Views {
             eventManager.handleFriendListClicked();
         })
 
+        $('#meetingListButton').off();
+        $('#meetingListButton').on('click', (event) => {
+            eventManager.handleMeetingJoined("test");
+        })
+
+
         $('#chatListButton').off();
         $('#chatListButton').on('click', (event) => {
             $('#chatListModal').modal('show');

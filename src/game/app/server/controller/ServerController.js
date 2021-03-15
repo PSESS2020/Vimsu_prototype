@@ -6,6 +6,7 @@ const CommandHandler = require('../models/CommandHandler.js');
 const AllchatContext = require('../models/AllchatContext.js');
 const LectureContext = require('../models/LectureContext.js');
 const LectureService = require('../services/LectureService');
+const MeetingService = require('../services/MeetingService.js');
 const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
@@ -1309,6 +1310,40 @@ module.exports = class ServerController {
 
                 });
                 this.#io.to(socket.id).emit('chatList', chatListData);
+            });
+
+            socket.on('getMeetingList', () => {
+                // get the participant
+                let ppantID = socket.ppantID;
+                let ppant = this.#ppants.get(ppantID);
+
+                // if participant does not exist, we do nothing
+                if (!ppant)
+                    return;
+
+                /* get participants meetings and prepare data object
+                 * that we are going to send to client. */
+                let meetList = ppant.getMeetingList();
+                let meetListData = [];
+
+                /* for each meeting get (randomly generated) id, which
+                 * we need to generate the URL as well as the name, which
+                 * is what the meeting will get listed as. */
+                meetList.forEach(meeting => {
+                    meetListDate.push({
+                        id: meeting.getId(),
+                        name: meeting.getName()
+                    });
+                });
+
+                // send everything to client
+                this.#io.to(socket.id).emit('meetingList', meetListData);
+            });
+
+            socket.on('requestModMeeting', () => {
+                // Check for available moderators
+                // as soon as one is available, add him to meeting with requester
+                // add requester to meeting
             });
 
             /* Gets the necessary information to display a chat and sends it to the client.

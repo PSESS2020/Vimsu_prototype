@@ -1,8 +1,7 @@
 <html>
 
 <body>
-    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
-        aria-hidden="true">
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -32,6 +31,22 @@
                         <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                     </div>
                     <div id="noschedule"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="meetingModal" tabindex="-1" role="dialog" aria-labelledby="meetingModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoMeetingModalTitle">Jitsi-Meeting</h5>
+                    <button type="button" id="meetingModalClose" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="meetingModal-body">
                 </div>
             </div>
         </div>
@@ -190,6 +205,25 @@
                     </div>
                     <div id="noranklist"></div>
                     <div class="row" id="ranklistrow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog"   aria-labelledby="meetingListModalTitle" aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meetingListModalTitle">Meetings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow: auto; height: 500px">
+                    <div id="nomeeting"></div>
+                    <ul class="list-group bg-transparent">
+
+                    </ul>
                 </div>
             </div>
         </div>

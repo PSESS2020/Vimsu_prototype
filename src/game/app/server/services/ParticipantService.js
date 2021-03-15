@@ -9,6 +9,7 @@ const Account = require('../../../../website/models/Account');
 const AccountService = require('../../../../website/services/AccountService');
 const AchievementService = require('./AchievementService');
 const ChatService = require('./ChatService.js');
+const MeetingService = require('./MeetingService.js');
 const FriendList = require('../models/FriendList.js');
 const TaskService = require('./TaskService');
 const Task = require('../models/Task');
@@ -53,6 +54,8 @@ module.exports = class ParticipantService {
                     let friendRequestListReceived = [];
                     let friendRequestListSent = [];
 
+                    let meetingList = await MeetingService.loadMeetingList(par.meetingIDList, conferenceId, vimsudb);
+
                     await par.friendIds.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendList.push(busCard);
@@ -76,6 +79,7 @@ module.exports = class ParticipantService {
                             console.error(err)
                         });
                     });
+
 
                     var achievements = [];
 
@@ -101,7 +105,8 @@ module.exports = class ParticipantService {
                         par.taskCount,
                         par.isModerator,
                         par.points,
-                        chatList);
+                        chatList,
+                        meetingList);
 
                     let achievementService = new AchievementService();
 
@@ -161,6 +166,7 @@ module.exports = class ParticipantService {
                     isModerator: false,
                     points: 0,
                     chatIDList: [],
+                    meetingIDList: [],
                     taskCount: emptyTaskCount
                 }
 
@@ -189,7 +195,8 @@ module.exports = class ParticipantService {
                         par.taskCount,
                         par.isModerator,
                         par.points,
-                        []);
+                        [], // ChatList
+                        []);// MeetingList
 
                     new AchievementService().computeAchievements(participant);
 

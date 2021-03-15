@@ -13,6 +13,7 @@ class GameView {
 
     #currentLecturesView;
     #lectureView;
+    #meetingListView
     #chatListView;
     #chatThreadView;
     #statusBar;
@@ -84,6 +85,7 @@ class GameView {
         this.#friendListView = new FriendListView(this.#eventManager);
         this.#inviteFriendsView = new InviteFriendsView(this.#eventManager);
         this.#chatListView = new ChatListView(this.#eventManager);
+        this.#meetingListView = new MeetingListView(this.#eventManager);
         this.#chatThreadView = new ChatThreadView(this.#eventManager);
         this.#chatParticipantListView = new ChatParticipantListView();
         this.#scheduleListView = new ScheduleListView();
@@ -894,6 +896,15 @@ class GameView {
     initRankListView(rankList) {
         this.#rankListView.draw(rankList);
     }
+
+    /**
+     * Draws jitsi meeting list window
+     * 
+     * @param {Object[]} meetings meetings
+     */
+    initMeetingListView(meetings) {
+        this.#meetingListView.draw(meetings);
+    };
 
     /**
      * Draws chat list window
