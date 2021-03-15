@@ -37,11 +37,12 @@ module.exports = Object.freeze({
 
     ROOM1: {
         TYPE: Globals.RECEPTION,
+        ID: 1,
         WIDTH: 100,
         LENGTH: 100,
-        SHAPE: 'L',
-        // Entry Points
-        // Start position for reception?
+
+        SHAPE: null, /* Here people give either holes or non-holes in the form of arrays? */
+
         WALLTYPE: 'default',
         TILETYPE: 'default',
         MAPELEMENTS: [],

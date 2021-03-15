@@ -25,6 +25,7 @@ const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const Participant = require('../models/Participant.js');
+const RoomFactory = require('../models/RoomFactory.js');
 
 /**
  * The Server Controller
@@ -47,6 +48,7 @@ module.exports = class ServerController {
     #roomService;
     #interval;
     #currentLecturesData;
+    #roomFactory;
 
     //map from socket-id to ppant-id
     #socketMap;
@@ -95,6 +97,8 @@ module.exports = class ServerController {
             let room = decorator.getRoom();
             this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
         });
+
+        this.#roomFactory = new RoomFactory();
         
         this.#banList = [];
         this.#muteList = [];

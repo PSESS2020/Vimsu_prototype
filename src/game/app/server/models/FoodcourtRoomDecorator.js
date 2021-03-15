@@ -21,6 +21,7 @@ const RoomDimensions = require('../utils/RoomDimensions.js');
 module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
     #room;
 
+
     #assetPaths = {
         "tile_default": "client/assets/tiles/tile_default.png",
         "leftwall_default": "client/assets/walls/wall1.png",
