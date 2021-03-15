@@ -344,7 +344,7 @@ class LectureView extends WindowView {
                 $('#lectureChatInputGroup').append(`
                     <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" autocomplete="off" placeholder="Enter message ...">
                     <div class="input-group-append">
-                        <button id="lectureChatButton" class="btn btn-accept mr-3" type="button">Send</button>
+                        <button id="lectureChatButton" class="btn btn-blue mr-3" type="button">Send</button>
                     </div>
                 `)
             }

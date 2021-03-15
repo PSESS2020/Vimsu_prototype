@@ -96,7 +96,7 @@ class BusinessCardView extends WindowView {
         $('#businessCardModal .modal-body').append(`
             </table>
             </br>
-            <button id="${"chatnow" + this.#businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-accept mx-auto d-block">Chat</button>
+            <button id="${"chatnow" + this.#businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
         `)
 

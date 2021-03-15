@@ -76,9 +76,9 @@ class FriendListView extends WindowView {
                             <a class="action_button nav-item nav-link" href="" style="position: absolute;" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 90px !important; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
-                                <button class="dropdown-item btn btn-accept" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
-                                <button class="dropdown-item btn btn-reject" style=" width: auto" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 5px; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
+                                <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
+                                <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
                             </div>
                         </span>
                     </div>  

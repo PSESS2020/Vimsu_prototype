@@ -203,7 +203,7 @@ class ChatListView extends WindowView {
                                     style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
                                 <div class="input-group-append">
-                                    <button id=${"chatMessageButton" + chatID} class="btn btn-accept" type="button">Send</button>
+                                    <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
                                 </div>
                             </form>
                         </div>
