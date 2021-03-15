@@ -327,7 +327,7 @@ module.exports = class RouteController {
         this.#app.get('/editAccount', (request, response) => {
             if (request.session.loggedin === true) {
                 forename = request.session.forename;
-                response.render('editAccount', { loggedIn: true, username: username, forename: forename })
+                response.render('editAccount', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
             }
             else {
                 response.redirect('/');
