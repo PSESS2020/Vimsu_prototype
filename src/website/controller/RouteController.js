@@ -118,12 +118,12 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    response.render('upload', { loggedIn: true, username: username, forename: forename });
+                    response.render('upload', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                 } else {
-                response.redirect('/');
+                    response.redirect('/');
                 }
             });
-        
+
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
@@ -186,7 +186,7 @@ module.exports = class RouteController {
                 let os = parser.setUA(ua).getOS().name;
                 let browserName = parser.setUA(ua).getBrowser().name;
                 let fullBrowserVersion = parser.setUA(ua).getBrowser().version;
-                let browserVersion = fullBrowserVersion.split(".",1).toString();
+                let browserVersion = fullBrowserVersion.split(".", 1).toString();
                 let browserVersionNumber = Number(browserVersion);
                 let isSupported = false;
 
@@ -196,19 +196,19 @@ module.exports = class RouteController {
                         isSupported = true;
                     }
                 } else if (device === undefined) {
-                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 62) 
-                    || (browserName === 'Edge' && browserVersionNumber >= 79)) {
+                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 62)
+                        || (browserName === 'Edge' && browserVersionNumber >= 79)) {
                         isSupported = true;
                     }
                 }
-                
+
                 if (isSupported) {
                     const ServerController = require('../../game/app/server/controller/ServerController');
                     new ServerController(this.#io, this.#db, this.#blob);
                     response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
                 } else {
                     response.send("Your browser does not support private class fields in JavaScript, which are required to use VIMSU." +
-                    " Check out https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields to see which browsers are currently supported.");
+                        " Check out https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields to see which browsers are currently supported.");
                 }
             } else {
                 response.redirect('/');
@@ -261,11 +261,11 @@ module.exports = class RouteController {
             username = request.body.username
 
             return AccountService.isUsernameValid(username, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res) {    
+                if (res) {
                     request.session.registerValid = true;
                     request.session.username = username;
                     response.redirect('/register');
-                           
+
                     response.end();
                 }
                 else {
@@ -292,7 +292,7 @@ module.exports = class RouteController {
                     //Needed for creating business card during entering the conference.
                     request.session.username = res.getUsername();
                 }
-                
+
                 response.redirect('/');
                 response.end();
             }).catch(err => {
