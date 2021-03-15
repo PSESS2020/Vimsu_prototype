@@ -31,6 +31,7 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
 const Meeting = require('../models/Meeting.js');
 const Message = require('../models/Message.js');
+const RoomFactory = require('../models/RoomFactory.js');
 
 /**
  * The Server Controller
@@ -53,6 +54,7 @@ module.exports = class ServerController {
     #roomService;
     #interval;
     #currentLecturesData;
+    #roomFactory;
 
     //map from socket-id to ppant-id
     #socketMap;
@@ -107,6 +109,8 @@ module.exports = class ServerController {
             let room = decorator.getRoom();
             this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
         });
+
+        this.#roomFactory = new RoomFactory();
         
         this.#banList = [];
         this.#muteList = [];

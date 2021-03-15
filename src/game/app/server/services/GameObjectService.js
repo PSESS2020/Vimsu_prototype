@@ -14,6 +14,12 @@ const Position = require('../models/Position.js');
  */
 module.exports = class GameObjectService {
 
+    /* TODO:
+     * createTile
+     * createWall
+     * createWindow
+    */
+
     #gameObjectIDs;
 
     constructor() {
