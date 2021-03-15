@@ -10,6 +10,7 @@ const OneToOneChat = require('./OneToOneChat.js');
 const TypeOfTask = require('../utils/TypeOfTask');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const Settings = require('../utils/Settings.js');
+const Meeting = require('./Meeting.js');
 
 /**
  * The Participant Model
@@ -27,6 +28,7 @@ module.exports = class Participant {
     #direction;
     #friendList;
     #receivedRequestList;
+    #meetingList
     #sentRequestList;
     #isMod;
     #taskTypeMapping;
@@ -48,13 +50,14 @@ module.exports = class Participant {
      * @param {FriendList} friendList list of friends
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
+     * @param {Meeting[]} meetingList List of jitsi meetings
      * @param {Achievement[]} achievements list of achievements
      * @param {Task[]} taskMapping list of tasks and its counts
      * @param {boolean} isMod moderator status
      * @param {number} awardPoints participant's points
      * @param {Chat[]} chatList list of chats
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList) {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList, meetingList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -77,6 +80,10 @@ module.exports = class Participant {
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
         });
+        TypeChecker.isInstanceOf(meetingList, Array);
+        meetingList.forEach(meeting => {
+            TypeChecker.isInstanceOf(meeting, Meeting);
+        })
 
         this.#id = id;
         this.#accountId = accountId;
@@ -91,6 +98,7 @@ module.exports = class Participant {
         this.#isMod = isMod;
         this.#awardPoints = awardPoints;
         this.#chatList = chatList;
+        this.#meetingList = meetingList;
         this.#isVisible = true;
         this.#shirtColor = Settings.DEFAULT_SHIRTCOLOR_PPANT;
     }
@@ -246,6 +254,16 @@ module.exports = class Participant {
      */
     getChatList() {
         return this.#chatList;
+    }
+
+    /**
+     * Gets meeting list
+     * @method module:Participant#getMeetingList
+     * 
+     * @return {Meeting[]} meetingList
+     */
+    getMeetingList() {
+        return this.#meetingList
     }
 
     /**

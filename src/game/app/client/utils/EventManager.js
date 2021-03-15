@@ -196,6 +196,22 @@ class EventManager {
     };
 
     /**
+     * called from view on meeting list click
+     */
+    handleMeetingListClicked() {
+        this.#clientController.handleFromViewShowMeetingList();
+    };
+
+    /** 
+     * called from view when an entry in the meeting list is clicked.
+     * 
+     * this may require additional information to be passed (such as a password)
+     */
+    handleMeetingJoined(meetingId) {
+        this.#clientController.handleFromViewJoinMeeting(meetingId);
+    }
+
+    /**
      * 
      * @param {String} chatId chat ID
      */
