@@ -139,19 +139,28 @@ form button:hover {
 #notifBar {
   font-size: 15px;
   background: rgba(15, 15, 15, 0.8);
-  border-radius: 5px;
+  border-radius: 0px;
   overflow-y: scroll;
   margin: 0;
   padding-left: 10px;
   max-height: 60vh;
+  padding: 0;
 }
 
 .notifBarDiv {
   background-color: none; 
+  border-radius: 0px;
+  padding: 5px;
+}
+
+.notifBarText {
   color: antiquewhite;
-  border-radius: 5px;
-  border: none;
-  padding: 5px 10px;
+  text-align: right;
+  padding: 5px;
+}
+
+.notifBarText:hover {
+  opacity: .8;
 }
 
 #allChatBox {
@@ -166,7 +175,6 @@ form button:hover {
 }
 
 #allChatHeader {
-  width: 20vw; 
   background-color: rgba(15, 15, 15, 0.8); 
   border-radius: 0px 5px 0px 0px; 
   border-bottom: 1px solid antiquewhite; 
@@ -242,6 +250,10 @@ vertical-align: middle;
   outline: none !important;
   -webkit-appearance:none !important;
   box-shadow: none !important;
+}
+
+.closeBtn:hover {
+  color: antiquewhite;
 }
 
 .lectureChatContainer {
@@ -530,6 +542,7 @@ vertical-align: middle;
   border-right: none !important;
   border-bottom: 1pt solid antiquewhite !important;
   border-radius: 0px 0px 0px 0px !important;
+  background: none;
 }
 
 .chatthread:hover {
