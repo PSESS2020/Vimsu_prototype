@@ -45,35 +45,37 @@ class ProfileView extends WindowView {
         `)
 
         $('#profileModal .modal-body').append(`
-            <table id="profile" style = "color: antiquewhite; width:100%; margin-left: 0">
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                    <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
-                </tr>
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                    <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
-                </tr>
+            <div class="d-flex" style="overflow-x: auto">
+                <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
+                    <tr>
+                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
+                        <td style="padding: 15px">${this.#businessCard.getJob() + " at " + this.#businessCard.getCompany()}</td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
+                        <td style="padding: 15px">${this.#businessCard.getEmail()}</td>
+                    </tr>
         `)
 
         if(this.#isModerator) {
             $('#profileModal .modal-body #profile').append(`
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">Moderator</td>
-                </tr>
+                    <tr>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                        <td style="padding: 15px">Moderator</td>
+                    </tr>
             `)
         } else {
             $('#profileModal .modal-body #profile').append(`
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">Participant</td>
-                </tr>
+                    <tr>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
+                        <td style="padding: 15px">Participant</td>
+                    </tr>
             `)
         }
 
         $('#profileModal .modal-body').append(`
-            </table>
+                </table>
+            </div>
         `)
 
         
