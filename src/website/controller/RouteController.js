@@ -316,7 +316,7 @@ module.exports = class RouteController {
             if (request.session.loggedin === true) {
                 username = request.session.username;
                 forename = request.session.forename;
-                response.render('account', { loggedIn: true, username: username, forename: forename });
+                response.render('account', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
             }
 
             else {
