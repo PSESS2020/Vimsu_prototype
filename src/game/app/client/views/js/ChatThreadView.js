@@ -174,7 +174,7 @@ class ChatThreadView extends WindowView {
 
         if (message.senderUsername === this.#ownUsername) {
             messageDiv =
-            `
+                `
                 <div class="d-flex flex-column align-items-end mr-2">
                     <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="messageBubbleMyself">
@@ -183,12 +183,12 @@ class ChatThreadView extends WindowView {
                 </div>
             `
         } else {
-            messageDiv = 
-            `
+            messageDiv =
+                `
                 <div class="d-flex flex-column align-items-start ml-2">
                     <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="messageBubbleOthers">
-                        ${this.#chat.groupChat? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        ${this.#chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>
                     </div>
                 </div>
@@ -305,6 +305,8 @@ class ChatThreadView extends WindowView {
 
             this.#eventManager.handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
+
+        new EmojiPicker().draw('top-end', "chatthread-emoji-trigger", `chatMessageInput${this.#chat.chatId}`)
     }
 
     #addNewChatParticipantListWindow = () => {
