@@ -152,7 +152,7 @@ class ChatListView extends WindowView {
   addNewChatThreadWindow(chatID) {
     if (!($('#chatThreadModal' + chatID).length)) {
       $("#chatThreadModalCollection").append(`
-          <div class="modal" id=${"chatThreadModal" + chatID} tabindex="-1" role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
+          <div class="modal" id=${"chatThreadModal" + chatID} role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
           aria-hidden="true" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
                 <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
@@ -204,6 +204,7 @@ class ChatListView extends WindowView {
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
                                 <div class="input-group-append">
                                     <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
+                                    <button id="chatthread-emoji-trigger" class="ml-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
                                 </div>
                             </form>
                         </div>
