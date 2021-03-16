@@ -47,7 +47,16 @@ class ParticipantAvatarView extends AvatarView {
         this.initSpriteAnimation();
 
         this.#currentAnimation = this.#standingDownRightAnimation;
-        this.#forename = forename;
+     
+        ctx_avatar.font = "1em sans-serif";
+
+        //calculate maximum number of forename characters that can be drawn without being to big for rectangel
+        let maxNameLength = forename.length;
+        while (ctx_avatar.measureText(forename.slice(0, maxNameLength)).width > Settings.AVATAR_WIDTH * 1.5) 
+            maxNameLength--;
+        
+        this.#forename = forename.slice(0, maxNameLength);
+         
         this.#isVisible = isVisible;
         this.#isModerator = isModerator;
         this.#isOwnAvatar = isOwnAvatar;
