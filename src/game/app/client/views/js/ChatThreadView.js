@@ -311,7 +311,7 @@ class ChatThreadView extends WindowView {
             this.#eventManager.handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
         });
 
-        new EmojiPicker().draw('top-end', "chatthread-emoji-trigger", `chatMessageInput${this.#chat.chatId}`)
+        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.#chat.chatId}`)
     }
 
     #addNewChatParticipantListWindow = () => {
