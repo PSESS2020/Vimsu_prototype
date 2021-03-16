@@ -38,14 +38,7 @@ class AllchatView extends Views {
             $('#showRoomChat').show();
         })
 
-        $('#allchat').on('keydown', (event) => {
-            event.stopPropagation();
-        });
-
-        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput")
-
-        $('#allchat').on('submit', (event) => {
-
+        const sendMessage = (event) => {
             event.preventDefault();
             //Replace needed to replace html tags.
             let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -55,7 +48,20 @@ class AllchatView extends Views {
                 $('#allchatMessageInput').val('');
                 return false;
             }
+        }
 
+        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput")
+
+        $('#allchat').on('keydown', (event) => {
+            event.stopPropagation();
+
+            if (event.keyCode === 13) {
+                sendMessage(event);
+            }
+        });
+
+        $('#allchat').on('submit', (event) => {
+            sendMessage(event)
         });
     }
 

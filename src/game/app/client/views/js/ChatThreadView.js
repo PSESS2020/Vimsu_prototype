@@ -227,6 +227,11 @@ class ChatThreadView extends WindowView {
 
         $('#chatMessageInputGroup' + this.#chat.chatId).on('keydown', (event) => {
             event.stopPropagation();
+
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                this.#sendMessage();
+            }
         });
 
         $('#chatMessageInputGroup' + this.#chat.chatId).on('submit', (event) => {
