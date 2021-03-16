@@ -199,12 +199,12 @@ class ChatListView extends WindowView {
                         </div>
                         <div class="d-flex">
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
+                                <button id="chatthread-emoji-trigger" class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
                                 <input id=${"chatMessageInput" + chatID} type="text"
-                                    style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
+                                    style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite; border-radius: 5px 0px 0px 5px;"
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
                                 <div class="input-group-append">
                                     <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
-                                    <button id="chatthread-emoji-trigger" class="ml-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
                                 </div>
                             </form>
                         </div>
