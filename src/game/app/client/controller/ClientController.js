@@ -1038,8 +1038,7 @@ class ClientController {
      */
     handleFromServerGameEntered = function () {
         alert("You have entered the conference with the same account. Redirect to homepage...")
-        var redirect = $('nav_leave_button').attr('href');
-        window.location.href = redirect;
+        window.location.href = "/";
     }
 
     /**
