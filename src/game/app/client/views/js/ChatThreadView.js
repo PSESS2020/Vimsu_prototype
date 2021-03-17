@@ -221,6 +221,9 @@ class ChatThreadView extends WindowView {
         chatFriendRequestButton.title = "Send friend request"
     }
 
+    /**
+     * Init all buttons
+     */
     initButtons = () => {
         $('#chatMessageInput' + this.chat.chatId).off();
         $('#chatMessageInputGroup' + this.chat.chatId).off();

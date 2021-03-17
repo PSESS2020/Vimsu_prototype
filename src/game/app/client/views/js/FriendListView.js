@@ -45,17 +45,14 @@ class FriendListView extends WindowView {
         $('#nofriend').empty();
         $('#friendListModal .modal-body .list-group').empty();
 
-        if (businessCards.length < 1) {
-            $('#nofriend').text("No friend is found. Chat with others and send some friend requests!");
-            return;
-        }
+        this.handleEmptyFriendlist(businessCards)
 
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.businessCards = sortedBusinessCards;
 
         this.businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent chatthread" >
+                <li class="list-group-item bg-transparent chatthread" id="${"friend" + businessCard.getParticipantId()}">
                     <div class="d-flex justify-content-between">
                         <div class="row w-100">
                             <div class="col-12 col-sm-2 px-0">
@@ -114,7 +111,8 @@ class FriendListView extends WindowView {
             }
         });
 
-        this.draw(this.businessCards);
+        $("#friend" + participantId).remove()
+        this.handleEmptyFriendlist(this.businessCards)
     }
 
     /**
@@ -126,6 +124,19 @@ class FriendListView extends WindowView {
         if (!this.businessCards.includes(businessCard)) {
             this.businessCards.push(businessCard);
             this.draw(this.businessCards);
-        }        
+        }
+    }
+
+    /**
+     * Displays no friend if there's no friend
+     * 
+     * @param {Object[]} businessCards business cards
+     * @returns if no friend
+     */
+    handleEmptyFriendlist(businessCards) {
+        if (businessCards && businessCards.length < 1) {
+            $('#nofriend').text("No friend is found. Chat with others and send some friend requests!");
+            return;
+        }
     }
 }
