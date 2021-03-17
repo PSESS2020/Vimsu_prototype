@@ -5,13 +5,13 @@
  * @version 1.0.0
  */
 class GameObjectViewFactory {
-    #tileColumnWidth;
-    #tileRowHeight;
-    #assetImages;
-    #defaultOffset;
+    tileColumnWidth;
+    tileRowHeight;
+    assetImages;
+    defaultOffset;
 
-    #gameEngine;
-    #eventManager;
+    gameEngine;
+    eventManager;
 
     /**
      * Creates an instance of GameObjectViewFactory
@@ -21,16 +21,16 @@ class GameObjectViewFactory {
      * @param {EventManager} eventManager event manager instance
      */
     constructor(assetImages, gameEngine, eventManager) {
-        this.#assetImages = assetImages;
+        this.assetImages = assetImages;
 
-        this.#gameEngine = gameEngine;
-        this.#eventManager = eventManager;
+        this.gameEngine = gameEngine;
+        this.eventManager = eventManager;
 
         //gets map tile size
-        this.#tileColumnWidth = this.#gameEngine.getTileColumnWidth();
-        this.#tileRowHeight = this.#gameEngine.getTileRowHeight();
+        this.tileColumnWidth = this.gameEngine.getTileColumnWidth();
+        this.tileRowHeight = this.gameEngine.getTileRowHeight();
 
-        this.#defaultOffset = { x: 0, y: 0 };
+        this.defaultOffset = { x: 0, y: 0 };
     }
 
     /**
@@ -44,7 +44,7 @@ class GameObjectViewFactory {
      */
     getClickMap(image, pos, offset) {
         var clickMap = [];
-        let screenPosXY = this.#gameEngine.calculateScreenPosXY(pos.getCordX(), pos.getCordY());
+        let screenPosXY = this.gameEngine.calculateScreenPosXY(pos.getCordX(), pos.getCordY());
         let screenPosWithOffsetX = screenPosXY.x + offset.x;
         let screenPosWithOffsetY = screenPosXY.y + offset.y;
 
@@ -99,22 +99,22 @@ class GameObjectViewFactory {
         switch (gameObjectType) {
 
             case GameObjectType.TILE:
-                gameMapElementImage = this.#assetImages[objectName];
+                gameMapElementImage = this.assetImages[objectName];
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
                 else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
             case GameObjectType.LEFTSCHEDULE:
             case GameObjectType.LEFTWALL:
-                gameMapElementImage = this.#assetImages[objectName];
+                gameMapElementImage = this.assetImages[objectName];
 
-                var wallOffset = { x: 0, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1 };
+                var wallOffset = { x: 0, y: this.tileRowHeight / 2 - gameMapElementImage.width + 1 };
 
                 if (gameMapElementImage !== undefined) {
                     if (gameObjectType === GameObjectType.LEFTSCHEDULE)
-                        gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, wallOffset), pos, wallOffset, objectName, this.#eventManager);
+                        gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, wallOffset), pos, wallOffset, objectName, this.eventManager);
                     else
                         gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
                 } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
@@ -122,9 +122,9 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.RIGHTWALL:
-                gameMapElementImage = this.#assetImages[objectName];
+                gameMapElementImage = this.assetImages[objectName];
 
-                var wallOffset = { x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - gameMapElementImage.width + 1 };
+                var wallOffset = { x: -this.tileColumnWidth, y: this.tileRowHeight / 2 - gameMapElementImage.width + 1 };
 
                 if (gameMapElementImage !== undefined)
                     gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
@@ -133,23 +133,23 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.LEFTTILE:
-                gameMapElementImage = this.#assetImages[objectName];
+                gameMapElementImage = this.assetImages[objectName];
 
                 pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
                 else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
             case GameObjectType.RIGHTTILE:
-                gameMapElementImage = this.#assetImages[objectName];
+                gameMapElementImage = this.assetImages[objectName];
 
                 pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
 
                 if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.#defaultOffset, objectName);
+                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
                 else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -187,18 +187,18 @@ class GameObjectViewFactory {
         switch (gameObjectType) {
 
             case GameObjectType.SELECTED_TILE:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
                 if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, this.#defaultOffset, objectName);
+                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, this.defaultOffset, objectName);
                 else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
             case GameObjectType.TABLE:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 7 };
+                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 7 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
@@ -206,9 +206,9 @@ class GameObjectViewFactory {
 
                 break;
             case GameObjectType.SMALLDINNERTABLEFOOD:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var tableOffset = { x: -4, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+                var tableOffset = { x: -4, y: this.tileRowHeight - gameObjectImage.height + 20 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
@@ -217,9 +217,9 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.SMALLDINNERTABLE:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 20 };
+                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 20 };
 
                 if (gameObjectImage !== undefined) {
 
@@ -234,9 +234,9 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.RIGHTTABLE:
-                    gameObjectImage = this.#assetImages[objectName];
+                    gameObjectImage = this.assetImages[objectName];
     
-                    var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 52 };
+                    var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 52 };
     
                     if (gameObjectImage !== undefined)
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
@@ -245,9 +245,9 @@ class GameObjectViewFactory {
                     break; 
             
             case GameObjectType.CANTEENCOUNTER:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var tableOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height + 50 };
+                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 50 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
@@ -256,8 +256,8 @@ class GameObjectViewFactory {
                 break;
             
             case GameObjectType.RECEPTIONCOUNTER:
-                gameObjectImage = this.#assetImages[objectName];
-                var receptionCounterOffset = { x: 0, y: -this.#tileRowHeight + 8};
+                gameObjectImage = this.assetImages[objectName];
+                var receptionCounterOffset = { x: 0, y: -this.tileRowHeight + 8};
     
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
@@ -266,8 +266,8 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.RECEPTIONCOUNTERSIDEPART:
-                gameObjectImage = this.#assetImages[objectName];
-                var receptionCounterOffset = { x: -9, y: this.#tileRowHeight - gameObjectImage.height + 28};
+                gameObjectImage = this.assetImages[objectName];
+                var receptionCounterOffset = { x: -9, y: this.tileRowHeight - gameObjectImage.height + 28};
     
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
@@ -275,9 +275,9 @@ class GameObjectViewFactory {
     
                 break;
             case GameObjectType.DRINKS:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var tableOffset = { x: 14, y: this.#tileRowHeight - gameObjectImage.height + 12 };
+                var tableOffset = { x: 14, y: this.tileRowHeight - gameObjectImage.height + 12 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
@@ -286,9 +286,9 @@ class GameObjectViewFactory {
                 break; 
 
             case GameObjectType.CHAIR:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var chairOffset = { x: 15, y: this.#tileRowHeight - gameObjectImage.height - 6 };
+                var chairOffset = { x: 15, y: this.tileRowHeight - gameObjectImage.height - 6 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
@@ -297,9 +297,9 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.SOFA:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var sofaOffset = { x: 0, y: this.#tileRowHeight - gameObjectImage.height - 4 };
+                var sofaOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height - 4 };
 
                 if (gameObjectImage !== undefined)
                     gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
@@ -308,9 +308,9 @@ class GameObjectViewFactory {
                 break;
 
             case GameObjectType.PLANT:
-                gameObjectImage = this.#assetImages[objectName];
+                gameObjectImage = this.assetImages[objectName];
 
-                var plantOffset = { x: -5, y: this.#tileRowHeight - gameObjectImage.height - 10 };
+                var plantOffset = { x: -5, y: this.tileRowHeight - gameObjectImage.height - 10 };
                 if (gameObjectImage !== undefined) {
 
                     if (isClickable) {
@@ -352,24 +352,24 @@ class GameObjectViewFactory {
             case TypeOfDoor.LECTURE_DOOR:
             case TypeOfDoor.LEFT_DOOR:
 
-                doorImage = this.#assetImages[objectName];
+                doorImage = this.assetImages[objectName];
 
-                var leftDoorOffset = { x: 0, y: this.#tileRowHeight / 2 - doorImage.width + 1 };
+                var leftDoorOffset = { x: 0, y: this.tileRowHeight / 2 - doorImage.width + 1 };
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, leftDoorOffset, objectName, this.#eventManager);
+                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, leftDoorOffset, objectName, this.eventManager);
                 else throw new Error("The image for lefthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
 
             case TypeOfDoor.RIGHT_DOOR:
 
-                doorImage = this.#assetImages[objectName];
+                doorImage = this.assetImages[objectName];
 
-                var rightDoorOffset = { x: -this.#tileColumnWidth, y: this.#tileRowHeight / 2 - doorImage.width + 1 };
+                var rightDoorOffset = { x: -this.tileColumnWidth, y: this.tileRowHeight / 2 - doorImage.width + 1 };
 
                 if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, rightDoorOffset, objectName, this.#eventManager);
+                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, rightDoorOffset, objectName, this.eventManager);
                 else throw new Error("The image for righthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;

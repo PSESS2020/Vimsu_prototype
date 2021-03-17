@@ -5,7 +5,7 @@
  * @version 1.0.0
  */
 class ScheduleView extends GameMapElementView {
-    #eventManager;
+    eventManager;
 
     /**
      * Creates an instance of Schedule View
@@ -18,7 +18,7 @@ class ScheduleView extends GameMapElementView {
      */
     constructor(scheduleImage, clickMap, position, screenPositionOffset, name, eventManager) {
         super(scheduleImage, clickMap, position, screenPositionOffset, name);
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
     
     /**
@@ -35,7 +35,7 @@ class ScheduleView extends GameMapElementView {
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
             $('#scheduleModal').modal('show');
             $('#scheduleWait').show()
-            this.#eventManager.handleScheduleClicked();
+            this.eventManager.handleScheduleClicked();
         }
     }
 }

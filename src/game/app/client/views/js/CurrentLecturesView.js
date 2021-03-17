@@ -6,7 +6,7 @@
  */
 class CurrentLecturesView extends WindowView {
 
-    #eventManager;
+    eventManager;
 
     /**
      * Creates an instance of CurrentLecturesView
@@ -22,12 +22,12 @@ class CurrentLecturesView extends WindowView {
 
         CurrentLecturesView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
 
         $(document).ready(() => {
             $('#closeCurrentLecturesButton').off();
             $('#closeCurrentLecturesButton').on('click', (event) => {
-                this.#eventManager.handleClearInterval();
+                this.eventManager.handleClearInterval();
                 $('#currentLectures').hide();
             })
         })
@@ -65,7 +65,7 @@ class CurrentLecturesView extends WindowView {
 
             $('#show' + lecture.id).on('click', (event) => {
                 $('#show' + lecture.id).hide();
-                this.#eventManager.handleLectureClicked(lecture.id);
+                this.eventManager.handleLectureClicked(lecture.id);
             })
         });
 

@@ -5,13 +5,13 @@
  * @version 1.0.0
  */
 class StatusBar extends Views {
-    #timeLeft;
-    #connectionStatus;
+    timeLeft;
+    connectionStatus;
 
     //FPS variables
-    #secondsPassed;
-    #oldTimeStamp;
-    #fps;
+    secondsPassed;
+    oldTimeStamp;
+    fps;
 
     /**
      * Creates an instance of StatusBar
@@ -25,33 +25,33 @@ class StatusBar extends Views {
 
         StatusBar.instance = this;
 
-        this.#connectionStatus = ConnectionState.CONNECTED;
+        this.connectionStatus = ConnectionState.CONNECTED;
         $('#group').hide();
     }
 
     /**
-     * @private draws game clock
+     * draws game clock
      */
-    #drawClock = function () {
+    drawClock = function () {
         $('#time').empty()
         let now = new DateParser(new Date()).parseWithSeconds();
         $('#time').text(now);
     }
 
     /**
-     * @private draws connection status
+     * draws connection status
      */
-    #drawConnectionStatus = function () {
-        if (this.#connectionStatus === ConnectionState.DISCONNECTED) {
-            if (this.#timeLeft < 0) {
+    drawConnectionStatus = function () {
+        if (this.connectionStatus === ConnectionState.DISCONNECTED) {
+            if (this.timeLeft < 0) {
                 var redirect = $('#nav_leave_button').attr('href');
                 window.location.href = redirect;
             } else {
                 $('#connectionStatus').empty();
-                $('#connectionStatus').text(`Lost connection to the server. ${isNaN(this.#timeLeft) ? `` : `Time left until leave: ${this.#timeLeft}s.`}`);
+                $('#connectionStatus').text(`Lost connection to the server. ${isNaN(this.timeLeft) ? `` : `Time left until leave: ${this.timeLeft}s.`}`);
                 $('#connectionStatus').show();
 
-                if (!isNaN(this.#timeLeft)) this.#timeLeft--;
+                if (!isNaN(this.timeLeft)) this.timeLeft--;
             }
         }
     }
@@ -60,13 +60,13 @@ class StatusBar extends Views {
      * draws status bar every 1 seconds
      */
     draw() {
-        this.#drawClock();
-        this.#drawConnectionStatus();
+        this.drawClock();
+        this.drawConnectionStatus();
 
         setInterval(() => {
 
-            this.#drawClock();
-            this.#drawConnectionStatus();
+            this.drawClock();
+            this.drawConnectionStatus();
 
         }, 1000);
     }
@@ -91,14 +91,14 @@ class StatusBar extends Views {
         $('#fps').empty();
 
         // Calculate the number of seconds passed since the last frame
-        this.#secondsPassed = (timeStamp - this.#oldTimeStamp) / 1000;
-        this.#oldTimeStamp = timeStamp;
+        this.secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
+        this.oldTimeStamp = timeStamp;
 
         // Calculate fps
-        this.#fps = Math.round(1 / this.#secondsPassed);
+        this.fps = Math.round(1 / this.secondsPassed);
 
         // Draw number to the screen
-        $('#fps').text('FPS: ' + this.#fps + ', ');
+        $('#fps').text('FPS: ' + this.fps + ', ');
     }
 
     /**
@@ -117,7 +117,7 @@ class StatusBar extends Views {
      * @param {ConnectionState} status connection status
      */
     updateConnectionStatus(status) {
-        this.#connectionStatus = status;
+        this.connectionStatus = status;
 
         if (status === ConnectionState.CONNECTED) {
             $('#connectionStatus').empty();
@@ -128,7 +128,7 @@ class StatusBar extends Views {
                 return;
             }
 
-            this.#timeLeft = Settings.TIME_UNTIL_LEAVE;
+            this.timeLeft = Settings.TIME_UNTIL_LEAVE;
         }
     }
 

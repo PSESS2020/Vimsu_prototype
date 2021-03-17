@@ -12,14 +12,14 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class GameObjectClient {
 
-    #id;
-    #name;
-    #width;
-    #length;
-    #position;
-    #gameObjectType;
-    #isClickable;
-    #url;
+    id;
+    name;
+    width;
+    length;
+    position;
+    gameObjectType;
+    isClickable;
+    url;
 
     /**
      * Creates an instance of Game Object on client-side
@@ -46,16 +46,16 @@ class GameObjectClient {
         if (url !== undefined) 
             TypeChecker.isString(url);
 
-        this.#id = id;
-        this.#gameObjectType = gameObjectType;
-        this.#name = name;
-        this.#width = width;
-        this.#length = length;
+        this.id = id;
+        this.gameObjectType = gameObjectType;
+        this.name = name;
+        this.width = width;
+        this.length = length;
 
         //Position of left down corner of gameObject
-        this.#position = position;
-        this.#isClickable = isClickable;
-        this.#url = url;
+        this.position = position;
+        this.isClickable = isClickable;
+        this.url = url;
     }
 
     /**
@@ -64,7 +64,7 @@ class GameObjectClient {
      * @return {number} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -73,7 +73,7 @@ class GameObjectClient {
      * @return {GameObjectType} gameObjectType
      */
     getGameObjectType() {
-        return this.#gameObjectType;
+        return this.gameObjectType;
     }
 
     /**
@@ -82,7 +82,7 @@ class GameObjectClient {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -91,7 +91,7 @@ class GameObjectClient {
      * @return {number} width
      */
     getWidth() {
-        return this.#width;
+        return this.width;
     }
 
     /**
@@ -100,7 +100,7 @@ class GameObjectClient {
      * @return {number} length
      */
     getLength() {
-        return this.#length;
+        return this.length;
     }
 
     /**
@@ -109,7 +109,7 @@ class GameObjectClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -117,8 +117,8 @@ class GameObjectClient {
      * 
      * @return {boolean} true if clickable, otherwise false
      */
-    isClickable() {
-        return this.#isClickable;
+    getIsClickable() {
+        return this.isClickable;
     }
 
     /**
@@ -127,7 +127,7 @@ class GameObjectClient {
      * @return {?String} returns URL if there clicking this object opens an external website, otherwise undefined
      */
     getURL() {
-        return this.#url;
+        return this.url;
     }
 }
 

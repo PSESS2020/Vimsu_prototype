@@ -6,7 +6,7 @@
  */
 class SmallDinerTableView extends GameObjectView {
 
-    #url;
+    url;
     
     /**
      * Creates an instance of SmallDinerTableView
@@ -21,7 +21,7 @@ class SmallDinerTableView extends GameObjectView {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
         TypeChecker.isString(url);
 
-        this.#url = url;
+        this.url = url;
     }
 
     /**
@@ -42,7 +42,7 @@ class SmallDinerTableView extends GameObjectView {
             });
         });
 
-        document.getElementById('iframe').src = this.#url;
+        document.getElementById('iframe').src = this.url;
         $('#externalWebsite').show();
     }
 }

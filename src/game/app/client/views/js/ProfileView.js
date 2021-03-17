@@ -5,8 +5,8 @@
  * @version 1.0.0
  */
 class ProfileView extends WindowView {
-    #businessCard;
-    #isModerator;
+    businessCard;
+    isModerator;
 
     /**
      * Creates an instance of ProfileView
@@ -24,7 +24,7 @@ class ProfileView extends WindowView {
     /**
      * Draws profile window
      * 
-     * @param {BusinessCard} businessCard own business card
+     * @param {BusinessCardClient} businessCard own business card
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isModerator) {
@@ -32,13 +32,13 @@ class ProfileView extends WindowView {
         $('#profileModal .modal-header').empty()
         $('#profileModal .modal-body').empty()
 
-        this.#businessCard = businessCard;
-        this.#isModerator = isModerator;
+        this.businessCard = businessCard;
+        this.isModerator = isModerator;
 
         $('#profileModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="profileModalTitle">
             <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-            ${this.#businessCard.getForename() + " " + " (@" + this.#businessCard.getUsername() + ")"}</h5>
+            ${this.businessCard.getForename() + " " + " (@" + this.businessCard.getUsername() + ")"}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             </button>
@@ -49,7 +49,7 @@ class ProfileView extends WindowView {
                 <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
         `)
 
-        if(this.#isModerator) {
+        if(this.isModerator) {
             $('#profileModal .modal-body #profile').append(`
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>

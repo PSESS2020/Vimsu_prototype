@@ -18,19 +18,19 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class RoomClient {
 
-    #roomId;
-    #typeOfRoom;
-    #assetPaths;
-    #listOfMapElements;
-    #listOfGameObjects;
-    #listOfNPCs;
-    #listOfDoors;
-    #width;
-    #length;
-    #listOfPPants;
-    #occupationMap;
-    #map;
-    #objectMap;
+    roomId;
+    typeOfRoom;
+    assetPaths;
+    listOfMapElements;
+    listOfGameObjects;
+    listOfNPCs;
+    listOfDoors;
+    width;
+    length;
+    listOfPPants;
+    occupationMap;
+    map;
+    objectMap;
 
     /**
      * Creates an instance of Room on client-side
@@ -62,7 +62,7 @@ class RoomClient {
      * @return {number} roomId
      */
     getRoomId() {
-        return this.#roomId;
+        return this.roomId;
     }
 
     /**
@@ -71,7 +71,7 @@ class RoomClient {
      * @return {TypeOfRoom} typeOfRoom
      */
     getTypeOfRoom() {
-        return this.#typeOfRoom;
+        return this.typeOfRoom;
     }
 
     /**
@@ -80,7 +80,7 @@ class RoomClient {
      * @return {Object} assetPaths
      */
     getAssetPaths() {
-        return this.#assetPaths;
+        return this.assetPaths;
     }
 
     /**
@@ -89,7 +89,7 @@ class RoomClient {
      * @return {number} width
      */
     getWidth() {
-        return this.#width;
+        return this.width;
     }
 
     /**
@@ -98,7 +98,7 @@ class RoomClient {
      * @return {number} length
      */
     getLength() {
-        return this.#length;
+        return this.length;
     }
 
     /**
@@ -107,7 +107,7 @@ class RoomClient {
      * @return {ParticipantClient[]} list of ppants
      */
     getListOfPPants() {
-        return this.#listOfPPants;
+        return this.listOfPPants;
     }
 
     /**
@@ -116,7 +116,7 @@ class RoomClient {
      * @return {GameObjectClient[]} list of map elements
      */
     getListOfMapElements() {
-        return this.#listOfMapElements;
+        return this.listOfMapElements;
     }
 
     /**
@@ -125,7 +125,7 @@ class RoomClient {
      * @return {GameObjectClient[]} list of game objects
      */
     getListOfGameObjects() {
-        return this.#listOfGameObjects;
+        return this.listOfGameObjects;
     }
 
     /**
@@ -134,7 +134,7 @@ class RoomClient {
      * @return {NPCClient[]} list of NPCs
      */
     getListOfNPCs() {
-        return this.#listOfNPCs;
+        return this.listOfNPCs;
     }
 
     /**
@@ -143,7 +143,7 @@ class RoomClient {
      * @return {DoorClient[]} list of doors
      */
     getListOfDoors() {
-        return this.#listOfDoors;
+        return this.listOfDoors;
     }
 
     /**
@@ -153,8 +153,8 @@ class RoomClient {
      */
     enterParticipant(participant) {
         TypeChecker.isInstanceOf(participant, ParticipantClient);
-        if (!this.#listOfPPants.includes(participant)) {
-            this.#listOfPPants.push(participant);
+        if (!this.listOfPPants.includes(participant)) {
+            this.listOfPPants.push(participant);
         }
     }
 
@@ -165,10 +165,10 @@ class RoomClient {
      */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
-        this.#listOfPPants.forEach(participant => {
+        this.listOfPPants.forEach(participant => {
             if (participant.getId() === participantId) {
-                let index = this.#listOfPPants.indexOf(participant);
-                this.#listOfPPants.splice(index, 1);
+                let index = this.listOfPPants.indexOf(participant);
+                this.listOfPPants.splice(index, 1);
             }
         });
     }
@@ -180,7 +180,7 @@ class RoomClient {
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
         var result;
-        this.#listOfPPants.forEach(ppant => {
+        this.listOfPPants.forEach(ppant => {
             if (ppantID === ppant.getId()) {
                 result = ppant;
             }
@@ -200,12 +200,12 @@ class RoomClient {
         let cordY = position.getCordY();
 
         //WALLS
-        if (cordX < 0 || cordY < 0 || cordX >= this.#length || cordY >= this.#width) {
+        if (cordX < 0 || cordY < 0 || cordX >= this.length || cordY >= this.width) {
             return true;
         }
 
         //GAMEOBJECTS in room
-        if (this.#occupationMap[cordX][cordY + Settings.MAP_BLANK_TILES_WIDTH] == 1) {
+        if (this.occupationMap[cordX][cordY + Settings.MAP_BLANK_TILES_WIDTH] == 1) {
             return true;
         }
         else {
@@ -259,39 +259,39 @@ class RoomClient {
             });
         });
 
-        this.#roomId = roomId;
-        this.#typeOfRoom = typeOfRoom;
-        this.#assetPaths = assetPaths;
-        this.#listOfMapElements = listOfMapElements;
-        this.#listOfGameObjects = listOfGameObjects;
-        this.#listOfNPCs = listOfNPCs;
-        this.#listOfDoors = listOfDoors;
-        this.#listOfPPants = [];
-        this.#width = width;
-        this.#length = length;
-        this.#occupationMap = occupationMap;
+        this.roomId = roomId;
+        this.typeOfRoom = typeOfRoom;
+        this.assetPaths = assetPaths;
+        this.listOfMapElements = listOfMapElements;
+        this.listOfGameObjects = listOfGameObjects;
+        this.listOfNPCs = listOfNPCs;
+        this.listOfDoors = listOfDoors;
+        this.listOfPPants = [];
+        this.width = width;
+        this.length = length;
+        this.occupationMap = occupationMap;
 
-        this.#buildMapArray();
+        this.buildMapArray();
     }
 
     /**
      * Builds room map and game object map array
      */
-    #buildMapArray = function () {
+    buildMapArray = function () {
 
-        var mapLength = this.#length + Settings.MAP_BLANK_TILES_LENGTH;
-        this.#map = new Array(mapLength);
-        this.#objectMap = new Array(mapLength);
+        var mapLength = this.length + Settings.MAP_BLANK_TILES_LENGTH;
+        this.map = new Array(mapLength);
+        this.objectMap = new Array(mapLength);
 
         for (var i = 0; i < mapLength; i++) {
-            this.#map[i] = new Array(this.#width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
-            this.#objectMap[i] = new Array(this.#width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
+            this.map[i] = new Array(this.width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
+            this.objectMap[i] = new Array(this.width + Settings.MAP_BLANK_TILES_LENGTH).fill(null);
         }
 
-        this.#listOfMapElements.forEach(mapElement => {
+        this.listOfMapElements.forEach(mapElement => {
             let xPos = mapElement.getPosition().getCordX();
             let yPos = mapElement.getPosition().getCordY();
-            let mapEntry = this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
+            let mapEntry = this.map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
             if (mapEntry !== null) {
                 mapEntry = [mapEntry, mapElement];
@@ -300,13 +300,13 @@ class RoomClient {
             } else
                 mapEntry = mapElement;
 
-            this.#map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
+            this.map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
 
-        this.#listOfGameObjects.forEach(gameObject => {
+        this.listOfGameObjects.forEach(gameObject => {
             let xPos = gameObject.getPosition().getCordX();
             let yPos = gameObject.getPosition().getCordY();
-            let mapEntry = this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
+            let mapEntry = this.objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
             if (mapEntry !== null) {
                 mapEntry = [mapEntry, gameObject];
@@ -315,16 +315,16 @@ class RoomClient {
             } else
                 mapEntry = gameObject;
 
-            this.#objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
+            this.objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
 
         //set door positions in map
-        this.#listOfDoors.forEach(door => {
+        this.listOfDoors.forEach(door => {
 
             var positionX = door.getMapPosition().getCordX();
             var positionY = door.getMapPosition().getCordY();
 
-            this.#map[positionX][positionY + Settings.MAP_BLANK_TILES_WIDTH] = door;
+            this.map[positionX][positionY + Settings.MAP_BLANK_TILES_WIDTH] = door;
 
         });
     }
@@ -335,7 +335,7 @@ class RoomClient {
      * @return {number[][]} map array
      */
     getMap() {
-        return this.#map;
+        return this.map;
     }
 
     /**
@@ -344,7 +344,7 @@ class RoomClient {
      * @return {number[][]} object map array
      */
     getObjectMap() {
-        return this.#objectMap;
+        return this.objectMap;
     }
 
     /**
@@ -353,7 +353,7 @@ class RoomClient {
      * @return {number[][]} occupation map array
      */
     getOccupationMap() {
-        return this.#occupationMap;
+        return this.occupationMap;
     }
 }
 

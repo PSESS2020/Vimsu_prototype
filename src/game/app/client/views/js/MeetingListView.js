@@ -6,8 +6,8 @@
  */
 class MeetingListView extends WindowView {
 
-    #meetings;
-    #eventManager;
+    meetings;
+    eventManager;
 
     /**
      * Creates an instance of MeetingListView
@@ -23,7 +23,7 @@ class MeetingListView extends WindowView {
 
         MeetingListView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -41,9 +41,9 @@ class MeetingListView extends WindowView {
             return;
         }
 
-        this.#meetings = meetings;
+        this.meetings = meetings;
 
-        this.#meetings.forEach(meeting => {
+        this.meetings.forEach(meeting => {
 
             // Now we want to append each meeting as a clickable element
             $('#meetingListModal .modal-body .list-group').append(`
@@ -63,7 +63,7 @@ class MeetingListView extends WindowView {
 
             $('#meeting' + meeting.id).off();
             $('#meeting' + meeting.id).on('click', (event) => {
-                this.#eventManager.handleMeetingThreadClicked(meeting.id);
+                this.eventManager.handleMeetingThreadClicked(meeting.id);
             })
         })
 
@@ -76,15 +76,15 @@ class MeetingListView extends WindowView {
      * @param {String} meetingId meeting ID
      */
     deleteMeeting(meetingId) {
-        this.#meetings.forEach(meeting => {
+        this.meetings.forEach(meeting => {
 
             if (meeting.meetingId === meetingId) {
-                let index = this.#meetings.indexOf(meeting);
-                this.#meetings.splice(index, 1);
+                let index = this.meetings.indexOf(meeting);
+                this.meetings.splice(index, 1);
             }
         });
 
-        this.draw(this.#meetings);
+        this.draw(this.meetings);
     };
 
     /**
@@ -93,9 +93,9 @@ class MeetingListView extends WindowView {
      * @param {Object} meeting meeting
      */
     addNewMeeting(meeting) {
-        if (!this.#meetings.includes(meeting)) {
-            this.#meetings.push(meeting);
-            this.draw(this.#meetings);
+        if (!this.meetings.includes(meeting)) {
+            this.meetings.push(meeting);
+            this.draw(this.meetings);
         }
     };
 

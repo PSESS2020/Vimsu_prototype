@@ -1,10 +1,10 @@
-const BusinessCard = require('../../src/game/app/client/shared/BusinessCard.js');
+const BusinessCardClient = require('../../../src/game/app/client/models/BusinessCardClient.js');
 const expect = require('chai').expect;
 
 var participantId = "53f";
 var username = "maxmust";
 var forename = "Max";
-var businessCard = new BusinessCard(participantId, username, forename);
+var businessCard = new BusinessCardClient(participantId, username, forename);
 
 
 describe("BusinessCard Test getter", function () {

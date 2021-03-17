@@ -6,8 +6,8 @@
  */
 class ScheduleListView extends WindowView {
 
-    #lectures = [];
-    #timeOffset;
+    lectures = [];
+    timeOffset;
 
     /**
      * Creates an instance of ScheduleListView
@@ -43,13 +43,13 @@ class ScheduleListView extends WindowView {
         });
 
         const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
-        this.#lectures = sortedLectures;
-        this.#timeOffset = timeOffset;
+        this.lectures = sortedLectures;
+        this.timeOffset = timeOffset;
 
-        this.#drawSchedule();
+        this.drawSchedule();
 
         var interval = setInterval(() => {
-            this.#drawSchedule(interval);
+            this.drawSchedule(interval);
         }, 1000);
 
         $('#scheduleModal').on('hide.bs.modal', (e) => {
@@ -58,20 +58,20 @@ class ScheduleListView extends WindowView {
     }
 
     /**
-     * @private draws schedule window
+     * draws schedule window
      */
-    #drawSchedule = function (interval) {
+    drawSchedule = function (interval) {
         var count = 0;
         var now = Date.now();
 
-        this.#lectures.forEach(lecture => {
+        this.lectures.forEach(lecture => {
             var startingTime = lecture.startingTime.getTime();
             var startToShow = startingTime - Settings.SHOWLECTURE;
             var stopToShow = startingTime + lecture.duration * 1000;
 
-            var currentTimeDifferenceStartingTime = now - startingTime - this.#timeOffset;
-            var currentTimeDifferenceStartToShow = now - startToShow - this.#timeOffset;
-            var currentTimeDifferenceStopToShow = now - stopToShow - this.#timeOffset;
+            var currentTimeDifferenceStartingTime = now - startingTime - this.timeOffset;
+            var currentTimeDifferenceStartToShow = now - startToShow - this.timeOffset;
+            var currentTimeDifferenceStopToShow = now - stopToShow - this.timeOffset;
 
             if (currentTimeDifferenceStartToShow >= 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.OPENED;

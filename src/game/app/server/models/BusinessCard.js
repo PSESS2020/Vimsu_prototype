@@ -1,6 +1,4 @@
-if (typeof module === 'object' && typeof exports === 'object') {
-    TypeChecker = require('./TypeChecker.js');
-}
+const TypeChecker = require('../../client/shared/TypeChecker.js');
 
 /**
  * The Business Card Model
@@ -8,7 +6,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class BusinessCard {
+module.exports = class BusinessCard {
 
     #participantId;
     #username;
@@ -16,6 +14,7 @@ class BusinessCard {
 
     /**
      * Creates an instance of BusinessCard
+     * @module BusinessCard
      * 
      * @param {String} participantId participant ID
      * @param {String} username participant username
@@ -33,6 +32,7 @@ class BusinessCard {
 
     /**
      * Gets participant ID
+     * @method module:BusinessCard#getParticipantId
      * 
      * @return {String} participantId
      */
@@ -42,6 +42,7 @@ class BusinessCard {
 
     /**
      * Gets participant username
+     * @method module:BusinessCard#getUsername
      * 
      * @return {String} username
      */
@@ -51,14 +52,11 @@ class BusinessCard {
 
     /**
      * Gets participant forename
+     * @method module:BusinessCard#getForename
      * 
      * @return {String} forename
      */
     getForename() {
         return this.#forename;
     }
-}
-
-if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = BusinessCard;
 }

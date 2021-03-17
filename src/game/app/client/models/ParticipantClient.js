@@ -13,13 +13,13 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class ParticipantClient {
 
-    #id;
-    #position;
-    #direction;
-    #forename;
-    #isVisible;
-    #isModerator;
-    #shirtColor;
+    id;
+    position;
+    direction;
+    forename;
+    isVisible;
+    isModerator;
+    shirtColor;
 
     /**
      * Creates an instance of participant on client-side
@@ -41,13 +41,13 @@ class ParticipantClient {
         TypeChecker.isBoolean(isModerator);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#id = id;
-        this.#position = position;
-        this.#direction = direction;
-        this.#forename = forename;
-        this.#isVisible = isVisible;
-        this.#isModerator = isModerator;
-        this.#shirtColor = shirtColor;
+        this.id = id;
+        this.position = position;
+        this.direction = direction;
+        this.forename = forename;
+        this.isVisible = isVisible;
+        this.isModerator = isModerator;
+        this.shirtColor = shirtColor;
     }
 
     /**
@@ -56,7 +56,7 @@ class ParticipantClient {
      * @return {String} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -65,7 +65,7 @@ class ParticipantClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -74,7 +74,7 @@ class ParticipantClient {
      * @return {boolean} true if moderator, otherwise false
      */
     getIsModerator() {
-        return this.#isModerator;
+        return this.isModerator;
     }
 
     /**
@@ -84,7 +84,7 @@ class ParticipantClient {
      */
     setIsModerator(isMod) {
         TypeChecker.isBoolean(isMod);
-        this.#isModerator = isMod;
+        this.isModerator = isMod;
     }
 
     /**
@@ -94,7 +94,7 @@ class ParticipantClient {
      */
     setPosition(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
-        this.#position = position;
+        this.position = position;
     }
 
     /**
@@ -103,7 +103,7 @@ class ParticipantClient {
      * @return {Direction} direction
      */
     getDirection() {
-        return this.#direction;
+        return this.direction;
     }
 
     /**
@@ -113,7 +113,7 @@ class ParticipantClient {
      */
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
-        this.#direction = direction;
+        this.direction = direction;
     }
 
     /**
@@ -122,7 +122,7 @@ class ParticipantClient {
      * @return {String} forename
      */
     getForename() {
-        return this.#forename;
+        return this.forename;
     }
 
     /**
@@ -131,7 +131,7 @@ class ParticipantClient {
      * @return {boolean} true if avatar is visible, otherwise false
      */
     getIsVisible() {
-        return this.#isVisible;
+        return this.isVisible;
     }
 
     /**
@@ -141,7 +141,7 @@ class ParticipantClient {
      */
     setisVisible(isVisible) {
         TypeChecker.isBoolean(isVisible);
-        this.#isVisible = isVisible;
+        this.isVisible = isVisible;
     }
 
     /**
@@ -150,7 +150,7 @@ class ParticipantClient {
      * @return {ShirtColor} shirt color
      */
     getShirtColor() {
-        return this.#shirtColor;
+        return this.shirtColor;
     }
 
     /**
@@ -161,7 +161,7 @@ class ParticipantClient {
     setShirtColor(shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#shirtColor = shirtColor;
+        this.shirtColor = shirtColor;
     }
 }
 

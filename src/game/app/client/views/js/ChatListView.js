@@ -6,9 +6,9 @@
  */
 class ChatListView extends WindowView {
 
-  #chats;
-  #eventManager;
-  #ownUsername;
+  chats;
+  eventManager;
+  ownUsername;
 
   /**
    * Creates an instance of ChatListView
@@ -24,7 +24,7 @@ class ChatListView extends WindowView {
 
     ChatListView.instance = this;
 
-    this.#eventManager = eventManager;
+    this.eventManager = eventManager;
   }
 
   /**
@@ -45,7 +45,7 @@ class ChatListView extends WindowView {
       return;
     }
 
-    this.#ownUsername = ownUsername
+    this.ownUsername = ownUsername
 
     chats.forEach((chat) => {
       if (chat.timestamp) {
@@ -53,11 +53,11 @@ class ChatListView extends WindowView {
       }
     });
 
-    this.#chats = chats.sort(
+    this.chats = chats.sort(
       (chatA, chatB) => chatB.timestamp - chatA.timestamp
     );
 
-    this.#chats.forEach((chat) => {
+    this.chats.forEach((chat) => {
       var timestamp, previewMessage;
 
       if (chat.timestamp && chat.timestamp instanceof Date) {
@@ -66,7 +66,7 @@ class ChatListView extends WindowView {
         timestamp = "no messages";
       }
 
-      if (chat.previewUsername && chat.previewUsername !== this.#ownUsername) {
+      if (chat.previewUsername && chat.previewUsername !== this.ownUsername) {
         previewMessage = chat.previewUsername + ": " + chat.previewMessage;
       } else {
         previewMessage = chat.previewMessage;
@@ -94,7 +94,7 @@ class ChatListView extends WindowView {
 
       $("#chat" + chat.chatId).off();
       $("#chat" + chat.chatId).on("click", () => {
-        this.#eventManager.handleChatThreadClicked(chat.chatId);
+        this.eventManager.handleChatThreadClicked(chat.chatId);
       });
     });
   }
@@ -105,14 +105,14 @@ class ChatListView extends WindowView {
    * @param {String} chatId chat ID
    */
   deleteChat(chatId) {
-    this.#chats.forEach((chat) => {
+    this.chats.forEach((chat) => {
       if (chat.chatId === chatId) {
-        let index = this.#chats.indexOf(chat);
-        this.#chats.splice(index, 1);
+        let index = this.chats.indexOf(chat);
+        this.chats.splice(index, 1);
       }
     });
 
-    this.draw(this.#chats, this.#ownUsername);
+    this.draw(this.chats, this.ownUsername);
   }
 
   /**
@@ -121,9 +121,9 @@ class ChatListView extends WindowView {
    * @param {Object} chat chat
    */
   addNewChat(chat) {
-    if (!this.#chats.includes(chat)) {
-      this.#chats.push(chat);
-      this.draw(this.#chats, this.#ownUsername);
+    if (!this.chats.includes(chat)) {
+      this.chats.push(chat);
+      this.draw(this.chats, this.ownUsername);
     }
   }
 
@@ -134,7 +134,7 @@ class ChatListView extends WindowView {
    * @param {Object} message chat message
    */
   addNewMessage(chatID, message) {
-    this.#chats.forEach((chat) => {
+    this.chats.forEach((chat) => {
       if (chat.chatId === chatID) {
         if (message.msgText.length > 35) {
           var msgText = message.msgText.slice(0, 35) + "...";
@@ -144,7 +144,7 @@ class ChatListView extends WindowView {
         chat.timestamp = message.timestamp;
         chat.previewUsername = message.senderUsername;
         chat.previewMessage = msgText;
-        this.draw(this.#chats, this.#ownUsername);
+        this.draw(this.chats, this.ownUsername);
       }
     });
   }

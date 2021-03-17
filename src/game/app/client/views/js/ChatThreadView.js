@@ -6,10 +6,10 @@
  */
 class ChatThreadView extends WindowView {
 
-    #chat;
-    #messages;
-    #eventManager;
-    #ownUsername;
+    chat;
+    messages;
+    eventManager;
+    ownUsername;
 
     /**
      * Creates an instance of ChatThreadView
@@ -25,19 +25,19 @@ class ChatThreadView extends WindowView {
 
         ChatThreadView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
 
     /**
-     * @private called if participant inputs a message
+     * called if participant inputs a message
      */
-    #sendMessage = function () {
-        let messageVal = $('#chatMessageInput' + this.#chat.chatId).val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    sendMessage = function () {
+        let messageVal = $('#chatMessageInput' + this.chat.chatId).val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
         if (messageVal !== '') {
-            this.#eventManager.handleChatMessageInput(this.#chat.chatId, messageVal);
-            $('#chatMessageInput' + this.#chat.chatId).val('');
-            $('#chatMessageInput' + this.#chat.chatId).trigger('focus');
+            this.eventManager.handleChatMessageInput(this.chat.chatId, messageVal);
+            $('#chatMessageInput' + this.chat.chatId).val('');
+            $('#chatMessageInput' + this.chat.chatId).trigger('focus');
         }
     }
 
@@ -48,49 +48,49 @@ class ChatThreadView extends WindowView {
      * @param {String} ownUsername current participant's username
      */
     draw(chat, ownUsername) {
-        this.#chat = chat;
-        this.#messages = chat.messages;
-        this.#ownUsername = ownUsername
+        this.chat = chat;
+        this.messages = chat.messages;
+        this.ownUsername = ownUsername
 
-        this.#initButtons();
+        this.initButtons();
 
-        $('#chatThreadWait' + this.#chat.chatId).hide();
-        $("#chatThreadModalTitle" + this.#chat.chatId).empty();
-        $(`#chatThreadModalList${this.#chat.chatId}`).empty();
+        $('#chatThreadWait' + this.chat.chatId).hide();
+        $("#chatThreadModalTitle" + this.chat.chatId).empty();
+        $(`#chatThreadModalList${this.chat.chatId}`).empty();
 
-        $('#chatThreadModalTitle' + this.#chat.chatId).text(chat.title);
+        $('#chatThreadModalTitle' + this.chat.chatId).text(chat.title);
 
-        if ($('#notifChatDiv' + this.#chat.chatId).length)
-            $('#notifChatDiv' + this.#chat.chatId).remove();
+        if ($('#notifChatDiv' + this.chat.chatId).length)
+            $('#notifChatDiv' + this.chat.chatId).remove();
 
-        if ($('#notifGroupChatDiv' + this.#chat.chatId).length)
-            $('#notifGroupChatDiv' + this.#chat.chatId).remove();
+        if ($('#notifGroupChatDiv' + this.chat.chatId).length)
+            $('#notifGroupChatDiv' + this.chat.chatId).remove();
 
-        this.#messages.forEach((message) => {
-            this.#appendMessage(message);
+        this.messages.forEach((message) => {
+            this.appendMessage(message);
         })
 
-        this.updateFriendRequestButton(this.#chat.chatId, this.#chat.areFriends, this.#chat.friendRequestSent);
+        this.updateFriendRequestButton(this.chat.chatId, this.chat.areFriends, this.chat.friendRequestSent);
 
         if (chat.groupChat) {
-            $('#chatParticipantListBtn' + this.#chat.chatId).show();
+            $('#chatParticipantListBtn' + this.chat.chatId).show();
         } else {
-            $('#chatParticipantListBtn' + this.#chat.chatId).hide();
+            $('#chatParticipantListBtn' + this.chat.chatId).hide();
         }
 
         if (chat.inviteButton) {
-            $('#inviteFriendsBtn' + this.#chat.chatId).show();
+            $('#inviteFriendsBtn' + this.chat.chatId).show();
         } else {
-            $('#inviteFriendsBtn' + this.#chat.chatId).hide();
+            $('#inviteFriendsBtn' + this.chat.chatId).hide();
         }
 
         if (chat.leaveButton) {
-            $('#chatLeaveButton' + this.#chat.chatId).show();
+            $('#chatLeaveButton' + this.chat.chatId).show();
         } else {
-            $('#chatLeaveButton' + this.#chat.chatId).hide();
+            $('#chatLeaveButton' + this.chat.chatId).hide();
         }
 
-        $('#chatThreadModalList' + this.#chat.chatId).scrollTop($('#chatThreadModalList' + this.#chat.chatId)[0].scrollHeight);
+        $('#chatThreadModalList' + this.chat.chatId).scrollTop($('#chatThreadModalList' + this.chat.chatId)[0].scrollHeight);
     };
 
     /**
@@ -101,18 +101,18 @@ class ChatThreadView extends WindowView {
      * @param {boolean} friendRequestSent true if friend request sent/received
      */
     updateFriendRequestButton(chatId, areFriends, friendRequestSent) {
-        if (this.#chat.chatId != chatId) {
+        if (this.chat.chatId != chatId) {
             return;
         }
 
         if (areFriends) {
-            $('#chatFriendRequestButton' + this.#chat.chatId).hide();
+            $('#chatFriendRequestButton' + this.chat.chatId).hide();
         } else if (friendRequestSent) {
-            this.#disableFriendRequestBtn()
-            $('#chatFriendRequestButton' + this.#chat.chatId).show();
+            this.disableFriendRequestBtn()
+            $('#chatFriendRequestButton' + this.chat.chatId).show();
         } else {
-            this.#enableFriendRequestBtn()
-            $('#chatFriendRequestButton' + this.#chat.chatId).show();
+            this.enableFriendRequestBtn()
+            $('#chatFriendRequestButton' + this.chat.chatId).show();
         }
     }
 
@@ -123,12 +123,12 @@ class ChatThreadView extends WindowView {
      * @param {Object} message chat message
      */
     addNewMessage(chatId, message) {
-        if (this.#chat.chatId != chatId) {
+        if (this.chat.chatId != chatId) {
             return;
         }
 
-        this.#messages.push(message);
-        this.#appendMessage(message);
+        this.messages.push(message);
+        this.appendMessage(message);
     };
 
     /**
@@ -138,8 +138,8 @@ class ChatThreadView extends WindowView {
      * @param {Object} message chat message
      */
     close(chatId) {
-        if (this.#chat.chatId === chatId) {
-            $('#chatThreadModal' + this.#chat.chatId).modal('hide');
+        if (this.chat.chatId === chatId) {
+            $('#chatThreadModal' + this.chat.chatId).modal('hide');
         }
     }
 
@@ -149,17 +149,17 @@ class ChatThreadView extends WindowView {
      * @return {String} chatId
      */
     getChatId() {
-        return this.#chat.chatId;
+        return this.chat.chatId;
     }
 
     /**
-     * @private appends message to chat thread window
+     * appends message to chat thread window
      * 
      * @param {Object} message message
      */
-    #appendMessage = (message) => {
-        if ($('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).length) {
-            $('#notifMessageDiv' + message.senderUsername + this.#chat.chatId).remove();
+    appendMessage = (message) => {
+        if ($('#notifMessageDiv' + message.senderUsername + this.chat.chatId).length) {
+            $('#notifMessageDiv' + message.senderUsername + this.chat.chatId).remove();
         }
 
         var timestamp = new DateParser(new Date(message.timestamp)).parse();
@@ -172,7 +172,7 @@ class ChatThreadView extends WindowView {
 
         let messageDiv = ``
 
-        if (message.senderUsername === this.#ownUsername) {
+        if (message.senderUsername === this.ownUsername) {
             messageDiv =
                 `
                 <div class="d-flex flex-column align-items-end mr-2">
@@ -188,22 +188,22 @@ class ChatThreadView extends WindowView {
                 <div class="d-flex flex-column align-items-start ml-2">
                     <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="messageBubbleOthers">
-                        ${this.#chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        ${this.chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>
                     </div>
                 </div>
             `
         }
 
-        $('#chatThreadModalList' + this.#chat.chatId).append(messageDiv);
-        $('#chatThreadModalList' + this.#chat.chatId).scrollTop($('#chatThreadModalList' + this.#chat.chatId)[0].scrollHeight);
+        $('#chatThreadModalList' + this.chat.chatId).append(messageDiv);
+        $('#chatThreadModalList' + this.chat.chatId).scrollTop($('#chatThreadModalList' + this.chat.chatId)[0].scrollHeight);
     }
 
     /**
-     * @private disables friend request button
+     * disables friend request button
      */
-    #disableFriendRequestBtn = () => {
-        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.#chat.chatId);
+    disableFriendRequestBtn = () => {
+        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.chat.chatId);
         chatFriendRequestButton.disabled = true
         chatFriendRequestButton.style.opacity = "0.5"
         chatFriendRequestButton.style.cursor = "not-allowed"
@@ -211,91 +211,91 @@ class ChatThreadView extends WindowView {
     }
 
     /**
-     * @private enables friend request button
+     * enables friend request button
      */
-    #enableFriendRequestBtn = () => {
-        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.#chat.chatId);
+    enableFriendRequestBtn = () => {
+        const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.chat.chatId);
         chatFriendRequestButton.disabled = false
         chatFriendRequestButton.style.opacity = "1"
         chatFriendRequestButton.style.cursor = "pointer"
         chatFriendRequestButton.title = "Send friend request"
     }
 
-    #initButtons = () => {
-        $('#chatMessageInput' + this.#chat.chatId).off();
-        $('#chatMessageInputGroup' + this.#chat.chatId).off();
+    initButtons = () => {
+        $('#chatMessageInput' + this.chat.chatId).off();
+        $('#chatMessageInputGroup' + this.chat.chatId).off();
 
-        $('#chatMessageInputGroup' + this.#chat.chatId).on('keydown', (event) => {
+        $('#chatMessageInputGroup' + this.chat.chatId).on('keydown', (event) => {
             event.stopPropagation();
 
             if (event.keyCode === 13) {
                 event.preventDefault();
-                this.#sendMessage();
+                this.sendMessage();
             }
         });
 
-        $('#chatMessageInputGroup' + this.#chat.chatId).on('submit', (event) => {
+        $('#chatMessageInputGroup' + this.chat.chatId).on('submit', (event) => {
             event.preventDefault();
-            this.#sendMessage();
+            this.sendMessage();
         });
 
-        $('#chatMessageButton' + this.#chat.chatId).off();
-        $('#chatMessageButton' + this.#chat.chatId).on('click', (event) => {
+        $('#chatMessageButton' + this.chat.chatId).off();
+        $('#chatMessageButton' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
-            this.#sendMessage();
+            this.sendMessage();
         });
 
-        $('#chatLeaveButton' + this.#chat.chatId).off();
-        $('#chatLeaveButton' + this.#chat.chatId).on('click', (event) => {
+        $('#chatLeaveButton' + this.chat.chatId).off();
+        $('#chatLeaveButton' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            var result = confirm(`Are you sure you want to leave from the chat with ${this.#chat.title}?`)
+            var result = confirm(`Are you sure you want to leave from the chat with ${this.chat.title}?`)
 
             if (result) {
-                $('#chatThreadModal' + this.#chat.chatId).modal('hide');
-                $('#chatThreadModal' + this.#chat.chatId).remove();
-                $("#chatParticipantListModal" + this.#chat.chatId).remove();
-                this.#eventManager.handleLeaveChat(this.#chat.chatId);
+                $('#chatThreadModal' + this.chat.chatId).modal('hide');
+                $('#chatThreadModal' + this.chat.chatId).remove();
+                $("#chatParticipantListModal" + this.chat.chatId).remove();
+                this.eventManager.handleLeaveChat(this.chat.chatId);
             }
 
             event.stopImmediatePropagation();
         });
 
-        $('#chatFriendRequestButton' + this.#chat.chatId).off();
-        $('#chatFriendRequestButton' + this.#chat.chatId).on('click', (event) => {
+        $('#chatFriendRequestButton' + this.chat.chatId).off();
+        $('#chatFriendRequestButton' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            if (!this.#chat.partnerId) {
+            if (!this.chat.partnerId) {
                 return;
             }
 
-            this.updateFriendRequestButton(this.#chat.chatId, false, true)
+            this.updateFriendRequestButton(this.chat.chatId, false, true)
 
-            this.#eventManager.handleSendFriendRequest(this.#chat.partnerId, this.#chat.chatId);
+            this.eventManager.handleSendFriendRequest(this.chat.partnerId, this.chat.chatId);
         });
 
-        $('#chatParticipantListBtn' + this.#chat.chatId).off()
-        $('#chatParticipantListBtn' + this.#chat.chatId).on('click', (event) => {
+        $('#chatParticipantListBtn' + this.chat.chatId).off()
+        $('#chatParticipantListBtn' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            if (this.#chat.partnerId) {
+            if (this.chat.partnerId) {
                 return;
             }
 
-            if (!($('#chatParticipantListModal' + this.#chat.chatId).length)) {
-                this.#addNewChatParticipantListWindow(this.#chat.chatId)
+            if (!($('#chatParticipantListModal' + this.chat.chatId).length)) {
+                this.addNewChatParticipantListWindow(this.chat.chatId)
             }
 
-            $('#chatParticipantListModal' + this.#chat.chatId).modal('show');
+            $('#chatParticipantListModal' + this.chat.chatId).modal('show');
 
-            this.#eventManager.handleShowChatParticipantList(this.#chat.chatId);
+            this.eventManager.handleShowChatParticipantList(this.chat.chatId);
         })
 
-        $('#inviteFriendsBtn' + this.#chat.chatId).off()
-        $('#inviteFriendsBtn' + this.#chat.chatId).on('click', (event) => {
+        $('#inviteFriendsBtn' + this.chat.chatId).off()
+        $('#inviteFriendsBtn' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            if (this.#chat.partnerId) {
+            if (this.chat.partnerId) {
                 return;
             }
 
@@ -308,26 +308,26 @@ class ChatThreadView extends WindowView {
             $('#inviteFriendsModal').modal('show');
             $('#inviteFriendsWait').show();
 
-            this.#eventManager.handleInviteFriendsClicked(this.#chat.title, this.#chat.chatId);
+            this.eventManager.handleInviteFriendsClicked(this.chat.title, this.chat.chatId);
         });
 
-        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.#chat.chatId}`)
+        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.chat.chatId}`)
     }
 
-    #addNewChatParticipantListWindow = () => {
+    addNewChatParticipantListWindow = () => {
         $("#chatParticipantListModalCollection").append(`
-            <div class="modal" id=${"chatParticipantListModal" + this.#chat.chatId} tabindex="-1" role="dialog"
-                aria-labelledby=${"chatParticipantListModalTitle" + this.#chat.chatId} aria-hidden="true" data-focus-on="input:first">
+            <div class="modal" id=${"chatParticipantListModal" + this.chat.chatId} tabindex="-1" role="dialog"
+                aria-labelledby=${"chatParticipantListModalTitle" + this.chat.chatId} aria-hidden="true" data-focus-on="input:first">
                 <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
                     <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                         <div class="modal-header">
-                            <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.#chat.chatId}>Chat Participant List</h5>
+                            <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>Chat Participant List</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body modal-body-large">
-                            <div id=${"chatParticipantListWait" + this.#chat.chatId} style="text-align: center;">
+                            <div id=${"chatParticipantListWait" + this.chat.chatId} style="text-align: center;">
                                 <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                             </div>
                             <ul class="list-group bg-transparent">

@@ -6,7 +6,7 @@
  */
 class NotificationBar extends Views {
     
-    #eventManager;
+    eventManager;
     
     /**
      * Creates an instance of NotificationBar
@@ -22,7 +22,7 @@ class NotificationBar extends Views {
 
         NotificationBar.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
 
         $('#showNotifBar').hide();
 
@@ -56,7 +56,7 @@ class NotificationBar extends Views {
 
         $('#' + id).on('click', (e) => {
             $('#' + id + 'Div').remove();
-            return this.#eventManager.handleChatThreadClicked(chatId);
+            return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -72,7 +72,7 @@ class NotificationBar extends Views {
 
         $('#' + id).on('click', (e) => {
             $('#' + id + 'Div').remove();
-            return this.#eventManager.handleChatThreadClicked(chatId);
+            return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -89,7 +89,7 @@ class NotificationBar extends Views {
 
         $('#' + id).on('click', (e) => {
             $('#' + id + 'Div').remove();
-            return this.#eventManager.handleChatThreadClicked(chatId);
+            return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
 
@@ -108,7 +108,7 @@ class NotificationBar extends Views {
             $('#friendRequestListModal .modal-body .list-group').empty()
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
-            return this.#eventManager.handleFriendRequestListClicked();
+            return this.eventManager.handleFriendRequestListClicked();
         })
     }
 
@@ -124,7 +124,7 @@ class NotificationBar extends Views {
         $('#' + id).on('click', (e) => {
             $('#' + id + 'Div').remove();
             $('#friendListModal').modal('show');
-            return this.#eventManager.handleFriendListClicked();
+            return this.eventManager.handleFriendListClicked();
         })
     }
 

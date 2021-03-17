@@ -6,7 +6,7 @@
  */
 class EnterCodeView extends WindowView {
 
-    #eventManager;
+    eventManager;
 
     /**
      * Creates an instance of Enter Code Window View
@@ -22,7 +22,7 @@ class EnterCodeView extends WindowView {
 
         EnterCodeView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -37,7 +37,7 @@ class EnterCodeView extends WindowView {
         
             if (enteredCode !== '') {
                 $('#inputEnterCodeModal').modal('hide');
-                this.#eventManager.handleCodeEntered(doorId, enteredCode);
+                this.eventManager.handleCodeEntered(doorId, enteredCode);
                 $('#codeInput').val('');
             }
         });

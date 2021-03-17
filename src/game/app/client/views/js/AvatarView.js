@@ -6,15 +6,15 @@
  */
 class AvatarView extends Views {
 
-    #position;
-    #direction;
-    #walking = false;
-    #isVisible;
-    #shirtColor;
-    #spriteSheet;
-    #topClothing;
-    #bottomClothing;
-    #shoes;
+    position;
+    direction;
+    walking = false;
+    isVisible;
+    shirtColor;
+    spriteSheet;
+    topClothing;
+    bottomClothing;
+    shoes;
 
     /**
      * Creates an instance of AvatarView
@@ -30,14 +30,14 @@ class AvatarView extends Views {
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#position = position;
-        this.#direction = direction;
-        this.#shirtColor = shirtColor;
+        this.position = position;
+        this.direction = direction;
+        this.shirtColor = shirtColor;
 
-        this.#spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.#topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.#bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.#shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
 
         if (new.target === AvatarView) {
             throw new Error("Cannot construct abstract AvatarView instances directly");
@@ -50,7 +50,7 @@ class AvatarView extends Views {
      */
     setPosition(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
-        this.#position = position;
+        this.position = position;
     }
 
     /**
@@ -59,7 +59,7 @@ class AvatarView extends Views {
      * @return {PositionClient} position
      */
     getGridPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -69,7 +69,7 @@ class AvatarView extends Views {
      */
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
-        this.#direction = direction;
+        this.direction = direction;
     }
 
     /**
@@ -78,7 +78,7 @@ class AvatarView extends Views {
      * @return {Direction} direction
      */
     getDirection() {
-        return this.#direction;
+        return this.direction;
     }
 
     /**
@@ -87,7 +87,7 @@ class AvatarView extends Views {
      * @param {SpriteSheet} spriteSheet sprite sheet
      */
     setSpriteSheet(spriteSheet) {
-        this.#spriteSheet = spriteSheet;
+        this.spriteSheet = spriteSheet;
     }
 
     /**
@@ -96,7 +96,7 @@ class AvatarView extends Views {
      * @return {SpriteSheet} spriteSheet
      */
     getSpriteSheet() {
-        return this.#spriteSheet;
+        return this.spriteSheet;
     }
 
     /**
@@ -105,7 +105,7 @@ class AvatarView extends Views {
      * @return {SpriteSheet} topClothing
      */
     getTopClothing() {
-        return this.#topClothing;
+        return this.topClothing;
     }
 
     /**
@@ -114,7 +114,7 @@ class AvatarView extends Views {
      * @return {SpriteSheet} bottomClothing
      */
     getBottomClothing() {
-        return this.#bottomClothing;
+        return this.bottomClothing;
     }
 
     /**
@@ -123,7 +123,7 @@ class AvatarView extends Views {
      * @return {SpriteSheet} shoes
      */
     getShoes() {
-        return this.#shoes;
+        return this.shoes;
     }
 
     /**
@@ -132,7 +132,7 @@ class AvatarView extends Views {
      * @return {boolean} true if the Avatar is currently walking, otherwise false
      */
     isWalking() {
-        return this.#walking;
+        return this.walking;
     }
 
     /**
@@ -141,7 +141,7 @@ class AvatarView extends Views {
      * @return {boolean} true if avatar is visible, otherwise false
      */
     getVisibility() {
-        return this.#isVisible;
+        return this.isVisible;
     }
 
     /**
@@ -150,7 +150,7 @@ class AvatarView extends Views {
      * @param {boolean} visible true if visible, otherwise false
      */
     setVisibility(visible) {
-        this.#isVisible = visible;
+        this.isVisible = visible;
     }
 
     /**
@@ -159,7 +159,7 @@ class AvatarView extends Views {
      * @return {ShirtColor} avatar shirt color
      */
     getShirtColor() {
-        return this.#shirtColor;
+        return this.shirtColor;
     }
 
     /**
@@ -170,8 +170,8 @@ class AvatarView extends Views {
     updateShirtColor(shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         
-        this.#shirtColor = shirtColor;
-        this.#topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.shirtColor = shirtColor;
+        this.topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         this.initSpriteAnimation();
     }
 

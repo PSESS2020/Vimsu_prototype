@@ -37,7 +37,7 @@ describe('GameObjectClient test', function () {
         assert.equal(width, gameObject.getWidth());
         assert.equal(length, gameObject.getLength());
         assert.equal(position, gameObject.getPosition());
-        assert.equal(isClickable, gameObject.isClickable());
+        assert.equal(isClickable, gameObject.getIsClickable());
         assert.equal(url, gameObject.getURL());
     });
 
