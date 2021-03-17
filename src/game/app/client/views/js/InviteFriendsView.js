@@ -46,14 +46,11 @@ class InviteFriendsView extends WindowView {
         $('#toomanyinvitedfriends').hide();
         $('#toomanyinvitedfriends').empty();
         $('#createGroupChat').hide();
-        
+
         this.invitedFriends = [];
 
         if (businessCards) {
-            if (businessCards.length < 1) {
-                $('#nofriendtoinvite').text("No friends to invite.");
-                return;
-            }
+            this.handleEmptyInviteFriends(businessCards)
 
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
             this.businessCards = sortedBusinessCards;
@@ -172,8 +169,22 @@ class InviteFriendsView extends WindowView {
             });
 
             if (found) {
-                this.draw(this.businessCards, this.groupName, this.limit, this.chatId);
+                $("#invitefriend" + participantId).remove()
+                this.handleEmptyInviteFriends(this.businessCards)
             }
+        }
+    }
+
+    /**
+   * Displays no friend if there's no friend to invite
+   * 
+   * @param {Object[]} businessCards business cards
+   * @returns if no friend to invite
+   */
+    handleEmptyInviteFriends(businessCards) {
+        if (businessCards && businessCards.length < 1) {
+            $('#nofriendtoinvite').text("No friends to invite.");
+            return;
         }
     }
 }

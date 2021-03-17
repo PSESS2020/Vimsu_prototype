@@ -38,12 +38,7 @@ class ChatListView extends WindowView {
     $("#nochat").empty();
     $("#chatListModal .modal-body .list-group").empty();
 
-    if (chats.length < 1) {
-      $("#nochat").text(
-        "No chats found. Let's connect with others!"
-      );
-      return;
-    }
+    this.handleEmptyChats(chats)
 
     this.ownUsername = ownUsername
 
@@ -58,23 +53,46 @@ class ChatListView extends WindowView {
     );
 
     this.chats.forEach((chat) => {
-      var timestamp, previewMessage;
+      this.appendNewChat(chat);
+    });
+  }
 
-      if (chat.timestamp && chat.timestamp instanceof Date) {
-        timestamp = new DateParser(chat.timestamp).parse();
-      } else {
-        timestamp = "no messages";
-      }
+  /**
+   * Sets timestamp and preview message for the preview
+   * 
+   * @param {Object} chat 
+   * @returns parsed timestamp and preview message
+   */
+  setChatPreview(chat) {
+    let timestamp = "";
+    let previewMessage = chat.previewMessage;
 
-      if (chat.previewUsername && chat.previewUsername !== this.ownUsername) {
-        previewMessage = chat.previewUsername + ": " + chat.previewMessage;
-      } else {
-        previewMessage = chat.previewMessage;
-      }
+    if (chat.timestamp && chat.timestamp instanceof Date) {
+      timestamp = new DateParser(chat.timestamp).parse();
+    } else {
+      timestamp = "no messages";
+    }
 
-      // Now we want to append each chat as a clickable element
-      $("#chatListModal .modal-body .list-group").append(`
-        <li class="list-group-item bg-transparent chatthread">
+    if (chat.previewUsername && chat.previewUsername !== this.ownUsername) {
+      previewMessage = chat.previewUsername + ": " + chat.previewMessage;
+    }
+
+    return { timestamp, previewMessage }
+  }
+
+  /**
+   * Appends new chat
+   * 
+   * @param {Object} chat 
+   */
+  appendNewChat(chat) {
+    $("#nochat").empty();
+
+    let { timestamp, previewMessage } = this.setChatPreview(chat);
+
+    // Now we want to append each chat as a clickable element
+    $("#chatListModal .modal-body .list-group").prepend(`
+        <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
           <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
             <div class="row w-100">
               <div class="col-12 col-sm-2 px-0">
@@ -83,19 +101,18 @@ class ChatListView extends WindowView {
               <div class="col-12 col-md-10 text-center text-sm-left">
                 <label class="name lead">${chat.title}</label>
                 <br>
-                <span class="small p-0" style="opacity: 0.3">${timestamp}</span>
+                <span class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
                 <br>
-                <span class ="small p-0 wrapword" style="opacity: 0.8">${previewMessage}</span>                                
+                <span class ="small p-0 wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>                                
               </div>  
             </div>
           </a>
         </li>
       `);
 
-      $("#chat" + chat.chatId).off();
-      $("#chat" + chat.chatId).on("click", () => {
-        this.eventManager.handleChatThreadClicked(chat.chatId);
-      });
+    $("#chat" + chat.chatId).off();
+    $("#chat" + chat.chatId).on("click", () => {
+      this.eventManager.handleChatThreadClicked(chat.chatId);
     });
   }
 
@@ -112,7 +129,21 @@ class ChatListView extends WindowView {
       }
     });
 
-    this.draw(this.chats, this.ownUsername);
+    $("#chatListEntry" + chatId).remove();
+    this.handleEmptyChats(this.chats)
+  }
+
+  /**
+   * Displays no chat message if there's no chat
+   * 
+   * @param {Object[]} chats chats
+   * @returns if no chat
+   */
+  handleEmptyChats(chats) {
+    if (chats && chats.length < 1) {
+      $("#nochat").text("No chats found. Let's connect with others!");
+      return;
+    }
   }
 
   /**
@@ -123,7 +154,7 @@ class ChatListView extends WindowView {
   addNewChat(chat) {
     if (!this.chats.includes(chat)) {
       this.chats.push(chat);
-      this.draw(this.chats, this.ownUsername);
+      this.appendNewChat(chat)
     }
   }
 
@@ -141,14 +172,31 @@ class ChatListView extends WindowView {
         } else {
           var msgText = message.msgText;
         }
+
         chat.timestamp = message.timestamp;
+
+        if (chat.timestamp) {
+          chat.timestamp = new Date(chat.timestamp);
+        }
+
         chat.previewUsername = message.senderUsername;
         chat.previewMessage = msgText;
-        this.draw(this.chats, this.ownUsername);
+
+        let { timestamp, previewMessage } = this.setChatPreview(chat);
+
+        $("#chatTimestamp" + chatID).empty();
+        $("#chatTimestamp" + chatID).text(timestamp);
+        $("#chatPreviewMessage" + chatID).empty();
+        $("#chatPreviewMessage" + chatID).text(previewMessage);
       }
     });
   }
 
+  /**
+   * Adds new chat thread window for new chat
+   * 
+   * @param {String} chatID chat ID
+   */
   addNewChatThreadWindow(chatID) {
     if (!($('#chatThreadModal' + chatID).length)) {
       $("#chatThreadModalCollection").append(`

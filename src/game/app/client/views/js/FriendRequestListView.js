@@ -36,55 +36,63 @@ class FriendRequestListView extends WindowView {
         $('#nofriendrequest').empty();
         $('#friendRequestListModal .modal-body .list-group').empty()
 
-        if (businessCards.length < 1) {
-            $('#nofriendrequest').text("No friend request received.")
-            return;
-        }
+        this.handleEmptyFriendRequestList(businessCards)
 
         this.businessCards = businessCards;
         this.businessCards.forEach(businessCard => {
-            $('#friendRequestListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent">
-                    <div class="row w-100">
-                        <div class="col-12 col-sm-2 px-0">
-                            <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
-                        </div>
-                        <div class="col-12 col-md-8 text-center text-sm-left">
-                            <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                            <br> 
-                            <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                            <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                            <br>
-                        </div>
-                        <div class="col-12 col-sm-2 col-md-2")>
-                            <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>
-                            <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 10px; width: 75px;">Reject</button>
-                            <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
-                            <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
-                            <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-blue" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
-                            <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
-                        </div>
+            this.appendFriendRequest(businessCard);
+        })
+    }
+
+    /**
+     * Appends new friend request
+     * 
+     * @param {BusinessCardClient} businessCard 
+     */
+    appendFriendRequest(businessCard) {
+        $('#nofriendrequest').empty();
+
+        $('#friendRequestListModal .modal-body .list-group').prepend(`
+            <li class="list-group-item bg-transparent" id="${"friendRequest" + businessCard.getParticipantId()}">
+                <div class="row w-100">
+                    <div class="col-12 col-sm-2 px-0">
+                        <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                     </div>
-                </li>
-            `)
+                    <div class="col-12 col-md-8 text-center text-sm-left">
+                        <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
+                        <br> 
+                        <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
+                        <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                        <br>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2")>
+                        <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>
+                        <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 10px; width: 75px;">Reject</button>
+                        <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
+                        <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
+                        <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-blue" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
+                        <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
+                    </div>
+                </div>
+            </li>
+        `)
 
-            $('#accept' + businessCard.getParticipantId()).off();
-            $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
-                if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
+        $('#accept' + businessCard.getParticipantId()).off();
+        $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
+            if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
+                $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
-                event.stopPropagation();
-                this.eventManager.handleAcceptRequestClicked(businessCard);
-            })
+            event.stopPropagation();
+            this.eventManager.handleAcceptRequestClicked(businessCard);
+        })
 
-            $('#reject' + businessCard.getParticipantId()).off();
-            $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
-                if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
+        $('#reject' + businessCard.getParticipantId()).off();
+        $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
+            if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
+                $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
-                event.stopPropagation();
-                this.eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
-            })
+            event.stopPropagation();
+            this.eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
         })
     }
 
@@ -102,7 +110,8 @@ class FriendRequestListView extends WindowView {
             }
         });
 
-        this.draw(this.businessCards);
+        $("#friendRequest" + participantId).remove()
+        this.handleEmptyFriendRequestList(this.businessCards)
     }
 
     /**
@@ -136,8 +145,21 @@ class FriendRequestListView extends WindowView {
      */
     addToFriendRequestList(businessCard) {
         if (!this.businessCards.includes(businessCard)) {
-            this.businessCards.push(businessCard);
-            this.draw(this.businessCards);
-        }   
+            this.businessCards.unshift(businessCard);
+            this.appendFriendRequest(businessCard);
+        }
+    }
+
+    /**
+     * Displays no friend request if there's no friend request
+     * 
+     * @param {Object[]} businessCards business cards
+     * @returns if no friend request
+     */
+    handleEmptyFriendRequestList(businessCards) {
+        if (businessCards && businessCards.length < 1) {
+            $('#nofriendrequest').text("No friend request received.")
+            return;
+        }
     }
 }
