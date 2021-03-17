@@ -1017,9 +1017,10 @@ class GameView {
      * 
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {Object[]} messages allchat messages
+     * @param {String} ownUsername current participant's username
      */
-    initAllchatView(typeOfRoom, messages) {
-        this.allchatView.draw(typeOfRoom, messages);
+    initAllchatView(typeOfRoom, messages, ownUsername) {
+        this.allchatView.draw(typeOfRoom, messages, ownUsername);
     }
 
     /**
