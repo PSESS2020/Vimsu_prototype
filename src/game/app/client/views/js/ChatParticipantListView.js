@@ -6,7 +6,7 @@
  */
 class ChatParticipantListView extends Views {
 
-    #usernames;
+    usernames;
 
     /**
      * Creates an instance of ChatParticipantListView
@@ -32,9 +32,9 @@ class ChatParticipantListView extends Views {
         $(`#chatParticipantListModal${chatId} .modal-body .list-group`).empty();
 
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
-        this.#usernames = sortedUsernames;
+        this.usernames = sortedUsernames;
 
-        this.#usernames.forEach(username => {
+        this.usernames.forEach(username => {
             $(`#chatParticipantListModal${chatId} .modal-body .list-group`).append(`
                 <li class="list-group-item bg-transparent chatthread" >
                     <div class="row w-100">
@@ -56,9 +56,9 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     addToChatParticipantList(username) {
-        if (!this.#usernames.includes(username)) {
-            this.#usernames.push(username);
-            this.draw(this.#usernames);
+        if (!this.usernames.includes(username)) {
+            this.usernames.push(username);
+            this.draw(this.usernames);
         }
     }
 
@@ -68,14 +68,14 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     removeFromChatParticipantList(username) {
-        this.#usernames.forEach(parUsername => {
+        this.usernames.forEach(parUsername => {
             if (parUsername === username) {
-                let index = this.#usernames.indexOf(parUsername);
-                this.#usernames.splice(index, 1);
+                let index = this.usernames.indexOf(parUsername);
+                this.usernames.splice(index, 1);
             }
         });
 
-        this.draw(this.#usernames);
+        this.draw(this.usernames);
     }
 
 }

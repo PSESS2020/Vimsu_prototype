@@ -6,12 +6,12 @@
  */
 class InviteFriendsView extends WindowView {
 
-    #businessCards;
-    #groupName;
-    #limit;
-    #chatId;
-    #invitedFriends = [];
-    #eventManager;
+    businessCards;
+    groupName;
+    limit;
+    chatId;
+    invitedFriends = [];
+    eventManager;
 
     /**
      * Creates an instance of InviteFriendsView
@@ -27,7 +27,7 @@ class InviteFriendsView extends WindowView {
 
         InviteFriendsView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -47,7 +47,7 @@ class InviteFriendsView extends WindowView {
         $('#toomanyinvitedfriends').empty();
         $('#createGroupChat').hide();
         
-        this.#invitedFriends = [];
+        this.invitedFriends = [];
 
         if (businessCards) {
             if (businessCards.length < 1) {
@@ -56,12 +56,12 @@ class InviteFriendsView extends WindowView {
             }
 
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
-            this.#businessCards = sortedBusinessCards;
-            this.#groupName = groupName;
-            this.#limit = limit;
-            this.#chatId = chatId;
+            this.businessCards = sortedBusinessCards;
+            this.groupName = groupName;
+            this.limit = limit;
+            this.chatId = chatId;
 
-            this.#businessCards.forEach(businessCard => {
+            this.businessCards.forEach(businessCard => {
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent" >
@@ -92,34 +92,34 @@ class InviteFriendsView extends WindowView {
                 `)
 
                 $('#invite' + businessCard.getParticipantId()).on('click', (event) => {
-                    this.#invitedFriends.push(businessCard.getParticipantId());
+                    this.invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
                 })
 
                 $('#selected' + businessCard.getParticipantId()).on('click', (event) => {
-                    let index = this.#invitedFriends.indexOf(businessCard.getParticipantId());
-                    this.#invitedFriends.splice(index, 1);
+                    let index = this.invitedFriends.indexOf(businessCard.getParticipantId());
+                    this.invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
                     $('#invite' + businessCard.getParticipantId()).show();
                 })
 
                 $('#createGroupChat').off();
                 $('#createGroupChat').on('click', (event) => {
-                    if (this.#invitedFriends.length > 0 && this.#invitedFriends.length < this.#limit + 1) {
+                    if (this.invitedFriends.length > 0 && this.invitedFriends.length < this.limit + 1) {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
                         $('#inviteFriendsModal').modal('hide');
-                        this.#eventManager.handleCreateGroupChat(this.#groupName, this.#invitedFriends, this.#chatId);
-                        this.#invitedFriends = [];
-                    } else if (this.#invitedFriends.length < 1) {
+                        this.eventManager.handleCreateGroupChat(this.groupName, this.invitedFriends, this.chatId);
+                        this.invitedFriends = [];
+                    } else if (this.invitedFriends.length < 1) {
                         $('#toomanyinvitedfriends').hide();
                         $('#noinvitedfriends').show();
                     } else {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').empty();
-                        var diff = this.#invitedFriends.length - this.#limit;
-                        $('#toomanyinvitedfriends').text("You may only invite " + this.#limit + " friend(s)! Please unselect " + diff + " friend(s).");
+                        var diff = this.invitedFriends.length - this.limit;
+                        $('#toomanyinvitedfriends').text("You may only invite " + this.limit + " friend(s)! Please unselect " + diff + " friend(s).");
                         $('#toomanyinvitedfriends').show();
                     }
                 })
@@ -139,13 +139,13 @@ class InviteFriendsView extends WindowView {
      */
     addToInviteFriends(businessCard, hasLeftChat) {
         if (hasLeftChat) {
-            this.#limit = this.#limit + 1;
+            this.limit = this.limit + 1;
         }
 
         if (businessCard) {
-            if (!this.#businessCards.includes(businessCard)) {
-                this.#businessCards.push(businessCard);
-                this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+            if (!this.businessCards.includes(businessCard)) {
+                this.businessCards.push(businessCard);
+                this.draw(this.businessCards, this.groupName, this.limit, this.chatId);
             }
         }
     }
@@ -158,21 +158,21 @@ class InviteFriendsView extends WindowView {
      */
     removeFromInviteFriends(participantId, isMemberOfChat) {
         if (isMemberOfChat) {
-            this.#limit = this.#limit - 1;
+            this.limit = this.limit - 1;
         }
 
         if (participantId) {
             var found = false;
-            this.#businessCards.forEach(businessCard => {
+            this.businessCards.forEach(businessCard => {
                 if (businessCard.getParticipantId() === participantId) {
-                    let index = this.#businessCards.indexOf(businessCard);
-                    this.#businessCards.splice(index, 1);
+                    let index = this.businessCards.indexOf(businessCard);
+                    this.businessCards.splice(index, 1);
                     found = true;
                 }
             });
 
             if (found) {
-                this.draw(this.#businessCards, this.#groupName, this.#limit, this.#chatId);
+                this.draw(this.businessCards, this.groupName, this.limit, this.chatId);
             }
         }
     }

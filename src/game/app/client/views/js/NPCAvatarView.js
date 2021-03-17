@@ -6,16 +6,16 @@
  */
 class NPCAvatarView extends AvatarView {
 
-    #npcId;
-    #name;
-    #standingUpLeftAnimation;
-    #standingUpRightAnimation;
-    #standingDownLeftAnimation;
-    #standingDownRightAnimation;
-    #currentAnimation;
+    npcId;
+    name;
+    standingUpLeftAnimation;
+    standingUpRightAnimation;
+    standingDownLeftAnimation;
+    standingDownRightAnimation;
+    currentAnimation;
 
-    #gameEngine;
-    #eventManager;
+    gameEngine;
+    eventManager;
 
     /**
      * Creates an instance of NPCAvatarView
@@ -34,20 +34,20 @@ class NPCAvatarView extends AvatarView {
         TypeChecker.isString(name);
 
         this.initSpriteAnimation();
-        this.#npcId = npcId;
-        this.#name = name;
+        this.npcId = npcId;
+        this.name = name;
 
-        this.#gameEngine = gameEngine;
-        this.#eventManager = eventManager;
+        this.gameEngine = gameEngine;
+        this.eventManager = eventManager;
 
         if (direction === 'UPLEFT') {
-            this.#currentAnimation = this.#standingUpLeftAnimation;
+            this.currentAnimation = this.standingUpLeftAnimation;
         } else if (direction === 'UPRIGHT') {
-            this.#currentAnimation = this.#standingUpRightAnimation;
+            this.currentAnimation = this.standingUpRightAnimation;
         } else if (direction === 'DOWNLEFT') {
-            this.#currentAnimation = this.#standingDownLeftAnimation;
+            this.currentAnimation = this.standingDownLeftAnimation;
         } else if (direction === 'DOWNRIGHT') {
-            this.#currentAnimation = this.#standingDownRightAnimation;
+            this.currentAnimation = this.standingDownRightAnimation;
         }
     }
 
@@ -58,8 +58,8 @@ class NPCAvatarView extends AvatarView {
         let cordX = super.getGridPosition().getCordX();
         let cordY = super.getGridPosition().getCordY();
 
-        var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
-        var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
+        var screenX = this.gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
+        var screenY = this.gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
 
         ctx_avatar.font = "1em sans-serif";
         ctx_avatar.textBaseline = 'top';
@@ -68,9 +68,9 @@ class NPCAvatarView extends AvatarView {
         ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 1, Settings.AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
         ctx_avatar.fillStyle = "white";
-        ctx_avatar.fillText(this.#name, screenX + Settings.AVATAR_WIDTH / 2, screenY);
+        ctx_avatar.fillText(this.name, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
-        this.#currentAnimation.draw(screenX, screenY);
+        this.currentAnimation.draw(screenX, screenY);
     }
 
     /**
@@ -82,16 +82,16 @@ class NPCAvatarView extends AvatarView {
         let bottomClothing = super.getBottomClothing();
         let shoes = super.getShoes();
         
-        this.#standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
-        this.#standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
-        this.#standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);
-        this.#standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
+        this.standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
+        this.standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
+        this.standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);
+        this.standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
     }
 
     /**
      * called if npc is clicked
      */
     onClick() {
-        this.#eventManager.handleNPCClick(this.#npcId);
+        this.eventManager.handleNPCClick(this.npcId);
     }
 }

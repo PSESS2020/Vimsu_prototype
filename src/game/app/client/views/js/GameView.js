@@ -6,41 +6,41 @@
  */
 class GameView {
 
-    #updateList = [];
-    #gameViewInit;
+    updateList = [];
+    gameViewInit;
 
-    #currentMapView;
+    currentMapView;
 
-    #currentLecturesView;
-    #lectureView;
-    #meetingListView
-    #chatListView;
-    #chatThreadView;
-    #statusBar;
-    #hudView;
-    #friendListView;
-    #inviteFriendsView;
-    #friendRequestListView;
-    #chatParticipantListView;
-    #allchatView;
-    #scheduleListView;
-    #globalChatView;
-    #largerGlobalChatView;
-    #profileView;
-    #ownAvatarView;
-    #anotherParticipantAvatarViews = [];
-    #npcAvatarViews = [];
-    #notifBar;
-    #successesBar;
-    #rankListView;
-    #npcStoryView;
-    #newAchievementView;
-    #achievementView;
-    #businessCardView;
-    #enterCodeView;
+    currentLecturesView;
+    lectureView;
+    meetingListView
+    chatListView;
+    chatThreadView;
+    statusBar;
+    hudView;
+    friendListView;
+    inviteFriendsView;
+    friendRequestListView;
+    chatParticipantListView;
+    allchatView;
+    scheduleListView;
+    globalChatView;
+    largerGlobalChatView;
+    profileView;
+    ownAvatarView;
+    anotherParticipantAvatarViews = [];
+    npcAvatarViews = [];
+    notifBar;
+    successesBar;
+    rankListView;
+    npcStoryView;
+    newAchievementView;
+    achievementView;
+    businessCardView;
+    enterCodeView;
 
-    #gameEngine;
-    #eventManager;
+    gameEngine;
+    eventManager;
 
     /**
      * Creates an instance of GameView
@@ -53,8 +53,8 @@ class GameView {
         GameView.instance = this;
 
         //bool to check, if game view is already initialized. If not, draw is not possible
-        this.#gameViewInit = false;
-        this.#gameEngine = new IsometricEngine();
+        this.gameViewInit = false;
+        this.gameEngine = new IsometricEngine();
     }
     
     /**
@@ -64,41 +64,41 @@ class GameView {
      */
     initEventManager(clientController) {
         TypeChecker.isInstanceOf(clientController, ClientController)
-        this.#eventManager = new EventManager(clientController);
+        this.eventManager = new EventManager(clientController);
 
         //initialize some Views at the very beginning
-        this.#initViews();
+        this.initViews();
     } 
 
     /**
-     * @private initializes View instances
+     * initializes View instances
      */
-    #initViews = function () {
-        this.#hudView = new HUDView(this.#eventManager);
-        this.#statusBar = new StatusBar();
-        this.#notifBar = new NotificationBar(this.#eventManager);
-        this.#allchatView = new AllchatView(this.#eventManager);
-        new InputGroupNameView(this.#eventManager);
-        this.#currentLecturesView = new CurrentLecturesView(this.#eventManager);
-        this.#lectureView = new LectureView(this.#eventManager);
-        this.#friendRequestListView = new FriendRequestListView(this.#eventManager);
-        this.#friendListView = new FriendListView(this.#eventManager);
-        this.#inviteFriendsView = new InviteFriendsView(this.#eventManager);
-        this.#chatListView = new ChatListView(this.#eventManager);
-        this.#meetingListView = new MeetingListView(this.#eventManager);
-        this.#chatThreadView = new ChatThreadView(this.#eventManager);
-        this.#chatParticipantListView = new ChatParticipantListView();
-        this.#scheduleListView = new ScheduleListView();
-        this.#globalChatView = new GlobalChatView();
-        this.#largerGlobalChatView = new LargerGlobalChatView();
-        this.#profileView = new ProfileView();
-        this.#rankListView = new RankListView();
-        this.#npcStoryView = new NPCStoryView();
-        this.#newAchievementView = new NewAchievementView();
-        this.#achievementView = new AchievementView();
-        this.#businessCardView = new BusinessCardView(this.#eventManager);
-        this.#successesBar = new SuccessesBar();
-        this.#enterCodeView = new EnterCodeView(this.#eventManager);
+    initViews = function () {
+        this.hudView = new HUDView(this.eventManager);
+        this.statusBar = new StatusBar();
+        this.notifBar = new NotificationBar(this.eventManager);
+        this.allchatView = new AllchatView(this.eventManager);
+        new InputGroupNameView(this.eventManager);
+        this.currentLecturesView = new CurrentLecturesView(this.eventManager);
+        this.lectureView = new LectureView(this.eventManager);
+        this.friendRequestListView = new FriendRequestListView(this.eventManager);
+        this.friendListView = new FriendListView(this.eventManager);
+        this.inviteFriendsView = new InviteFriendsView(this.eventManager);
+        this.chatListView = new ChatListView(this.eventManager);
+        this.meetingListView = new MeetingListView(this.eventManager);
+        this.chatThreadView = new ChatThreadView(this.eventManager);
+        this.chatParticipantListView = new ChatParticipantListView();
+        this.scheduleListView = new ScheduleListView();
+        this.globalChatView = new GlobalChatView();
+        this.largerGlobalChatView = new LargerGlobalChatView();
+        this.profileView = new ProfileView();
+        this.rankListView = new RankListView();
+        this.npcStoryView = new NPCStoryView();
+        this.newAchievementView = new NewAchievementView();
+        this.achievementView = new AchievementView();
+        this.businessCardView = new BusinessCardView(this.eventManager);
+        this.successesBar = new SuccessesBar();
+        this.enterCodeView = new EnterCodeView(this.eventManager);
     }
 
     /**
@@ -107,7 +107,7 @@ class GameView {
      * @return {ParticipantAvatarView} ownAvatarView
      */
     getOwnAvatarView() {
-        return this.#ownAvatarView;
+        return this.ownAvatarView;
     }
 
     /**
@@ -116,7 +116,7 @@ class GameView {
      * @return {ParticipantAvatarView[]} anotherParticipantAvatarViews
      */
     getAnotherParticipantAvatarViews() {
-        return this.#anotherParticipantAvatarViews;
+        return this.anotherParticipantAvatarViews;
     }
 
     /**
@@ -126,14 +126,14 @@ class GameView {
      */
     setGameViewInit(bool) {
         TypeChecker.isBoolean(bool);
-        this.#gameViewInit = bool;
+        this.gameViewInit = bool;
     }
 
     /**
      * Initialize canvas events
      */
     initCanvasEvents() {
-        if (this.#currentMapView === null || this.#currentMapView === undefined)
+        if (this.currentMapView === null || this.currentMapView === undefined)
             return;
 
         var canvas = document.getElementById('avatarCanvas');
@@ -142,14 +142,14 @@ class GameView {
         $('#avatarCanvas').on('mousemove', (e) => {
 
             //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+            var newPosition = this.gameEngine.translateMouseToCanvasPos(canvas, e);
 
-            var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+            var selectedTileCords = this.gameEngine.translateMouseToTileCord(newPosition);
 
-            if (selectedTileCords !== undefined && this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                canvas.style.cursor = (this.#currentMapView.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
+            if (selectedTileCords !== undefined && this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                canvas.style.cursor = (this.currentMapView.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
 
-                this.#npcAvatarViews.forEach(npcView => {
+                this.npcAvatarViews.forEach(npcView => {
                     if (npcView.getGridPosition().getCordX() === selectedTileCords.x
                         && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
                         canvas.style.cursor = "pointer";
@@ -163,25 +163,25 @@ class GameView {
                     }
                 });
 
-                this.#currentMapView.selectionOnMap = true;
-            } else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.#currentMapView.selectionOnMap = false;
-                this.#currentMapView.findClickableElementOutsideMap(newPosition, false, canvas);
+                this.currentMapView.selectionOnMap = true;
+            } else if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+                this.currentMapView.selectionOnMap = false;
+                this.currentMapView.findClickableElementOutsideMap(newPosition, false, canvas);
             } else {
-                this.#currentMapView.selectionOnMap = false;
+                this.currentMapView.selectionOnMap = false;
                 canvas.style.cursor = "default";
             }
 
-            this.#currentMapView.updateSelectedTile(selectedTileCords);
+            this.currentMapView.updateSelectedTile(selectedTileCords);
         });
 
         //Handles mouse click on canvas
         $('#avatarCanvas').on('click', (e) => {
-            this.#clickHandler(canvas, e);
+            this.clickHandler(canvas, e);
         });
 
         $('#avatarCanvas').on('dblclick', (e) => {
-            this.#dblclickHandler(canvas, e);
+            this.dblclickHandler(canvas, e);
         });
 
         var timeout;
@@ -192,15 +192,15 @@ class GameView {
 
             clearTimeout(timeout);
             if (tapLength < 500 && tapLength > 0) {
-                this.#currentMapView.selectionOnMap = true;
+                this.currentMapView.selectionOnMap = true;
                 e.pageX = e.changedTouches[e.changedTouches.length-1].pageX;
                 e.pageY = e.changedTouches[e.changedTouches.length-1].pageY;
 
                 e.preventDefault();
-                this.#dblclickHandler(canvas, e);
+                this.dblclickHandler(canvas, e);
             }
                 timeout = setTimeout(()=> {
-                    this.#currentMapView.selectionOnMap = false;
+                    this.currentMapView.selectionOnMap = false;
                     clearTimeout(timeout);
                 }, 500);
 
@@ -213,19 +213,19 @@ class GameView {
      * @param {Canvas} canvas canvas
      * @param {Event} e click Event
      */
-    #clickHandler = function(canvas, e) {
+    clickHandler = function(canvas, e) {
 
         //Translates the current mouse position to the mouse position on the canvas.
-        var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+        var newPosition = this.gameEngine.translateMouseToCanvasPos(canvas, e);
 
-        var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+        var selectedTileCords = this.gameEngine.translateMouseToTileCord(newPosition);
 
            
         //check if clicked tile is a valid walkable tile
-        if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+        if (this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
          
             //first check if click is on door or clickable object in room (not existing at this point)
-            this.#currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
+            this.currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
 
             //then, check if there is an avatar at this position
             this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -236,15 +236,15 @@ class GameView {
             });
 
             //then, check if there is an NPC at this position
-            this.#npcAvatarViews.forEach(npcView => {
+            this.npcAvatarViews.forEach(npcView => {
                 if (npcView.getGridPosition().getCordX() === selectedTileCords.x
                     && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
                     npcView.onClick();
                 }
             })
         }//check if clicked tile is outside the walkable area
-        else if (this.#currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-            this.#currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
+        else if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
+            this.currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
         }
     }
 
@@ -253,23 +253,23 @@ class GameView {
      * @param {Canvas} canvas canvas
      * @param {Event} e dblclick Event
      */
-    #dblclickHandler = function(canvas, e) {
+    dblclickHandler = function(canvas, e) {
 
         //Translates the current mouse position to the mouse position on the canvas.
-        var newPosition = this.#gameEngine.translateMouseToCanvasPos(canvas, e);
+        var newPosition = this.gameEngine.translateMouseToCanvasPos(canvas, e);
 
-        var selectedTileCords = this.#gameEngine.translateMouseToTileCord(newPosition);
+        var selectedTileCords = this.gameEngine.translateMouseToTileCord(newPosition);
 
         //check if clicked tile is a valid walkable tile
-        if (this.#currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+        if (this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
             //update Position of tile selection marker. Needed for double touch event.
-            this.#currentMapView.updateSelectedTile(selectedTileCords);
+            this.currentMapView.updateSelectedTile(selectedTileCords);
 
-            let avatarCords = this.#ownAvatarView.getGridPosition();
+            let avatarCords = this.ownAvatarView.getGridPosition();
             let startCords = {x: avatarCords.getCordX(), y: avatarCords.getCordY() + Settings.MAP_BLANK_TILES_WIDTH};
 
             //Point&Click movement event
-            this.#eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
+            this.eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
         }
     }
     
@@ -278,7 +278,7 @@ class GameView {
      * 
      * @param {Views} viewInstance view instance
      */
-    #addToUpdateList = function (viewInstance) {
+    addToUpdateList = function (viewInstance) {
         if (viewInstance instanceof Array) {
             var i;
             for (i = 0; i < viewInstance.length; i++) {
@@ -289,8 +289,8 @@ class GameView {
             TypeChecker.isInstanceOf(viewInstance, Views);
         }
 
-        if (!this.#updateList.includes(viewInstance)) {
-            this.#updateList.push(viewInstance);
+        if (!this.updateList.includes(viewInstance)) {
+            this.updateList.push(viewInstance);
         }
     }
 
@@ -304,17 +304,17 @@ class GameView {
         TypeChecker.isString(username);
         TypeChecker.isBoolean(isVideoConference);
 
-        this.#hudView.drawProfile(username);
+        this.hudView.drawProfile(username);
 
         if (!isVideoConference) 
-            this.#hudView.removeScheduleButton();
+            this.hudView.removeScheduleButton();
     }
 
     /**
      * Draws status bar
      */
     drawStatusBar() {
-        this.#statusBar.draw();
+        this.statusBar.draw();
     }
 
     /**
@@ -322,20 +322,20 @@ class GameView {
      */
     draw() {
         //check if game view is already initalized
-        if (this.#gameViewInit) {
-            if (this.#currentMapView.selectionOnMap) {
-                let selectedTile = this.#currentMapView.getSelectedTile();
+        if (this.gameViewInit) {
+            if (this.currentMapView.selectionOnMap) {
+                let selectedTile = this.currentMapView.getSelectedTile();
                 if (selectedTile !== undefined) selectedTile.draw();
             }
 
-            var gameObjects = this.#currentMapView.getGameObjects();
+            var gameObjects = this.currentMapView.getGameObjects();
 
             //put all AvatarViews and all GameObjects in one list
-            var allDrawElements = (gameObjects !== undefined) ? gameObjects.concat(this.#ownAvatarView)
-                .concat(this.#anotherParticipantAvatarViews)
-                .concat(this.#npcAvatarViews)
-                : [this.#ownAvatarView].concat(this.#anotherParticipantAvatarViews)
-                    .concat(this.#npcAvatarViews);
+            var allDrawElements = (gameObjects !== undefined) ? gameObjects.concat(this.ownAvatarView)
+                .concat(this.anotherParticipantAvatarViews)
+                .concat(this.npcAvatarViews)
+                : [this.ownAvatarView].concat(this.anotherParticipantAvatarViews)
+                    .concat(this.npcAvatarViews);
 
             //sort all Elements 
             allDrawElements.sort(function (a, b) {
@@ -373,15 +373,15 @@ class GameView {
      * Update Views in update list
      */
     update() {
-        for (var i = 0; i < this.#updateList.length; i++) {
+        for (var i = 0; i < this.updateList.length; i++) {
 
-            if (this.#updateList[i] instanceof Array) {
-                for (var j = 0; j < this.#updateList[i].length; j++) {
-                    this.#updateList[i][j].update();
+            if (this.updateList[i] instanceof Array) {
+                for (var j = 0; j < this.updateList[i].length; j++) {
+                    this.updateList[i][j].update();
                 }
             }
             else {
-                this.#updateList[i].update();
+                this.updateList[i].update();
             }
         }
     }
@@ -393,7 +393,7 @@ class GameView {
      */
     updatePing(ms) {
         TypeChecker.isInt(ms);
-        this.#statusBar.updatePing(ms);
+        this.statusBar.updatePing(ms);
     }
 
     /**
@@ -403,7 +403,7 @@ class GameView {
      */
     updateFPS(timeStamp) {
         TypeChecker.isNumber(timeStamp);
-        this.#statusBar.updateFPS(timeStamp);
+        this.statusBar.updateFPS(timeStamp);
     }
 
     /**
@@ -413,7 +413,7 @@ class GameView {
      */
     updateConnectionStatus(status) {
         TypeChecker.isEnumOf(status, ConnectionState);
-        this.#statusBar.updateConnectionStatus(status);
+        this.statusBar.updateConnectionStatus(status);
     }
 
     /**
@@ -423,14 +423,14 @@ class GameView {
      */
     addGroupName(groupName) {
         TypeChecker.isString(groupName);
-        this.#statusBar.addGroupName(groupName);
+        this.statusBar.addGroupName(groupName);
     }
 
     /**
      * Remove group name from status bar
      */
     removeGroupName() {
-        this.#statusBar.removeGroupName();
+        this.statusBar.removeGroupName();
     }
 
     /**
@@ -447,13 +447,13 @@ class GameView {
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
 
-        this.#npcAvatarViews = [];
+        this.npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
-            this.#npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.#gameEngine, this.#eventManager));
+            this.npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.gameEngine, this.eventManager));
         });
 
-        this.#currentMapView = new MapView(assetPaths, map, objectMap, this.#gameEngine, this.#eventManager);
-        this.#statusBar.updateLocation(typeOfRoom);
+        this.currentMapView = new MapView(assetPaths, map, objectMap, this.gameEngine, this.eventManager);
+        this.statusBar.updateLocation(typeOfRoom);
     }
 
     /**
@@ -462,18 +462,18 @@ class GameView {
      * @param {ParticipantClient} participant another participant
      */
     initAnotherAvatarViews(participant) {
-        if (!(this.#ownAvatarView instanceof ParticipantAvatarView)) {
+        if (!(this.ownAvatarView instanceof ParticipantAvatarView)) {
             throw new Error("Please initialize the current client's avatar view first using initOwnAvatarView(participant)");
         }
 
         TypeChecker.isInstanceOf(participant, ParticipantClient);
 
-        if (this.#anotherParticipantAvatarViews.includes(participant)) {
+        if (this.anotherParticipantAvatarViews.includes(participant)) {
             throw new Error(participant + " is already in list of participants")
         }
 
-        if (participant !== this.#ownAvatarView) {
-            this.#anotherParticipantAvatarViews.push(new ParticipantAvatarView(
+        if (participant !== this.ownAvatarView) {
+            this.anotherParticipantAvatarViews.push(new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
                 participant.getShirtColor(),
@@ -482,11 +482,11 @@ class GameView {
                 participant.getIsVisible(),
                 participant.getIsModerator(),
                 false,
-                this.#gameEngine,
-                this.#eventManager
+                this.gameEngine,
+                this.eventManager
             ));
         }
-        this.#addToUpdateList(this.#anotherParticipantAvatarViews);
+        this.addToUpdateList(this.anotherParticipantAvatarViews);
     }
 
     /**
@@ -499,13 +499,13 @@ class GameView {
         TypeChecker.isString(participantId);
         TypeChecker.isInstanceOf(newPosition, PositionClient);
 
-        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+        let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].setPosition(newPosition);
+        this.anotherParticipantAvatarViews[index].setPosition(newPosition);
     }
 
     /**
@@ -518,13 +518,13 @@ class GameView {
         TypeChecker.isString(participantId);
         TypeChecker.isEnumOf(direction, Direction);
 
-        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+        let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].setDirection(direction);
+        this.anotherParticipantAvatarViews[index].setDirection(direction);
     }
 
     /**
@@ -537,15 +537,15 @@ class GameView {
         TypeChecker.isString(participantId);
         TypeChecker.isBoolean(isMoving);
 
-        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+        let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].updateWalking(isMoving);
-        this.#anotherParticipantAvatarViews[index].updateCurrentAnimation();
-        this.#anotherParticipantAvatarViews[index].draw();
+        this.anotherParticipantAvatarViews[index].updateWalking(isMoving);
+        this.anotherParticipantAvatarViews[index].updateCurrentAnimation();
+        this.anotherParticipantAvatarViews[index].draw();
     }
 
     /**
@@ -557,14 +557,14 @@ class GameView {
         TypeChecker.isString(participantId);
 
         //Searches in Array of other Avatars for participant with this ID
-        var index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
+        var index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
         //Removes disconnected Avatar from participant avatar views
-        this.#anotherParticipantAvatarViews.splice(index, 1);
+        this.anotherParticipantAvatarViews.splice(index, 1);
 
     }
 
@@ -572,7 +572,7 @@ class GameView {
      * Resets another avatar views
      */
     resetAnotherAvatarViews() {
-        this.#anotherParticipantAvatarViews.length = 0;
+        this.anotherParticipantAvatarViews.length = 0;
     }
 
     /**
@@ -590,8 +590,8 @@ class GameView {
         let username = ownParticipant.getUsername();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.#ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, username, true, isModerator, true, this.#gameEngine, this.#eventManager);
-        this.#addToUpdateList(this.#ownAvatarView);
+        this.ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, username, true, isModerator, true, this.gameEngine, this.eventManager);
+        this.addToUpdateList(this.ownAvatarView);
     }
 
     /**
@@ -601,7 +601,7 @@ class GameView {
      */
     updateOwnAvatarPosition(newPosition) {
         TypeChecker.isInstanceOf(newPosition, PositionClient);
-        this.#ownAvatarView.setPosition(newPosition);
+        this.ownAvatarView.setPosition(newPosition);
     }
 
     /**
@@ -611,7 +611,7 @@ class GameView {
      */
     updateOwnAvatarDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
-        this.#ownAvatarView.setDirection(direction);
+        this.ownAvatarView.setDirection(direction);
 
     }
 
@@ -622,8 +622,8 @@ class GameView {
      */
     updateOwnAvatarWalking(isMoving) {
         TypeChecker.isBoolean(isMoving);
-        this.#ownAvatarView.updateWalking(isMoving);
-        this.#ownAvatarView.updateCurrentAnimation();
+        this.ownAvatarView.updateWalking(isMoving);
+        this.ownAvatarView.updateCurrentAnimation();
     }
 
     /**
@@ -634,7 +634,7 @@ class GameView {
     setOwnModState(modState) {
         TypeChecker.isBoolean(modState);
 
-        this.#ownAvatarView.setIsModerator(modState);
+        this.ownAvatarView.setIsModerator(modState);
     }
 
     /**
@@ -647,13 +647,13 @@ class GameView {
         TypeChecker.isBoolean(modState);
         TypeChecker.isString(ppantID);
 
-        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
+        let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].setIsModerator(modState);
+        this.anotherParticipantAvatarViews[index].setIsModerator(modState);
     }
 
     /**
@@ -664,7 +664,7 @@ class GameView {
     setOwnShirtColor(shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#ownAvatarView.updateShirtColor(shirtColor);
+        this.ownAvatarView.updateShirtColor(shirtColor);
     }
 
     /**
@@ -677,13 +677,13 @@ class GameView {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isString(ppantID);
 
-        let index = this.#anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
+        let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
 
         if (index < 0) {
             throw new Error(participantId + " is not in list of participants")
         }
 
-        this.#anotherParticipantAvatarViews[index].updateShirtColor(shirtColor);
+        this.anotherParticipantAvatarViews[index].updateShirtColor(shirtColor);
     }
 
     /**
@@ -692,7 +692,7 @@ class GameView {
      * @param {Object[]} lectures current lectures
      */
     initCurrentLectures(lectures) {
-        this.#currentLecturesView.draw(lectures);
+        this.currentLecturesView.draw(lectures);
     }
 
     /**
@@ -702,7 +702,7 @@ class GameView {
      */
     updateCurrentLectures(lectureId) {
         TypeChecker.isString(lectureId);
-        this.#currentLecturesView.drawLectureFull(lectureId);
+        this.currentLecturesView.drawLectureFull(lectureId);
     }
 
     /**
@@ -712,7 +712,7 @@ class GameView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     initCurrentSchedule(lectures, timeOffset) {
-        this.#scheduleListView.draw(lectures, timeOffset);
+        this.scheduleListView.draw(lectures, timeOffset);
     }
 
     /**
@@ -726,7 +726,7 @@ class GameView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     updateCurrentLecture(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset) {
-        this.#lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset);
+        this.lectureView.draw(lecture, hasToken, lectureChat, isOrator, isModerator, timeOffset);
     }
 
     /**
@@ -746,7 +746,7 @@ class GameView {
             TypeChecker.isString(messageText);
         }
 
-        this.#globalChatView.draw(messageHeader, messageText);
+        this.globalChatView.draw(messageHeader, messageText);
     };
 
     /**
@@ -766,7 +766,7 @@ class GameView {
             TypeChecker.isString(messageText);
         }
 
-        this.#largerGlobalChatView.draw(messageHeader, messageText);
+        this.largerGlobalChatView.draw(messageHeader, messageText);
     };
 
     /**
@@ -779,7 +779,7 @@ class GameView {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
         TypeChecker.isBoolean(isModerator);
 
-        this.#profileView.draw(businessCard, isModerator);
+        this.profileView.draw(businessCard, isModerator);
     }
 
     /**
@@ -801,7 +801,7 @@ class GameView {
 
         TypeChecker.isBoolean(isModerator);
 
-        this.#businessCardView.draw(businessCard, isFriend, rank, isModerator);
+        this.businessCardView.draw(businessCard, isFriend, rank, isModerator);
     }
 
     /**
@@ -815,7 +815,7 @@ class GameView {
             TypeChecker.isInstanceOf(busCard, BusinessCardClient);
         })
 
-        this.#friendListView.draw(businessCards)
+        this.friendListView.draw(businessCards)
     }
 
     /**
@@ -841,7 +841,7 @@ class GameView {
         if (chatId)
             TypeChecker.isString(chatId);
 
-        this.#inviteFriendsView.draw(businessCards, groupName, limit, chatId);
+        this.inviteFriendsView.draw(businessCards, groupName, limit, chatId);
     }
 
     /**
@@ -850,7 +850,7 @@ class GameView {
      * @param {Object[]} achievements achievements
      */
     initCurrentAchievementsView(achievements) {
-        this.#achievementView.draw(achievements);
+        this.achievementView.draw(achievements);
     }
 
     /**
@@ -859,7 +859,7 @@ class GameView {
      * @param {Object} achievement achievement
      */
     handleNewAchievement(achievement) {
-        this.#newAchievementView.draw(achievement);
+        this.newAchievementView.draw(achievement);
     }
 
     /**
@@ -876,7 +876,7 @@ class GameView {
             TypeChecker.isString(element);
         })
 
-        this.#npcStoryView.draw(name, story, npcId);
+        this.npcStoryView.draw(name, story, npcId);
     }
 
     /**
@@ -885,7 +885,7 @@ class GameView {
      * @param {String} npcId NPC id
      */
      addNPCStoryWindow(npcId) {
-        this.#npcStoryView.addNewNPCStoryWindow(npcId);
+        this.npcStoryView.addNewNPCStoryWindow(npcId);
     }
 
     /**
@@ -894,7 +894,7 @@ class GameView {
      * @param {Object[]} rankList rank list
      */
     initRankListView(rankList) {
-        this.#rankListView.draw(rankList);
+        this.rankListView.draw(rankList);
     }
 
     /**
@@ -903,7 +903,7 @@ class GameView {
      * @param {Object[]} meetings meetings
      */
     initMeetingListView(meetings) {
-        this.#meetingListView.draw(meetings);
+        this.meetingListView.draw(meetings);
     };
 
     /**
@@ -913,7 +913,7 @@ class GameView {
      * @param {String} ownUsername current participant's username
      */
     initChatListView(chats, ownUsername) {
-        this.#chatListView.draw(chats, ownUsername);
+        this.chatListView.draw(chats, ownUsername);
     };
 
     /**
@@ -926,7 +926,7 @@ class GameView {
     initChatThreadView(chat, openNow, ownUsername) {
         if (openNow) {
             this.addChatThreadWindow(chat.chatId);
-            this.#chatThreadView.draw(chat, ownUsername);
+            this.chatThreadView.draw(chat, ownUsername);
         }
     };
 
@@ -936,7 +936,7 @@ class GameView {
      * @param {Stirng} chatId chat id
      */
     addChatThreadWindow(chatId) {
-        this.#chatListView.addNewChatThreadWindow(chatId);
+        this.chatListView.addNewChatThreadWindow(chatId);
     }
 
     /**
@@ -946,7 +946,7 @@ class GameView {
      */
      closeChatThreadView(chatId) {
         if ($('#chatThreadModal' + chatId).is(':visible')) {
-            this.#chatThreadView.close(chatId);
+            this.chatThreadView.close(chatId);
         }
     };
 
@@ -956,7 +956,7 @@ class GameView {
      * @return {ChatThreadView} chatThreadView
      */
     getChatThreadView() {
-        return this.#chatThreadView;
+        return this.chatThreadView;
     }
 
     /**
@@ -967,7 +967,7 @@ class GameView {
      */
     addNewChat(chat, openNow) {
         if ($('#chatListModal').is(':visible')) {
-            this.#chatListView.addNewChat(chat);
+            this.chatListView.addNewChat(chat);
         }
         this.initChatThreadView(chat, openNow);
     };
@@ -985,7 +985,7 @@ class GameView {
         TypeChecker.isBoolean(friendRequestSent);
 
         if ($('#chatThreadModal' + chatId).is(':visible')) {
-            this.#chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
+            this.chatThreadView.updateFriendRequestButton(chatId, areFriends, friendRequestSent);
         }
     }
 
@@ -997,11 +997,11 @@ class GameView {
      */
     addNewChatMessage(chatId, message) {
         if ($('#chatListModal').is(':visible')) {
-            this.#chatListView.addNewMessage(chatId, message);
+            this.chatListView.addNewMessage(chatId, message);
         }
 
         if ($('#chatThreadModal' + chatId).is(':visible')) {
-            this.#chatThreadView.addNewMessage(chatId, message);
+            this.chatThreadView.addNewMessage(chatId, message);
         }
     };
 
@@ -1011,7 +1011,7 @@ class GameView {
      * @param {Object} message allchat message
      */
     appendAllchatMessage(message) {
-        this.#allchatView.appendMessage(message);
+        this.allchatView.appendMessage(message);
     }
 
     /**
@@ -1021,7 +1021,7 @@ class GameView {
      * @param {Object[]} messages allchat messages
      */
     initAllchatView(typeOfRoom, messages) {
-        this.#allchatView.draw(typeOfRoom, messages);
+        this.allchatView.draw(typeOfRoom, messages);
     }
 
     /**
@@ -1031,7 +1031,7 @@ class GameView {
      */
     updatePoints(points) {
         TypeChecker.isInt(points);
-        this.#successesBar.updatePoints(points);
+        this.successesBar.updatePoints(points);
     }
 
     /**
@@ -1044,7 +1044,7 @@ class GameView {
             TypeChecker.isInt(rank);
         }
 
-        this.#successesBar.updateRank(rank);
+        this.successesBar.updateRank(rank);
     }
 
     /**
@@ -1056,7 +1056,7 @@ class GameView {
         TypeChecker.isString(participantId);
 
         if ($('#friendListModal').is(':visible')) {
-            this.#friendListView.deleteFriend(participantId);
+            this.friendListView.deleteFriend(participantId);
         }
 
         this.removeFromInviteFriends(participantId, false);
@@ -1071,7 +1071,7 @@ class GameView {
         TypeChecker.isString(chatId);
 
         if ($('#chatListModal').is(':visible')) {
-            this.#chatListView.deleteChat(chatId);
+            this.chatListView.deleteChat(chatId);
         }
     }
 
@@ -1084,7 +1084,7 @@ class GameView {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
 
         if ($('#friendListModal').is(':visible')) {
-            this.#friendListView.addToFriendList(businessCard);
+            this.friendListView.addToFriendList(businessCard);
         }
 
         this.addToInviteFriends(businessCard, false);
@@ -1103,7 +1103,7 @@ class GameView {
         TypeChecker.isBoolean(hasLeftChat);
 
         if ($('#inviteFriendsModal').is(':visible')) {
-            this.#inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
+            this.inviteFriendsView.addToInviteFriends(businessCard, hasLeftChat);
         }
     }
 
@@ -1117,7 +1117,7 @@ class GameView {
         TypeChecker.isString(chatId);
         TypeChecker.isString(username);
         if ($('#chatParticipantListModal' + chatId).is(':visible')) {
-            this.#chatParticipantListView.addToChatParticipantList(username);
+            this.chatParticipantListView.addToChatParticipantList(username);
         }
     }
 
@@ -1131,7 +1131,7 @@ class GameView {
         TypeChecker.isString(chatId);
         TypeChecker.isString(username);
         if ($('#chatParticipantListModal' + chatId).is(':visible')) {
-            this.#chatParticipantListView.removeFromChatParticipantList(username);
+            this.chatParticipantListView.removeFromChatParticipantList(username);
         }
     }
 
@@ -1148,7 +1148,7 @@ class GameView {
         TypeChecker.isBoolean(isMemberOfChat);
 
         if ($('#inviteFriendsModal').is(':visible')) {
-            this.#inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
+            this.inviteFriendsView.removeFromInviteFriends(participantId, isMemberOfChat);
         }
     }
 
@@ -1164,7 +1164,7 @@ class GameView {
         usernames.forEach(username => {
             TypeChecker.isString(username);
         })
-        this.#chatParticipantListView.draw(chatId, usernames);
+        this.chatParticipantListView.draw(chatId, usernames);
     }
 
     /**
@@ -1176,7 +1176,7 @@ class GameView {
     drawNewChat(senderUsername, chatId) {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(chatId);
-        this.#notifBar.drawNewChat(senderUsername, chatId);
+        this.notifBar.drawNewChat(senderUsername, chatId);
     }
 
     /**
@@ -1191,7 +1191,7 @@ class GameView {
         TypeChecker.isString(creatorUsername);
         TypeChecker.isString(chatId);
 
-        this.#notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
+        this.notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
     }
 
     /**
@@ -1204,11 +1204,11 @@ class GameView {
         TypeChecker.isString(senderUsername);
         TypeChecker.isString(chatId);
 
-        if ($('#chatThreadModal' + chatId).is(':visible') && this.#chatThreadView.getChatId() === chatId) {
+        if ($('#chatThreadModal' + chatId).is(':visible') && this.chatThreadView.getChatId() === chatId) {
             return;
         }
 
-        this.#notifBar.drawNewMessage(senderUsername, chatId);
+        this.notifBar.drawNewMessage(senderUsername, chatId);
     }
 
     /**
@@ -1218,7 +1218,7 @@ class GameView {
      */
     drawNewFriendRequest(senderUsername) {
         TypeChecker.isString(senderUsername);
-        this.#notifBar.drawNewFriendRequest(senderUsername);
+        this.notifBar.drawNewFriendRequest(senderUsername);
     }
 
     /**
@@ -1228,7 +1228,7 @@ class GameView {
      */
     drawNewFriend(friendUsername) {
         TypeChecker.isString(friendUsername);
-        this.#notifBar.drawNewFriend(friendUsername);
+        this.notifBar.drawNewFriend(friendUsername);
     }
 
     /**
@@ -1242,7 +1242,7 @@ class GameView {
             TypeChecker.isInstanceOf(busCard, BusinessCardClient);
         })
 
-        this.#friendRequestListView.draw(businessCards);
+        this.friendRequestListView.draw(businessCards);
     }
 
     /**
@@ -1256,7 +1256,7 @@ class GameView {
         TypeChecker.isBoolean(isAccepted);
 
         if ($('#friendRequestListModal').is(':visible')) {
-            this.#friendRequestListView.update(participantId, isAccepted);
+            this.friendRequestListView.update(participantId, isAccepted);
         }
     }
 
@@ -1269,7 +1269,7 @@ class GameView {
         TypeChecker.isInstanceOf(businessCard, BusinessCardClient);
 
         if ($('#friendRequestListModal').is(':visible')) {
-            this.#friendRequestListView.addToFriendRequestList(businessCard);
+            this.friendRequestListView.addToFriendRequestList(businessCard);
         }
     }
 
@@ -1277,7 +1277,7 @@ class GameView {
      * Removes own avatar view
      */
     removeOwnAvatarView() {
-        this.#ownAvatarView = undefined;
+        this.ownAvatarView = undefined;
     }
 
     /**
@@ -1288,8 +1288,8 @@ class GameView {
     hideAvatar(participantId) {
         TypeChecker.isString(participantId);
 
-        for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
-            var avatar = this.#anotherParticipantAvatarViews[i];
+        for (var i = 0; i < this.anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.anotherParticipantAvatarViews[i];
             if (avatar.getId() === participantId) {
                 avatar.setVisibility(false);
             }
@@ -1304,8 +1304,8 @@ class GameView {
     showAvatar(participantId) {
         TypeChecker.isString(participantId);
 
-        for (var i = 0; i < this.#anotherParticipantAvatarViews.length; i++) {
-            var avatar = this.#anotherParticipantAvatarViews[i];
+        for (var i = 0; i < this.anotherParticipantAvatarViews.length; i++) {
+            var avatar = this.anotherParticipantAvatarViews[i];
             if (avatar.getId() === participantId) {
                 avatar.setVisibility(true);
             }
@@ -1319,7 +1319,7 @@ class GameView {
      */
     appendLectureChatMessage(message) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.appendMessage(message);
+            this.lectureView.appendMessage(message);
         }
     }
 
@@ -1330,7 +1330,7 @@ class GameView {
      */
     updateLectureChat(lectureChat) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.drawChat(lectureChat);
+            this.lectureView.drawChat(lectureChat);
         }
     };
 
@@ -1343,7 +1343,7 @@ class GameView {
         TypeChecker.isBoolean(hasToken);
 
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.drawToken(hasToken, TokenMessages.REVOKE);
+            this.lectureView.drawToken(hasToken, TokenMessages.REVOKE);
         }
     };
 
@@ -1356,7 +1356,7 @@ class GameView {
         TypeChecker.isString(videoUrl);
 
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.drawVideo(videoUrl);
+            this.lectureView.drawVideo(videoUrl);
         }
     }
 
@@ -1365,7 +1365,7 @@ class GameView {
      */
     closeLectureView() {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.#lectureView.close();
+            this.lectureView.close();
         }
     };
 
@@ -1377,6 +1377,6 @@ class GameView {
     initEnterCodeWindow(doorId) {
         TypeChecker.isString(doorId);
         
-        this.#enterCodeView.draw(doorId);
+        this.enterCodeView.draw(doorId);
     }
 }

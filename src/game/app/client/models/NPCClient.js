@@ -13,11 +13,11 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class NPCClient {
 
-    #id;
-    #name;
-    #position;
-    #direction;
-    #shirtColor;
+    id;
+    name;
+    position;
+    direction;
+    shirtColor;
 
     /**
      * Creates an instance of NPC on client-side
@@ -35,11 +35,11 @@ class NPCClient {
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#id = id;
-        this.#name = name;
-        this.#position = position;
-        this.#direction = direction;
-        this.#shirtColor = shirtColor;
+        this.id = id;
+        this.name = name;
+        this.position = position;
+        this.direction = direction;
+        this.shirtColor = shirtColor;
     }
 
     /**
@@ -48,7 +48,7 @@ class NPCClient {
      * @return {number} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -57,7 +57,7 @@ class NPCClient {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -66,7 +66,7 @@ class NPCClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -75,7 +75,7 @@ class NPCClient {
      * @return {Direction} direction
      */
     getDirection() {
-        return this.#direction;
+        return this.direction;
     }
 
     /**
@@ -84,7 +84,7 @@ class NPCClient {
      * @return {ShirtColor} shirt color
      */
     getShirtColor() {
-        return this.#shirtColor;
+        return this.shirtColor;
     }
 }
 

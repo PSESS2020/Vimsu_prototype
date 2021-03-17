@@ -6,7 +6,7 @@
  */
 class RankListView extends WindowView {
 
-    #rankList;
+    rankList;
 
     /**
      * Creates an instance of RankListView
@@ -35,9 +35,9 @@ class RankListView extends WindowView {
             return;
         }
 
-        this.#rankList = rankList;
+        this.rankList = rankList;
 
-        this.#rankList.forEach(ppant => {
+        this.rankList.forEach(ppant => {
 
             var color;
 

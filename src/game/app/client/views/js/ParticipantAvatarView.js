@@ -6,24 +6,24 @@
  */
 class ParticipantAvatarView extends AvatarView {
 
-    #participantId;
-    #walkingDownRightAnimation;
-    #walkingUpRightAnimation;
-    #walkingDownLeftAnimation;
-    #walkingUpLeftAnimation;
-    #standingUpLeftAnimation;
-    #standingUpRightAnimation;
-    #standingDownLeftAnimation;
-    #standingDownRightAnimation;
-    #currentAnimation;
-    #walking = false;
-    #isVisible;
-    #username;
-    #isModerator;
-    #isOwnAvatar;
+    participantId;
+    walkingDownRightAnimation;
+    walkingUpRightAnimation;
+    walkingDownLeftAnimation;
+    walkingUpLeftAnimation;
+    standingUpLeftAnimation;
+    standingUpRightAnimation;
+    standingDownLeftAnimation;
+    standingDownRightAnimation;
+    currentAnimation;
+    walking = false;
+    isVisible;
+    username;
+    isModerator;
+    isOwnAvatar;
 
-    #gameEngine;
-    #eventManager;
+    gameEngine;
+    eventManager;
 
     /**
      * Creates an instance of ParticipantAvatarView
@@ -43,18 +43,18 @@ class ParticipantAvatarView extends AvatarView {
         super(position, direction, shirtColor);
         TypeChecker.isString(participantId);
 
-        this.#participantId = participantId;
+        this.participantId = participantId;
         this.initSpriteAnimation();
 
-        this.#currentAnimation = this.#standingDownRightAnimation;
-        this.#username = username;
-        this.#isVisible = isVisible;
-        this.#isModerator = isModerator;
-        this.#isOwnAvatar = isOwnAvatar;
+        this.currentAnimation = this.standingDownRightAnimation;
+        this.username = username;
+        this.isVisible = isVisible;
+        this.isModerator = isModerator;
+        this.isOwnAvatar = isOwnAvatar;
 
-        this.#gameEngine = gameEngine;
-        this.#eventManager = eventManager;
-        this.#initMovement();
+        this.gameEngine = gameEngine;
+        this.eventManager = eventManager;
+        this.initMovement();
     }
 
     /**
@@ -63,7 +63,7 @@ class ParticipantAvatarView extends AvatarView {
      * @return {String} participantId
      */
     getId() {
-        return this.#participantId;
+        return this.participantId;
     }
 
     /**
@@ -72,7 +72,7 @@ class ParticipantAvatarView extends AvatarView {
      * @param {String} participantId participant ID
      */
     setId(participantId) {
-        this.#participantId = participantId;
+        this.participantId = participantId;
     }
 
     /**
@@ -81,7 +81,7 @@ class ParticipantAvatarView extends AvatarView {
      * @return {boolean} true if visible, otherwise false
      */
     getVisibility() {
-        return this.#isVisible;
+        return this.isVisible;
     }
 
     /**
@@ -90,7 +90,7 @@ class ParticipantAvatarView extends AvatarView {
      * @param {boolean} visible true if visible, otherwise false
      */
     setVisibility(visible) {
-        this.#isVisible = visible;
+        this.isVisible = visible;
     }
 
     /**
@@ -99,7 +99,7 @@ class ParticipantAvatarView extends AvatarView {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     setIsModerator(isModerator) {
-        this.#isModerator = isModerator;
+        this.isModerator = isModerator;
     }
 
 
@@ -107,7 +107,7 @@ class ParticipantAvatarView extends AvatarView {
      * Updates current animation
      */
     update() {
-        this.#currentAnimation.update();
+        this.currentAnimation.update();
     }
 
     /**
@@ -115,27 +115,27 @@ class ParticipantAvatarView extends AvatarView {
      */
     updateCurrentAnimation() {
         var direction = super.getDirection();
-        if (this.#walking === true) {
+        if (this.walking === true) {
             if (direction === 'UPLEFT') {
-                this.#currentAnimation = this.#walkingUpLeftAnimation;
+                this.currentAnimation = this.walkingUpLeftAnimation;
             } else if (direction === 'UPRIGHT') {
-                this.#currentAnimation = this.#walkingUpRightAnimation;
+                this.currentAnimation = this.walkingUpRightAnimation;
             } else if (direction === 'DOWNLEFT') {
-                this.#currentAnimation = this.#walkingDownLeftAnimation;
+                this.currentAnimation = this.walkingDownLeftAnimation;
             } else if (direction === 'DOWNRIGHT') {
-                this.#currentAnimation = this.#walkingDownRightAnimation;
+                this.currentAnimation = this.walkingDownRightAnimation;
             }
 
 
         } else {
             if (direction === 'UPLEFT') {
-                this.#currentAnimation = this.#standingUpLeftAnimation;
+                this.currentAnimation = this.standingUpLeftAnimation;
             } else if (direction === 'UPRIGHT') {
-                this.#currentAnimation = this.#standingUpRightAnimation;
+                this.currentAnimation = this.standingUpRightAnimation;
             } else if (direction === 'DOWNLEFT') {
-                this.#currentAnimation = this.#standingDownLeftAnimation;
+                this.currentAnimation = this.standingDownLeftAnimation;
             } else if (direction === 'DOWNRIGHT') {
-                this.#currentAnimation = this.#standingDownRightAnimation;
+                this.currentAnimation = this.standingDownRightAnimation;
             }
         }
     }
@@ -146,43 +146,43 @@ class ParticipantAvatarView extends AvatarView {
      * @param {boolean} isMoving true if moving, otherwise false
      */
     updateWalking(isMoving) {
-        this.#walking = isMoving;
+        this.walking = isMoving;
     }
 
     /**
      * Draws participant avatar
      */
     draw() {
-        if (this.#isVisible) {
+        if (this.isVisible) {
 
             let cordX = super.getGridPosition().getCordX();
             let cordY = super.getGridPosition().getCordY();
             this.updateCurrentAnimation();
 
-            var screenX = this.#gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
-            var screenY = this.#gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
+            var screenX = this.gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
+            var screenY = this.gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
 
             ctx_avatar.font = "1em sans-serif";
             ctx_avatar.textBaseline = 'top';
 
             var arrowColor;
-            if (this.#isModerator) {
+            if (this.isModerator) {
                 ctx_avatar.fillStyle = arrowColor = Settings.MODERATOR_COLOR;
             } else {
                 ctx_avatar.fillStyle = arrowColor = Settings.PARTICIPANT_COLOR;
             }
 
-            if (this.#isOwnAvatar) {
-                this.#drawArrow(screenX + Settings.AVATAR_WIDTH / 2, screenY - 15 - Settings.ARROW_LENGTH, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15, Settings.ARROW_WIDTH, arrowColor);
+            if (this.isOwnAvatar) {
+                this.drawArrow(screenX + Settings.AVATAR_WIDTH / 2, screenY - 15 - Settings.ARROW_LENGTH, screenX + Settings.AVATAR_WIDTH / 2, screenY - 15, Settings.ARROW_WIDTH, arrowColor);
             }
 
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 1, Settings.AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
 
             ctx_avatar.fillStyle = "black";
-            ctx_avatar.fillText(this.#username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
+            ctx_avatar.fillText(this.username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
-            this.#currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
+            this.currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }
     }
 
@@ -190,19 +190,19 @@ class ParticipantAvatarView extends AvatarView {
      * Called if participant avatar is clicked
      */
     onClick() {
-        if (this.#isVisible) {
+        if (this.isVisible) {
             $('#businessCardModal').modal('show');
             $('#businessCardModal .modal-body').append(`
-                <div id=${"businessCardWait" + this.#participantId} style="text-align: center;">
+                <div id=${"businessCardWait" + this.participantId} style="text-align: center;">
                     <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                 </div>
             `)
-            this.#eventManager.handleAvatarClick(this.#participantId);
+            this.eventManager.handleAvatarClick(this.participantId);
         }
     }
 
     /**
-     * @private draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
+     * draws an arrow from (fromCordX, fromCordY) to (toCordX, toCordY)
      * 
      * @param {number} fromCordX origin x coordinate
      * @param {number} fromCordY origin y coordinate
@@ -211,7 +211,7 @@ class ParticipantAvatarView extends AvatarView {
      * @param {number} arrowWidth arrow width
      * @param {String} color arrow color
      */
-    #drawArrow = function (fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
+    drawArrow = function (fromCordX, fromCordY, toCordX, toCordY, arrowWidth, color) {
         //variables to be used when creating the arrow
         var headlen = 5;
         var angle = Math.atan2(toCordY - fromCordY, toCordX - fromCordX);
@@ -261,20 +261,20 @@ class ParticipantAvatarView extends AvatarView {
         let bottomClothing = super.getBottomClothing();
         let shoes = super.getShoes();
 
-        this.#walkingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 1, 4);
-        this.#walkingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 11, 14);
-        this.#walkingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 6, 9);
-        this.#walkingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 16, 19);
-        this.#standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
-        this.#standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
-        this.#standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);
-        this.#standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
+        this.walkingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 1, 4);
+        this.walkingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 11, 14);
+        this.walkingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 6, 9);
+        this.walkingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 16, 19);
+        this.standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
+        this.standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
+        this.standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);
+        this.standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
     }
 
     /**
-     * @private initializes keyboard events for movement
+     * initializes keyboard events for movement
      */
-    #initMovement = function () {
+    initMovement = function () {
         document.body.onkeydown = (event) => {
 
             if (event.defaultPrevented) {
@@ -283,32 +283,32 @@ class ParticipantAvatarView extends AvatarView {
 
             switch (event.code) {
                 case "KeyW":
-                    this.#eventManager.handleUpArrowDown();
+                    this.eventManager.handleUpArrowDown();
                     break;
                 case "ArrowUp":
                     event.preventDefault();
-                    this.#eventManager.handleUpArrowDown();
+                    this.eventManager.handleUpArrowDown();
                     break;
                 case "KeyS":
-                    this.#eventManager.handleDownArrowDown();
+                    this.eventManager.handleDownArrowDown();
                     break;
                 case "ArrowDown":
                     event.preventDefault();
-                    this.#eventManager.handleDownArrowDown();
+                    this.eventManager.handleDownArrowDown();
                     break;
                 case "KeyD":
-                    this.#eventManager.handleRightArrowDown();
+                    this.eventManager.handleRightArrowDown();
                     break;
                 case "ArrowRight":
                     event.preventDefault();
-                    this.#eventManager.handleRightArrowDown();
+                    this.eventManager.handleRightArrowDown();
                     break;
                 case "KeyA":
-                    this.#eventManager.handleLeftArrowDown();
+                    this.eventManager.handleLeftArrowDown();
                     break;
                 case "ArrowLeft":
                     event.preventDefault();
-                    this.#eventManager.handleLeftArrowDown();
+                    this.eventManager.handleLeftArrowDown();
                     break;
                 default:
                     return;
@@ -324,7 +324,7 @@ class ParticipantAvatarView extends AvatarView {
             switch (event.code) {
                 case "KeyW": case "KeyS": case "KeyD": case "KeyA":
                 case "ArrowUp": case "ArrowDown": case "ArrowRight": case "ArrowLeft":
-                    this.#eventManager.handleArrowUp();
+                    this.eventManager.handleArrowUp();
                     break;
             }
         }

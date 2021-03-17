@@ -35,7 +35,7 @@ describe('GameObjectClient test', function () {
         assert.equal(width, gameObject.getWidth());
         assert.equal(length, gameObject.getLength());
         assert.equal(position, gameObject.getPosition());
-        assert.equal(isClickable, gameObject.isClickable());
+        assert.equal(isClickable, gameObject.getIsClickable());
     });
 
     it('test constructor invalid input', function () {

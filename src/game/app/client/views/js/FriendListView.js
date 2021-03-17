@@ -6,8 +6,8 @@
  */
 class FriendListView extends WindowView {
 
-    #businessCards;
-    #eventManager;
+    businessCards;
+    eventManager;
 
     /**
      * Creates an instance of FriendListView
@@ -23,7 +23,7 @@ class FriendListView extends WindowView {
 
         FriendListView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
 
         $('#friendRequestList').off();
         $('#friendRequestList').on('click', (event) => {
@@ -31,7 +31,7 @@ class FriendListView extends WindowView {
             $('#friendRequestListModal .modal-body .list-group').empty()
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
-            this.#eventManager.handleFriendRequestListClicked();
+            this.eventManager.handleFriendRequestListClicked();
         })
     }
 
@@ -51,9 +51,9 @@ class FriendListView extends WindowView {
         }
 
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
-        this.#businessCards = sortedBusinessCards;
+        this.businessCards = sortedBusinessCards;
 
-        this.#businessCards.forEach(businessCard => {
+        this.businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent chatthread" >
                     <div class="d-flex justify-content-between">
@@ -89,7 +89,7 @@ class FriendListView extends WindowView {
             $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).remove();
-                this.#eventManager.handleChatNowClicked(businessCard.getParticipantId());
+                this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })
 
             $('#delete' + businessCard.getParticipantId()).off();
@@ -99,7 +99,7 @@ class FriendListView extends WindowView {
 
                 var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
                 if (result)
-                    this.#eventManager.handleRemoveFriend(businessCard.getParticipantId());
+                    this.eventManager.handleRemoveFriend(businessCard.getParticipantId());
                 else
                     event.stopImmediatePropagation();
             })
@@ -112,15 +112,15 @@ class FriendListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriend(participantId) {
-        this.#businessCards.forEach(businessCard => {
+        this.businessCards.forEach(businessCard => {
 
             if (businessCard.getParticipantId() === participantId) {
-                let index = this.#businessCards.indexOf(businessCard);
-                this.#businessCards.splice(index, 1);
+                let index = this.businessCards.indexOf(businessCard);
+                this.businessCards.splice(index, 1);
             }
         });
 
-        this.draw(this.#businessCards);
+        this.draw(this.businessCards);
     }
 
     /**
@@ -129,9 +129,9 @@ class FriendListView extends WindowView {
      * @param {BusinessCardClient} businessCard friend's business card
      */
     addToFriendList(businessCard) {
-        if (!this.#businessCards.includes(businessCard)) {
-            this.#businessCards.push(businessCard);
-            this.draw(this.#businessCards);
+        if (!this.businessCards.includes(businessCard)) {
+            this.businessCards.push(businessCard);
+            this.draw(this.businessCards);
         }        
     }
 }

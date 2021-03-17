@@ -5,10 +5,10 @@
  * @version 1.0.0
  */
 class PlantView extends GameObjectView {
-    #story = ['Hey I\'m a beautiful plant. Don\'t touch me!',
+    story = ['Hey I\'m a beautiful plant. Don\'t touch me!',
               'Seriously, DON\'T TOUCH ME!!'];
 
-    #id = 'plant'
+    id = 'plant'
 
     /**
      * Creates an instance of PlantView
@@ -27,7 +27,7 @@ class PlantView extends GameObjectView {
      */
     onclick() {
         const npcStoryView = new NPCStoryView()
-        npcStoryView.addNewNPCStoryWindow(this.#id)
-        npcStoryView.draw("Beautiful Plant", this.#story, this.#id);
+        npcStoryView.addNewNPCStoryWindow(this.id)
+        npcStoryView.draw("Beautiful Plant", this.story, this.id);
     }
 }

@@ -6,8 +6,8 @@
  */
 class FriendRequestListView extends WindowView {
 
-    #businessCards;
-    #eventManager;
+    businessCards;
+    eventManager;
 
     /**
      * Creates an instance of FriendRequestListView
@@ -23,7 +23,7 @@ class FriendRequestListView extends WindowView {
 
         FriendRequestListView.instance = this;
 
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -41,8 +41,8 @@ class FriendRequestListView extends WindowView {
             return;
         }
 
-        this.#businessCards = businessCards;
-        this.#businessCards.forEach(businessCard => {
+        this.businessCards = businessCards;
+        this.businessCards.forEach(businessCard => {
             $('#friendRequestListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent">
                     <div class="row w-100">
@@ -74,7 +74,7 @@ class FriendRequestListView extends WindowView {
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
                 event.stopPropagation();
-                this.#eventManager.handleAcceptRequestClicked(businessCard);
+                this.eventManager.handleAcceptRequestClicked(businessCard);
             })
 
             $('#reject' + businessCard.getParticipantId()).off();
@@ -83,7 +83,7 @@ class FriendRequestListView extends WindowView {
                     $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
 
                 event.stopPropagation();
-                this.#eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
+                this.eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
             })
         })
     }
@@ -94,15 +94,15 @@ class FriendRequestListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriendRequest(participantId) {
-        this.#businessCards.forEach(businessCard => {
+        this.businessCards.forEach(businessCard => {
 
             if (businessCard.getParticipantId() === participantId) {
-                let index = this.#businessCards.indexOf(businessCard);
-                this.#businessCards.splice(index, 1);
+                let index = this.businessCards.indexOf(businessCard);
+                this.businessCards.splice(index, 1);
             }
         });
 
-        this.draw(this.#businessCards);
+        this.draw(this.businessCards);
     }
 
     /**
@@ -135,9 +135,9 @@ class FriendRequestListView extends WindowView {
      * @param {BusinessCardClient} businessCard requester's business card
      */
     addToFriendRequestList(businessCard) {
-        if (!this.#businessCards.includes(businessCard)) {
-            this.#businessCards.push(businessCard);
-            this.draw(this.#businessCards);
+        if (!this.businessCards.includes(businessCard)) {
+            this.businessCards.push(businessCard);
+            this.draw(this.businessCards);
         }   
     }
 }

@@ -10,14 +10,14 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class BusinessCardClient {
 
-    #participantId;
-    #username;
-    #title;
-    #surname;
-    #forename;
-    #job;
-    #company;
-    #email;
+    participantId;
+    username;
+    title;
+    surname;
+    forename;
+    job;
+    company;
+    email;
 
     /**
      * Creates an instance of Business Card on client-side
@@ -45,14 +45,14 @@ class BusinessCardClient {
             TypeChecker.isString(email);
         }
 
-        this.#participantId = participantId;
-        this.#username = username;
-        this.#title = title;
-        this.#surname = surname;
-        this.#forename = forename;
-        this.#job = job;
-        this.#company = company;
-        this.#email = email;
+        this.participantId = participantId;
+        this.username = username;
+        this.title = title;
+        this.surname = surname;
+        this.forename = forename;
+        this.job = job;
+        this.company = company;
+        this.email = email;
     }
 
     /**
@@ -61,7 +61,7 @@ class BusinessCardClient {
      * @return {String} participantId
      */
     getParticipantId() {
-        return this.#participantId;
+        return this.participantId;
     }
 
     /**
@@ -70,7 +70,7 @@ class BusinessCardClient {
      * @return {String} username
      */
     getUsername() {
-        return this.#username;
+        return this.username;
     }
 
     /**
@@ -79,7 +79,7 @@ class BusinessCardClient {
      * @return {String} title
      */
     getTitle() {
-        return this.#title;
+        return this.title;
     }
 
     /**
@@ -88,7 +88,7 @@ class BusinessCardClient {
      * @return {String} surname
      */
     getSurname() {
-        return this.#surname;
+        return this.surname;
     }
 
     /**
@@ -97,7 +97,7 @@ class BusinessCardClient {
      * @return {String} forename
      */
     getForename() {
-        return this.#forename;
+        return this.forename;
     }
 
     /**
@@ -106,7 +106,7 @@ class BusinessCardClient {
      * @return {String} job
      */
     getJob() {
-        return this.#job;
+        return this.job;
     }
 
     /**
@@ -115,7 +115,7 @@ class BusinessCardClient {
      * @return {String} company
      */
     getCompany() {
-        return this.#company;
+        return this.company;
     }
 
     /**
@@ -124,7 +124,7 @@ class BusinessCardClient {
      * @return {String} email
      */
     getEmail() {
-        return this.#email;
+        return this.email;
     }
 }
 

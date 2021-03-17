@@ -12,13 +12,13 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class GameObjectClient {
 
-    #id;
-    #name;
-    #width;
-    #length;
-    #position;
-    #gameObjectType;
-    #isClickable;
+    id;
+    name;
+    width;
+    length;
+    position;
+    gameObjectType;
+    isClickable;
 
     /**
      * Creates an instance of Game Object on client-side
@@ -41,15 +41,15 @@ class GameObjectClient {
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isBoolean(isClickable);
 
-        this.#id = id;
-        this.#gameObjectType = gameObjectType;
-        this.#name = name;
-        this.#width = width;
-        this.#length = length;
+        this.id = id;
+        this.gameObjectType = gameObjectType;
+        this.name = name;
+        this.width = width;
+        this.length = length;
 
         //Position of left down corner of gameObject
-        this.#position = position;
-        this.#isClickable = isClickable;
+        this.position = position;
+        this.isClickable = isClickable;
     }
 
     /**
@@ -58,7 +58,7 @@ class GameObjectClient {
      * @return {number} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -67,7 +67,7 @@ class GameObjectClient {
      * @return {GameObjectType} gameObjectType
      */
     getGameObjectType() {
-        return this.#gameObjectType;
+        return this.gameObjectType;
     }
 
     /**
@@ -76,7 +76,7 @@ class GameObjectClient {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -85,7 +85,7 @@ class GameObjectClient {
      * @return {number} width
      */
     getWidth() {
-        return this.#width;
+        return this.width;
     }
 
     /**
@@ -94,7 +94,7 @@ class GameObjectClient {
      * @return {number} length
      */
     getLength() {
-        return this.#length;
+        return this.length;
     }
 
     /**
@@ -103,7 +103,7 @@ class GameObjectClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -111,8 +111,8 @@ class GameObjectClient {
      * 
      * @return {boolean} true if clickable, otherwise false
      */
-    isClickable() {
-        return this.#isClickable;
+    getIsClickable() {
+        return this.isClickable;
     }
 }
 

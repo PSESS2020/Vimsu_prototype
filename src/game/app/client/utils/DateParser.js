@@ -6,7 +6,7 @@
  */
 class DateParser {
 
-    #date;
+    date;
 
     /**
      * creates an instance of Date parser
@@ -15,7 +15,7 @@ class DateParser {
      */
     constructor(date) {
         TypeChecker.isDate(date);
-        this.#date = date;
+        this.date = date;
     }
 
     /**
@@ -27,8 +27,8 @@ class DateParser {
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-        var parsedDate = days[this.#date.getDay()] + ", " + this.#printTwoDigitsNumber(this.#date.getDate()) + " "
-            + months[this.#date.getMonth()] + " " + this.#date.getFullYear() + " " + this.parseOnlyTime();
+        var parsedDate = days[this.date.getDay()] + ", " + this.printTwoDigitsNumber(this.date.getDate()) + " "
+            + months[this.date.getMonth()] + " " + this.date.getFullYear() + " " + this.parseOnlyTime();
 
         return parsedDate;
     }
@@ -39,7 +39,7 @@ class DateParser {
      * @return {String} parsed date
      */
     parseWithSeconds() {
-        var parsedDate = this.parse() + ":" + this.#printTwoDigitsNumber(this.#date.getSeconds());
+        var parsedDate = this.parse() + ":" + this.printTwoDigitsNumber(this.date.getSeconds());
         return parsedDate;
     }
 
@@ -49,17 +49,17 @@ class DateParser {
      * @return {String} parsed time
      */
     parseOnlyTime() {
-        var parsedDate = this.#printTwoDigitsNumber(this.#date.getHours()) + ":" + this.#printTwoDigitsNumber(this.#date.getMinutes());
+        var parsedDate = this.printTwoDigitsNumber(this.date.getHours()) + ":" + this.printTwoDigitsNumber(this.date.getMinutes());
         return parsedDate;
     }
 
     /**
-     * @private adds 0 in front of the number if number is less than 10
+     * adds 0 in front of the number if number is less than 10
      * @param {number} number number
      * 
      * @return {String} two digits number
      */
-    #printTwoDigitsNumber = function (number) {
+    printTwoDigitsNumber = function (number) {
         return (number < 10 ? '0' : '') + number;
     }
 }
