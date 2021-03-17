@@ -909,7 +909,7 @@ class ClientController {
      * Receives from server that client has been removed from the conference
      */
     handleFromServerRemoved = function () {
-        $('viewBlocker').show();
+        $('#viewBlocker').show();
     };
 
     /**
@@ -1175,7 +1175,7 @@ class ClientController {
             this.socket.emit('sendMessage', text);
         }
         else
-            $('allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
     }
 
     /**
@@ -1189,7 +1189,7 @@ class ClientController {
             this.socket.emit('evalServer', input);
         }
         else
-            $('allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
+            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
 
     }
 
@@ -1205,7 +1205,7 @@ class ClientController {
             this.socket.emit('lectureMessage', text);
         }
         else
-            $('lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+            $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
 
     }
 
@@ -1495,10 +1495,10 @@ class ClientController {
             }
         });
 
-        $('meetingModal').modal('show');
+        $('#meetingModal').modal('show');
         
 
-        $('meetingModal').on('hidden.bs.modal', function() { 
+        $('#meetingModal').on('hidden.bs.modal', function() { 
             this.jitsi.dispose();
         }.bind(this));
 
