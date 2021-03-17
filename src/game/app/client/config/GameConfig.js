@@ -10,25 +10,35 @@ class GameConfig {
    /*
    * The width of the game context. Determines how broad the game window will be.
    */
-   static CTX_WIDTH = 1900;
+   static get CTX_WIDTH() { 
+      return 1900;
+   }
 
    /*
    * The height of the game context. Determines how height the game window will be.
    */
-   static CTX_HEIGHT = 950;
+   static get CTX_HEIGHT() { 
+      return 950;
+   }
 
    /*
    * The name of the game.
    */
-   static GAME_NAME = "Vimsu";
+   static get GAME_NAME() {
+      return "Vimsu"
+   } 
 
    /*
    * The version of the game.
    */
-   static GAME_VERSION = "v1.0.0 (alpha)";
+   static get GAME_VERSION() {
+      return "v1.0.0 (alpha)";
+   } 
 
    /*
    * The port at which the game communicates with the server.
    */
-   static PORT = 5000;
+   static get PORT() {
+      return 5000;
+   } 
 }
