@@ -6,8 +6,16 @@
  */
 class ImageCache {
 
-    static images = new Map();
-    static enabled = true;
+    constructor() {
+        if (!!ImageCache.instance) {
+            return ImageCache.instance;
+        }
+
+        ImageCache.instance = this;
+
+        this.enabled = true;
+        this.images = new Map();
+    }
 
     /**
      * @static adds an image to the images
@@ -15,7 +23,7 @@ class ImageCache {
      * @param {String} key image key
      * @param {Image} image image
      */
-    static addImage(key, image) {
+    addImage(key, image) {
         TypeChecker.isString(key);
         TypeChecker.isInstanceOf(image, Image);
 
@@ -28,7 +36,7 @@ class ImageCache {
      * 
      * @param {String} key image key
      */
-    static getImage(key) {
+    getImage(key) {
         TypeChecker.isString(key);
 
         if (this.enabled === false) return;
