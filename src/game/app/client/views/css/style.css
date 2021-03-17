@@ -191,9 +191,7 @@ form button:hover {
 }
 
 #allchatMessages div {
-  background: none;
   color: antiquewhite;
-
 }
 
 .navbarIcons {
@@ -409,7 +407,7 @@ vertical-align: middle;
 }
 
 .messageBubbleMyself {
-  max-width: 40vh;
+  max-width: 25vw;
   background-color: rgb(0, 135, 153);
   color: antiquewhite;
   border: none !important;
@@ -418,7 +416,25 @@ vertical-align: middle;
 }
 
 .messageBubbleOthers {
-  max-width: 40vh;
+  max-width: 25vw;
+  background-color: rgb(68, 68, 68);
+  color: antiquewhite;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 5px 8px;
+}
+
+.allChatMessageBubbleMyself {
+  max-width: 200px;
+  background-color: rgb(68, 68, 68);
+  color: antiquewhite;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 5px 8px;
+}
+
+.allChatMessageBubbleOthers {
+  max-width: 200px;
   background-color: rgb(68, 68, 68);
   color: antiquewhite;
   border: none !important;

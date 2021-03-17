@@ -848,7 +848,7 @@ class ClientController {
      * @param {{senderId: String, timestamp: String, text: String}} messages allchat messages
      */
     handleFromServerInitAllchat = function (messages) {
-        this.gameView.initAllchatView(this.currentRoom.getTypeOfRoom(), messages);
+        this.gameView.initAllchatView(this.currentRoom.getTypeOfRoom(), messages, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -1192,8 +1192,10 @@ class ClientController {
             TypeChecker.isString(text);
             this.socket.emit('sendMessage', text);
         }
-        else
-            $('#allchatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
+        else {
+            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
+            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+        }            
     }
 
     /**
@@ -1206,9 +1208,10 @@ class ClientController {
             TypeChecker.isString(input)
             this.socket.emit('evalServer', input);
         }
-        else
-            $('#allchatMessages').prepend($('<div>').text("Failed to send input. No connection to the server."));
-
+        else {
+            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
+            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+        }
     }
 
     /**
@@ -1222,9 +1225,10 @@ class ClientController {
             TypeChecker.isString(text)
             this.socket.emit('lectureMessage', text);
         }
-        else
-            $('#lectureChatMessages').prepend($('<div>').text("Failed to send message. No connection to the server."));
-
+        else {
+            $('#lectureChatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
+            $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
+        }    
     }
 
     /**

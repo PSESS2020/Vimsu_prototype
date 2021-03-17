@@ -6,6 +6,8 @@
  */
 class AllchatView extends Views {
 
+    ownUsername;
+
     /**
      * Creates an instance of Allchat View
      * 
@@ -70,8 +72,9 @@ class AllchatView extends Views {
      * 
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {Object[]} messages allchat messages
+     * @param {String} ownUsername current participant's username
      */
-    draw(typeOfRoom, messages) {
+    draw(typeOfRoom, messages, ownUsername) {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
         $('#allchatHeader').text(typeOfRoom + ' Chat');
 
@@ -87,11 +90,14 @@ class AllchatView extends Views {
         $('#allchatMessages').empty();
         if (messages.length < 1) {
             $('#noAllchat').text("The " + typeOfRoom.toLowerCase() + " chat is somehow quiet. Send some love here?")
-        } else {
-            messages.forEach((message) => {
-                this.appendMessage(message)
-            })
+            return;
         }
+
+        this.ownUsername = ownUsername;
+
+        messages.forEach((message) => {
+            this.appendMessage(message)
+        })
     }
 
     /**
@@ -104,15 +110,20 @@ class AllchatView extends Views {
 
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
-        var messageDiv = `
-            <div style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
-                <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
-                <small><b>${message.username}</b></small>
-                <small class="wrapword">${message.text}</small>
-            </div>
-        `;
+        const isOwnParticipant = message.username === this.ownUsername
 
-        $('#allchatMessages').prepend(messageDiv);
-        $('#allchatMessages').scrollTop(0);
+        const messageDiv =
+            `
+                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start ml-2"}">
+                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
+                        ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}
+                        <small class="wrapword" style="text-align: ${isOwnParticipant ? "right" : "left"};">${message.text}</small>
+                    </div>
+                </div>
+            `
+
+        $('#allchatMessages').append(messageDiv);
+        $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
     }
 }
