@@ -124,7 +124,8 @@ form button:hover {
 }
 
 .modal-body-large {
-  overflow: auto; height: 75vh
+  overflow: auto; 
+  height: 500px
 }
 
 #connectionStatus {
