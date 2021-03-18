@@ -619,7 +619,7 @@ class ClientController {
     handleFromServerFriendRequestList = function (friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
-            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.forename));
+            friendRequestList.unshift(new BusinessCardClient(data.friendId, data.username, data.forename));
         });
 
         this.gameView.initFriendRequestListView(friendRequestList);
