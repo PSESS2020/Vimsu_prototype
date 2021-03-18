@@ -1,20 +1,20 @@
 /**
- * The Small Diner Table Object View
+ * The IFrame Object View
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class SmallDinerTableView extends GameObjectView {
+class IFrameObjectView extends GameObjectView {
 
     url;
     
     /**
-     * Creates an instance of SmallDinerTableView
+     * Creates an instance of IFrameObjectView
      * 
-     * @param {Image} objectImage smallDinerTable image
-     * @param {PositionClient} gridPosition smallDinerTable position
-     * @param {number} screenPositionOffset smallDinerTable screen position offset
-     * @param {String} name smallDinerTable name
+     * @param {Image} objectImage object image
+     * @param {PositionClient} gridPosition object position
+     * @param {number} screenPositionOffset object screen position offset
+     * @param {String} name object name
      * @param {String} url external website url
      */
     constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, url) {
@@ -25,7 +25,7 @@ class SmallDinerTableView extends GameObjectView {
     }
 
     /**
-     * Called if participant clicks the smallDinerTable
+     * Called if participant clicks the iFrameObject
      */
     onclick() {
         

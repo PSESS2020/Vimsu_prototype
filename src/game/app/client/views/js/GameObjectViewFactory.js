@@ -200,8 +200,14 @@ class GameObjectViewFactory {
 
                 var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 7 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+
+                }   
                 else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -210,8 +216,14 @@ class GameObjectViewFactory {
 
                 var tableOffset = { x: -4, y: this.tileRowHeight - gameObjectImage.height + 20 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+
+                }
                 else throw new Error("The image for the food view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -223,8 +235,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable) {
-                        gameObjectView = new SmallDinerTableView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -238,8 +250,14 @@ class GameObjectViewFactory {
     
                     var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 52 };
     
-                    if (gameObjectImage !== undefined)
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                    if (gameObjectImage !== undefined) {
+
+                        if (isClickable && url !== undefined) {
+                            gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                        } else
+                            gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+    
+                    }
                     else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
     
                     break; 
@@ -249,28 +267,48 @@ class GameObjectViewFactory {
 
                 var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 50 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+
+                }
                 else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
             
             case GameObjectType.RECEPTIONCOUNTER:
                 gameObjectImage = this.assetImages[objectName];
+
                 var receptionCounterOffset = { x: 0, y: -this.tileRowHeight + 8};
     
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
+
+                }
                 else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
     
                 break;
 
             case GameObjectType.RECEPTIONCOUNTERSIDEPART:
                 gameObjectImage = this.assetImages[objectName];
+
                 var receptionCounterOffset = { x: -9, y: this.tileRowHeight - gameObjectImage.height + 28};
     
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
+
+                }
                 else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
     
                 break;
@@ -279,8 +317,14 @@ class GameObjectViewFactory {
 
                 var tableOffset = { x: 14, y: this.tileRowHeight - gameObjectImage.height + 12 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
+
+                }
                 else throw new Error("The image for the drinking machine could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break; 
@@ -290,8 +334,14 @@ class GameObjectViewFactory {
 
                 var chairOffset = { x: 15, y: this.tileRowHeight - gameObjectImage.height - 6 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, chairOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
+
+                }
                 else throw new Error("The image for the chair view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -301,8 +351,14 @@ class GameObjectViewFactory {
 
                 var sofaOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height - 4 };
 
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
+                if (gameObjectImage !== undefined) {
+
+                    if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, sofaOffset, objectName, url);
+                    } else
+                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
+
+                }
                 else throw new Error("The image for the sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
 
                 break;
@@ -311,10 +367,13 @@ class GameObjectViewFactory {
                 gameObjectImage = this.assetImages[objectName];
 
                 var plantOffset = { x: -5, y: this.tileRowHeight - gameObjectImage.height - 10 };
+
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable) {
+                    if (isClickable && url === undefined) {
                         gameObjectView = new PlantView(gameObjectImage, [], pos, plantOffset, objectName);
+                    } else if (isClickable && url !== undefined) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, plantOffset, objectName, url);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, plantOffset, objectName);
 
