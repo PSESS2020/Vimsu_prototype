@@ -1,8 +1,8 @@
 <html>
 
-<body>
+<body style="display: none">
     <!--UPPER HUD-->
-    <div class="row mt-2 justify-content-between">
+    <div class="row mt-2 justify-content-between" id="upperHUD" style="display: none">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="text-align: left;">
                 <div id="time" style="color: antiquewhite"></div>
@@ -55,7 +55,7 @@
     </div>
 
     <!--MIDDLE HUD-->
-    <div class="row mt-2 justify-content-between">
+    <div class="row mt-2 justify-content-between" id="middleHUD" style="display: none">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="width: 250px;">
                 <div id="allchatWindow" style="z-index: 300;">
@@ -90,7 +90,7 @@
     </div>
 
     <!--LOWER HUD BUTTON-->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="lowerHUD" style="display: none">
         <div class="d-flex flex-row col-12" style="bottom:0; position: absolute">
             <div class="d-flex flex-column" style="z-index: 300;">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
