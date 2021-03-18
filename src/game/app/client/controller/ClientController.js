@@ -637,7 +637,7 @@ class ClientController {
     handleFromServerFriendRequestList = function (friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
-            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            friendRequestList.unshift(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
         });
 
         this.gameView.initFriendRequestListView(friendRequestList);
