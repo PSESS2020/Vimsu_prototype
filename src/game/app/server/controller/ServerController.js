@@ -32,6 +32,7 @@ const GroupService = require('../services/GroupService');
 const Meeting = require('../models/Meeting.js');
 const Message = require('../models/Message.js');
 const RoomFactory = require('../models/RoomFactory.js');
+const Floorplan = require('../utils/Floorplan.js');
 
 /**
  * The Server Controller
@@ -111,6 +112,9 @@ module.exports = class ServerController {
         });
 
         this.#roomFactory = new RoomFactory();
+        Object.entries(Floorplan).forEach(roomData => {
+            this.#roomFactory.buildRoom(roomData);
+        })
         
         this.#banList = [];
         this.#muteList = [];

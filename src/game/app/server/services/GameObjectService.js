@@ -84,6 +84,12 @@ module.exports = class GameObjectService {
         }
     }
 
+    #isKnownType = function (type) {
+        if(!GameObjectType.hasOwnProperty(type)) {
+            throw new TypeError(type + ' is not a known objecttype!')
+        }
+    }
+
     /* ##################################################################### */
     /* ###################### GAMEOBJECT INFORMATIONS ###################### */
     /* ##################################################################### */
@@ -792,4 +798,30 @@ module.exports = class GameObjectService {
         } else
             return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
+
+    /* ##################################################################### */
+    /* ############################ NEW METHODS ############################ */
+    /* ##################################################################### */
+
+    /* The methods in this section are an attempt to replace some of the highly
+     * specific methods from above by some new, more flexible methods. As a part
+     * of this, the game objects in the GameObjectType-Class had to be changed a
+     * bit. */
+
+    createObject(roomId, type, xPos, yPos, isSolid, isClickable, url) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, isSolid, isClickable, url);
+        this.#isKnownType(type);
+        let objTypeData = GameObjectType[type];
+        return new GameObject(roomId, this.#generateGameObjectID(), objTypeData.TYPE, objTypeData.NAME, objTypeData.WIDTH, objTypeData.LENGTH, new Position(roomId, xPos, yPos), isSolid, isClickable, url);
+    }
+
+    // replace GameObjectType with GameEnvStyle
+    // do the same for tiles
+    // do i really want to have this?
+    createEnv(roomId, type, xPos, yPos, isSolid, isClickable) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwall_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    }
+
+
 }

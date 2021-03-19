@@ -41,9 +41,11 @@ module.exports = Object.freeze({
         WIDTH: 100,
         LENGTH: 100,
 
-        SHAPE: null, /* Here people give either holes or non-holes in the form of arrays? */
+        //SHAPE: null, /* Here people give either holes or non-holes in the form of arrays? */
 
-        WALLTYPE: 'default',
+        // replace string by global
+        WALLTYPE_LEFT: 'default',
+        WALLTYPE_RIGHT: 'default',
         TILETYPE: 'default',
         MAPELEMENTS: [],
         DOORS: [],

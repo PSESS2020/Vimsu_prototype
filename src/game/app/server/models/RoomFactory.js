@@ -24,7 +24,7 @@ module.exports = class RoomFactory {
 
         switch(roomData.TYPE) {
             case TypeOfRoom.RECEPTION:
-                this.#buildBlueprintReception(roomData);
+                // just do it via roomDecorator
                 break;
             case TypeOfRoom.FOYER:
                 break;
@@ -42,16 +42,20 @@ module.exports = class RoomFactory {
         }
     }
 
-    #buildBlueprintReception = function() {
+    #createObjectFromData = function(objData) {
+        if (Array.isArray(objData.POS)) {
+            for (i = 0; i < objData.POS.length; i++) {
+                if(!Array.isArray(objData.POS[i])) {
+                    throw new TypeError('When array is passed as position of objects, it needs to be array of array');
+                }
+                for (j = 0; j < objData.POS[i].length; j++) {
+                    listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, i, j, objData.SOLID, objData.CLICKABLE, objData.URL));
+                }
+            }
 
-    }
-
-    #buildBlueprintFoyer = function() {
-
-    }
-
-    #buildBlueprintFoodcourt = function() {
-
+        } else {
+            listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, objData.POS.X, objData.POS.Y, objData.SOLID, objData.CLICKABLE, objData.URL));
+        }
     }
 
     #buildByPlan = function(roomData) {
@@ -60,36 +64,41 @@ module.exports = class RoomFactory {
         let listOfMapElements = [];
         let listOfGameObjects = [];
 
-        // the next three functions need to be slightly altered s.t. switching the wall-type will actually do someting.
+        // these methods still need proper handling for when some arguments are
+        // missing.
+
+        // Also shape-handling
+
+        // And allow arrays as positions.
 
         // ADD TILES
         for (var i = 0; i < this.#room.getLength(); i++) {
             for (var j = 0; j < this.#room.getWidth(); j++) {
                 // Whats the best way to add the shape here?
-                listOfMapElements.push(objService.createTile(roomData.ID, AssetPaths.defaultTile, i, j, false, false));
+                listOfMapElements.push(objService.createTile(roomData.ID, roomData.TILETYPE, i, j, false, false));
             }
         }
 
         // ADD LEFT WALLS
         for (var i = 0; i < this.#room.getLength(); i++) {
-            listOfMapElements.push(objService.createWall(roomData.ID, AssetPaths.defaultWall.left, 1, 1, i, -1, false, false));
+            listOfMapElements.push(objService.createWall(roomData.ID, roomData.WALLTYPE_LEFT, i, -1, false, false));
         }
 
         // ADD RIGHT WALLS
         for (var j = 0; j < this.#room.getWidth(); j++) {
-            listOfMapElements.push(objService.createWall(roomData.ID, AssetPaths.defaultWall.right, 1, 1, this.#room.getLength(), j, false, false));
+            listOfMapElements.push(objService.createWall(roomData.ID, roomData.WALLTYPE_RIGHT, this.#room.getLength(), j, false, false));
         }
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
+        roomData.MAPELEMENTS.forEach(objData => {
+            this.#createObjectFromData(objData);
+        })
 
         // ADD OBJECTS
         // tables, plants, food and more
         roomData.OBJECTS.forEach(objData => {
-            listOfGameObjects.push(objService.createObject(roomData.ID, objData.POS_X, objData.POS_Y, objData.SOLID, objData.CLICKABLE, objData.URL));
-
-            // handling to allow for array instead
-            // of integer for position
+            this.#createObjectFromData(objData);
         })
 
         // ADD DOORS
