@@ -78,6 +78,7 @@ hr {
 
 .link:hover, .nav-link:hover, .nav-item a.active {
   color: var(--tosca-color) !important;
+  background-color: transparent;
 }
 
 .primary-button {
