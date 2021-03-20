@@ -106,7 +106,7 @@ module.exports = class RouteController {
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('home', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('home', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('home');
             }
@@ -115,7 +115,7 @@ module.exports = class RouteController {
         this.#app.get('/about-us', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('about-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('about-us', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('about-us');
             }
@@ -124,7 +124,7 @@ module.exports = class RouteController {
         this.#app.get('/tutorial', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('tutorial', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('tutorial', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('tutorial');
             }
@@ -133,7 +133,7 @@ module.exports = class RouteController {
         this.#app.get('/contact-us', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('contact-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('contact-us', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('contact-us');
             }
@@ -142,7 +142,7 @@ module.exports = class RouteController {
         this.#app.get('/privacy-policy', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('privacy-policy', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('privacy-policy', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('privacy-policy');
             }
@@ -152,26 +152,26 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    response.render('upload', { loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                    response.render('upload', this.#getLoggedInParameters({}, username));
                 } else {
-                    response.redirect('/');
+                    response.render('page-not-found');
                 }
             });
 
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', { notInt: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', { notDate: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
                 var lectureTitle = request.body.title;
@@ -181,10 +181,10 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
                     }
                     else {
-                        response.render('upload', { uploading: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
+                        response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
@@ -198,14 +198,14 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
                 }
             });
         }
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {
-                response.redirect('/');
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('login');
             }
@@ -220,7 +220,7 @@ module.exports = class RouteController {
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
 
             } else {
-                response.redirect('/');
+                response.render('page-not-found');
             }
         })
 
@@ -249,7 +249,7 @@ module.exports = class RouteController {
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
-                response.redirect('/');
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('register');
             }
@@ -297,17 +297,21 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/logout', (request, response) => {
-            request.session.destroy();
-            response.redirect('/');
+            if (request.session.loggedin === true) {
+                request.session.destroy();
+                response.redirect('/');
+            } else {
+                response.render('page-not-found');
+            }
         });
 
         this.#app.get('/editAccount', (request, response) => {
             if (request.session.loggedin === true) {
                 forename = request.session.forename;
-                response.render('editAccount', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
+                response.render('editAccount', this.#getLoggedInParameters({ forename: forename }, username))
             }
             else {
-                response.redirect('/');
+                response.render('page-not-found');
             }
         })
 
@@ -324,17 +328,21 @@ module.exports = class RouteController {
                 response.redirect('/');
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                return response.render('editAccount', this.#getLoggedInParameters({ editAccountFailed: true }, username));
             })
         })
 
         this.#app.get('*', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('page-not-found', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('page-not-found');
             }
         });
+    }
+
+    #getLoggedInParameters = function (otherParameters, username) {
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
     }
 }
