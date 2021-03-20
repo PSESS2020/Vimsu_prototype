@@ -4,77 +4,95 @@
 <head>
     <%- include('partials/head') %>
 </head>
-<script>
-    function select() {
-        var title = "<%=title%>";
-        document.getElementById("title").value = title;
-    }
-
-    $(document).ready(() => {
-        select();
-    })
-
-</script>
 
 <body>
-    <%- include('partials/header') %>
-
     <div class="container">
-        <h1 style="margin-top: 20px; font-size:xx-large; text-align: center;">Edit Account Information</h1>
-        <form action="saveAccountChanges" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:20px">
-            <hr />
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label for="title">Title</label>
-                    <select class="form-control" id="title" name="title" required>
-                        <option selected>Title</option>
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Ms.</option>
-                        <option>Miss</option>
-                        <option>Dr.</option>
-                        <option>Prof.</option>
-                        <option>Rev.</option>
-                    </select>
+		<%- include('partials/header') %>
+        <section class="row align-items-center justify-content-center" id="upload-content">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+                <h5>Edit Account Information</h5>
+                <br>
+                <div class="row justify-content-left m-0 p-0">
+                    <% if(locals.invalidTitle === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
+                            Please choose a title from the options we provided.</small>
+                    <% } else if (locals.editAccountFailed === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an
+                            error while saving your changes. Please try again.</small>
+                    <% } %>
                 </div>
-                <div class="form-group col-md-5">
-                    <label for="inputSurname">Surname</label>
-                    <input type="text" class="form-control" id="inputSurname" name="surname" value="<%=surname%>"
-                        required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="inputForename">Forename</label>
-                    <input type="text" class="form-control" id="inputForename" name="forename" value="<%=forename%>"
-                        required>
-                </div>
-            </div>
+                <br>
+                <form action="saveAccountChanges" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="mt-2 input-label">Username: </label>
+                        <input class="form-control" type="text" id="usernameInput" name="username"
+                            value="<%=username%>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="mt-2 input-label">Email: </label>
+                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" readonly>
+                    </div>
 
-            <div class="form-row" style="margin-bottom: -15px; ">
-                <div class="form-group col-md-6">
-                    <label for="inputJob">Job/Profession</label>
-                    <input type="text" class="form-control" id="inputJob" name="job" value="<%=job%>" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputCompany">Company/University</label>
-                    <input type="text" class="form-control" id="inputCompany" name="company" value="<%=company%>"
-                        required>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group col-4">
+                            <label for="title" class="mt-2 input-label">Title: </label>
+                            <select class="form-control" name="title" id="inputTitle" required>
+                                <option selected>Title</option>
+                                <option>Mr.</option>
+                                <option>Mrs.</option>
+                                <option>Ms.</option>
+                                <option>Miss</option>
+                                <option>Dr.</option>
+                                <option>Prof.</option>
+                                <option>Rev.</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="forename" class="mt-2 input-label">Forename: </label>
+                            <input type="text" class="form-control" id="inputForename" name="forename"
+                                value="<%=forename%>" required>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="surname" class="mt-2 input-label">Surname: </label>
+                            <input type="text" class="form-control" id="inputSurname" name="surname"
+                                value="<%=surname%>" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="job" class="mt-2 input-label">Job/Profession: </label>
+                            <input type="text" class="form-control" id="inputJob" name="job"
+                                value="<%=job%>" required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="company" class="mt-2 input-label">Company/School: </label>
+                            <input type="text" class="form-control" id="inputCompany" name="company"
+                                value="<%=company%>" required>
+                        </div>
+                    </div>
+                    <button class="primary-button mt-4 p-2" type="submit">
+                        <span>Save changes</span>
+                    </button>
+                </form>
             </div>
-            <hr />
-            <div class="row justify-content-left m-0 p-0">
-                <% if(locals.invalidTitle === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Invalid title.
-                    Please choose a title from the options we provided.</p>
-                <% } else if (locals.editAccountFailed === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
-                    error while saving your changes. Please try again.</p>
-                <% } else { %>
-                <% } %>
-            </div>
-            <input class="btn btn-block btn-submit" type="submit" value="Save changes"
-                style="margin-bottom: 30px; "></button>
-        </form>
-    </div>
+        </section>
+	</div>
+    <%- include('partials/footer') %>
+
+    <script>
+        function select() {
+            var title = "<%=title%>";
+            document.getElementById("inputTitle").value = title;
+        }
+    
+        $(document).ready(() => {
+            select();
+        })
+
+        $('#usernameInput').tooltip({'trigger':'focus', 'title': 'Username cannot be changed'});
+        $('#emailInput').tooltip({'trigger':'focus', 'title': 'Email cannot be changed'});
+    </script>
 </body>
 
 </html>
