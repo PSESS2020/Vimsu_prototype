@@ -106,7 +106,6 @@ module.exports = class RouteController {
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                forename = request.session.forename;
                 response.render('home', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('home');
