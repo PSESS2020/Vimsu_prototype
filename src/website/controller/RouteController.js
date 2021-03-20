@@ -9,7 +9,6 @@ const Settings = require('../../game/app/server/utils/Settings.js');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
-const UAParser = require('ua-parser-js');
 
 /**
  * The Route Controller
