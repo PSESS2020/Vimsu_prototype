@@ -48,6 +48,7 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getListOfGameObjects()).to.eql([]);
         expect(testRoom.getListOfNPCs()).to.eql([]);
         expect(testRoom.getNPC(1)).to.eql(undefined);
+        expect(testRoom.getGameObject(1)).to.eql(undefined);
         expect(testRoom.getListOfDoors()).to.eql([]);
         expect(testRoom.getListOfMapElements()).to.eql([]);
 

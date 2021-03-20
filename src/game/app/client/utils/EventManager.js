@@ -335,6 +335,15 @@ class EventManager {
     }
 
     /**
+     * called from View on IFrame Object click
+     * 
+     * @param {number} gameObjectID 
+     */
+    handleIFrameObjectClick(gameObjectID) {
+        this.clientController.handleFromViewShowExternalWebsiteView(gameObjectID);
+    }
+
+    /**
      * called from View on sending friend request
      * 
      * @param {String} participantRecipientId friend request recepient ID

@@ -6,8 +6,9 @@
  */
 class IFrameObjectView extends GameObjectView {
 
-    url;
-    
+    gameObjectID;
+    eventManager;
+
     /**
      * Creates an instance of IFrameObjectView
      * 
@@ -15,34 +16,30 @@ class IFrameObjectView extends GameObjectView {
      * @param {PositionClient} gridPosition object position
      * @param {number} screenPositionOffset object screen position offset
      * @param {String} name object name
-     * @param {String} url external website url
+     * @param {number} gameObjectID ID of gameObject that is represented by this view
+     * @param {EventManager} eventManager event manager instance
      */
-    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, url) {
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, gameObjectID, eventManager) {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
-        TypeChecker.isString(url);
+        TypeChecker.isInt(gameObjectID);
 
-        this.url = url;
+        this.gameObjectID = gameObjectID;
+        this.eventManager = eventManager;
+    }
+
+    /**
+     * Returns IFrame object ID
+     * 
+     * @returns {number} IFrame object ID
+     */
+     getGameObjectID() {
+        return this.gameObjectID;
     }
 
     /**
      * Called if participant clicks the iFrameObject
      */
     onclick() {
-        
-        $(function () {
-            $('#closeExternalWebsiteButton').off();
-            $('#closeExternalWebsiteButton').on('click', (event) => {
-                $('#externalWebsite').hide();
-                document.getElementById('iframe').src = "";
-
-                /* Needed to stop video after close button click */
-                $('.iframeclass').each(function() {
-                    this.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*')
-                });
-            });
-        });
-
-        document.getElementById('iframe').src = this.#url;
-        $('#externalWebsite').show();
+        this.eventManager.handleIFrameObjectClick(this.gameObjectID);  
     }
 }
