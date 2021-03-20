@@ -106,10 +106,6 @@ module.exports = class RouteController {
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
                 response.render('home', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('home');
@@ -119,10 +115,6 @@ module.exports = class RouteController {
         this.#app.get('/about-us', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
                 response.render('about-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('about-us');
@@ -132,10 +124,6 @@ module.exports = class RouteController {
         this.#app.get('/tutorial', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
                 response.render('tutorial', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('tutorial');
@@ -145,26 +133,18 @@ module.exports = class RouteController {
         this.#app.get('/contact-us', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
                 response.render('contact-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('contact-us');
             }
         });
 
-        this.#app.get('/impressum', (request, response) => {
+        this.#app.get('/privacy-policy', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
-                response.render('impressum', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+                response.render('privacy-policy', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
-                response.render('impressum');
+                response.render('privacy-policy');
             }
         });
 
@@ -411,10 +391,6 @@ module.exports = class RouteController {
         this.#app.get('*', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                email = request.session.email;
-                title = request.session.title;
-                forename = request.session.forename;
-                surname = request.session.surname;
                 response.render('page-not-found', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
                 response.render('page-not-found');
