@@ -52,6 +52,18 @@ body {
 
 #logo-text {
   text-align: left;
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -o-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
+}
+
+#logo-text:hover {
+  -webkit-transform:scale(1.1);
+  -moz-transform:scale(1.1);
+  -o-transform:scale(1.1);
+  -ms-transform:scale(1.1);
+  transform:scale(1.1)
 }
 
 #logo img {
@@ -87,10 +99,19 @@ hr {
   border: 1px solid var(--grey-color);
   border-radius: .25rem;
   min-width: 100px;
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -o-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
 }
 
 .primary-button:hover {
   color: var(--tosca-color);
+  -webkit-transform:scale(1.1);
+  -moz-transform:scale(1.1);
+  -o-transform:scale(1.1);
+  -ms-transform:scale(1.1);
+  transform:scale(1.1)
 }
 
 #content {
@@ -148,7 +169,6 @@ hr {
 .input-label {
   text-align: left;
   font-size: 13px;
-
   display: flex;
 }
 
@@ -190,45 +210,57 @@ input {
   text-align: center;
 }
 
+@media all and (min-width: 992px) {
+  .navbar .nav-item .dropdown-menu {
+    display: none;
+  }
+  .navbar .nav-item:hover .nav-link {
+    color: #fff;
+  }
+  .navbar .nav-item:hover .dropdown-menu {
+    display: block;
+  }
+  .navbar .nav-item .dropdown-menu {
+    margin-top: 0;
+  }
+}
+
 @media (max-width: 575.98px) {
   #logo #logo-text {
-      text-align: center;
+    text-align: center;
   }
   #logo-text {
-      align-items: flex-start;
-      height: 100%;
-      margin-bottom: 20px;
+    align-items: flex-start;
+    height: 100%;
+    margin-bottom: 20px;
   }
   hr {
-      margin: 10px;
+    margin: 10px;
   }
   #register-content {
-      height: 80vh;
+    height: 80vh;
   }
-
   #login-content {
-      height: 70vh;
+    height: 70vh;
   }
-
   #upload-content {
-      height: 100vh;
+    height: 100vh;
   }
-
   .form-control {
-      font-size: 12px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 991.98px) {
   #title {
-      text-align: center;
-      margin-top: 30px;
+    text-align: center;
+    margin-top: 30px;
   }
   #slideshow {
-      margin-top: 30px;
-      margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
   #content {
-      height: 600px;
+    height: 600px;
   }
 }
