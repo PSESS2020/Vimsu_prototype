@@ -215,6 +215,7 @@ class ClientController {
         this.socket.on('join group', this.handleFromServerJoinGroup.bind(this));
         this.socket.on('leave group', this.handleFromServerLeaveGroup.bind(this));
         this.socket.on('meetingList', this.handleFromServerShowMeetingList.bind(this));
+        this.socket.on('showExternalWebsite', this.handleFromServerShowExternalWebsite.bind(this));
     }
 
     /*  */
@@ -321,6 +322,7 @@ class ClientController {
             TypeChecker.isInt(mapElement.cordX);
             TypeChecker.isInt(mapElement.cordY);
             TypeChecker.isBoolean(mapElement.isClickable);
+            TypeChecker.isBoolean(mapElement.isIFrameObject);
         });
         TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
         listOfGameObjectsData.forEach(gameObject => {
@@ -333,6 +335,7 @@ class ClientController {
             TypeChecker.isInt(gameObject.cordX);
             TypeChecker.isInt(gameObject.cordY);
             TypeChecker.isBoolean(gameObject.isClickable);
+            TypeChecker.isBoolean(gameObject.isIFrameObject);
         });
         TypeChecker.isInstanceOf(npcData, Array);
         npcData.forEach(npc => {
@@ -358,14 +361,14 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject))
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.url));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject));
         });
 
         //transform NPCs to NPCClients
@@ -1136,6 +1139,18 @@ class ClientController {
         this.gameView.removeChat(groupChatID);
     }
 
+    /**
+     * Receives from server after clicking an IFrameObject
+     * 
+     * @param {url} url URL
+     * @param {number} gameObjectID GameObject id
+     */
+     handleFromServerShowExternalWebsite = function (url, gameObjectID) {
+        TypeChecker.isString(url);
+        TypeChecker.isInt(gameObjectID);
+        this.gameView.initExternalWebsiteView(url, gameObjectID.toString());
+    }
+
     /*  */
     /*  HANDLE FROM VIEW  */
     /*  */
@@ -1439,6 +1454,19 @@ class ClientController {
 
         if (this.socketReady()) {
             this.socket.emit('getNPCStory', npcId);
+        }
+    }
+
+    /**
+     * called from View on IFrame Object click
+     * 
+     * @param {number} gameObjectID 
+     */
+    handleFromViewShowExternalWebsiteView(gameObjectID) {
+        this.gameView.addExternalWebsiteWindow(gameObjectID.toString());
+
+        if (this.socketReady()) {
+            this.socket.emit('getExternalWebsiteData', gameObjectID);
         }
     }
 

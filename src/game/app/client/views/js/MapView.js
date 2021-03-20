@@ -136,7 +136,7 @@ class MapView extends Views {
      */
     buildMap = function() {
 
-        this.selectedTile = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false);
+        this.selectedTile = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
 
         for (var row = (this.xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.yNumTiles; col++) {
@@ -207,7 +207,7 @@ class MapView extends Views {
      */
     createObjectView = function(gameObject, position) {
         var objectType = gameObject.getGameObjectType();
-        var object = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getURL());
+        var object = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getIsIFrameObject(), gameObject.getId());
 
         if (object != null) {
             this.gameObjects.push(object);
@@ -301,9 +301,7 @@ class MapView extends Views {
         if (object !== null && object.getIsClickable()) {
 
             let viewObject = this.clickableObjects.find(viewObject => {
-                return object instanceof GameObjectClient && object.getName() === viewObject.getName() 
-                    && object.getPosition().getCordX() === viewObject.getGridPosition().getCordX() 
-                    && object.getPosition().getCordY() + Settings.MAP_BLANK_TILES_WIDTH === viewObject.getGridPosition().getCordY();
+                return object instanceof GameObjectClient && object.getId() === viewObject.getGameObjectID();
             });
 
             if (viewObject != undefined) viewObject.onclick();

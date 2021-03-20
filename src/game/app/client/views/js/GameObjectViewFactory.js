@@ -167,20 +167,21 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if object is clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {boolean} isIFrameObject true if object is an IFrameObject, otherwise false
+     * @param {?number} gameObjectID ID of this gameObject if it exists
      *
      * @return {GameObjectView} GameObjectViw instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, url) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
         TypeChecker.isBoolean(isClickable);
+        TypeChecker.isBoolean(isIFrameObject);
 
-        if (url !== undefined) 
-            TypeChecker.isString(url);
+        if (gameObjectID !== undefined) 
+            TypeChecker.isInt(gameObjectID);
 
-        
         var gameObjectView;
         var gameObjectImage;
 
@@ -202,8 +203,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -218,8 +219,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -235,8 +236,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -252,8 +253,8 @@ class GameObjectViewFactory {
     
                     if (gameObjectImage !== undefined) {
 
-                        if (isClickable && url !== undefined) {
-                            gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                        if (isClickable && isIFrameObject) {
+                            gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                         } else
                             gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
     
@@ -269,8 +270,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -286,8 +287,8 @@ class GameObjectViewFactory {
     
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
 
@@ -303,8 +304,8 @@ class GameObjectViewFactory {
     
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
 
@@ -319,8 +320,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
 
@@ -336,8 +337,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, chairOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, chairOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
 
@@ -353,8 +354,8 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, sofaOffset, objectName, url);
+                    if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, sofaOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
 
@@ -370,10 +371,10 @@ class GameObjectViewFactory {
 
                 if (gameObjectImage !== undefined) {
 
-                    if (isClickable && url === undefined) {
-                        gameObjectView = new PlantView(gameObjectImage, [], pos, plantOffset, objectName);
-                    } else if (isClickable && url !== undefined) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, plantOffset, objectName, url);
+                    if (isClickable && !isIFrameObject) {
+                        gameObjectView = new PlantView(gameObjectImage, [], pos, plantOffset, objectName, gameObjectID);
+                    } else if (isClickable && isIFrameObject) {
+                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, plantOffset, objectName, gameObjectID, this.eventManager);
                     } else
                         gameObjectView = new GameObjectView(gameObjectImage, [], pos, plantOffset, objectName);
 

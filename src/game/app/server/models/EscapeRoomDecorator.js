@@ -74,7 +74,7 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
         listOfGameObjects.push(objService.createPlant(Settings.ESCAPEROOM_ID, this.#room.getLength() - 1, this.#room.getWidth() - 1, true, false));
 
         /* These Objects are here for IFrame-Testing */
-        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 0, true, true, "https://www.youtube.com/embed/x51zMg7roIs?enablejsapi=1"),
+        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 0, true, true, "https://www.kit.edu/"),
             objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 1, true, false),
             objService.createTea(Settings.ESCAPEROOM_ID, 0, 1, true, true, "https://www.kit.edu/"),
             objService.createPlant(Settings.ESCAPEROOM_ID, 0, 2, true, true, "https://www.kit.edu/"),
