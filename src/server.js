@@ -31,6 +31,11 @@ app.set('port', PORT);
 app.use('/website', express.static(path.join(__dirname + '/website')));
 app.use('/client', express.static(path.join(__dirname + '/game/app/client')));
 
+app.use(function (req, res, next) {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    next();
+});
+
 /* Sets the server to websockets only. */
 io.set("transports", ["websocket"]);
 
@@ -46,7 +51,7 @@ require('dotenv').config();
 
 
 /* Initializes blob instance if video storage is needed for this conference */
-var blob; 
+var blob;
 var blobClient;
 
 if (Settings.VIDEOSTORAGE_ACTIVATED) {
