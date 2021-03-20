@@ -20,8 +20,9 @@ body {
   font-family: 'Montserrat', sans-serif;
   overflow-x: hidden;
   overflow-y: scroll;
-  background: var(--black-color) url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/stars.png) repeat;
+  background: var(--black-color) url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/stars.png);
   background-size: cover;
+  background-attachment: fixed;
   color: var(--grey-color);
 }
 
