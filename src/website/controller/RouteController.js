@@ -347,6 +347,7 @@ module.exports = class RouteController {
                 surname = request.session.surname;
                 job = request.session.job;
                 company = request.session.company;
+                email = request.session.email;
                 response.render('editAccount', { loggedIn: true, username: username, email: email, title: title, forename: forename, surname: surname, job: job, company: company, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
             }
             else {
