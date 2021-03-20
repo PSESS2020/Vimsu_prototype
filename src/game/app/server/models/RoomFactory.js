@@ -42,22 +42,6 @@ module.exports = class RoomFactory {
         }
     }
 
-    #createObjectFromData = function(objData) {
-        if (Array.isArray(objData.POS)) {
-            for (i = 0; i < objData.POS.length; i++) {
-                if(!Array.isArray(objData.POS[i])) {
-                    throw new TypeError('When array is passed as position of objects, it needs to be array of array');
-                }
-                for (j = 0; j < objData.POS[i].length; j++) {
-                    listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, i, j, objData.SOLID, objData.CLICKABLE, objData.URL));
-                }
-            }
-
-        } else {
-            listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, objData.POS.X, objData.POS.Y, objData.SOLID, objData.CLICKABLE, objData.URL));
-        }
-    }
-
     #buildByPlan = function(roomData) {
         let room = new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
 
@@ -75,18 +59,18 @@ module.exports = class RoomFactory {
         for (var i = 0; i < this.#room.getLength(); i++) {
             for (var j = 0; j < this.#room.getWidth(); j++) {
                 // Whats the best way to add the shape here?
-                listOfMapElements.push(objService.createTile(roomData.ID, roomData.TILETYPE, i, j, false, false));
+                listOfMapElements.push(objService.createEnv(roomData.ID, roomData.TILETYPE, i, j, false, false));
             }
         }
 
         // ADD LEFT WALLS
         for (var i = 0; i < this.#room.getLength(); i++) {
-            listOfMapElements.push(objService.createWall(roomData.ID, roomData.WALLTYPE_LEFT, i, -1, false, false));
+            listOfMapElements.push(objService.createEnv(roomData.ID, roomData.WALLTYPE_LEFT, i, -1, false, false));
         }
 
         // ADD RIGHT WALLS
         for (var j = 0; j < this.#room.getWidth(); j++) {
-            listOfMapElements.push(objService.createWall(roomData.ID, roomData.WALLTYPE_RIGHT, this.#room.getLength(), j, false, false));
+            listOfMapElements.push(objService.createEnv(roomData.ID, roomData.WALLTYPE_RIGHT, this.#room.getLength(), j, false, false));
         }
 
         // ADD MAPELEMENTS
@@ -106,6 +90,22 @@ module.exports = class RoomFactory {
         // ADD NPCS
 
 
+    }
+
+    #createObjectFromData = function(objData) {
+        if (Array.isArray(objData.POS)) {
+            for (i = 0; i < objData.POS.length; i++) {
+                if(!Array.isArray(objData.POS[i])) {
+                    throw new TypeError('When array is passed as position of objects, it needs to be array of array');
+                }
+                for (j = 0; j < objData.POS[i].length; j++) {
+                    listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, i, j, objData.SOLID, objData.CLICKABLE, objData.URL));
+                }
+            }
+
+        } else {
+            listOfMapElements.push(objService.createObject(roomData.ID, objData.TYPE, objData.POS.X, objData.POS.Y, objData.SOLID, objData.CLICKABLE, objData.URL));
+        }
     }
 
 
