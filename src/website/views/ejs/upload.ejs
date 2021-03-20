@@ -3,66 +3,75 @@
 
 <head>
     <%- include('partials/head') %>
-    <script src="https://kit.fontawesome.com/f6c8522501.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <%- include('partials/header') %>
-
-    <div class="container" id="uploaded">
-        <h2 style="text-align: center; margin-top: 30px;">Create Lecture</h2>
-        <form action="upload" method="POST" enctype="multipart/form-data" style="max-width: 600px; margin: 0 auto">
-            <hr />
-            <div class="form-group">
-                <input type="text" class="form-control" id="titleInput" name="title" placeholder="Title" required>
+    <div class="container">
+		<%- include('partials/header') %>
+        <section class="row align-items-center justify-content-center" id="upload-content">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+                <h5>Create Lecture</h5>
+                <br>
+                <div class="row justify-content-left m-0 p-0">
+                    <% if(locals.noFilesUploaded === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> No files were
+                            uploaded. Please upload a video.</small>
+                    <% } else if (locals.fileSizeExceeded === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> File size
+                            exceeded 50 MB.</small>
+                    <% } else if (locals.unsupportedFileType === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Unsupported
+                            file type.</small>
+                    <% } else if (locals.notInt === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Max
+                            participants must be an integer.</small>
+                    <% } else if (locals.notDate === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Starting time
+                            must be a valid date.</small>
+                    <% } else if (locals.uploadFailed === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an
+                            error while uploading the video. Please try again.</small>
+                    <% } else if (locals.createSlotFailed === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an
+                            error while creating the slot. Please try again.</small>
+                    <% } else if (locals.uploading === true) { %>
+                        <small class="success"><i class="fa fa-check-circle"></i> Lecture slot is successfully created. You may exit this page.</small>
+                    <% } %>
+                </div>
+                <br>
+                <form action="upload" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="titleInput" name="title" placeholder="Title"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="startingTime" class="mt-2 input-label">Starting time:</label>
+                        <input type="datetime-local" class="form-control" id="startingTimeInput"
+                            name="startingTime" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-8">
+                            <input type="text" class="form-control" id="remarksInput" name="remarks"
+                                placeholder="Remarks">
+                        </div>
+                        <div class="form-group col-4">
+                            <input type="number" step="1" class="form-control" id="maxParticipantsInput"
+                                name="maxParticipants" placeholder="# Participants" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="video" class="mt-2 input-label">Video: </label>
+                        <input type="file" class="form-control" name="video" id="file" accept="video/mp4" />
+                    </div>
+                    <label for="video" class="input-label mt-1 mb-0">Supported file: .mp4 || Max. size: 50 MB</label>
+                    <button class="primary-button mt-4 p-2" type="submit">
+                        <span>Create lecture</span>
+                    </button>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="number" step="1" class="form-control" id="maxParticipantsInput" name="maxParticipants"
-                    placeholder="Max. Participants" required>
-            </div>
-            <div style="margin-bottom: 10px">
-                <label for="startingTime">Starting time:</label>
-                <input type="datetime-local" id="startingTimeInput" name="startingTime">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="remarksInput" name="remarks" placeholder="Remarks">
-            </div>
-            <div class="box__input">
-                <label for="video">Video:</label>
-                <input type="file" name="video" id="file" accept="video/mp4" />
-            </div>
-            <label style="margin-top: 0px; margin-bottom: 0px">Supported file: .mp4 || Max. size: 50 MB</label>
-            <hr />
-            <div class="row justify-content-left m-0 p-0">
-                <% if(locals.noFilesUploaded === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>No files were
-                    uploaded. Please upload a video.</p>
-                <% } else if (locals.fileSizeExceeded === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>File size
-                    exceeded 50 MB. Please try again.</p>
-                <% } else if (locals.unsupportedFileType === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Unsupported
-                    file type. Please upload only .mp4 file.</p>
-                <% } else if (locals.notInt === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Max
-                    participants must be an integer. Please try again.</p>
-                <% } else if (locals.notDate === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>Starting time
-                    must be a valid date. Please try again.</p>
-                <% } else if (locals.uploadFailed === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
-                    error while uploading the video. Please try again.</p>
-                <% } else if (locals.createSlotFailed === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
-                    error while creating the slot. Please try again.</p>
-                <% } else if (locals.uploading === true) { %>
-                    <p style="font-size: small;"><i class="fa fa-check-circle"></i> Lecture slot is successfully created. You may exit this page.</p>
-                <% } %>
-            </div>
-            <input class="btn btn-block btn-submit" type="submit" value="Create lecture and upload video"
-                style="margin-bottom: 30px; "></button>
-        </form>
-    </div>
+        </section>
+	</div>
+    <%- include('partials/footer') %>
 </body>
 
 </html>

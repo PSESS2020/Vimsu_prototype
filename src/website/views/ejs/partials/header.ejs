@@ -1,96 +1,67 @@
-<div id="header" class="headerBG clearfix" role="banner">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <div id="logo" class="headerBG">
-                    <a href="/">
-                        <img id="logoimg" src="website/assets/vimsu_banner.png" type="image/png" alt="Vimsu Logo"
-                            style="width:79px;height:119px;">
-                    </a>
-                </div>
-                <div class="col" id="signature">
-                    <div id="site-name">
-                        <a href="/">
-                            <div class="site-name-child">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <% if (locals.loggedIn === true) { %>
-                <div class="profileIcon" style="display:inline-block;vertical-align:top;">
-                    <i class="fa fa-user fa-4x iconProfile"></i>
-                </div>
-                <div style="display:inline-block; margin-left: 10px">
-                    <div><%=forename%> (@<%=username%>)</div>
-                </div>
-            <% } %>
-        </div>
+<section class="row align-items-center justify-content-center">
+    <div class="col-lg-1 col-md-2 col-sm-2 header" id="logo">
+        <a href="/">
+            <img src="website/assets/vimsu_banner.png" type="image/png" alt="Vimsu Logo">
+        </a>
     </div>
-</div>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-custom">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+    <div class="col-lg-2 col-md-2 col-sm-3 header" id="logo-text">
+        <a href="/">
+            <img src="website/assets/Logo_Vimsu_Light.png" type="image/png" alt="Vimsu Logo">
+        </a>
+    </div>
+</section>
+<hr>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span><span> menu</span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <ul class="navbar-nav mr-auto ml-5 pl-4">
-                <% if (locals.loggedIn === true) { %>
-                    <% if (locals.videoStorageActivated) { %>
-                        <li class="nav-item">
-                            <a class="action_button nav-link navbar-brand" href="/upload">
-                                <div class="octicons octicon octicon-cloud-upload">
-                                    <p id="octicon_text">
-                                        Upload
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                    <% } %>
-                    <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/account">
-                            <div class="octicons octicon octicon-gear">
-                                <p id="octicon_text">
-                                    Account Settings
-                                </p>
-                            </div>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/" id="home">home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about-us">about us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/tutorial">tutorial</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact-us">contact us</a>
+            </li>
+            <% if (locals.loggedIn===true) { %>
+                <% if (locals.videoStorageActivated) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            my dashboard
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/logout">
-                            <div class="octicons octicon octicon-sign-out">
-                                <p id="octicon_text">
-                                    Log out
-                                </p>
-                            </div>
-                        </a>
-                    </li>
-                <% } else { %>
-                    <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/login">
-                            <span class="octicons octicon octicon-sign-in">
-                                <p id="octicon_text">
-                                    Log in
-                                </p>
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="action_button nav-link navbar-brand" href="/register">
-                            <span class="octicons octicon octicon-pencil">
-                                <p id="octicon_text">
-                                    Register
-                                </p>
-                            </span>
-                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/upload">upload video</a>
+                        </div>
                     </li>
                 <% } %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%=username%>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/editAccount">account settings</a>
+                        <a class="dropdown-item" href="/logout">log out</a>
+                    </div>
+                </li>
+            <% } %>
         </ul>
-        <% if (locals.loggedIn === true) { %>
-            <form class="form-inline">
-                <a class="btn btn-outline-warning mr-5" type="button" href="/game">Enter Conference >></a>
-            </form>
-        <% } %>
     </div>
 </nav>
+<hr>
+
+<script>
+    $(function() {
+        $('nav a[href="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+    });
+</script>
