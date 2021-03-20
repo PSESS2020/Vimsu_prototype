@@ -6,25 +6,44 @@
 </head>
 
 <body>
-    <%- include('partials/header') %>
-
     <div class="container">
-        <h1 style="margin-top: 20px; font-size:xx-large; text-align: center;">Edit Account Information</h1>
-        <form action="saveAccountChanges" method="POST" style="max-width: 600px; margin: 0 auto; margin-top:20px">
-            <hr />
-            <div class="form-row">
-                <div class="form-group col-md-5">
-                    <label for="inputForename">Forename</label>
-                    <input type="text" class="form-control" id="inputForename" name="forename" value="<%=forename%>"
-                        required>
+        <%- include('partials/header') %>
+        <section class="row align-items-center justify-content-center" id="upload-content">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+                <h5>Edit Account Information</h5>
+                <br>
+                <div class="row justify-content-left m-0 p-0">
+                    <% if(locals.editAccountFailed===true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an
+                            error while saving your changes. Please try again.</small>
+                        <% } %>
                 </div>
-            </div>
+                <br>
+                <form action="saveAccountChanges" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="mt-2 input-label">Username: </label>
+                        <input class="form-control" type="text" id="usernameInput" name="username"
+                            value="<%=username%>" readonly>
+                    </div>
 
-            <hr />
-            <input class="btn btn-block btn-submit" type="submit" value="Save changes"
-                style="margin-bottom: 30px; "></button>
-        </form>
+                    <div class="form-group">
+                        <label for="forename" class="mt-2 input-label">Forename: </label>
+                        <input type="text" class="form-control" id="inputForename" name="forename"
+                            value="<%=forename%>" required>
+                    </div>
+
+                    <button class="primary-button mt-4 p-2" type="submit">
+                        <span>Save changes</span>
+                    </button>
+                </form>
+            </div>
+        </section>
     </div>
+    <%- include('partials/footer') %>
+
+    <script>
+        $('#usernameInput').tooltip({ 'trigger': 'focus', 'title': 'Username cannot be changed' });
+    </script>
 </body>
 
 </html>

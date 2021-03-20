@@ -6,33 +6,42 @@
 </head>
 
 <body>
-    <%- include('partials/header') %>
-    <div class="container" id="logIn">
-        <h2 style="text-align: center; margin-top: 30px;">Login</h2>
-
-        <form action="login" method="POST" style="max-width: 600px; margin: 0 auto">
-            <hr />
-            <div class="form-group">
-                <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username"
-                    maxlength="10" required>
+    <div class="container">
+		<%- include('partials/header') %>
+        <section class="row align-items-center justify-content-center" id="login-content">
+            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+                <h5>Sign In</h5>
+                <br>
+                <div class="row justify-content-left m-0 p-0">
+                    <% if(locals.wrongLoginData === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> The password or
+                            the username you entered is wrong! Please try again.</small>
+                    <% } else if (locals.verifyDataFailed === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an
+                            error while verifying the login data. Please try again.</small>
+                    <% } %>
+                </div>
+                <br>
+                <form action="login" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username"
+                            maxlength="10" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
+                            required>
+                    </div>                    
+                    <div class="row justify-content-center m-0 p-0">
+                        <small>Don't have an account yet? <span><a class="link" href="/register"> Sign up now!</a></span></small>
+                    </div>
+                    <button class="primary-button mt-4 p-2" type="submit">
+                        <span>Sign in</span>
+                    </button>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
-                    required>
-            </div>
-            <hr />
-            <div class="row justify-content-left m-0 p-0">
-                <% if(locals.wrongLoginData === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>The password or
-                    the username you entered is wrong! Please try again.</p>
-                <% } else if (locals.verifyDataFailed === true) { %>
-                <p style="font-size: small; color: red;"><i class="fa fa-times-circle wrongDataIcon"></i>There's an
-                    error while verifying the login data. Please try again.</p>
-                <% } %>
-            </div>
-            <input class="btn btn-block btn-submit" type="submit" value="Log in"></button>
-        </form>
-    </div>
+        </section>
+	</div>
+    <%- include('partials/footer') %>
 </body>
 
 </html>

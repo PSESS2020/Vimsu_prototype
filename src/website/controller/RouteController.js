@@ -107,18 +107,53 @@ module.exports = class RouteController {
             if (request.session.loggedin === true) {
                 username = request.session.username;
                 forename = request.session.forename;
-                response.render('index', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username, forename: forename });
+                response.render('home', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
             } else {
-                response.render('index');
+                response.render('home');
             }
+        });
 
+        this.#app.get('/about-us', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('about-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('about-us');
+            }
+        });
+
+        this.#app.get('/tutorial', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('tutorial', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('tutorial');
+            }
+        });
+
+        this.#app.get('/contact-us', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('contact-us', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('contact-us');
+            }
+        });
+
+        this.#app.get('/privacy-policy', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('privacy-policy', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('privacy-policy');
+            }
         });
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    response.render('upload', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
+                    response.render('upload', { loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                 } else {
                     response.redirect('/');
                 }
@@ -127,7 +162,7 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
@@ -137,7 +172,7 @@ module.exports = class RouteController {
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', { notDate: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', { notDate: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                 }
 
                 var lectureTitle = request.body.title;
@@ -147,10 +182,10 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, forename: forename });
+                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                     }
                     else {
-                        response.render('upload', { uploading: true, loggedIn: true, username: username, forename: forename })
+                        response.render('upload', { uploading: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED })
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
@@ -164,7 +199,7 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
                 }
             });
         }
@@ -180,11 +215,11 @@ module.exports = class RouteController {
 
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
-                
+
                 const ServerController = require('../../game/app/server/controller/ServerController');
                 new ServerController(this.#io, this.#db, this.#blob);
                 response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
-               
+
             } else {
                 response.redirect('/');
             }
@@ -214,15 +249,10 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/register', (request, response) => {
-            if (request.session.registerValid === true) {
-                username = request.session.username;
-                response.render('register', { registerValid: true, username: username });
-            }
-            else if (request.session.loggedin === true) {
+            if (request.session.loggedin === true) {
                 response.redirect('/');
-            }
-            else {
-                response.render('register', { registerValid: false });
+            } else {
+                response.render('register');
             }
         });
 
@@ -237,67 +267,40 @@ module.exports = class RouteController {
 
             return AccountService.isUsernameValid(username, Settings.CONFERENCE_ID, this.#db).then(res => {
                 if (res) {
-                    request.session.registerValid = true;
-                    request.session.username = username;
-                    response.redirect('/register');
+                    forename = request.body.forename;
+                    var password = request.body.password;
 
-                    response.end();
-                }
-                else {
+                    return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
+                        if (res) {
+                            request.session.accountId = res.getAccountID();
+                            request.session.registerValid = false;
+                            request.session.loggedin = true;
+                            request.session.forename = res.getForename();
+
+                            //Needed for creating business card during entering the conference.
+                            request.session.username = res.getUsername();
+                        }
+
+                        response.redirect('/');
+                        response.end();
+                    }).catch(err => {
+                        console.error(err);
+                        return response.render('register', { registerFailed: true });
+                    })
+                } else {
                     return response.render('register', { usernameTaken: true });
                 }
+
             }).catch(err => {
                 console.error(err);
                 return response.render('register', { verifyDataFailed: true })
             })
         });
 
-        this.#app.post('/registerValid', (request, response) => {
-            username = request.session.username;
-            forename = request.body.forename;
-            var password = request.body.password;
-
-            return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res) {
-                    request.session.accountId = res.getAccountID();
-                    request.session.registerValid = false;
-                    request.session.loggedin = true;
-                    request.session.forename = res.getForename();
-
-                    //Needed for creating business card during entering the conference.
-                    request.session.username = res.getUsername();
-                }
-
-                response.redirect('/');
-                response.end();
-            }).catch(err => {
-                console.error(err);
-                return response.render('register', { registerFailed: true });
-            })
-        })
-
-        this.#app.post('/editRegistration', (request, response) => {
-            request.session.registerValid = false;
-            response.redirect('/register');
-            response.end();
-        })
-
         this.#app.get('/logout', (request, response) => {
             request.session.destroy();
             response.redirect('/');
         });
-
-        this.#app.get('/account', (request, response) => {
-            if (request.session.loggedin === true) {
-                username = request.session.username;
-                forename = request.session.forename;
-                response.render('account', { loggedIn: true, username: username, forename: forename, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
-            }
-
-            else {
-                response.redirect('/');
-            }
-        })
 
         this.#app.get('/editAccount', (request, response) => {
             if (request.session.loggedin === true) {
@@ -319,11 +322,20 @@ module.exports = class RouteController {
                 request.session.accountId = res.getAccountID();
                 request.session.forename = res.getForename();
                 request.session.username = res.getUsername();
-                response.redirect('/account');
+                response.redirect('/');
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, forename: forename });
+                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED });
             })
         })
+
+        this.#app.get('*', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('page-not-found', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('page-not-found');
+            }
+        });
     }
 }
