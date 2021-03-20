@@ -155,6 +155,19 @@ module.exports = class RouteController {
             }
         });
 
+        this.#app.get('/impressum', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                email = request.session.email;
+                title = request.session.title;
+                forename = request.session.forename;
+                surname = request.session.surname;
+                response.render('impressum', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username });
+            } else {
+                response.render('impressum');
+            }
+        });
+
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
