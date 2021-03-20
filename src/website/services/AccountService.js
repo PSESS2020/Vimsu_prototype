@@ -57,27 +57,23 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.isUsernameValid(username, suffix, vimsudb).then(res => {
-            if (!res)
-                return res;
-            
-            var accountId = new ObjectId().toString();
-            var account = new Account(accountId, username, forename);
-        
-            var acc = {
-                accountId: account.getAccountID(),
-                username: account.getUsername(),
-                forename: account.getForename(),
-                passwordHash: passwordHash.generate(password),
-                registrationTime: new Date()
-            }
-        
-             return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-                return account;
-            }).catch(err => {
-                console.error(err);
-            })
+        var accountId = new ObjectId().toString();
+        var account = new Account(accountId, username, forename);
+
+        var acc = {
+            accountId: account.getAccountID(),
+            username: account.getUsername(),
+            forename: account.getForename(),
+            passwordHash: passwordHash.generate(password),
+            registrationTime: new Date()
+        }
+
+        return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
+            return account;
+        }).catch(err => {
+            console.error(err);
         })
+
     }
 
     /**
@@ -241,4 +237,4 @@ module.exports = class AccountService {
         })
 
     }
-} 
+}
