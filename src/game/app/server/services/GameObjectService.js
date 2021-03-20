@@ -808,6 +808,8 @@ module.exports = class GameObjectService {
      * of this, the game objects in the GameObjectType-Class had to be changed a
      * bit. */
 
+    /* This needs to be able to account for different variants of the same object */
+
     createObject(roomId, type, xPos, yPos, isSolid, isClickable, url) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, isSolid, isClickable, url);
         this.#isKnownType(type);
