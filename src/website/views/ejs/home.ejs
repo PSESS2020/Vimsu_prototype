@@ -12,18 +12,18 @@
             <div class="col-lg-6 col-md-12 col-sm-12" id="title">
                 <h2>Virtual Interactive Meeting Simulator</h2>
                 <h6>Discover the 2.5D virtual conference experience with us!</h6>
-				<% if (locals.loggedIn === true) { %>
-					<a class="btn primary-button mt-4 p-2" href="/game">
-						<span>Enter conference</span>
-					</a>
-				<% } else { %>
-					<a class="btn primary-button mt-4 p-2" href="/register">
-						<span>Try it now for free</span>
-					</a>
-					<a class="btn primary-button ml-3 mt-4 p-2" href="/login">
-						<span>Sign in</span>
-					</a>
-				<% } %>
+                <% if (locals.loggedIn === true) { %>
+                  <a class="btn primary-button mt-4 p-2" href="/game">
+                    <span>Enter conference</span>
+                  </a>
+                <% } else { %>
+                  <a class="btn primary-button mt-4 p-2" href="/register">
+                    <span>Try it now for free</span>
+                  </a>
+                  <a class="btn primary-button ml-3 mt-4 p-2" href="/login">
+                    <span>Sign in</span>
+                  </a>
+                <% } %>
             </div>
             <div class="col-lg-6 col-md-12 col-sm-12" id="slideshow">
                 <div id="carouselControls" class="carousel slide" data-ride="carousel">

@@ -343,7 +343,7 @@ module.exports = class RouteController {
             }
         });
 
-        this.#app.get('/editAccount', (request, response) => {
+        this.#app.get('/account-settings', (request, response) => {
             if (request.session.loggedin === true) {
                 title = request.session.title;
                 forename = request.session.forename;
@@ -351,7 +351,7 @@ module.exports = class RouteController {
                 job = request.session.job;
                 company = request.session.company;
                 email = request.session.email;
-                response.render('editAccount', this.#getLoggedInParameters({ email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                response.render('account-settings', this.#getLoggedInParameters({ email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
             }
             else {
                 response.render('page-not-found');
@@ -365,7 +365,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('editAccount', this.#getLoggedInParameters({invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company}, username));
+                return response.render('account-settings', this.#getLoggedInParameters({invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company}, username));
             }
 
             surname = request.body.surname;
@@ -385,10 +385,11 @@ module.exports = class RouteController {
                 request.session.job = res.getJob();
                 request.session.company = res.getCompany();
                 request.session.email = res.getEmail();
-                response.redirect('/');
+                forename = request.session.forename;
+                response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                return response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
             })
         })
 
