@@ -142,6 +142,11 @@ a, a:hover {
   background-color: transparent;
 }
 
+.carousel-control-next, .carousel-control-prev, 
+.carousel-control-next:hover, .carousel-control-prev:hover {
+  color: var(--white-color);
+}
+
 .primary-button {
   color: var(--white-color);
   background-color: transparent;
