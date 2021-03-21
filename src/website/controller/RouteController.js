@@ -9,6 +9,7 @@ const Settings = require('../../game/app/server/utils/Settings');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
+const Account = require('../models/Account');
 
 /**
  * The Route Controller
@@ -274,63 +275,45 @@ module.exports = class RouteController {
                 return response.render('register', { invalidEmail: true });
             }
 
-            return AccountService.isUsernameValid(username, '', this.#db).then(res => {
-                if (res) {
-                    email = request.body.email;
-                    return AccountService.isEmailValid(email, '', this.#db).then(res => {
-                        if (res) {
-                            title = request.body.title;
+            email = request.body.email;
+            title = request.body.title;
 
-                            if (title === "Title") {
-                                title = "";
-                            }
-                            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                                return response.render('register', { invalidTitle: true });
-                            }
+            if (title === "Title") {
+                title = "";
+            }
+            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                return response.render('register', { invalidTitle: true });
+            }
 
-                            surname = request.body.surname;
-                            forename = request.body.forename;
-                            job = request.body.job;
-                            company = request.body.company;
-                            var password = request.body.password;
+            surname = request.body.surname;
+            forename = request.body.forename;
+            job = request.body.job;
+            company = request.body.company;
+            var password = request.body.password;
 
-                            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
-                                if (res) {
-                                    request.session.accountId = res.getAccountID();
-                                    request.session.registerValid = false;
-                                    request.session.loggedin = true;
-                                    request.session.title = res.getTitle();
-                                    request.session.surname = res.getSurname();
-                                    request.session.forename = res.getForename();
+            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
+                if (res instanceof Account) {
+                    request.session.accountId = res.getAccountID();
+                    request.session.registerValid = false;
+                    request.session.loggedin = true;
+                    request.session.title = res.getTitle();
+                    request.session.surname = res.getSurname();
+                    request.session.forename = res.getForename();
 
-                                    //Needed for creating business card during entering the conference.
-                                    request.session.username = res.getUsername();
-                                    request.session.job = res.getJob();
-                                    request.session.company = res.getCompany();
-                                    request.session.email = res.getEmail();
-                                }
-
-                                response.redirect('/');
-                                response.end();
-                            }).catch(err => {
-                                console.error(err);
-                                return response.render('register', { registerFailed: true });
-                            })
-                        }
-                        else {
-                            return response.render('register', { emailTaken: true })
-                        }
-                    }).catch(err => {
-                        console.error(err);
-                        return response.render('register', { verifyDataFailed: true })
-                    })
+                    //Needed for creating business card during entering the conference.
+                    request.session.username = res.getUsername();
+                    request.session.job = res.getJob();
+                    request.session.company = res.getCompany();
+                    request.session.email = res.getEmail();
+                    response.redirect('/');
+                    response.end();
+                } else if (res.username) {
+                    response.render('register', { usernameTaken: true })
+                } else if (res.email) {
+                    response.render('register', { emailTaken: true })
+                } else {
+                    response.render('register', { registerFailed: true });
                 }
-                else {
-                    return response.render('register', { usernameTaken: true });
-                }
-            }).catch(err => {
-                console.error(err);
-                return response.render('register', { verifyDataFailed: true })
             })
         });
 
@@ -365,7 +348,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('account-settings', this.#getLoggedInParameters({invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company}, username));
+                return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
             }
 
             surname = request.body.surname;
