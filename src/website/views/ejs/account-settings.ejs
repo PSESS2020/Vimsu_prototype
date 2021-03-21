@@ -16,7 +16,9 @@
                     <% if(locals.editAccountFailed===true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an
                             error while saving your changes. Please try again.</small>
-                        <% } %>
+                    <% } else if (locals.editAccountSuccess === true) { %>
+                        <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                    <% } %>
                 </div>
                 <br>
                 <form action="saveAccountChanges" method="POST">

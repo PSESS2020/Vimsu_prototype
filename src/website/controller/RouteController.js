@@ -304,10 +304,10 @@ module.exports = class RouteController {
             }
         });
 
-        this.#app.get('/editAccount', (request, response) => {
+        this.#app.get('/account-settings', (request, response) => {
             if (request.session.loggedin === true) {
                 forename = request.session.forename;
-                response.render('editAccount', this.#getLoggedInParameters({ forename: forename }, username))
+                response.render('account-settings', this.#getLoggedInParameters({ forename: forename }, username))
             }
             else {
                 response.render('page-not-found');
@@ -324,10 +324,11 @@ module.exports = class RouteController {
                 request.session.accountId = res.getAccountID();
                 request.session.forename = res.getForename();
                 request.session.username = res.getUsername();
-                response.redirect('/');
+                forename = request.session.forename;
+                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, editAccountSuccess: true }, username))
             }).catch(err => {
                 console.error(err);
-                return response.render('editAccount', this.#getLoggedInParameters({ editAccountFailed: true }, username));
+                return response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
             })
         })
 
