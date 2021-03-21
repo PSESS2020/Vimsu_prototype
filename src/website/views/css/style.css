@@ -111,11 +111,20 @@ hr {
   margin: 0px 20px;
 }
 
-.link, .nav-link {
+.link {
+  color: var(--tosca-color);
+}
+
+.link:hover {
+  color: var(--tosca-color);
+  text-decoration: underline;
+}
+
+.nav-link {
   color: var(--white-color) !important;
 }
 
-.link:hover, .nav-link:hover, .nav-item a.active {
+.nav-link:hover, .nav-item a.active {
   color: var(--tosca-color) !important;
   background-color: transparent;
 }
