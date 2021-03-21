@@ -161,17 +161,17 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
                 var lectureTitle = request.body.title;
@@ -181,7 +181,7 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
+                        response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
                     }
                     else {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
@@ -198,7 +198,7 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
                 }
             });
         }
@@ -243,12 +243,9 @@ module.exports = class RouteController {
                     response.redirect('/');
                 }
                 else {
-                    return response.render('login', { wrongLoginData: true });
+                    response.render('login', { wrongLoginData: true });
                 }
                 response.end();
-            }).catch(err => {
-                console.error(err);
-                return response.render('login', { verifyDataFailed: true });
             })
         });
 
@@ -264,7 +261,7 @@ module.exports = class RouteController {
             const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
             if (!usernameRegex.test(request.body.username)) {
-                return response.render('register', { invalidUsernameString: true });
+                response.render('register', { invalidUsernameString: true });
             }
 
             username = request.body.username;
@@ -272,7 +269,7 @@ module.exports = class RouteController {
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (!emailRegex.test(String(email).toLowerCase())) {
-                return response.render('register', { invalidEmail: true });
+                response.render('register', { invalidEmail: true });
             }
 
             email = request.body.email;
@@ -282,7 +279,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('register', { invalidTitle: true });
+                response.render('register', { invalidTitle: true });
             }
 
             surname = request.body.surname;
@@ -348,7 +345,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
             }
 
             surname = request.body.surname;
@@ -360,19 +357,20 @@ module.exports = class RouteController {
             email = request.session.email;
 
             return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, '', this.#db).then(res => {
-                request.session.accountId = res.getAccountID();
-                request.session.title = res.getTitle();
-                request.session.surname = res.getSurname();
-                request.session.forename = res.getForename();
-                request.session.username = res.getUsername();
-                request.session.job = res.getJob();
-                request.session.company = res.getCompany();
-                request.session.email = res.getEmail();
-                forename = request.session.forename;
-                response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
-            }).catch(err => {
-                console.error(err);
-                return response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                if (res instanceof Account) {
+                    request.session.accountId = res.getAccountID();
+                    request.session.title = res.getTitle();
+                    request.session.surname = res.getSurname();
+                    request.session.forename = res.getForename();
+                    request.session.username = res.getUsername();
+                    request.session.job = res.getJob();
+                    request.session.company = res.getCompany();
+                    request.session.email = res.getEmail();
+                    forename = request.session.forename;
+                    response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                } else {
+                    response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                }
             })
         })
 
