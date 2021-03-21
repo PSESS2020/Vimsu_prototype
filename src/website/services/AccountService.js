@@ -14,31 +14,6 @@ const db = require('../../config/db');
 module.exports = class AccountService {
 
     /**
-     * checks if username is valid
-     * @static @method module:AccountService#isUsernameValid
-     * 
-     * @param {String} username username
-     * @param {String} suffix collection name suffix
-     * @param {db} vimsudb db instance
-     * 
-     * @return {boolean} true if valid, i.e. there's no user with this username found in the database, otherwise false
-     */
-    static isUsernameValid(username, suffix, vimsudb) {
-        TypeChecker.isString(username);
-        TypeChecker.isString(suffix);
-        TypeChecker.isInstanceOf(vimsudb, db)
-
-        return vimsudb.findInCollection("accounts" + suffix, { username: username }, { username: username }).then(results => {
-            if (results.length > 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        })
-    }
-
-    /**
      * creates a user account and saves it in the database.
      * @static @method module:AccountService#createAccount
      * 
@@ -69,11 +44,14 @@ module.exports = class AccountService {
         }
 
         return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-            return account;
-        }).catch(err => {
-            console.error(err);
+            if (res.insertedCount) {
+                return account;
+            } else if (res.code === 11000) {
+                return res.keyValue;
+            }
+            
+            return undefined;
         })
-
     }
 
     /**

@@ -9,6 +9,7 @@ const Settings = require('../../game/app/server/utils/Settings.js');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
+const Account = require('../models/Account');
 
 /**
  * The Route Controller
@@ -262,36 +263,25 @@ module.exports = class RouteController {
             }
 
             username = request.body.username
+            forename = request.body.forename;
+            var password = request.body.password;
 
-            return AccountService.isUsernameValid(username, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res) {
-                    forename = request.body.forename;
-                    var password = request.body.password;
+            return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
+                if (res instanceof Account) {
+                    request.session.accountId = res.getAccountID();
+                    request.session.registerValid = false;
+                    request.session.loggedin = true;
+                    request.session.forename = res.getForename();
 
-                    return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
-                        if (res) {
-                            request.session.accountId = res.getAccountID();
-                            request.session.registerValid = false;
-                            request.session.loggedin = true;
-                            request.session.forename = res.getForename();
-
-                            //Needed for creating business card during entering the conference.
-                            request.session.username = res.getUsername();
-                        }
-
-                        response.redirect('/');
-                        response.end();
-                    }).catch(err => {
-                        console.error(err);
-                        return response.render('register', { registerFailed: true });
-                    })
+                    //Needed for creating business card during entering the conference.
+                    request.session.username = res.getUsername();
+                    response.redirect('/');
+                    response.end();
+                } else if (res.username) {
+                    response.render('register', { usernameTaken: true });
                 } else {
-                    return response.render('register', { usernameTaken: true });
+                    response.render('register', { registerFailed: true });
                 }
-
-            }).catch(err => {
-                console.error(err);
-                return response.render('register', { verifyDataFailed: true })
             })
         });
 

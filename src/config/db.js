@@ -79,8 +79,11 @@ module.exports = class db {
         var collection = this.#vimsudb.collection(collectionName);
 
         return collection.insertOne(object)
+            .then(res => {
+                return res;
+            })
             .catch(err => {
-                console.error(err)
+                return err;
             })
     }
 
@@ -227,6 +230,26 @@ module.exports = class db {
                 } else {
                     return false;
                 }
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
+
+    /**
+     * Creates unique index in a collection
+     * 
+     * @param {String} collectionName collection name
+     * @param {Object} query key that should be unique in format { key: 1 }
+     * @returns 
+     */
+    createUniqueIndexInCollection(collectionName, query) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.createIndex(query, { unique: true })
+            .then(results => {
+                console.log(results);
             })
             .catch(err => {
                 console.error(err)
