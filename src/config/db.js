@@ -203,10 +203,11 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.updateOne(query, { '$set': newValue })
-            .catch(err => {
-                console.error(err)
-            })
+        return collection.updateOne(query, { '$set': newValue }).then(res => {
+            return res;
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
     /**

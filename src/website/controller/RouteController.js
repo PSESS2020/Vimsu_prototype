@@ -161,17 +161,17 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
                 var lectureTitle = request.body.title;
@@ -181,7 +181,7 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
+                        response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
                     }
                     else {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
@@ -198,7 +198,7 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
+                    response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
                 }
             });
         }
@@ -238,12 +238,9 @@ module.exports = class RouteController {
                     response.redirect('/');
                 }
                 else {
-                    return response.render('login', { wrongLoginData: true });
+                    response.render('login', { wrongLoginData: true });
                 }
                 response.end();
-            }).catch(err => {
-                console.error(err);
-                return response.render('login', { verifyDataFailed: true });
             })
         });
 
@@ -259,7 +256,7 @@ module.exports = class RouteController {
             const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
             if (!usernameRegex.test(request.body.username)) {
-                return response.render('register', { invalidUsernameString: true });
+                response.render('register', { invalidUsernameString: true });
             }
 
             username = request.body.username
@@ -311,14 +308,16 @@ module.exports = class RouteController {
             username = request.session.username;
 
             return AccountService.updateAccountData(accountId, username, forename, Settings.CONFERENCE_ID, this.#db).then(res => {
-                request.session.accountId = res.getAccountID();
-                request.session.forename = res.getForename();
-                request.session.username = res.getUsername();
-                forename = request.session.forename;
-                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, editAccountSuccess: true }, username))
-            }).catch(err => {
-                console.error(err);
-                return response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                if (res instanceof Account) {
+                    request.session.accountId = res.getAccountID();
+                    request.session.forename = res.getForename();
+                    request.session.username = res.getUsername();
+                    forename = request.session.forename;
+                    response.render('account-settings', this.#getLoggedInParameters({ forename: forename, editAccountSuccess: true }, username))
+
+                } else {
+                    response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                }
             })
         })
 

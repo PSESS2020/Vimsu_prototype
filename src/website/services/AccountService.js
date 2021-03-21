@@ -44,7 +44,7 @@ module.exports = class AccountService {
         }
 
         return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-            if (res.insertedCount) {
+            if (res.insertedCount > 0) {
                 return account;
             } else if (res.code === 11000) {
                 return res.keyValue;
@@ -159,10 +159,11 @@ module.exports = class AccountService {
         var account = new Account(accountId, username, newForename);
 
         return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { forename: newForename }).then(res => {
-            return account;
-        }).catch(err => {
-            console.error(err)
-        });
+            if (res.modifiedCount > 0)
+                return account;
+
+            return undefined
+        })
     }
 
     /**
