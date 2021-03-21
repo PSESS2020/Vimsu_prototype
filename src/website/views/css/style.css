@@ -12,7 +12,7 @@
   --light-red-color: rgb(254, 92, 54, .3);
   --light-orange-color: rgb(255, 180, 73, .3);
   --light-tosca-color: rgb(72, 148, 160, .1);
-  --grey-color: rgb(230, 230, 230);
+  --white-color: antiquewhite;
   --footer-height: 35px;
 }
 
@@ -36,12 +36,12 @@ body {
   font-family: 'Montserrat', sans-serif;
   overflow-x: hidden;
   overflow-y: scroll;
-  color: var(--grey-color);
+  color: var(--white-color);
 }
 
 .navbar-dark .navbar-toggler {
-  color: var(--grey-color);
-  border-color: var(--grey-color);
+  color: var(--white-color);
+  border-color: var(--white-color);
 }
 
 .navbar-toggler:hover {
@@ -62,6 +62,14 @@ body {
 
 #logo {
   text-align: right;
+}
+
+#vimsu-text {
+  font-family: 'Fredoka One', cursive;
+  color: var(--white-color);
+  font-size: 40px;
+  letter-spacing: 10px;
+  margin-right: -10px;
 }
 
 #logo-text {
@@ -99,7 +107,7 @@ hr {
 }
 
 .link, .nav-link {
-  color: var(--grey-color) !important;
+  color: var(--white-color) !important;
 }
 
 .link:hover, .nav-link:hover, .nav-item a.active {
@@ -108,9 +116,9 @@ hr {
 }
 
 .primary-button {
-  color: var(--grey-color);
+  color: var(--white-color);
   background-color: transparent;
-  border: 1px solid var(--grey-color);
+  border: 1px solid var(--white-color);
   border-radius: .25rem;
   min-width: 100px;
   -webkit-transition: all 0.2s ease-in-out 0s;
@@ -134,7 +142,7 @@ hr {
 
 #form {
   border-radius: .25rem;
-  border: 1px solid var(--grey-color);
+  border: 1px solid var(--white-color);
   padding: 1rem 1rem;
 }
 
@@ -152,7 +160,7 @@ hr {
   height: var(--footer-height);
   position: relative;
   background-color: var(--tosca-color);
-  color: var(--grey-color);
+  color: var(--white-color);
   font-size: 10px;
   padding: 10px 50px;
 }
@@ -163,21 +171,21 @@ a, a:hover {
 }
 
 hr {
-  border-top: 1px solid var(--grey-color)
+  border-top: 1px solid var(--white-color)
 }
 
 .form-control, .form-control-custom {
   background-color: transparent;
-  border: 1px solid var(--grey-color);
+  border: 1px solid var(--white-color);
   border-radius: .25rem;
   padding: .25rem;
-  color: var(--grey-color);
+  color: var(--white-color);
   font-size: 13px;
 }
 
 .form-control:focus {
   background-color: transparent;
-  color: var(--grey-color);
+  color: var(--white-color);
 }
 
 .input-label {
@@ -193,7 +201,7 @@ hr {
 
 input {
   background: transparent !important;
-  color: var(--grey-color) !important;
+  color: var(--white-color) !important;
 }
 
 .success {
@@ -207,12 +215,12 @@ input {
 }
 
 .dropdown-menu {
-  color: var(--grey-color) !important;
+  color: var(--white-color) !important;
   background-color: var(--black-color) !important;
 }
 
 .dropdown-item {
-  color: var(--grey-color) !important;
+  color: var(--white-color) !important;
 }
 
 .dropdown-item:hover {
@@ -246,7 +254,6 @@ input {
   #logo-text {
     align-items: flex-start;
     height: 100%;
-    margin-bottom: 20px;
   }
   hr {
     margin: 10px;
