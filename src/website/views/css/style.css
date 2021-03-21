@@ -48,6 +48,11 @@ body {
   color: var(--tosca-color);
 }
 
+*:focus {
+  outline: none !important;
+  -webkit-appearance: none !important;
+}
+
 .container {
   min-height: 100vh;
   margin-bottom: -(var(--footer-height));
