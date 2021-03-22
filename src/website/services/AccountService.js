@@ -90,10 +90,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -118,10 +115,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -146,8 +140,6 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -156,36 +148,38 @@ module.exports = class AccountService {
      * @static @method module:AccountService#updateAccountData
      * 
      * @param {String} accountId account ID
-     * @param {String} username account username
+     * @param {String} newUsername new account username
      * @param {String} newTitle new user title
      * @param {String} newSurname new user surname
      * @param {String} newForename new user forename
      * @param {String} newJob new user job
      * @param {String} newCompany new user company
-     * @param {String} email user email
+     * @param {String} newEmail new user email
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return {Account} Account instance
      */
-    static updateAccountData(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email, suffix, vimsudb) {
+    static updateAccountData(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, suffix, vimsudb) {
         TypeChecker.isString(accountId);
-        TypeChecker.isString(username);
+        TypeChecker.isString(newUsername);
         TypeChecker.isString(newTitle);
         TypeChecker.isString(newSurname);
         TypeChecker.isString(newForename);
         TypeChecker.isString(newJob);
         TypeChecker.isString(newCompany);
-        TypeChecker.isString(email);
+        TypeChecker.isString(newEmail);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var account = new Account(accountId, username, newTitle, newSurname, newForename, newJob, newCompany, email)
+        var account = new Account(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail)
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
-            if (res.modifiedCount > 0)
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, email: newEmail, title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
+            if (res.modifiedCount >= 0 && res.matchedCount > 0) {
                 return account;
-
+            } else if (res.code === 11000) {
+                return res.keyValue;
+            }
             return undefined
         })
     }
@@ -214,8 +208,6 @@ module.exports = class AccountService {
             } else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err)
         })
     }
 
@@ -235,9 +227,6 @@ module.exports = class AccountService {
         return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
             console.log("account with accountId " + accountId + " deleted");
             return res;
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 }

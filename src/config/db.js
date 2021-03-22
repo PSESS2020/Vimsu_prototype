@@ -206,7 +206,7 @@ module.exports = class db {
         return collection.updateOne(query, { '$set': newValue }).then(res => {
             return res;
         }).catch(err => {
-            console.error(err)
+            return err;
         })
     }
 

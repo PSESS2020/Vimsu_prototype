@@ -205,6 +205,7 @@ module.exports = class RouteController {
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {
+                username = request.session.username;
                 response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('login');
@@ -225,15 +226,12 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/login', (request, response) => {
-            username = request.body.username;
-            var password = request.body.password;
-
-            return AccountService.verifyLoginData(username, password, '', this.#db).then(user => {
+            return AccountService.verifyLoginData(request.body.username, request.body.password, '', this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
-                    request.session.username = username;
+                    request.session.username = user.getUsername();
                     request.session.title = user.getTitle();
                     request.session.surname = user.getSurname();
                     request.session.forename = user.getForename();
@@ -264,16 +262,12 @@ module.exports = class RouteController {
                 response.render('register', { invalidUsernameString: true });
             }
 
-            username = request.body.username;
-            email = request.body.email;
-
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailRegex.test(String(email).toLowerCase())) {
+            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
                 response.render('register', { invalidEmail: true });
             }
 
-            email = request.body.email;
-            title = request.body.title;
+            let title = request.body.title;
 
             if (title === "Title") {
                 title = "";
@@ -282,13 +276,7 @@ module.exports = class RouteController {
                 response.render('register', { invalidTitle: true });
             }
 
-            surname = request.body.surname;
-            forename = request.body.forename;
-            job = request.body.job;
-            company = request.body.company;
-            var password = request.body.password;
-
-            return AccountService.createAccount(username, title, surname, forename, job, company, email, password, '', this.#db).then(res => {
+            return AccountService.createAccount(request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, '', this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
@@ -304,9 +292,9 @@ module.exports = class RouteController {
                     request.session.email = res.getEmail();
                     response.redirect('/');
                     response.end();
-                } else if (res.username) {
+                } else if (res && res.username) {
                     response.render('register', { usernameTaken: true })
-                } else if (res.email) {
+                } else if (res && res.email) {
                     response.render('register', { emailTaken: true })
                 } else {
                     response.render('register', { registerFailed: true });
@@ -339,7 +327,17 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/saveAccountChanges', (request, response) => {
-            title = request.body.title;
+            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
+
+            if (!usernameRegex.test(request.body.username)) {
+                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
+            }
+
+            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                response.render('register', this.#getLoggedInParameters({ forename: forename, invalidEmail: true }, username));
+            }
+            let title = request.body.title;
 
             if (title === "Title") {
                 title = "";
@@ -348,15 +346,9 @@ module.exports = class RouteController {
                 response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
             }
 
-            surname = request.body.surname;
-            forename = request.body.forename;
-            job = request.body.job;
-            company = request.body.company;
             var accountId = request.session.accountId;
-            username = request.session.username;
-            email = request.session.email;
 
-            return AccountService.updateAccountData(accountId, username, title, surname, forename, job, company, email, '', this.#db).then(res => {
+            return AccountService.updateAccountData(accountId, request.body.username, request.body.title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, '', this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.title = res.getTitle();
@@ -366,8 +358,12 @@ module.exports = class RouteController {
                     request.session.job = res.getJob();
                     request.session.company = res.getCompany();
                     request.session.email = res.getEmail();
-                    forename = request.session.forename;
-                    response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+
+                    response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                } else if (res && res.username) {
+                    response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                } else if (res && res.email) {
+                    response.render('account-settings', this.#getLoggedInParameters({ emailTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
                 } else {
                     response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
                 }

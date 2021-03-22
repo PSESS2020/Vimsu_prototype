@@ -13,14 +13,26 @@
                 <h5>Edit Account Information</h5>
                 <br>
                 <div class="row justify-content-left m-0 p-0">
-                    <% if(locals.invalidTitle === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
-                            Please choose a title from the options we provided.</small>
+                    <% if (locals.editAccountSuccess === true) { %>
+                        <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                    <% } else if (locals.usernameTaken === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> The username
+                            you entered is already taken</small>
+                    <% } else if (locals.emailTaken === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> The email you
+                            entered is already registered</small>
                     <% } else if (locals.editAccountFailed === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an
                             error while saving your changes. Please try again.</small>
-                    <% } else if (locals.editAccountSuccess === true) { %>
-                        <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                    <% } else if (locals.invalidUsernameString === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> The username
+                            you entered doesn't match our criteria.</small>
+                    <% } else if (locals.invalidEmail === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> The email you
+                            entered is invalid. Please try again.</small>
+                    <% } else if(locals.invalidTitle === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
+                            Please choose a title from the options we provided.</small>
                     <% } %>
                 </div>
                 <br>
@@ -28,11 +40,11 @@
                     <div class="form-group">
                         <label for="username" class="mt-2 input-label">Username: </label>
                         <input class="form-control" type="text" id="usernameInput" name="username"
-                            value="<%=username%>" readonly>
+                            value="<%=username%>" required>
                     </div>
                     <div class="form-group">
                         <label for="email" class="mt-2 input-label">Email: </label>
-                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" readonly>
+                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" required>
                     </div>
 
                     <div class="form-row">
@@ -88,8 +100,7 @@
             document.getElementById("inputTitle").value = title ? title : "Title";
         })
 
-        $('#usernameInput').tooltip({'trigger':'focus', 'title': 'Username cannot be changed'});
-        $('#emailInput').tooltip({'trigger':'focus', 'title': 'Email cannot be changed'});
+        $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-10 characters containing only numbers, letters, and characters such as dash, underscore, or dot. No 2 characters in a row or any characters at the start or at the end.'});
     </script>
 </body>
 
