@@ -137,7 +137,7 @@ class FriendListView extends WindowView {
      * Displays no friend if there's no friend
      * 
      * @param {Object[]} businessCards business cards
-     * @returns if no friend
+     * @returns false if no friend
      */
     handleEmptyFriendlist(businessCards) {
         if (businessCards && businessCards.length < 1) {
