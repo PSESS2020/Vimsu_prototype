@@ -37,8 +37,6 @@ module.exports = class RankListService {
                 rankList[i].self = false;
             }
             return rankList;
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -74,8 +72,6 @@ module.exports = class RankListService {
             })).then(res => {
                 return rankList;
             })
-        }).catch(err => {
-            console.error(err);
         })
     }
 
