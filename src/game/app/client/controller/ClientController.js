@@ -1484,8 +1484,7 @@ class ClientController {
      * @param {String} meetingName
      * @param {String} meetingPassword
      */
-    handleFromViewJoinMeeting(meetingName, meetingPassword) {
-        
+    handleFromViewJoinMeeting(meetingName, meetingPassword) {       
 
         this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
             roomName: meetingName,
@@ -1500,6 +1499,11 @@ class ClientController {
             }
         });
 
+        // This would automatically pass the password used to
+        // secure the meeting.
+        // However, only moderators can set passwords, and it seems
+        // not to be possible to set the password when "setting up" the
+        // meeting the way it is currently done.
         this.jitsi.on('passwordRequired', function() {
             this.jitsi.executeCommand('password', meetingPassword);
         })
