@@ -190,12 +190,8 @@ module.exports = class RouteController {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                     response.end();
-                                }).catch(err => {
-                                    console.error(err);
                                 })
                             }
-                        }).catch(err => {
-                            console.error(err);
                         })
                     }
                 } else {
