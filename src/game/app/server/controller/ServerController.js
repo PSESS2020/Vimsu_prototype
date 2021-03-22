@@ -1304,8 +1304,8 @@ module.exports = class ServerController {
                 meetList.forEach(meeting => {
                     meetListData.push({
                         id: meeting.getId(),
-                        URL: meeting.getURL(),
-                        name: meeting.getName()
+                        name: meeting.getName(),
+                        password: meeting.getPassword()
                     });
                 });
 

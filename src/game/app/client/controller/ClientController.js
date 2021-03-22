@@ -1481,23 +1481,28 @@ class ClientController {
     /**
      * Calls the Jitsi-API to join a meeting
      * 
-     * might move the code into a seperate class?
-     * @param {*} meetingId 
+     * @param {String} meetingName
+     * @param {String} meetingPassword
      */
-    handleFromViewJoinMeeting(meetingName, meetingURL) {
-        // domain name should not be hard-coded
+    handleFromViewJoinMeeting(meetingName, meetingPassword) {
+        
 
         this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
-            roomName: meetingURL,
+            roomName: meetingName,
+            subject: meetingName, // will this work?
             width: '100%',
             height: window.innerHeight * 0.7,
-            // Add JWT
+            // TODO: Add JWT (maybe)
             parentNode: document.getElementById('meetingModal-body'),
             userInfo: {
                 // email: 'place', ppant has no Email
                 displayName: this.ownBusinessCard.getForename()
             }
         });
+
+        this.jitsi.on('passwordRequired', function() {
+            this.jitsi.executeCommand('password', meetingPassword);
+        })
 
         $('#meetingModal').modal('show');
         

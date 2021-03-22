@@ -66,6 +66,7 @@ module.exports = class Meetingservice {
      */
     static newMeeting(memberIdList, meetingName, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(memberIdList, Array);
+        TypeChecker.isString(meetingId);
         memberIdList.forEach(id => {
             TypeChecker.isString(id);
         });
@@ -79,14 +80,15 @@ module.exports = class Meetingservice {
         }
 
         var meeting = {
-            id: new ObjectId().toString(),
+            id: new ObjectId().toHexString(),
             name: meetingName,
-            members: memberIdList
+            members: memberIdList,
+            password: new ObjectId().toHexString()
         }
 
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
             console.log("meeting saved");
-            return new Meeting(meeting.id, meeting.name, meeting.members);
+            return new Meeting(meeting.id, meeting.name, meeting.members, meeting.password);
         }).catch(err => {
             console.error(err);
         })
@@ -394,4 +396,20 @@ module.exports = class Meetingservice {
             return false;
         })
     }
+
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {String} meetingName 
+     * @param {db} vimsudb
+     * @returns {String} A 
+     */
+    static generateMeetingId(conferenceId, meetingName, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isString(meetingName);
+        let salt = new ObjectId().toHexString();
+        let meetingId = conferenceId + "_" + meetingName + "_" + salt;
+        //if(this.checkForMeetingId
+    }
+
 }

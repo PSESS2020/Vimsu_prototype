@@ -207,8 +207,8 @@ class EventManager {
      * 
      * this may require additional information to be passed (such as a password)
      */
-    handleMeetingJoined(meetingName, meetingURL) {
-        this.clientController.handleFromViewJoinMeeting(meetingName, meetingURL);
+    handleMeetingJoined(meetingName, meetingPassword) {
+        this.clientController.handleFromViewJoinMeeting(meetingName, meetingPassword);
     }
 
     /**
