@@ -23,11 +23,14 @@ module.exports = class Meetingservice {
      * - Add participant to meeting         [X]
      * - remove ppant                       [X]
      * - remove all meetings (clean db)     [X]
+     * - turn id into passed parameter,     [ ]
+     *   alter methods accordingly          [ ]
      */
 
     /**
      * Load a map that contains all meetings belonging to the passed
      * conference stored in the database, indexed by their names.
+     * 
      * @static @method module:MeetingService#loadMeetingMap
      * 
      * @param {String} conferenceId 
@@ -69,6 +72,11 @@ module.exports = class Meetingservice {
         TypeChecker.isString(meetingName);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
+
+        if(!this.existsMeeting(memberIdList, meetingName, conferenceId, vimsudb)) {
+            console.log("Meeting with id " + meetingId + " already exists in database.");
+            return false;
+        }
 
         var meeting = {
             id: new ObjectId().toString(),
