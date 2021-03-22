@@ -315,6 +315,7 @@ module.exports = class RouteController {
 
         this.#app.get('/account-settings', (request, response) => {
             if (request.session.loggedin === true) {
+                username = request.session.username;
                 title = request.session.title;
                 forename = request.session.forename;
                 surname = request.session.surname;
