@@ -76,10 +76,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -104,10 +101,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -132,8 +126,6 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -142,26 +134,28 @@ module.exports = class AccountService {
      * @static @method module:AccountService#updateAccountData
      * 
      * @param {String} accountId account ID
-     * @param {String} username account username
+     * @param {String} newUsername new account username
      * @param {String} newForename new user forename
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return {Account} Account instance
      */
-    static updateAccountData(accountId, username, newForename, suffix, vimsudb) {
+    static updateAccountData(accountId, newUsername, newForename, suffix, vimsudb) {
         TypeChecker.isString(accountId);
-        TypeChecker.isString(username);
+        TypeChecker.isString(newUsername);
         TypeChecker.isString(newForename);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var account = new Account(accountId, username, newForename);
+        var account = new Account(accountId, newUsername, newForename);
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { forename: newForename }).then(res => {
-            if (res.modifiedCount > 0)
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, forename: newForename }).then(res => {
+            if (res.modifiedCount >= 0 && res.matchedCount > 0) {
                 return account;
-
+            } else if (res.code === 11000) {
+                return res.keyValue;
+            }
             return undefined
         })
     }
@@ -190,8 +184,6 @@ module.exports = class AccountService {
             } else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err)
         })
     }
 
@@ -211,9 +203,6 @@ module.exports = class AccountService {
         return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
             console.log("account with accountId " + accountId + " deleted");
             return res;
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 }

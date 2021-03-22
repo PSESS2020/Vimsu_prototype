@@ -225,10 +225,7 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/login', (request, response) => {
-            username = request.body.username;
-            var password = request.body.password;
-
-            return AccountService.verifyLoginData(username, password, Settings.CONFERENCE_ID, this.#db).then(user => {
+            return AccountService.verifyLoginData(request.body.username, request.body.password, Settings.CONFERENCE_ID, this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
@@ -259,11 +256,7 @@ module.exports = class RouteController {
                 response.render('register', { invalidUsernameString: true });
             }
 
-            username = request.body.username
-            forename = request.body.forename;
-            var password = request.body.password;
-
-            return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
+            return AccountService.createAccount(request.body.username, request.body.forename, request.body.password, Settings.CONFERENCE_ID, this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
@@ -274,7 +267,7 @@ module.exports = class RouteController {
                     request.session.username = res.getUsername();
                     response.redirect('/');
                     response.end();
-                } else if (res.username) {
+                } else if (res && res.username) {
                     response.render('register', { usernameTaken: true });
                 } else {
                     response.render('register', { registerFailed: true });
@@ -302,19 +295,24 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/saveAccountChanges', (request, response) => {
+            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
-            forename = request.body.forename;
+            if (!usernameRegex.test(request.body.username)) {
+                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
+            }
+
             var accountId = request.session.accountId;
-            username = request.session.username;
 
-            return AccountService.updateAccountData(accountId, username, forename, Settings.CONFERENCE_ID, this.#db).then(res => {
+            return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.forename = res.getForename();
                     request.session.username = res.getUsername();
+                    username = request.session.username;
                     forename = request.session.forename;
                     response.render('account-settings', this.#getLoggedInParameters({ forename: forename, editAccountSuccess: true }, username))
-
+                } else if (res && res.username) {
+                    response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
                 } else {
                     response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
                 }
