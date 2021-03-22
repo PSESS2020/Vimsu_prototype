@@ -150,7 +150,7 @@ class FriendRequestListView extends WindowView {
      * Displays no friend request if there's no friend request
      * 
      * @param {Object[]} businessCards business cards
-     * @returns if no friend request
+     * @returns false if no friend request
      */
      handleEmptyFriendRequestList(businessCards) {
         if (businessCards && businessCards.length < 1) {
