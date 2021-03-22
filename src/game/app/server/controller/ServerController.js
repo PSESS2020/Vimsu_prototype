@@ -61,6 +61,9 @@ module.exports = class ServerController {
     //map from group-name to group-instance
     #groups;
 
+    // map from meeting name to meeting instance
+    #meetings;
+
     /**
      * Creates an instance of ServerController
      * @constructor module:ServerController
@@ -136,6 +139,13 @@ module.exports = class ServerController {
         }).catch(err => {
             console.error(err);
         });;
+
+        // Load all meetings from db
+        MeetingService.loadMeetingMap(Settings.CONFERENCE_ID, this.#db).then(meetingMap => {
+            this.#meetings = meetingMap;
+        }).catch(err => {
+            console.error(err);
+        })
 
         this.#io.on('connection', (socket) => {
 
@@ -2240,13 +2250,15 @@ module.exports = class ServerController {
             GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, Settings.CONFERENCE_ID, this.#db).then(group => {
                 this.#groups.set(groupName, group);
                 this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
+                // create the meeting belonging to the freshly created group
+                group.setMeeting(this.createMeeting(groupName, memberIDs));
     
                 memberIDs.forEach(memberID => {
                     let member = this.#ppants.get(memberID);
                     let socketID = this.getSocketId(memberID);
         
                     if (member !== undefined && socketID !== undefined) {
-        
+                        
                         let socket = this.getSocketObject(socketID);
     
                         this.#handleLeaveOldGroup(member, groupName);
@@ -2420,6 +2432,50 @@ module.exports = class ServerController {
 
         return true;
     }
+
+    createMeeting(meetingName, memberIDs) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(groupMemberID => {
+            TypeChecker.isString(groupMemberID);
+        });
+
+        // Check if a meeting with name already exists
+        if (this.#meetings.get(meetingName) !== undefined) {
+            return false;
+        }
+
+        MeetingService.newMeeting(memberIDs, meetingName, Setting.CONFERENCE_ID, this.#db).then(meeting => {
+            this.#meetings.set(meetingName, meeting);
+            memberIDs.forEach(memberID => {
+                let member = this.#ppants.get(memberID);
+                if(member != undefined) {
+                    member.joinMeeting(meeting);
+                }
+            })
+        })
+
+    }
+
+    deleteMeeting(meetingName) {
+        TypeChecker.isString(meetingName);
+        
+    }
+
+    deleteAllMeetings() {
+
+    }
+
+    addMemberToMeeting(meetingName, memberId) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(memberId);
+    }
+
+    removeMemberFromMeeting(meetingName, memberId) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(memberId);
+    }
+
 
     /**
      * @private Handle ppant leaving an old group if he joined a new one
