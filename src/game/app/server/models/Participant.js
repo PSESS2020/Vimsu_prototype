@@ -263,7 +263,7 @@ module.exports = class Participant {
      * @return {Meeting[]} meetingList
      */
     getMeetingList() {
-        return this.#meetingList
+        return this.#meetingList;
     }
 
     /**
@@ -276,6 +276,19 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(chat, Chat);
         if (!this.#chatList.includes(chat)) {
             this.#chatList.push(chat);
+        }
+    }
+
+    /**
+     * Adds Meeting instance to the meeting list.
+     * @method module:Participant#joinMeeting
+     * 
+     * @param {Meeting} meeting 
+     */
+    joinMeeting(meeting) {
+        TypeChecker.isInstanceOf(meeting, Meeting);
+        if(!this.#meetingList.includes(meeting)) {
+            this.#meetingList.push(meeting);
         }
     }
 

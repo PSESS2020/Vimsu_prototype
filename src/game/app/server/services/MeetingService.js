@@ -26,6 +26,29 @@ module.exports = class Meetingservice {
      */
 
     /**
+     * Load a map that contains all meetings belonging to the passed
+     * conference stored in the database, indexed by their names.
+     * @static @method module:MeetingService#loadMeetingMap
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
+     * @returns {Map} map from meeting name to meeting
+     */
+    static loadMeetingMap(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+        
+        var meetingMap = new Map();
+
+        return vimsudb.findAllInCollection("meetings_" + conferenceId).then(async meetings => {
+            meetings.forEach(meeting => {
+                meetingMap.set(meeting.name, new Meeting(meeting.id, meeting.name, meeting.members));
+            })
+            return meetingMap;
+        })
+    }
+
+    /**
      * Creates a new meeting in the database and returns a
      * Meeting-instance corresponding to it
      * 

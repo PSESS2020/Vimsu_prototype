@@ -15,6 +15,7 @@ module.exports = class Group {
     #shirtColor;
     #groupMemberIDs;
     #groupChat;
+    #meeting
 
     /* TODO: Meeting functionality is still missing */
 
@@ -81,6 +82,27 @@ module.exports = class Group {
      */
      getGroupChat() {
         return this.#groupChat;
+    }
+
+    /**
+     * Gets the meeting belonging to the group.
+     * @method module:Group#getMeeting
+     * 
+     * @returns {Meeting} 
+     */
+    getMeeting() {
+        return this.#meeting;
+    }
+
+    /**
+     * Sets the meeting belonging to the Group-instance to the passed
+     * meeting-instance.
+     * @method module:Group#setMeeting
+     * 
+     * @param {Meeting} meeting 
+     */
+    setMeeting(meeting) {
+        this.#meeting = meeting;
     }
 
     /**
