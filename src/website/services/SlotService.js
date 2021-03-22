@@ -44,13 +44,9 @@ module.exports = class SlotService {
                         } else {
                             return false;
                         }
-                    }).catch(err => {
-                        console.error(err)
                     })
                 }
             })
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -105,10 +101,13 @@ module.exports = class SlotService {
             isAccepted: false
         }
 
-        return vimsudb.insertOneToCollection("lectures", lecture)
-            .catch(err => {
-                console.error(err)
-            })
+        return vimsudb.insertOneToCollection("lectures", lecture).then(res => {
+            if (res.insertedCount > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        })
     }
 
     /**
@@ -135,10 +134,9 @@ module.exports = class SlotService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteAllFromCollection("lectures").then(res => {
-            console.log("all slots deleted");
+            if (res)
+                console.log("all slots deleted");
             return res;
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -154,10 +152,10 @@ module.exports = class SlotService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteOneFromCollection("lectures", { lectureId: lectureId }).then(res => {
-            console.log("slot with lectureId " + lectureId + " deleted");
+            if (res)
+                console.log("slot with lectureId " + lectureId + " deleted");
+            
             return res;
-        }).catch(err => {
-            console.error(err);
         })
     }
 } 

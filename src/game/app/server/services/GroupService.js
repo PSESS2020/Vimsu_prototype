@@ -33,15 +33,11 @@ const db = require('../../../../config/db.js');
             await groups.forEach(group => {
                 return ChatService.loadChat(group.groupChatID, conferenceId, vimsudb).then(groupChat => {
                     groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat));
-                }).catch(err => {
-                    console.error(err);
-                });
+                })
             })
 
             return groupMap;
-        }).catch(err => {
-            console.error(err)
-        });
+        })
     }
 
     /**
@@ -79,8 +75,6 @@ const db = require('../../../../config/db.js');
             console.log("group saved in DB");
             return new Group(groupName, groupColor, memberIDs, groupChat);
 
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -102,8 +96,6 @@ const db = require('../../../../config/db.js');
         return vimsudb.deleteOneFromCollection("groups_" + conferenceId, { groupName: groupName }).then(res => {
             console.log("group with groupName " + groupName + " deleted");
             return res;
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -126,9 +118,7 @@ const db = require('../../../../config/db.js');
 
         return vimsudb.insertToArrayInCollection("groups_" + conferenceId, { groupName: groupName }, { memberIDs: memberID }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-        });
+        })
     }
 
     /**
@@ -156,11 +146,7 @@ const db = require('../../../../config/db.js');
                     this.deleteGroup(groupName, conferenceId, vimsudb);
                 }
                 return res;
-            }).catch(err => {
-                console.error(err);
-            });
-        }).catch(err => {
-            console.error(err);
-        });
+            })
+        })
     }
  }
