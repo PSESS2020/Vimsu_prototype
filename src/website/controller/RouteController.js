@@ -152,6 +152,7 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
+                    username = request.session.username;
                     response.render('upload', this.#getLoggedInParameters({}, username));
                 } else {
                     response.render('page-not-found');
@@ -205,6 +206,7 @@ module.exports = class RouteController {
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {
+                username = request.session.username;
                 response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('login');
@@ -230,7 +232,7 @@ module.exports = class RouteController {
                 if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
-                    request.session.username = username;
+                    request.session.username = user.getUsername();
                     request.session.forename = user.getForename();
                     response.redirect('/');
                 }
@@ -243,6 +245,7 @@ module.exports = class RouteController {
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
+                username = request.session.username;
                 response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('register');
@@ -308,9 +311,7 @@ module.exports = class RouteController {
                     request.session.accountId = res.getAccountID();
                     request.session.forename = res.getForename();
                     request.session.username = res.getUsername();
-                    username = request.session.username;
-                    forename = request.session.forename;
-                    response.render('account-settings', this.#getLoggedInParameters({ forename: forename, editAccountSuccess: true }, username))
+                    response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
                 } else if (res && res.username) {
                     response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
                 } else {
