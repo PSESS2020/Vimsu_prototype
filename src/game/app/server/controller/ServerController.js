@@ -2157,6 +2157,7 @@ module.exports = class ServerController {
                 this.#groups.set(groupName, group);
                 this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
                 // create the meeting belonging to the freshly created group
+                // MARKED FOR IMPROVEMENT
                 group.setMeeting(this.createMeeting(groupName, memberIDs));
     
                 memberIDs.forEach(memberID => {
@@ -2220,6 +2221,7 @@ module.exports = class ServerController {
         });
 
         this.#groups.delete(groupName);
+        this.deleteMeeting(groupName); // MARKED FOR IMPROVEMENT
         GroupService.deleteGroup(groupName, Settings.CONFERENCE_ID, this.#db);
         return true;
     }
@@ -2264,6 +2266,9 @@ module.exports = class ServerController {
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
+
+            // MARKED FOR IMPROVEMENT
+            this.addMembersToMeeting(groupName, [memberID]);
 
             if (member !== undefined && socketID !== undefined && !group.includesGroupMember(memberID)) {
 
@@ -2312,6 +2317,9 @@ module.exports = class ServerController {
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
+
+            // MARKED FOR IMPROVEMENT
+            this.removeMembersFromMeeting(groupName, [memberID]);
 
             if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
 
