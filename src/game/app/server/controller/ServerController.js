@@ -2433,6 +2433,14 @@ module.exports = class ServerController {
         return true;
     }
 
+    /**
+     * Creates a meeting with the passed name
+     * @method module:ServerController#createMeeting
+     * 
+     * @param {String} meetingName 
+     * @param {String[]} memberIDs 
+     * @returns {Boolean} Whether operation was successful or not.
+     */
     createMeeting(meetingName, memberIDs) {
         TypeChecker.isString(meetingName);
         TypeChecker.isInstanceOf(memberIDs, Array);
@@ -2449,31 +2457,137 @@ module.exports = class ServerController {
             this.#meetings.set(meetingName, meeting);
             memberIDs.forEach(memberID => {
                 let member = this.#ppants.get(memberID);
-                if(member != undefined) {
+                if(member !== undefined) {
                     member.joinMeeting(meeting);
                 }
             })
+            return true;
         })
 
     }
 
+    /**
+     * Deletes a specific meeting from the database.
+     * @method module:ServerController#deleteMeeting
+     * 
+     * @param {String} meetingName 
+     * @returns {Boolean} Whether the operation was successful or not
+     */
     deleteMeeting(meetingName) {
         TypeChecker.isString(meetingName);
-        
+
+        let meeting = this.#meetings.get(meetingName);
+
+        // Check if meeting with that name exists
+        if (meeting === undefined) {
+            return false;
+        }
+
+        let memberIDs = meeting.getMemberIdList();
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            member.leaveMeeting(meeting.getId);
+        })
+
+        this.#meetings.delete(meetingName);
+        MeetingService.deleteMeeting(meeting.getId(), Settings.CONFERENCE_ID, this.#db);
+        return true;
     }
 
+    /**
+     * Deletes all meetings from database.
+     * WARNING: DOES NOT YET HAVE A RETURN CODE
+     * @method module:ServerController#deleteAllMeetings
+     */
     deleteAllMeetings() {
-
+        this.#meetings.forEach((meeting, meetingName) => {
+            this.deleteMeeting(meetingName);
+        })
     }
 
-    addMemberToMeeting(meetingName, memberId) {
+    /**
+     * Adds a list of participants, referenced by id,
+     * to a specified meeting.
+     * @method module:ServerController#addMembersToMeeting
+     * 
+     * @param {String} meetingName 
+     * @param {String[]} memberIDs 
+     * @returns {Boolean} Whether the operation was successful or not
+     */
+    addMembersToMeeting(meetingName, memberIDs) {
         TypeChecker.isString(meetingName);
-        TypeChecker.isString(memberId);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        });
+
+        let meeting = this.#meetings.get(meetingName);
+
+        // Check if meeting with that name exists
+        if (meeting === undefined) {
+            return false;
+        }
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+
+            // This only allows for currently online ppants to
+            // be added to meetings. It would be nicer if also
+            // offline ppants could be added to meetings, but
+            // this would require checking the database for the
+            // passed ppantId
+            if(member !== undefined) {
+                meeting.addMember(member.getParticipantId());
+                MeetingService.addParticipant(meeting.getId(), member.getParticipantId(), Settings.CONFERENCE_ID, this.#db);
+                member.joinMeeting(meeting.getId());
+            }
+        });
+        return true;
     }
 
-    removeMemberFromMeeting(meetingName, memberId) {
+    /**
+     * Removes a list of participants, referenced by id,
+     * from a specified meeting.
+     * @method module:ServerController:removerMembersFromMeeting
+     * 
+     * @param {String} meetingName 
+     * @param {String[]} memberIDs 
+     * @returns {Boolean} Whether the operation was successful or not
+     */
+    removeMembersFromMeeting(meetingName, memberIDs) {
         TypeChecker.isString(meetingName);
-        TypeChecker.isString(memberId);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        });
+
+        let meeting = this.#meetings.get(meetingName);
+
+        // Check if meeting with that name exists
+        if (meeting === undefined) {
+            return false;
+        }
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+
+            // This only allows for currently online ppants to
+            // be removed from meetings. It would be nicer if also
+            // offline ppants could be remove from meetings, but
+            // this would require more database interaction
+            if (member !== undefined) {
+                // member is removed from meeting as well
+                // during this next operation
+                member.leaveMeeting(meeting.getId());
+                MeetingService.removeParticipant(meeting.getId(), member.getParticipantId(), Settings.CONFERENCE_ID, this.#db);
+            }
+        })
+
+        // this method should probably have more sophisticated returns
+        // in order to be able to give info about why it failed (if it fails)
+        return true;
+
     }
 
 

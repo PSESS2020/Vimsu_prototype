@@ -292,6 +292,19 @@ module.exports = class Participant {
         }
     }
 
+    leaveMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.#meetingList.forEach(meeting => {
+            if(meeting.getId() === meetingId) {
+                meeting.removeMember(this.#id);
+                let index = this.#meetingList.indexOf(meeting);
+                this.#meetingList.splice(index, 1);
+            }
+        })
+
+    }
+
     /**
      * Sets avatar's position
      * @method module:Participant#setPosition
