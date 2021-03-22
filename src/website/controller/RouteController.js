@@ -152,6 +152,7 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
+                    username = request.session.username;
                     response.render('upload', this.#getLoggedInParameters({}, username));
                 } else {
                     response.render('page-not-found');
@@ -249,6 +250,7 @@ module.exports = class RouteController {
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
+                username = request.session.username;
                 response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('register');
