@@ -36,7 +36,7 @@ class FriendRequestListView extends WindowView {
         $('#nofriendrequest').empty();
         $('#friendRequestListModal .modal-body .list-group').empty()
 
-        this.handleEmptyFriendRequestList(businessCards)
+        if (!this.handleEmptyFriendRequestList(businessCards)) return
 
         this.businessCards = businessCards;
         this.businessCards.forEach(businessCard => {
@@ -111,7 +111,7 @@ class FriendRequestListView extends WindowView {
         });
 
         $("#friendRequest" + participantId).remove()
-        this.handleEmptyFriendRequestList(this.businessCards)
+        if (!this.handleEmptyFriendRequestList(this.businessCards)) return;
     }
 
     /**
@@ -159,7 +159,9 @@ class FriendRequestListView extends WindowView {
     handleEmptyFriendRequestList(businessCards) {
         if (businessCards && businessCards.length < 1) {
             $('#nofriendrequest').text("No friend request received.")
-            return;
+            return false;
         }
+
+        return true;
     }
 }

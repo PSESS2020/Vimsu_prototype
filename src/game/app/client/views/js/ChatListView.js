@@ -38,7 +38,7 @@ class ChatListView extends WindowView {
     $("#nochat").empty();
     $("#chatListModal .modal-body .list-group").empty();
 
-    this.handleEmptyChats(chats)
+    if (!this.handleEmptyChats(chats)) return;
 
     this.ownUsername = ownUsername
 
@@ -130,20 +130,22 @@ class ChatListView extends WindowView {
     });
 
     $("#chatListEntry" + chatId).remove();
-    this.handleEmptyChats(this.chats)
+    if (!this.handleEmptyChats(this.chats)) return;
   }
 
   /**
    * Displays no chat message if there's no chat
    * 
    * @param {Object[]} chats chats
-   * @returns if no chat
+   * @returns false if no chat
    */
   handleEmptyChats(chats) {
     if (chats && chats.length < 1) {
       $("#nochat").text("No chats found. Let's connect with others!");
-      return;
+      return false;
     }
+
+    return true;
   }
 
   /**
