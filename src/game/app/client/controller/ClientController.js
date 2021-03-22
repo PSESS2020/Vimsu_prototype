@@ -1484,18 +1484,18 @@ class ClientController {
      * might move the code into a seperate class?
      * @param {*} meetingId 
      */
-    handleFromViewJoinMeeting(meetingId) {
+    handleFromViewJoinMeeting(meetingName, meetingURL) {
         // domain name should not be hard-coded
 
         this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
-            roomName: 'maybenottestidontknowseemsawkward',
+            roomName: meetingURL,
             width: '100%',
             height: window.innerHeight * 0.7,
             // Add JWT
             parentNode: document.getElementById('meetingModal-body'),
             userInfo: {
-                email: 'place', // These will be the correct values from
-                displayName: 'holder' // the participants data
+                // email: 'place', ppant has no Email
+                displayName: this.ownBusinessCard.getForename()
             }
         });
 

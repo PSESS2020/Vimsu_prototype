@@ -1302,8 +1302,9 @@ module.exports = class ServerController {
                  * we need to generate the URL as well as the name, which
                  * is what the meeting will get listed as. */
                 meetList.forEach(meeting => {
-                    meetListDate.push({
+                    meetListData.push({
                         id: meeting.getId(),
+                        URL: meeting.getURL(),
                         name: meeting.getName()
                     });
                 });
@@ -1313,6 +1314,7 @@ module.exports = class ServerController {
             });
 
             socket.on('requestModMeeting', () => {
+                // TODO
                 // Check for available moderators
                 // as soon as one is available, add him to meeting with requester
                 // add requester to meeting
