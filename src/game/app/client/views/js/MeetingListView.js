@@ -102,7 +102,9 @@ class MeetingListView extends WindowView {
 
         $('#meeting' + meeting.id).off();
         $('#meeting' + meeting.id).on('click', () => {
-            this.eventManager.handleMeetingJoined(meeting.name, meeting.URL);
+            /* TO FIX
+            This is not ideal, sensitive information like a password, even though it is not a particularly important, is not good practice */
+            this.eventManager.handleMeetingJoined(meeting.name, meeting.password); 
         })
     }
 

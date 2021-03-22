@@ -12,20 +12,20 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 module.exports = class Meeting{
 
     #meetingId      // The unique id used to identify the meeting with
-    #URL            // URL under which to find the video-meeting
-    #meetingName    // The name under which the meeting is displayed in the GUI
-    #settings       // additional settings, maybe not necessary
-    #memberIdList     // the 
+    #meetingName    // The name under which the meeting is displayed in the
+                    // GUI
+    #password       // the "password" used to join the meeting
+    #memberIdList   // the list of id of members of the meeting
 
     /**
      * 
      * 
      */
-    constructor(id, name, members) {
+    constructor(id, name, members, password) {
         this.#meetingId = id;
         this.#meetingName = name;
         this.#memberIdList = members;
-        this.#URL = this.#generateURL(id, name);
+        this.#password = password;
     } 
 
     getId() {
@@ -40,8 +40,8 @@ module.exports = class Meeting{
         return this.#memberIdList;
     }
 
-    getURL() {
-        return this.#URL;
+    getPassword() {
+        return this.#password;
     }
 
     addMember(ppantId) {
