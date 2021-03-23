@@ -64,7 +64,6 @@ module.exports = class Meetingservice {
      */
     static newMeeting(memberIdList, meetingName, conferenceId, vimsudb) {
         TypeChecker.isInstanceOf(memberIdList, Array);
-        TypeChecker.isString(meetingId);
         memberIdList.forEach(id => {
             TypeChecker.isString(id);
         });
