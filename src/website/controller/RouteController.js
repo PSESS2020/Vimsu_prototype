@@ -325,48 +325,60 @@ module.exports = class RouteController {
             }
         })
 
-        this.#app.post('/saveAccountChanges', (request, response) => {
-            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
-
-            if (!usernameRegex.test(request.body.username)) {
-                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
-            }
-
-            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                response.render('register', this.#getLoggedInParameters({ forename: forename, invalidEmail: true }, username));
-            }
-            let title = request.body.title;
-
-            if (title === "Title") {
-                title = "";
-            }
-            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
-            }
+        this.#app.post('/account-settings', (request, response) => {
+            var clickedButton = request.body.accountSettingsButton;
 
             var accountId = request.session.accountId;
 
-            return AccountService.updateAccountData(accountId, request.body.username, request.body.title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, '', this.#db).then(res => {
-                if (res instanceof Account) {
-                    request.session.accountId = res.getAccountID();
-                    request.session.title = res.getTitle();
-                    request.session.surname = res.getSurname();
-                    request.session.forename = res.getForename();
-                    request.session.username = res.getUsername();
-                    request.session.job = res.getJob();
-                    request.session.company = res.getCompany();
-                    request.session.email = res.getEmail();
+            if (clickedButton === "saveChangesButton") {
+                const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
-                    response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                } else if (res && res.username) {
-                    response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
-                } else if (res && res.email) {
-                    response.render('account-settings', this.#getLoggedInParameters({ emailTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
-                } else {
-                    response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                if (!usernameRegex.test(request.body.username)) {
+                    response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
                 }
-            })
+
+                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                    response.render('register', this.#getLoggedInParameters({ forename: forename, invalidEmail: true }, username));
+                }
+                let title = request.body.title;
+
+                if (title === "Title") {
+                    title = "";
+                }
+                else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                    response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                }
+
+                return AccountService.updateAccountData(accountId, request.body.username, request.body.title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, '', this.#db).then(res => {
+                    if (res instanceof Account) {
+                        request.session.accountId = res.getAccountID();
+                        request.session.title = res.getTitle();
+                        request.session.surname = res.getSurname();
+                        request.session.forename = res.getForename();
+                        request.session.username = res.getUsername();
+                        request.session.job = res.getJob();
+                        request.session.company = res.getCompany();
+                        request.session.email = res.getEmail();
+
+                        response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    } else if (res && res.username) {
+                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                    } else if (res && res.email) {
+                        response.render('account-settings', this.#getLoggedInParameters({ emailTaken: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                    }
+                })
+            } else if (clickedButton === "deleteAccountButton") {
+                return AccountService.deleteAccountAndParticipant(accountId, '', this.#db).then(res => {
+                    if (res) {
+                        response.redirect('/logout');
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                    }
+                })
+            }
         })
 
         this.#app.get('*', (request, response) => {
