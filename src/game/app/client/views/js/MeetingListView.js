@@ -35,7 +35,7 @@ class MeetingListView extends WindowView {
         $('#nomeeting').empty();
         $('#meetingListModal .modal-body .list-group').empty();
 
-        this.handleEmptyMeetingList(meetings)
+        if (!this.handleEmptyMeetingList(meetings)) return;
 
         this.meetings = meetings;
 
@@ -63,7 +63,7 @@ class MeetingListView extends WindowView {
         });
 
         $("#meetingEntry" + meetingId).remove()
-        this.handleEmptyMeetingList(meetings)
+        if (!this.handleEmptyMeetingList(meetings)) return
     };
 
     /**
@@ -111,13 +111,15 @@ class MeetingListView extends WindowView {
      * Displays no meeting if there's no meeting
      * 
      * @param {Object[]} meetings meetings
-     * @returns if no meeting
+     * @returns false if no meeting
      */
      handleEmptyMeetingList(meetings) {
         if (meetings && meetings.length < 1) {
             $('#nomeeting').text("No meetings found. Let's connect with others!")
             $('#meetingListModal').modal('show');
-            return;
+            return false;
         }
+
+        return true;
     }
 }

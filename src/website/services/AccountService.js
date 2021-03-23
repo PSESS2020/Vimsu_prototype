@@ -3,6 +3,8 @@ const Account = require('../models/Account')
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 const db = require('../../config/db');
+const ParticipantService = require('../../game/app/server/services/ParticipantService')
+const Settings = require('../../game/app/server/utils/Settings')
 
 /**
  * The Account Service
@@ -14,31 +16,6 @@ const db = require('../../config/db');
 module.exports = class AccountService {
 
     /**
-     * checks if username is valid
-     * @static @method module:AccountService#isUsernameValid
-     * 
-     * @param {String} username username
-     * @param {String} suffix collection name suffix
-     * @param {db} vimsudb db instance
-     * 
-     * @return {boolean} true if valid, i.e. there's no user with this username found in the database, otherwise false
-     */
-    static isUsernameValid(username, suffix, vimsudb) {
-        TypeChecker.isString(username);
-        TypeChecker.isString(suffix);
-        TypeChecker.isInstanceOf(vimsudb, db)
-
-        return vimsudb.findInCollection("accounts" + suffix, { username: username }, { username: username }).then(results => {
-            if (results.length > 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        })
-    }
-
-    /**
      * creates a user account and saves it in the database.
      * @static @method module:AccountService#createAccount
      * 
@@ -48,7 +25,7 @@ module.exports = class AccountService {
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
-     * @return {Account} Account instance
+     * @return {Account|boolean} Account instance if successful
      */
     static createAccount(username, forename, password, suffix, vimsudb) {
         TypeChecker.isString(username);
@@ -69,11 +46,14 @@ module.exports = class AccountService {
         }
 
         return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-            return account;
-        }).catch(err => {
-            console.error(err);
-        })
+            if (res.insertedCount > 0) {
+                return account;
+            } else if (res.code === 11000) {
+                return res.keyValue;
+            }
 
+            return false;
+        })
     }
 
     /**
@@ -98,10 +78,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -126,10 +103,7 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -154,8 +128,6 @@ module.exports = class AccountService {
             else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -164,27 +136,58 @@ module.exports = class AccountService {
      * @static @method module:AccountService#updateAccountData
      * 
      * @param {String} accountId account ID
-     * @param {String} username account username
+     * @param {String} newUsername new account username
      * @param {String} newForename new user forename
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
-     * @return {Account} Account instance
+     * @return {Account|boolean} Account instance if successful
      */
-    static updateAccountData(accountId, username, newForename, suffix, vimsudb) {
+    static updateAccountData(accountId, newUsername, newForename, suffix, vimsudb) {
         TypeChecker.isString(accountId);
-        TypeChecker.isString(username);
+        TypeChecker.isString(newUsername);
         TypeChecker.isString(newForename);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var account = new Account(accountId, username, newForename);
+        var account = new Account(accountId, newUsername, newForename);
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { forename: newForename }).then(res => {
-            return account;
-        }).catch(err => {
-            console.error(err)
-        });
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, forename: newForename }).then(res => {
+            if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                return account;
+            } else if (res.code === 11000) {
+                return res.keyValue;
+            }
+            return false;
+        })
+    }
+
+    /**
+     * changes user's password
+     * @param {String} username account username
+     * @param {String} password user's password
+     * @param {String} newPassword user's new password
+     * @param {String} suffix collection name suffix
+     * @param {db} vimsudb db instance
+     * @returns {Account|boolean} Account instance if successful
+     */
+    static changePassword(username, password, newPassword, suffix, vimsudb) {
+        TypeChecker.isString(username);
+        TypeChecker.isString(password);
+        TypeChecker.isString(newPassword);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return this.verifyLoginData(username, password, suffix, vimsudb).then(account => {
+            if (!account) return false;
+
+            return vimsudb.updateOneToCollection("accounts" + suffix, { username: username }, { passwordHash: passwordHash.generate(newPassword) }).then(res => {
+                if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                    return true;
+                }
+                return false;
+            })
+        })
     }
 
     /**
@@ -211,18 +214,17 @@ module.exports = class AccountService {
             } else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err)
         })
     }
 
     /**
-     * Deletes an account from the database
+     * Deletes an account  from the database
      * @static @method module:AccountService#deleteAccount
      * 
      * @param {String} accountId account ID
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
+     * @return {boolean} true if deleted
      */
     static deleteAccount(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
@@ -230,11 +232,45 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteOneFromCollection("accounts" + suffix, { accountId: accountId }).then(res => {
-            console.log("account with accountId " + accountId + " deleted");
-            return res;
-        }).catch(err => {
-            console.error(err);
-        })
+            if (res !== true) return false;
 
+            console.log("account with accountId " + accountId + " deleted");
+            return true;
+        });
+    }
+
+    /**
+     * Deletes account and participant entry from the database
+     * @static @method module:AccountService#deleteAccount
+     * 
+     * @param {String} accountId account ID
+     * @param {String} suffix collection name suffix
+     * @return {boolean} true if deleted
+     */
+    static deleteAccountAndParticipant(accountId, suffix, vimsudb) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return this.deleteAccount(accountId, suffix, vimsudb).then(res => {
+            if (res !== true) return false;
+
+            //find participant entry with this account
+            return ParticipantService.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
+                //if participant not found then do nothing
+                if (!par) {
+                    return true;
+                }
+
+                //participant is found, delete entry
+                return ParticipantService.deleteParticipant(par.participantId, Settings.CONFERENCE_ID, vimsudb).then(res => {
+                    if (res) {
+                        return true;
+                    }
+
+                    return false;
+                })
+            })
+        })
     }
 }

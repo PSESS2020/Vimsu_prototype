@@ -29,9 +29,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -54,9 +51,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -79,9 +73,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.sent': receiverId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
 
     }
@@ -103,9 +94,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.sent': { $exists: true } }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -128,9 +116,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: ownParticipantId }, { 'friendRequestIds.received': senderId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -151,9 +136,6 @@ module.exports = class FriendRequestListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { 'friendRequestIds.received': { $exists: true } }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -180,8 +162,6 @@ module.exports = class FriendRequestListService {
                 console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
 
     }
@@ -209,8 +189,6 @@ module.exports = class FriendRequestListService {
                 console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 } 

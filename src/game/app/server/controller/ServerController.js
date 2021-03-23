@@ -355,12 +355,8 @@ module.exports = class ServerController {
 
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
                         socket.emit('updateRank', rank);
-                    }).catch(err => {
-                        console.error(err);
                     })
-                }).catch(err => {
-                    console.error(err)
-                });
+                })
             });
 
             /* handles participant sending a message */
@@ -1527,9 +1523,7 @@ module.exports = class ServerController {
                     //get BusCard from DB and add it to sent friend Request
                     ParticipantService.getBusinessCard(targetID, Settings.CONFERENCE_ID, this.#db).then(targetBusCard => {
                         requester.addSentFriendRequest(targetBusCard);
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    })
                 } else if (target !== undefined && requester === undefined) {
                     //requester goes instantly offline after he sent friend request
                     //get BusCard from DB and add it to sent friend Request
@@ -1543,9 +1537,7 @@ module.exports = class ServerController {
                         }
 
                         this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    })
                 }
 
                 //update DB

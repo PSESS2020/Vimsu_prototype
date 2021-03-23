@@ -44,7 +44,7 @@ module.exports = class ParticipantService {
 
         var accountId = account.getAccountID();
 
-        return this.#getParticipant(accountId, conferenceId, vimsudb).then(par => {
+        return this.getParticipant(accountId, conferenceId, vimsudb).then(par => {
             var participant;
 
             if (par) {
@@ -59,25 +59,19 @@ module.exports = class ParticipantService {
                     await par.friendIds.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendList.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
+                        })
                     });
 
                     await par.friendRequestIds.received.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendRequestListReceived.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
+                        })
                     });
 
                     await par.friendRequestIds.sent.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {
                             friendRequestListSent.push(busCard);
-                        }).catch(err => {
-                            console.error(err)
-                        });
+                        })
                     });
 
 
@@ -119,7 +113,7 @@ module.exports = class ParticipantService {
                     })
 
                     participant.setAchievements(achievements);
-                    
+
                     return Promise.all(ppantAchievements.map(async achievement => {
                         let index = participant.getAchievements().findIndex(ach => ach.getId() === achievement.getId());
                         if (index < 0) {
@@ -202,18 +196,14 @@ module.exports = class ParticipantService {
 
                     return this.#storeAchievements(par.participantId, conferenceId, achievementsData, vimsudb).then(res => {
                         return participant;
-                    }).catch(err => {
-                        console.error(err);
                     })
                 })
             }
-        }).catch(err => {
-            console.error(err)
         })
     }
 
     /**
-     * @static @private Gets participant with this account from the database
+     * @static Gets participant with this account from the database
      * @method module:ParticipantService#getParticipant
      * 
      * @param {String} accountId account ID
@@ -222,7 +212,7 @@ module.exports = class ParticipantService {
      * 
      * @return {boolean} true if participant is found, otherwise false
      */
-    static #getParticipant = function (accountId, conferenceId, vimsudb) {
+    static getParticipant(accountId, conferenceId, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
@@ -257,8 +247,6 @@ module.exports = class ParticipantService {
             if (par) {
                 return AccountService.getAccountUsername(par.accountId, conferenceId, vimsudb).then(username => {
                     return username;
-                }).catch(err => {
-                    console.error(err);
                 })
             }
             else {
@@ -371,9 +359,6 @@ module.exports = class ParticipantService {
                 console.log("participant not found");
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -396,9 +381,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { points: points }).then(res => {
             return true;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
 
     }
@@ -427,9 +409,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { $each: achievementsData } }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -452,9 +431,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { achievements: { id: achievementId } }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -481,9 +457,6 @@ module.exports = class ParticipantService {
                 console.log("participant not found");
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -510,9 +483,6 @@ module.exports = class ParticipantService {
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId, 'achievements.id': achievementId },
             { 'achievements.$.currentLevel': level }).then(res => {
                 return true;
-            }).catch(err => {
-                console.error(err);
-                return false;
             })
     }
 
@@ -534,9 +504,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { taskCount: taskCount }).then(res => {
             return true;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -565,9 +532,6 @@ module.exports = class ParticipantService {
                 console.log("participant not found");
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -592,9 +556,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { ['taskCount.' + taskType]: count }).then(res => {
             return true;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -617,10 +578,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { chatIDList: chatId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
-        });
+        })
     }
 
     /**
@@ -637,8 +595,6 @@ module.exports = class ParticipantService {
         return vimsudb.deleteAllFromCollection("participants_" + conferenceId).then(res => {
             console.log("all participants deleted");
             return res;
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -656,12 +612,13 @@ module.exports = class ParticipantService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return vimsudb.deleteOneFromCollection("participants_" + conferenceId, { participantId: participantId }).then(res => {
-            console.log("participant with participantId " + participantId + " deleted");
-            return res;
-        }).catch(err => {
-            console.error(err);
-        })
+            if (res === true) {
+                console.log("participant with participantId " + participantId + " deleted");
+                return true;
+            } 
 
+            return false;
+        })
     }
 
     /**
@@ -683,9 +640,6 @@ module.exports = class ParticipantService {
 
         return vimsudb.updateOneToCollection("participants_" + conferenceId, { participantId: participantId }, { isModerator: modState }).then(res => {
             return true;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
-} 
+}

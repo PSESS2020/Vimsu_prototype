@@ -50,7 +50,7 @@ class InviteFriendsView extends WindowView {
         this.invitedFriends = [];
 
         if (businessCards) {
-            this.handleEmptyInviteFriends(businessCards)
+            if (!this.handleEmptyInviteFriends(businessCards)) return
 
             const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
             this.businessCards = sortedBusinessCards;
@@ -164,7 +164,7 @@ class InviteFriendsView extends WindowView {
 
             if (found) {
                 $("#invitefriend" + participantId).remove()
-                this.handleEmptyInviteFriends(this.businessCards)
+                if (!this.handleEmptyInviteFriends(this.businessCards)) return
             }
         }
     }
@@ -173,12 +173,14 @@ class InviteFriendsView extends WindowView {
    * Displays no friend if there's no friend to invite
    * 
    * @param {Object[]} businessCards business cards
-   * @returns if no friend to invite
+   * @returns false if no friend to invite
    */
     handleEmptyInviteFriends(businessCards) {
         if (businessCards && businessCards.length < 1) {
             $('#nofriendtoinvite').text("No friends to invite.");
-            return;
+            return false;
         }
+
+        return true;
     }
 }
