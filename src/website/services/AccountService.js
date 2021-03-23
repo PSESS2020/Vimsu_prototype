@@ -4,6 +4,7 @@ const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 const db = require('../../config/db');
 const ParticipantService = require('../../game/app/server/services/ParticipantService')
+const Settings = require('../../game/app/server/utils/Settings')
 
 /**
  * The Account Service
@@ -227,14 +228,14 @@ module.exports = class AccountService {
             if (res !== true) return false;
             
             //find participant entry with this account
-            return ParticipantService.getParticipant(accountId, suffix, vimsudb).then(par => {
+            return ParticipantService.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
                 //if participant not found then do nothing
                 if (!par) {
                     return true;
                 }
 
                 //participant is found, delete entry
-                return ParticipantService.deleteParticipant(par.participantId, suffix, vimsudb).then(res => {
+                return ParticipantService.deleteParticipant(par.participantId, Settings.CONFERENCE_ID, vimsudb).then(res => {
                     if (res) {
                         return true;
                     }
