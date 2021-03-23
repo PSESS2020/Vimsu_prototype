@@ -73,10 +73,15 @@ module.exports = class Meeting{
      * @method module:Meeting#addMember
      * 
      * @param {String} ppantId 
+     * @returns {Boolean} Whether the operation was successful or not 
      */
     addMember(ppantId) {
         TypeChecker.isString(ppantId);
-        this.#memberIdList.push(ppantId);
+        if(!this.#memberIdList.includes(ppantId)) {
+            this.#memberIdList.push(ppantId);
+            return true;
+        }
+        return false;
     }
 
     /**
