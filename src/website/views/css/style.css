@@ -13,7 +13,6 @@
   --light-orange-color: rgb(255, 180, 73, .3);
   --light-tosca-color: rgb(72, 148, 160, .1);
   --white-color: antiquewhite;
-  --footer-height: 35px;
 }
 
 body:before {
@@ -62,8 +61,7 @@ body {
 }
 
 .container {
-  min-height: 100vh;
-  margin-bottom: -(var(--footer-height));
+  min-height: 95vh;
 }
 
 .header {
@@ -214,7 +212,7 @@ a, a:hover {
 }
 
 #content {
-  height: 65vh;
+  margin-top: 100px;
 }
 
 #form {
@@ -225,21 +223,20 @@ a, a:hover {
 
 #login-content, #register-content {
   text-align: center;
-  height: 75vh;
+  margin-top: 90px;
 }
 
 #upload-content {
   text-align: center;
-  height: 90vh;
+  margin-top: 35px;
 }
 
-.footer {
-  height: var(--footer-height);
-  position: relative;
+#footer {
+  margin-top: 40px;
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
-  padding: 10px 50px;
+  padding: 10px 100px;
 }
 
 hr {
@@ -337,17 +334,11 @@ input {
   hr {
     margin: 10px;
   }
-  #register-content {
-    height: 80vh;
-  }
-  #login-content {
-    height: 70vh;
-  }
-  #upload-content {
-    height: 100vh;
-  }
   .form-control {
     font-size: 12px;
+  }
+  #login-content, #register-content {
+    margin-top: 50px;
   }
 }
 
@@ -361,6 +352,6 @@ input {
     margin-bottom: 30px;
   }
   #content {
-    height: 600px;
+    margin-top: 50px;
   }
 }
