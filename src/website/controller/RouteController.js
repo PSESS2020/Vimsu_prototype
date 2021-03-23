@@ -294,27 +294,38 @@ module.exports = class RouteController {
             }
         })
 
-        this.#app.post('/saveAccountChanges', (request, response) => {
-            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
-
-            if (!usernameRegex.test(request.body.username)) {
-                response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
-            }
-
+        this.#app.post('/account-settings', (request, response) => {
+            var clickedButton = request.body.accountSettingsButton;
             var accountId = request.session.accountId;
+            
+            if (clickedButton === "saveChangesButton") {
+                const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
-            return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res instanceof Account) {
-                    request.session.accountId = res.getAccountID();
-                    request.session.forename = res.getForename();
-                    request.session.username = res.getUsername();
-                    response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
-                } else if (res && res.username) {
-                    response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
-                } else {
-                    response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                if (!usernameRegex.test(request.body.username)) {
+                    response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
                 }
-            })
+    
+                return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
+                    if (res instanceof Account) {
+                        request.session.accountId = res.getAccountID();
+                        request.session.forename = res.getForename();
+                        request.session.username = res.getUsername();
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
+                    } else if (res && res.username) {
+                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                    }
+                })
+            } else if (clickedButton === "deleteAccountButton") {
+                return AccountService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then (res => {
+                    if (res) {
+                        response.redirect('/logout');
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: forename }, username));
+                    }
+                })
+            }
         })
 
         this.#app.get('*', (request, response) => {

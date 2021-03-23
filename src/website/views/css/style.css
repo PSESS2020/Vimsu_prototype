@@ -168,6 +168,26 @@ a, a:hover {
   transform:scale(1.1)
 }
 
+.warning-button {
+  color: var(--red-color);
+  background-color: transparent;
+  border: 1px solid var(--red-color);
+  border-radius: .25rem;
+  min-width: 100px;
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -o-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
+}
+
+.warning-button:hover {
+  -webkit-transform:scale(1.1);
+  -moz-transform:scale(1.1);
+  -o-transform:scale(1.1);
+  -ms-transform:scale(1.1);
+  transform:scale(1.1)
+}
+
 #content {
   height: 65vh;
 }

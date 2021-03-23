@@ -24,10 +24,12 @@
                     <% } else if (locals.invalidUsernameString === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The username
                             you entered doesn't match our criteria.</small>
+                    <% } else if (locals.deleteAccountFailed === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> There's an error while deleting your account. Please try again.</small>
                     <% } %>
                 </div>
                 <br>
-                <form action="saveAccountChanges" method="POST">
+                <form action="account-settings" method="POST">
                     <div class="form-group">
                         <label for="username" class="mt-2 input-label">Username: </label>
                         <input class="form-control" type="text" id="usernameInput" name="username"
@@ -40,9 +42,13 @@
                             value="<%=forename%>" required>
                     </div>
 
-                    <button class="primary-button mt-4 p-2" type="submit">
+                    <button class="primary-button mt-4 p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
                         <span>Save changes</span>
                     </button>
+                    <button class="warning-button mt-4 ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 p-2" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
+                        <span>Delete account</span>
+                    </button>
+                    
                 </form>
             </div>
         </section>
@@ -51,6 +57,11 @@
 
     <script>
         $('#usernameInput').tooltip({ 'trigger': 'focus', 'title': '2-10 characters containing only numbers, letters, and characters such as dash, underscore, or dot. No 2 characters in a row or any characters at the start or at the end.' });
+        function confirmDeleteAccount(e) {
+            if (!confirm("Are you sure you want to delete your account permanently?")) {
+                e.preventDefault();
+            }
+        }
     </script>
 </body>
 
