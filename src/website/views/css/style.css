@@ -151,7 +151,13 @@ a, a:hover {
 .nav-tabs .nav-link.active, .nav-tabs .nav-link:hover {
   background-color: transparent;
   border-color: var(--white-color);
+  border-bottom: 3px solid var(--black-color);
+  margin-bottom: -2px;
   color: var(--tosca-color) !important;
+}
+
+.tab.pane {
+  border-top: 1px solid var(--white-color);
 }
 
 .carousel-control-next, .carousel-control-prev, 
