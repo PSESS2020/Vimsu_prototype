@@ -53,7 +53,7 @@ body {
   -webkit-appearance: none !important;
 }
 
-.form-control:focus{
+.form-control:focus {
   outline: none;
   -webkit-appearance: none !important;
   -webkit-box-shadow: none;
@@ -94,11 +94,11 @@ body {
 }
 
 #logo-text:hover {
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 #logo img {
@@ -148,7 +148,19 @@ a, a:hover {
   justify-content: center;
 }
 
-.nav-tabs .nav-link.active, .nav-tabs .nav-link:hover {
+.nav-tabs .nav-item {
+  width: 50%;
+  margin: 0;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--tosca-color) !important;
+  margin-bottom: -2px;
+  border-color: transparent;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-tabs .nav-link.active {
   background-color: transparent;
   border-color: var(--white-color);
   border-bottom: 3px solid var(--black-color);
@@ -156,12 +168,7 @@ a, a:hover {
   color: var(--tosca-color) !important;
 }
 
-.tab.pane {
-  border-top: 1px solid var(--white-color);
-}
-
-.carousel-control-next, .carousel-control-prev, 
-.carousel-control-next:hover, .carousel-control-prev:hover {
+.carousel-control-next, .carousel-control-prev, .carousel-control-next:hover, .carousel-control-prev:hover {
   color: var(--white-color);
 }
 
@@ -179,11 +186,11 @@ a, a:hover {
 
 .primary-button:hover {
   color: var(--tosca-color);
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 .warning-button {
@@ -199,11 +206,11 @@ a, a:hover {
 }
 
 .warning-button:hover {
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 #content {
