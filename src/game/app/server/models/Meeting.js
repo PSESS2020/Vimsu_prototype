@@ -28,42 +28,75 @@ module.exports = class Meeting{
         this.#password = password;
     } 
 
+    /**
+     * Simple getter.
+     * @method module:Meeting#getId
+     * 
+     * @returns {String} The id of this meeting
+     */
     getId() {
         return this.#meetingId;
     }
 
+    /**
+     * Simple getter.
+     * @method module:Meeting#getName
+     * 
+     * @returns {String} The name of this meeting
+     */
     getName() {
         return this.#meetingName;
     }
 
+    /**
+     * Simple getter.
+     * @method module:Meeting#getMemberIdList
+     * 
+     * @returns {String[]} The ppantIDs of all members of this meeting
+     */
     getMemberIdList() {
         return this.#memberIdList;
     }
 
+    /**
+     * Simple getter.
+     * @method module:Meeting#getPassword
+     * 
+     * @returns {String} The password of this meeting
+     */
     getPassword() {
         return this.#password;
     }
 
+    /**
+     * Adds the passed ppantId to the memberIdList
+     * @method module:Meeting#addMember
+     * 
+     * @param {String} ppantId 
+     */
     addMember(ppantId) {
         TypeChecker.isString(ppantId);
         this.#memberIdList.push(ppantId);
     }
 
+    /**
+     * Removes the passed ppantId from the memberIdList,
+     * if it is present.
+     * @method module:Meeting#removeMember
+     * 
+     * @param {String} ppantId
+     * @returns {Boolean} Whether the operation was successful or not 
+     */
     removeMember(ppantId) {
         TypeChecker.isString(ppantId);
         this.#memberIdList.forEach(memberId => {
             if (memberId === ppantId) {
                 let index = this.#memberIdList.indexOf(memberId);
                 this.#memberIdList.splice(index, 1);
+                return true;
             }
         });
+        return false;
     }
-
-    #generateURL = function(id, name) {
-        // TODO
-    }
-
-
-
 
 }
