@@ -30,7 +30,7 @@ module.exports = class AccountService {
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
-     * @return {Account|boolean} Account instance
+     * @return {Account|boolean} Account instance if successful
      */
     static createAccount(username, title, surname, forename, job, company, email, password, suffix, vimsudb) {
         TypeChecker.isString(username);
@@ -65,7 +65,7 @@ module.exports = class AccountService {
             } else if (res.code === 11000) {
                 return res.keyValue;
             }
-            
+
             return false;
         })
     }
@@ -160,7 +160,7 @@ module.exports = class AccountService {
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
-     * @return {Account|boolean} Account instance
+     * @return {Account|boolean} Account instance if successful
      */
     static updateAccountData(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, suffix, vimsudb) {
         TypeChecker.isString(accountId);
@@ -183,6 +183,34 @@ module.exports = class AccountService {
                 return res.keyValue;
             }
             return false;
+        })
+    }
+
+    /**
+     * changes user's password
+     * @param {String} username account username
+     * @param {String} password user's password
+     * @param {String} newPassword user's new password
+     * @param {String} suffix collection name suffix
+     * @param {db} vimsudb db instance
+     * @returns {Account|boolean} Account instance if successful
+     */
+    static changePassword(username, password, newPassword, suffix, vimsudb) {
+        TypeChecker.isString(username);
+        TypeChecker.isString(password);
+        TypeChecker.isString(newPassword);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return this.verifyLoginData(username, password, suffix, vimsudb).then(account => {
+            if (!account) return false;
+
+            return vimsudb.updateOneToCollection("accounts" + suffix, { username: username }, { passwordHash: passwordHash.generate(newPassword) }).then(res => {
+                if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                    return true;
+                }
+                return false;
+            })
         })
     }
 
@@ -250,7 +278,7 @@ module.exports = class AccountService {
 
         return this.deleteAccount(accountId, suffix, vimsudb).then(res => {
             if (res !== true) return false;
-            
+
             //find participant entry with this account
             return ParticipantService.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
                 //if participant not found then do nothing

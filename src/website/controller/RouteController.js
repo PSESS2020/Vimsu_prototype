@@ -378,6 +378,14 @@ module.exports = class RouteController {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
                     }
                 })
+            } else if (clickedButton === "changePasswordButton") {
+                return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, '', this.#db).then(res => {
+                    if (res) {
+                        response.render('account-settings', this.#getLoggedInParameters({ changePasswordSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ changePasswordFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                    }
+                })
             }
         })
 

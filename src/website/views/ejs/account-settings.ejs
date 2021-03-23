@@ -7,97 +7,152 @@
 
 <body>
     <div class="container">
-		<%- include('partials/header') %>
-        <section class="row align-items-center justify-content-center" id="upload-content">
-            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
-                <h5>Edit Account Information</h5>
-                <br>
-                <div class="row justify-content-left m-0 p-0">
-                    <% if (locals.editAccountSuccess === true) { %>
-                        <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
-                    <% } else if (locals.usernameTaken === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> The username
-                            you entered is already taken</small>
-                    <% } else if (locals.emailTaken === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> The email you
-                            entered is already registered</small>
-                    <% } else if (locals.editAccountFailed === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> There's an
-                            error while saving your changes. Please try again.</small>
-                    <% } else if (locals.invalidUsernameString === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> The username
-                            you entered doesn't match our criteria.</small>
-                    <% } else if (locals.invalidEmail === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> The email you
-                            entered is invalid. Please try again.</small>
-                    <% } else if(locals.invalidTitle === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
-                            Please choose a title from the options we provided.</small>
-                    <% } else if (locals.deleteAccountFailed === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> There's an error while deleting your account. Please try again.</small>
-                    <% } %>
+        <%- include('partials/header') %>
+            <section class="row align-items-center justify-content-center" id="account-settings-content">
+                <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+                    <div class="align-items-center justify-content-center">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link" id="nav-edit-account-tab" data-toggle="tab"
+                                href="#nav-edit-account" role="tab" aria-controls="nav-edit-account"
+                                aria-selected="true" onclick="activateTab(this.id)"><i class="fa fa-user-edit"></i></a>
+                            <a class="nav-item nav-link" id="nav-change-password-tab" data-toggle="tab"
+                                href="#nav-change-password" role="tab" aria-controls="nav-change-password"
+                                aria-selected="true" onclick="activateTab(this.id)"><i class="fa fa-lock"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 align-items-center justify-content-center">
+                        
+                        <div class="tab-content" id="nav-tabContent">
+                            
+                            <div class="tab-pane" id="nav-edit-account" role="tabpanel"
+                                aria-labelledby="nav-edit-account-tab">
+                                <form action="account-settings" method="POST">
+                                    <h5>Edit Account Info</h5>
+                                    <br>
+                                    <div class="row justify-content-left m-0 p-0">
+                                        <% if (locals.editAccountSuccess === true) { %>
+                                            <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                                        <% } else if (locals.usernameTaken === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> The username
+                                                you entered is already taken</small>
+                                        <% } else if (locals.emailTaken === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> The email you
+                                                entered is already registered</small>
+                                        <% } else if (locals.editAccountFailed === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> There's an
+                                                error while saving your changes. Please try again.</small>
+                                        <% } else if (locals.invalidUsernameString === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> The username
+                                                you entered doesn't match our criteria.</small>
+                                        <% } else if (locals.invalidEmail === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> The email you
+                                                entered is invalid. Please try again.</small>
+                                        <% } else if(locals.invalidTitle === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
+                                                Please choose a title from the options we provided.</small>
+                                        <% } else if (locals.deleteAccountFailed === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> There's an error while deleting your account. Please try again.</small>
+                                        <% } %>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="username" class="mt-2 input-label">Username: </label>
+                                        <input class="form-control" type="text" id="usernameInput" name="username"
+                                            value="<%=username%>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email" class="mt-2 input-label">Email: </label>
+                                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" required>
+                                    </div>
+                
+                                    <div class="form-row">
+                                        <div class="form-group col-4">
+                                            <label for="title" class="mt-2 input-label">Title: </label>
+                                            <select class="form-control" name="title" id="inputTitle" required>
+                                                <option selected>Title</option>
+                                                <option>Mr.</option>
+                                                <option>Mrs.</option>
+                                                <option>Ms.</option>
+                                                <option>Miss</option>
+                                                <option>Dr.</option>
+                                                <option>Prof.</option>
+                                                <option>Rev.</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="forename" class="mt-2 input-label">Forename: </label>
+                                            <input type="text" class="form-control" id="inputForename" name="forename"
+                                                value="<%=forename%>" required>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="surname" class="mt-2 input-label">Surname: </label>
+                                            <input type="text" class="form-control" id="inputSurname" name="surname"
+                                                value="<%=surname%>" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-6">
+                                            <label for="job" class="mt-2 input-label">Job/Profession: </label>
+                                            <input type="text" class="form-control" id="inputJob" name="job"
+                                                value="<%=job%>" required>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="company" class="mt-2 input-label">Company/School: </label>
+                                            <input type="text" class="form-control" id="inputCompany" name="company"
+                                                value="<%=company%>" required>
+                                        </div>
+                                    </div>
+                                    <button class="primary-button mt-4 p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
+                                        <span>Save changes</span>
+                                    </button>
+                                    <button class="warning-button mt-4 ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 p-2" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
+                                        <span>Delete account</span>
+                                    </button>
+                                </form>
+                            </div>
+                        
+                        
+                            <div class="tab-pane" id="nav-change-password" role="tabpanel"
+                                aria-labelledby="nav-change-password-tab">
+                                <form action="account-settings" method="POST">
+                                    <h5>Change Password</h5>
+                                    <br>
+                                    <div class="row justify-content-left m-0 p-0">
+                                        <% if (locals.changePasswordSuccess===true) { %>
+                                            <small class="success"><i class="fa fa-check-circle"></i> Your password has
+                                                been changed.</small>
+                                        <% } else if (locals.changePasswordFailed===true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> There's an error while changing your password. 
+                                                Please try again.</small>
+                                        <% } %>
+                                    </div>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="oldPassword" class="mt-2 input-label">Old password: </label>
+                                        <input class="form-control" type="password" id="oldPasswordInput" name="oldPassword"
+                                            required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="newPassword" class="mt-2 input-label">New password: </label>
+                                        <input type="password" class="form-control" id="newPasswordInput" name="newPassword"
+                                            required>
+                                    </div>
+
+                                    <button class="primary-button mt-4 p-2" type="submit"
+                                        name="accountSettingsButton" value="changePasswordButton">
+                                        <span>Change password</span>
+                                    </button>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
                 </div>
-                <br>
-                <form action="account-settings" method="POST">
-                    <div class="form-group">
-                        <label for="username" class="mt-2 input-label">Username: </label>
-                        <input class="form-control" type="text" id="usernameInput" name="username"
-                            value="<%=username%>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="mt-2 input-label">Email: </label>
-                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-4">
-                            <label for="title" class="mt-2 input-label">Title: </label>
-                            <select class="form-control" name="title" id="inputTitle" required>
-                                <option selected>Title</option>
-                                <option>Mr.</option>
-                                <option>Mrs.</option>
-                                <option>Ms.</option>
-                                <option>Miss</option>
-                                <option>Dr.</option>
-                                <option>Prof.</option>
-                                <option>Rev.</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="forename" class="mt-2 input-label">Forename: </label>
-                            <input type="text" class="form-control" id="inputForename" name="forename"
-                                value="<%=forename%>" required>
-                        </div>
-                        <div class="form-group col-4">
-                            <label for="surname" class="mt-2 input-label">Surname: </label>
-                            <input type="text" class="form-control" id="inputSurname" name="surname"
-                                value="<%=surname%>" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="job" class="mt-2 input-label">Job/Profession: </label>
-                            <input type="text" class="form-control" id="inputJob" name="job"
-                                value="<%=job%>" required>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="company" class="mt-2 input-label">Company/School: </label>
-                            <input type="text" class="form-control" id="inputCompany" name="company"
-                                value="<%=company%>" required>
-                        </div>
-                    </div>
-                    <button class="primary-button mt-4 p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
-                        <span>Save changes</span>
-                    </button>
-                    <button class="warning-button mt-4 ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 p-2" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
-                        <span>Delete account</span>
-                    </button>
-                    
-                </form>
-            </div>
-        </section>
-	</div>
+            </section>
+    </div>
     <%- include('partials/footer') %>
 
     <script>
@@ -113,6 +168,32 @@
                 e.preventDefault();
             }
         }
+
+        const navEditAccountId = "nav-edit-account"
+        const navChangePasswordId = "nav-change-password"
+
+        function swapActiveClass(idToRemove, idToAdd) {
+            $(`#${idToRemove}-tab`).removeClass('active')
+            $(`#${idToRemove}`).removeClass('show active')
+            $(`#${idToAdd}-tab`).addClass('active')
+            $(`#${idToAdd}`).addClass('show active')
+        }
+
+        function activateTab(clickedId) {
+            if (clickedId === navEditAccountId) {
+                swapActiveClass(navChangePasswordId, navEditAccountId)
+            } else {
+                swapActiveClass(navEditAccountId, navChangePasswordId)
+            }
+        };
+
+        $(function() {
+            `${activateTab(navEditAccountId)}
+            
+            <% if (locals.changePasswordFailed===true || locals.changePasswordSuccess===true) { %>
+                ${activateTab(navChangePasswordId)}
+            <% } %>`
+        });
     </script>
 </body>
 
