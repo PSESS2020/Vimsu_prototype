@@ -211,28 +211,34 @@ a, a:hover {
   transform: scale(1.1)
 }
 
-#content {
-  margin-top: 100px;
-}
-
 #form {
   border-radius: .25rem;
   border: 1px solid var(--white-color);
   padding: 1rem 1rem;
 }
 
-#login-content, #register-content {
-  text-align: center;
-  margin-top: 90px;
+#content, .large-form-content, .medium-form-content, .small-form-content {
+  min-height: 75vh;
 }
 
-#upload-content {
+.large-form-content {
   text-align: center;
-  margin-top: 35px;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+.medium-form-content {
+  text-align: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.small-form-content {
+  text-align: center;
+  min-height: 75vh;
 }
 
 #footer {
-  margin-top: 40px;
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
@@ -337,9 +343,6 @@ input {
   .form-control {
     font-size: 12px;
   }
-  #login-content, #register-content {
-    margin-top: 50px;
-  }
 }
 
 @media (max-width: 991.98px) {
@@ -351,7 +354,11 @@ input {
     margin-top: 30px;
     margin-bottom: 30px;
   }
-  #content {
-    margin-top: 50px;
+}
+
+@media (max-height: 430px) {
+  #content, .small-form-content, .large-form-content {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
   }
 }
