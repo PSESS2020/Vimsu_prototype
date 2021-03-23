@@ -211,24 +211,34 @@ a, a:hover {
   transform: scale(1.1)
 }
 
-#content {
-  min-height: 70vh;
-}
-
 #form {
   border-radius: .25rem;
   border: 1px solid var(--white-color);
   padding: 1rem 1rem;
 }
 
-.form-content {
+#content, .large-form-content, .medium-form-content, .small-form-content {
+  min-height: 75vh;
+}
+
+.large-form-content {
   text-align: center;
-  min-height: 70vh;
-  margin-top: 10vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+.medium-form-content {
+  text-align: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.small-form-content {
+  text-align: center;
+  min-height: 75vh;
 }
 
 #footer {
-  margin-top: 10vh;
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
@@ -347,7 +357,8 @@ input {
 }
 
 @media (max-height: 430px) {
-  #content {
+  #content, .small-form-content, .medium-form-content, .large-form-content {
     margin-top: 10vh;
+    margin-bottom: 10vh;
   }
 }
