@@ -10,6 +10,7 @@ const DoorClient = require('../../../src/game/app/client/models/DoorClient.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
+const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const GameObjectType = require('../../../src/game/app/client/shared/GameObjectType.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const SettingsClient = require('../../../src/game/app/client/utils/Settings.js');
@@ -40,7 +41,7 @@ describe('RoomClient test', function() {
         }
         listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool())];
         listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false)];
-        listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT)];
+        listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT, ShirtColor.BLUE)];
         listOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
         width = TestUtil.randomIntWithMaxAndMin(1000, 1);
         length = TestUtil.randomIntWithMaxAndMin(1000, 1);
@@ -86,12 +87,12 @@ describe('RoomClient test', function() {
         let ppantPosition = new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1));
         let isVisible = TestUtil.randomBool();
         let isModerator = TestUtil.randomBool();
-        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator);
+        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator, ShirtColor.BLUE);
 
         //second ppant
         let secondPpantID = TestUtil.randomString();
         let secondPpantUsername = TestUtil.randomString();
-        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator);
+        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator, ShirtColor.GREEN);
 
         //ppant is not in room before
         assert.equal(room.getParticipant(ppantID), undefined);
@@ -133,7 +134,7 @@ describe('RoomClient test', function() {
         let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 2, 1, new PositionClient(0, 1), false)];
 
         //npc at (1,1)
-        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT)];
+        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT, ShirtColor.RED)];
 
         let newListOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomInt())];
         let newAssetPaths = {"tile_default": "client/assets/tile_default.png"};
