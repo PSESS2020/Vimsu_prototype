@@ -8,6 +8,7 @@ const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
 const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const ClientSettings = require('../../../src/game/app/client/utils/Settings.js');
 const RoomDimensions = require('../../../src/game/app/server/utils/RoomDimensions.js');
 const TestUtil = require('./utils/TestUtil.js');
 const chai = require('chai');
@@ -55,9 +56,9 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
-        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOYER_WIDTH);
+        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOYER_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
         for (var i = 0; i < RoomDimensions.FOYER_WIDTH; i++) {
-            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOYER_LENGTH);
+            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOYER_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
     });
@@ -75,9 +76,9 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
-        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOODCOURT_WIDTH);
+        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOODCOURT_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
         for (var i = 0; i < RoomDimensions.FOODCOURT_WIDTH; i++) {
-            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOODCOURT_LENGTH);
+            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOODCOURT_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
     });
@@ -95,9 +96,30 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
-        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.RECEPTION_WIDTH);
+        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.RECEPTION_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
         for (var i = 0; i < RoomDimensions.RECEPTION_WIDTH; i++) {
-            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.RECEPTION_LENGTH);
+            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.RECEPTION_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
+        };
+
+    });
+
+    it('test Escape Room constructor and getters', function () {
+
+        var testRoom = new Room(Settings.ESCAPEROOM_ID, TypeOfRoom.ESCAPEROOM, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH);
+
+        expect(testRoom.getRoomId()).to.equal(Settings.ESCAPEROOM_ID);
+        expect(testRoom.getTypeOfRoom()).to.equal(TypeOfRoom.ESCAPEROOM);
+
+        // This fails otherwise !!!
+        expect(testRoom.getWidth()).to.equal(RoomDimensions.ESCAPEROOM_WIDTH);
+        expect(testRoom.getLength()).to.equal(RoomDimensions.ESCAPEROOM_LENGTH);
+
+        expect(testRoom.getMessages()).to.be.an('array').that.is.empty;
+        expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
+
+        expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.ESCAPEROOM_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
+        for (var i = 0; i < RoomDimensions.ESCAPEROOM_WIDTH; i++) {
+            expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.ESCAPEROOM_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
     });
@@ -130,7 +152,7 @@ describe('test Participant handling', function () {
 
     beforeEach(function () {
         testRoom = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
-        testPPant = new Participant('id', 'accountId', TestUtil.randomBusinessCard(), TestUtil.randomPosition(), TestUtil.randomObjectValue(Direction), new FriendList([]), new FriendList([]), new FriendList([]), [], [], TestUtil.randomBool(), TestUtil.randomIntWithMin(0), []);
+        testPPant = new Participant('id', 'accountId', TestUtil.randomBusinessCard(), TestUtil.randomPosition(), TestUtil.randomObjectValue(Direction), new FriendList([]), new FriendList([]), new FriendList([]), [], [], TestUtil.randomBool(), TestUtil.randomIntWithMin(0), [], []);
         assert.isArray(testRoom.getListOfPPants());
         assert.isEmpty(testRoom.getListOfPPants());
     });

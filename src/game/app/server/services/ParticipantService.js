@@ -53,8 +53,11 @@ module.exports = class ParticipantService {
                     let friendList = [];
                     let friendRequestListReceived = [];
                     let friendRequestListSent = [];
+                    let meetingList = [];
 
-                    let meetingList = await MeetingService.loadMeetingList(par.meetingIDList, conferenceId, vimsudb);
+                    if(par.meetingIDList !== undefined) {
+                        meetingList = await MeetingService.loadMeetingList(par.meetingIDList, conferenceId, vimsudb);
+                    }
 
                     await par.friendIds.forEach(friendId => {
                         this.getBusinessCard(friendId, conferenceId, vimsudb).then(busCard => {

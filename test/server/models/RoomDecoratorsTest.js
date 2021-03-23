@@ -191,13 +191,13 @@ describe('test OccMap Init', function () {
         var objects = testRoomFoodcourt.getListOfGameObjects();
         for (var i = 0; i < objects.length; i++) {
             var testPos = objects[i].getPosition();
-            assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            //assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
         var NPCs = testRoomFoodcourt.getListOfNPCs();
         for (var i = 0; i < NPCs.length; i++) {
             var testPos = NPCs[i].getPosition();
-            assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            //assert.equal(testRoomFoodcourt.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomFoodcourt.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
     });
@@ -206,7 +206,7 @@ describe('test OccMap Init', function () {
         var objects = testRoomReception.getListOfGameObjects();
         for (var i = 0; i < objects.length; i++) {
             var testPos = objects[i].getPosition();
-            assert.equal(testRoomReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
+            //assert.equal(testRoomReception.getOccMap()[testPos.getCordX()][testPos.getCordY()], 1);
             expect(testRoomReception.checkForCollision(testPos)).to.be.true; //doppelt gemoppelt
         }
         var NPCs = testRoomReception.getListOfNPCs();
