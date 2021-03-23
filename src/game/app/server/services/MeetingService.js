@@ -23,8 +23,6 @@ module.exports = class Meetingservice {
      * - Add participant to meeting         [X]
      * - remove ppant                       [X]
      * - remove all meetings (clean db)     [X]
-     * - turn id into passed parameter,     [ ]
-     *   alter methods accordingly          [ ]
      */
 
     /**
