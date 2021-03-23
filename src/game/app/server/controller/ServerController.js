@@ -2369,7 +2369,7 @@ module.exports = class ServerController {
             return false;
         }
 
-        MeetingService.newMeeting(memberIDs, meetingName, Setting.CONFERENCE_ID, this.#db).then(meeting => {
+        MeetingService.newMeeting(memberIDs, meetingName, Settings.CONFERENCE_ID, this.#db).then(meeting => {
             this.#meetings.set(meetingName, meeting);
             memberIDs.forEach(memberID => {
                 let member = this.#ppants.get(memberID);
