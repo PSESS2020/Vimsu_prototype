@@ -325,6 +325,14 @@ module.exports = class RouteController {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: forename }, username));
                     }
                 })
+            } else if (clickedButton === "changePasswordButton") {
+                return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, Settings.CONFERENCE_ID, this.#db).then(res => {
+                    if (res) {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordSuccess: true }, request.session.username))
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordFailed: true }, request.session.username))
+                    }
+                })
             }
         })
 
