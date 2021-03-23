@@ -212,7 +212,7 @@ a, a:hover {
 }
 
 #content {
-  margin-top: 100px;
+  min-height: 70vh;
 }
 
 #form {
@@ -221,18 +221,14 @@ a, a:hover {
   padding: 1rem 1rem;
 }
 
-#login-content {
+.form-content {
   text-align: center;
-  margin-top: 90px;
-}
-
-#register-content, #upload-content, #account-settings-content {
-  text-align: center;
-  margin-top: 40px;
+  min-height: 70vh;
+  margin-top: 10vh;
 }
 
 #footer {
-  margin-top: 40px;
+  margin-top: 10vh;
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
@@ -337,9 +333,6 @@ input {
   .form-control {
     font-size: 12px;
   }
-  #login-content, #register-content {
-    margin-top: 50px;
-  }
 }
 
 @media (max-width: 991.98px) {
@@ -351,7 +344,10 @@ input {
     margin-top: 30px;
     margin-bottom: 30px;
   }
+}
+
+@media (max-height: 430px) {
   #content {
-    margin-top: 50px;
+    margin-top: 10vh;
   }
 }
