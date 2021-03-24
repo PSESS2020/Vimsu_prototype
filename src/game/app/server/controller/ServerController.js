@@ -2363,15 +2363,13 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
-            // MARKED FOR IMPROVEMENT
-            this.addMembersToMeeting(groupName, [memberID]);
-
             if (member !== undefined && socketID !== undefined && !group.includesGroupMember(memberID)) {
-
+          
                 let socket = this.getSocketObject(socketID);
                 
                 group.addGroupMember(memberID);
                 GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
+                this.addMembersToMeeting(groupName, [memberID]);
 
                 this.#handleLeaveOldGroup(member, groupName);
                 this.#handleChangeShirtColor(member, groupColor, socket);
@@ -2414,15 +2412,13 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
 
-            // MARKED FOR IMPROVEMENT
-            this.removeMembersFromMeeting(groupName, [memberID]);
-
             if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
 
                 let socket = this.getSocketObject(socketID);
 
                 group.removeGroupMember(memberID);
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
+                this.removeMembersFromMeeting(groupName, [memberID]);
                 
                 this.#handleLeaveChat(memberID, groupChatID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
@@ -2497,11 +2493,13 @@ module.exports = class ServerController {
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
-            member.leaveMeeting(meeting.getId);
+            if (member !== undefined) {
+                member.leaveMeeting(meeting.getId());
+            }
         })
 
         this.#meetings.delete(meetingName);
-        MeetingService.deleteMeeting(meeting.getId(), Settings.CONFERENCE_ID, this.#db);
+        MeetingService.removeMeeting(meeting.getId(), Settings.CONFERENCE_ID, this.#db);
         return true;
     }
 
@@ -2548,9 +2546,9 @@ module.exports = class ServerController {
             // this would require checking the database for the
             // passed ppantId
             if(member !== undefined) {
-                meeting.addMember(member.getParticipantId());
-                MeetingService.addParticipant(meeting.getId(), member.getParticipantId(), Settings.CONFERENCE_ID, this.#db);
-                member.joinMeeting(meeting.getId());
+                meeting.addMember(member.getId());
+                MeetingService.addParticipant(meeting.getId(), member.getId(), Settings.CONFERENCE_ID, this.#db);
+                member.joinMeeting(meeting);
             }
         });
         return true;
@@ -2590,7 +2588,7 @@ module.exports = class ServerController {
                 // member is removed from meeting as well
                 // during this next operation
                 member.leaveMeeting(meeting.getId());
-                MeetingService.removeParticipant(meeting.getId(), member.getParticipantId(), Settings.CONFERENCE_ID, this.#db);
+                MeetingService.removeParticipant(meeting.getId(), member.getId(), Settings.CONFERENCE_ID, this.#db);
             }
         })
 
@@ -2622,13 +2620,14 @@ module.exports = class ServerController {
 
                 //if other group has no longer members, delete it from map
                 if (newMemberIDs.length < 1) {
-                    this.#groups.delete(groupName);
+                    this.#groups.delete(otherGroupName);
                 }
                 GroupService.removeGroupMember(otherGroupName, memberID, Settings.CONFERENCE_ID, this.#db);
 
                 let otherGroupChat = otherGroup.getGroupChat();
                 let otherGroupChatID = otherGroupChat.getId();
-                this.#handleLeaveChat(memberID, otherGroupChatID);
+                this.#handleLeaveChat(memberID, otherGroupChatID)
+                this.removeMembersFromMeeting(otherGroupName, [memberID]);
             }
         });
     }

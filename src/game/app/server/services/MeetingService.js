@@ -83,6 +83,10 @@ module.exports = class Meetingservice {
             password: new ObjectId().toHexString()
         }
 
+        memberIdList.forEach(participantId => {
+            vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meeting.id });
+        });
+            
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
             console.log("meeting saved");
             return new Meeting(meeting.meetingId, meeting.name, meeting.members);
@@ -115,7 +119,7 @@ module.exports = class Meetingservice {
             if (meeting) {
                 return meeting;
             } else {
-                console.log("No meeting with id " + meetingId + " could be found in database.");
+                console.log("No meeting with name " + meetingName + " could be found in database.");
                 return false;
             }
         })
