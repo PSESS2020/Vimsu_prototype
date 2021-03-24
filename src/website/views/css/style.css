@@ -241,7 +241,7 @@ a, a:hover {
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
-  padding: 10px 100px;
+  padding: 10px 5vw;
 }
 
 hr {
@@ -329,6 +329,12 @@ input, textarea {
   }
   .navbar .nav-item .dropdown-menu {
     margin-top: 0;
+  }
+}
+
+@media (min-width: 575.98px) {
+  #footer {
+    padding: 10px 15vh;
   }
 }
 
