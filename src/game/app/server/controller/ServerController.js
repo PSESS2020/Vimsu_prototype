@@ -249,7 +249,7 @@ module.exports = class ServerController {
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
                             isClickable: mapElement.getClickable(),
-                            isIFrameObject: mapElement.getURL() !== undefined
+                            isIFrameObject: mapElement.getIFrameData() !== undefined
                         });
                     });
 
@@ -268,7 +268,7 @@ module.exports = class ServerController {
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
-                            isIFrameObject: gameObject.getURL() !== undefined
+                            isIFrameObject: gameObject.getIFrameData() !== undefined
                         });
                     });
 
@@ -1774,9 +1774,9 @@ module.exports = class ServerController {
                     return;
                 }
 
-                let url = gameObject.getURL();
+                let iFrameData = gameObject.getIFrameData();
         
-                socket.emit('showExternalWebsite', url, gameObjectID);
+                socket.emit('showExternalWebsite', iFrameData, gameObjectID);
             });
 
             /* handles entered code from client for door with doorId */
@@ -3078,7 +3078,7 @@ module.exports = class ServerController {
                 cordX: mapElement.getPosition().getCordX(),
                 cordY: mapElement.getPosition().getCordY(),
                 isClickable: mapElement.getClickable(),
-                isIFrameObject: mapElement.getURL() !== undefined
+                isIFrameObject: mapElement.getIFrameData() !== undefined
             });
         });
 
@@ -3097,7 +3097,7 @@ module.exports = class ServerController {
                 cordX: gameObject.getPosition().getCordX(),
                 cordY: gameObject.getPosition().getCordY(),
                 isClickable: gameObject.getClickable(),
-                isIFrameObject: gameObject.getURL() !== undefined
+                isIFrameObject: gameObject.getIFrameData() !== undefined
             });
         });
 

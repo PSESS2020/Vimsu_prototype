@@ -54,9 +54,12 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, url) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -65,8 +68,12 @@ module.exports = class GameObjectService {
         TypeChecker.isBoolean(solidity);
         TypeChecker.isBoolean(clickable);
 
-        if (url !== undefined) 
-            TypeChecker.isString(url);
+        if (iFrameData !== undefined) {
+            TypeChecker.isInstanceOf(iFrameData, Object);
+            TypeChecker.isInt(iFrameData.width);
+            TypeChecker.isInt(iFrameData.height);
+            TypeChecker.isString(iFrameData.url);
+        }
     }
 
     /* ##################################################################### */
@@ -186,13 +193,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default table
      */
-    createTable(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createTable(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.TABLE, "table_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -204,13 +214,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default small dinner table
      */
-    createSmallDinnerTable(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLE, "smalldinnertable_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createSmallDinnerTable(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLE, "smalldinnertable_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -224,13 +237,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} right dinner table
      */
-    createRightDinnerTable(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTABLE, "righttable_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createRightDinnerTable(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTTABLE, "righttable_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Reception
@@ -246,13 +262,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} reception counter front part
      */
-    createReceptionCounterFrontPart(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTER, "receptionCounterFrontPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createReceptionCounterFrontPart(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTER, "receptionCounterFrontPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -266,13 +285,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} reception counter front part
      */
-    createReceptionCounterLeftPart(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterLeftPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createReceptionCounterLeftPart(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterLeftPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -286,13 +308,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} reception counter right part
      */
-    createReceptionCounterRightPart(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterRightPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createReceptionCounterRightPart(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.RECEPTIONCOUNTERSIDEPART, "receptionCounterRightPart_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Canteen
@@ -308,13 +333,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} canteen counter
      */
-    createCanteenCounter(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.CANTEENCOUNTER, "canteencounter_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createCanteenCounter(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CANTEENCOUNTER, "canteencounter_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -327,11 +355,14 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      */
-    createDrinkingMachine(roomId, width, length, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.DRINKS, "drinks_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createDrinkingMachine(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.DRINKS, "drinks_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Food
@@ -344,13 +375,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} left koeriWurst
      */
-    createKoeriWurst(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_allSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createKoeriWurst(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_allSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -362,13 +396,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} small left koeri wurst for upper side of table
      */
-    createUpperSideKoeriWurst(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_upperSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createUpperSideKoeriWurst(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_upperSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -380,13 +417,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} small left koeriWurst for lower side of table
      */
-    createLowerSideKoeriWurst(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_lowerSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createLowerSideKoeriWurst(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_lowerSide", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -398,13 +438,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} small left koeriWurst for both sides of table
      */
-    createBothSidesKoeriWurst(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_bothSides", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createBothSidesKoeriWurst(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "koeriWurst_bothSides", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -416,13 +459,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} cup of tea
      */
-    createTea(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "tea_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createTea(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SMALLDINNERTABLEFOOD, "tea_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
 
@@ -437,13 +483,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default left chair
      */
-    createLeftChair(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createLeftChair(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -455,13 +504,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default right chair
      */
-    createRightChair(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createRightChair(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchair_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -473,13 +525,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} left chair's back
      */
-    createLeftChairBack(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createLeftChairBack(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "leftchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -491,13 +546,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} right chair's back
      */
-    createRightChairBack(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createRightChairBack(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.CHAIR, "rightchairback_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Plants
@@ -511,13 +569,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default plant
      */
-    createPlant(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.PLANT, "plant_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createPlant(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.PLANT, "plant_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Sofas
@@ -531,13 +592,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default left sofa
      */
-    createLeftSofa(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "leftsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createLeftSofa(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "leftsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     /**
@@ -549,13 +613,16 @@ module.exports = class GameObjectService {
      * @param {number} yPos y position
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @return {GameObject} default right sofa
      */
-    createRightSofa(roomId, xPos, yPos, solidity, clickable, url) {
-        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, url);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "rightsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, url);
+    createRightSofa(roomId, xPos, yPos, solidity, clickable, iFrameData) {
+        this.#checkParamTypes(roomId, Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, xPos, yPos, solidity, clickable, iFrameData);
+        return new GameObject(this.#generateGameObjectID(), GameObjectType.SOFA, "rightsofa_default", Settings.SMALL_OBJECT_WIDTH, Settings.SMALL_OBJECT_LENGTH, new Position(roomId, xPos, yPos), solidity, clickable, iFrameData);
     }
 
     //Window

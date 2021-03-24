@@ -19,7 +19,7 @@ module.exports = class GameObject {
     #isSolid;
     #gameObjectType;
     #isClickable;
-    #url;
+    #iFrameData;
 
     /**
      * Creates a game object instance
@@ -33,9 +33,12 @@ module.exports = class GameObject {
      * @param {Position} position game object position
      * @param {boolean} isSolid game object solidity
      * @param {boolean} isClickable game object clickable status
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, url) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -46,8 +49,12 @@ module.exports = class GameObject {
         TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
 
-        if (url !== undefined) 
-            TypeChecker.isString(url);
+        if (iFrameData !== undefined) {
+            TypeChecker.isInstanceOf(iFrameData, Object);
+            TypeChecker.isInt(iFrameData.width);
+            TypeChecker.isInt(iFrameData.height);
+            TypeChecker.isString(iFrameData.url);
+        }
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -59,7 +66,7 @@ module.exports = class GameObject {
         this.#position = position;
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;
-        this.#url = url;
+        this.#iFrameData = iFrameData;
     }
 
     /**
@@ -143,12 +150,12 @@ module.exports = class GameObject {
     }
 
     /**
-     * Gets game object url
-     * @method module:GameObject#getURL
+     * Gets game object iFrameData if it exists, otherwise undefined
+     * @method module:GameObject#getIFrameData
      * 
-     * @return {?String} returns URL if there clicking this object opens an external website, otherwise undefined
+     * @return {?Object} iFrameData or undefined
      */
-    getURL() {
-        return this.#url;
+    getIFrameData() {
+        return this.#iFrameData;
     }
 }
