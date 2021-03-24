@@ -292,6 +292,12 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * Removes Meeting instance from the meeting list.
+     * @method module:Participant#leaveMeeting
+     * 
+     * @param {String} meetingId
+     */
     leaveMeeting(meetingId) {
         TypeChecker.isString(meetingId);
 
