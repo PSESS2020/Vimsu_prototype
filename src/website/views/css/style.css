@@ -248,6 +248,10 @@ hr {
   border-top: 1px solid var(--white-color)
 }
 
+textarea {
+  resize: none;
+}
+
 .form-control, .form-control-custom {
   background-color: transparent;
   border: 1px solid var(--white-color);
@@ -273,7 +277,7 @@ hr {
   opacity: 0.9;
 }
 
-input {
+input, textarea {
   background: transparent !important;
   color: var(--white-color) !important;
 }

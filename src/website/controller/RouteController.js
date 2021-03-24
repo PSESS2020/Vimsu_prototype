@@ -11,6 +11,7 @@ const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
 const Account = require('../models/Account');
+const nodemailer = require("nodemailer");
 
 /**
  * The Route Controller
@@ -140,6 +141,45 @@ module.exports = class RouteController {
             }
         });
 
+        this.#app.post('/contact-us', (request, response) => {
+            const vimsuEmail = process.env.VIMSU_EMAIL;
+
+            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
+                if (request.session.loggedin === true) {
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true }, username));
+                } else {
+                    return response.render('contact-us', { invalidEmail: true });
+                }
+            }
+
+            const mailOptions = {
+                from: vimsuEmail,
+                to: vimsuEmail,
+                subject: "New message from contact us form",
+                html: `
+                    <p>From: <a href="mailto:${request.body.email}">${request.body.email}</a></p>
+                    <p>Message: ${request.body.message}</p>
+                `
+            }
+
+            return this.#sendMail(vimsuEmail, mailOptions).then(result => {
+                if (result === true) {
+                    if (request.session.loggedin === true) {
+                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true }, username));
+                    } else {
+                        response.render('contact-us', { messageSent: true });
+                    }
+                } else {
+                    if (request.session.loggedin === true) {
+                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true }, username));
+                    } else {
+                        response.render('contact-us', { sendMessageFailed: true });
+                    }
+                }
+            })            
+        })
+
         this.#app.get('/privacy-policy', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
@@ -163,17 +203,17 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
                 var lectureTitle = request.body.title;
@@ -183,7 +223,7 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
+                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
                     }
                     else {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
@@ -196,7 +236,7 @@ module.exports = class RouteController {
                         })
                     }
                 } else {
-                    response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
                 }
             });
         }
@@ -258,12 +298,12 @@ module.exports = class RouteController {
             const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
             if (!usernameRegex.test(request.body.username)) {
-                response.render('register', { invalidUsernameString: true });
+                return response.render('register', { invalidUsernameString: true });
             }
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                response.render('register', { invalidEmail: true });
+                return response.render('register', { invalidEmail: true });
             }
 
             let title = request.body.title;
@@ -272,7 +312,7 @@ module.exports = class RouteController {
                 title = "";
             }
             else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                response.render('register', { invalidTitle: true });
+                return response.render('register', { invalidTitle: true });
             }
 
             return AccountService.createAccount(request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, '', this.#db).then(res => {
@@ -335,12 +375,12 @@ module.exports = class RouteController {
                 const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
                 if (!usernameRegex.test(request.body.username)) {
-                    response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
+                    return response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
                 }
 
                 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                    response.render('register', this.#getLoggedInParameters({ forename: forename, invalidEmail: true }, username));
+                    return response.render('register', this.#getLoggedInParameters({ forename: forename, invalidEmail: true }, username));
                 }
                 let title = request.body.title;
 
@@ -348,7 +388,7 @@ module.exports = class RouteController {
                     title = "";
                 }
                 else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                    response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                    return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
                 }
 
                 return AccountService.updateAccountData(accountId, request.body.username, request.body.title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, '', this.#db).then(res => {
@@ -400,7 +440,31 @@ module.exports = class RouteController {
         });
     }
 
-    #getLoggedInParameters = function (otherParameters, username) {
-        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
+    #sendMail = async function (vimsuEmail, mailOptions) {
+        return new Promise(function (resolve, reject) {
+            const smtpTransport = nodemailer.createTransport({
+                service: "Gmail",
+                port: 465,
+                secure: true,
+                auth: {
+                    user: vimsuEmail,
+                    pass: process.env.VIMSU_EMAIL_PASSWORD
+                }
+            });
+
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+                if (error) {
+                    console.log(error)
+                    resolve(false);
+                } else {
+                    console.log("message sent");
+                    resolve(true);
+                }
+            });
+        });
     }
-}
+
+    #getLoggedInParameters = function (otherParameters, username) {
+            return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
+        }
+    }
