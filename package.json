@@ -49,8 +49,7 @@
     "requirejs": "^2.3.6",
     "rimraf": "^3.0.2",
     "sinon": "^9.0.3",
-    "socket.io": "^2.4.1",
-    "xoauth2": "^1.2.0"
+    "socket.io": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
