@@ -56,7 +56,7 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
         expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOYER_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
-        for (var i = 0; i < RoomDimensions.FOYER_WIDTH; i++) {
+        for (var i = 0; i < RoomDimensions.FOYER_LENGTH; i++) {
             expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOYER_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
@@ -76,7 +76,7 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
         expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.FOODCOURT_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
-        for (var i = 0; i < RoomDimensions.FOODCOURT_WIDTH; i++) {
+        for (var i = 0; i < RoomDimensions.FOODCOURT_LENGTH; i++) {
             expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.FOODCOURT_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
@@ -96,7 +96,7 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
         expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.RECEPTION_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
-        for (var i = 0; i < RoomDimensions.RECEPTION_WIDTH; i++) {
+        for (var i = 0; i < RoomDimensions.RECEPTION_LENGTH; i++) {
             expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.RECEPTION_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 
@@ -117,7 +117,7 @@ describe('test Room Constructor and getters', function () {
         expect(testRoom.getListOfPPants()).to.be.an('array').that.is.empty;
 
         expect(testRoom.getOccMap()).to.be.an('array').of.length(RoomDimensions.ESCAPEROOM_LENGTH + ClientSettings.MAP_BLANK_TILES_LENGTH);
-        for (var i = 0; i < RoomDimensions.ESCAPEROOM_WIDTH; i++) {
+        for (var i = 0; i < RoomDimensions.ESCAPEROOM_LENGTH; i++) {
             expect(testRoom.getOccMap()[i]).to.be.an('array').of.length(RoomDimensions.ESCAPEROOM_WIDTH + ClientSettings.MAP_BLANK_TILES_WIDTH);
         };
 

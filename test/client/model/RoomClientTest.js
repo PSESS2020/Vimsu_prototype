@@ -141,25 +141,16 @@ describe('RoomClient test', function() {
         let newListOfMapElements = [];
         
         //calculate occMap, normally happens in server, here just for testing purpose
-        let newOccupationMap = new Array(width);
-        for (var i = 0; i < width; i++) {
-            newOccupationMap[i] = new Array(length).fill(0);
+        let newOccupationMap = new Array(newWidth);
+        for (var i = 0; i < newWidth; i++) {
+            newOccupationMap[i] = new Array(newLength).fill(0);
         }
 
         //table
-        newOccupationMap[0][1] = 1;
-        newOccupationMap[1][1] = 1;
+        newOccupationMap[0][4] = 1;
 
-        //npc
-        newOccupationMap[1][0] = 1;
-        
-        //collision with NPCs
-        for (var i = 0; i < newListOfNPCs.length; i++) {
-            let npcPosition = newListOfNPCs[i].getPosition();
-            let cordX = npcPosition.getCordX();
-            let cordY = npcPosition.getCordY();
-            newOccupationMap[cordX][cordY] = 1;
-        }
+        //npcs
+        newOccupationMap[1][3] = 1;
 
         room.swapRoom(newRoomID, newTypeOfRoom, newAssetPaths, newListOfMapElements, newListOfGameObjects, newListOfNPCs, newListOfDoors, newWidth, newLength, newOccupationMap);
 
@@ -171,8 +162,8 @@ describe('RoomClient test', function() {
         expect(room.getListOfPPants()).to.be.an('array').and.to.have.lengthOf(0);
         expect(room.getWidth()).to.equal(newWidth);
         expect(room.getLength()).to.equal(newLength);
-        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_WIDTH);
-        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newLength + SettingsClient.MAP_BLANK_TILES_WIDTH);
+        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(newLength + SettingsClient.MAP_BLANK_TILES_LENGTH);
         expect(room.getAssetPaths()).to.equal(newAssetPaths);
         expect(room.getListOfMapElements()).to.equal(newListOfMapElements);
 
@@ -181,7 +172,6 @@ describe('RoomClient test', function() {
 
         //position where Test GameObject is
         assert.equal(room.checkForCollision(new PositionClient(0, 1)), true);
-        assert.equal(room.checkForCollision(new PositionClient(1, 1)), true);
 
         //position of random empty tile
         assert.equal(room.checkForCollision(new PositionClient(0, 0)), false);
