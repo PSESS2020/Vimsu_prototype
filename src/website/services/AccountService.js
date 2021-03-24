@@ -3,8 +3,6 @@ const Account = require('../models/Account')
 const ObjectId = require('mongodb').ObjectID;
 const passwordHash = require('password-hash');
 const db = require('../../config/db');
-const ParticipantService = require('../../game/app/server/services/ParticipantService')
-const Settings = require('../../game/app/server/utils/Settings')
 
 /**
  * The Account Service
@@ -237,40 +235,5 @@ module.exports = class AccountService {
             console.log("account with accountId " + accountId + " deleted");
             return true;
         });
-    }
-
-    /**
-     * Deletes account and participant entry from the database
-     * @static @method module:AccountService#deleteAccount
-     * 
-     * @param {String} accountId account ID
-     * @param {String} suffix collection name suffix
-     * @return {boolean} true if deleted
-     */
-    static deleteAccountAndParticipant(accountId, suffix, vimsudb) {
-        TypeChecker.isString(accountId);
-        TypeChecker.isString(suffix);
-        TypeChecker.isInstanceOf(vimsudb, db);
-
-        return this.deleteAccount(accountId, suffix, vimsudb).then(res => {
-            if (res !== true) return false;
-
-            //find participant entry with this account
-            return ParticipantService.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
-                //if participant not found then do nothing
-                if (!par) {
-                    return true;
-                }
-
-                //participant is found, delete entry
-                return ParticipantService.deleteParticipant(par.participantId, Settings.CONFERENCE_ID, vimsudb).then(res => {
-                    if (res) {
-                        return true;
-                    }
-
-                    return false;
-                })
-            })
-        })
     }
 }

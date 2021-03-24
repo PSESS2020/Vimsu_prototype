@@ -3,6 +3,7 @@ const expressSession = require('express-session');
 const MemoryStore = require('memorystore')(expressSession);
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
+const ParticipantService = require('../../game/app/server/services/ParticipantService')
 const SlotService = require('../services/SlotService')
 const path = require('path');
 const Settings = require('../../game/app/server/utils/Settings.js');
@@ -318,7 +319,7 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "deleteAccountButton") {
-                return AccountService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then (res => {
+                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then (res => {
                     if (res) {
                         response.redirect('/logout');
                     } else {
