@@ -1142,13 +1142,19 @@ class ClientController {
     /**
      * Receives from server after clicking an IFrameObject
      * 
-     * @param {url} url URL
+     * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.url URL of iFrame
+     * @param {number} iFrameData.width width of iframe in px
+     * @param {number} iFrameData.height height of iframe in px
      * @param {number} gameObjectID GameObject id
      */
-     handleFromServerShowExternalWebsite = function (url, gameObjectID) {
-        TypeChecker.isString(url);
+     handleFromServerShowExternalWebsite = function (iFrameData, gameObjectID) {
+        TypeChecker.isInstanceOf(iFrameData, Object);
+        TypeChecker.isInt(iFrameData.width);
+        TypeChecker.isInt(iFrameData.height);
+        TypeChecker.isString(iFrameData.url);
         TypeChecker.isInt(gameObjectID);
-        this.gameView.initExternalWebsiteView(url, gameObjectID.toString());
+        this.gameView.initExternalWebsiteView(iFrameData, gameObjectID.toString());
     }
 
     /*  */

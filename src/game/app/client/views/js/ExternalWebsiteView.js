@@ -22,18 +22,24 @@
     /**
      * Draws External Website window
      * 
-     * @param {String} url URL
-     * @param {String} gameObjectID
+     * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.url URL of iFrame
+     * @param {number} iFrameData.width width of iframe in px
+     * @param {number} iFrameData.height height of iframe in px
+     * @param {String} gameObjectID GameObject Id
      */
-     draw(url, gameObjectID) {
+     draw(iFrameData, gameObjectID) {
         $('#externalWebsiteWait' + gameObjectID).hide()
         $(`#externalWebsiteWaitModal${gameObjectID} .modal-header`).empty()
         $('#externalWebsiteBody' + gameObjectID).empty();
 
+        let width = iFrameData.width.toString() + 'px';
+        let height = iFrameData.height.toString() + 'px';
+
         $('#externalWebsiteBody' + gameObjectID).append(`
-            <div class="modal-body modal-body-large">
+            <div class="modal-body" style="overflow:auto; height:${height};">
                 <p style="text-align:center">
-                    <iframe id="iframe" src=${url} width=100% height=100% frameborder="2" allowfullscreen></iframe>
+                    <iframe id="iframe" frameborder="1" src=${iFrameData.url} width=${width} height=${height} allowfullscreen scrolling="no"></iframe>
                 </p>
             </div>
         `);
@@ -55,7 +61,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             </div>
-                            <div class="modal-body modal-body-large">
+                            <div class="modal-body">
                                 <div id="externalWebsiteWait${gameObjectID}" style="text-align: center;">
                                     <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                                 </div>
