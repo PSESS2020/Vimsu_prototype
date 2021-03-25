@@ -582,6 +582,41 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * Deletes account and participant entry from the database
+     * @static @method module:AccountService#deleteAccount
+     * 
+     * @param {String} accountId account ID
+     * @param {String} suffix collection name suffix
+     * @return {boolean} true if deleted
+     */
+     static deleteAccountAndParticipant(accountId, suffix, vimsudb) {
+        TypeChecker.isString(accountId);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return AccountService.deleteAccount(accountId, suffix, vimsudb).then(res => {
+            if (res !== true) return false;
+
+            //find participant entry with this account
+            return this.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
+                //if participant not found then do nothing
+                if (!par) {
+                    return true;
+                }
+
+                //participant is found, delete entry
+                return this.deleteParticipant(par.participantId, Settings.CONFERENCE_ID, vimsudb).then(res => {
+                    if (res) {
+                        return true;
+                    }
+
+                    return false;
+                })
+            })
+        })
+    }
+
+    /**
      * @static Deletes all participants from the database
      * @method module:ParticipantService#deleteAllParticipants
      * 

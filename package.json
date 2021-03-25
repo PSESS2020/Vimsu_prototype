@@ -43,6 +43,7 @@
     "merge-images": "^2.0.0",
     "mkdirp": "^1.0.4",
     "mongodb": "^3.5.9",
+    "nodemailer": "^6.5.0",
     "password-hash": "^1.2.2",
     "popper.js": "^1.16.1",
     "requirejs": "^2.3.6",

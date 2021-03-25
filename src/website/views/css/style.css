@@ -13,7 +13,6 @@
   --light-orange-color: rgb(255, 180, 73, .3);
   --light-tosca-color: rgb(72, 148, 160, .1);
   --white-color: antiquewhite;
-  --footer-height: 35px;
 }
 
 body:before {
@@ -53,7 +52,7 @@ body {
   -webkit-appearance: none !important;
 }
 
-.form-control:focus{
+.form-control:focus {
   outline: none;
   -webkit-appearance: none !important;
   -webkit-box-shadow: none;
@@ -62,8 +61,7 @@ body {
 }
 
 .container {
-  min-height: 100vh;
-  margin-bottom: -(var(--footer-height));
+  min-height: 95vh;
 }
 
 .header {
@@ -94,11 +92,11 @@ body {
 }
 
 #logo-text:hover {
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 #logo img {
@@ -148,14 +146,27 @@ a, a:hover {
   justify-content: center;
 }
 
-.nav-tabs .nav-link.active, .nav-tabs .nav-link:hover {
+.nav-tabs .nav-item {
+  width: 50%;
+  margin: 0;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--tosca-color) !important;
+  margin-bottom: -2px;
+  border-color: transparent;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-tabs .nav-link.active {
   background-color: transparent;
   border-color: var(--white-color);
+  border-bottom: 3px solid var(--black-color);
+  margin-bottom: -2px;
   color: var(--tosca-color) !important;
 }
 
-.carousel-control-next, .carousel-control-prev, 
-.carousel-control-next:hover, .carousel-control-prev:hover {
+.carousel-control-next, .carousel-control-prev, .carousel-control-next:hover, .carousel-control-prev:hover {
   color: var(--white-color);
 }
 
@@ -173,11 +184,11 @@ a, a:hover {
 
 .primary-button:hover {
   color: var(--tosca-color);
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 .warning-button {
@@ -193,15 +204,11 @@ a, a:hover {
 }
 
 .warning-button:hover {
-  -webkit-transform:scale(1.1);
-  -moz-transform:scale(1.1);
-  -o-transform:scale(1.1);
-  -ms-transform:scale(1.1);
-  transform:scale(1.1)
-}
-
-#content {
-  height: 65vh;
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1)
 }
 
 #form {
@@ -210,27 +217,39 @@ a, a:hover {
   padding: 1rem 1rem;
 }
 
-#login-content, #register-content {
-  text-align: center;
-  height: 75vh;
+#content, .large-form-content, .medium-form-content, .small-form-content {
+  min-height: 75vh;
 }
 
-#upload-content {
+.large-form-content {
   text-align: center;
-  height: 90vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
-.footer {
-  height: var(--footer-height);
-  position: relative;
+.medium-form-content {
+  text-align: center;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+
+.small-form-content {
+  text-align: center;
+}
+
+#footer {
   background-color: var(--tosca-color);
   color: var(--white-color);
   font-size: 10px;
-  padding: 10px 50px;
+  padding: 10px 5vw;
 }
 
 hr {
   border-top: 1px solid var(--white-color)
+}
+
+textarea {
+  resize: none;
 }
 
 .form-control, .form-control-custom {
@@ -258,7 +277,7 @@ hr {
   opacity: 0.9;
 }
 
-input {
+input, textarea {
   background: transparent !important;
   color: var(--white-color) !important;
 }
@@ -313,6 +332,12 @@ input {
   }
 }
 
+@media (min-width: 575.98px) {
+  #footer {
+    padding: 10px 15vh;
+  }
+}
+
 @media (max-width: 575.98px) {
   #logo #logo-text {
     text-align: center;
@@ -323,15 +348,6 @@ input {
   }
   hr {
     margin: 10px;
-  }
-  #register-content {
-    height: 80vh;
-  }
-  #login-content {
-    height: 70vh;
-  }
-  #upload-content {
-    height: 100vh;
   }
   .form-control {
     font-size: 12px;
@@ -347,7 +363,11 @@ input {
     margin-top: 30px;
     margin-bottom: 30px;
   }
-  #content {
-    height: 600px;
+}
+
+@media (max-height: 430px) {
+  #content, .small-form-content, .medium-form-content, .large-form-content {
+    margin-top: 10vh;
+    margin-bottom: 10vh;
   }
 }
