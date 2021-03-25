@@ -1545,7 +1545,15 @@ class ClientController {
      * @param {String} meetingName
      * @param {String} meetingPassword
      */
-    handleFromViewJoinMeeting(meetingName, meetingPassword) {       
+    handleFromViewJoinMeeting(meetingName, meetingPassword) {
+        
+        /* TODO:
+         * - When closing the modal, only video gets muted
+         * - That is unless the modal gets hidden because
+         *   we hung up the call
+         * - When the meeting-modal is opened, it should
+         *   be checked whether or not a jitsi-object already
+         *   exists (?)*/
 
         this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
             roomName: meetingName,
@@ -1565,15 +1573,21 @@ class ClientController {
         // However, only moderators can set passwords, and it seems
         // not to be possible to set the password when "setting up" the
         // meeting the way it is currently done.
-        this.jitsi.on('passwordRequired', function() {
+        this.jitsi.on('passwordRequired', function () {
             this.jitsi.executeCommand('password', meetingPassword);
         })
 
-        $('#meetingModal').modal('show');
-        
-
-        $('#meetingModal').on('hidden.bs.modal', function() { 
+        // When user leaves meeting, then jitsi-object is disposed
+        this.jitsi.on('readyToClose', function () {
             this.jitsi.dispose();
+            $('#meetingModal').modal('hide');
+        })
+
+        $('#meetingModal').modal('show');
+
+        
+        $('#meetingModal').on('hidden.bs.modal', function() { 
+            this.jitsi.executeCommand('toggleVideo');
         }.bind(this));
 
     }
