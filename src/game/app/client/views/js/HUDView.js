@@ -49,6 +49,7 @@ class HUDView extends Views {
 
         $('#meetingListButton').off();
         $('#meetingListButton').on('click', (event) => {
+            $('#meetingListModal').modal('show');
             eventManager.handleMeetingListClicked();
         })
 
