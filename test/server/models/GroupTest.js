@@ -33,7 +33,7 @@ describe('test Group class functionality', function() {
     });
 
     it('test add, remove and includes group members', function() {
-        let group = new Group(name, shirtColor, [], groupChat);
+        let group = new Group(name, shirtColor, [], groupChat, groupMeeting);
         let memberID = TestUtil.randomString();
 
         expect(group.includesGroupMember(memberID)).to.equal(false);

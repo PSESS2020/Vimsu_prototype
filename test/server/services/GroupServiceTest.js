@@ -13,6 +13,7 @@ const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const ServiceTestData = require('./TestData/ServiceTestData.js');
 const Meeting = require('../../../src/game/app/server/models/Meeting.js');
+const { assert } = require('chai');
 
 const dbStub = sinon.createStubInstance(db);
 const conferenceId = ServiceTestData.conferenceId_1;
@@ -70,10 +71,10 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
                                  password: 'password1'
                                 });
     } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID2') {
-        return Promise.resolve({ chatId: 'meetingID2',
+        return Promise.resolve({ id: 'meetingID2',
                                  name: 'name2',
                                  members: [],
-                                 password: 'password2',
+                                 password: 'password2'
                                 });
     }  else {
         return Promise.resolve(undefined);
@@ -128,12 +129,12 @@ var name1;
 var shirtColor1;
 var groupMemberIDs1;
 var groupChat1 = new GroupChat('chatID1', 'owner1', 'name1', [], [], Settings.MAXGROUPPARTICIPANTS, Settings.MAXNUMMESSAGES_GROUPCHAT);
-var groupMeeting1 = new Meeting('meetingID1', 'name1', [], 'password1' );
+var groupMeeting1 = new Meeting('meetingID1', 'name1', [], 'password1');
 var name2;
 var shirtColor2;
 var groupMemberIDs2;
 var groupChat2 = new GroupChat('chatID2', 'owner2', 'name2', [], [], Settings.MAXGROUPPARTICIPANTS, Settings.MAXNUMMESSAGES_GROUPCHAT);
-var groupMeeting2 = new Meeting('meetingID2', 'name2', [], 'password2' );
+var groupMeeting2 = new Meeting('meetingID2', 'name2', [], 'password2');
 
 /* TESTS */
 
@@ -156,6 +157,7 @@ describe('GroupServiceTest', () => {
         
         expect(group1).to.be.instanceOf(Group);
         expect(group2).to.be.instanceOf(Group);
+        // Both these fail, as groupMap.get(key) returns undefined...
         expect(groupMap.get(name1)).to.eql(group1);
         expect(groupMap.get(name2)).to.eql(group2);
         expect(groupMap.size).to.equal(2);
@@ -177,6 +179,7 @@ describe('GroupServiceTest', () => {
         let groupMap = await GroupService.getGroupMap(conferenceId, dbStub);
         let group = groupMap.get(name1);
         expect(addSuccess).to.be.true;
+        // Fails as groupMap.get(key) returns undefined...
         expect(group.includesGroupMember('member1')).to.be.true;
 
         let removeSuccess = await GroupService.removeGroupMember(name1, 'member1', conferenceId, dbStub);
