@@ -38,9 +38,9 @@
         let height = iFrameData.height.toString() + 'px';
 
         $('#externalWebsiteBody' + gameObjectID).append(`
-            <div class="modal-body" style="overflow:auto; height:${height};">
+            <div class="modal-body" style="overflow:auto; height:100%;">
                 <p style="text-align:center">
-                    <iframe id=${"iframe" + gameObjectID} frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
+                    <iframe id="iframe${gameObjectID}" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
                         allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
                 </p>
             </div>
@@ -50,42 +50,71 @@
         $('#fullscreenBtn' + gameObjectID).on('click', (event) => {
             event.preventDefault();
 
-            let iFrame = document.getElementById("iframe" + gameObjectID);
-            let window = document.getElementById("externalWebsiteModal" + gameObjectID);
-
             if (!fullScreenMode) {
-            
-                iFrame.width = '100%';
-                iFrame.height = '100%';
-                iFrame.scrolling= 'yes';
-
-                if (window.requestFullscreen) {
-                    window.requestFullscreen();
-                } else if (window.webkitRequestFullscreen) { /* Safari */
-                    window.webkitRequestFullscreen();
-                } else if (window.msRequestFullscreen) { /* IE11 */
-                    window.msRequestFullscreen();
-                }
-
+                this.enterFullscreenMode(gameObjectID);
                 fullScreenMode = true;
             } else {
-        
-                iFrame.width = iFrameData.width;
-                iFrame.height = iFrameData.height;
-                iFrame.scrolling= 'no';
+                this.exitFullscreenMode(gameObjectID, width, height);
+                fullScreenMode = false;
+            }
+        });
 
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                    document.msExitFullscreen();
-                }
+        $('#closeBtn' + gameObjectID).off();
+        $('#closeBtn' + gameObjectID).on('click', (event) => {
+            event.preventDefault();
 
+            if (fullScreenMode) {
+                this.exitFullscreenMode(gameObjectID, width, height);
                 fullScreenMode = false;
             }
         });
      }
+
+    /**
+     * Enter FullscreenMode
+     * 
+     * @param {String} gameObjectID GameObject Id
+     */
+     enterFullscreenMode(gameObjectID) {
+        let modalContent = document.getElementById("externalWebsiteModalContent" + gameObjectID);
+        let iFrame = document.getElementById("iframe" + gameObjectID);
+
+        iFrame.width = '100%';
+        iFrame.height = '100%';
+        iFrame.scrolling = 'yes';
+
+        if (modalContent.requestFullscreen) {
+            modalContent.requestFullscreen();
+        } else if (modalContent.webkitRequestFullscreen) { /* Safari */
+            modalContent.webkitRequestFullscreen();
+        } else if (modalContent.msRequestFullscreen) { /* IE11 */
+            modalContent.msRequestFullscreen();
+        }
+        
+    }
+
+    /**
+     * Exit FullscreenMode
+     * 
+     * @param {String} gameObjectID GameObject Id
+     * @param {String} width width of iframe in px after exiting fullScreenMode
+     * @param {String} height height of iframe in px after exiting fullScreenMode
+     */
+    exitFullscreenMode(gameObjectID, width, height) {
+        let iFrame = document.getElementById("iframe" + gameObjectID);
+
+        iFrame.width = width;
+        iFrame.height = height;
+        iFrame.scrolling = 'no';
+
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+    }
     
     /**
      * Add new External Website window
@@ -97,17 +126,17 @@
             $('#externalWebsiteModalCollection').append(`
                 <div class="modal fade" id="externalWebsiteModal${gameObjectID}" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
-                        <div class="modal-content">
+                        <div class="modal-content" id="externalWebsiteModalContent${gameObjectID}">
                             <div class="modal-header">
-                                <h5 class="modal-title" id=${"externalWebsiteModalTitle" + gameObjectID}></h5>
+                                <h5 class="modal-title" id="externalWebsiteModalTitle${gameObjectID}"></h5>
                                 <div class="d-flex flex-row justify-content-end">
                                     <div>
-                                        <button id=${"fullscreenBtn" + gameObjectID} class="close btn">
+                                        <button id="fullscreenBtn${gameObjectID}" class="close btn">
                                             <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 1px;"></i>
                                         </button>
                                     </div>
                                     <div>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button id="closeBtn${gameObjectID}" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
