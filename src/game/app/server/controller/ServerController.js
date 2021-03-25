@@ -366,8 +366,12 @@ module.exports = class ServerController {
 
                     RankListService.getRank(ppant.getId(), Settings.CONFERENCE_ID, this.#db).then(rank => {
                         socket.emit('updateRank', rank);
+                    }).catch(err => {
+                        console.error(err);
                     })
-                })
+                }).catch(err => {
+                    console.error(err)
+                });
             });
 
             /* handles participant sending a message */
@@ -1587,7 +1591,9 @@ module.exports = class ServerController {
                     //get BusCard from DB and add it to sent friend Request
                     ParticipantService.getBusinessCard(targetID, Settings.CONFERENCE_ID, this.#db).then(targetBusCard => {
                         requester.addSentFriendRequest(targetBusCard);
-                    })
+                    }).catch(err => {
+                        console.error(err);
+                    });
                 } else if (target !== undefined && requester === undefined) {
                     //requester goes instantly offline after he sent friend request
                     //get BusCard from DB and add it to sent friend Request
@@ -1606,7 +1612,9 @@ module.exports = class ServerController {
                         }
 
                         this.#io.to(this.getSocketId(target.getId())).emit('newFriendRequestReceived', requesterBusCardData, chatID);
-                    })
+                    }).catch(err => {
+                        console.error(err);
+                    });
                 }
 
                 //update DB
@@ -2249,29 +2257,29 @@ module.exports = class ServerController {
         
         let groupOwnerID = 'groupChat: ' + groupName;
         ChatService.newGroupChat(groupOwnerID, memberIDs, 'Group: ' + groupName, Settings.CONFERENCE_ID, this.#db).then(groupChat => {
-            GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, Settings.CONFERENCE_ID, this.#db).then(group => {
-                this.#groups.set(groupName, group);
-                this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
-                // create the meeting belonging to the freshly created group
-                // MARKED FOR IMPROVEMENT
-                group.setMeeting(this.createMeeting(groupName, memberIDs));
-    
-                memberIDs.forEach(memberID => {
-                    let member = this.#ppants.get(memberID);
-                    let socketID = this.getSocketId(memberID);
+            MeetingService.newMeeting(memberIDs, groupName, Settings.CONFERENCE_ID, this.#db).then(groupMeeting => {
+                GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, groupMeeting, Settings.CONFERENCE_ID, this.#db).then(group => {
+                    this.#groups.set(groupName, group);
+                    this.#meetings.set(groupName, groupMeeting);
+                    this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
         
-                    if (member !== undefined && socketID !== undefined) {
-                        
-                        let socket = this.getSocketObject(socketID);
-    
-                        this.#handleLeaveOldGroup(member, groupName);
-                        this.#handleChangeShirtColor(member, groupColor, socket);
-    
-                        //Notify user that he joined a new group (right now only for status bar)
-                        socket.emit('join group', groupName);
-                        this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
-                    }
-                });    
+                    memberIDs.forEach(memberID => {
+                        let member = this.#ppants.get(memberID);
+                        let socketID = this.getSocketId(memberID);
+            
+                        if (member !== undefined && socketID !== undefined) {
+                            
+                            let socket = this.getSocketObject(socketID);
+        
+                            this.#handleLeaveOldGroup(member, groupName);
+                            this.#handleChangeShirtColor(member, groupColor, socket);
+        
+                            //Notify user that he joined a new group (right now only for status bar)
+                            socket.emit('join group', groupName);
+                            this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
+                        }
+                    });
+                })    
             })
         });
         return true;
@@ -2316,8 +2324,8 @@ module.exports = class ServerController {
             }
         });
 
-        this.#groups.delete(groupName);
         this.deleteMeeting(groupName); // MARKED FOR IMPROVEMENT
+        this.#groups.delete(groupName);     
         GroupService.deleteGroup(groupName, Settings.CONFERENCE_ID, this.#db);
         return true;
     }
@@ -2369,7 +2377,6 @@ module.exports = class ServerController {
                 
                 group.addGroupMember(memberID);
                 GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
-                this.addMembersToMeeting(groupName, [memberID]);
 
                 this.#handleLeaveOldGroup(member, groupName);
                 this.#handleChangeShirtColor(member, groupColor, socket);
@@ -2418,7 +2425,6 @@ module.exports = class ServerController {
 
                 group.removeGroupMember(memberID);
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
-                this.removeMembersFromMeeting(groupName, [memberID]);
                 
                 this.#handleLeaveChat(memberID, groupChatID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
