@@ -19,6 +19,7 @@ const conferenceId = ServiceTestData.conferenceId_1;
 
 const groupCollectionName = "groups_" + conferenceId;
 const chatCollectionName = "chats_" + conferenceId;
+const meetingCollectionName = "meetings_" + conferenceId;
 
 /* DB STUB SETUP */
 
@@ -62,7 +63,19 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
                                  memberId: [],
                                  messageList: [],
                                 });
-    } else {
+    } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID1') {
+        return Promise.resolve({ id: 'meetingID1',
+                                 name: 'name1',
+                                 members: [],
+                                 password: 'password1'
+                                });
+    } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID2') {
+        return Promise.resolve({ chatId: 'meetingID2',
+                                 name: 'name2',
+                                 members: [],
+                                 password: 'password2',
+                                });
+    }  else {
         return Promise.resolve(undefined);
     } 
 }

@@ -26,6 +26,7 @@ module.exports = class Group {
      * @param {ShirtColor} shirtColor shirtColor every group member wears
      * @param {String[]} groupMemberIDs array of starting group member IDs
      * @param {GroupChat} groupChat chat of this group
+     * @param {Meeting} groupMeeting meeting of this group
      */
     constructor(name, shirtColor, groupMemberIDs, groupChat, groupMeeting) {
         TypeChecker.isString(name);

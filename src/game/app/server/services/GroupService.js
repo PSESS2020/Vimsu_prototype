@@ -34,7 +34,7 @@ const Meeting = require('../models/Meeting.js');
 
             await groups.forEach(group => {
                 return ChatService.loadChat(group.groupChatID, conferenceId, vimsudb).then(groupChat => {
-                    return MeetingService.loadMeetingList(group.meetingID, conferenceId, vimsudb).then(groupMeeting => {
+                    return MeetingService.loadMeeting(group.meetingID, conferenceId, vimsudb).then(groupMeeting => {
                         groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
                     })
                 })
