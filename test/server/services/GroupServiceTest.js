@@ -12,6 +12,7 @@ const sinon = require('sinon');
 const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const ServiceTestData = require('./TestData/ServiceTestData.js');
+const Meeting = require('../../../src/game/app/server/models/Meeting.js');
 
 const dbStub = sinon.createStubInstance(db);
 const conferenceId = ServiceTestData.conferenceId_1;
@@ -114,10 +115,12 @@ var name1;
 var shirtColor1;
 var groupMemberIDs1;
 var groupChat1 = new GroupChat('chatID1', 'owner1', 'name1', [], [], Settings.MAXGROUPPARTICIPANTS, Settings.MAXNUMMESSAGES_GROUPCHAT);
+var groupMeeting1 = new Meeting('meetingID1', 'name1', [], 'password1' );
 var name2;
 var shirtColor2;
 var groupMemberIDs2;
 var groupChat2 = new GroupChat('chatID2', 'owner2', 'name2', [], [], Settings.MAXGROUPPARTICIPANTS, Settings.MAXNUMMESSAGES_GROUPCHAT);
+var groupMeeting2 = new Meeting('meetingID2', 'name2', [], 'password2' );
 
 /* TESTS */
 
@@ -133,8 +136,8 @@ describe('GroupServiceTest', () => {
     });
     
     it('test create groups, load and delete them', async() => {
-        let group1 = await GroupService.createGroup(name1, shirtColor1, groupMemberIDs1, groupChat1, conferenceId, dbStub);
-        let group2 = await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, conferenceId, dbStub);
+        let group1 = await GroupService.createGroup(name1, shirtColor1, groupMemberIDs1, groupChat1, groupMeeting1, conferenceId, dbStub);
+        let group2 = await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, groupMeeting2, conferenceId, dbStub);
 
         let groupMap = await GroupService.getGroupMap(conferenceId, dbStub);
         
@@ -154,8 +157,8 @@ describe('GroupServiceTest', () => {
     });
 
     it('test add and remove members', async() => {
-        await GroupService.createGroup(name1, shirtColor1, groupMemberIDs1, groupChat1, conferenceId, dbStub);
-        await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, conferenceId, dbStub);
+        await GroupService.createGroup(name1, shirtColor1, groupMemberIDs1, groupChat1, groupMeeting1, conferenceId, dbStub);
+        await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, groupMeeting2, conferenceId, dbStub);
 
         let addSuccess = await GroupService.addGroupMember(name1, 'member1', conferenceId, dbStub);
         let groupMap = await GroupService.getGroupMap(conferenceId, dbStub);
