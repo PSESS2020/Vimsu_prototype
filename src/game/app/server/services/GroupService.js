@@ -6,6 +6,7 @@ const ChatService = require('./ChatService.js');
 const db = require('../../../../config/db.js');
 const MeetingService = require('./MeetingService.js');
 const Meeting = require('../models/Meeting.js');
+const { ObjectId } = require('bson');
 
 /**
  * The Group Service
@@ -34,9 +35,16 @@ const Meeting = require('../models/Meeting.js');
 
             await groups.forEach(group => {
                 return ChatService.loadChat(group.groupChatID, conferenceId, vimsudb).then(groupChat => {
-                    return MeetingService.loadMeeting(group.groupMeetingID, conferenceId, vimsudb).then(groupMeeting => {
-                        groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
-                    })
+                    if (group.groupMeetingID !== undefined) {
+                        return MeetingService.loadMeeting(group.groupMeetingID, conferenceId, vimsudb).then(groupMeeting => {
+                            groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
+                        })
+                    } else {
+                        return MeetingService.newMeeting(group.memberIDs, group.groupName, conferenceId, vimsudb).then(groupMeeting => {
+                            groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
+                        })
+                    }
+                    
                 })
             })
 

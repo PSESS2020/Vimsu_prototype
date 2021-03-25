@@ -32,6 +32,7 @@ class MeetingListView extends WindowView {
      * @param {Object[]} meetings meetings
      */
     draw(meetings) {
+        $('#meetingListWait').hide();
         $('#nomeeting').empty();
         $('#meetingListModal .modal-body .list-group').empty();
 
@@ -40,7 +41,6 @@ class MeetingListView extends WindowView {
         this.meetings = meetings;
 
         this.meetings.forEach(meeting => {
-
             // Now we want to append each meeting as a clickable element
             this.appendNewMeeting(meeting);
         })
