@@ -8,7 +8,7 @@
 <body>
     <div class="container">
 		<%- include('partials/header') %>
-        <section class="row align-items-center justify-content-center" id="login-content">
+        <section class="small-form-content row align-items-center justify-content-center">
             <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
                 <h5>Sign In</h5>
                 <br>
@@ -16,9 +16,6 @@
                     <% if(locals.wrongLoginData === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The password or
                             the username you entered is wrong! Please try again.</small>
-                    <% } else if (locals.verifyDataFailed === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> There's an
-                            error while verifying the login data. Please try again.</small>
                     <% } %>
                 </div>
                 <br>

@@ -45,7 +45,7 @@ class FriendListView extends WindowView {
         $('#nofriend').empty();
         $('#friendListModal .modal-body .list-group').empty();
 
-        this.handleEmptyFriendlist(businessCards)
+        if (!this.handleEmptyFriendlist(businessCards)) return;
 
         const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
         this.businessCards = sortedBusinessCards;
@@ -112,7 +112,7 @@ class FriendListView extends WindowView {
         });
 
         $("#friend" + participantId).remove()
-        this.handleEmptyFriendlist(this.businessCards)
+        if (!this.handleEmptyFriendlist(this.businessCards)) return;
     }
 
     /**
@@ -131,12 +131,14 @@ class FriendListView extends WindowView {
      * Displays no friend if there's no friend
      * 
      * @param {Object[]} businessCards business cards
-     * @returns if no friend
+     * @returns false if no friend
      */
     handleEmptyFriendlist(businessCards) {
         if (businessCards && businessCards.length < 1) {
             $('#nofriend').text("No friend is found. Chat with others and send some friend requests!");
-            return;
+            return false;
         }
+
+        return true;
     }
 }

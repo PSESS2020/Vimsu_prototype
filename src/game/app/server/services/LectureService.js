@@ -55,8 +55,6 @@ module.exports = class LectureService {
             }
             return lectureLists;
 
-        }).catch(err => {
-            console.error(err)
         })
     }
 

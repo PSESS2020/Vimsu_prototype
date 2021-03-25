@@ -93,7 +93,6 @@ module.exports = class Meetingservice {
         }).catch(err => {
             console.error(err);
         })
-        
     }
 
     /**
@@ -125,8 +124,6 @@ module.exports = class Meetingservice {
                 console.log("No meeting with name " + meetingName + " could be found in database.");
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -192,10 +189,7 @@ module.exports = class Meetingservice {
                 } else {
                     console.log("Could not find meeting with id " + meetingId);
                 }
-        }).catch(err => {
-            console.error(err);
         })
-
     }
 
     /**
@@ -225,16 +219,10 @@ module.exports = class Meetingservice {
                     } else {
                         return false;
                     }
-                }).catch(err => {
-                    console.error(err);
-                    return false;
                 })
             } else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -279,9 +267,6 @@ module.exports = class Meetingservice {
                                     console.log("Meeting with id " + meetingId + " could not be deleted from database.");
                                 }
                                 return res;
-                            }).catch(err => {
-                                console.error(err);
-                                return false;
                             })
                         }
                         return true;
@@ -289,17 +274,8 @@ module.exports = class Meetingservice {
                         console.log("No meeting with id " + meetingId + " could be found in database.");
                         return false;
                     }
-                }).catch(err => {
-                    console.error(err);
-                    return false;
                 })
-            }).catch(err => {
-                console.error(err);
-                return false;
-            }) 
-        }).catch(err => {
-            console.error(err);
-            return false;
+            })
         })
     }
 
@@ -324,13 +300,7 @@ module.exports = class Meetingservice {
                     console.log("All meetings have been deleted from database.");
                 }
                 return meetRes
-            }).catch(err => {
-                console.error(err);
-                return false;
             })
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
     
@@ -375,26 +345,17 @@ module.exports = class Meetingservice {
                                 console.log("Meeting with id " + meetingId + " could not be deleted from database.");
                             }
                             return resSecond;
-                        }).catch(err => {
-                            console.error(err);
-                            return false;
                         })
                     } else {
                         // Meeting has been successfully removed
                         return true;
                     }
-                }).catch(err => {
-                    console.error(err);
-                    return false;
                 })
             } else {
                 // If no meeting with the passed id could be found
                 console.log("No meeting with id " + meetingId + " could be found in database.");
                 return false;            
             } 
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
