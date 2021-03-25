@@ -13,7 +13,7 @@ class GameView {
 
     currentLecturesView;
     lectureView;
-    meetingListView
+    meetingListView;
     chatListView;
     chatThreadView;
     statusBar;
