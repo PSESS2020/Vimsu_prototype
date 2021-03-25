@@ -45,7 +45,7 @@ class MeetingListView extends WindowView {
             this.appendNewMeeting(meeting);
         })
 
-        $('#meetingListModal').modal('show');
+        
     }
 
     /**
