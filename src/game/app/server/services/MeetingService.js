@@ -55,7 +55,7 @@ module.exports = class Meetingservice {
 
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
             console.log("meeting saved");
-            return new Meeting(meeting.id, meeting.name, meeting.members);
+            return new Meeting(meeting.meetingId, meeting.name, meeting.members);
         }).catch(err => {
             console.error(err);
         })
@@ -120,9 +120,9 @@ module.exports = class Meetingservice {
 
         let meetings = [];
         return Promise.all(meetingIDList.map(async meetingId => {
-            var meeting = await vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId });
+            var meeting = await vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId });
             meetings.push(new Meeting(
-                meeting.id,
+                meeting.meetingId,
                 meeting.name,
                 meeting.members
             ));
@@ -152,7 +152,7 @@ module.exports = class Meetingservice {
         return vimsudb.findOneInCollection("meetings_" + conferenceId, {id: meetingId }).then(meeting => {
 
             if (meeting) {
-                return new Meeting(meeting.id, 
+                return new Meeting(meeting.meetingId, 
                     meeting.name, 
                     meeting.members);
                 } else {
