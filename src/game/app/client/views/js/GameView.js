@@ -905,6 +905,7 @@ class GameView {
      * Draws external website window 
      * 
      * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.title title of iFrame
      * @param {String} iFrameData.url URL of iFrame
      * @param {number} iFrameData.width width of iframe in px
      * @param {number} iFrameData.height height of iframe in px
@@ -912,6 +913,7 @@ class GameView {
      */
     initExternalWebsiteView(iFrameData, gameObjectID) {
         TypeChecker.isInstanceOf(iFrameData, Object);
+        TypeChecker.isString(iFrameData.title);
         TypeChecker.isInt(iFrameData.width);
         TypeChecker.isInt(iFrameData.height);
         TypeChecker.isString(iFrameData.url);

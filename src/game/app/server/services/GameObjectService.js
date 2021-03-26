@@ -55,6 +55,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -70,6 +71,7 @@ module.exports = class GameObjectService {
 
         if (iFrameData !== undefined) {
             TypeChecker.isInstanceOf(iFrameData, Object);
+            TypeChecker.isString(iFrameData.title);
             TypeChecker.isInt(iFrameData.width);
             TypeChecker.isInt(iFrameData.height);
             TypeChecker.isString(iFrameData.url);
@@ -194,6 +196,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -215,6 +218,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -238,6 +242,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -263,6 +268,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -286,6 +292,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -309,6 +316,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -334,6 +342,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -356,6 +365,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -376,6 +386,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -397,6 +408,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -418,6 +430,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -439,6 +452,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -460,6 +474,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -484,6 +499,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -505,6 +521,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -526,6 +543,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -547,6 +565,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -570,6 +589,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -593,6 +613,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
@@ -614,6 +635,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px

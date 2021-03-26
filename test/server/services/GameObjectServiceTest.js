@@ -24,7 +24,7 @@ describe('GameObjectService test', function () {
         cordY = TestUtil.randomIntWithMin(0);
         solidity = TestUtil.randomBool();
         clickable = TestUtil.randomBool();
-        iFrameData = { url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
+        iFrameData = { title: TestUtil.randomString(), url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
     });
 
     it('test create default Tile', function () {
