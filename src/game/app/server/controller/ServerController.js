@@ -2266,6 +2266,7 @@ module.exports = class ServerController {
                     memberIDs.forEach(memberID => {
                         let member = this.#ppants.get(memberID);
                         let socketID = this.getSocketId(memberID);
+                        member.joinMeeting(groupMeeting);
             
                         if (member !== undefined && socketID !== undefined) {
                             
