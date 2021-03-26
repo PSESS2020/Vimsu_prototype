@@ -84,7 +84,7 @@ module.exports = class Meetingservice {
         }
 
         memberIdList.forEach(participantId => {
-            vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meeting.id });
+            vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meeting.meetingId });
         });
             
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
