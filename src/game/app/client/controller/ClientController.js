@@ -81,6 +81,7 @@ class ClientController {
 
         //Game View is now fully initialised
         this.gameView.setGameViewInit(true);
+        this.gameView.updateConnectionStatus(ConnectionState.CONNECTED);
     }
 
     /**
@@ -112,7 +113,6 @@ class ClientController {
      */
     openSocketConnection = function () {
         if (this.port && !this.socket) {
-
             /**
              * Arguments prevent initial http polling and start the websocket directly.
              * Without the arguments the client starts a http connection and upgrades later to websocket protocol.
@@ -123,27 +123,32 @@ class ClientController {
                 upgrade: false,
                 'reconnection': true,
                 'reconnectionDelay': 0,
-                'reconnectionAttempts': 120
+                'reconnectionAttempts': Infinity,
+                'force new connection': true
             });
 
-            this.socket.on('connect', (socket) => {
-                this.gameView.updateConnectionStatus(ConnectionState.CONNECTED);
+            this.socket.on('connect', () => {
+                this.socket.emit('new participant');
+
+                if (this.connectedOnce) {
+                    this.gameView.updateConnectionStatus(ConnectionState.RECONNECTED);
+                }
+                
+                this.connectedOnce = true;
             });
 
             this.socket.on('pong', (ms) => {
                 this.gameView.updatePing(ms);
             });
 
-            this.socket.on('disconnect', () => {
+            this.socket.on('disconnect', (reason) => {
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
-
-                //closes socket on disconnect
-                this.socket.close();
+                if (reason !== "transport close") {
+                    this.socket.close();
+                }
             });
 
             this.setUpSocket();
-            this.socket.emit('new participant');
-
         }
     }
 
