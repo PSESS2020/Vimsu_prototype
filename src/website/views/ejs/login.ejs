@@ -10,15 +10,15 @@
 		<%- include('partials/header') %>
         <section class="small-form-content row align-items-center justify-content-center">
             <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
-                <h5>Sign In</h5>
-                <br>
-                <div class="row justify-content-left m-0 p-0">
+                <h5 class="mb-4">Sign In</h5>
+                <div class="row justify-content-left mb-3 m-0 p-0">
                     <% if(locals.wrongLoginData === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The password or
                             the username you entered is wrong! Please try again.</small>
+                    <% } else if (locals.fieldEmpty === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Username or password cannot be empty.</small>
                     <% } %>
                 </div>
-                <br>
                 <form action="login" method="POST">
                     <div class="form-group">
                         <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username"

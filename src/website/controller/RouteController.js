@@ -153,6 +153,14 @@ module.exports = class RouteController {
                 }
             }
 
+            if (!request.body.message) { 
+                if (request.session.loggedin === true) {
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidMessage: true }, username));
+                } else {
+                    return response.render('contact-us', { invalidMessage: true });
+                }
+            }
+
             const mailOptions = {
                 from: vimsuEmail,
                 to: vimsuEmail,
@@ -163,7 +171,7 @@ module.exports = class RouteController {
                 `
             }
 
-            return this.#sendMail(vimsuEmail, mailOptions).then(result => {
+            return this.#sendMail(mailOptions).then(result => {
                 if (result === true) {
                     if (request.session.loggedin === true) {
                         response.render('contact-us', this.#getLoggedInParameters({ messageSent: true }, username));
@@ -216,8 +224,10 @@ module.exports = class RouteController {
                     return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
-                var lectureTitle = request.body.title;
-                var remarks = request.body.remarks;
+                if (!request.body.title) {
+                    return response.render('upload', this.#getLoggedInParameters({ invalidLectureTitle: true }, username));
+                }
+
                 var oratorId = request.session.accountId;
                 var video = request.files.video;
 
@@ -229,7 +239,7 @@ module.exports = class RouteController {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
-                                return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
+                                return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, request.body.title, request.body.remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                     response.end();
                                 })
                             }
@@ -264,6 +274,10 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/login', (request, response) => {
+            if (!request.body.username || !request.body.password) {
+                return response.render('login', { fieldEmpty: true });
+            }
+
             return AccountService.verifyLoginData(request.body.username, request.body.password, '', this.#db).then(user => {
 
                 if (user) {
@@ -306,16 +320,25 @@ module.exports = class RouteController {
                 return response.render('register', { invalidEmail: true });
             }
 
+            if (!request.body.password) {
+                return response.render('register', { invalidPassword: true });
+            }
+
+            if (request.body.password !== request.body.retypedPassword) {
+                return response.render('register', { passwordsDontMatch: true });
+            }
+
             let title = request.body.title;
 
-            if (title === "Title") {
-                title = "";
-            }
-            else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+            if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
                 return response.render('register', { invalidTitle: true });
             }
 
-            return AccountService.createAccount(request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, '', this.#db).then(res => {
+            if (!request.body.forename) {
+                return response.render('register', { invalidForename: true });
+            }
+
+            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, '', this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
@@ -384,14 +407,15 @@ module.exports = class RouteController {
                 }
                 let title = request.body.title;
 
-                if (title === "Title") {
-                    title = "";
-                }
-                else if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
                 }
 
-                return AccountService.updateAccountData(accountId, request.body.username, request.body.title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, '', this.#db).then(res => {
+                if (!request.body.forename) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username));
+                }
+
+                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, '', this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
                         request.session.title = res.getTitle();
@@ -420,11 +444,21 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
+                if (!request.body.oldPassword || !request.body.newPassword) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                }
+    
+                if (request.body.newPassword !== request.body.retypedNewPassword) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                }
+
                 return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, '', this.#db).then(res => {
-                    if (res) {
-                        response.render('account-settings', this.#getLoggedInParameters({ changePasswordSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                    if (res === true) {
+                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                    } else if (res === null) {
+                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, oldPasswordWrong: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ changePasswordFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordFailed: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
                     }
                 })
             }
@@ -440,14 +474,14 @@ module.exports = class RouteController {
         });
     }
 
-    #sendMail = async function (vimsuEmail, mailOptions) {
+    #sendMail = async function (mailOptions) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 port: 465,
                 secure: true,
                 auth: {
-                    user: vimsuEmail,
+                    user: mailOptions.from,
                     pass: process.env.VIMSU_EMAIL_PASSWORD
                 }
             });

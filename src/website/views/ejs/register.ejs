@@ -10,15 +10,16 @@
 		<%- include('partials/header') %>
         <section class="large-form-content row align-items-center justify-content-center">
             <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
-                <h5>Sign Up</h5>
-                <br>
-                <div class="row justify-content-left m-0 p-0">
+                <h5 class="mb-4">Sign Up</h5>
+                <div class="row justify-content-left m-0 mb-3 p-0">
                     <% if(locals.emailTaken === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The email you
                             entered is already registered</small>
                     <% } else if (locals.usernameTaken === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The username
                             you entered is already taken</small>
+                    <% } else if (locals.passwordsDontMatch === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Passwords do not match.</small>
                     <% } else if (locals.invalidUsernameString === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The username
                             you entered doesn't match our criteria.</small>
@@ -28,29 +29,46 @@
                     <% } else if (locals.invalidTitle === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
                             Please choose a title from the options we provided.</small>
+                    <% } else if (locals.invalidPassword === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Password cannot be empty.</small>
+                    <% } else if (locals.invalidForename === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Forename cannot be empty.</small>
                     <% } else if (locals.registerFailed === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an
                             error while registering your account. Please try again.</small>
                     <% } %>
                 </div>
-                <br>
+                
+                <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
                 <form action="register" method="POST">
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <input class="form-control" type="text" id="usernameInput" name="username" placeholder="Username" maxlength="10" required>
-                        </div>
-                        
-                        <div class="form-group col-6">
-                            <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
-                                required autocomplete="new-password">
-                        </div>
+                    <div class="form-group">
+                        <label for="username" class="input-label">Username&nbsp<span class="warning">*</span></label>
+                        <input class="form-control" type="text" id="usernameInput" name="username" placeholder="maxmuster" maxlength="10" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" id="emailInput" name="email" placeholder="Email" required>
+                        <label for="email" class="input-label">Email&nbsp<span class="warning">*</span></label>
+                        <input class="form-control" type="text" id="emailInput" name="email" placeholder="maxmustermann@example.com" required>
                     </div>
-    
+                    
+                    <div class="form-group">
+                        <label for="forename" class="input-label">Forename&nbsp<span class="warning">*</span></label>
+                        <input type="text" class="form-control" id="forenameInput" name="forename" placeholder="Max" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="input-label">Password&nbsp<span class="warning">*</span></label>
+                        <input type="password" class="form-control" id="passwordInput" name="password" placeholder="******"
+                            required autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="retypedPassword" class="input-label">Confirm password&nbsp<span class="warning">*</span></label>
+                        <input type="password" class="form-control" id="retypePasswordInput" name="retypedPassword" placeholder="******"
+                            required autocomplete="new-password">
+                    </div>
+                    
                     <div class="form-row">
-                        <div class="form-group col-4">
+                        <div class="form-group col-6">
+                            <label for="title" class="input-label">Title</label>
                             <select class="form-control" name="title" id="titleInput" required>
                                 <option selected>Title</option>
                                 <option>Mr.</option>
@@ -62,24 +80,21 @@
                                 <option>Rev.</option>
                             </select>
                         </div>
-                        <div class="form-group col-4">
-                            <input type="text" class="form-control" id="forenameInput" name="forename" placeholder="Forename"
-                                required>
-                        </div>
-                        <div class="form-group col-4">
-                            <input type="text" class="form-control" id="surnameInput" name="surname" placeholder="Surname"
-                                required>
+                        <div class="form-group col-6">
+                            <label for="surname" class="input-label">Surname</label>
+                            <input type="text" class="form-control" id="surnameInput" name="surname" placeholder="Mustermann">
                         </div>
                     </div>
     
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <input type="text" class="form-control" id="jobInput" name="job" placeholder="Job/Profession"
-                                required>
+                            <label for="job" class="input-label">Job/Profession</label>
+                            <input type="text" class="form-control" id="jobInput" name="job" placeholder="Student">
                         </div>
                         <div class="form-group col-6">
+                            <label for="company" class="input-label">Company/School</label>
                             <input type="text" class="form-control" id="companyInput" name="company"
-                                placeholder="Company/School" required>
+                                placeholder="MIT">
                         </div>
                     </div>
                     <div class="row justify-content-center m-0 p-0">
