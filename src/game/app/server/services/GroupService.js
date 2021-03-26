@@ -6,7 +6,6 @@ const ChatService = require('./ChatService.js');
 const db = require('../../../../config/db.js');
 const MeetingService = require('./MeetingService.js');
 const Meeting = require('../models/Meeting.js');
-const { ObjectId } = require('bson');
 
 /**
  * The Group Service
