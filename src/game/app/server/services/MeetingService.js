@@ -144,7 +144,7 @@ module.exports = class Meetingservice {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, {id: meetingId }).then(meeting => {
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, {meetingId: meetingId }).then(meeting => {
 
             if (meeting) {
                 return new Meeting(meeting.meetingId, 
@@ -174,7 +174,7 @@ module.exports = class Meetingservice {
         TypeChecker.isString(participantId);
         TypeChecker.isInstanceOf(vimsudb, db);
         
-        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { id: meetingId }, { members: participantId }).then(res => {
+        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: participantId }).then(res => {
             if (res) {
                 // Add meeting to the participant's list of meetings
                 return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meetingId }).then(res => {
@@ -212,7 +212,7 @@ module.exports = class Meetingservice {
         
         // First, we attempt to remove the ppant from the members of
         // the meeting
-        return vimsudb.deleteFromArrayInCollection("meetings_" + conferenceId, { id: meetingId }, { members: participantId }).then(res => {
+        return vimsudb.deleteFromArrayInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: participantId }).then(res => {
             var dbRes = res;
 
             // then, we attempt to remove the meeting from the meeting
@@ -221,10 +221,10 @@ module.exports = class Meetingservice {
                 
                 // Finally, we now check whether there are any meeting
                 // members left. If not, we delete the meetung entry.
-                return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(meeting => {
+                return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(meeting => {
                     if (meeting && dbRes) {
                         if (meeting.members.length < 1) {
-                            return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { id: meetingId }).then(res => {
+                            return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { meetingId: meetingId }).then(res => {
                                 if (res) {
                                     console.log("Meeting with id " + meetingId + " was deleted from database.");
                                 } else {
@@ -284,7 +284,7 @@ module.exports = class Meetingservice {
         TypeChecker.isInstanceOf(vimsudb, db);
         
         // Find the meeting in the database.
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(meeting => {
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(meeting => {
             if (meeting) {
                 /* Remove every member from the meeting. After this loop
                  * has concluded, the meeting should no longer exist in
@@ -295,12 +295,12 @@ module.exports = class Meetingservice {
 
                 // Check whether the meeting has been successfully been
                 // removed
-                return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(resFirst => {
+                return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(resFirst => {
                     // The loop did for some reason fail to remove
                     // the meeting.
                     if (resFirst) {
                         // So now we remove it manually
-                        return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { id: meetingId }).then(resSecond => {
+                        return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { meetingId: meetingId }).then(resSecond => {
                             if (resSecond) {
                                 console.log("Meeting with id " + meetingId + " was deleted from database.");
                             } else {
