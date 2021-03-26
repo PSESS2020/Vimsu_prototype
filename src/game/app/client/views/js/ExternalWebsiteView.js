@@ -23,19 +23,23 @@
      * Draws External Website window
      * 
      * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.title title of iFrame
      * @param {String} iFrameData.url URL of iFrame
      * @param {number} iFrameData.width width of iframe in px
      * @param {number} iFrameData.height height of iframe in px
      * @param {String} gameObjectID GameObject Id
      */
      draw(iFrameData, gameObjectID) {
-        $('#externalWebsiteWait' + gameObjectID).hide()
-        $(`#externalWebsiteWaitModal${gameObjectID} .modal-header`).empty()
+        $('#externalWebsiteWait' + gameObjectID).hide();
+        $(`#externalWebsiteWaitModal${gameObjectID} .modal-header`).empty();
+        $("#externalWebsiteModalTitle" + gameObjectID).empty();
         $('#externalWebsiteBody' + gameObjectID).empty();
 
         let fullScreenMode = false;
         let width = iFrameData.width.toString() + 'px';
         let height = iFrameData.height.toString() + 'px';
+
+        $('#externalWebsiteModalTitle' + gameObjectID).text(iFrameData.title);
 
         $('#externalWebsiteBody' + gameObjectID).append(`
             <div class="modal-body" style="overflow:auto; height:100%;">

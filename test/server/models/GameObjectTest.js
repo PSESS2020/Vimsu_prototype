@@ -27,7 +27,7 @@ describe('GameObject test', function () {
         position = new Position(TestUtil.randomInt(), TestUtil.randomInt(), TestUtil.randomInt());
         isSolid = TestUtil.randomBool();
         isClickable = TestUtil.randomBool();
-        iFrameData = { url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
+        iFrameData = { title: TestUtil.randomString(), url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
     });
 
     it('test constructor and getters', function () {
