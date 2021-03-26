@@ -7,6 +7,7 @@
 const ConnectionState = Object.freeze({
     DISCONNECTED: 0,
     CONNECTED: 1,
+    RECONNECTED: 2
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

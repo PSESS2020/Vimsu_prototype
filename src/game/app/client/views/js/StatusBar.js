@@ -5,7 +5,6 @@
  * @version 1.0.0
  */
 class StatusBar extends Views {
-    timeLeft;
     connectionStatus;
 
     //FPS variables
@@ -43,16 +42,13 @@ class StatusBar extends Views {
      */
     drawConnectionStatus = function () {
         if (this.connectionStatus === ConnectionState.DISCONNECTED) {
-            if (this.timeLeft < 0) {
-                var redirect = $('#nav_leave_button').attr('href');
-                window.location.href = redirect;
-            } else {
-                $('#connectionStatus').empty();
-                $('#connectionStatus').text(`Lost connection to the server. ${isNaN(this.timeLeft) ? `` : `Time left until leave: ${this.timeLeft}s.`}`);
-                $('#connectionStatus').show();
-
-                if (!isNaN(this.timeLeft)) this.timeLeft--;
-            }
+            $('#connectionStatus').empty();
+            $('#connectionStatus').text(`Lost connection to the server.`);
+            $('#connectionStatus').show();
+        } else if (this.connectionStatus === ConnectionState.RECONNECTED) {
+            $('#connectionStatus').empty();
+            $('#connectionStatus').text("Reconnecting to the server...");
+            $('#connectionStatus').show();
         }
     }
 
@@ -61,13 +57,9 @@ class StatusBar extends Views {
      */
     draw() {
         this.drawClock();
-        this.drawConnectionStatus();
 
         setInterval(() => {
-
             this.drawClock();
-            this.drawConnectionStatus();
-
         }, 1000);
     }
 
@@ -120,15 +112,16 @@ class StatusBar extends Views {
         this.connectionStatus = status;
 
         if (status === ConnectionState.CONNECTED) {
+            $('#connectionStatus').hide();
             $('#connectionStatus').empty();
-        } else if (status === ConnectionState.DISCONNECTED) {
-            var result = confirm(`The connection to the server is lost and you won't be automatically reconnected. You will be automatically redirected to the homepage in ${Settings.TIME_UNTIL_LEAVE} seconds. However, you can still look around. Would you like to stay?`)
-
-            if (result) {
-                return;
-            }
-
-            this.timeLeft = Settings.TIME_UNTIL_LEAVE;
+        } else if (this.connectionStatus === ConnectionState.DISCONNECTED) {
+            $('#connectionStatus').empty();
+            $('#connectionStatus').text(`Lost connection to the server.`);
+            $('#connectionStatus').show();
+        } else if (this.connectionStatus === ConnectionState.RECONNECTED) {
+            $('#connectionStatus').empty();
+            $('#connectionStatus').text("Reconnecting to the server...");
+            $('#connectionStatus').show();
         }
     }
 
