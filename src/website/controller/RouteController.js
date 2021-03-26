@@ -147,9 +147,17 @@ module.exports = class RouteController {
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
                 if (request.session.loggedin === true) {
-                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true }, username));
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true }, request.session.username));
                 } else {
                     return response.render('contact-us', { invalidEmail: true });
+                }
+            }
+
+            if (!request.body.message) {
+                if (request.session.loggedin === true) {
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidMessage: true }, request.session.username));
+                } else {
+                    return response.render('contact-us', { invalidMessage: true });
                 }
             }
 
@@ -163,21 +171,21 @@ module.exports = class RouteController {
                 `
             }
 
-            return this.#sendMail(vimsuEmail, mailOptions).then(result => {
+            return this.#sendMail(mailOptions).then(result => {
                 if (result === true) {
                     if (request.session.loggedin === true) {
-                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true }, username));
+                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true }, request.session.username));
                     } else {
                         response.render('contact-us', { messageSent: true });
                     }
                 } else {
                     if (request.session.loggedin === true) {
-                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true }, username));
+                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true }, request.session.username));
                     } else {
                         response.render('contact-us', { sendMessageFailed: true });
                     }
                 }
-            })            
+            })
         })
 
         this.#app.get('/privacy-policy', (request, response) => {
@@ -203,40 +211,42 @@ module.exports = class RouteController {
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, request.session.username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, request.session.username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, request.session.username));
                 }
 
-                var lectureTitle = request.body.title;
-                var remarks = request.body.remarks;
+                if (!request.body.title) {
+                    return response.render('upload', this.#getLoggedInParameters({ invalidLectureTitle: true }, request.session.username));
+                }
+
                 var oratorId = request.session.accountId;
                 var video = request.files.video;
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
+                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, request.session.username));
                     }
                     else {
-                        response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
+                        response.render('upload', this.#getLoggedInParameters({ uploading: true }, request.session.username))
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
-                                return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
+                                return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, request.body.title, request.body.remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                     response.end();
                                 })
                             }
                         })
                     }
                 } else {
-                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
+                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, request.session.username));
                 }
             });
         }
@@ -264,6 +274,10 @@ module.exports = class RouteController {
         })
 
         this.#app.post('/login', (request, response) => {
+            if (!request.body.username || !request.body.password) {
+                return response.render('login', { fieldEmpty: true });
+            }
+
             return AccountService.verifyLoginData(request.body.username, request.body.password, Settings.CONFERENCE_ID, this.#db).then(user => {
 
                 if (user) {
@@ -294,6 +308,18 @@ module.exports = class RouteController {
 
             if (!usernameRegex.test(request.body.username)) {
                 return response.render('register', { invalidUsernameString: true });
+            }
+
+            if (!request.body.password) {
+                return response.render('register', { invalidPassword: true });
+            }
+
+            if (request.body.password !== request.body.retypedPassword) {
+                return response.render('register', { passwordsDontMatch: true });
+            }
+
+            if (!request.body.forename) {
+                return response.render('register', { invalidForename: true });
             }
 
             return AccountService.createAccount(request.body.username, request.body.forename, request.body.password, Settings.CONFERENCE_ID, this.#db).then(res => {
@@ -338,14 +364,18 @@ module.exports = class RouteController {
         this.#app.post('/account-settings', (request, response) => {
             var clickedButton = request.body.accountSettingsButton;
             var accountId = request.session.accountId;
-            
+
             if (clickedButton === "saveChangesButton") {
                 const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
                 if (!usernameRegex.test(request.body.username)) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
+                    return response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, invalidUsernameString: true }, request.session.username));
                 }
-    
+
+                if (!request.body.forename) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, invalidForename: true }, request.session.username));
+                }
+
                 return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
@@ -353,25 +383,35 @@ module.exports = class RouteController {
                         request.session.username = res.getUsername();
                         response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
                     } else if (res && res.username) {
-                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
+                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: request.session.forename }, request.session.username));
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: request.session.forename }, request.session.username));
                     }
                 })
             } else if (clickedButton === "deleteAccountButton") {
-                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then (res => {
+                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then(res => {
                     if (res) {
                         response.redirect('/logout');
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: forename }, username));
+                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: request.session.forename }, request.session.username));
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
+                if (!request.body.oldPassword || !request.body.newPassword) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, forename: request.session.forename }, request.session.username))
+                }
+
+                if (request.body.newPassword !== request.body.retypedNewPassword) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, forename: request.session.forename }, request.session.username))
+                }
+
                 return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, Settings.CONFERENCE_ID, this.#db).then(res => {
-                    if (res) {
-                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordSuccess: true }, request.session.username))
+                    if (res === true) {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, changePasswordSuccess: true }, request.session.username))
+                    } else if (res === null) {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, oldPasswordWrong: true }, request.session.username))
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordFailed: true }, request.session.username))
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, changePasswordFailed: true }, request.session.username))
                     }
                 })
             }
@@ -387,14 +427,14 @@ module.exports = class RouteController {
         });
     }
 
-    #sendMail = async function (vimsuEmail, mailOptions) {
+    #sendMail = async function (mailOptions) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 port: 465,
                 secure: true,
                 auth: {
-                    user: vimsuEmail,
+                    user: mailOptions.from,
                     pass: process.env.VIMSU_EMAIL_PASSWORD
                 }
             });
@@ -412,6 +452,6 @@ module.exports = class RouteController {
     }
 
     #getLoggedInParameters = function (otherParameters, username) {
-            return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
-        }
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
     }
+}

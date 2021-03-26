@@ -292,6 +292,11 @@ input, textarea {
   text-align: left;
 }
 
+.warning { 
+  color: var(--orange-color);
+  text-align: left;
+}
+
 .dropdown-menu {
   color: var(--white-color) !important;
   background-color: var(--black-color) !important;
