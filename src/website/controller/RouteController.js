@@ -70,8 +70,6 @@ module.exports = class RouteController {
             SlotService.createVideoContainer(this.#blob);
         }
 
-        var username, forename;
-
         //sets the view engine to ejs, ejs is required to render templates
         this.#app.set('view engine', 'ejs');
 
@@ -107,8 +105,7 @@ module.exports = class RouteController {
 
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('home', this.#getLoggedInParameters({}, username));
+                response.render('home', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('home');
             }
@@ -116,8 +113,7 @@ module.exports = class RouteController {
 
         this.#app.get('/about-us', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('about-us', this.#getLoggedInParameters({}, username));
+                response.render('about-us', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('about-us');
             }
@@ -125,8 +121,7 @@ module.exports = class RouteController {
 
         this.#app.get('/tutorial', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('tutorial', this.#getLoggedInParameters({}, username));
+                response.render('tutorial', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('tutorial');
             }
@@ -134,8 +129,7 @@ module.exports = class RouteController {
 
         this.#app.get('/contact-us', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('contact-us', this.#getLoggedInParameters({}, username));
+                response.render('contact-us', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('contact-us');
             }
@@ -190,8 +184,7 @@ module.exports = class RouteController {
 
         this.#app.get('/privacy-policy', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('privacy-policy', this.#getLoggedInParameters({}, username));
+                response.render('privacy-policy', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('privacy-policy');
             }
@@ -201,8 +194,7 @@ module.exports = class RouteController {
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    username = request.session.username;
-                    response.render('upload', this.#getLoggedInParameters({}, username));
+                    response.render('upload', this.#getLoggedInParameters({}, request.session.username));
                 } else {
                     response.render('page-not-found');
                 }
@@ -253,8 +245,7 @@ module.exports = class RouteController {
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('page-not-found', this.#getLoggedInParameters({}, username));
+                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('login');
             }
@@ -296,8 +287,7 @@ module.exports = class RouteController {
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('page-not-found', this.#getLoggedInParameters({}, username));
+                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('register');
             }
@@ -352,9 +342,7 @@ module.exports = class RouteController {
 
         this.#app.get('/account-settings', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                forename = request.session.forename;
-                response.render('account-settings', this.#getLoggedInParameters({ forename: forename }, username))
+                response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename }, request.session.username))
             }
             else {
                 response.render('page-not-found');
@@ -419,8 +407,7 @@ module.exports = class RouteController {
 
         this.#app.get('*', (request, response) => {
             if (request.session.loggedin === true) {
-                username = request.session.username;
-                response.render('page-not-found', this.#getLoggedInParameters({}, username));
+                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
             } else {
                 response.render('page-not-found');
             }
