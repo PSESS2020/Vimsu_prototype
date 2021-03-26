@@ -262,6 +262,25 @@ module.exports = class Room {
     }
 
     /**
+     * Gets a GameObject with this id
+     * @method module:Room#getGameObject
+     * 
+     * @param {number} id GameObject ID
+     * @return {GameObject} the GameObject with the passed id or undefined if no GameObject if the passed id exists in the room
+     */
+     getGameObject(id) {
+        TypeChecker.isInt(id);
+
+        let index = this.#listOfGameObjects.findIndex(gameObject => gameObject.getId() === id);
+
+        if (index < 0) {
+            return undefined;
+        }
+
+        return this.#listOfGameObjects[index];
+    }
+
+    /**
      * Adds ppant into room
      * @method module:Room#enterParticipant
      * 

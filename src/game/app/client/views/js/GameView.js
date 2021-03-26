@@ -34,6 +34,7 @@ class GameView {
     successesBar;
     rankListView;
     npcStoryView;
+    externalWebsiteView;
     newAchievementView;
     achievementView;
     businessCardView;
@@ -94,6 +95,7 @@ class GameView {
         this.profileView = new ProfileView();
         this.rankListView = new RankListView();
         this.npcStoryView = new NPCStoryView();
+        this.externalWebsiteView = new ExternalWebsiteView();
         this.newAchievementView = new NewAchievementView();
         this.achievementView = new AchievementView();
         this.businessCardView = new BusinessCardView(this.eventManager);
@@ -884,6 +886,38 @@ class GameView {
      */
      addNPCStoryWindow(npcId) {
         this.npcStoryView.addNewNPCStoryWindow(npcId);
+    }
+
+    /**
+     * Add external website window and show
+     * 
+     * @param {String} gameObjectID GameObject id
+     */
+     addExternalWebsiteWindow(gameObjectID) {
+        TypeChecker.isString(gameObjectID);
+
+        this.externalWebsiteView.addNewExternalWebsiteWindow(gameObjectID);
+    }
+
+    /**
+     * Draws external website window 
+     * 
+     * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.title title of iFrame
+     * @param {String} iFrameData.url URL of iFrame
+     * @param {number} iFrameData.width width of iframe in px
+     * @param {number} iFrameData.height height of iframe in px
+     * @param {String} gameObjectID GameObject id
+     */
+    initExternalWebsiteView(iFrameData, gameObjectID) {
+        TypeChecker.isInstanceOf(iFrameData, Object);
+        TypeChecker.isString(iFrameData.title);
+        TypeChecker.isInt(iFrameData.width);
+        TypeChecker.isInt(iFrameData.height);
+        TypeChecker.isString(iFrameData.url);
+        TypeChecker.isString(gameObjectID);
+
+        this.externalWebsiteView.draw(iFrameData, gameObjectID);
     }
 
     /**

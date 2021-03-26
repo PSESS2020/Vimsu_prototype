@@ -243,7 +243,8 @@ module.exports = class ServerController {
                             length: mapElement.getLength(),
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
-                            isClickable: mapElement.getClickable()
+                            isClickable: mapElement.getClickable(),
+                            isIFrameObject: mapElement.getIFrameData() !== undefined
                         });
                     });
 
@@ -262,7 +263,7 @@ module.exports = class ServerController {
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
-                            url: gameObject.getURL()
+                            isIFrameObject: gameObject.getIFrameData() !== undefined
                         });
                     });
 
@@ -1694,6 +1695,36 @@ module.exports = class ServerController {
                 socket.emit('showNPCStory', name, story, npcID);
             });
 
+            /* handles IFrameObject clicked, sends URL-Data to client */
+            socket.on('getExternalWebsiteData', (gameObjectID) => {
+
+                //prevents server to crash when client purposely sends wrong type of data to server
+                try {
+                    TypeChecker.isInt(gameObjectID);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
+                let ppantID = socket.ppantID;
+                let ppant = this.#ppants.get(ppantID);
+                if (!ppant)
+                    return;
+
+                let currentRoomId = ppant.getPosition().getRoomId();
+                let gameObject = this.#roomDecorators[currentRoomId - 1].getRoom().getGameObject(gameObjectID);
+
+                //prevents server to crash when client emits wrong GameObject ID
+                if (!gameObject) {
+                    console.log('Client emitted wrong GameObject-ID!');
+                    return;
+                }
+
+                let iFrameData = gameObject.getIFrameData();
+        
+                socket.emit('showExternalWebsite', iFrameData, gameObjectID);
+            });
+
             /* handles entered code from client for door with doorId */
             socket.on('codeEntered', (doorId, enteredCode) => {
 
@@ -2987,7 +3018,8 @@ module.exports = class ServerController {
                 length: mapElement.getLength(),
                 cordX: mapElement.getPosition().getCordX(),
                 cordY: mapElement.getPosition().getCordY(),
-                isClickable: mapElement.getClickable()
+                isClickable: mapElement.getClickable(),
+                isIFrameObject: mapElement.getIFrameData() !== undefined
             });
         });
 
@@ -3006,7 +3038,7 @@ module.exports = class ServerController {
                 cordX: gameObject.getPosition().getCordX(),
                 cordY: gameObject.getPosition().getCordY(),
                 isClickable: gameObject.getClickable(),
-                url: gameObject.getURL()
+                isIFrameObject: gameObject.getIFrameData() !== undefined
             });
         });
 

@@ -19,7 +19,7 @@ class GameObjectClient {
     position;
     gameObjectType;
     isClickable;
-    url;
+    isIFrameObject
 
     /**
      * Creates an instance of Game Object on client-side
@@ -31,9 +31,9 @@ class GameObjectClient {
      * @param {number} length game object length
      * @param {PositionClient} position game object position
      * @param {boolean} isClickable game object clickable status
-     * @param {?String} url URL if clicking this object opens an external website, otherwise undefined
+     * @param {boolean} isIFrameObject true if object is an IFrameObject, false otherwise
      */
-    constructor(id, gameObjectType, name, width, length, position, isClickable, url) {
+    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -42,10 +42,8 @@ class GameObjectClient {
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isBoolean(isClickable);
-
-        if (url !== undefined) 
-            TypeChecker.isString(url);
-
+        TypeChecker.isBoolean(isIFrameObject);
+        
         this.id = id;
         this.gameObjectType = gameObjectType;
         this.name = name;
@@ -55,7 +53,7 @@ class GameObjectClient {
         //Position of left down corner of gameObject
         this.position = position;
         this.isClickable = isClickable;
-        this.url = url;
+        this.isIFrameObject = isIFrameObject;
     }
 
     /**
@@ -122,12 +120,12 @@ class GameObjectClient {
     }
 
     /**
-     * Gets game object url
+     * Gets game object IFrame status
      * 
-     * @return {?String} returns URL if there clicking this object opens an external website, otherwise undefined
+     * @return {boolean} true if gameObject is IFrameObject, otherwise false
      */
-    getURL() {
-        return this.url;
+     getIsIFrameObject() {
+        return this.isIFrameObject;
     }
 }
 
