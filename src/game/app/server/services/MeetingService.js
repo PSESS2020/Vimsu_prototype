@@ -212,7 +212,7 @@ module.exports = class Meetingservice {
         TypeChecker.isString(participantId);
         TypeChecker.isInstanceOf(vimsudb, db);
         
-        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { id: meetingId }, { members: participantId }).then(res => {
+        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: participantId }).then(res => {
             if (res) {
                 // Add meeting to the participant's list of meetings
                 return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meetingId }).then(res => {
