@@ -470,7 +470,9 @@ class GameView {
 
         TypeChecker.isInstanceOf(participant, ParticipantClient);
 
-        if (this.anotherParticipantAvatarViews.includes(participant)) {
+        let index = this.anotherParticipantAvatarViews.findIndex(participantAvatarView => participantAvatarView.getId() === participant.getId());
+        
+        if (index >= 0) {
             throw new Error(participant + " is already in list of participants")
         }
 
