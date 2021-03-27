@@ -281,7 +281,7 @@ class EventManager {
     handleAchievementsClicked() {
         this.clientController.handleFromViewShowAchievements();
     }
-    
+
     /**
      * called from View on rank list click
      */
