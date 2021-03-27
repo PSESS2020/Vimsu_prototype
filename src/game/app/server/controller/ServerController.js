@@ -1429,6 +1429,24 @@ module.exports = class ServerController {
                     }
 
                     this.#io.to(socket.id).emit('chatThread', chatData);
+                } else {
+                    var chatData = {
+                        chatId: chatID,
+                        title: "An error has occured",
+                        areFriends: true,
+                        friendRequestSent: true,
+                        partnerId: undefined,
+                        groupChat: false,
+                        inviteButton: false,
+                        leaveButton: true,
+                        messages: [{
+                            senderUsername: '',
+                            timestamp: new Date(),
+                            msgText: "You are not a member of this chat anymore. Please kindly leave the chat"
+                        }]
+                    }
+
+                    this.#io.to(socket.id).emit('chatThread', chatData);
                 }
             });
 
