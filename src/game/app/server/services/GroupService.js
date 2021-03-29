@@ -34,21 +34,14 @@ const Meeting = require('../models/Meeting.js');
 
             await groups.forEach(group => {
                 return ChatService.loadChat(group.groupChatID, conferenceId, vimsudb).then(groupChat => {
-                    if (group.groupMeetingID !== undefined) {
-                        return MeetingService.loadMeeting(group.groupMeetingID, conferenceId, vimsudb).then(groupMeeting => {
-                            groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
-                        })
-                    } else {
-                        return MeetingService.newMeeting(group.memberIDs, group.groupName, conferenceId, vimsudb).then(groupMeeting => {
-                            groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
-                        })
-                    }
-                    
-                })
-            })
+                    return MeetingService.loadMeeting(group.groupMeetingID, conferenceId, vimsudb).then(groupMeeting => {
+                        groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
+                    });                    
+                });
+            });
 
             return groupMap;
-        })
+        });
     }
 
     /**

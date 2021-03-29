@@ -197,10 +197,12 @@ class ClientController {
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
         this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
+        this.socket.on('gotNewMeeting', this.handleFromServerGotNewMeeting.bind(this));
         this.socket.on('evalAnswer', function (data) {   //Displays evaluated input.
             console.log(data);
         });
         this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
+        this.socket.on('newMeeting', this.handleFromServerNewMeeting.bind(this));
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
         this.socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
@@ -214,6 +216,7 @@ class ClientController {
         this.socket.on('other shirt color changed', this.handleFromServerChangeOtherShirtColor.bind(this));
         this.socket.on('join group', this.handleFromServerJoinGroup.bind(this));
         this.socket.on('leave group', this.handleFromServerLeaveGroup.bind(this));
+        this.socket.on('leave meeting', this.handleFromServerLeaveMeeting.bind(this));
         this.socket.on('meetingList', this.handleFromServerShowMeetingList.bind(this));
     }
 
@@ -984,6 +987,36 @@ class ClientController {
     };
 
     /**
+     * Receives from server that a new meeting has been created
+     * 
+     * @param {Object} meeting meeting
+     * @param {String} meeting.id ID of meeting
+     * @param {String} meeting.name name of meeting
+     * @param {String} meeting.password password of meeting
+     */
+     handleFromServerNewMeeting = function (meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.gameView.addNewMeeting(meeting);
+    };
+
+    /**
+     * Receives from server that user got a new meeting, view should draw notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    handleFromServerGotNewMeeting = function (meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+
+        this.gameView.drawNewMeeting(meetingName, meetingID);
+    }
+
+    /**
      * Receives from server that user got a new chat
      * 
      * @param {String} senderUsername chat sender username
@@ -1134,6 +1167,17 @@ class ClientController {
         this.gameView.removeGroupName();
         this.gameView.closeChatThreadView(groupChatID);
         this.gameView.removeChat(groupChatID);
+    }
+
+    /**
+     * Receives from server that you left a meeting
+     * 
+     * @param {String} meetingID meetingID of left meeting
+     */
+     handleFromServerLeaveMeeting = function(meetingID) {
+        TypeChecker.isString(meetingID);
+
+        this.gameView.removeMeeting(meetingID);
     }
 
     /*  */

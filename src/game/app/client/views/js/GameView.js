@@ -971,6 +971,17 @@ class GameView {
     };
 
     /**
+     * Adds new meeting to meeting list
+     * 
+     * @param {Object} meeting meeting
+     */
+     addNewMeeting(meeting) {
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.addNewMeeting(meeting);
+        }
+    };
+
+    /**
      * Updates friend request button in chat thread
      * 
      * @param {String} chatId chat ID
@@ -1071,6 +1082,19 @@ class GameView {
 
         if ($('#chatListModal').is(':visible')) {
             this.chatListView.deleteChat(chatId);
+        }
+    }
+
+    /**
+     * Removes meeting from meeting list window
+     * 
+     * @param {String} meetingId meeting ID
+     */
+     removeMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.deleteMeeting(meetingId);
         }
     }
 
@@ -1191,6 +1215,18 @@ class GameView {
         TypeChecker.isString(chatId);
 
         this.notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
+    }
+
+    /**
+     * Draws new meeting notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    drawNewMeeting(meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+        this.notifBar.drawNewMeeting(meetingName, meetingID);
     }
 
     /**
