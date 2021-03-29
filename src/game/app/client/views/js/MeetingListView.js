@@ -24,6 +24,7 @@ class MeetingListView extends WindowView {
         MeetingListView.instance = this;
 
         this.eventManager = eventManager;
+        this.meetings = [];
     }
 
     /**
@@ -56,13 +57,14 @@ class MeetingListView extends WindowView {
     deleteMeeting(meetingId) {
         this.meetings.forEach((meeting, index) => {
 
-            if (meeting.meetingId === meetingId) {
+            if (meeting.id === meetingId) {
+                let index = this.meetings.indexOf(meeting);
                 this.meetings.splice(index, 1);
             }
         });
 
         $("#meetingEntry" + meetingId).remove()
-        if (!this.handleEmptyMeetingList(meetings)) return
+        if (!this.handleEmptyMeetingList(this.meetings)) return;
     };
 
     /**

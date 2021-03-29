@@ -29,6 +29,7 @@ const Participant = require('../models/Participant.js');
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
+const Meeting = require('../models/Meeting.js');
 
 /**
  * The Server Controller
@@ -1250,7 +1251,7 @@ module.exports = class ServerController {
                         this.#io.to(socket.id).emit('newChat', chatData, true);
 
                         // Handles Group Chat creation for chatPartners 
-                        this.#handleGroupChatCreation(chatPartnerIDList, chat, creatorUsername);
+                        this.#handleGroupChatCreationWithoutOwner(chatPartnerIDList, chat, creatorUsername);
                     });
                 }
             });
@@ -2260,21 +2261,21 @@ module.exports = class ServerController {
             MeetingService.newMeeting(memberIDs, groupName, Settings.CONFERENCE_ID, this.#db).then(groupMeeting => {
                 GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, groupMeeting, Settings.CONFERENCE_ID, this.#db).then(group => {
                     this.#groups.set(groupName, group);
-                    this.#meetings.set(groupName, groupMeeting);
-                    this.#handleGroupChatCreation(memberIDs, groupChat, "GroupCreator");
+                  
+                    this.#handleGroupChatCreationWithoutOwner(memberIDs, groupChat, "GroupCreator");
+                    this.#handleGroupMeetingCreation(memberIDs, groupMeeting);
         
                     memberIDs.forEach(memberID => {
                         let member = this.#ppants.get(memberID);
                         let socketID = this.getSocketId(memberID);
-                        member.joinMeeting(groupMeeting);
-            
+                   
                         if (member !== undefined && socketID !== undefined) {
                             
                             let socket = this.getSocketObject(socketID);
-        
+                            
                             this.#handleLeaveOldGroup(member, groupName);
                             this.#handleChangeShirtColor(member, groupColor, socket);
-        
+                    
                             //Notify user that he joined a new group (right now only for status bar)
                             socket.emit('join group', groupName);
                             this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
@@ -2307,6 +2308,9 @@ module.exports = class ServerController {
         let groupChat = group.getGroupChat();
         let groupChatID = groupChat.getId();
         let memberIDs = group.getGroupMemberIDs();
+        let groupMeeting = group.getMeeting();
+
+        this.#handleDeleteGroupMeeting(groupMeeting);
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
@@ -2325,7 +2329,6 @@ module.exports = class ServerController {
             }
         });
 
-        this.deleteMeeting(groupName); // MARKED FOR IMPROVEMENT
         this.#groups.delete(groupName);     
         GroupService.deleteGroup(groupName, Settings.CONFERENCE_ID, this.#db);
         return true;
@@ -2366,6 +2369,8 @@ module.exports = class ServerController {
 
         let groupColor = group.getShirtColor();
         let groupChat = group.getGroupChat();
+        let groupMeeting = group.getMeeting();
+        
         this.#handleJoinGroupChat(memberIDs, groupChat, "GroupCreator");
 
         memberIDs.forEach(memberID => {
@@ -2378,6 +2383,7 @@ module.exports = class ServerController {
                 
                 group.addGroupMember(memberID);
                 GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
+                this.#handleJoinGroupMeeting([memberID], groupMeeting);
 
                 this.#handleLeaveOldGroup(member, groupName);
                 this.#handleChangeShirtColor(member, groupColor, socket);
@@ -2415,6 +2421,8 @@ module.exports = class ServerController {
 
         let groupChat = group.getGroupChat();
         let groupChatID = groupChat.getId();
+        let groupMeeting = group.getMeeting();
+        let meetingID = groupMeeting.getId();
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
@@ -2428,6 +2436,7 @@ module.exports = class ServerController {
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
                 
                 this.#handleLeaveChat(memberID, groupChatID);
+                this.#handleLeaveGroupMeeting([memberID], meetingID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
@@ -2441,170 +2450,11 @@ module.exports = class ServerController {
         //if group has no longer members, delete it from map
         if (newMemberIDs.length < 1) {
             this.#groups.delete(groupName);
+            this.#meetings.delete(groupName);
         }
 
         return true;
     }
-
-    /**
-     * Creates a meeting with the passed name
-     * @method module:ServerController#createMeeting
-     * 
-     * @param {String} meetingName 
-     * @param {String[]} memberIDs 
-     * @returns {Boolean} Whether operation was successful or not.
-     */
-    createMeeting(meetingName, memberIDs) {
-        TypeChecker.isString(meetingName);
-        TypeChecker.isInstanceOf(memberIDs, Array);
-        memberIDs.forEach(groupMemberID => {
-            TypeChecker.isString(groupMemberID);
-        });
-
-        // Check if a meeting with name already exists
-        if (this.#meetings.get(meetingName) !== undefined) {
-            return false;
-        }
-
-        MeetingService.newMeeting(memberIDs, meetingName, Settings.CONFERENCE_ID, this.#db).then(meeting => {
-            this.#meetings.set(meetingName, meeting);
-            memberIDs.forEach(memberID => {
-                let member = this.#ppants.get(memberID);
-                if(member !== undefined) {
-                    member.joinMeeting(meeting);
-                }
-            })
-            return true;
-        })
-
-    }
-
-    /**
-     * Deletes a specific meeting from the database.
-     * @method module:ServerController#deleteMeeting
-     * 
-     * @param {String} meetingName 
-     * @returns {Boolean} Whether the operation was successful or not
-     */
-    deleteMeeting(meetingName) {
-        TypeChecker.isString(meetingName);
-
-        let meeting = this.#meetings.get(meetingName);
-
-        // Check if meeting with that name exists
-        if (meeting === undefined) {
-            return false;
-        }
-
-        let memberIDs = meeting.getMemberIdList();
-
-        memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            if (member !== undefined) {
-                member.leaveMeeting(meeting.getId());
-            }
-        })
-
-        this.#meetings.delete(meetingName);
-        MeetingService.removeMeeting(meeting.getId(), Settings.CONFERENCE_ID, this.#db);
-        return true;
-    }
-
-    /**
-     * Deletes all meetings from database.
-     * WARNING: DOES NOT YET HAVE A RETURN CODE
-     * @method module:ServerController#deleteAllMeetings
-     */
-    deleteAllMeetings() {
-        this.#meetings.forEach((meeting, meetingName) => {
-            this.deleteMeeting(meetingName);
-        })
-    }
-
-    /**
-     * Adds a list of participants, referenced by id,
-     * to a specified meeting.
-     * @method module:ServerController#addMembersToMeeting
-     * 
-     * @param {String} meetingName 
-     * @param {String[]} memberIDs 
-     * @returns {Boolean} Whether the operation was successful or not
-     */
-    addMembersToMeeting(meetingName, memberIDs) {
-        TypeChecker.isString(meetingName);
-        TypeChecker.isInstanceOf(memberIDs, Array);
-        memberIDs.forEach(memberID => {
-            TypeChecker.isString(memberID);
-        });
-
-        let meeting = this.#meetings.get(meetingName);
-
-        // Check if meeting with that name exists
-        if (meeting === undefined) {
-            return false;
-        }
-
-        memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-
-            // This only allows for currently online ppants to
-            // be added to meetings. It would be nicer if also
-            // offline ppants could be added to meetings, but
-            // this would require checking the database for the
-            // passed ppantId
-            if(member !== undefined) {
-                meeting.addMember(member.getId());
-                MeetingService.addParticipant(meeting.getId(), member.getId(), Settings.CONFERENCE_ID, this.#db);
-                member.joinMeeting(meeting);
-            }
-        });
-        return true;
-    }
-
-    /**
-     * Removes a list of participants, referenced by id,
-     * from a specified meeting.
-     * @method module:ServerController:removerMembersFromMeeting
-     * 
-     * @param {String} meetingName 
-     * @param {String[]} memberIDs 
-     * @returns {Boolean} Whether the operation was successful or not
-     */
-    removeMembersFromMeeting(meetingName, memberIDs) {
-        TypeChecker.isString(meetingName);
-        TypeChecker.isInstanceOf(memberIDs, Array);
-        memberIDs.forEach(memberID => {
-            TypeChecker.isString(memberID);
-        });
-
-        let meeting = this.#meetings.get(meetingName);
-
-        // Check if meeting with that name exists
-        if (meeting === undefined) {
-            return false;
-        }
-
-        memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-
-            // This only allows for currently online ppants to
-            // be removed from meetings. It would be nicer if also
-            // offline ppants could be remove from meetings, but
-            // this would require more database interaction
-            if (member !== undefined) {
-                // member is removed from meeting as well
-                // during this next operation
-                member.leaveMeeting(meeting.getId());
-                MeetingService.removeParticipant(meeting.getId(), member.getId(), Settings.CONFERENCE_ID, this.#db);
-            }
-        })
-
-        // this method should probably have more sophisticated returns
-        // in order to be able to give info about why it failed (if it fails)
-        return true;
-
-    }
-
 
     /**
      * @private Handle ppant leaving an old group if he joined a new one
@@ -2633,22 +2483,177 @@ module.exports = class ServerController {
 
                 let otherGroupChat = otherGroup.getGroupChat();
                 let otherGroupChatID = otherGroupChat.getId();
-                this.#handleLeaveChat(memberID, otherGroupChatID)
-                this.removeMembersFromMeeting(otherGroupName, [memberID]);
+                let otherGroupMeeting = otherGroup.getMeeting();
+                let otherGroupMeetingID = otherGroupMeeting.getId();
+
+                this.#handleLeaveGroupChat(memberID, otherGroupChatID);
+                this.#handleLeaveGroupMeeting([memberID], otherGroupMeetingID);
             }
         });
     }
 
     /**
-     * @private Handles group chat creation
+     * @private Handles group meeting creation
      * 
-     * @method module:ServerController#handleGroupChatCreation
+     * @method module:ServerController#handleGroupMeetingCreation
+     * 
+     * @param {String[]} memberIDList list of ppantIDs that join groupMeeting
+     * @param {GroupChat} meeting group meeting
+     */
+     #handleGroupMeetingCreation = function(memberIDList, meeting) {
+        TypeChecker.isInstanceOf(memberIDList, Array);
+        memberIDList.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        })
+        TypeChecker.isInstanceOf(meeting, Meeting);
+
+        let meetingName = meeting.getName();
+        let meetingID = meeting.getId();
+        let meetingPassword = meeting.getPassword();
+
+        this.#meetings.set(meetingName, meeting);
+
+        /* Meeting Data that will be sent to client */
+        let meetingData = {
+            id: meetingID,
+            name: meetingName,
+            password: meetingPassword,
+        };
+
+        memberIDList.forEach(memberID => {
+        
+            let member = this.#ppants.get(memberID);
+            let socketID = this.getSocketId(memberID);
+
+            if (member !== undefined && socketID !== undefined) {
+
+                member.joinMeeting(meeting);
+
+                this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
+                this.#io.to(socketID).emit('newMeeting', meetingData);
+            }
+        });
+    }
+
+    /**
+     * @private Handle ppant joining group meeting 
+     * 
+     * @method module:ServerController#handleJoinGroupMeeting
+     * 
+     * @param {String[]} memberIDList list of ppantIDs that join groupMeeting
+     * @param {Meeting} meeting group meeting
+     */
+    #handleJoinGroupMeeting = function(memberIDList, meeting) {
+        TypeChecker.isInstanceOf(memberIDList, Array);
+        memberIDList.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        })
+        TypeChecker.isInstanceOf(meeting, Meeting);
+      
+        let meetingName = meeting.getName();
+        let meetingID = meeting.getId();
+        let meetingPassword = meeting.getPassword();
+
+        /* Meeting Data that will be sent to client */
+        let meetingData = {
+            id: meetingID,
+            name: meetingName,
+            password: meetingPassword,
+        };
+                
+        memberIDList.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+            meeting.addMember(memberID);
+
+            let socketID = this.getSocketId(memberID);
+            // This only allows for currently online ppants to
+            // be added to meetings. It would be nicer if also
+            // offline ppants could be added to meetings, but
+            // this would require checking the database for the
+            // passed ppantId
+            if(member !== undefined && socketID !== undefined) {
+                MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
+                member.joinMeeting(meeting);
+
+                this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
+                this.#io.to(socketID).emit('newMeeting', meetingData);
+            }
+        });
+    }
+
+    /**
+     * @private Handle ppant leaving group meeting 
+     * 
+     * @method module:ServerController#handleLeaveGroupMeeting
+     * 
+     * @param {String[]} memberIDList list of ppantIDs that leave groupMeeting
+     * @param {Meeting} meetingID group meeting ID
+     */
+    #handleLeaveGroupMeeting = function(memberIDList, meetingID) {
+        TypeChecker.isInstanceOf(memberIDList, Array);
+        memberIDList.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        })
+        TypeChecker.isString(meetingID);
+      
+        memberIDList.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+
+            let socketID = this.getSocketId(memberID);
+            // This only allows for currently online ppants to
+            // be removed from meetings. It would be nicer if also
+            // offline ppants could be remove from meetings, but
+            // this would require more database interaction
+            if (member !== undefined && socketID !== undefined) {
+                // member is removed from meeting as well
+                // during this next operation
+                member.leaveMeeting(meetingID);
+                MeetingService.removeParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
+
+                this.#io.to(socketID).emit('leave meeting', meetingID);
+            }
+        })
+    }
+
+    /**
+     * Deletes a specific meeting from the database.
+     * @method module:ServerController#handleDeleteGroupMeeting
+     * 
+     * @param {Meeting} meeting meeting that should be deleted
+     */
+    #handleDeleteGroupMeeting = function(meeting) {
+        TypeChecker.isInstanceOf(meeting, Meeting);
+
+        let memberIDs = meeting.getMemberIdList();
+        let meetingID = meeting.getId();
+        let meetingName = meeting.getName();
+
+        memberIDs.forEach(memberID => {
+            let member = this.#ppants.get(memberID);
+
+            let socketID = this.getSocketId(memberID);
+            if (member !== undefined && socketID !== undefined) {
+                member.leaveMeeting(meetingID);
+
+                this.#io.to(socketID).emit('leave meeting', meetingID);
+            }
+        })
+
+        this.#meetings.delete(meetingName);
+        MeetingService.removeMeeting(meetingID, Settings.CONFERENCE_ID, this.#db);
+    }
+
+    
+    /**
+     * @private Handles group chat creation for all members that are not the owner
+     * 
+     * @method module:ServerController#handleGroupChatCreationWithoutOwner
      * 
      * @param {String[]} chatPartnerIDList list of ppantIDs that join groupChat
      * @param {GroupChat} chat group chat
      * @param {String} creatorUsername chatCreator username
      */
-    #handleGroupChatCreation = function(chatPartnerIDList, chat, creatorUsername) {
+    #handleGroupChatCreationWithoutOwner = function(chatPartnerIDList, chat, creatorUsername) {
         TypeChecker.isInstanceOf(chatPartnerIDList, Array);
         chatPartnerIDList.forEach(partnerID => {
             TypeChecker.isString(partnerID);
@@ -2702,8 +2707,8 @@ module.exports = class ServerController {
 
                         socketPartner.join(loadedChat.getId());
 
-                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('gotNewGroupChat', chatName, creatorUsername, loadedChat.getId());
-                        this.#io.to(this.getSocketId(chatPartner.getId())).emit('newChat', chatData, false);
+                        this.#io.to(this.getSocketId(chatPartnerID)).emit('gotNewGroupChat', chatName, creatorUsername, loadedChat.getId());
+                        this.#io.to(this.getSocketId(chatPartnerID)).emit('newChat', chatData, false);
 
                     });
                 }

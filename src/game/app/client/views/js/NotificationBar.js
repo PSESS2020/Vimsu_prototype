@@ -102,6 +102,23 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Draws new meeting notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+     drawNewMeeting(meetingName, meetingID) {
+        const id = 'notifMeeting' + meetingID;
+        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`)
+
+        $('#' + id).on('click', (e) => {
+            $('#' + id + 'Div').remove();
+            $('#meetingListModal').modal('show');
+            return this.eventManager.handleMeetingListClicked();
+        })
+    }
+
+    /**
      * Draws new friend request notification
      * 
      * @param {String} senderUsername requester username
