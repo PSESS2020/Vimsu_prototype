@@ -34,6 +34,8 @@ module.exports = Object.freeze({
 
     /* Conference Constants */
     CONFERENCE_ID: '1',
+    CONFERENCE_MEETINGID: 'GlobalMeetingID',
+    CONFERENCE_MEETINGNAME: 'Conference Meeting',
 
     /* Lecture Constants */
     SHOWLECTURE: 10 * 60 * 1000, //lecture is shown 10 minutes before lecture start 
