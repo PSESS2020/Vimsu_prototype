@@ -26,6 +26,52 @@ module.exports = class Meetingservice {
      */
 
     /**
+     * Initializes meeting for whole conference if it does not exist already and returns it
+     * 
+     * @static @method module:MeetingService#getConferenceMeeting
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb
+     * 
+     * @returns {Meeting} Conference meeting
+     */
+    static getConferenceMeeting(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: Settings.CONFERENCE_MEETINGID }).then(conferenceMeetingData => {
+            if (conferenceMeetingData) {
+                return new Meeting(conferenceMeetingData.meetingId, conferenceMeetingData.name, conferenceMeetingData.members, conferenceMeetingData.password);
+            } else {
+                console.log("Conference meeting did not exist.");
+
+                //get all exisiting participants from db
+                return vimsudb.findAllInCollection("participants_" + conferenceId).then(participants => {
+                    let memberIdList = [];
+
+                    //insert meeting to all existing participant entries
+                    participants.forEach(ppant => {
+                        memberIdList.push(ppant.participantId);
+                        vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ppant.participantId }, { meetingIDList: Settings.CONFERENCE_MEETINGID});
+                    });
+
+                    var conferenceMeetingData = {
+                        meetingId: Settings.CONFERENCE_MEETINGID,
+                        name: Settings.CONFERENCE_MEETINGNAME,
+                        members: memberIdList,
+                        password: new ObjectId().toHexString()
+                    }
+
+                    return vimsudb.insertOneToCollection("meetings_" + conferenceId, conferenceMeetingData).then(res => {
+                        console.log("Created conference meeting");
+                        return new Meeting(conferenceMeetingData.meetingId, conferenceMeetingData.name, conferenceMeetingData.members, conferenceMeetingData.password);
+                    });
+                });
+            }       
+        });
+    }
+
+    /**
      * Load a map that contains all meetings belonging to the passed
      * conference stored in the database, indexed by their names.
      * 

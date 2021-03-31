@@ -166,40 +166,48 @@ module.exports = class ParticipantService {
 
                 return vimsudb.insertOneToCollection("participants_" + conferenceId, par).then(res => {
 
-                    participant = new Participant(par.participantId,
-                        accountId,
-                        new BusinessCard(par.participantId,
-                            account.getUsername(),
-                            account.getForename()),
-                        new Position(par.position.roomId,
-                            par.position.cordX,
-                            par.position.cordY),
-                        par.direction,
-                        new FriendList([]),
-                        new FriendList([]),
-                        new FriendList([]),
-                        [],
-                        par.taskCount,
-                        par.isModerator,
-                        par.points,
-                        [], // ChatList
-                        []);// MeetingList
+                    //Get Conference meeting
+                    return MeetingService.getConferenceMeeting(conferenceId, vimsudb).then(conferenceMeeting => {
 
-                    new AchievementService().computeAchievements(participant);
+                        //Add new participant to conference meeting
+                        MeetingService.addParticipant(conferenceMeeting.getId(), par.participantId, conferenceId, vimsudb);
 
-                    var achievementsData = [];
-                    participant.getAchievements().forEach(ach => {
-                        achievementsData.push(
-                            {
-                                id: ach.getId(),
-                                currentLevel: ach.getCurrentLevel(),
-                            },
-                        )
-                    })
+                        participant = new Participant(par.participantId,
+                            accountId,
+                            new BusinessCard(par.participantId,
+                                account.getUsername(),
+                                account.getForename()),
+                            new Position(par.position.roomId,
+                                par.position.cordX,
+                                par.position.cordY),
+                            par.direction,
+                            new FriendList([]),
+                            new FriendList([]),
+                            new FriendList([]),
+                            [],
+                            par.taskCount,
+                            par.isModerator,
+                            par.points,
+                            [], // ChatList
+                            [conferenceMeeting]);// MeetingList
+    
+                        new AchievementService().computeAchievements(participant);
+    
+                        var achievementsData = [];
+                        participant.getAchievements().forEach(ach => {
+                            achievementsData.push(
+                                {
+                                    id: ach.getId(),
+                                    currentLevel: ach.getCurrentLevel(),
+                                },
+                            )
+                        })
+    
+                        return this.#storeAchievements(par.participantId, conferenceId, achievementsData, vimsudb).then(res => {
+                            return participant;
+                        })
 
-                    return this.#storeAchievements(par.participantId, conferenceId, achievementsData, vimsudb).then(res => {
-                        return participant;
-                    })
+                    });
                 })
             }
         })

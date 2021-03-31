@@ -64,6 +64,7 @@ module.exports = class ServerController {
 
     // map from meeting name to meeting instance
     #meetings;
+    #conferenceMeeting;
 
     /**
      * Creates an instance of ServerController
@@ -133,6 +134,11 @@ module.exports = class ServerController {
                 console.error(err);
             });
         }
+
+        // Creates meeting for whole conference if it did not exist already and gets it
+        MeetingService.getConferenceMeeting(Settings.CONFERENCE_ID, this.#db).then(conferenceMeeting => {
+            this.#conferenceMeeting = conferenceMeeting;
+        });
 
         // Array to hold all groups
         GroupService.getGroupMap(Settings.CONFERENCE_ID, this.#db).then(groupMap => {
@@ -207,6 +213,9 @@ module.exports = class ServerController {
                     ppant.getChatList().forEach(chat => {
                         socket.join(chat.getId());
                     });
+
+                    //Add ppant to conference meeting instance, only relevant when this ppant joined the conference for the first time
+                    this.#conferenceMeeting.addMember(ppant.getId());
 
                     //Sets ppant in the right room
                     currentRoom.enterParticipant(ppant);
