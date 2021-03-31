@@ -39,7 +39,7 @@ module.exports = class Meetingservice {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: Settings.CONFERENCE_MEETINGID }).then(conferenceMeetingData => {
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { name: Settings.CONFERENCE_MEETINGNAME }).then(conferenceMeetingData => {
             if (conferenceMeetingData) {
                 return new Meeting(conferenceMeetingData.meetingId, conferenceMeetingData.name, conferenceMeetingData.members, conferenceMeetingData.password);
             } else {
@@ -48,24 +48,11 @@ module.exports = class Meetingservice {
                 //get all exisiting participants from db
                 return vimsudb.findAllInCollection("participants_" + conferenceId).then(participants => {
                     let memberIdList = [];
-
-                    //insert meeting to all existing participant entries
                     participants.forEach(ppant => {
                         memberIdList.push(ppant.participantId);
-                        vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: ppant.participantId }, { meetingIDList: Settings.CONFERENCE_MEETINGID});
                     });
 
-                    var conferenceMeetingData = {
-                        meetingId: Settings.CONFERENCE_MEETINGID,
-                        name: Settings.CONFERENCE_MEETINGNAME,
-                        members: memberIdList,
-                        password: new ObjectId().toHexString()
-                    }
-
-                    return vimsudb.insertOneToCollection("meetings_" + conferenceId, conferenceMeetingData).then(res => {
-                        console.log("Created conference meeting");
-                        return new Meeting(conferenceMeetingData.meetingId, conferenceMeetingData.name, conferenceMeetingData.members, conferenceMeetingData.password);
-                    });
+                    return this.newMeeting(memberIdList, Settings.CONFERENCE_MEETINGNAME, conferenceId, vimsudb);
                 });
             }       
         });
