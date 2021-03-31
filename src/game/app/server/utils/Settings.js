@@ -34,7 +34,6 @@ module.exports = Object.freeze({
 
     /* Conference Constants */
     CONFERENCE_ID: '1',
-    CONFERENCE_MEETINGID: 'GlobalMeetingID',
     CONFERENCE_MEETINGNAME: 'Conference Meeting',
 
     /* Lecture Constants */
