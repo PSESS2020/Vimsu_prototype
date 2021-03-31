@@ -40,7 +40,7 @@ const Meeting = require('../models/Meeting.js');
                 });
             });
 
-            return groupMap;
+            return Promise.resolve(groupMap);
         });
     }
 
