@@ -65,13 +65,13 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
                                  messageList: [],
                                 });
     } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID1') {
-        return Promise.resolve({ meetingId: 'meetingID1',
+        return Promise.resolve({ id: 'meetingID1',
                                  name: 'name1',
                                  members: [],
                                  password: 'password1'
                                 });
     } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID2') {
-        return Promise.resolve({ meetingId: 'meetingID2',
+        return Promise.resolve({ id: 'meetingID2',
                                  name: 'name2',
                                  members: [],
                                  password: 'password2'
@@ -153,21 +153,22 @@ describe('GroupServiceTest', () => {
         let group1 = await GroupService.createGroup(name1, shirtColor1, groupMemberIDs1, groupChat1, groupMeeting1, conferenceId, dbStub);
         let group2 = await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, groupMeeting2, conferenceId, dbStub);
 
-        GroupService.getGroupMap(conferenceId, dbStub).then(async groupMap => {
-            expect(group1).to.be.instanceOf(Group);
-            expect(group2).to.be.instanceOf(Group);
-            expect(groupMap.get(name1)).to.eql(group1);
-            expect(groupMap.get(name2)).to.eql(group2);
-            expect(groupMap.size).to.equal(2);
-            
-            let deletionSuccess1 = await GroupService.deleteGroup(name1, conferenceId, dbStub);
-            let deletionSuccess2 = await GroupService.deleteGroup(name2, conferenceId, dbStub);
-            let newGroupMap = await GroupService.getGroupMap(conferenceId, dbStub);
-    
-            expect(deletionSuccess1).to.be.true;
-            expect(deletionSuccess2).to.be.true;
-            expect(newGroupMap.size).to.equal(0);
-        })
+        let groupMap = await GroupService.getGroupMap(conferenceId, dbStub);
+        
+        expect(group1).to.be.instanceOf(Group);
+        expect(group2).to.be.instanceOf(Group);
+        // Both these fail, as groupMap.get(key) returns undefined...
+        expect(groupMap.get(name1)).to.eql(group1);
+        expect(groupMap.get(name2)).to.eql(group2);
+        expect(groupMap.size).to.equal(2);
+        
+        let deletionSuccess1 = await GroupService.deleteGroup(name1, conferenceId, dbStub);
+        let deletionSuccess2 = await GroupService.deleteGroup(name2, conferenceId, dbStub);
+        let newGroupMap = await GroupService.getGroupMap(conferenceId, dbStub);
+
+        expect(deletionSuccess1).to.be.true;
+        expect(deletionSuccess2).to.be.true;
+        expect(newGroupMap.size).to.equal(0);
     });
 
     it('test add and remove members', async() => {
@@ -175,19 +176,19 @@ describe('GroupServiceTest', () => {
         await GroupService.createGroup(name2, shirtColor2, groupMemberIDs2, groupChat2, groupMeeting2, conferenceId, dbStub);
 
         let addSuccess = await GroupService.addGroupMember(name1, 'member1', conferenceId, dbStub);
-        GroupService.getGroupMap(conferenceId, dbStub).then(async groupMap => {
-            let group = groupMap.get(name1);
-            expect(addSuccess).to.be.true;
-            expect(group.includesGroupMember('member1')).to.be.true;
+        let groupMap = await GroupService.getGroupMap(conferenceId, dbStub);
+        let group = groupMap.get(name1);
+        expect(addSuccess).to.be.true;
+        // Fails as groupMap.get(key) returns undefined...
+        expect(group.includesGroupMember('member1')).to.be.true;
 
-            let removeSuccess = await GroupService.removeGroupMember(name1, 'member1', conferenceId, dbStub);
-            let newGroupMap = await GroupService.getGroupMap(conferenceId, dbStub);
-            let newGroup = newGroupMap.get(name1);
-            expect(removeSuccess).to.be.true;
-            expect(newGroup.includesGroupMember('member1')).to.be.false;
+        let removeSuccess = await GroupService.removeGroupMember(name1, 'member1', conferenceId, dbStub);
+        let newGroupMap = await GroupService.getGroupMap(conferenceId, dbStub);
+        let newGroup = newGroupMap.get(name1);
+        expect(removeSuccess).to.be.true;
+        expect(newGroup.includesGroupMember('member1')).to.be.false;
 
-            GroupService.deleteGroup(name1, conferenceId, dbStub);
-            GroupService.deleteGroup(name2, conferenceId, dbStub);   
-        });
+        GroupService.deleteGroup(name1, conferenceId, dbStub);
+        GroupService.deleteGroup(name2, conferenceId, dbStub);   
     });
 })
