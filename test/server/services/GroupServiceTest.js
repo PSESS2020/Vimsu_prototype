@@ -65,13 +65,13 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
                                  messageList: [],
                                 });
     } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID1') {
-        return Promise.resolve({ id: 'meetingID1',
+        return Promise.resolve({ meetingId: 'meetingID1',
                                  name: 'name1',
                                  members: [],
                                  password: 'password1'
                                 });
     } else if (collectionName === meetingCollectionName && query.meetingId === 'meetingID2') {
-        return Promise.resolve({ id: 'meetingID2',
+        return Promise.resolve({ meetingId: 'meetingID2',
                                  name: 'name2',
                                  members: [],
                                  password: 'password2'
