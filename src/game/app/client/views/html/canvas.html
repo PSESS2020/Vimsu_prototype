@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Vimsu</title>
 
+    <noscript>Your browser does not support JavaScript!</noscript>
+
     <!------------------------------------IMPORTING REQUIREMENTS------------------------------------->
 
     <!--FONTAWESOME-->
@@ -19,6 +21,9 @@
     <!--SOCKET.IO-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
+    <!--JITSI API-->
+    <script src='https://meet.jit.si/external_api.js'></script>
+
     <!--BOOTSTRAP-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -26,6 +31,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.1.1/dist/index.min.js"></script>
 
     <!--OTHER REQUIREMENTS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
@@ -53,7 +60,7 @@
     <!--OTHER HTML PAGE-->
     <div id="windowHTML"></div>
     <div id="requireJSHTML"></div>
-    <div id="hudHTML"></div>
+    <div id="hudHTML" class="canvas"></div>
 
     <!--LOADING OVERLAY-->
     <div id="overlay">
@@ -62,8 +69,8 @@
     </div>
 
     <!--CANVAS-->
-    <canvas id="mapCanvas" width="600" height="300"></canvas>
-    <canvas id="avatarCanvas" width="600" height="300"></canvas>
+    <canvas id="mapCanvas" class="canvas"></canvas>
+    <canvas id="avatarCanvas" class="canvas"></canvas>
 </body>
 
 </html>

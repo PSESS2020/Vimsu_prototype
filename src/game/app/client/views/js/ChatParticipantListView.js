@@ -6,7 +6,7 @@
  */
 class ChatParticipantListView extends Views {
 
-    #usernames;
+    usernames;
 
     /**
      * Creates an instance of ChatParticipantListView
@@ -23,17 +23,20 @@ class ChatParticipantListView extends Views {
 
     /**
      * Draws chat participant list window
+     * 
+     * @param {String} chatId chat id
      * @param {String[]} usernames usernames
      */
-    draw(usernames) {
-        $('#chatParticipantListModal .modal-body .list-group').empty()
+    draw(chatId, usernames) {
+        $('#chatParticipantListWait' + chatId).hide();
+        $(`#chatParticipantListModal${chatId} .modal-body .list-group`).empty();
 
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
-        this.#usernames = sortedUsernames;
+        this.usernames = sortedUsernames;
 
-        this.#usernames.forEach(username => {
-            $('#chatParticipantListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent chatthread" >
+        this.usernames.forEach(username => {
+            $(`#chatParticipantListModal${chatId} .modal-body .list-group`).append(`
+                <li class="list-group-item bg-transparent chatthread" id="${"chatParticipantEntry" + username}">
                     <div class="row w-100">
                         <div class="col-12 col-sm-1 px-0">
                             <i class="fa fa-user fa-2x navbarIcons" style="margin-left: 5px" ></i>
@@ -43,11 +46,8 @@ class ChatParticipantListView extends Views {
                         </div>
                     </div>
                 </li>
-
             `)
         })
-
-        $('#chatParticipantListModal').modal('show');
     }
 
     /**
@@ -56,9 +56,9 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     addToChatParticipantList(username) {
-        if (!this.#usernames.includes(username)) {
-            this.#usernames.push(username);
-            this.draw(this.#usernames);
+        if (!this.usernames.includes(username)) {
+            this.usernames.push(username);
+            this.draw(this.usernames);
         }
     }
 
@@ -68,14 +68,14 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     removeFromChatParticipantList(username) {
-        this.#usernames.forEach(parUsername => {
+        this.usernames.forEach(parUsername => {
             if (parUsername === username) {
-                let index = this.#usernames.indexOf(parUsername);
-                this.#usernames.splice(index, 1);
+                let index = this.usernames.indexOf(parUsername);
+                this.usernames.splice(index, 1);
             }
         });
 
-        this.draw(this.#usernames);
+        $("#chatParticipantEntry" + username).remove()
     }
 
 }

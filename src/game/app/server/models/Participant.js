@@ -1,13 +1,16 @@
 const Position = require('./Position.js')
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Direction = require('../../client/shared/Direction.js')
-const BusinessCard = require('../../client/shared/BusinessCard.js')
+const BusinessCard = require('./BusinessCard.js');
 const FriendList = require('./FriendList.js');
 const Achievement = require('./Achievement.js');
 const Chat = require('./Chat.js');
 const Task = require('./Task.js');
 const OneToOneChat = require('./OneToOneChat.js');
-const TypeOfTask = require('../utils/TypeOfTask')
+const TypeOfTask = require('../utils/TypeOfTask');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
+const Settings = require('../utils/Settings.js');
+const Meeting = require('./Meeting.js');
 
 /**
  * The Participant Model
@@ -25,6 +28,7 @@ module.exports = class Participant {
     #direction;
     #friendList;
     #receivedRequestList;
+    #meetingList
     #sentRequestList;
     #isMod;
     #taskTypeMapping;
@@ -32,6 +36,7 @@ module.exports = class Participant {
     #awardPoints;
     #chatList;
     #isVisible;
+    #shirtColor;
 
     /**
      * Creates a participant instance
@@ -45,13 +50,14 @@ module.exports = class Participant {
      * @param {FriendList} friendList list of friends
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
+     * @param {Meeting[]} meetingList List of jitsi meetings
      * @param {Achievement[]} achievements list of achievements
      * @param {Task[]} taskMapping list of tasks and its counts
      * @param {boolean} isMod moderator status
      * @param {number} awardPoints participant's points
      * @param {Chat[]} chatList list of chats
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList) {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList, meetingList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -74,6 +80,10 @@ module.exports = class Participant {
         chatList.forEach(chat => {
             TypeChecker.isInstanceOf(chat, Chat);
         });
+        TypeChecker.isInstanceOf(meetingList, Array);
+        meetingList.forEach(meeting => {
+            TypeChecker.isInstanceOf(meeting, Meeting);
+        })
 
         this.#id = id;
         this.#accountId = accountId;
@@ -88,7 +98,9 @@ module.exports = class Participant {
         this.#isMod = isMod;
         this.#awardPoints = awardPoints;
         this.#chatList = chatList;
+        this.#meetingList = meetingList;
         this.#isVisible = true;
+        this.#shirtColor = Settings.DEFAULT_SHIRTCOLOR_PPANT;
     }
 
     /**
@@ -202,6 +214,28 @@ module.exports = class Participant {
     }
 
     /**
+     * Gets avatar shirt color
+     * @method module:Participant#getShirtColor
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.#shirtColor;
+    }
+
+    /**
+     * Sets avatar shirt color
+     * @method module:Participant#setShirtColor
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.#shirtColor = shirtColor;
+    }
+
+    /**
      * Sets moderator status
      * @method module:Participant#setIsModerator
      * 
@@ -223,6 +257,16 @@ module.exports = class Participant {
     }
 
     /**
+     * Gets meeting list
+     * @method module:Participant#getMeetingList
+     * 
+     * @return {Meeting[]} meetingList
+     */
+    getMeetingList() {
+        return this.#meetingList;
+    }
+
+    /**
      * Adds chat to the chat list
      * @method module:Participant#addChat
      * 
@@ -233,6 +277,32 @@ module.exports = class Participant {
         if (!this.#chatList.includes(chat)) {
             this.#chatList.push(chat);
         }
+    }
+
+    /**
+     * Adds Meeting instance to the meeting list.
+     * @method module:Participant#joinMeeting
+     * 
+     * @param {Meeting} meeting 
+     */
+    joinMeeting(meeting) {
+        TypeChecker.isInstanceOf(meeting, Meeting);
+        if(!this.#meetingList.includes(meeting)) {
+            this.#meetingList.push(meeting);
+        }
+    }
+
+    leaveMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.#meetingList.forEach(meeting => {
+            if(meeting.getId() === meetingId) {
+                meeting.removeMember(this.#id);
+                let index = this.#meetingList.indexOf(meeting);
+                this.#meetingList.splice(index, 1);
+            }
+        })
+
     }
 
     /**

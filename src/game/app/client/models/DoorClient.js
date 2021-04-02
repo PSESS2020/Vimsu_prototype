@@ -12,11 +12,11 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class DoorClient {
 
-    #id;
-    #typeOfDoor;
-    #name;
-    #mapPosition;
-    #targetRoomId;
+    id;
+    typeOfDoor;
+    name;
+    mapPosition;
+    targetRoomId;
 
     /**
      * Creates an instance of Door on client-side
@@ -36,11 +36,11 @@ class DoorClient {
         if (targetRoomId !== undefined)
             TypeChecker.isNumber(targetRoomId);
 
-        this.#id = id;
-        this.#typeOfDoor = typeOfDoor;
-        this.#name = name;
-        this.#mapPosition = mapPosition;
-        this.#targetRoomId = targetRoomId;
+        this.id = id;
+        this.typeOfDoor = typeOfDoor;
+        this.name = name;
+        this.mapPosition = mapPosition;
+        this.targetRoomId = targetRoomId;
     }
 
     /**
@@ -49,7 +49,7 @@ class DoorClient {
      * @return {String} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -58,7 +58,7 @@ class DoorClient {
      * @return {TypeOfDoor} typeOfDoor
      */
     getTypeOfDoor() {
-        return this.#typeOfDoor;
+        return this.typeOfDoor;
     }
 
     /**
@@ -67,7 +67,7 @@ class DoorClient {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -76,7 +76,7 @@ class DoorClient {
      * @return {PositionClient} mapPosition
      */
     getMapPosition() {
-        return this.#mapPosition;
+        return this.mapPosition;
     }
 
     /**
@@ -85,7 +85,7 @@ class DoorClient {
      * @return {number} targetRoomId
      */
     getTargetRoomId() {
-        return this.#targetRoomId;
+        return this.targetRoomId;
     }
 
 }

@@ -5,8 +5,8 @@
  * @version 1.0.0
  */
 class DoorView extends GameMapElementView {
-    #DOORTYPE;
-    #eventManager;
+    DOORTYPE;
+    eventManager;
 
     /**
      * Creates an instance of DoorView
@@ -21,8 +21,8 @@ class DoorView extends GameMapElementView {
     constructor(doorImage, clickMap, position, doorType, doorScreenPositionOffset, name, eventManager) {
         super(doorImage, clickMap, position, doorScreenPositionOffset, name);
 
-        this.#DOORTYPE = doorType;
-        this.#eventManager = eventManager;
+        this.DOORTYPE = doorType;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -31,7 +31,7 @@ class DoorView extends GameMapElementView {
      * @return {TypeOfDoor} door type
      */
     getDoorType() {
-        return this.#DOORTYPE;
+        return this.DOORTYPE;
     }
 
     /**
@@ -40,10 +40,10 @@ class DoorView extends GameMapElementView {
      * @param {number} targetRoomId target room ID
      */
     onclick(targetRoomId) {
-        if (this.#DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
-            this.#eventManager.handleLectureDoorClick();
+        if (this.DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
+            this.eventManager.handleLectureDoorClick();
         } else {
-            this.#eventManager.handleDoorClick(targetRoomId);
+            this.eventManager.handleDoorClick(targetRoomId);
         }
     }
 }

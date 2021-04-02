@@ -3,13 +3,15 @@ const expressSession = require('express-session');
 const MemoryStore = require('memorystore')(expressSession);
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
+const ParticipantService = require('../../game/app/server/services/ParticipantService')
 const SlotService = require('../services/SlotService')
 const path = require('path');
 const Settings = require('../../game/app/server/utils/Settings.js');
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
-const UAParser = require('ua-parser-js');
+const Account = require('../models/Account');
+const nodemailer = require("nodemailer");
 
 /**
  * The Route Controller
@@ -106,38 +108,112 @@ module.exports = class RouteController {
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
-                forename = request.session.forename;
-                response.render('index', { videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username, forename: forename });
+                response.render('home', this.#getLoggedInParameters({}, username));
             } else {
-                response.render('index');
+                response.render('home');
+            }
+        });
+
+        this.#app.get('/about-us', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('about-us', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('about-us');
+            }
+        });
+
+        this.#app.get('/tutorial', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('tutorial', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('tutorial');
+            }
+        });
+
+        this.#app.get('/contact-us', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('contact-us', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('contact-us');
+            }
+        });
+
+        this.#app.post('/contact-us', (request, response) => {
+            const vimsuEmail = process.env.VIMSU_EMAIL;
+
+            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
+                if (request.session.loggedin === true) {
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true }, username));
+                } else {
+                    return response.render('contact-us', { invalidEmail: true });
+                }
             }
 
+            const mailOptions = {
+                from: vimsuEmail,
+                to: vimsuEmail,
+                subject: "New message from contact us form",
+                html: `
+                    <p>From: <a href="mailto:${request.body.email}">${request.body.email}</a></p>
+                    <p>Message: ${request.body.message}</p>
+                `
+            }
+
+            return this.#sendMail(vimsuEmail, mailOptions).then(result => {
+                if (result === true) {
+                    if (request.session.loggedin === true) {
+                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true }, username));
+                    } else {
+                        response.render('contact-us', { messageSent: true });
+                    }
+                } else {
+                    if (request.session.loggedin === true) {
+                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true }, username));
+                    } else {
+                        response.render('contact-us', { sendMessageFailed: true });
+                    }
+                }
+            })            
+        })
+
+        this.#app.get('/privacy-policy', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('privacy-policy', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('privacy-policy');
+            }
         });
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/upload', (request, response) => {
                 if (request.session.loggedin === true) {
-                    response.render('upload', { loggedIn: true, username: username, forename: forename });
+                    username = request.session.username;
+                    response.render('upload', this.#getLoggedInParameters({}, username));
                 } else {
-                response.redirect('/');
+                    response.render('page-not-found');
                 }
             });
-        
+
 
             this.#app.post('/upload', (request, response) => {
                 if (!request.files || Object.keys(request.files).length === 0) {
-                    return response.render('upload', { noFilesUploaded: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true }, username));
                 }
 
                 var maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
-                    return response.render('upload', { notInt: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', this.#getLoggedInParameters({ notInt: true }, username));
                 }
 
                 var startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
-                    return response.render('upload', { notDate: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', this.#getLoggedInParameters({ notDate: true }, username));
                 }
 
                 var lectureTitle = request.body.title;
@@ -147,31 +223,28 @@ module.exports = class RouteController {
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
-                        return response.render('upload', { fileSizeExceeded: true, loggedIn: true, username: username, forename: forename });
+                        return response.render('upload', this.#getLoggedInParameters({ fileSizeExceeded: true }, username));
                     }
                     else {
-                        response.render('upload', { uploading: true, loggedIn: true, username: username, forename: forename })
+                        response.render('upload', this.#getLoggedInParameters({ uploading: true }, username))
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, lectureTitle, remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
                                     response.end();
-                                }).catch(err => {
-                                    console.error(err);
                                 })
                             }
-                        }).catch(err => {
-                            console.error(err);
                         })
                     }
                 } else {
-                    return response.render('upload', { unsupportedFileType: true, loggedIn: true, username: username, forename: forename });
+                    return response.render('upload', this.#getLoggedInParameters({ unsupportedFileType: true }, username));
                 }
             });
         }
 
         this.#app.get('/login', (request, response) => {
             if (request.session.loggedin === true) {
-                response.redirect('/');
+                username = request.session.username;
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
             } else {
                 response.render('login');
             }
@@ -180,74 +253,39 @@ module.exports = class RouteController {
 
         this.#app.get('/game', (request, response) => {
             if (request.session.loggedin === true) {
-                let parser = new UAParser();
-                let ua = request.headers['user-agent'];
-                let device = parser.setUA(ua).getDevice().type;
-                let os = parser.setUA(ua).getOS().name;
-                let browserName = parser.setUA(ua).getBrowser().name;
-                let fullBrowserVersion = parser.setUA(ua).getBrowser().version;
-                let browserVersion = fullBrowserVersion.split(".",1).toString();
-                let browserVersionNumber = Number(browserVersion);
-                let isSupported = false;
 
-                /* supported browsers */
-                if ((device === 'mobile' || device === 'tablet') && os === 'Android') {
-                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 53)) {
-                        isSupported = true;
-                    }
-                } else if (device === undefined) {
-                    if ((browserName === 'Chrome' && browserVersionNumber >= 74) || (browserName === 'Opera' && browserVersionNumber >= 62) 
-                    || (browserName === 'Edge' && browserVersionNumber >= 79)) {
-                        isSupported = true;
-                    }
-                }
-                
-                if (isSupported) {
-                    const ServerController = require('../../game/app/server/controller/ServerController');
-                    new ServerController(this.#io, this.#db, this.#blob);
-                    response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
-                } else {
-                    response.send("Your browser does not support private class fields in JavaScript, which are required to use VIMSU." +
-                    " Check out https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields to see which browsers are currently supported.");
-                }
+                const ServerController = require('../../game/app/server/controller/ServerController');
+                new ServerController(this.#io, this.#db, this.#blob);
+                response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
+
             } else {
-                response.redirect('/');
+                response.render('page-not-found');
             }
         })
 
         this.#app.post('/login', (request, response) => {
-            username = request.body.username;
-            var password = request.body.password;
-
-            return AccountService.verifyLoginData(username, password, Settings.CONFERENCE_ID, this.#db).then(user => {
+            return AccountService.verifyLoginData(request.body.username, request.body.password, Settings.CONFERENCE_ID, this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
-                    request.session.username = username;
+                    request.session.username = user.getUsername();
                     request.session.forename = user.getForename();
                     response.redirect('/');
                 }
                 else {
-                    return response.render('login', { wrongLoginData: true });
+                    response.render('login', { wrongLoginData: true });
                 }
                 response.end();
-            }).catch(err => {
-                console.error(err);
-                return response.render('login', { verifyDataFailed: true });
             })
         });
 
         this.#app.get('/register', (request, response) => {
-            if (request.session.registerValid === true) {
+            if (request.session.loggedin === true) {
                 username = request.session.username;
-                response.render('register', { registerValid: true, username: username });
-            }
-            else if (request.session.loggedin === true) {
-                response.redirect('/');
-            }
-            else {
-                response.render('register', { registerValid: false });
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('register');
             }
         });
 
@@ -258,32 +296,8 @@ module.exports = class RouteController {
                 return response.render('register', { invalidUsernameString: true });
             }
 
-            username = request.body.username
-
-            return AccountService.isUsernameValid(username, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res) {    
-                    request.session.registerValid = true;
-                    request.session.username = username;
-                    response.redirect('/register');
-                           
-                    response.end();
-                }
-                else {
-                    return response.render('register', { usernameTaken: true });
-                }
-            }).catch(err => {
-                console.error(err);
-                return response.render('register', { verifyDataFailed: true })
-            })
-        });
-
-        this.#app.post('/registerValid', (request, response) => {
-            username = request.session.username;
-            forename = request.body.forename;
-            var password = request.body.password;
-
-            return AccountService.createAccount(username, forename, password, Settings.CONFERENCE_ID, this.#db).then(res => {
-                if (res) {
+            return AccountService.createAccount(request.body.username, request.body.forename, request.body.password, Settings.CONFERENCE_ID, this.#db).then(res => {
+                if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
                     request.session.loggedin = true;
@@ -291,64 +305,113 @@ module.exports = class RouteController {
 
                     //Needed for creating business card during entering the conference.
                     request.session.username = res.getUsername();
+                    response.redirect('/');
+                    response.end();
+                } else if (res && res.username) {
+                    response.render('register', { usernameTaken: true });
+                } else {
+                    response.render('register', { registerFailed: true });
                 }
-                
-                response.redirect('/');
-                response.end();
-            }).catch(err => {
-                console.error(err);
-                return response.render('register', { registerFailed: true });
             })
-        })
-
-        this.#app.post('/editRegistration', (request, response) => {
-            request.session.registerValid = false;
-            response.redirect('/register');
-            response.end();
-        })
-
-        this.#app.get('/logout', (request, response) => {
-            request.session.destroy();
-            response.redirect('/');
         });
 
-        this.#app.get('/account', (request, response) => {
+        this.#app.get('/logout', (request, response) => {
+            if (request.session.loggedin === true) {
+                request.session.destroy();
+                response.redirect('/');
+            } else {
+                response.render('page-not-found');
+            }
+        });
+
+        this.#app.get('/account-settings', (request, response) => {
             if (request.session.loggedin === true) {
                 username = request.session.username;
                 forename = request.session.forename;
-                response.render('account', { loggedIn: true, username: username, forename: forename });
+                response.render('account-settings', this.#getLoggedInParameters({ forename: forename }, username))
             }
-
             else {
-                response.redirect('/');
+                response.render('page-not-found');
             }
         })
 
-        this.#app.get('/editAccount', (request, response) => {
-            if (request.session.loggedin === true) {
-                forename = request.session.forename;
-                response.render('editAccount', { loggedIn: true, username: username, forename: forename })
-            }
-            else {
-                response.redirect('/');
-            }
-        })
-
-        this.#app.post('/saveAccountChanges', (request, response) => {
-
-            forename = request.body.forename;
+        this.#app.post('/account-settings', (request, response) => {
+            var clickedButton = request.body.accountSettingsButton;
             var accountId = request.session.accountId;
-            username = request.session.username;
+            
+            if (clickedButton === "saveChangesButton") {
+                const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
-            return AccountService.updateAccountData(accountId, username, forename, Settings.CONFERENCE_ID, this.#db).then(res => {
-                request.session.accountId = res.getAccountID();
-                request.session.forename = res.getForename();
-                request.session.username = res.getUsername();
-                response.redirect('/account');
-            }).catch(err => {
-                console.error(err);
-                return response.render('editAccount', { editAccountFailed: true, loggedIn: true, username: username, forename: forename });
-            })
+                if (!usernameRegex.test(request.body.username)) {
+                    return response.render('account-settings', this.#getLoggedInParameters({ forename: forename, invalidUsernameString: true }, username));
+                }
+    
+                return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
+                    if (res instanceof Account) {
+                        request.session.accountId = res.getAccountID();
+                        request.session.forename = res.getForename();
+                        request.session.username = res.getUsername();
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
+                    } else if (res && res.username) {
+                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: forename }, username));
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: forename }, username));
+                    }
+                })
+            } else if (clickedButton === "deleteAccountButton") {
+                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then (res => {
+                    if (res) {
+                        response.redirect('/logout');
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: forename }, username));
+                    }
+                })
+            } else if (clickedButton === "changePasswordButton") {
+                return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, Settings.CONFERENCE_ID, this.#db).then(res => {
+                    if (res) {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordSuccess: true }, request.session.username))
+                    } else {
+                        response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changePasswordFailed: true }, request.session.username))
+                    }
+                })
+            }
         })
+
+        this.#app.get('*', (request, response) => {
+            if (request.session.loggedin === true) {
+                username = request.session.username;
+                response.render('page-not-found', this.#getLoggedInParameters({}, username));
+            } else {
+                response.render('page-not-found');
+            }
+        });
     }
-}
+
+    #sendMail = async function (vimsuEmail, mailOptions) {
+        return new Promise(function (resolve, reject) {
+            const smtpTransport = nodemailer.createTransport({
+                service: "Gmail",
+                port: 465,
+                secure: true,
+                auth: {
+                    user: vimsuEmail,
+                    pass: process.env.VIMSU_EMAIL_PASSWORD
+                }
+            });
+
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+                if (error) {
+                    console.log(error)
+                    resolve(false);
+                } else {
+                    console.log("message sent");
+                    resolve(true);
+                }
+            });
+        });
+    }
+
+    #getLoggedInParameters = function (otherParameters, username) {
+            return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
+        }
+    }

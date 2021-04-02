@@ -10,8 +10,8 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class PositionClient {
 
-    #cordX;
-    #cordY;
+    cordX;
+    cordY;
 
     /**
      * Creates an instance of Position on client-side
@@ -23,8 +23,8 @@ class PositionClient {
         TypeChecker.isInt(cordX);
         TypeChecker.isInt(cordY);
 
-        this.#cordX = cordX;
-        this.#cordY = cordY;
+        this.cordX = cordX;
+        this.cordY = cordY;
     }
 
     /**
@@ -33,7 +33,7 @@ class PositionClient {
      * @return {number} cordX
      */
     getCordX() {
-        return this.#cordX;
+        return this.cordX;
     }
 
     /**
@@ -42,7 +42,7 @@ class PositionClient {
      * @return {number} cordY
      */
     getCordY() {
-        return this.#cordY;
+        return this.cordY;
     }
 }
 

@@ -2,6 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     Direction = require('../shared/Direction.js');
+    ShirtColor = require('../shared/ShirtColor.js');
 }
 
 /**
@@ -12,37 +13,41 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class ParticipantClient {
 
-    #id;
-    #position;
-    #direction;
-    #username;
-    #isVisible;
-    #isModerator;
+    id;
+    position;
+    direction;
+    forename;
+    isVisible;
+    isModerator;
+    shirtColor;
 
     /**
      * Creates an instance of participant on client-side
      * 
      * @param {String} id participant ID
-     * @param {String} username participant username
+     * @param {String} forename participant forename
      * @param {PositionClient} position participant position
      * @param {Direction} direction participant avatar direction
      * @param {boolean} isVisible participant avatar visibility
      * @param {boolean} isModerator participant avatar moderator status
+     * @param {ShirtColor} shirtColor participant avatar shirt color
      */
-    constructor(id, username, position, direction, isVisible, isModerator) {
+    constructor(id, forename, position, direction, isVisible, isModerator, shirtColor) {
         TypeChecker.isString(id);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
-        TypeChecker.isString(username);
+        TypeChecker.isString(forename);
         TypeChecker.isBoolean(isVisible);
         TypeChecker.isBoolean(isModerator);
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#id = id;
-        this.#position = position;
-        this.#direction = direction;
-        this.#username = username;
-        this.#isVisible = isVisible;
-        this.#isModerator = isModerator;
+        this.id = id;
+        this.position = position;
+        this.direction = direction;
+        this.forename = forename;
+        this.isVisible = isVisible;
+        this.isModerator = isModerator;
+        this.shirtColor = shirtColor;
     }
 
     /**
@@ -51,7 +56,7 @@ class ParticipantClient {
      * @return {String} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -60,7 +65,7 @@ class ParticipantClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -69,7 +74,7 @@ class ParticipantClient {
      * @return {boolean} true if moderator, otherwise false
      */
     getIsModerator() {
-        return this.#isModerator;
+        return this.isModerator;
     }
 
     /**
@@ -79,7 +84,7 @@ class ParticipantClient {
      */
     setIsModerator(isMod) {
         TypeChecker.isBoolean(isMod);
-        this.#isModerator = isMod;
+        this.isModerator = isMod;
     }
 
     /**
@@ -89,7 +94,7 @@ class ParticipantClient {
      */
     setPosition(position) {
         TypeChecker.isInstanceOf(position, PositionClient);
-        this.#position = position;
+        this.position = position;
     }
 
     /**
@@ -98,7 +103,7 @@ class ParticipantClient {
      * @return {Direction} direction
      */
     getDirection() {
-        return this.#direction;
+        return this.direction;
     }
 
     /**
@@ -108,16 +113,16 @@ class ParticipantClient {
      */
     setDirection(direction) {
         TypeChecker.isEnumOf(direction, Direction);
-        this.#direction = direction;
+        this.direction = direction;
     }
 
     /**
-     * Gets participant username
+     * Gets participant forename
      * 
-     * @return {String} username
+     * @return {String} forename
      */
-    getUsername() {
-        return this.#username;
+    getForename() {
+        return this.forename;
     }
 
     /**
@@ -126,7 +131,7 @@ class ParticipantClient {
      * @return {boolean} true if avatar is visible, otherwise false
      */
     getIsVisible() {
-        return this.#isVisible;
+        return this.isVisible;
     }
 
     /**
@@ -136,7 +141,27 @@ class ParticipantClient {
      */
     setisVisible(isVisible) {
         TypeChecker.isBoolean(isVisible);
-        this.#isVisible = isVisible;
+        this.isVisible = isVisible;
+    }
+
+    /**
+     * Gets avatar shirt color
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.shirtColor;
+    }
+
+    /**
+     * Sets avatar shirt color
+     * 
+     * @param {ShirtColor} shirtColor new shirt color
+     */
+    setShirtColor(shirtColor) {
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
+
+        this.shirtColor = shirtColor;
     }
 }
 

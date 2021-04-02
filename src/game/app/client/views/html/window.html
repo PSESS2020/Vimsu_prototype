@@ -1,8 +1,7 @@
 <html>
 
 <body>
-    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
-        aria-hidden="true">
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,7 +10,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-large">
                     <table id="schedule" class="table" style="width:100%">
                         <thead>
                             <tr>
@@ -28,7 +27,26 @@
                         <tbody>
                         </tbody>
                     </table>
+                    <div id="scheduleWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="noschedule"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="meetingModal" tabindex="-1" role="dialog" aria-labelledby="meetingModalTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoMeetingModalTitle">Jitsi-Meeting</h5>
+                    <button type="button" id="meetingModalClose" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="meetingModal-body">
                 </div>
             </div>
         </div>
@@ -41,6 +59,9 @@
                 <div class="modal-header text-center d-block">
                 </div>
                 <div class="modal-body">
+                    <div id="profileWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,44 +77,41 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: auto; max-height: 500px">
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="npcStoryModal" tabindex="-1" role="dialog" aria-labelledby="npcStoryTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                </div>
-                <div class="modal-body">
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="npcStoryModalCollection"></div>
 
     <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle"
         aria-hidden="true" data-focus-on="input:first">
         <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                    <a class="action_button nav-item nav-link d-flex flex-column"
-                        style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList"
-                        data-toggle="modal" title="Received friend requests" href="">
-                        <i class="fa fa-user-plus friendRequestListButton navbarIcons"
-                            style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                        <small style="color: antiquewhite; font-size: 10px;">Requests</small>
-                    </a>
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="d-flex flex-row justify-content-end">
+                        <div class="friendRequestListButton">
+                            <a class="action_button nav-item nav-link d-flex flex-column"
+                                style="position: absolute; top: 0.5rem; right: 2rem;" role="button"
+                                id="friendRequestList" data-toggle="modal" title="Received friend requests" href="">
+                                <i class="fa fa-user-plus navbarIcons"
+                                    style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
+                                <small style="color: antiquewhite; font-size: 10px;">Requests</small>
+                            </a>
+                        </div>
+                        <div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body" style="overflow: auto; height: 500px">
+                <div class="modal-body modal-body-large">
+                    <div id="friendlistWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="nofriend"></div>
                     <ul class="list-group bg-transparent">
 
@@ -113,7 +131,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="overflow: auto; height: 500px;">
+                <div class="modal-body modal-body-large">
+                    <div id="friendRequestListWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="nofriendrequest"></div>
                     <ul class="list-group bg-transparent">
 
@@ -132,7 +153,10 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-large">
+                    <div id="achievementWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div class="container container-fluid">
                         <div class="row" id="achievementModalContent">
                         </div>
@@ -175,14 +199,31 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-large">
                     <div id="ranklistwait" style="text-align: center;">
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
-                        <i class="fas fa-cog fa-spin fa-2x"></i>
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                     </div>
                     <div id="noranklist"></div>
                     <div class="row" id="ranklistrow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog"   aria-labelledby="meetingListModalTitle" aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meetingListModalTitle">Meetings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-body-large">
+                    <div id="nomeeting"></div>
+                    <ul class="list-group bg-transparent">
+
+                    </ul>
                 </div>
             </div>
         </div>
@@ -194,19 +235,27 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
-                    <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat"
-                        href="#inputGroupNameModal" style="position: absolute; top: 0.5rem; right: 2rem;" role="button"
-                        id="newGroupChat" data-toggle="modal">
-                        <i class="fa fa-edit friendRequestListButton navbarIcons"
-                            style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                        <small style="color: antiquewhite; font-size: 10px;">Group</small>
-                    </a>
-                    </a>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="d-flex flex-row justify-content-end">
+                        <div class="friendRequestListButton">
+                            <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat"
+                                href="#inputGroupNameModal" style="position: absolute; top: 0.5rem; right: 2rem;"
+                                role="button" id="newGroupChat" data-toggle="modal">
+                                <i class="fa fa-edit navbarIcons"
+                                    style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
+                                <small style="color: antiquewhite; font-size: 10px;">Group</small>
+                            </a>
+                        </div>
+                        <div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body" style="overflow: auto; height: 500px">
+                <div class="modal-body modal-body-large">
+                    <div id="chatListWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="nochat"></div>
                     <ul class="list-group bg-transparent">
 
@@ -216,54 +265,8 @@
         </div>
     </div>
 
-    <div class="modal" id="chatThreadModal" tabindex="-1" role="dialog" aria-labelledby="chatThreadModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="chatThreadModalTitle"></h5>
-                    <button id="chatLeaveButton" class="close mr-2 btn" title="Leave chat">
-                        <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                    </button>
-                    <button id="chatFriendRequestButton" class="close mr-5 btn" title="Send friend request">
-                        <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px; margin-right: -12px"
-                            aria-hidden="true"></i>
-                    </button>
-                    <div id="friendRequestSent" class="mr-5 navbarIconsDisabled" title="Pending friend request">
-                        <i class="fa fa-user-plus navbarIconsDisabled" style="cursor: not-allowed;"
-                            aria-hidden="true"></i>
-                    </div>
-                    <a class="action_button nav-item nav-link mr-5 close btn" title="Show chat participant list"
-                        role="button" id="chatParticipantListBtn" data-toggle="modal">
-                        <i class="fa fa-info-circle navbarIcons"
-                            style="transform: scale(0.8); margin-top: 1px; margin-right: -8px"></i>
-                    </a>
-                    <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
-                        role="button" id="inviteFriendsBtn" data-toggle="modal">
-                        <i class="fa fa-plus-square navbarIcons"
-                            style="transform: scale(0.8); margin-top: 1px; margin-left: -200px"></i>
-                    </a>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body d-flex flex-column" style="overflow: auto; height: 500px;">
-                    <div id="chatThreadModalList" class="list-group mb-3"
-                        style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
-                    </div>
-                    <div class="d-flex">
-                        <form id="chatMessageInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto flex-align-bottom">
-                            <input id="chatMessageInput" type="text"
-                                style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
-                                class="form-control" placeholder="Enter message ..." autocomplete="off">
-                            <div class="input-group-append">
-                                <button id="chatMessageButton" class="btn btn-accept" type="button">Send</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="chatThreadModalCollection">
+        
     </div>
 
     <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
@@ -276,12 +279,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body modal-body-center" style="height: 500px;">
+                <div class="modal-body modal-body-center modal-body-large">
                     <form id="groupName" action="" style="text-align: center; width: 100%">
-                        <input id="groupNameInput" 
-                            style="width: 100%; background-color: #1b1e24; color: antiquewhite"
-                            placeholder="Enter group name" maxlength="20" required autocomplete="off"/>
-                        <button class="btn btn-accept mt-3"
+                        <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                            placeholder="Enter group name" maxlength="20" required autocomplete="off" />
+                        <button class="btn btn-blue mt-3"
                             title="Invite friends to group chat with the input group name" style=" width: auto;">Invite
                             Friends</button>
                     </form>
@@ -302,11 +304,10 @@
                 </div>
                 <div class="modal-body modal-body-center" style="height: 200px;">
                     <form id="enteredCode" action="" style="text-align: center; width: 100%">
-                        <input id="codeInput"
-                            style="width: 100%; background-color: #1b1e24; color: antiquewhite"
-                            placeholder="Enter code" required autocomplete="off"/>
-                        <button class="btn btn-accept mt-3"
-                            title="Sends the code you entered in the input field" style=" width: auto;"> Send Code
+                        <input id="codeInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                            placeholder="Enter code" required autocomplete="off" />
+                        <button class="btn btn-blue mt-3" title="Sends the code you entered in the input field"
+                            style=" width: auto;"> Send Code
                         </button>
                     </form>
                 </div>
@@ -324,39 +325,26 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="overflow: auto; text-align: center; height: 500px">
+                <div class="modal-body modal-body-large" style="text-align: center">
+                    <div id="inviteFriendsWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="nofriendtoinvite"></div>
                     <ul class="list-group bg-transparent">
 
                     </ul>
                     </br>
-                    <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!</div>
+                    <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!
+                    </div>
                     <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                    <button class="btn btn-accept mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
+                    <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
                         friends to group chat</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="chatParticipantListModal" tabindex="-1" role="dialog"
-        aria-labelledby="chatParticipantListModalTitle" aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="chatParticipantListModalTitle">Chat Participant List</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto; height: 500px;">
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="chatParticipantListModalCollection"></div>
 
     <div class="lectureVideoWindow" id="lectureVideoWindow">
         <div class="container-fluid p-1">
@@ -385,12 +373,6 @@
                     <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
                     </div>
                     <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
-                        <input id="lectureChatInput" type="text"
-                            style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite"
-                            class="form-control" placeholder="Enter message ..." autocomplete="off">
-                        <div class="input-group-append">
-                            <button id="lectureChatButton" class="btn btn-accept mr-3" type="button">Send</button>
-                        </div>
                     </div>
                 </div>
             </div>

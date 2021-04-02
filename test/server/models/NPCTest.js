@@ -2,6 +2,7 @@ const NPC = require('../../../src/game/app/server/models/NPC.js');
 const chai = require('chai');
 const Position = require('../../../src/game/app/server/models/Position.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
+const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const assert = chai.assert;
 
 //create example NPC
@@ -34,5 +35,9 @@ describe('NPCTest getter functions', function () {
 
     it('test getStory', function () {
         assert.equal(npc.getStory(), story);
+    });
+
+    it('test getShirtColor', function() {
+        assert.equal(npc.getShirtColor(), Settings.DEFAULT_SHIRTCOLOR_NPC);
     });
 });

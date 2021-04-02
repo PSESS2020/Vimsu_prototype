@@ -3,35 +3,39 @@ const TestUtil = require('../../server/models/utils/TestUtil.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const PositionClient = require('../../../src/game/app/client/models/PositionClient.js');
 const ParticipantClient = require('../../../src/game/app/client/models/ParticipantClient.js');
+const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 
 var id;
-var username;
+var forename;
 var position;
 var direction;
 var isVisible;
 var isModerator;
 var ppant;
+var shirtColor;
 
 describe('ParticipantClient test', function () {
 
     //test data
     beforeEach(function () {
         id = TestUtil.randomString();
-        username = TestUtil.randomString();
+        forename = TestUtil.randomString();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
         direction = Direction.DOWNLEFT;
         isVisible = TestUtil.randomBool();
         isModerator = TestUtil.randomBool();
-        ppant = new ParticipantClient(id, username, position, direction, isVisible, isModerator);
+        shirtColor = ShirtColor.BLUE;
+        ppant = new ParticipantClient(id, forename, position, direction, isVisible, isModerator, shirtColor);
     });
 
     it('test getters', function () {
         expect(ppant.getId()).to.be.a('string').and.to.equal(id);
-        expect(ppant.getUsername()).to.be.a('string').and.to.equal(username);
+        expect(ppant.getForename()).to.be.a('string').and.to.equal(forename);
         expect(ppant.getPosition()).to.be.instanceOf(PositionClient).and.to.equal(position);
         expect(ppant.getDirection()).to.equal(direction);
         expect(ppant.getIsVisible()).to.equal(isVisible);
         expect(ppant.getIsModerator()).to.equal(isModerator);
+        expect(ppant.getShirtColor()).to.equal(shirtColor);
     });
 
     it('test set new valid position', function () {
@@ -58,6 +62,12 @@ describe('ParticipantClient test', function () {
         expect(ppant.getIsModerator()).to.equal(newIsModerator);
     });
 
+    it('test set valid shirtColor', function () {
+        let newShirtColor = ShirtColor.RED;
+        ppant.setShirtColor(newShirtColor);
+        expect(ppant.getShirtColor()).to.equal(newShirtColor);
+    });
+
     it('test set new invalid position', function () {
         expect(() => ppant.setPosition('newPosition')).to.throw(TypeError);
     });
@@ -72,5 +82,9 @@ describe('ParticipantClient test', function () {
 
     it('test set invalid isModerator', function () {
         expect(() => ppant.setisModerator('isModerator')).to.throw(TypeError);
+    });
+
+    it('test set invalid shirtColor', function () {
+        expect(() => ppant.setShirtColor('shirtColor')).to.throw(TypeError);
     });
 });

@@ -5,8 +5,8 @@
  * @version 1.0.0
  */
 class EventManager {
-    #handlingPlaygroundClicked = false;
-    #clientController;
+    handlingPlaygroundClicked = false;
+    clientController;
 
     /**
      * creates an instance of EventManager.
@@ -22,7 +22,7 @@ class EventManager {
         EventManager.instance = this;
 
         TypeChecker.isInstanceOf(clientController, ClientController);
-        this.#clientController = clientController;
+        this.clientController = clientController;
     }
 
     /**
@@ -33,12 +33,12 @@ class EventManager {
         if(startPos.x == goalPos.x && startPos.y == goalPos.y)
             return;
 
-        if (this.#handlingPlaygroundClicked)
+        if (this.handlingPlaygroundClicked)
             return;
             
-        this.#handlingPlaygroundClicked = true;
+        this.handlingPlaygroundClicked = true;
        
-        var currentRoom = this.#clientController.getCurrentRoom();
+        var currentRoom = this.clientController.getCurrentRoom();
 
         let occupationMap = JSON.parse(JSON.stringify(currentRoom.getOccupationMap()));
 
@@ -47,7 +47,7 @@ class EventManager {
 
         var walkPath = AStar.astarSearch(occupationMap, "manhattan", false);
 
-        if ( walkPath == null) this.#handlingPlaygroundClicked = false;
+        if ( walkPath == null) this.handlingPlaygroundClicked = false;
         else
         {
             var prev = startPos;
@@ -84,7 +84,7 @@ class EventManager {
                     }, i * 40 + 80);
 
                     setTimeout(()=>{
-                        this.#handlingPlaygroundClicked = false;
+                        this.handlingPlaygroundClicked = false;
                     }, i * 40);
                 }
 
@@ -98,7 +98,7 @@ class EventManager {
      * called from View when lecture door tile is clicked
      */
     handleLectureDoorClick() {
-        this.#clientController.handleFromViewGetCurrentLectures();
+        this.clientController.handleFromViewGetCurrentLectures();
     }
 
     /**
@@ -107,7 +107,7 @@ class EventManager {
      * @param {number} roomId room ID
      */
     handleDoorClick(roomId) {
-        this.#clientController.handleFromViewEnterNewRoom(roomId);
+        this.clientController.handleFromViewEnterNewRoom(roomId);
     }
 
     /**
@@ -117,9 +117,9 @@ class EventManager {
      */
     handleAllchatMessageInput(messageVal) {
         if (messageVal[0] === '/') {
-            this.#clientController.sendToServerEvalInput(messageVal.slice(1));
+            this.clientController.sendToServerEvalInput(messageVal.slice(1));
         } else
-            this.#clientController.sendToServerAllchatMessage(messageVal);
+            this.clientController.sendToServerAllchatMessage(messageVal);
     }
 
     /**
@@ -128,7 +128,7 @@ class EventManager {
      * @param {String} messageVal message value
      */
     handleLectureChatMessageInput(messageVal) {
-        this.#clientController.sendToServerLectureChatMessage(messageVal);
+        this.clientController.sendToServerLectureChatMessage(messageVal);
     }
 
     /**
@@ -137,7 +137,7 @@ class EventManager {
      * @param {String} lectureId lecture ID
      */
     handleLectureClicked(lectureId) {
-        this.#clientController.handleFromViewEnterLecture(lectureId);
+        this.clientController.handleFromViewEnterLecture(lectureId);
     }
 
     /**
@@ -146,7 +146,7 @@ class EventManager {
      * @param {String} lectureId lectureID
      */
     handleLectureLeft(lectureId) {
-        this.#clientController.handleFromViewLectureLeft(lectureId);
+        this.clientController.handleFromViewLectureLeft(lectureId);
     }
 
     /**
@@ -155,14 +155,14 @@ class EventManager {
      * @param {String} lectureId lecture ID
      */
     handleShowVideo(lectureId) {
-        this.#clientController.handleFromViewGetVideoUrl(lectureId);
+        this.clientController.handleFromViewGetVideoUrl(lectureId);
     }
 
     /**
      * called from View on schedule click
      */
     handleScheduleClicked() {
-        this.#clientController.handleFromViewShowSchedule();
+        this.clientController.handleFromViewShowSchedule();
     }
 
     /**
@@ -171,36 +171,52 @@ class EventManager {
      * @param {String} participantId participant ID
      */
     handleAvatarClick(participantId) {
-        this.#clientController.handleFromViewShowBusinessCard(participantId);
+        this.clientController.handleFromViewShowBusinessCard(participantId);
     }
 
     /**
      * called from View on profile click
      */
     handleProfileClicked() {
-        this.#clientController.handleFromViewShowProfile();
+        this.clientController.handleFromViewShowProfile();
     }
 
     /**
      * called from View on friend list click
      */
     handleFriendListClicked() {
-        this.#clientController.handleFromViewShowFriendList();
+        this.clientController.handleFromViewShowFriendList();
     }
 
     /**
      * called from view on chat list click
      */
     handleChatListClicked() {
-        this.#clientController.handleFromViewShowChatList();
+        this.clientController.handleFromViewShowChatList();
     };
+
+    /**
+     * called from view on meeting list click
+     */
+    handleMeetingListClicked() {
+        this.clientController.handleFromViewShowMeetingList();
+    };
+
+    /** 
+     * called from view when an entry in the meeting list is clicked.
+     * 
+     * this may require additional information to be passed (such as a password)
+     */
+    handleMeetingJoined(meetingId) {
+        this.clientController.handleFromViewJoinMeeting(meetingId);
+    }
 
     /**
      * 
      * @param {String} chatId chat ID
      */
     handleChatThreadClicked(chatId) {
-        this.#clientController.handleFromViewShowChatThread(chatId);
+        this.clientController.handleFromViewShowChatThread(chatId);
     };
 
     /**
@@ -209,7 +225,7 @@ class EventManager {
      * @param {String} chatId chat ID
      */
     handleShowChatParticipantList(chatId) {
-        this.#clientController.handleFromViewShowChatParticipantList(chatId);
+        this.clientController.handleFromViewShowChatParticipantList(chatId);
     }
 
     /**
@@ -218,7 +234,7 @@ class EventManager {
      * @param {String} participantId participant ID
      */
     handleChatNowClicked(participantId) {
-        this.#clientController.handleFromViewCreateNewChat(participantId);
+        this.clientController.handleFromViewCreateNewChat(participantId);
     }
 
     /**
@@ -229,7 +245,7 @@ class EventManager {
      * @param {String} chatId chat ID
      */
     handleCreateGroupChat(chatName, participantIdList, chatId) {
-        this.#clientController.handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId)
+        this.clientController.handleFromViewCreateNewGroupChat(chatName, participantIdList, chatId)
     }
 
     /**
@@ -239,7 +255,7 @@ class EventManager {
      * @param {String} chatId chat ID
      */
     handleInviteFriendsClicked(groupName, chatId) {
-        this.#clientController.handleFromViewShowInviteFriends(groupName, chatId);
+        this.clientController.handleFromViewShowInviteFriends(groupName, chatId);
     }
 
     /**
@@ -249,28 +265,28 @@ class EventManager {
      * @param {String} message message value
      */
     handleChatMessageInput(chatId, message) {
-        this.#clientController.handleFromViewSendNewMessage(chatId, message);
+        this.clientController.handleFromViewSendNewMessage(chatId, message);
     };
 
     /**
      * called from View on friend request list click
      */
     handleFriendRequestListClicked() {
-        this.#clientController.handleFromViewShowFriendRequestList();
+        this.clientController.handleFromViewShowFriendRequestList();
     }
 
     /**
      * called from View on achievement list click
      */
     handleAchievementsClicked() {
-        this.#clientController.handleFromViewShowAchievements();
+        this.clientController.handleFromViewShowAchievements();
     }
 
     /**
      * called from View on rank list click
      */
     handleRankListClicked() {
-        this.#clientController.handleFromViewShowRankList();
+        this.clientController.handleFromViewShowRankList();
     }
 
     /**
@@ -279,7 +295,7 @@ class EventManager {
      * @param {BusinessCardClient} businessCard accepted business card
      */
     handleAcceptRequestClicked(businessCard) {
-        this.#clientController.handleFromViewAcceptRequest(businessCard);
+        this.clientController.handleFromViewAcceptRequest(businessCard);
     }
 
     /**
@@ -288,7 +304,7 @@ class EventManager {
      * @param {String} participantId rejected participant ID
      */
     handleRejectRequestClicked(participantId) {
-        this.#clientController.handleFromViewRejectRequest(participantId);
+        this.clientController.handleFromViewRejectRequest(participantId);
     }
 
     /**
@@ -297,7 +313,7 @@ class EventManager {
      * @param {String} friendId old friend ID
      */
     handleRemoveFriend(friendId) {
-        this.#clientController.handleFromViewRemoveFriend(friendId);
+        this.clientController.handleFromViewRemoveFriend(friendId);
     }
 
     /**
@@ -306,7 +322,7 @@ class EventManager {
      * @param {String} chatId chat ID
      */
     handleLeaveChat(chatId) {
-        this.#clientController.handleFromViewLeaveChat(chatId);
+        this.clientController.handleFromViewLeaveChat(chatId);
     }
 
     /**
@@ -315,7 +331,7 @@ class EventManager {
      * @param {number} npcId NPC ID
      */
     handleNPCClick(npcId) {
-        this.#clientController.handleFromViewGetNPCStory(npcId);
+        this.clientController.handleFromViewGetNPCStory(npcId);
     }
 
     /**
@@ -325,49 +341,49 @@ class EventManager {
      * @param {String} chatId chat ID
      */
     handleSendFriendRequest(participantRecipientId, chatId) {
-        this.#clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
+        this.clientController.handleFromViewNewFriendRequest(participantRecipientId, chatId);
     }
 
     /**
      * called from View to clear interval
      */
     handleClearInterval() {
-        this.#clientController.handleFromViewClearInterval();
+        this.clientController.handleFromViewClearInterval();
     }
 
     /**
      * called from View on arrow up
      */
     handleArrowUp() {
-        this.#clientController.handleArrowUp();
+        this.clientController.handleArrowUp();
     }
 
     /**
      * called from View on up arrow down
      */
     handleUpArrowDown() {
-        this.#clientController.handleUpArrowDown();
+        this.clientController.handleUpArrowDown();
     }
 
     /**
      * called from View on down arrow down
      */
     handleDownArrowDown() {
-        this.#clientController.handleDownArrowDown();
+        this.clientController.handleDownArrowDown();
     }
 
     /**
      * called from View on left arrow down
      */
     handleLeftArrowDown() {
-        this.#clientController.handleLeftArrowDown();
+        this.clientController.handleLeftArrowDown();
     }
 
     /**
      * called from View on right arrow down
      */
     handleRightArrowDown() {
-        this.#clientController.handleRightArrowDown();
+        this.clientController.handleRightArrowDown();
     }
 
     /**
@@ -377,6 +393,6 @@ class EventManager {
      * @param {String} enteredCode code the user entered
      */
     handleCodeEntered(doorId, enteredCode) {
-        this.#clientController.handleFromViewCodeEntered(doorId, enteredCode);
+        this.clientController.handleFromViewCodeEntered(doorId, enteredCode);
     }
 }

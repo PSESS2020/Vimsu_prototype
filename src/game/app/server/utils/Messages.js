@@ -69,18 +69,26 @@ module.exports = Object.freeze({
                 "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
                 "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
                 "\\opendoorfor <doorID> <list of usernames> -- Opens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\openalldoorsfor <list of usernames> -- Opens all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one seperated from the next one by a whitespace character.",
+                ", each one separated from the next one by a whitespace character.",
                 "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>.",
                 "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
                 "\\porttouser <username> -- Teleports you to user with <username>.", 
                 "\\mod <username> -- Sets a normal user with <username> to a moderator.",
-                "\\unmod <username> -- Sets a moderator with <username> to a normal user."]
+                "\\unmod <username> -- Sets a moderator with <username> to a normal user.",
+                "\\creategroup <groupName> <groupColor> <list of usernames> -- Creates a group with the unique name <groupName>. All group members will wear " +
+                " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                "\\deletegroup <groupName> -- Deletes group with the unique name <groupName>.",
+                "\\deleteallgroups -- Deletes all exisiting groups.",
+                "\\addtogroup <groupName> <list of usernames> -- Adds all users with username in <list of usernames> to group with name <groupName>" + 
+                ", each username separated from the next one by a whitespace character.",
+                "\\rmfromgroup <groupName> <list of usernames> -- Removes all users with username in <list of usernames> from group with name <groupName>" + 
+                ", each username separated from the next one by a whitespace character."]
     },
     WARNING: {
         header: "Warning",
@@ -142,6 +150,30 @@ module.exports = Object.freeze({
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
     },
+    OPEPNEDDOOR(doorID) {
+        return {
+            header: "Successfully opened door",
+            body: "You successfully opened the door with the ID " + doorID + " for all passed users."
+        }
+    },
+    CLOSEDDOOR(doorID) {
+        return {
+            header: "Successfully closed door",
+            body: "You successfully closed the door with the ID " + doorID + " for all passed users."
+        }
+    },
+    OPEPNEDDOORFORALL(doorID) {
+        return {
+            header: "Successfully opened door",
+            body: "You successfully opened the door with the ID " + doorID + " for all users."
+        }
+    },
+    CLOSEDDOORFORALL(doorID) {
+        return {
+            header: "Successfully closed door",
+            body: "You successfully closed the door with the ID " + doorID + " for all users."
+        }
+    },
     CLOSEDALLDOORS: {
         header: "Successfully closed all doors",
         body: "You successfully closed all doors for all passed users."
@@ -164,6 +196,12 @@ module.exports = Object.freeze({
         header: "Door closed",
         body: "Greet our Chef before you leave!"
     },
+    SETCODE(doorID, code) {
+        return {
+            header: "Code set successfully",
+            body: "You successfully set the door code of the door with the ID " + doorID + " to " + code + "."
+        }
+    },
     CORRECTCODE: {
         header: "Code was correct!",
         body: "The code you entered was correct! The door is now open for you."
@@ -184,6 +222,18 @@ module.exports = Object.freeze({
         header: "Your teleport failed",
         body: "Your teleport failed. Please check the passed username again."
     },
+    SETMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is now a moderator.",
+        }
+    },
+    SETUNMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is no longer a moderator.",
+        }
+    },
     YOUARENOWMOD: {
         header: "Your mod state changed",
         body: "You are now a moderator. Type in \\help to see all commands.",
@@ -191,5 +241,61 @@ module.exports = Object.freeze({
     YOUARENOLONGERMOD: {
         header: "Your mod state changed",
         body: "You are no longer a moderator."  
+    },
+    UNKNOWNCOLOR: {
+        header: "Unknown color",
+        body: "Entered color does not exist. Currently available colors are blue, red, green, yellow and white."
+    },
+    INVALIDGROUPNAME: {
+        header: "Invalid group name",
+        body: "The entered group name is already used by another group. Please try again."
+    },
+    GROUPNOTEXISTS: {
+        header: "Group does not exist",
+        body: "A group with this name does not exist. Please try again."
+    },
+    NOUSERSFOUND: {
+        header: "No Users found",
+        body: "No Users were found. Don't forget to pass valid usernames!"
+    }, 
+    DELETEDALLGROUPS: {
+        header: "Successfully deleted all groups",
+        body: "All exisiting groups were sucessfully deleted."
+    },
+    CREATEDGROUP(groupName) {
+        return {
+            header: "Group successfully created",
+            body: "Successfully created group " + groupName + "."
+        }
+    },
+    DELETEDGROUP(groupName) {
+        return {
+            header: "Group successfully deleted",
+            body: "Successfully deleted group " + groupName + "."
+        }
+    },
+    ADDEDUSERSTOGROUP(groupName) {
+        return {
+            header: "Added users to group",
+            body: "Successfully added users to group " + groupName + "."
+        }
+    },
+    RMUSERSFROMGROUP(groupName) {
+        return {
+            header: "Removed users from group",
+            body: "Successfully removed users from group " + groupName + "."
+        }
+    }, 
+    YOUJOINEDGROUP(groupName) {
+        return {
+            header: "Group joined",
+            body: "You joined group " + groupName + "."
+        }
+    },
+    YOULEFTGROUP(groupName) {
+        return {
+            header: "Group left",
+            body: "You left group " + groupName +  "."
+        }
     }
 });

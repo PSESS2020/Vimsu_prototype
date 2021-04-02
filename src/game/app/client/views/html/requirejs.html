@@ -8,11 +8,12 @@
             'client/utils/DateParser',
             'client/utils/TokenMessages',
             'client/shared/Direction',
+            'client/shared/ShirtColor',
             'client/config/GameConfig',
             'client/shared/TypeOfRoom',
             'client/shared/TypeOfDoor',
             'client/shared/GameObjectType',
-            'client/shared/BusinessCard',
+            'client/models/BusinessCardClient',
             'client/models/ParticipantClient',
             'client/models/PositionClient',
             'client/models/NPCClient',
@@ -39,11 +40,13 @@
                                     'client/views/js/LoadingView'], () => {
 
                                         requirejs([
+                                            'client/views/js/EmojiPicker',
                                             'client/views/js/AllchatView',
                                             'client/views/js/GameObjectViewFactory',
                                             'client/views/js/ProfileView',
                                             'client/views/js/NotificationBar',
                                             'client/views/js/ChatParticipantListView',
+                                            'client/views/js/MeetingListView',
                                             'client/views/js/ChatListView',
                                             'client/views/js/ChatThreadView',
                                             'client/views/js/GlobalChatView',

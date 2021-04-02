@@ -6,18 +6,18 @@
  */
 class GameObjectView extends Views {
 
-    #objectImage;
-    #clickMap;
-    #gridPosition;
-    #screenPositionOffset;
-    #name;
-    #screenPosition;
+    objectImage;
+    clickMap;
+    gridPosition;
+    screenPositionOffset;
+    name;
+    screenPosition;
 
     /**
      * Creates an instance of GameObjectView
      * 
      * @param {Image} objectImage game object image
-     * @param {number[][]} clickMap schedule clickMap
+     * @param {number[][]} clickMap schedule clickMaps
      * @param {PositionClient} gridPosition game object position
      * @param {number} screenPositionOffset screen position offset
      * @param {String} name game object name
@@ -31,11 +31,11 @@ class GameObjectView extends Views {
         TypeChecker.isString(name);
 
 
-        this.#objectImage = objectImage;
-        this.#clickMap = clickMap;
-        this.#gridPosition = gridPosition;
-        this.#screenPositionOffset = screenPositionOffset;
-        this.#name = name;
+        this.objectImage = objectImage;
+        this.clickMap = clickMap;
+        this.gridPosition = gridPosition;
+        this.screenPositionOffset = screenPositionOffset;
+        this.name = name;
     }
 
     /**
@@ -44,7 +44,7 @@ class GameObjectView extends Views {
      * @return {Image} objectImage
      */
     getObjectImage() {
-        return this.#objectImage;
+        return this.objectImage;
     }
 
     /**
@@ -53,7 +53,7 @@ class GameObjectView extends Views {
      * @return {PositionClient} gridPosition
      */
     getGridPosition() {
-        return this.#gridPosition;
+        return this.gridPosition;
     }
 
     /**
@@ -62,7 +62,7 @@ class GameObjectView extends Views {
      * @return {PositionClient} screenPosition
      */
     getScreenPosition() {
-        return this.#screenPosition;
+        return this.screenPosition;
     }
 
     /**
@@ -71,7 +71,7 @@ class GameObjectView extends Views {
      * @return {number} screenPositionOffset
      */
     getScreenPositionOffset() {
-        return this.#screenPositionOffset;
+        return this.screenPositionOffset;
     }
 
     /**
@@ -86,7 +86,7 @@ class GameObjectView extends Views {
         
         var clickImgCordY = Math.abs((screenPos.getCordY() + this.getScreenPositionOffset().y) - Math.round(mousePos.y));
 
-        return this.#clickMap[clickImgCordY][clickImgCordX];
+        return this.clickMap[clickImgCordY][clickImgCordX];
     }
 
     /**
@@ -95,7 +95,7 @@ class GameObjectView extends Views {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -106,7 +106,7 @@ class GameObjectView extends Views {
     updateGridPos(gridPosition) {
         TypeChecker.isInstanceOf(gridPosition, PositionClient);
 
-        this.#gridPosition = gridPosition;
+        this.gridPosition = gridPosition;
     }
 
     /**
@@ -117,7 +117,7 @@ class GameObjectView extends Views {
     updateScreenPos(screenPosition) {
         TypeChecker.isInstanceOf(screenPosition, PositionClient);
 
-        this.#screenPosition = screenPosition;
+        this.screenPosition = screenPosition;
     }
 
     /**
@@ -126,12 +126,12 @@ class GameObjectView extends Views {
     draw() {
 
         //screen position is not set yet
-        if (!this.#screenPosition) {
+        if (!this.screenPosition) {
             return;
         }
 
-        ctx_avatar.drawImage(this.#objectImage, this.#screenPosition.getCordX() + this.#screenPositionOffset.x,
-            this.#screenPosition.getCordY() + this.#screenPositionOffset.y);
+        ctx_avatar.drawImage(this.objectImage, this.screenPosition.getCordX() + this.screenPositionOffset.x,
+            this.screenPosition.getCordY() + this.screenPositionOffset.y);
     }
 
     /**

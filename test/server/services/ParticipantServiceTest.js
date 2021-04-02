@@ -18,7 +18,7 @@ const Task = require('../../../src/game/app/server/models/Task');
 const TypeOfTask = require('../../../src/game/app/server/utils/TypeOfTask');
 const Account = require('../../../src/website/models/Account');
 const Participant = require('../../../src/game/app/server/models/Participant');
-const BusinessCard = require('../../../src/game/app/client/shared/BusinessCard.js');
+const BusinessCard = require('../../../src/game/app/server/models/BusinessCard.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
 
 function generateTasks() {

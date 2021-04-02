@@ -6,7 +6,7 @@
  */
 class NewAchievementView extends WindowView {
 
-    #confetti;
+    confetti;
 
     /**
      * Creates an instance of NewAchievementView
@@ -22,7 +22,7 @@ class NewAchievementView extends WindowView {
 
         $("#newAchievementModal").on("hidden.bs.modal", () => {
             $('#confettiCanvas').hide();
-            this.#confetti.clear();
+            this.confetti.clear();
         });
     }
 
@@ -43,8 +43,8 @@ class NewAchievementView extends WindowView {
         );
 
         var confettiSettings = { target: 'confettiCanvas' };
-        this.#confetti = new ConfettiGenerator(confettiSettings);
-        this.#confetti.render();
+        this.confetti = new ConfettiGenerator(confettiSettings);
+        this.confetti.render();
 
         $('#newAchievementModal').modal('show');
         $('#confettiCanvas').show();

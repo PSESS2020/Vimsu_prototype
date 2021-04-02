@@ -3,6 +3,7 @@ const Messages = require('../utils/Messages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext.js');
 const Position = require('../models/Position.js');
+const ShirtColor = require('../../client/shared/ShirtColor.js');
 
 /**
  * The Command Handler Model
@@ -341,9 +342,7 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            let header = "Successfully closed door";
-            let body = "You successfully closed the door with the ID " + doorID + " for all users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOORFORALL(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -371,9 +370,7 @@ module.exports = class CommandHandler {
 
 
         if (opened) {
-            let header = "Successfully opened door";
-            let body = "You successfully opened the door with the ID " + doorID + " for all users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOORFORALL(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -414,9 +411,7 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            let header = "Successfully closed door";
-            let body = "You successfully closed the door with the ID " + doorID + " for all passed users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOOR(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -457,9 +452,7 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            let header = "Successfully opened door";
-            let body = "You successfully opened the door with the ID " + doorID + " for all passed users.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOOR(doorID));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -551,9 +544,7 @@ module.exports = class CommandHandler {
 
         if (door !== undefined) {
             door.setCodeToOpen(code);
-            let header = "Code set successfully";
-            let body = "You successfully set the door code of the door with the ID " + doorID + " to " + code + ".";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETCODE(doorID, code));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -626,9 +617,7 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (this.#serverController.setModState(username, true)) {
-            let header = "Mod status set successfully";
-            let body = username + " is now a moderator.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETMOD(username));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
         }
@@ -648,12 +637,176 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (this.#serverController.setModState(username, false)) {
-            let header = "Mod status set successfully";
-            let body = username + " is no longer a moderator.";
-            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+            this.#serverController.sendNotification(socket.id, Messages.SETUNMOD(username));
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
         }
+    }
+
+    /**
+     * Creates a new group
+     * @method module:CommandHandler#createGroup
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    createGroup(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+
+        /* parse first character of color string from lowercase to uppercase (e.g. blue to Blue) */
+        let groupColor = commandArgs[1].substring(0, 1).toUpperCase() + commandArgs[1].substring(1);
+        let usernames = commandArgs.slice(2);
+
+        try {
+            TypeChecker.isEnumOf(groupColor, ShirtColor);
+        } catch (e) {
+            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNCOLOR);
+            return;
+        }
+
+        let memberIDs = [];
+        
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
+        }
+        
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
+        }
+
+        if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
+            this.#serverController.sendNotification(socket.id, Messages.CREATEDGROUP(groupName));
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.INVALIDGROUPNAME);
+        } 
+    }
+
+    /**
+     * Deletes an existing group
+     * @method module:CommandHandler#deleteGroup
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    deleteGroup(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+
+        if (this.#serverController.deleteGroup(groupName)) {
+            this.#serverController.sendNotification(socket.id, Messages.DELETEDGROUP(groupName));
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
+    }
+
+    /**
+     * Deletes all existing groups
+     * @method module:CommandHandler#deleteAllGroups
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+     deleteAllGroups(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        this.#serverController.deleteAllGroups();
+        this.#serverController.sendNotification(socket.id, Messages.DELETEDALLGROUPS);
+    } 
+    
+
+    /**
+     * Adds all passed users to group with passed groupName
+     * @method module:CommandHandler#addGroupMember
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    addGroupMember(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+        let usernames = commandArgs.slice(1);
+
+        let memberIDs = [];
+        
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
+        }
+
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
+        }
+
+        if (this.#serverController.addGroupMember(groupName, memberIDs)) {
+            this.#serverController.sendNotification(socket.id, Messages.ADDEDUSERSTOGROUP(groupName));
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
+    }
+
+    /**
+     * Removes all passed users from group with passed groupName
+     * @method module:CommandHandler#removeGroupMember
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    removeGroupMember(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groupName = commandArgs[0];
+        let usernames = commandArgs.slice(1);
+
+        let memberIDs = [];
+        
+        for (let i = 0; i < usernames.length; i++) {
+            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            if (ppantID === undefined) {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                return; 
+            }
+            //Eliminates duplicates
+            if (!memberIDs.includes(ppantID)) {
+                memberIDs.push(ppantID);
+            }
+        }
+
+        if (memberIDs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            return;
+        }
+
+        if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
+            this.#serverController.sendNotification(socket.id, Messages.RMUSERSFROMGROUP(groupName));
+        } else {
+            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+        } 
     }
 
     /**

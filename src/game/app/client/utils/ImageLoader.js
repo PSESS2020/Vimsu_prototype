@@ -21,7 +21,7 @@ class ImageLoader {
         TypeChecker.isString(key);
         TypeChecker.isString(path);
 
-        const cached = ImageCache.getImage(key);
+        const cached = new ImageCache().getImage(key);
 
         if (cached !== undefined) {
             return cached;
@@ -31,7 +31,7 @@ class ImageLoader {
             const image = new Image();
 
             image.onload = () => {
-                ImageCache.addImage(key, image);
+                new ImageCache().addImage(key, image);
                 resolve(image);
             }
 

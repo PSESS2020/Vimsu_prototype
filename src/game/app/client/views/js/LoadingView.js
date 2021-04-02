@@ -27,14 +27,17 @@ class LoadingView extends Views {
      */
     contentLoaded(totalContents, loadedContents) {
         var percentage = ((100 / totalContents * loadedContents) << 0) + "%";
-        $("#progressbar")[0].style.width = percentage;
-        $("#progressstatus")[0].innerHTML = "Loading Conference " + percentage + " . . .";
+        document.getElementById("progressbar").style.width = percentage;
+        document.getElementById("progressstatus").innerHTML = "Loading Conference " + percentage + " . . .";
     }
 
     /**
      * Called when loading contents done
      */
     doneLoading() {
-        $("#overlay")[0].style.opacity = 0;
+        document.getElementById("overlay").style.opacity = 0;
+        $("#upperHUD").show();
+        $("#middleHUD").show();
+        $("#lowerHUD").show();
     }
 }

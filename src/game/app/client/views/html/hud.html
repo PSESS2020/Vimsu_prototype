@@ -1,34 +1,23 @@
 <html>
 
-<body>
+<body style="display: none">
     <!--UPPER HUD-->
-    <div class="row mt-2">
+    <div class="row mt-2 justify-content-between" id="upperHUD" style="display: none">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="text-align: left;">
                 <div id="time" style="color: antiquewhite"></div>
                 <div id="location" style="color: antiquewhite"></div>
+                <div id="group" style="color: antiquewhite"></div>
                 <div>
                     <small id="fps" style="color: antiquewhite; opacity: 0.5"></small>
                     <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
                 </div>
-                <br>
-                <div id="allchatWindow" style="z-index: 300">
-                    <div class="p-2" id="allchatHeader"
-                        style="width: 20vw; background-color: rgba(15, 15, 15, 0.8); border-radius: 0px 5px 0px 0px; border-bottom: 1px solid antiquewhite; color: antiquewhite; font-size: medium;">
-                    </div>
-                    <div id="allchatBox" class="allChatBar">
-                        <small>
-                            <div id="noAllchat" class="wrapword"
-                                style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div>
-                        </small>
-                        <div id="allchatMessages"></div>
-                    </div>
-                </div>
             </div>
             <div class="d-flex flex-column ml-4">
                 <form id="allchat" action="">
-                    <input id="allchatMessageInput" autocomplete="off" placeholder="" /><button
-                        style="background-color: transparent">>></button>
+                    <input id="allchatMessageInput" autocomplete="off" placeholder="" />
+                    <button id="allchat-emoji-trigger" title="Pick emojis"><i class="fas fa-smile-beam navbarIcons"></i></button>
+                    <button style="background-color: transparent" title="Send"><i class="fas fa-paper-plane navbarIcons"></i></button>
                 </form>
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick=""
                     href="" style="z-index: 300">
@@ -52,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="d-flex flex-column ml-5">
+            <div class="d-flex flex-column ml-4">
                 <div class="profileBox"
                     style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
                     <a class="action_button nav-item nav-link" title="Profile" href="" onclick="" id="profileButton"
@@ -65,77 +54,123 @@
         </div>
     </div>
 
-    <!--NOTIFICATIONS-->
-    <div class="row">
-        <div class="d-flex flex-row col-12" style="align-items: center; justify-content: center; margin-top: -66vw;">
-            <div id="connectionStatus"
-                style="background-color: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 10px; color: firebrick; z-index: 1000; display: none">
+    <!--MIDDLE HUD-->
+    <div class="row mt-2 justify-content-between" id="middleHUD" style="display: none">
+        <div class="d-flex flex-row col-12">
+            <div class="d-flex flex-column" style="width: 250px;">
+                <div id="allchatWindow" style="z-index: 300;">
+                    <div class="p-2" id="allchatHeader">
+                    </div>
+                    <div id="allchatBox">
+                        <small>
+                            <div id="noAllchat" class="wrapword"
+                                style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div>
+                        </small>
+                        <div id="allchatMessages"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column align-self-start" style="align-items: center; width: 750px">
+                <div id="connectionStatus" style="display: none"></div>
+            </div>
+
+            <div class="d-flex flex-column ml-auto" style="width: 250px;">
+                <div style="z-index: 5">
+                    <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showNotifBar"
+                        onclick="" href="" style="float:right; text-align: right;"><small>Show Notification Bar</small>
+                    </a>
+                    <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideNotifBar" href=""
+                        onclick="" style="float:right; text-align: right;"><small>Hide Notification Bar</small>
+                    </a>
+                </div>
+                <div id="notifBar" style="z-index: 5"></div>
             </div>
         </div>
-
-        <div class="ml-auto messageBar" id="notifBar" style="margin-top: -34vw; z-index: 300"></div>
     </div>
 
-    <!--LOWER HUD BUTTON LEFT-->
-    <nav class="navbar navbar-expand-md navbar-light"
-        style="position: absolute; bottom: 0; float: left; left: 10; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
+    <!--LOWER HUD BUTTON-->
+    <div class="row justify-content-center" id="lowerHUD" style="display: none">
+        <div class="d-flex flex-row col-12" style="bottom:0; position: absolute">
+            <div class="d-flex flex-column" style="z-index: 300;">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""
-                    onclick="" id="rankListButton" data-toggle="modal" data-target="#rankListModal">
-                    <i class="fa fa-globe fa-4x navbarIcons" style="margin-right: 25px"></i>
-                    <p class="navbarIconsText" style="margin-left: 3px; ">Ranklist</p>
+                    onclick="" id="rankListButton" data-toggle="modal">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fa fa-globe fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Ranklist
+                    </div>
                 </a>
-            </li>
-
-            <li class="nav-item">
+            </div>
+            <div class="d-flex flex-column" style="z-index: 300;">
+                <a class="action_button nav-item nav-link align-items-center justify-content-center" href="" id="achievementListButton" title="Achievement list"
+                    onclick="" data-toggle="modal">
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        <i class="fa fa-star fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row align-items-center justify-content-center navbarIconsText">
+                        Achievements
+                    </div>
+                </a>
+            </div>
+            <div class="d-flex flex-column" style="z-index: 300;">
                 <a href="" onclick="" id="scheduleListButton" title="Presentation schedule"
                     class="action_button nav-item nav-link" data-toggle="modal">
-                    <i class="fa fa-table fa-4x navbarIcons" style="margin-right: 25px"></i>
-                    <p class="navbarIconsText" style="margin-left: -1px;">Schedule</p>
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fa fa-table fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Schedule
+                    </div>
                 </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="action_button nav-item nav-link" href="" id="achievementListButton" title="Achievement list"
-                    onclick="" data-toggle="modal">
-                    <i class="fa fa-star fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: -12px;">Achievements</p>
+            </div>
+            <div class="d-flex flex-column" style="z-index: 300;">
+                <a class="action_button nav-item nav-link" href="" id="meetingListButton" title="Meeting list" onclick=""
+                    data-toggle="modal">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fas fa-video fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Meetings
+                    </div>
                 </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!--LOWER HUD BUTTON RIGHT-->
-    <nav class="navbar navbar-expand-md navbar-light"
-        style="position: absolute; bottom: 0; float: right; right: 0; width: 30%; height: 15%; background-color: rgba(100, 100, 100, 0); z-index: 300">
-
-        <ul class="navbar nav ml-auto">
-            <li class="nav-item">
+            </div>
+            <div class="d-flex flex-column ml-auto" style="z-index: 300;">
                 <a class="action_button nav-item nav-link" href="" id="friendListButton"
                     title="Friend list and received friend request list" onclick="" data-toggle="modal">
-                    <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: -4px;">Friendlist</p>
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Friendlist
+                    </div>
                 </a>
-            </li>
-
-            <li class="nav-item">
+            </div>
+            <div class="d-flex flex-column" style="z-index: 300;">
                 <a class="action_button nav-item nav-link" href="" id="chatListButton" title="Chat list" onclick=""
                     data-toggle="modal">
-                    <i class="fa fa-comments-o fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: 11px;">Chats</p>
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fa fa-comments-o fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Chats
+                    </div>
                 </a>
-            </li>
-
-            <li class="nav-item">
+            </div>
+            <div class="d-flex flex-column" style="z-index: 300;">
                 <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" title="Leave conference"
                     onclick="return confirm('Are you sure you want to leave?')">
-                    <i class="fa fa-sign-out fa-4x navbarIcons"></i>
-                    <p class="navbarIconsText" style="margin-left: 7px;">Leave</p>
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <i class="fa fa-sign-out fa-4x navbarIcons"></i>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
+                        Leave
+                    </div>
                 </a>
-            </li>
-        </ul>
-    </nav>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

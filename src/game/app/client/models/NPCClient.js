@@ -2,6 +2,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     TypeChecker = require('../shared/TypeChecker.js');
     PositionClient = require('./PositionClient.js');
     Direction = require('../shared/Direction.js');
+    ShirtColor = require('../shared/ShirtColor.js');
 }
 
 /**
@@ -12,10 +13,11 @@ if (typeof module === 'object' && typeof exports === 'object') {
  */
 class NPCClient {
 
-    #id;
-    #name;
-    #position;
-    #direction;
+    id;
+    name;
+    position;
+    direction;
+    shirtColor;
 
     /**
      * Creates an instance of NPC on client-side
@@ -24,17 +26,20 @@ class NPCClient {
      * @param {String} name NPC name
      * @param {PositionClient} position NPC position
      * @param {Direction} direction NPC avatar direction
+     * @param {ShirtColor} shirtColor NPC shirt color
      */
-    constructor(id, name, position, direction) {
+    constructor(id, name, position, direction, shirtColor) {
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isEnumOf(direction, Direction);
+        TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
-        this.#id = id;
-        this.#name = name;
-        this.#position = position;
-        this.#direction = direction;
+        this.id = id;
+        this.name = name;
+        this.position = position;
+        this.direction = direction;
+        this.shirtColor = shirtColor;
     }
 
     /**
@@ -43,7 +48,7 @@ class NPCClient {
      * @return {number} id
      */
     getId() {
-        return this.#id;
+        return this.id;
     }
 
     /**
@@ -52,7 +57,7 @@ class NPCClient {
      * @return {String} name
      */
     getName() {
-        return this.#name;
+        return this.name;
     }
 
     /**
@@ -61,7 +66,7 @@ class NPCClient {
      * @return {PositionClient} position
      */
     getPosition() {
-        return this.#position;
+        return this.position;
     }
 
     /**
@@ -70,7 +75,16 @@ class NPCClient {
      * @return {Direction} direction
      */
     getDirection() {
-        return this.#direction;
+        return this.direction;
+    }
+
+    /**
+     * Gets NPC shirt color
+     * 
+     * @return {ShirtColor} shirt color
+     */
+    getShirtColor() {
+        return this.shirtColor;
     }
 }
 

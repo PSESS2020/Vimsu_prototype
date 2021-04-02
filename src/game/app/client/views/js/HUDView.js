@@ -22,31 +22,46 @@ class HUDView extends Views {
 
         $('#rankListButton').off();
         $('#rankListButton').on('click', (event) => {
+            $('#rankListModal').modal('show');
             eventManager.handleRankListClicked();
         })
 
         $('#scheduleListButton').off();
         $('#scheduleListButton').on('click', (event) => {
+            $('#noschedule').empty();
+            $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
+            $('#scheduleModal').modal('show');
+            $('#scheduleWait').show()
             eventManager.handleScheduleClicked();
         })
 
         $('#achievementListButton').off();
         $('#achievementListButton').on('click', (event) => {
+            $('#achievementsModal').modal('show');
             eventManager.handleAchievementsClicked();
         })
 
         $('#friendListButton').off();
         $('#friendListButton').on('click', (event) => {
+            $('#friendListModal').modal('show');
             eventManager.handleFriendListClicked();
         })
 
+        $('#meetingListButton').off();
+        $('#meetingListButton').on('click', (event) => {
+            eventManager.handleMeetingJoined("test");
+        })
+
+
         $('#chatListButton').off();
         $('#chatListButton').on('click', (event) => {
+            $('#chatListModal').modal('show');
             eventManager.handleChatListClicked();
         })
 
         $('#profileButton').off();
         $('#profileButton').on('click', (event) => {
+            $('#profileModal').modal('show');
             eventManager.handleProfileClicked();
         })
     }

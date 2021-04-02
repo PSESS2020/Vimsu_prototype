@@ -47,8 +47,6 @@ module.exports = class FriendListService {
                 console.log("participant with participantId " + participantId + " is not found in collection participants_" + conferenceId);
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -71,9 +69,6 @@ module.exports = class FriendListService {
 
         return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -96,9 +91,6 @@ module.exports = class FriendListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -119,9 +111,6 @@ module.exports = class FriendListService {
 
         return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: { $exists: true } }).then(res => {
             return res;
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 } 

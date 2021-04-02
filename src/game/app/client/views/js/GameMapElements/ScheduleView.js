@@ -5,7 +5,7 @@
  * @version 1.0.0
  */
 class ScheduleView extends GameMapElementView {
-    #eventManager;
+    eventManager;
 
     /**
      * Creates an instance of Schedule View
@@ -18,7 +18,7 @@ class ScheduleView extends GameMapElementView {
      */
     constructor(scheduleImage, clickMap, position, screenPositionOffset, name, eventManager) {
         super(scheduleImage, clickMap, position, screenPositionOffset, name);
-        this.#eventManager = eventManager;
+        this.eventManager = eventManager;
     }
     
     /**
@@ -31,7 +31,11 @@ class ScheduleView extends GameMapElementView {
         if (super.getClickMapValueWithGridCoords(mousePos) === 1) {
             //This Event fires multiple times because of three parallel schedule images.
             //Not sure how to prevent this.
-            this.#eventManager.handleScheduleClicked();
+            $('#noschedule').empty();
+            $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
+            $('#scheduleModal').modal('show');
+            $('#scheduleWait').show()
+            this.eventManager.handleScheduleClicked();
         }
     }
 }

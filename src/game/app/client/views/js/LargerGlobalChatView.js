@@ -38,21 +38,21 @@ class LargerGlobalChatView extends WindowView {
         $('#largerGlobalChatWindowHeaderText').text(messageHeader);
         if (messageText instanceof Array) {
             for (var i = 0; i < messageText.length; i++) {
-                this.#addMessage(messageText[i]);
+                this.addMessage(messageText[i]);
             }
         } else {
-            this.#addMessage(messageText);
+            this.addMessage(messageText);
         }
 
         $('#largerGlobalChat').show();
     };
 
     /**
-     * @private add message text to the global chat window
+     * add message text to the global chat window
      * 
      * @param {String} text message text
      */
-    #addMessage = function (text) {
+    addMessage = function (text) {
         var $newMessageBody = $("<div style='font-size: medium; overflow-wrap: break-word;'></div><br>");
         $newMessageBody.text(text);
         $('#largerGlobalChatMessage').append($newMessageBody);

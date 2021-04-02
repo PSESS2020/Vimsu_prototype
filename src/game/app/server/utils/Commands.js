@@ -109,5 +109,25 @@ module.exports = Object.freeze({
     UNMODUSER: {
         string: "unmod",
         method: "unmodUser"
-    }  
+    },
+    CREATEGROUP: {
+        string: "creategroup",
+        method: "createGroup"
+    },
+    DELETEGROUP: {
+        string: "deletegroup",
+        method: "deleteGroup"
+    },
+    DELETEALLGROUPS: {
+        string: "deleteallgroups",
+        method: "deleteAllGroups"
+    },
+    ADDGROUPMEMBER: {
+        string: "addtogroup",
+        method: "addGroupMember"
+    },
+    REMOVEGROUPMEMBER: {
+        string: "rmfromgroup",
+        method: "removeGroupMember"
+    }
 });

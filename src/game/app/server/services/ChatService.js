@@ -13,7 +13,7 @@ const db = require('../../../../config/db')
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class Chatservice {
+module.exports = class ChatService {
 
     /**
      * creates a new one to one chat instance and saves it in the database
@@ -55,8 +55,6 @@ module.exports = class Chatservice {
                 chat.username1,
                 chat.username2)
 
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -100,9 +98,7 @@ module.exports = class Chatservice {
                 Settings.MAXGROUPPARTICIPANTS,
                 Settings.MAXNUMMESSAGES_GROUPCHAT);
 
-        }).catch(err => {
-            console.error(err)
-        });
+        })
     }
 
     /**
@@ -130,8 +126,6 @@ module.exports = class Chatservice {
                 console.log("oneToOneChat not found between " + ownerId + " and " + chatPartnerId + " in collection chats_" + conferenceId);
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
 
     }
@@ -232,8 +226,6 @@ module.exports = class Chatservice {
                 console.log("could not find chat with chatId" + chatId);
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -260,9 +252,6 @@ module.exports = class Chatservice {
             } else {
                 return false;
             }
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
 
     }
@@ -299,9 +288,6 @@ module.exports = class Chatservice {
                             //chat doesn't have any member anymore, so delete the entry from chats collection
                             return vimsudb.deleteOneFromCollection("chats_" + conferenceId, { chatId: chatId }).then(res => {
                                 return res;
-                            }).catch(err => {
-                                console.error(err);
-                                return false;
                             })
                         }
                         return true;
@@ -309,17 +295,8 @@ module.exports = class Chatservice {
                         console.log("no chat found with " + chatId);
                         return false;
                     }
-                }).catch(err => {
-                    console.error(err);
-                    return false;
                 })
-            }).catch(err => {
-                console.error(err);
-                return false;
             })
-        }).catch(err => {
-            console.error(err);
-            return false;
         })
     }
 
@@ -359,9 +336,7 @@ module.exports = class Chatservice {
                 message.senderUsername,
                 message.timestamp,
                 message.msgText);
-        }).catch(err => {
-            console.error(err)
-        });
+        })
     }
 
     /**
@@ -383,11 +358,7 @@ module.exports = class Chatservice {
                 if (chatsRes && res)
                     console.log("all chats deleted");
                 return chatsRes;
-            }).catch(err => {
-                console.error(err);
             })
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -413,11 +384,7 @@ module.exports = class Chatservice {
                 if (chatRes && res)
                     console.log("chat with chatId " + chatId + " deleted");
                 return chatRes;
-            }).catch(err => {
-                console.error(err);
             })
-        }).catch(err => {
-            console.error(err);
         })
     }
 }

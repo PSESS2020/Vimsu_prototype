@@ -5,14 +5,14 @@
  * @version 1.0.0
  */
 class IsometricEngine {
-    #xNumTiles;
-    #yNumTiles;
-    #mapOriginX;
-    #mapOriginY;
-    #tileColumnWidth = 64;
-    #tileRowHeight = 32;
+    xNumTiles;
+    yNumTiles;
+    mapOriginX;
+    mapOriginY;
+    tileColumnWidth = 64;
+    tileRowHeight = 32;
 
-    #loader;
+    loader;
 
     /**
      * Creates an instance of IsometricEngine
@@ -22,12 +22,12 @@ class IsometricEngine {
             return IsometricEngine.instance;
         }
         IsometricEngine.instance = this;
-        this.#xNumTiles = 0;
-        this.#yNumTiles = 0;
-        this.#mapOriginX = 0;
-        this.#mapOriginY = 0;
+        this.xNumTiles = 0;
+        this.yNumTiles = 0;
+        this.mapOriginX = 0;
+        this.mapOriginY = 0;
 
-        this.#loader = new LoadingView();
+        this.loader = new LoadingView();
     }
 
     /**
@@ -41,12 +41,12 @@ class IsometricEngine {
         TypeChecker.isInt(xNumTiles);
         TypeChecker.isInt(yNumTiles);
 
-        this.#xNumTiles = xNumTiles;
-        this.#yNumTiles = yNumTiles;
+        this.xNumTiles = xNumTiles;
+        this.yNumTiles = yNumTiles;
 
         //origin that indicates where to start drawing the map assets.
-        this.#mapOriginX = ctx_map.canvas.width / 2 - this.#xNumTiles * this.#tileRowHeight;
-        this.#mapOriginY = ctx_map.canvas.height / 2;
+        this.mapOriginX = ctx_map.canvas.width / 2 - this.xNumTiles * this.tileRowHeight;
+        this.mapOriginY = ctx_map.canvas.height / 2;
 
         return await this.loadImages(assetPaths);
     }
@@ -61,8 +61,8 @@ class IsometricEngine {
         TypeChecker.isInt(xNumTiles);
         TypeChecker.isInt(yNumTiles);
 
-        this.#xNumTiles = xNumTiles;
-        this.#yNumTiles = yNumTiles;
+        this.xNumTiles = xNumTiles;
+        this.yNumTiles = yNumTiles;
     }
 
     /**
@@ -75,8 +75,8 @@ class IsometricEngine {
         TypeChecker.isInt(mapOriginX);
         TypeChecker.isInt(mapOriginY);
 
-        this.#mapOriginX = mapOriginX;
-        this.#mapOriginY = mapOriginY;
+        this.mapOriginX = mapOriginX;
+        this.mapOriginY = mapOriginY;
     }
 
     /**
@@ -85,7 +85,7 @@ class IsometricEngine {
      * @return {number} tileColumnWidth
      */
     getTileColumnWidth() {
-        return this.#tileColumnWidth;
+        return this.tileColumnWidth;
     }
 
     /**
@@ -94,7 +94,7 @@ class IsometricEngine {
      * @return {number} tileRowHeight
      */
     getTileRowHeight() {
-        return this.#tileRowHeight;
+        return this.tileRowHeight;
     }
 
     /**
@@ -104,8 +104,8 @@ class IsometricEngine {
      */
     getNumMapTilesXY() {
         return {
-            x: this.#xNumTiles,
-            y: this.#yNumTiles
+            x: this.xNumTiles,
+            y: this.yNumTiles
         }
     }
 
@@ -116,8 +116,8 @@ class IsometricEngine {
      */
     getMapOriginXY() {
         return {
-            x: this.#mapOriginX,
-            y: this.#mapOriginY
+            x: this.mapOriginX,
+            y: this.mapOriginY
         }
     }
 
@@ -145,11 +145,11 @@ class IsometricEngine {
 
             loadedImages++;
 
-            this.#loader.contentLoaded(totalImages, loadedImages);
+            this.loader.contentLoaded(totalImages, loadedImages);
 
             if (loadedImages >= totalImages) {
                 return Promise.all(Object.entries(assetImages)).then(() => {
-                    this.#loader.doneLoading();
+                    this.loader.doneLoading();
 
                     return assetImages;
                 });
@@ -171,10 +171,10 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
+        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined) {
             return {
-                x: xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX,
-                y: yPos * this.#tileRowHeight / 2 - xPos * this.#tileRowHeight / 2 + this.#mapOriginY
+                x: xPos * this.tileColumnWidth / 2 + yPos * this.tileColumnWidth / 2 + this.mapOriginX,
+                y: yPos * this.tileRowHeight / 2 - xPos * this.tileRowHeight / 2 + this.mapOriginY
             }
         }
     }
@@ -191,8 +191,8 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
-            return xPos * this.#tileColumnWidth / 2 + yPos * this.#tileColumnWidth / 2 + this.#mapOriginX;
+        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined)
+            return xPos * this.tileColumnWidth / 2 + yPos * this.tileColumnWidth / 2 + this.mapOriginX;
     }
 
     /**
@@ -207,8 +207,8 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined)
-            return yPos * this.#tileRowHeight / 2 - xPos * this.#tileRowHeight / 2 + this.#mapOriginY;
+        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined)
+            return yPos * this.tileRowHeight / 2 - xPos * this.tileRowHeight / 2 + this.mapOriginY;
     }
 
     /**
@@ -248,16 +248,16 @@ class IsometricEngine {
         TypeChecker.isNumber(newPosition.x);
         TypeChecker.isNumber(newPosition.y);
 
-        if (this.#mapOriginX !== undefined && this.#mapOriginY !== undefined
-            && this.#tileColumnWidth !== undefined && this.#tileRowHeight !== undefined) {
+        if (this.mapOriginX !== undefined && this.mapOriginY !== undefined
+            && this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined) {
 
             //Adjusts mouse position to the tile position. 
-            var newPosX = newPosition.x - this.#tileColumnWidth / 2 - this.#mapOriginX;
-            var newPosY = newPosition.y - this.#tileRowHeight / 2 - this.#mapOriginY;
+            var newPosX = newPosition.x - this.tileColumnWidth / 2 - this.mapOriginX;
+            var newPosY = newPosition.y - this.tileRowHeight / 2 - this.mapOriginY;
 
             //Calculate the tile at which the current mouse cursor points.
-            var selectedTileX = Math.round(newPosX / this.#tileColumnWidth - newPosY / this.#tileRowHeight);
-            var selectedTileY = Math.round(newPosX / this.#tileColumnWidth + newPosY / this.#tileRowHeight);
+            var selectedTileX = Math.round(newPosX / this.tileColumnWidth - newPosY / this.tileRowHeight);
+            var selectedTileY = Math.round(newPosX / this.tileColumnWidth + newPosY / this.tileRowHeight);
 
             return {
                 x: selectedTileX,

@@ -6,8 +6,8 @@
  */
 class ScheduleListView extends WindowView {
 
-    #lectures = [];
-    #timeOffset;
+    lectures = [];
+    timeOffset;
 
     /**
      * Creates an instance of ScheduleListView
@@ -29,11 +29,12 @@ class ScheduleListView extends WindowView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     draw(lectures, timeOffset) {
-        $('#scheduleModal .modal-body #noschedule').empty();
+        $('#scheduleWait').hide()
+        $('#noschedule').empty();
+        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
         if (lectures.length < 1) {
-            $('#scheduleModal .modal-body #noschedule').text("Sorry, no lecture is found.");
-            $('#scheduleModal').modal('show');
+            $('#noschedule').text("Sorry, no lecture is found.");
             return;
         }
 
@@ -42,38 +43,35 @@ class ScheduleListView extends WindowView {
         });
 
         const sortedLectures = lectures.slice().sort((a, b) => a.startingTime - b.startingTime);
-        this.#lectures = sortedLectures;
-        this.#timeOffset = timeOffset;
+        this.lectures = sortedLectures;
+        this.timeOffset = timeOffset;
 
-        this.#drawSchedule();
+        this.drawSchedule();
 
         var interval = setInterval(() => {
-            this.#drawSchedule(interval);
+            this.drawSchedule(interval);
         }, 1000);
 
         $('#scheduleModal').on('hide.bs.modal', (e) => {
             clearInterval(interval);
         })
-
     }
 
     /**
-     * @private draws schedule window
+     * draws schedule window
      */
-    #drawSchedule = function (interval) {
-        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
-
+    drawSchedule = function (interval) {
         var count = 0;
         var now = Date.now();
 
-        this.#lectures.forEach(lecture => {
+        this.lectures.forEach(lecture => {
             var startingTime = lecture.startingTime.getTime();
             var startToShow = startingTime - Settings.SHOWLECTURE;
             var stopToShow = startingTime + lecture.duration * 1000;
 
-            var currentTimeDifferenceStartingTime = now - startingTime - this.#timeOffset;
-            var currentTimeDifferenceStartToShow = now - startToShow - this.#timeOffset;
-            var currentTimeDifferenceStopToShow = now - stopToShow - this.#timeOffset;
+            var currentTimeDifferenceStartingTime = now - startingTime - this.timeOffset;
+            var currentTimeDifferenceStartToShow = now - startToShow - this.timeOffset;
+            var currentTimeDifferenceStopToShow = now - stopToShow - this.timeOffset;
 
             if (currentTimeDifferenceStartToShow >= 0 && currentTimeDifferenceStartingTime < 0) {
                 var status = LectureStatus.OPENED;
@@ -105,15 +103,13 @@ class ScheduleListView extends WindowView {
             `)
 
             if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
-                $('#schedulerow' + lecture.id)[0].style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
+                document.getElementById("schedulerow" + lecture.id).style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })
 
         if (count === 0) {
-            $('#scheduleModal .modal-body #noschedule').text("Sorry, all lectures have expired.");
+            $('#noschedule').text("Sorry, all lectures have expired.");
             clearInterval(interval);
         }
-
-        $('#scheduleModal').modal('show');
     }
 }
