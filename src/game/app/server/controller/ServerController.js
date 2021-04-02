@@ -26,14 +26,11 @@ const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const Participant = require('../models/Participant.js');
-<<<<<<< HEAD
 const RoomFactory = require('../models/RoomFactory.js');
 const Floorplan = require('../utils/Floorplan.js');
-=======
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
->>>>>>> masterLLL
 
 /**
  * The Server Controller
