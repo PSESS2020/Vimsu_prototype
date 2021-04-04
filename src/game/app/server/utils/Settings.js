@@ -51,6 +51,6 @@ module.exports = Object.freeze({
     DEFAULT_SHIRTCOLOR_NPC: ShirtColor.RED,
 
     /* Decides wheter video storage is needed or not */
-    VIDEOSTORAGE_ACTIVATED: false
+    VIDEOSTORAGE_ACTIVATED: true
 
 });
