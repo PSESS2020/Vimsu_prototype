@@ -49,7 +49,7 @@ class ChatListView extends WindowView {
     });
 
     this.chats = chats.sort(
-      (chatA, chatB) => chatB.timestamp - chatA.timestamp
+      (chatA, chatB) => chatA.timestamp - chatB.timestamp
     );
 
     this.chats.forEach((chat) => {
@@ -122,9 +122,8 @@ class ChatListView extends WindowView {
    * @param {String} chatId chat ID
    */
   deleteChat(chatId) {
-    this.chats.forEach((chat) => {
+    this.chats.forEach((chat, index) => {
       if (chat.chatId === chatId) {
-        let index = this.chats.indexOf(chat);
         this.chats.splice(index, 1);
       }
     });
@@ -167,7 +166,7 @@ class ChatListView extends WindowView {
    * @param {Object} message chat message
    */
   addNewMessage(chatID, message) {
-    this.chats.forEach((chat) => {
+    this.chats.forEach(chat => {
       if (chat.chatId === chatID) {
         if (message.msgText.length > 35) {
           var msgText = message.msgText.slice(0, 35) + "...";
@@ -192,6 +191,8 @@ class ChatListView extends WindowView {
         $("#chatPreviewMessage" + chatID).text(previewMessage);
       }
     });
+
+    this.draw(this.chats, this.ownUsername)
   }
 
   /**

@@ -125,9 +125,8 @@ module.exports = class Chat {
     removeMessage(msgId) {
         TypeChecker.isString(msgId);
 
-        this.#messageList.forEach(msg => {
+        this.#messageList.forEach((msg, index) => {
             if (msg.getMessageId() === msgId) {
-                let index = this.#messageList.indexOf(msg);
                 this.#messageList.splice(index, 1);
             }
         });
@@ -142,10 +141,9 @@ module.exports = class Chat {
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
 
-        this.#participantList.forEach(participant => {
+        this.#participantList.forEach((participant, index) => {
 
             if (participant === participantId) {
-                let index = this.#participantList.indexOf(participant);
                 this.#participantList.splice(index, 1);
             }
         });

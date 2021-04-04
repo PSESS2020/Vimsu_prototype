@@ -188,7 +188,7 @@ class ChatThreadView extends WindowView {
                 <div class="d-flex flex-column align-items-start ml-2">
                     <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="messageBubbleOthers">
-                        ${this.chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        ${this.chat.groupChat && senderUsername? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>
                     </div>
                 </div>

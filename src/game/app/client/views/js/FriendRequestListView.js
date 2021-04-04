@@ -102,10 +102,9 @@ class FriendRequestListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriendRequest(participantId) {
-        this.businessCards.forEach(businessCard => {
+        this.businessCards.forEach((businessCard, index) => {
 
             if (businessCard.getParticipantId() === participantId) {
-                let index = this.businessCards.indexOf(businessCard);
                 this.businessCards.splice(index, 1);
             }
         });
