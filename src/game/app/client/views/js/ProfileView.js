@@ -55,29 +55,12 @@ class ProfileView extends WindowView {
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
                         <td style="padding: 15px">${this.businessCard.getEmail()}</td>
                     </tr>
-        `)
-
-        if(this.isModerator) {
-            $('#profileModal .modal-body #profile').append(`
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                        <td style="padding: 15px">Moderator</td>
+                        <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
                     </tr>
-            `)
-        } else {
-            $('#profileModal .modal-body #profile').append(`
-                    <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                        <td style="padding: 15px">Participant</td>
-                    </tr>
-            `)
-        }
-
-        $('#profileModal .modal-body').append(`
                 </table>
             </div>
         `)
-
-        
     }
 }
