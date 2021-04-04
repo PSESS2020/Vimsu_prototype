@@ -92,7 +92,7 @@ class MeetingListView extends WindowView {
                 <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
                             <div class="col-12 col-sm-2 px-0">
-                                <i class="fa fa-video fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                                <i class="fa fa-video fa-5x navbarIcons" style="transform: scale(0.7)" ></i>
                             </div>
                             <div class="col-12 col-md-10 text-center text-sm-left">
                                 <label class="name lead">${meeting.name}</label>
