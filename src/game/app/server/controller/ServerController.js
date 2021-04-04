@@ -1402,7 +1402,7 @@ module.exports = class ServerController {
                         messages: [{
                             senderUsername: '',
                             timestamp: new Date(),
-                            msgText: "You are not a member of this chat anymore. Please kindly leave the chat"
+                            msgText: "*VIMSU Bot* You are not a member of this chat anymore. Please kindly leave the chat"
                         }]
                     }
 
