@@ -701,12 +701,7 @@ class ClientController {
      * @param {Object} rankList rank list
      */
     handleFromServerRankList = function (rankList) {
-        //remark own participant's ranking
-        let idx = rankList.findIndex(ppant => ppant.participantId === this.ownParticipant.getId());
-        if (idx > -1) {
-            rankList[idx].self = true;
-        }
-        this.gameView.initRankListView(rankList);
+        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername());
     }
 
     /**

@@ -928,9 +928,10 @@ class GameView {
      * Draws rank list window
      * 
      * @param {Object[]} rankList rank list
+     * @param {String} ownUsername current participant username
      */
-    initRankListView(rankList) {
-        this.rankListView.draw(rankList);
+    initRankListView(rankList, ownUsername) {
+        this.rankListView.draw(rankList, ownUsername);
     }
 
     /**
