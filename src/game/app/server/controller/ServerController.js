@@ -2509,7 +2509,7 @@ module.exports = class ServerController {
                 await ChatService.storeParticipant(chatId, newChatPartnerID, Settings.CONFERENCE_ID, this.#db);
         
                 var newChatPartnerUsername = await ParticipantService.getUsername(newChatPartnerID, Settings.CONFERENCE_ID, this.#db);
-                let msgText = newChatPartnerUsername + " has joined the chat";
+                let msgText = "*VIMSU Bot* " + newChatPartnerUsername + " has joined the chat";
                 var msg = await ChatService.createChatMessage(chatId, '', '', msgText, Settings.CONFERENCE_ID, this.#db);
                 let newChatPartner = this.#ppants.get(newChatPartnerID);
                 var loadedChat = await ChatService.loadChat(chatId, Settings.CONFERENCE_ID, this.#db);
