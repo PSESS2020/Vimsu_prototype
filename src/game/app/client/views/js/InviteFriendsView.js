@@ -154,9 +154,8 @@ class InviteFriendsView extends WindowView {
 
         if (participantId) {
             var found = false;
-            this.businessCards.forEach(businessCard => {
+            this.businessCards.forEach((businessCard, index) => {
                 if (businessCard.getParticipantId() === participantId) {
-                    let index = this.businessCards.indexOf(businessCard);
                     this.businessCards.splice(index, 1);
                     found = true;
                 }

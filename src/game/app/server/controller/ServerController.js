@@ -1128,9 +1128,8 @@ module.exports = class ServerController {
                 let creatorUsername = creator.getBusinessCard().getUsername();
 
                 //check if the invited friends are friends with the creator. if not, remove the partner from the list.
-                chatPartnerIDList.forEach(chatPartnerID => {
+                chatPartnerIDList.forEach((chatPartnerID, index) => {
                     if (!creator.hasFriend(chatPartnerID)) {
-                        let index = chatPartnerIDList.indexOf(chatPartnerID);
                         chatPartnerIDList.splice(index, 1);
                     };
                 })
@@ -2642,7 +2641,7 @@ module.exports = class ServerController {
             let socket = this.getSocketObject(socketID);
             let chatPartnerIDList = member.getChat(groupChatID).getParticipantList();
 
-            let msgText = memberUsername + " has left the chat";
+            let msgText = "*VIMSU Bot* " + memberUsername + " has left the chat";
 
             ChatService.createChatMessage(groupChatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
                 chatPartnerIDList.forEach(chatPartnerID => {
@@ -2652,24 +2651,23 @@ module.exports = class ServerController {
                     if (chatPartnerID !== memberID && chatPartner !== undefined) {
 
                         let chatPartnerChat = chatPartner.getChat(groupChatID);
+                        chatPartnerChat.addMessage(msg);
+                        chatPartnerChat.removeParticipant(memberID);
 
                         if (chatPartnerChat instanceof GroupChat) {
-                            chatPartnerChat.removeParticipant(memberID);
-                            chatPartnerChat.addMessage(msg);
                             this.#io.in(groupChatID).emit('removeFromChatParticipantList', groupChatID, memberUsername);
+
+                            if (chatPartner.hasFriend(memberID)) {
+                                var memberBusinessCardData = {
+                                    friendId: memberBusinessCard.getParticipantId(),
+                                    username: memberUsername,
+                                    forename: memberBusinessCard.getForename()
+                                }
+    
+                                this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', memberBusinessCardData, true)
+                            } else
+                                this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
                         }
-                        
-                        if (chatPartner.hasFriend(memberID)) {
-                            var memberBusinessCardData = {
-                                friendId: memberBusinessCard.getParticipantId(),
-                                username: memberUsername,
-                                forename: memberBusinessCard.getForename()
-                            }
-
-                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', memberBusinessCardData, true)
-                        } else
-                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
-
                     }
                 });
 
