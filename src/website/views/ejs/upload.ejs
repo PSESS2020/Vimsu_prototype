@@ -44,23 +44,23 @@
                     <div class="form-group">
                         <label for="title" class="input-label">Title&nbsp<span class="warning">*</span></label>
                         <input type="text" class="form-control" id="titleInput" name="title" placeholder="A New Normal Era"
-                            required autocomplete="off">
+                            required autocomplete="off" value="<%=title%>">
                     </div>
                     <div class="form-group">
                         <label for="startingTime" class="input-label">Starting time&nbsp<span class="warning">*</span></label>
                         <input type="datetime-local" class="form-control" id="startingTimeInput"
-                            name="startingTime" autocomplete="off" required/>
+                            name="startingTime" autocomplete="off" required value="<%=startingTime%>"/>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="remarks" class="input-label">Remarks&nbsp<span class="warning">*</span></label>
                             <input type="text" class="form-control" id="remarksInput" name="remarks"
-                                placeholder="Limited seats, ..." autocomplete="off">
+                                placeholder="Limited seats, ..." autocomplete="off" value="<%=remarks%>">
                         </div>
                         <div class="form-group col-6">
                             <label for="maxParticipants" class="input-label"># Participants&nbsp<span class="warning">*</span></label>
                             <input type="number" step="1" class="form-control" id="maxParticipantsInput"
-                                name="maxParticipants" placeholder="0" required autocomplete="off">
+                                name="maxParticipants" placeholder="0" required autocomplete="off" value="<%=maxParticipants%>">
                         </div>
                     </div>
                     <div class="form-group mb-2">
