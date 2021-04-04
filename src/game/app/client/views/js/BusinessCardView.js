@@ -51,34 +51,17 @@ class BusinessCardView extends WindowView {
             ${this.businessCard.getForename() + " " + " (@" + this.businessCard.getUsername() + ")"}</h5>
             </br>
             <table id="${"profile" + this.businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
-        `)
-
-        if (!this.isModerator) {
-            $('#businessCardModal .modal-body #profile' + this.businessCard.getParticipantId()).append(`
-                <tr>
+                ${!this.isModerator ?
+                `<tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Rank</td>
                     <td style="padding: 15px">${this.rank}</td>
-                </tr>
-            `)
-        }
-
-        if (this.isModerator) {
-            $('#businessCardModal .modal-body #profile' + this.businessCard.getParticipantId()).append(`
+                </tr>`
+                : ``
+                }
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">Moderator</td>
+                    <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
                 </tr>
-            `)
-        } else {
-            $('#businessCardModal .modal-body #profile' + this.businessCard.getParticipantId()).append(`
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">Participant</td>
-                </tr>
-            `)
-        }
-
-        $('#businessCardModal .modal-body').append(`
             </table>
             </br>
             <button id="${"chatnow" + this.businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
