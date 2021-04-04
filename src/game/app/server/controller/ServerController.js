@@ -1725,7 +1725,7 @@ module.exports = class ServerController {
                     
                 let removerId = socket.ppantID;
             
-                this.#handleLeaveGroupChat(removerId, chatId);
+                this.#handleLeaveChat(removerId, chatId);
             });
 
             /* handles npc clicked, show story */
@@ -2287,7 +2287,7 @@ module.exports = class ServerController {
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
-            this.#handleLeaveGroupChat(memberID, groupChatID);
+            this.#handleLeaveChat(memberID, groupChatID);
 
             if (member !== undefined && socketID !== undefined) {
 
@@ -2402,7 +2402,7 @@ module.exports = class ServerController {
                 group.removeGroupMember(memberID);
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
                 
-                this.#handleLeaveGroupChat(memberID, groupChatID);
+                this.#handleLeaveChat(memberID, groupChatID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
@@ -2448,7 +2448,7 @@ module.exports = class ServerController {
 
                 let otherGroupChat = otherGroup.getGroupChat();
                 let otherGroupChatID = otherGroupChat.getId();
-                this.#handleLeaveGroupChat(memberID, otherGroupChatID);
+                this.#handleLeaveChat(memberID, otherGroupChatID);
             }
         });
     }
@@ -2674,42 +2674,42 @@ module.exports = class ServerController {
     }
        
     /**
-     * @private Handle ppant leaving group chat 
+     * @private Handle ppant leaving chat 
      * 
-     * @method module:ServerController#handleLeaveGroupChat
+     * @method module:ServerController#handleLeaveChat
      * 
      * @param {String} memberID memberID
-     * @param {String} groupChatID group chat ID
+     * @param {String} chatID group chat ID
      */
-     #handleLeaveGroupChat = function(memberID, groupChatID) {
+     #handleLeaveChat = function(memberID, chatID) {
         TypeChecker.isString(memberID);
-        TypeChecker.isString(groupChatID);
+        TypeChecker.isString(chatID);
     
         let socketID = this.getSocketId(memberID);
         let member = this.#ppants.get(memberID);
 
-        if (member !== undefined && socketID !== undefined && member.isMemberOfChat(groupChatID)) {
+        if (member !== undefined && socketID !== undefined && member.isMemberOfChat(chatID)) {
 
             let memberBusinessCard = member.getBusinessCard();
             let memberUsername = memberBusinessCard.getUsername();
             let socket = this.getSocketObject(socketID);
-            let chatPartnerIDList = member.getChat(groupChatID).getParticipantList();
+            let chatPartnerIDList = member.getChat(chatID).getParticipantList();
 
             let msgText = "*VIMSU Bot* " + memberUsername + " has left the chat";
 
-            ChatService.createChatMessage(groupChatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
+            ChatService.createChatMessage(chatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
                 chatPartnerIDList.forEach(chatPartnerID => {
                     let chatPartner = this.#ppants.get(chatPartnerID);
 
                     //Checks if receiver of message is online
                     if (chatPartnerID !== memberID && chatPartner !== undefined) {
 
-                        let chatPartnerChat = chatPartner.getChat(groupChatID);
+                        let chatPartnerChat = chatPartner.getChat(chatID);
                         chatPartnerChat.addMessage(msg);
                         chatPartnerChat.removeParticipant(memberID);
 
                         if (chatPartnerChat instanceof GroupChat) {
-                            this.#io.in(groupChatID).emit('removeFromChatParticipantList', groupChatID, memberUsername);
+                            this.#io.in(chatID).emit('removeFromChatParticipantList', chatID, memberUsername);
 
                             if (chatPartner.hasFriend(memberID)) {
                                 var memberBusinessCardData = {
@@ -2739,13 +2739,13 @@ module.exports = class ServerController {
                 };
 
                 //distribute chat messages after leaving chat
-                this.#io.in(groupChatID).emit('newChatMessage', groupChatID, msgToEmit);
+                this.#io.in(chatID).emit('newChatMessage', chatID, msgToEmit);
 
             });
-            member.removeChat(groupChatID);
-            socket.leave(groupChatID);
+            member.removeChat(chatID);
+            socket.leave(chatID);
         }
-        ChatService.removeParticipant(groupChatID, memberID, Settings.CONFERENCE_ID, this.#db);
+        ChatService.removeParticipant(chatID, memberID, Settings.CONFERENCE_ID, this.#db);
     }
 
     /**

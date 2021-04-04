@@ -211,11 +211,6 @@ class ChatListView extends WindowView {
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
                             <div>
-                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
-                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                                </button>
-                            </div>
-                            <div>
                                 <button id=${"chatFriendRequestButton" + chatID} class="close btn">
                                     <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
                                 </button>
@@ -233,6 +228,11 @@ class ChatListView extends WindowView {
                                     <i class="fa fa-plus-square navbarIcons"
                                         style="transform: scale(0.8); margin-top: 1px;"></i>
                                 </a>
+                            </div>
+                            <div>
+                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
+                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
+                                </button>
                             </div>
                             <div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
