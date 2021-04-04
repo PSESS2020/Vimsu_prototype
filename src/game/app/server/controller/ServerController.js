@@ -2705,8 +2705,11 @@ module.exports = class ServerController {
                     if (chatPartnerID !== memberID && chatPartner !== undefined) {
 
                         let chatPartnerChat = chatPartner.getChat(chatID);
-                        chatPartnerChat.addMessage(msg);
-                        chatPartnerChat.removeParticipant(memberID);
+
+                        if (chatPartnerChat !== undefined) {
+                            chatPartnerChat.addMessage(msg);
+                            chatPartnerChat.removeParticipant(memberID);
+                        }
 
                         if (chatPartnerChat instanceof GroupChat) {
                             this.#io.in(chatID).emit('removeFromChatParticipantList', chatID, memberUsername);
