@@ -91,8 +91,8 @@ class MeetingListView extends WindowView {
             <li class="list-group-item bg-transparent meetingthread" id="${"meetingEntry" + meeting.id}">
                 <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
-                            <div class="col-2 px-0">
-                                <i class="fa fa-video fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                            <div class="col-12 col-sm-2 px-0">
+                                <i class="fa fa-video fa-5x navbarIcons" style="transform: scale(0.7)" ></i>
                             </div>
                             <div class="col-10 text-left">
                                 <label class="name lead">${meeting.name}</label>
