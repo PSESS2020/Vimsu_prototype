@@ -327,13 +327,13 @@ vertical-align: middle;
   display: none; 
   position: fixed; 
   top: 10%; 
-  left: 30%; 
+  left: 20%; 
   border-color: antiquewhite;
   border-style: solid;
   border-width: 1px;
   border-radius: 10px;
   z-index: 1040;
-  width: 40%; 
+  width: 60%; 
   height: 80%;
 }
 
