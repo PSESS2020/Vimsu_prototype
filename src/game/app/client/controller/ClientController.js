@@ -779,7 +779,7 @@ class ClientController {
      * @param {Object} message allchat message
      */
     handleFromServerNewAllchatMessage = function (message) {
-        this.gameView.appendAllchatMessage(message);
+        this.gameView.appendAllchatMessage(message, this.ownBusinessCard.getUsername());
     }
 
     /**
