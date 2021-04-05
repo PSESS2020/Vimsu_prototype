@@ -129,7 +129,7 @@ module.exports = class CommandHandler {
     printHelp(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage());
+        this.#serverController.sendNotification(socket.id, context.getHelpMessage());
     };
 
     /**

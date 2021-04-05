@@ -319,24 +319,6 @@ vertical-align: middle;
   font-size: 30px;
 }
 
-.largerGlobalChatWindow {
-  background-color:rgba(34, 43, 46, 0.8) !important;
-  color: antiquewhite;
-  padding: 0px !important;
-  overflow-y: auto;
-  display: none; 
-  position: fixed; 
-  top: 10%; 
-  left: 30%; 
-  border-color: antiquewhite;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 10px;
-  z-index: 1040;
-  width: 40%; 
-  height: 80%;
-}
-
 .externalWebsiteWindow {
   background-color:rgba(34, 43, 46, 0.8) !important;
   color: antiquewhite;
