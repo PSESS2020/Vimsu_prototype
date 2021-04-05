@@ -105,7 +105,7 @@ module.exports = class RouteController {
 
         this.#app.get('/', (request, response) => {
             if (request.session.loggedin === true) {
-                response.render('home', this.#getLoggedInParameters({}, request.session.username));
+                response.render('home', this.#getLoggedInParameters({ conferenceId: Settings.CONFERENCE_ID }, request.session.username));
             } else {
                 response.render('home');
             }
@@ -252,12 +252,12 @@ module.exports = class RouteController {
 
         });
 
-        this.#app.get('/game', (request, response) => {
+        this.#app.get('/conference/:id', (request, response) => {
             if (request.session.loggedin === true) {
 
                 const ServerController = require('../../game/app/server/controller/ServerController');
                 new ServerController(this.#io, this.#db, this.#blob);
-                response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
+                return response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
 
             } else {
                 response.render('page-not-found');

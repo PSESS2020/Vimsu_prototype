@@ -20,20 +20,20 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
     #room;
 
     #assetPaths = {
-        "tile_default": "client/assets/tiles/tile_default.png",
-        "leftwall_default": "client/assets/walls/wall1.png",
-        "rightwall_default": "client/assets/walls/wall2.png",
-        "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
-        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-        "leftconferencelogo_default0": "client/assets/logos/conferencelogo1.png",
-        "leftconferencelogo_default1": "client/assets/logos/conferencelogo2.png",
-        "leftconferencelogo_default2": "client/assets/logos/conferencelogo3.png",
-        "leftconferencelogo_default3": "client/assets/logos/conferencelogo4.png",
-        "leftconferencelogo_default4": "client/assets/logos/conferencelogo5.png",
-        "plant_default": "client/assets/plants/plant.png",
-        "receptionCounterFrontPart_default": "client/assets/other/ReceptionCounterFrontPart.png",
-        "receptionCounterLeftPart_default": "client/assets/other/ReceptionCounterBackPartLeft.png",
-        "receptionCounterRightPart_default": "client/assets/other/ReceptionCounterBackPartRight.png",
+        "tile_default": "../client/assets/tiles/tile_default.png",
+        "leftwall_default": "../client/assets/walls/wall1.png",
+        "rightwall_default": "../client/assets/walls/wall2.png",
+        "leftfoyerdoor_default": "../client/assets/doors/door_foyer.png",
+        "rightwindow_default0": "../client/assets/windows/right_small_window_default0.png",
+        "leftconferencelogo_default0": "../client/assets/logos/conferencelogo1.png",
+        "leftconferencelogo_default1": "../client/assets/logos/conferencelogo2.png",
+        "leftconferencelogo_default2": "../client/assets/logos/conferencelogo3.png",
+        "leftconferencelogo_default3": "../client/assets/logos/conferencelogo4.png",
+        "leftconferencelogo_default4": "../client/assets/logos/conferencelogo5.png",
+        "plant_default": "../client/assets/plants/plant.png",
+        "receptionCounterFrontPart_default": "../client/assets/other/ReceptionCounterFrontPart.png",
+        "receptionCounterLeftPart_default": "../client/assets/other/ReceptionCounterBackPartLeft.png",
+        "receptionCounterRightPart_default": "../client/assets/other/ReceptionCounterBackPartRight.png",
     }
 
     /**

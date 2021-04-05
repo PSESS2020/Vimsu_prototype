@@ -21,15 +21,15 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
     #room;
 
     #assetPaths = {
-        "tile_default": "client/assets/tiles/tile_default.png",
-        "leftwall_default": "client/assets/walls/wall1.png",
-        "rightwall_default": "client/assets/walls/wall2.png",
-        "rightfoodcourtdoor_default": "client/assets/doors/door_foodcourt.png",
-        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-        "plant_default": "client/assets/plants/plant.png",
-        "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
-        "tea_default": "client/assets/food/tea.png",
-        "rightsofa_default": "client/assets/chairs/sofa_right.png"
+        "tile_default": "../client/assets/tiles/tile_default.png",
+        "leftwall_default": "../client/assets/walls/wall1.png",
+        "rightwall_default": "../client/assets/walls/wall2.png",
+        "rightfoodcourtdoor_default": "../client/assets/doors/door_foodcourt.png",
+        "rightwindow_default0": "../client/assets/windows/right_small_window_default0.png",
+        "plant_default": "../client/assets/plants/plant.png",
+        "smalldinnertable_default": "../client/assets/tables/smallDinnerTable.png",
+        "tea_default": "../client/assets/food/tea.png",
+        "rightsofa_default": "../client/assets/chairs/sofa_right.png"
         }
 
     /**
