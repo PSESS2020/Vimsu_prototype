@@ -320,7 +320,7 @@ vertical-align: middle;
 }
 
 .largerGlobalChatWindow {
-  background-color:rgba(34, 43, 46, 0.8) !important;
+  background-color:rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
   padding: 0px !important;
   overflow-y: auto;
