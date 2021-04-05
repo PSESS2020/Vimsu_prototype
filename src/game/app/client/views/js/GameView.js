@@ -1044,9 +1044,10 @@ class GameView {
      * Appends all chat message
      * 
      * @param {Object} message allchat message
+     * @param {String} ownUsername current participant's username
      */
-    appendAllchatMessage(message) {
-        this.allchatView.appendMessage(message);
+    appendAllchatMessage(message, ownUsername) {
+        this.allchatView.appendMessage(message, ownUsername);
     }
 
     /**

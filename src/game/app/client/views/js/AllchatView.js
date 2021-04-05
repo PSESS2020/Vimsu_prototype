@@ -6,8 +6,6 @@
  */
 class AllchatView extends Views {
 
-    ownUsername;
-
     /**
      * Creates an instance of Allchat View
      * 
@@ -29,9 +27,7 @@ class AllchatView extends Views {
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-            allchatWindow.style.visibility = "visible";
-            $('#showRoomChat').hide();
-            $('#hideRoomChat').show();
+            showAllchatBox()
         })
         $('#hideRoomChat').on('click', (event) => {
             event.preventDefault();
@@ -39,6 +35,12 @@ class AllchatView extends Views {
             $('#hideRoomChat').hide();
             $('#showRoomChat').show();
         })
+
+        function showAllchatBox() {
+            allchatWindow.style.visibility = "visible";
+            $('#showRoomChat').hide();
+            $('#hideRoomChat').show();
+        }
 
         const sendMessage = (event) => {
             event.preventDefault();
@@ -48,6 +50,11 @@ class AllchatView extends Views {
             if (messageVal !== '') {
                 eventManager.handleAllchatMessageInput(messageVal)
                 $('#allchatMessageInput').val('');
+
+                if (!messageVal.startsWith("\\")) {
+                    showAllchatBox();
+                }
+                
                 return false;
             }
         }
@@ -93,10 +100,8 @@ class AllchatView extends Views {
             return;
         }
 
-        this.ownUsername = ownUsername;
-
         messages.forEach((message) => {
-            this.appendMessage(message)
+            this.appendMessage(message, ownUsername)
         })
     }
 
@@ -104,17 +109,18 @@ class AllchatView extends Views {
      * Appends message to the allchat window
      * 
      * @param {Object} message alchat message
+     * @param {String} ownUsername current participant's username
      */
-    appendMessage(message) {
+    appendMessage(message, ownUsername) {
         $('#noAllchat').empty();
 
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
-        const isOwnParticipant = message.username === this.ownUsername
+        const isOwnParticipant = message.username === ownUsername
 
         const messageDiv =
             `
-                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start ml-2"}">
+                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start"}">
                     <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
                         ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}
