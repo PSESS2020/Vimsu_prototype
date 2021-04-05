@@ -147,7 +147,7 @@ module.exports = class RouteController {
                 }
             }
 
-            if (!request.body.message) { 
+            if (!request.body.message) {
                 if (request.session.loggedin === true) {
                     return response.render('contact-us', this.#getLoggedInParameters({ invalidMessage: true, email: request.body.email, message: request.body.message }, request.session.username));
                 } else {
@@ -179,7 +179,7 @@ module.exports = class RouteController {
                         response.render('contact-us', { sendMessageFailed: true, email: request.body.email, message: request.body.message });
                     }
                 }
-            })            
+            })
         })
 
         this.#app.get('/privacy-policy', (request, response) => {
@@ -381,12 +381,12 @@ module.exports = class RouteController {
                 const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
                 if (!usernameRegex.test(request.body.username)) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, invalidUsernameString: true }, request.session.username));
+                    return response.render('account-settings', this.#getLoggedInParameters({ invalidUsernameString: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
 
                 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                    return response.render('register', this.#getLoggedInParameters({ forename: request.session.forename, invalidEmail: true }, request.session.username));
+                    return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
                 let title = request.body.title;
 
@@ -430,9 +430,9 @@ module.exports = class RouteController {
                 if (!request.body.oldPassword || !request.body.newPassword) {
                     return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
-    
+
                 if (request.body.newPassword !== request.body.retypedNewPassword) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: email, title: title, forename: forename, surname: surname, job: job, company: company }, username))
+                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username))
                 }
 
                 return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, '', this.#db).then(res => {
@@ -481,6 +481,6 @@ module.exports = class RouteController {
     }
 
     #getLoggedInParameters = function (otherParameters, username) {
-            return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
-        }
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
     }
+}
