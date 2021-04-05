@@ -2048,6 +2048,34 @@ module.exports = class ServerController {
     };
 
     /**
+     * Sends a larger notification where a larger window is needed to an individual socket id
+     * @method module:ServerController#sendLargeNotification
+     * 
+     * @param {String} socketid socket id
+     * @param {{header: String, body: String[]}} message message
+     */
+    sendLargeNotification(socketid, message) {
+        //only send notfitication when socketID is valid and user is online
+        if (socketid === undefined) {
+            return;
+        }
+        TypeChecker.isString(socketid);
+        TypeChecker.isString(message.header);
+        if (message.body instanceof Array) {
+            TypeChecker.isInstanceOf(message.body, Array);
+            message.body.forEach(line => {
+                TypeChecker.isString(line);
+            });
+        } else {
+            TypeChecker.isString(message.body);
+        }
+
+        if (this.#socketIsConnected(socketid)) {
+            this.#io.to(socketid).emit("New large notification", message.header, message.body);
+        }
+    };
+
+    /**
      * Sends global announcement to all participants
      * @method module:ServerController#sendGlobalAnnouncement
      * 
