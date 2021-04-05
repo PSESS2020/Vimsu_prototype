@@ -17,13 +17,6 @@ class GlobalChatView extends WindowView {
         }
 
         GlobalChatView.instance = this;
-
-        $(document).ready(() => {
-            $('#closeGlobalChatButton').off();
-            $('#closeGlobalChatButton').on('click', (event) => {
-                $('#globalChat').hide();
-            })
-        })
     }
 
     /**
@@ -45,7 +38,7 @@ class GlobalChatView extends WindowView {
             this.addMessage(messageText);
         }
 
-        $('#globalChat').show();
+        $('#globalChat').modal('show');
     };
 
     /**
