@@ -253,7 +253,7 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/conference/:id', (request, response) => {
-            if (request.session.loggedin === true) {
+            if (request.session.loggedin === true && request.params.id === Settings.CONFERENCE_ID) {
 
                 const ServerController = require('../../game/app/server/controller/ServerController');
                 new ServerController(this.#io, this.#db, this.#blob);
