@@ -32,11 +32,11 @@ describe('RoomClient test', function() {
         roomId = TestUtil.randomInt();
         typeOfRoom = TypeOfRoom.FOODCOURT;
         assetPaths = {
-            "tile_default": "client/assets/tiles/tile_default.png",
-            "leftwall_default": "client/assets/walls/wall1.png",
-            "rightwall_default": "client/assets/walls/wall2.png",
-            "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
-            "table_default": "client/assets/tables/table.png"
+            "tile_default": "../client/assets/tiles/tile_default.png",
+            "leftwall_default": "../client/assets/walls/wall1.png",
+            "rightwall_default": "../client/assets/walls/wall2.png",
+            "leftfoyerdoor_default": "../client/assets/doors/door_foyer.png",
+            "table_default": "../client/assets/tables/table.png"
         }
         listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool(), TestUtil.randomBool())];
         listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false, TestUtil.randomBool())];
@@ -136,7 +136,7 @@ describe('RoomClient test', function() {
         let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT)];
 
         let newListOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomInt())];
-        let newAssetPaths = {"tile_default": "client/assets/tile_default.png"};
+        let newAssetPaths = {"tile_default": "../client/assets/tile_default.png"};
         let newListOfMapElements = [];
         
         //calculate occMap, normally happens in server, here just for testing purpose

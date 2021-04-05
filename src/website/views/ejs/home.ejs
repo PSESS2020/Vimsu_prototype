@@ -13,7 +13,7 @@
                 <h2>Virtual Interactive Meeting Simulator</h2>
                 <h6>Discover the 2.5D virtual conference experience with us!</h6>
                 <% if (locals.loggedIn === true) { %>
-                  <a class="btn primary-button mt-4 p-2" href="/game">
+                  <a class="btn primary-button mt-4 p-2" href="/conference/<%=conferenceId%>">
                     <span>Enter conference</span>
                   </a>
                 <% } else { %>
