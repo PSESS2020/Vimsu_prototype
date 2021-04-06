@@ -13,6 +13,8 @@ module.exports = Object.freeze({
     RECEPTION: "reception",
     FOYER: "foyer",
     FOODCOURT: "foodcourt",
-    ESCAPE: "escaperoom"
+    ESCAPE: "escaperoom",
+    RIGHT: "RIGHT",
+    LEFT: "LEFT"
 
 })

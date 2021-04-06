@@ -48,6 +48,11 @@ module.exports = Object.freeze({
         WALLTYPE_RIGHT: 'default',
         TILETYPE: 'default',
         MAPELEMENTS: [],
+
+        // This does currently not offer support for lecture doors
+        // objData = {style, direction, positionOfDoor (array),
+        //            positionOnExit (array), directionOnExit, isOpen,
+        //            closedMessage, codeToOpen}
         DOORS: [],
         OBJECTS: [],
         NPCS: []
