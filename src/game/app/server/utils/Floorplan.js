@@ -35,6 +35,11 @@ module.exports = Object.freeze({
     // - Doors
     // Best way of doing doors is to force people to manually set ids of rooms and then give exit-room id when listing doors
 
+    // Giving any of the "standard" roomIds, the roomFactory will use
+    // legacy code to build them according to the standard conference.
+    // note that using these requires that the rest of the conference
+    // contains fitting rooms for the doors to exit into
+
     ROOM1: {
         TYPE: Globals.RECEPTION,
         ID: 1,
@@ -43,18 +48,18 @@ module.exports = Object.freeze({
 
         //SHAPE: null, /* Here people give either holes or non-holes in the form of arrays? */
 
-        // replace string by global
+        // replace string by asset path
         WALLTYPE_LEFT: 'default',
         WALLTYPE_RIGHT: 'default',
         TILETYPE: 'default',
         MAPELEMENTS: [],
+        OBJECTS: [],
 
         // This does currently not offer support for lecture doors
         // objData = {style, direction, positionOfDoor (array),
         //            positionOnExit (array), directionOnExit, isOpen,
         //            closedMessage, codeToOpen}
-        DOORS: [],
-        OBJECTS: [],
+        DOORS: [],    
         NPCS: []
     }
 

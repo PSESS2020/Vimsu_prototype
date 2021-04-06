@@ -5,7 +5,6 @@
  * @version 1.0.0
  */
 const TypeOfDoor = Object.freeze({
-    // Legacy types
     LECTURE_DOOR: "LECTURE_DOOR",
     LEFT_DOOR: "LEFT_DOOR",
     RIGHT_DOOR: "RIGHT_DOOR",

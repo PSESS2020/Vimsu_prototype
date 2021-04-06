@@ -111,6 +111,7 @@ module.exports = class ServerController {
             this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
         });
 
+        // TODO use this to create list of all rooms or something
         this.#roomFactory = new RoomFactory();
         Object.entries(Floorplan).forEach(roomData => {
             this.#roomFactory.buildRoom(roomData);
