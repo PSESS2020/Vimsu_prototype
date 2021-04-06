@@ -47,16 +47,17 @@ module.exports = class RoomFactory {
             case TypeOfRoom.ESCAPEROOM:
                 return new EscapeRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
             case TypeOfRoom.CUSTOM:
-                this.#buildByPlan(roomData);
-                break;
+                return this.#buildByPlan(roomData);
             default:
                 // This should never be reached
                 throw new Error("Default option in the roomFactory switch-statement triggered. This should never happen. Please report bug to developer.");
-                return undefined;
+
         }
     }
 
     #buildByPlan = function(roomData) {
+        // the room object should have uniform visibility
+        // throughout the entire file
         let room = new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
 
         let listOfMapElements = [];
@@ -74,6 +75,7 @@ module.exports = class RoomFactory {
 
         // TODO:
         // - Tiles at the edge need to be of a special kind 
+        // - those next three methods also need to be re-done
 
         // ADD TILES
         for (var i = 0; i < this.#room.getLength(); i++) {

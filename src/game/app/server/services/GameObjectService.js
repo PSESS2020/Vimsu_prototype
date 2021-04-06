@@ -673,7 +673,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * 
-     * @return {GameObject} defult left window
+     * @return {GameObject} default left window
      */
     createLeftWindowDefault(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
