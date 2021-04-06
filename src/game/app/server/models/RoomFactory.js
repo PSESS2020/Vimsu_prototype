@@ -4,6 +4,8 @@ const AssetPaths = require('../utils/AssetPaths.js');
 const Room = require('../models/Room.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const Settings = require('../utils/Settings.js');
+const DoorService = require('../services/DoorService.js');
+const Position = require('./Position.js');
 
 module.exports = class RoomFactory {
 
@@ -13,6 +15,7 @@ module.exports = class RoomFactory {
         }
 
         let objService = new GameObjectService();
+        let doorService = new DoorService();
 
         RoomFactory.instance = this;
     }
@@ -47,6 +50,7 @@ module.exports = class RoomFactory {
 
         let listOfMapElements = [];
         let listOfGameObjects = [];
+        let listOfDoors = [];
 
         // these methods still need proper handling for when some arguments are
         // missing.
@@ -86,6 +90,43 @@ module.exports = class RoomFactory {
         })
 
         // ADD DOORS
+        // doorData = {assetPath, direction, positionOfDoor,
+        //            positionOnExit, directionOnExit, isOpen,
+        //            closedMessage, codeToOpen}
+        roomData.DOORS.forEach(doorData => {
+            if (doorData.isOpen === undefined) {
+                listOfDoors.push(
+                    doorService.createGeneralDoor(doorData.assetPath,
+                    doorData.direction,
+                    new Position(doorData.positionOfDoor[0],
+                        doorData.positionOfDoor[1],
+                        doorData.positionOfDoor[2]),
+                    new Position(doorData.positionOnExit[0],
+                        doorData.positionOnExit[1],
+                        doorData.positionOnExit[2]),
+                    doorData.directionOnExit,
+                    true,
+                    "", // closedMessage
+                    "") // codeToOpen
+                ); 
+            } else {
+                listOfDoors.push(
+                    doorService.createGeneralDoor(doorData.assetPath,
+                    doorData.direction,
+                    new Position(doorData.positionOfDoor[0],
+                        doorData.positionOfDoor[1],
+                        doorData.positionOfDoor[2]),
+                    new Position(doorData.positionOnExit[0],
+                        doorData.positionOnExit[1],
+                        doorData.positionOnExit[2]),
+                    doorData.directionOnExit,
+                    doorData.isOpen,
+                    doorData.closedMessage,
+                    doorData.codeToOpen)
+                );
+            }
+
+        })
 
         // ADD NPCS
 
@@ -94,6 +135,8 @@ module.exports = class RoomFactory {
 
     #createObjectFromData = function(objData) {
         if (Array.isArray(objData.POS)) {
+            // The way an array is handled here is bad
+            // it will not do what is supposed to
             for (i = 0; i < objData.POS.length; i++) {
                 if(!Array.isArray(objData.POS[i])) {
                     throw new TypeError('When array is passed as position of objects, it needs to be array of array');

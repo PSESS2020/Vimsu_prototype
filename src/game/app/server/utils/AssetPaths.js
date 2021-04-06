@@ -1,5 +1,7 @@
 // TODO
 
+// Afterwards, move this into the shared folder, eh
+
 /* And it looks a little something like this
 
     // FOODCOURT:

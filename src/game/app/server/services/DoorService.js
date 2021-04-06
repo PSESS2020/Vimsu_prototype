@@ -3,6 +3,8 @@ const Door = require('../models/Door.js');
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
+const { type } = require('jquery');
+const GlobalStrings = require('../utils/GlobalStrings.js');
 
 /**
  * The Door Service
@@ -12,6 +14,8 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
  * @version 1.0.0
  */
 module.exports = class DoorService {
+
+    #doorCounter;
 
     /**
      * creates an instance of DoorService
@@ -23,6 +27,7 @@ module.exports = class DoorService {
         }
 
         DoorService.instance = this;
+        this.#doorCounter = 0;
     }
 
     /**
@@ -105,6 +110,22 @@ module.exports = class DoorService {
             }
         }
         return {enterPositionWithoutClick: enterPositionWithoutClick, enterPositions: enterPositions};
+    }
+
+    /**
+     * The class keeps a hidden counter of the amount of doors
+     * already generated for the conference (#doorCounter).
+     * To make sure that two doors connecting the same two rooms
+     * do not share an id, some "salt" is generated. This is not
+     * salt in the cryptographic sense, just a random integer
+     * depending on the doorCounter.
+     * 
+     * @method module:DoorService#generateDoorSalt
+     * @return {Int} A random integer between (doorCounter * 100) and 
+     *               (doorCounter++ * 100)
+     */
+    #generateDoorSalt = function () {
+        return Math.floor(Math.random() * 100) + (this.#doorCounter++ * 100);
     }
 
     /**
@@ -211,6 +232,38 @@ module.exports = class DoorService {
 
         return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
+
+    createGeneralDoor(assetPath, direction, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
+
+        this.#checkParamTypes(TypeOfDoor[direction + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
+
+        if (direction === GlobalStrings.LEFT) {
+            let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+        } else if (direction === GlobalStrings.RIGHT) {
+            let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+        } else {
+            throw new Error(direction + " is not a legal option for the direction of a door.");
+        }
+
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+
+        let doorId = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId() + this.#generateDoorSalt();
+
+        return new Door(doorId,   
+                TypeOfDoor[direction + "_DOOR"], 
+                assetPath,
+                mapPosition, 
+                enterPositionWithoutClick, 
+                enterPositions, 
+                targetPosition, 
+                direction, 
+                isOpen, 
+                closedMessage, 
+                codeToOpen);      
+    } 
+
+    
 
 
 } 
