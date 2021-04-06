@@ -1,6 +1,6 @@
 const TypeChecker = require('../..client/shared/TypeChecker.js');
 const TypeOfRoom = require('../client/shared/TypeOfRoom.js');
-const AssetPaths = require('../utils/AssetPaths.js');
+const AssetPaths = require('../../client/shared/AssetPaths.js');
 const Room = require('../models/Room.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const Settings = require('../utils/Settings.js');

@@ -76,6 +76,7 @@ module.exports = class RoomService {
         this.#rooms.push(new ReceptionRoomDecorator(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)));
         this.#rooms.push(new EscapeRoomDecorator(new Room(Settings.ESCAPEROOM_ID, TypeOfRoom.ESCAPEROOM, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)));
 
+        // TODO what is this doing here...?
         for(const [room,data] of Object.entries(Floorplan)) {
             this.#rooms.push(
                 new Room(
