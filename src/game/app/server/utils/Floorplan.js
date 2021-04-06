@@ -1,3 +1,4 @@
+const AssetPaths = require('../../client/shared/AssetPaths');
 const Direction = require('../../client/shared/Direction');
 const Globals = require('./GlobalStrings.js');
 
