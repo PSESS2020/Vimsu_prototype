@@ -5,11 +5,12 @@
  * @version 1.0.0
  */
  const AssetPaths = Object.freeze({
-    BLUE: "Blue",
-    RED: "Red",
-    GREEN: "Green",
-    YELLOW: "Yellow",
-    WHITE: "White"
+    // TODO
+    // see below
+
+    // TILE paths
+
+    // WALL paths
 
 });
 

@@ -11,7 +11,6 @@ const ReceptionRoomDecorator = require('./ReceptionRoomDecorator.js');
 const FoyerRoomDecorator = require('./FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
-const { isInstanceOf } = require('../../client/shared/TypeChecker.js');
 
 module.exports = class RoomFactory {
 
@@ -73,6 +72,9 @@ module.exports = class RoomFactory {
 
         // And allow arrays as positions.
 
+        // TODO:
+        // - Tiles at the edge need to be of a special kind 
+
         // ADD TILES
         for (var i = 0; i < this.#room.getLength(); i++) {
             for (var j = 0; j < this.#room.getWidth(); j++) {
@@ -92,6 +94,18 @@ module.exports = class RoomFactory {
         }
 
         // REDO the next two methods.
+        // TODO desired interaction
+        // - For each map element, the user only needs to specify
+        //   the type, the position, whether or not the object is
+        //   supposed to be clickable and if yes, which URL is
+        //   supposed to be openend on click
+        //   (does this not break stuff like the plant?)
+        // - the type is then "decoded" into the size, the necessary
+        //   asset paths, whether the object is solid usw.
+        //   (how to handle multi-part objects?)
+        // - how to handle custom options for "standard" objects?
+        // - how to handle more custom objects?
+        // - also, do all this without breaking the view if possible
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
