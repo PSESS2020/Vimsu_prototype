@@ -233,7 +233,23 @@ module.exports = class DoorService {
         return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
 
-    createGeneralDoor(assetPath, direction, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
+    /**
+     * Creates a custom door with the passed attributes.
+     * 
+     * @method module:DoorService#createCustomDoor
+     * 
+     * @param {String} assetPath 
+     * @param {Direction} direction 
+     * @param {Position} mapPosition 
+     * @param {Position} targetPosition 
+     * @param {Direction} directionOnExit 
+     * @param {Boolean} isOpen 
+     * @param {String} closedMessage 
+     * @param {String} codeToOpen 
+     * 
+     * @returns {Door} A door instance with the passed attributes
+     */
+    createCustomDoor(assetPath, direction, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
 
         this.#checkParamTypes(TypeOfDoor[direction + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
 
