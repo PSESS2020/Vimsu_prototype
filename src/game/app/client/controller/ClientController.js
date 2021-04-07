@@ -13,7 +13,6 @@ class ClientController {
     ownBusinessCard;
     gameView;
     isVideoConference;
-    jitsi;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
