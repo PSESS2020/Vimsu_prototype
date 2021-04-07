@@ -94,13 +94,12 @@ class VideoMeetingView extends WindowView {
         // not to be possible to set the password when "setting up" the
         // meeting the way it is currently done.
         this.jitsi.on('passwordRequired', function () {
-            this.jitsi.executeCommand('password', meetingPassword);
+            this.executeCommand('password', meetingPassword);
         })
 
-        /* THIS EVENT HAS NO EFFECT AT THIS MOMENT, Jitsi is undefined after readyToClose */
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
-            this.jitsi.dispose();
+            this.dispose();
             $('#meetingWindow').hide();
         });
     }
