@@ -41,10 +41,19 @@
         <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="videoMeetingModalTitle">Jitsi-Meeting</h5>
-                    <button type="button" id="meetingModalClose" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title" id="meetingModalTitle"></h5>
+                    <div class="d-flex flex-row justify-content-end">
+                        <div>
+                            <button id="meetingModalMinimize" class="close btn">
+                                <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <button id="meetingModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body" id="meetingModal-body">
                 </div>

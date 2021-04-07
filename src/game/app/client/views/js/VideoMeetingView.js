@@ -7,6 +7,9 @@
  class VideoMeetingView extends WindowView {
 
     eventManager;
+    jitsi;
+    nameOfLastMeeting;
+    isMinimized;
 
     /**
      * Creates an instance of VideoMeetingView
@@ -23,6 +26,7 @@
         VideoMeetingView.instance = this;
 
         this.eventManager = eventManager;
+        this.isMinimized = false;
     }
 
     /**
@@ -35,27 +39,54 @@
      */
     draw(meetingDomain, meetingName, meetingPassword, ownForename) {
         
-        /* TODO:
-         * - When closing the modal, only video gets muted
-         * - That is unless the modal gets hidden because
-         *   we hung up the call
-         * - When the meeting-modal is opened, it should
-         *   be checked whether or not a jitsi-object already
-         *   exists (?)*/
+        $("#meetingModalTitle").empty();
+        $("#meetingModalTitle").text(meetingName);
 
-        this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
-            roomName: meetingName,
-            subject: meetingName, // will this work?
-            width: '100%',
-            height: window.innerHeight * 0.7,
-            // TODO: Add JWT (maybe)
-            parentNode: document.getElementById('meetingModal-body'),
-            userInfo: {
-                // email: 'place', ppant has no Email
-                displayName: ownForename
-            }
+        //Meeting was only minimized
+        if (this.nameOfLastMeeting === meetingName && this.isMinimized) {
+            $('#meetingModal').modal('show');
+        //An other meeting was minimized before, that should be closed now
+        } else if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
+            this.jitsi.dispose();
+        } 
+
+        if (!(this.nameOfLastMeeting === meetingName && this.isMinimized)) {
+            this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
+                roomName: meetingName,
+                subject: meetingName, // will this work?
+                width: '100%',
+                height: window.innerHeight * 0.7,
+                // TODO: Add JWT (maybe)
+                parentNode: document.getElementById('meetingModal-body'),
+                userInfo: {
+                    // email: 'place', ppant has no Email
+                    displayName: ownForename
+                }
+            });
+        }
+        this.nameOfLastMeeting = meetingName;
+        this.isMinimized = false;
+
+        // Close button event, Window gets closed and Meeting is closed
+        $('#meetingModalClose').off();
+        $('#meetingModalClose').on('click', (event) => {
+            event.preventDefault();
+
+            this.jitsi.dispose();
+            $('#meetingModal').modal('hide');
+        });
+
+        // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
+        $('#meetingModalMinimize').off();
+        $('#meetingModalMinimize').on('click', (event) => {
+            event.preventDefault();
+
+            this.isMinimized = true;
+            $('#meetingModal').modal('hide');
         });
         
+        $('#meetingModal').modal('show');
+
         // This would automatically pass the password used to
         // secure the meeting.
         // However, only moderators can set passwords, and it seems
@@ -71,20 +102,5 @@
             this.jitsi.dispose();
             $('#meetingModal').modal('hide');
         });
-
-        // Close button event
-        $('#meetingModalClose').off();
-        $('#meetingModalClose').on('click', (event) => {
-            event.preventDefault();
-
-            this.jitsi.dispose();
-            $('#meetingModal').modal('hide');
-        });
-        
-        $('#meetingModal').modal('show');
-        
-        $('#meetingModal').on('hidden.bs.modal', function() { 
-            this.jitsi.executeCommand('toggleVideo');
-        }.bind(this));
     }
 }
