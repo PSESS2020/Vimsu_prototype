@@ -44,8 +44,7 @@ const GameObjectType = Object.freeze({
         RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
         // Food & Drinks
         DRINKS: 'DRINKS',   
-        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
-        
+        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',    
         
 });
     
