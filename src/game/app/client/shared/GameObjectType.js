@@ -5,28 +5,50 @@
  * @version 1.0.0
  */
 const GameObjectType = Object.freeze({
-        SELECTED_TILE: 'SELECTED_TILE',
+        /*********************************/
+        /** When new GameObjectType  is **/
+        /** added here, don't forget to **/
+        /** add  necessary  information **/
+        /** for  easy  creation  to the **/
+        /** GameObjectInfo-file!        **/
+        /*********************************/
+
+        // Blank
         BLANK: 'BLANK',
+        // Tiles
         TILE: 'TILE',
-        LEFTWALL: 'LEFTWALL',
-        RIGHTWALL: 'RIGHTWALL',
-        TABLE: 'TABLE',
+        SELECTED_TILE: 'SELECTED_TILE',
         LEFTTILE: 'LEFTTILE',
         RIGHTTILE: 'RIGHTTILE',
+        // Walls
+        LEFTWALL: 'LEFTWALL',
+        RIGHTWALL: 'RIGHTWALL',
+        // Schedule
         LEFTSCHEDULE: 'LEFTSCHEDULE',
+        // Windows
+        WINDOW: 'WINDOW',
+        // Plant
         PLANT: 'PLANT',
+        // Logo
         CONFERENCELOGO: 'CONFERENCELOGO',
-        SOFA: 'SOFA',
-        RIGHTTABLE: 'RIGHTTABLE',
+        // Seating
         CHAIR: 'CHAIR',
+        SOFA: 'SOFA',
+        // Tables
+        TABLE: 'TABLE',  
+        RIGHTTABLE: 'RIGHTTABLE',      
         SMALLDINNERTABLE: 'SMALLDINNERTABLE',
-        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
-        DRINKS: 'DRINKS',
+        // Counters
         CANTEENCOUNTER: 'CANTEENCOUNTER',
         RECEPTIONCOUNTER: 'RECEPTIONCOUNTER',
         RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
-    });
+        // Food & Drinks
+        DRINKS: 'DRINKS',   
+        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
+        
+        
+});
     
-    if (typeof module === 'object' && typeof exports === 'object') {
+if (typeof module === 'object' && typeof exports === 'object') {
         module.exports = GameObjectType;
-    }
+}
