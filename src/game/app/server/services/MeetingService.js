@@ -76,7 +76,7 @@ module.exports = class Meetingservice {
 
         return vimsudb.findAllInCollection("meetings_" + conferenceId).then(async meetings => {
             meetings.forEach(meeting => {
-                meetingMap.set(meeting.name, new Meeting(meeting.meetingId, meeting.name, meeting.members));
+                meetingMap.set(meeting.name, new Meeting(meeting.meetingId, meeting.name, meeting.members, meeting.password));
             })
             return meetingMap;
         })
