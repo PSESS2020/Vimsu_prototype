@@ -66,6 +66,7 @@ class VideoMeetingView extends WindowView {
 
         //Another meeting was minimized before, that should be closed now
         if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
+            this.isMinimized = false;
             this.jitsi.dispose();
         }
 
@@ -96,7 +97,7 @@ class VideoMeetingView extends WindowView {
             this.jitsi.executeCommand('password', meetingPassword);
         })
 
-        /* THIS EVENT HAS NO EFFECT AT THIS MOMENT */
+        /* THIS EVENT HAS NO EFFECT AT THIS MOMENT, Jitsi is undefined after readyToClose */
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
             this.jitsi.dispose();
