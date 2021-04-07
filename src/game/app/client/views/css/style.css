@@ -142,13 +142,10 @@ form button:hover {
   background: rgba(15, 15, 15, 0.8);
   border-radius: 0px;
   overflow-y: scroll;
-  margin: 0;
+  z-index: 5;
   padding-left: 10px;
   max-height: 360px;
   padding: 0;
-  right: -250px;
-  position: absolute;
-  width: 250px;
 }
 
 .notifBarDiv {
