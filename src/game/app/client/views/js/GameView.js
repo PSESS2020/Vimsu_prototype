@@ -14,6 +14,7 @@ class GameView {
     currentLecturesView;
     lectureView;
     meetingListView;
+    videoMeetingView;
     chatListView;
     chatThreadView;
     statusBar;
@@ -86,6 +87,7 @@ class GameView {
         this.inviteFriendsView = new InviteFriendsView(this.eventManager);
         this.chatListView = new ChatListView(this.eventManager);
         this.meetingListView = new MeetingListView(this.eventManager);
+        this.videoMeetingView = new VideoMeetingView(this.eventManager);
         this.chatThreadView = new ChatThreadView(this.eventManager);
         this.chatParticipantListView = new ChatParticipantListView();
         this.scheduleListView = new ScheduleListView();
@@ -903,6 +905,19 @@ class GameView {
     initMeetingListView(meetings) {
         this.meetingListView.draw(meetings);
     };
+
+    /**
+     * Draws jitsi meeting window
+     * 
+     * @param {String} meetingDomain domain of joined meeting
+     * @param {String} meetingName name of joined meeting
+     * @param {String} meetingPassword password of joined meeting
+     * @param {String} ownForename own forename that is shown in meeting
+     * 
+     */
+    initVideoMeetingView(meetingDomain, meetingName, meetingPassword, ownForename) {
+        this.videoMeetingView.draw(meetingDomain, meetingName, meetingPassword, ownForename);
+    }
 
     /**
      * Draws chat list window

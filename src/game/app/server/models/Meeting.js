@@ -11,20 +11,32 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
  */
 module.exports = class Meeting{
 
-    #meetingId      // The unique id used to identify the meeting with
-    #meetingName    // The name under which the meeting is displayed in the
-                    // GUI
-    #password       // the "password" used to join the meeting
-    #memberIdList   // the list of id of members of the meeting
+    #meetingId      
+    #meetingName    
+    #password       
+    #memberIdList   
 
     /**
+     * Creates an Meeting instance
+     * @constructor module:Meeting
      * 
-     * 
+     * @param {String} id The unique id used to identify the meeting with
+     * @param {String} name The name under which the meeting is displayed in the GUI
+     * @param {String[]} memberIDs the list of id of members of the meeting
+     * @param {String} password the "password" used to join the meeting
      */
-    constructor(id, name, members, password) {
+    constructor(id, name, memberIDs, password) {
+        TypeChecker.isString(id);
+        TypeChecker.isString(name);
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(memberID => {
+            TypeChecker.isString(memberID);
+        })
+        TypeChecker.isString(password);
+
         this.#meetingId = id;
         this.#meetingName = name;
-        this.#memberIdList = members;
+        this.#memberIdList = memberIDs;
         this.#password = password;
     } 
 
