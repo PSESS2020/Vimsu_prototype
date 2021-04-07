@@ -45,8 +45,6 @@ class MeetingListView extends WindowView {
             // Now we want to append each meeting as a clickable element
             this.appendNewMeeting(meeting);
         })
-
-        
     }
 
     /**
@@ -88,7 +86,7 @@ class MeetingListView extends WindowView {
         $('#nomeeting').empty();
 
         $('#meetingListModal .modal-body .list-group').prepend(`
-            <li class="list-group-item bg-transparent meetingthread" id="${"meetingEntry" + meeting.id}">
+            <li class="list-group-item bg-transparent chatthread" id="${"meetingEntry" + meeting.id}">
                 <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
                             <div class="col-12 col-sm-2 px-0">
@@ -106,6 +104,8 @@ class MeetingListView extends WindowView {
         $('#meeting' + meeting.id).on('click', () => {
             /* TO FIX
             This is not ideal, sensitive information like a password, even though it is not a particularly important, is not good practice */
+            $('#meetingWindow').show();
+            $('#meetingWindowWait').show();
             this.eventManager.handleMeetingJoined(meeting.domain, meeting.name, meeting.password); 
         })
     }
@@ -119,7 +119,6 @@ class MeetingListView extends WindowView {
      handleEmptyMeetingList(meetings) {
         if (meetings && meetings.length < 1) {
             $('#nomeeting').text("No meetings found. Let's connect with others!")
-            $('#meetingListModal').modal('show');
             return false;
         }
 

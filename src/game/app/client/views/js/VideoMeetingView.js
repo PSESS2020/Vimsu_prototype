@@ -38,10 +38,11 @@
      * @param {String} ownForename own forename that is shown in meeting
      */
     draw(meetingDomain, meetingName, meetingPassword, ownForename) {
+        $('#meetingWindowWait').hide();
+
         //Meeting was only minimized
         if (this.nameOfLastMeeting === meetingName && this.isMinimized) {
             this.isMinimized = false;
-            $('#meetingModal').show();
             return;
         }
 
@@ -50,8 +51,8 @@
             this.jitsi.dispose();
         } 
 
-        $("#meetingModalTitle").empty();
-        $("#meetingModalTitle").text(meetingName);
+        $("#meetingWindowTitle").empty();
+        $("#meetingWindowTitle").text(meetingName);
 
         // if (!(this.nameOfLastMeeting === meetingName && this.isMinimized)) {
             this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
@@ -60,7 +61,7 @@
                 width: '100%',
                 height: window.innerHeight * 0.85,
                 // TODO: Add JWT (maybe)
-                parentNode: document.getElementById('meetingModal-body'),
+                parentNode: document.getElementById('meetingWindowBody'),
                 userInfo: {
                     // email: 'place', ppant has no Email
                     displayName: ownForename
@@ -70,24 +71,22 @@
         this.nameOfLastMeeting = meetingName;
 
         // Close button event, Window gets closed and Meeting is closed
-        $('#meetingModalClose').off();
-        $('#meetingModalClose').on('click', (event) => {
+        $('#meetingWindowClose').off();
+        $('#meetingWindowClose').on('click', (event) => {
             event.preventDefault();
 
             this.jitsi.dispose();
-            $('#meetingModal').hide();
+            $('#meetingWindow').hide();
         });
 
         // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
-        $('#meetingModalMinimize').off();
-        $('#meetingModalMinimize').on('click', (event) => {
+        $('#meetingWindowMinimize').off();
+        $('#meetingWindowMinimize').on('click', (event) => {
             event.preventDefault();
 
             this.isMinimized = true;
-            $('#meetingModal').hide();
+            $('#meetingWindow').hide();
         });
-        
-        $('#meetingModal').show();
 
         // This would automatically pass the password used to
         // secure the meeting.
@@ -102,7 +101,7 @@
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
             this.jitsi.dispose();
-            $('#meetingModal').hide();
+            $('#meetingWindow').hide();
         });
     }
 }
