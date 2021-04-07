@@ -58,7 +58,7 @@
                 roomName: meetingName,
                 subject: meetingName, // will this work?
                 width: '100%',
-                height: window.innerHeight * 0.7,
+                height: window.innerHeight * 0.85,
                 // TODO: Add JWT (maybe)
                 parentNode: document.getElementById('meetingModal-body'),
                 userInfo: {
