@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
- class VideoMeetingView extends WindowView {
+class VideoMeetingView extends WindowView {
 
     eventManager;
     jitsi;
@@ -27,6 +27,24 @@
 
         this.eventManager = eventManager;
         this.isMinimized = false;
+
+        // Close button event, Window gets closed and Meeting is closed
+        $('#meetingWindowClose').off();
+        $('#meetingWindowClose').on('click', (event) => {
+            event.preventDefault();
+
+            this.jitsi.dispose();
+            $('#meetingWindow').hide();
+        });
+
+        // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
+        $('#meetingWindowMinimize').off();
+        $('#meetingWindowMinimize').on('click', (event) => {
+            event.preventDefault();
+
+            this.isMinimized = true;
+            $('#meetingWindow').hide();
+        });
     }
 
     /**
@@ -49,44 +67,25 @@
         //Another meeting was minimized before, that should be closed now
         if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
             this.jitsi.dispose();
-        } 
+        }
 
         $("#meetingWindowTitle").empty();
         $("#meetingWindowTitle").text(meetingName);
 
-        // if (!(this.nameOfLastMeeting === meetingName && this.isMinimized)) {
-            this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
-                roomName: meetingName,
-                subject: meetingName, // will this work?
-                width: '100%',
-                height: window.innerHeight * 0.85,
-                // TODO: Add JWT (maybe)
-                parentNode: document.getElementById('meetingWindowBody'),
-                userInfo: {
-                    // email: 'place', ppant has no Email
-                    displayName: ownForename
-                }
-            });
-        // }
+        this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
+            roomName: meetingName,
+            subject: meetingName, // will this work?
+            width: '100%',
+            height: window.innerHeight * 0.85,
+            // TODO: Add JWT (maybe)
+            parentNode: document.getElementById('meetingWindowBody'),
+            userInfo: {
+                // email: 'place', ppant has no Email
+                displayName: ownForename
+            }
+        });
+
         this.nameOfLastMeeting = meetingName;
-
-        // Close button event, Window gets closed and Meeting is closed
-        $('#meetingWindowClose').off();
-        $('#meetingWindowClose').on('click', (event) => {
-            event.preventDefault();
-
-            this.jitsi.dispose();
-            $('#meetingWindow').hide();
-        });
-
-        // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
-        $('#meetingWindowMinimize').off();
-        $('#meetingWindowMinimize').on('click', (event) => {
-            event.preventDefault();
-
-            this.isMinimized = true;
-            $('#meetingWindow').hide();
-        });
 
         // This would automatically pass the password used to
         // secure the meeting.
@@ -96,7 +95,7 @@
         this.jitsi.on('passwordRequired', function () {
             this.jitsi.executeCommand('password', meetingPassword);
         })
-        
+
         /* THIS EVENT HAS NO EFFECT AT THIS MOMENT */
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
