@@ -1353,6 +1353,7 @@ module.exports = class ServerController {
                 meetList.forEach(meeting => {
                     meetListData.push({
                         id: meeting.getId(),
+                        domain: Settings.DEFAULT_MEETINGDOMAIN,
                         name: meeting.getName(),
                         password: meeting.getPassword()
                     });
@@ -2519,12 +2520,14 @@ module.exports = class ServerController {
         let meetingName = meeting.getName();
         let meetingID = meeting.getId();
         let meetingPassword = meeting.getPassword();
+        let meetingDomain = Settings.DEFAULT_MEETINGDOMAIN;
 
         this.#meetings.set(meetingName, meeting);
 
         /* Meeting Data that will be sent to client */
         let meetingData = {
             id: meetingID,
+            domain: meetingDomain,
             name: meetingName,
             password: meetingPassword,
         };
@@ -2562,10 +2565,12 @@ module.exports = class ServerController {
         let meetingName = meeting.getName();
         let meetingID = meeting.getId();
         let meetingPassword = meeting.getPassword();
+        let meetingDomain = Settings.DEFAULT_MEETINGDOMAIN;
 
         /* Meeting Data that will be sent to client */
         let meetingData = {
             id: meetingID,
+            domain: meetingDomain,
             name: meetingName,
             password: meetingPassword,
         };
