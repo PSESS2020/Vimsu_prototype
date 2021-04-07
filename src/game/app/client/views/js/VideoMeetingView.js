@@ -42,11 +42,8 @@
         $("#meetingModalTitle").empty();
         $("#meetingModalTitle").text(meetingName);
 
-        //Meeting was only minimized
-        if (this.nameOfLastMeeting === meetingName && this.isMinimized) {
-            $('#meetingModal').modal('show');
         //An other meeting was minimized before, that should be closed now
-        } else if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
+        if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
             this.jitsi.dispose();
         } 
 
@@ -67,6 +64,8 @@
         this.nameOfLastMeeting = meetingName;
         this.isMinimized = false;
 
+        $('#meetingModal').modal('show');
+
         // Close button event, Window gets closed and Meeting is closed
         $('#meetingModalClose').off();
         $('#meetingModalClose').on('click', (event) => {
@@ -85,8 +84,6 @@
             $('#meetingModal').modal('hide');
         });
         
-        $('#meetingModal').modal('show');
-
         // This would automatically pass the password used to
         // secure the meeting.
         // However, only moderators can set passwords, and it seems
