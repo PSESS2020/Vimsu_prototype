@@ -38,16 +38,22 @@
      * @param {String} ownForename own forename that is shown in meeting
      */
     draw(meetingDomain, meetingName, meetingPassword, ownForename) {
-        
-        $("#meetingModalTitle").empty();
-        $("#meetingModalTitle").text(meetingName);
+        //Meeting was only minimized
+        if (this.nameOfLastMeeting === meetingName && this.isMinimized) {
+            this.isMinimized = false;
+            $('#meetingModal').show();
+            return;
+        }
 
-        //An other meeting was minimized before, that should be closed now
+        //Another meeting was minimized before, that should be closed now
         if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
             this.jitsi.dispose();
         } 
 
-        if (!(this.nameOfLastMeeting === meetingName && this.isMinimized)) {
+        $("#meetingModalTitle").empty();
+        $("#meetingModalTitle").text(meetingName);
+
+        // if (!(this.nameOfLastMeeting === meetingName && this.isMinimized)) {
             this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
                 roomName: meetingName,
                 subject: meetingName, // will this work?
@@ -60,11 +66,8 @@
                     displayName: ownForename
                 }
             });
-        }
+        // }
         this.nameOfLastMeeting = meetingName;
-        this.isMinimized = false;
-
-        $('#meetingModal').modal('show');
 
         // Close button event, Window gets closed and Meeting is closed
         $('#meetingModalClose').off();
@@ -72,7 +75,7 @@
             event.preventDefault();
 
             this.jitsi.dispose();
-            $('#meetingModal').modal('hide');
+            $('#meetingModal').hide();
         });
 
         // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
@@ -81,9 +84,11 @@
             event.preventDefault();
 
             this.isMinimized = true;
-            $('#meetingModal').modal('hide');
+            $('#meetingModal').hide();
         });
         
+        $('#meetingModal').show();
+
         // This would automatically pass the password used to
         // secure the meeting.
         // However, only moderators can set passwords, and it seems
@@ -97,7 +102,7 @@
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
             this.jitsi.dispose();
-            $('#meetingModal').modal('hide');
+            $('#meetingModal').hide();
         });
     }
 }
