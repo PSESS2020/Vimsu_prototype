@@ -36,27 +36,30 @@
         </div>
     </div>
 
-    <div class="currentLecturesWindow" id="meetingModal" style="z-index: 1060">
+    <div class="currentLecturesWindow" id="meetingWindow" style="z-index: 1060">
         <div class="container-fluid">
 
             <div class="row">
                 <div class="col-12 p-0">
                     <div class="currentLecturesHeader p-3 mb-3 d-flex">
-                        <h5 id="meetingModalTitle"></h5>
+                        <h5 id="meetingWindowTitle"></h5>
                         <div class="ml-auto">
-                            <button id="meetingModalMinimize" class="close btn">
+                            <button id="meetingWindowMinimize" class="close btn">
                                 <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
                             </button>
                         </div>
                         <div class="ml-2">
                             <button class="close"
                             style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="meetingModalClose" type="button"><i class="fa fa-close"></i></button>
+                            id="meetingWindowClose" type="button"><i class="fa fa-close"></i></button>
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
-                    <div id="meetingModal-body" class="row ml-auto mr-auto">
+                    <div id="meetingWindowWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
+                    <div id="meetingWindowBody" class="row ml-auto mr-auto">
 
                     </div>
                 </div>
