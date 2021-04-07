@@ -63,13 +63,13 @@ class InviteFriendsView extends WindowView {
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent" >
                             <div class="row w-100">
-                                <div class="col-12 col-sm-2 px-0">
+                                <div class="col-2px-0">
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
-                                <div class="col-12 col-md-9 text-center text-sm-left">
+                                <div class="col-9 text-left">
                                     <label class="name lead">${businessCard.getForename() + " (@" + businessCard.getUsername() + ")"}</label>
                                 </div>
-                                <div class="col-12 col-md-1">
+                                <div class="col-1">
                                     <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">
                                         <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
                                     </button>

@@ -55,13 +55,13 @@ class FriendRequestListView extends WindowView {
         $('#friendRequestListModal .modal-body .list-group').prepend(`
             <li class="list-group-item bg-transparent" id="${"friendRequest" + businessCard.getParticipantId()}">
                 <div class="row w-100">
-                    <div class="col-12 col-sm-2 px-0">
+                    <div class="col-2 px-0">
                         <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                     </div>
-                    <div class="col-12 col-md-8 text-center text-sm-left">
+                    <div class="col-8 text-left">
                         <label class="name lead">${businessCard.getForename() + " " + " (@" + businessCard.getUsername() + ")"}</label>
                     </div>
-                    <div class="col-12 col-sm-2 col-md-2")>
+                    <div class="col-2")>
                         <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>
                         <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 10px; width: 75px;">Reject</button>
                         <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>

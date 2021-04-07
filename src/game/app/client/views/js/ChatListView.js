@@ -95,10 +95,10 @@ class ChatListView extends WindowView {
         <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
           <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
             <div class="row w-100">
-              <div class="col-12 col-sm-2 px-0">
+              <div class="col-2 px-0">
                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
               </div>
-              <div class="col-12 col-md-10 text-center text-sm-left">
+              <div class="col-10 text-left">
                 <label class="name lead">${chat.title}</label>
                 <br>
                 <span class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
@@ -204,7 +204,7 @@ class ChatListView extends WindowView {
       $("#chatThreadModalCollection").append(`
           <div class="modal" id=${"chatThreadModal" + chatID} role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
           aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-50" role="document">
                 <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                     <div class="modal-header">
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
