@@ -65,8 +65,18 @@
             this.jitsi.executeCommand('password', meetingPassword);
         })
         
+        /* THIS EVENT HAS NO EFFECT AT THIS MOMENT */
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
+            this.jitsi.dispose();
+            $('#meetingModal').modal('hide');
+        });
+
+        // Close button event
+        $('#meetingModalClose').off();
+        $('#meetingModalClose').on('click', (event) => {
+            event.preventDefault();
+
             this.jitsi.dispose();
             $('#meetingModal').modal('hide');
         });
