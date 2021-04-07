@@ -146,6 +146,9 @@ form button:hover {
   padding-left: 10px;
   max-height: 360px;
   padding: 0;
+  right: -250px;
+  position: absolute;
+  width: 250px;
 }
 
 .notifBarDiv {
@@ -162,6 +165,12 @@ form button:hover {
 
 .notifBarText:hover {
   opacity: .8;
+}
+
+#allchatWindow {
+  left: -250px;
+  position: absolute;
+  width: 250px;
 }
 
 #allChatBox {

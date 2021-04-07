@@ -26,19 +26,28 @@ class NotificationBar extends Views {
 
         $('#showNotifBar').hide();
 
+        const TOGGLE_SPEED = 200;
+
         const notifBar = document.getElementById("notifBar")
 
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
-            notifBar.style.display = "block";
+            notifBar.style.visibility = "visible";
             notifBar.style.zIndex = "5";
+
+            $("#notifBar").animate({"right":"15px"}, TOGGLE_SPEED);
             $('#showNotifBar').hide();
             $('#hideNotifBar').show();
         })
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
-            notifBar.style.display = "none";
-            notifBar.style.zIndex = "0";
+            $("#notifBar").animate({"right":"-250px"}, TOGGLE_SPEED);
+            
+            setTimeout(() => {
+                notifBar.style.visibility = "hidden";
+                notifBar.style.zIndex = "0";
+            }, TOGGLE_SPEED)
+            
             $('#hideNotifBar').hide();
             $('#showNotifBar').show();
         })

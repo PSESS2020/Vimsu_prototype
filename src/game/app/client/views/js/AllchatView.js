@@ -20,26 +20,31 @@ class AllchatView extends Views {
 
         AllchatView.instance = this;
 
-        $('#hideRoomChat').hide();
-
         const allchatWindow = document.getElementById("allchatWindow")
         allchatWindow.style.visibility = "hidden";
+
+        const TOGGLE_SPEED = 200;
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
             showAllchatBox()
         })
-        $('#hideRoomChat').on('click', (event) => {
+        
+        $('#allchatWindowMinimize').on('click', (event) => {
             event.preventDefault();
-            allchatWindow.style.visibility = "hidden";
-            $('#hideRoomChat').hide();
+            $("#allchatWindow").animate({"left":"-250px"}, TOGGLE_SPEED);
+            
+            setTimeout(() => {
+                allchatWindow.style.visibility = "hidden";
+            }, TOGGLE_SPEED)
+            
             $('#showRoomChat').show();
         })
 
         function showAllchatBox() {
             allchatWindow.style.visibility = "visible";
+            $("#allchatWindow").animate({"left":"15px"}, TOGGLE_SPEED);
             $('#showRoomChat').hide();
-            $('#hideRoomChat').show();
         }
 
         const sendMessage = (event) => {
@@ -83,15 +88,11 @@ class AllchatView extends Views {
      */
     draw(typeOfRoom, messages, ownUsername) {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
-        $('#allchatHeader').text(typeOfRoom + ' Chat');
+        $('#allchatHeaderText').text(typeOfRoom + ' Chat');
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
             <small>Show ${typeOfRoom.toLowerCase()} chat messages</small>
-        `)
-        $('#hideRoomChat').empty();
-        $('#hideRoomChat').append(`
-            <small>Hide ${typeOfRoom.toLowerCase()} chat messages</small>
         `)
 
         $('#allchatMessages').empty();
