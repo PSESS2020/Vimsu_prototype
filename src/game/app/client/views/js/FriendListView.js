@@ -55,10 +55,10 @@ class FriendListView extends WindowView {
                 <li class="list-group-item bg-transparent chatthread" id="${"friend" + businessCard.getParticipantId()}">
                     <div class="d-flex justify-content-between">
                         <div class="row w-100">
-                            <div class="col-12 col-sm-2 px-0">
+                            <div class="col-2 px-0">
                                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                             </div>
-                            <div class="col-12 col-md-9 text-center text-sm-left">
+                            <div class="col-9 text-left">
                                 <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
                                 <br> 
                                 <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
