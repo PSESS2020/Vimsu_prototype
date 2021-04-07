@@ -8,9 +8,30 @@
     // TODO
     // see below
 
-    // TILE paths
+    // Tiles
+    tile_default: 'client/assets/tiles/tile_default.png',
 
-    // WALL paths
+    // Walls
+    "leftwall_default": "client/assets/walls/wall1.png",
+    "rightwall_default": "client/assets/walls/wall2.png",
+
+    // Doors
+
+    // Schedule
+
+    // Windows
+
+    // Plant
+
+    // Logo
+
+    // Seating
+
+    // Tables
+
+    // Counters
+
+    // Food & Drinks
 
 });
 
@@ -59,8 +80,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
     // FOYER
 
          "tile_default": "client/assets/tiles/tile_default.png",
-        "leftwall_default": "client/assets/walls/wall1.png",
-        "rightwall_default": "client/assets/walls/wall2.png",
+       
         "leftlecturedoor_default": "client/assets/doors/door_lecturehall.png",
         "rightfoodcourtdoor_default": "client/assets/doors/door_foodcourt.png",
         "rightreceptiondoor_default": "client/assets/doors/door_reception.png",

@@ -1,5 +1,7 @@
+const AssetPaths = require("../../client/shared/AssetPaths");
 const GameObjectType = require("../../client/shared/GameObjectType");
 const TypeChecker = require("../../client/shared/TypeChecker");
+const Settings = require("./Settings");
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -45,43 +47,36 @@ class GameObjectInfo {
     // - isSolid
     // - size
     // - necessary assetPaths
+    //   (these should not be the value, but the key)
     // - is there an easy way to group similar objects
     //   as variations of the same type?
-
-    /**
-     * Takes a GameObjectType and a <key> as arguments and checks
-     * if a property with the name <key> is stored for the passed
-     * GameObjectType. If yes, it is returned. If no, throws error.
-     * 
-     * @method moduke:GameObjectInfo#getInfo
-     * 
-     * @param {String} objectType 
-     * @param {String} key 
-     * @returns {*} The information saved for the passed GameObjectType
-     *              under the passed key (if it exists).
-     */
-    static getInfo(objectType, key) {
-        TypeChecker.isEnumOf(objectType, GameObjectType);
-        if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
-            return GameObjectInfo.#INFORMATION[objectType][key];
-        } else {
-            throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
-        }
-    }
-
-    /**
-     * All the info for each GameObjectType
-     * 
-     * 
-     */
+ 
+    // All the info for each GameObjectType
     static #INFORMATION = Object.freeze({
         // Blank
-        [GameObjectType.BLANK]: {},
+        // what is this for?
+        [GameObjectType.BLANK]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: '', 
+        },
         // Tiles
-        [GameObjectType.SELECTED_TILE]: {},
-        [GameObjectType.TILE]: {},
-        [GameObjectType.LEFTTILE]: {},
-        [GameObjectType.RIGHTTILE]: {},
+        
+        [GameObjectType.SELECTED_TILE]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: '', // Wait, how is this done client-side?
+        },
+        // the righttile and lefttile types seem to do nothing?
+        // for the asset paths, we need to pass keys not values (ugh)
+        [GameObjectType.TILE]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "",
+        },
         // Walls
         [GameObjectType.LEFTWALL]: {},
         [GameObjectType.RIGHTWALL]: {},
@@ -108,6 +103,28 @@ class GameObjectInfo {
         [GameObjectType.DRINKS]: {},
         [GameObjectType.SMALLDINNERTABLEFOOD]: {},
     });
+
+    /**
+     * Takes a GameObjectType and a <key> as arguments and checks
+     * if a property with the name <key> is stored for the passed
+     * GameObjectType. If yes, it is returned. If no, throws error.
+     * 
+     * TypeChecking should be done by whoever calls this method!
+     * 
+     * @method moduke:GameObjectInfo#getInfo
+     * 
+     * @param {String} objectType 
+     * @param {String} key 
+     * @returns {*} The information saved for the passed GameObjectType
+     *              under the passed key (if it exists).
+     */
+     static getInfo(objectType, key) {
+        if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
+            return GameObjectInfo.#INFORMATION[objectType][key];
+        } else {
+            throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
+        }
+    }    
     
 }
 

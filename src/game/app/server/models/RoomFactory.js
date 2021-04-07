@@ -11,6 +11,7 @@ const ReceptionRoomDecorator = require('./ReceptionRoomDecorator.js');
 const FoyerRoomDecorator = require('./FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
+const GameObjectInfo = require('../utils/GameObjectInfo.js');
 
 module.exports = class RoomFactory {
 
@@ -74,7 +75,8 @@ module.exports = class RoomFactory {
         // And allow arrays as positions.
 
         // TODO:
-        // - Tiles at the edge need to be of a special kind 
+        // - make sure that additional tiles like in other rooms are added
+        //   (or is this done in the Room constructor?)
         // - those next three methods also need to be re-done
 
         // ADD TILES
@@ -101,7 +103,7 @@ module.exports = class RoomFactory {
         //   the type, the position, whether or not the object is
         //   supposed to be clickable and if yes, which URL is
         //   supposed to be openend on click
-        //   (does this not break stuff like the plant?)
+        //   (does this not break stuff like the plant?) (done)
         // - the type is then "decoded" into the size, the necessary
         //   asset paths, whether the object is solid usw.
         //   (how to handle multi-part objects?)
@@ -109,53 +111,63 @@ module.exports = class RoomFactory {
         // - how to handle more custom objects?
         // - also, do all this without breaking the view if possible
 
+        // offer three options for positions:
+        // - [xPos, yPos] (done)
+        // - An array of positions formatted as above (done)
+        // - An area (how to implement)
+
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
         roomData.MAPELEMENTS.forEach(objData => {
-            this.#createObjectFromData(objData);
+            this.#createObjectsFromData(objData, listOfMapElements);
         })
 
         // ADD OBJECTS
         // tables, plants, food and more
-        // TODO add support for multi-tile objects
         roomData.OBJECTS.forEach(objData => {
-            this.#createObjectFromData(objData);
+            this.#createObjectsFromData(objData, listOfGameObjects);   
         })
 
         // ADD DOORS
-        // doorData = {assetPath, direction, positionOfDoor,
+        // doorData = {assetName, direction, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
-        //            closedMessage, codeToOpen}
+        //            closedMessage, codeToOpen, logo}
+        // TODO:
+        // - logos above doors
+        // - tiles "inside" of doors
         roomData.DOORS.forEach(doorData => {
+            // this requires error handling for when a door
+            // is defined as closed but there is no message
+            // or code to open defined
             if (doorData.isOpen === undefined) {
                 listOfDoors.push(
-                    this.#doorService.createGeneralDoor(doorData.assetPath,
-                    doorData.direction,
-                    new Position(roomData.ID,
-                        doorData.positionOfDoor[0],
-                        doorData.positionOfDoor[1]),
-                    new Position(doorData.positionOnExit[0],
-                        doorData.positionOnExit[1],
-                        doorData.positionOnExit[2]),
-                    doorData.directionOnExit,
-                    true,
-                    "", // closedMessage
-                    "") // codeToOpen
+                    this.#doorService.createCustomDoor(doorData.assetName,
+                        doorData.direction,
+                        new Position(roomData.ID,
+                            doorData.positionOfDoor[0],
+                            doorData.positionOfDoor[1]),
+                        new Position(doorData.positionOnExit[0],
+                            doorData.positionOnExit[1],
+                            doorData.positionOnExit[2]),
+                        doorData.directionOnExit,
+                        true,
+                        "", // closedMessage
+                        "") // codeToOpen
                 ); 
             } else {
                 listOfDoors.push(
-                    this.#doorService.createCustomDoor(doorData.assetPath,
-                    doorData.direction,
-                    new Position(roomData.ID,
-                        doorData.positionOfDoor[1],
-                        doorData.positionOfDoor[2]),
-                    new Position(doorData.positionOnExit[0],
-                        doorData.positionOnExit[1],
-                        doorData.positionOnExit[2]),
-                    doorData.directionOnExit,
-                    doorData.isOpen,
-                    doorData.closedMessage,
-                    doorData.codeToOpen)
+                    this.#doorService.createCustomDoor(doorData.assetName,
+                        doorData.direction,
+                        new Position(roomData.ID,
+                            doorData.positionOfDoor[1],
+                            doorData.positionOfDoor[2]),
+                        new Position(doorData.positionOnExit[0],
+                            doorData.positionOnExit[1],
+                            doorData.positionOnExit[2]),
+                        doorData.directionOnExit,
+                        doorData.isOpen,
+                        doorData.closedMessage,
+                        doorData.codeToOpen)
                 );
             }
 
@@ -185,25 +197,32 @@ module.exports = class RoomFactory {
         return room;
     }
 
-    // This is still unworkably broken
-    #createObjectFromData = function(objData) {
-        if (Array.isArray(objData.POS)) {
-            // The way an array is handled here is bad
-            // it will not do what is supposed to
-            for (i = 0; i < objData.POS.length; i++) {
-                if(!Array.isArray(objData.POS[i])) {
-                    throw new TypeError('When array is passed as position of objects, it needs to be array of array');
-                }
-                for (j = 0; j < objData.POS[i].length; j++) {
-                    return objService.createObject(roomData.ID, objData.TYPE, i, j, objData.SOLID, objData.CLICKABLE, objData.URL);
-                }
-            }
-
-        } else {
-            return objService.createObject(roomData.ID, objData.TYPE, objData.POS.X, objData.POS.Y, objData.SOLID, objData.CLICKABLE, objData.URL);
+    #createObjectsFromData = function (objData, listToPushInto) {
+        if (objData.isClickable == undefined) {
+            objData.isClickable = false;
+            objData.url = "";
         }
+        if (Array.isArray(objData.position[0])) {
+            objData.position.forEach(position => {
+                listToPushInto.push(objService.createCustomObject(
+                    roomData.ID,
+                    objData.type,
+                    position[0],
+                    position[1],
+                    objData.isClickable,
+                    objData.url
+                ));
+            })
+        } else {
+            listToPushInto.push(objService.createCustomObject(
+                roomData.ID,
+                objData.type,
+                objData.position[0],
+                objData.position[1],
+                objData.isClickable,
+                objData.url
+            ));
+        }      
     }
-
-
 
 }

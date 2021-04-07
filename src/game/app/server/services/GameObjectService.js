@@ -3,6 +3,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const Settings = require('../utils/Settings.js');
 const Position = require('../models/Position.js');
+const GameObjectInfo = require('../utils/GameObjectInfo.js');
 
 
 /**
@@ -799,33 +800,41 @@ module.exports = class GameObjectService {
             return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
 
-    /* ##################################################################### */
-    /* ############################ NEW METHODS ############################ */
-    /* ##################################################################### */
-
-    /* The methods in this section are an attempt to replace some of the highly
-     * specific methods from above by some new, more flexible methods. As a part
-     * of this, the game objects in the GameObjectType-Class had to be changed a
-     * bit. */
-
-    // but this is actually shit, as it breaks client-side implementation
-
-    /* This needs to be able to account for different variants of the same object */
-
-    createObject(roomId, type, xPos, yPos, isSolid, isClickable, url) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, isSolid, isClickable, url);
+    /**
+     * Creates a custom instance of te GameObjectClass with no hard-coded
+     * parameters passed.
+     * 
+     * @method module:GameObjectService#createCustomObject
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {String} url 
+     * 
+     * @returns {GameObject} A custom instance of the GameObject class
+     */
+    createCustomObject(roomId, type, xPos, yPos, isClickable, url) {
         this.#isKnownType(type);
-        let objTypeData = GameObjectType[type];
-        return new GameObject(roomId, this.#generateGameObjectID(), objTypeData.TYPE, objTypeData.NAME, objTypeData.WIDTH, objTypeData.LENGTH, new Position(roomId, xPos, yPos), isSolid, isClickable, url);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, url);
+        
+        return new GameObject(
+            this.#generateGameObjectID(), 
+            type, 
+            GameObjectInfo.getInfo(type, "assetName"), 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            url);
     }
 
-    // replace GameObjectType with GameEnvStyle
-    // do the same for tiles
-    // do i really want to have this?
-    createEnv(roomId, type, xPos, yPos, isSolid, isClickable) {
-        this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
-        return new GameObject(this.#generateGameObjectID(), GameObjectType.RIGHTWALL, "rightwall_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
+    createCustomObjectWithCustomOptions(roomId, ) {
+        
     }
-
 
 }
