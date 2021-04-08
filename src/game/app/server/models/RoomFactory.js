@@ -11,7 +11,6 @@ const ReceptionRoomDecorator = require('./ReceptionRoomDecorator.js');
 const FoyerRoomDecorator = require('./FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
-const GameObjectInfo = require('../utils/GameObjectInfo.js');
 
 module.exports = class RoomFactory {
 
