@@ -50,7 +50,7 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     #muteList;
-    #roomDecorators;
+    #rooms;
     #allDoors;
     #roomService;
     #interval;
@@ -102,20 +102,13 @@ module.exports = class ServerController {
         this.#roomService = new RoomService();
 
         //Array to hold all Rooms
-        this.#roomDecorators = this.#roomService.getAllRooms();
+        this.#rooms = this.#roomService.getAllRooms();
 
         //Array to hold all Doors
         this.#allDoors = [];
-        this.#roomDecorators.forEach(decorator => {
-            let room = decorator.getRoom();
+        this.#rooms.forEach(room => {
             this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
         });
-
-        // TODO use this to create list of all rooms or something
-        this.#roomFactory = new RoomFactory();
-        Object.entries(Floorplan).forEach(roomData => {
-            this.#roomFactory.buildRoom(roomData);
-        })
         
         this.#banList = [];
         this.#muteList = [];
