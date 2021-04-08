@@ -35,7 +35,7 @@ module.exports = class RoomFactory {
         RoomFactory.instance = this;
     }
 
-    buildRoom(roomData) {
+    buildRoomFrom(roomData) {
         TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
 
         switch(roomData.TYPE) {
@@ -59,7 +59,7 @@ module.exports = class RoomFactory {
     #buildByPlan = function(roomData) {
         // the room object should have uniform visibility
         // throughout the entire file
-        let room = new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
+        let room = new Room(roomData.ID, roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
 
         let listOfMapElements = [];
         let listOfGameObjects = [];

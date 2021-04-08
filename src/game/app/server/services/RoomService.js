@@ -9,6 +9,7 @@ const EscapeRoomDecorator = require('../models/EscapeRoomDecorator.js');
 const Settings = require('../utils/Settings.js');
 const Floorplan = require('../utils/Floorplan.js');
 const RoomDecorator = require('../models/RoomDecorator.js');
+const RoomFactory = require('../models/RoomFactory.js');
 
 /**
  * The Room Service
@@ -19,7 +20,7 @@ const RoomDecorator = require('../models/RoomDecorator.js');
  */
 module.exports = class RoomService {
     #rooms;
-    #floorplan;
+    #roomFactory;
 
     /**
      * Creates an instance of RoomService
@@ -31,7 +32,7 @@ module.exports = class RoomService {
         }
 
         this.#rooms = [];
-        this.#floorplan;
+        this.#roomFactory = new RoomFactory();
         this.#initAllRooms();
         RoomService.instance = this;
     }
@@ -71,18 +72,8 @@ module.exports = class RoomService {
      * @method module:RoomService#initAllRooms
      */
     #initAllRooms = function () {
-        this.#rooms.push(new FoyerRoomDecorator(new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)));
-        this.#rooms.push(new FoodcourtRoomDecorator(new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)));
-        this.#rooms.push(new ReceptionRoomDecorator(new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)));
-        this.#rooms.push(new EscapeRoomDecorator(new Room(Settings.ESCAPEROOM_ID, TypeOfRoom.ESCAPEROOM, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)));
-
-        // TODO what is this doing here...?
-        for(const [room,data] of Object.entries(Floorplan)) {
-            this.#rooms.push(
-                new Room(
-                    new Room(/*id, type, width, length*/)
-                )
-            )
-        };
+        for(const [roomHandle, roomData] in Object.entries(Floorplan)) {
+            this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData));
+        }
     }
 } 
