@@ -73,7 +73,25 @@ module.exports = class RoomService {
      */
     #initAllRooms = function () {
         for(const [roomHandle, roomData] in Object.entries(Floorplan)) {
-            this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData));
+            if (this.#roomNotAlreadyCreated(roomData.ID)) {
+                this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData));
+            }
         }
+    }
+
+    /**
+     * @method module:RoomService#roomNotAlreadyCreated
+     * 
+     * @param {String} roomId 
+     * @returns {Boolean} Whether room with the passed id has 
+     *                    not been created yet
+     */
+    #roomNotAlreadyCreated = function (roomId) {
+        this.#rooms.forEach(room => {
+            if (room.getRoomId() == roomId) {
+                return false;
+            }
+        })
+        return true;
     }
 } 
