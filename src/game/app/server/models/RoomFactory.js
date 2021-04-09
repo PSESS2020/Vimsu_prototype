@@ -21,7 +21,6 @@ module.exports = class RoomFactory {
     #doorService;
     #npcService;
 
-
     constructor() {
         if(!!RoomFactory.instance) {
             return RoomFactory.instance;

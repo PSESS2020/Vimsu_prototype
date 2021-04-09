@@ -27,7 +27,7 @@ const GameObjectType = Object.freeze({
         LEFTSCHEDULE: 'LEFTSCHEDULE',
         // Windows
         WINDOW: 'WINDOW',
-        // Plant
+        // Plant & Picture Frames
         PLANT: 'PLANT',
         // Logo
         CONFERENCELOGO: 'CONFERENCELOGO',
@@ -44,7 +44,8 @@ const GameObjectType = Object.freeze({
         RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
         // Food & Drinks
         DRINKS: 'DRINKS',   
-        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',    
+        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
+        TEA: 'TEA',    
         
 });
     

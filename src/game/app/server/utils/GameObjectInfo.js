@@ -84,7 +84,7 @@ class GameObjectInfo {
         [GameObjectType.LEFTSCHEDULE]: {},
         // Windows
         [GameObjectType.WINDOW]: {},
-        // Plant
+        // Plant & PIcture Frames
         [GameObjectType.PLANT]: {},
         // Logo
         [GameObjectType.CONFERENCELOGO]: {},
@@ -101,6 +101,7 @@ class GameObjectInfo {
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {},
         // Food & Drinks
         [GameObjectType.DRINKS]: {},
+        [GameObjectType.TEA]: {},
         [GameObjectType.SMALLDINNERTABLEFOOD]: {},
     });
 
