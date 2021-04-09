@@ -29,13 +29,15 @@ const GameObjectType = Object.freeze({
         WINDOW: 'WINDOW',
         // Plant & Picture Frames
         PLANT: 'PLANT',
+        PICTUREFRAME: 'PICTUREFRAME',
         // Logo
         CONFERENCELOGO: 'CONFERENCELOGO',
         // Seating
         CHAIR: 'CHAIR',
         SOFA: 'SOFA',
         // Tables
-        TABLE: 'TABLE',  
+        TABLE: 'TABLE',  // NOT COHERENT WITH ART STYLE
+                         // DO NOT USE
         RIGHTTABLE: 'RIGHTTABLE',      
         SMALLDINNERTABLE: 'SMALLDINNERTABLE',
         // Counters

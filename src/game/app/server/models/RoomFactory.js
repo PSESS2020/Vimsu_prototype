@@ -196,6 +196,10 @@ module.exports = class RoomFactory {
     }
 
     #createObjectsFromData = function (objData, listToPushInto) {
+        // TODO support multi-part objects
+        // TODO support objects with automatic additional parts
+        // TODO support variations of one object
+        // TODO support for custom options
         if (objData.isClickable == undefined) {
             objData.isClickable = false;
             objData.url = "";

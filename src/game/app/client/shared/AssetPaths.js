@@ -52,6 +52,7 @@
     "rightchairback_default": "client/assets/chairs/chair_right_back.png",
     
     // Tables
+    "table_default": "client/assets/tables/table.png",
     "righttable_default": "client/assets/tables/dinnerTableRight.png",     
     "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png",
     
@@ -63,6 +64,7 @@
     
     // Food & Drinks
     "drinks_default": "client/assets/other/Drinks.png",
+    "koeriWurst_default": "client/assets/food/koeriWurscht.png",
     "koeriWurst_bothSides": "client/assets/food/koeriWurscht_bothSides.png",
     "koeriWurst_upperSide": "client/assets/food/koeriWurscht_upperSide.png",
     "koeriWurst_lowerSide": "client/assets/food/koeriWurscht_lowerSide.png",

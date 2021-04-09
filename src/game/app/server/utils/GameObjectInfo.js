@@ -50,59 +50,170 @@ class GameObjectInfo {
     //   (these should not be the value, but the key)
     // - is there an easy way to group similar objects
     //   as variations of the same type?
+
+    // Have asset-paths be of style <direction><name>_<style><variation>
+
+    // for the asset paths, we need to pass keys not values
  
     // All the info for each GameObjectType
     static #INFORMATION = Object.freeze({
         // Blank
-        // what is this for?
         [GameObjectType.BLANK]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: '', 
         },
+
         // Tiles
-        
-        [GameObjectType.SELECTED_TILE]: {
-            isSolid: false,
-            width: Settings.SMALL_OBJECT_WIDTH,
-            length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: '', // Wait, how is this done client-side?
-        },
-        // the righttile and lefttile types seem to do nothing?
-        // for the asset paths, we need to pass keys not values (ugh)
         [GameObjectType.TILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "",
+            assetName: "tile_default",
         },
+        [GameObjectType.LEFTTILE]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "tile_default",
+        },
+        [GameObjectType.RIGHTTILE]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "tile_default",
+        },
+
         // Walls
-        [GameObjectType.LEFTWALL]: {},
-        [GameObjectType.RIGHTWALL]: {},
+        [GameObjectType.LEFTWALL]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "leftwall_default",
+        },
+        [GameObjectType.RIGHTWALL]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "rightwall_default",
+        },
+
         // Schedule
-        [GameObjectType.LEFTSCHEDULE]: {},
+        [GameObjectType.LEFTSCHEDULE]: {
+            // MULTIPART OBJECT
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
+        },
+
         // Windows
-        [GameObjectType.WINDOW]: {},
-        // Plant & PIcture Frames
-        [GameObjectType.PLANT]: {},
+        [GameObjectType.WINDOW]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "rightwall_default", // TODO object with variations
+        },
+        
+        // Plant & Picture Frames
+        [GameObjectType.PLANT]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "plant_default",
+        },
+        [GameObjectType.PICTUREFRAME]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "rightwallframe_default0",
+        },
+
         // Logo
-        [GameObjectType.CONFERENCELOGO]: {},
+        [GameObjectType.CONFERENCELOGO]: {
+            // MULTIPART OBJECT
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: ["leftconferencelogo_default0",
+                "leftconferencelogo_default1", "leftconferencelogo_default2",
+                "leftconferencelogo_default3",
+                "leftconferencelogo_default4"],
+        },
+
         // Seating
-        [GameObjectType.CHAIR]: {},
-        [GameObjectType.SOFA]: {},
+        [GameObjectType.CHAIR]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "leftchair_default",
+        },
+        [GameObjectType.SOFA]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "leftsofa_default",
+        },
+
         // Tables
-        [GameObjectType.TABLE]: {},
-        [GameObjectType.RIGHTTABLE]: {},
-        [GameObjectType.SMALLDINNERTABLE]: {},
+        [GameObjectType.TABLE]: {
+            // NOT COHERENT WITH ART STYLE
+            // DO NOT USE
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "table_default",
+        },
+        [GameObjectType.RIGHTTABLE]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: 3 * Settings.SMALL_OBJECT_LENGTH,
+            assetName: "righttable_default",
+        },
+        [GameObjectType.SMALLDINNERTABLE]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "smalldinnertable_default",
+        },
+
         // Counters
-        [GameObjectType.CANTEENCOUNTER]: {},
-        [GameObjectType.RECEPTIONCOUNTER]: {},
+        [GameObjectType.CANTEENCOUNTER]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: 3 * Settings.SMALL_OBJECT_LENGTH,
+            assetName: "canteencounter_default",
+        },
+        [GameObjectType.RECEPTIONCOUNTER]: {
+            // OBJECT WITH ADDITIONAL PARTS
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: 7 * Settings.SMALL_OBJECT_LENGTH,
+            assetName: "receptionCounterFrontPart_default",
+        },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {},
+
         // Food & Drinks
-        [GameObjectType.DRINKS]: {},
-        [GameObjectType.TEA]: {},
-        [GameObjectType.SMALLDINNERTABLEFOOD]: {},
+        [GameObjectType.DRINKS]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: 2 * Settings.SMALL_OBJECT_LENGTH,
+            assetName: "drinks_default",
+        },
+        [GameObjectType.TEA]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "tea_default",
+        },
+        [GameObjectType.SMALLDINNERTABLEFOOD]: {
+            // OBJECT WITH VARIATIONS
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "koeriWurst_default",
+        },
     });
 
     /**
