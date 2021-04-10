@@ -42,11 +42,9 @@
         $('#externalWebsiteModalTitle' + gameObjectID).text(iFrameData.title);
 
         $('#externalWebsiteBody' + gameObjectID).append(`
-            <div class="modal-body" style="overflow:auto; height:100%;">
-                <p style="text-align:center">
-                    <iframe id="iframe${gameObjectID}" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
-                        allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
-                </p>
+            <div class="modal-body modal-body-center" style="overflow:auto; height:100%;">
+                <iframe id="iframe${gameObjectID}" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
+                    allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
             </div>
         `);
 
