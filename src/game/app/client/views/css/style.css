@@ -462,17 +462,17 @@ vertical-align: middle;
   overflow-y: scroll;
 }
 
-.modal-header .dropdown-menu::-webkit-scrollbar {
-  display: none;
+.modal-header .dropdown-menu, .modal-header, .modal-content{
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-.modal-header::-webkit-scrollbar {
-  display: none;
-}
-
+.modal-header .dropdown-menu::-webkit-scrollbar, 
+.modal-header::-webkit-scrollbar, 
 .modal-content::-webkit-scrollbar {
   display: none;
 }
+
 
 .modal-header, 
 .modal-header .dropdown {
