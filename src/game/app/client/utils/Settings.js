@@ -35,6 +35,9 @@ const Settings = Object.freeze({
     ARROW_LENGTH: 20,
     ARROW_WIDTH: 7,
 
+    //constants for div element toggle speed
+    TOGGLE_SPEED: 200,
+
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

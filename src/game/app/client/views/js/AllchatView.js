@@ -20,32 +20,17 @@ class AllchatView extends Views {
 
         AllchatView.instance = this;
 
-        const allchatWindow = document.getElementById("allchatWindow")
-        allchatWindow.style.visibility = "hidden";
-
-        const TOGGLE_SPEED = 200;
+        $("#allchatWindow").hide()
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-            showAllchatBox()
+            this.showAllchatBox()
         })
         
         $('#allchatWindowMinimize').on('click', (event) => {
             event.preventDefault();
-            $("#allchatWindow").animate({"left":"-250px"}, TOGGLE_SPEED);
-            
-            setTimeout(() => {
-                allchatWindow.style.visibility = "hidden";
-            }, TOGGLE_SPEED)
-            
-            $('#showRoomChat').show();
+            this.hideAllchatBox()
         })
-
-        function showAllchatBox() {
-            allchatWindow.style.visibility = "visible";
-            $("#allchatWindow").animate({"left":"15px"}, TOGGLE_SPEED);
-            $('#showRoomChat').hide();
-        }
 
         const sendMessage = (event) => {
             event.preventDefault();
@@ -55,11 +40,6 @@ class AllchatView extends Views {
             if (messageVal !== '') {
                 eventManager.handleAllchatMessageInput(messageVal)
                 $('#allchatMessageInput').val('');
-
-                if (!messageVal.startsWith("\\")) {
-                    showAllchatBox();
-                }
-                
                 return false;
             }
         }
@@ -108,7 +88,22 @@ class AllchatView extends Views {
         setTimeout(() => {
             $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
         }, 500)
+    }
+
+    showAllchatBox() {
+        $("#allchatWindow").show()
+        $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
+        $('#showRoomChat').hide();
+    }
+
+    hideAllchatBox() {
+        $("#allchatWindow").animate({"left":"-250px"}, Settings.TOGGLE_SPEED);
+            
+        setTimeout(() => {
+            $("#allchatWindow").hide()
+        }, Settings.TOGGLE_SPEED)
         
+        $('#showRoomChat').show();
     }
 
     /**
@@ -137,5 +132,7 @@ class AllchatView extends Views {
 
         $('#allchatMessages').append(messageDiv);
         $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+
+        this.showAllchatBox();
     }
 }

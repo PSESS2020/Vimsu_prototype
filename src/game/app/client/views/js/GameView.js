@@ -1355,10 +1355,11 @@ class GameView {
      * Appends messsage to lecture chat
      * 
      * @param {Object} message lecture chat message
+     * @param {String} ownUsername current participant's username
      */
-    appendLectureChatMessage(message) {
+    appendLectureChatMessage(message, ownUsername) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.lectureView.appendMessage(message);
+            this.lectureView.appendMessage(message, ownUsername);
         }
     }
 
@@ -1366,10 +1367,11 @@ class GameView {
      * Draws lecture chat
      * 
      * @param {Object} lectureChat lecture chat
+     * @param {String} ownUsername current participant's username
      */
-    updateLectureChat(lectureChat) {
+    updateLectureChat(lectureChat, ownUsername) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.lectureView.drawChat(lectureChat);
+            this.lectureView.drawChat(lectureChat, ownUsername);
         }
     };
 
