@@ -235,6 +235,18 @@ class ClientController {
         this.gameView.updateFPS(timeStamp);
     }
 
+    /**
+     * Gets send message failure text
+     * @returns message failure text
+     */
+    getSendMessageFailureText() {
+        return {
+            username: "VIMSU Bot", 
+            timestamp: new Date(), 
+            text: "Failed to send message. No connection to the server."
+        }
+    }
+
     /*  */
     /*  RECEIVE FROM SERVER  */
     /*  */
@@ -770,7 +782,7 @@ class ClientController {
      * @param {Object} message lecture chat message
      */
     handleFromServerNewLectureChatMessage = function (message) {
-        this.gameView.appendLectureChatMessage(message);
+        this.gameView.appendLectureChatMessage(message, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -779,7 +791,7 @@ class ClientController {
      * @param {Object} messages lecture chat messages
      */
     handleFromServerUpdateLectureChat = function (messages) {
-        this.gameView.updateLectureChat(messages);
+        this.gameView.updateLectureChat(messages, this.ownBusinessCard.getUsername());
     };
 
     /**
@@ -1193,8 +1205,7 @@ class ClientController {
             this.socket.emit('sendMessage', text);
         }
         else {
-            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+            this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
         }            
     }
 
@@ -1209,8 +1220,7 @@ class ClientController {
             this.socket.emit('evalServer', input);
         }
         else {
-            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+            this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
         }
     }
 
@@ -1226,8 +1236,7 @@ class ClientController {
             this.socket.emit('lectureMessage', text);
         }
         else {
-            $('#lectureChatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
+            this.gameView.appendLectureChatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
         }    
     }
 
