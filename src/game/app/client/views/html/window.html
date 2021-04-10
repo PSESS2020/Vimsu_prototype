@@ -1,7 +1,8 @@
 <html>
 
 <body>
-    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -210,7 +211,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog"   aria-labelledby="meetingListModalTitle" aria-hidden="true" data-focus-on="input:first">
+    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog" aria-labelledby="meetingListModalTitle"
+        aria-hidden="true" data-focus-on="input:first">
         <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -266,7 +268,7 @@
     </div>
 
     <div id="chatThreadModalCollection">
-        
+
     </div>
 
     <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
@@ -283,8 +285,8 @@
                     <form id="groupName" action="" style="text-align: center; width: 100%">
                         <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
                             placeholder="Enter group name" maxlength="20" required autocomplete="off" />
-                        <button class="btn btn-blue mt-3"
-                            title="Invite friends to group chat with the input group name" style=" width: auto;">Invite
+                        <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
+                            style=" width: auto;">Invite
                             Friends</button>
                     </form>
                 </div>
@@ -381,27 +383,17 @@
 
         </div>
     </div>
-    </div>
 
-    <div class="currentLecturesWindow" id="currentLectures">
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="currentLecturesHeader p-3 mb-3 d-flex">
-                        <h5>Current Lectures</h5>
-                        <button class="ml-auto pl-1 pr-1 close"
-                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="closeCurrentLecturesButton" type="button"><i class="fa fa-close"></i></button>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="nolecture"></div>
-                    <div id="currentLecturesContainer" class="row ml-auto mr-auto">
-
-                    </div>
-                </div>
-
+    <div class="window" id="currentLectures" style="width: 100%; height: 100%">
+        <div class="p-3 d-flex window-header">
+            <div>Current Lectures</div>
+            <button id="closeCurrentLecturesButton" class="close btn ml-auto pl-1 pr-1">
+                <i class="fa fa-close"></i>
+            </button>
+        </div>
+        <div class="p-3 window-content">
+            <div id="nolecture"></div>
+            <div id="currentLecturesContainer" class="row justify-content-around">
             </div>
         </div>
     </div>
@@ -433,8 +425,8 @@
         </div>
     </div>
 
-    <div class="modal" id="globalChat" tabindex="-1" role="dialog"
-        aria-labelledby="globalChatWindowHeaderText" data-focus-on="input:first">
+    <div class="modal" id="globalChat" tabindex="-1" role="dialog" aria-labelledby="globalChatWindowHeaderText"
+        data-focus-on="input:first">
         <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
@@ -451,22 +443,15 @@
         </div>
     </div>
 
-    <div class="largerGlobalChatWindow" id="largerGlobalChat">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="globalChatWindowHeader p-3 mb-3 d-flex" id="largerGlobalChatMessageHeader">
-                        <div style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent; font-size: large;"
-                            id="largerGlobalChatWindowHeaderText"></div>
-                        <button class="ml-auto pl-1 pr-1 close"
-                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="closeLargerGlobalChatButton" type="button"><i class="fa fa-close"></i></button>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="largerGlobalChatMessage" class="mr-2 ml-2" style="text-align: left; white-space: pre-line">
-                    </div>
-                </div>
+    <div class="window" id="largerGlobalChat" style="width: 60%; height: 80%;">
+        <div class="p-3 d-flex window-header">
+            <div id="largerGlobalChatWindowHeaderText"></div>
+            <button id="closeLargerGlobalChatButton" class="close btn ml-auto pl-1 pr-1">
+                <i class="fa fa-close"></i>
+            </button>
+        </div>
+        <div class="p-3 window-content">
+            <div id="largerGlobalChatMessage" style="text-align: left; white-space: pre-line">
             </div>
         </div>
     </div>
