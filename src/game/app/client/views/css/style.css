@@ -267,21 +267,6 @@ vertical-align: middle;
   background-color: rgb(33, 41, 44);
 }
 
-.currentLecturesWindow {
-  background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
-  padding: 0px !important;
-  overflow: scroll;
-  display: none; 
-  position: fixed; 
-  top: 0px; 
-  left: 0px; 
-  border-radius: 10px; 
-  z-index: 320; 
-  width: 100%; 
-  height: 100%
-}
-
 .lectureVideoWindow {
   background-color:rgba(34, 43, 46, 1) !important;
   color: antiquewhite;
@@ -295,13 +280,6 @@ vertical-align: middle;
   z-index: 350; 
   width: 100%; 
   height: 100%;
-}
-
-.currentLecturesHeader {
-  background-color: rgba(24, 30, 32, 0.699);
-  color: antiquewhite;
-  font-size: 30px;
-
 }
 
 .lectureVideoHeader {
@@ -318,29 +296,36 @@ vertical-align: middle;
   color: antiquewhite;
 }
 
-.globalChatWindowHeader {
-  background-color: rgba(24, 30, 32, 0.699);
-  position: sticky;
+.window-header {
   color: antiquewhite;
   font-size: 30px;
+  background-color: rgba(24, 30, 32, 0.699);
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 0px 0px 0px transparent; 
+  font-size: large;
+  height: 10%;
 }
 
-.largerGlobalChatWindow {
+.window-content {
+  overflow-y: scroll;
+  border-radius: 0px 0px 10px 10px; 
+  margin: 0;
+  padding: 0;
   background-color:rgba(34, 43, 46, 1) !important;
+  height: 90%;
+}
+
+.window {
+  position: fixed;
   color: antiquewhite;
-  padding: 0px !important;
-  overflow-y: auto;
+  background-color:rgba(34, 43, 46, 1) !important;
   display: none; 
-  position: fixed; 
-  top: 10%; 
-  left: 20%; 
-  border-color: antiquewhite;
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid antiquewhite;
   border-radius: 10px;
   z-index: 1040;
-  width: 60%; 
-  height: 80%;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%,-50%);
 }
 
 .externalWebsiteWindow {

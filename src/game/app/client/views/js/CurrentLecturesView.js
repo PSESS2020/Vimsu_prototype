@@ -52,7 +52,7 @@ class CurrentLecturesView extends WindowView {
             var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
 
             $('#currentLecturesContainer').append(`
-                <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-5 pt-3">
+                <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-3 p-3">
                     <h5 style="display:inline">${lecture.title} </h5>
                     <div>${lecture.remarks}</div>
                     <div class="small">${"By " + lecture.oratorName}</div>
