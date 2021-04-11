@@ -164,10 +164,10 @@ class NotificationBar extends Views {
             $('#' + id + 'Div').show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${id + 'Div'}" style="display:flex" class="list-group-item notifBarDiv">
-                    <button class="self-align-end closeBtn friendRequestListButton" id="${"close" + id}" type="button"><i class="fa fa-close"></i></button>
+                <div id="${id + 'Div'}" class="d-flex list-group-item notifBarDiv justify-content-between">
+                    <button class="self-align-end closeBtn" id="${"close" + id}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${id}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarText wrapword">
+                        <div class="notifBarText wrapword self-align-end">
                             <small>${text}</small>
                         </div>
                     </a>

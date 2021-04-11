@@ -257,7 +257,7 @@ vertical-align: middle;
 }
 
 .closeBtn:hover {
-  color: antiquewhite;
+  opacity: .5 !important;
 }
 
 .lectureChatContainer {
