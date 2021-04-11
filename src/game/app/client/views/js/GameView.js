@@ -948,14 +948,15 @@ class GameView {
     /**
      * Draws jitsi meeting window
      * 
+     * @param {String} meetingId id of joined meeting
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
      * @param {String} ownForename own forename that is shown in meeting
      * 
      */
-    initVideoMeetingView(meetingDomain, meetingName, meetingPassword, ownForename) {
-        this.videoMeetingView.draw(meetingDomain, meetingName, meetingPassword, ownForename);
+    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
+        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename);
     }
 
     /**
@@ -1159,6 +1160,17 @@ class GameView {
             this.meetingListView.deleteMeeting(meetingId);
         }
     }
+
+    /**
+     * Closes video meeting window with meetingId if it is currently visible
+     * 
+     * @param {String} meetingId meeting ID
+     */
+    closeVideoMeetingView(meetingId) {
+        if ($('#meetingWindow').is(':visible')) {
+            this.videoMeetingView.close(meetingId);
+        }
+    };
 
     /**
      * Add friends to friend list window and invite friends window

@@ -205,12 +205,13 @@ class EventManager {
     /** 
      * called from view when an entry in the meeting list is clicked.
      * 
+     * @param {String} meetingId id of joined meeting
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
      */
-    handleMeetingJoined(meetingDomain, meetingName, meetingPassword) {
-        this.clientController.handleFromViewJoinMeeting(meetingDomain, meetingName, meetingPassword);
+    handleMeetingJoined(meetingId, meetingDomain, meetingName, meetingPassword) {
+        this.clientController.handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword);
     }
 
     /**

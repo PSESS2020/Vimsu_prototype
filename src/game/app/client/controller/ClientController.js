@@ -1225,6 +1225,7 @@ class ClientController {
         TypeChecker.isString(meetingID);
 
         this.gameView.removeMeeting(meetingID);
+        this.gameView.closeVideoMeetingView(meetingID);
     }
 
     /*  */
@@ -1585,16 +1586,18 @@ class ClientController {
     /**
      * Calls the Jitsi-API to join a meeting
      * 
+     * @param {String} meetingId id of joined meeting
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
      */
-    handleFromViewJoinMeeting(meetingDomain, meetingName, meetingPassword) {
+    handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword) {
+        TypeChecker.isString(meetingId);
         TypeChecker.isString(meetingDomain);
         TypeChecker.isString(meetingName);
         TypeChecker.isString(meetingPassword);
 
-        this.gameView.initVideoMeetingView(meetingDomain, meetingName, meetingPassword, this.ownBusinessCard.getForename());
+        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownBusinessCard.getForename());
     }
 
     /**
