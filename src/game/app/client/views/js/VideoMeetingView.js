@@ -8,7 +8,7 @@ class VideoMeetingView extends WindowView {
 
     eventManager;
     jitsi;
-    nameOfLastMeeting;
+    currentMeetingId;
     isMinimized;
 
     /**
@@ -50,22 +50,23 @@ class VideoMeetingView extends WindowView {
     /**
      * Draws video meeting window
      * 
+     * @param {String} meetingId id of joined meeting
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
      * @param {String} ownForename own forename that is shown in meeting
      */
-    draw(meetingDomain, meetingName, meetingPassword, ownForename) {
+    draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
         $('#meetingWindowWait').hide();
 
         //Meeting was only minimized
-        if (this.nameOfLastMeeting === meetingName && this.isMinimized) {
+        if (this.currentMeetingId === meetingId && this.isMinimized) {
             this.isMinimized = false;
             return;
         }
 
         //Another meeting was minimized before, that should be closed now
-        if (this.nameOfLastMeeting !== meetingName && this.isMinimized) {
+        if (this.currentMeetingId !== meetingId && this.isMinimized) {
             this.isMinimized = false;
             this.jitsi.dispose();
         }
@@ -86,7 +87,7 @@ class VideoMeetingView extends WindowView {
             }
         });
 
-        this.nameOfLastMeeting = meetingName;
+        this.currentMeetingId = meetingId;
 
         // This would automatically pass the password used to
         // secure the meeting.
@@ -102,5 +103,18 @@ class VideoMeetingView extends WindowView {
             this.dispose();
             $('#meetingWindow').hide();
         });
+    }
+
+    /**
+     * Closes MeetingView if the meeting with the passed meetingID is currently open
+     * 
+     * @param {String} meetingId if of meeting
+     */
+    close(meetingId) {
+        if (this.currentMeetingId === meetingId) {
+            this.isMinimized = false;
+            this.jitsi.dispose();
+            $('#meetingWindow').hide();
+        }
     }
 }
