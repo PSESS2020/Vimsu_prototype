@@ -62,8 +62,7 @@ module.exports = class ServerController {
     //map from group-name to group-instance
     #groups;
 
-    // map from meeting name to meeting instance
-    #meetings;
+    // conference meeting instance
     #conferenceMeeting;
 
     /**
@@ -146,13 +145,6 @@ module.exports = class ServerController {
         }).catch(err => {
             console.error(err);
         });;
-
-        // Load all meetings from db
-        MeetingService.loadMeetingMap(Settings.CONFERENCE_ID, this.#db).then(meetingMap => {
-            this.#meetings = meetingMap;
-        }).catch(err => {
-            console.error(err);
-        })
 
         this.#io.on('connection', (socket) => {
 
@@ -2358,7 +2350,6 @@ module.exports = class ServerController {
         //if group has no longer members, delete it from map
         if (newMemberIDs.length < 1) {
             this.#groups.delete(groupName);
-            this.#meetings.delete(groupName);
         }
 
         return true;
@@ -2419,8 +2410,6 @@ module.exports = class ServerController {
         let meetingID = meeting.getId();
         let meetingPassword = meeting.getPassword();
         let meetingDomain = Settings.DEFAULT_MEETINGDOMAIN;
-
-        this.#meetings.set(meetingName, meeting);
 
         /* Meeting Data that will be sent to client */
         let meetingData = {
@@ -2551,7 +2540,6 @@ module.exports = class ServerController {
             }
         })
 
-        this.#meetings.delete(meetingName);
         MeetingService.removeMeeting(meetingID, Settings.CONFERENCE_ID, this.#db);
     }
 
