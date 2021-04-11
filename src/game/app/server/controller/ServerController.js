@@ -2259,9 +2259,12 @@ module.exports = class ServerController {
         }
         
         let groupOwnerID = 'groupChat: ' + groupName;
-        ChatService.newGroupChat(groupOwnerID, memberIDs, 'Group: ' + groupName, Settings.CONFERENCE_ID, this.#db).then(groupChat => {
-            MeetingService.newMeeting(memberIDs, groupName, Settings.CONFERENCE_ID, this.#db).then(groupMeeting => {
-                GroupService.createGroup(groupName, groupColor, memberIDs, groupChat, groupMeeting, Settings.CONFERENCE_ID, this.#db).then(group => {
+        let chatMemberIDs = memberIDs.slice();
+        ChatService.newGroupChat(groupOwnerID, chatMemberIDs, 'Group: ' + groupName, Settings.CONFERENCE_ID, this.#db).then(groupChat => {
+            let meetingMemberIDs = memberIDs.slice();
+            MeetingService.newMeeting(meetingMemberIDs, groupName, Settings.CONFERENCE_ID, this.#db).then(groupMeeting => {
+                let groupMemberIDs = memberIDs.slice();
+                GroupService.createGroup(groupName, groupColor, groupMemberIDs, groupChat, groupMeeting, Settings.CONFERENCE_ID, this.#db).then(group => {
                     this.#groups.set(groupName, group);
                   
                     this.#handleGroupChatCreationWithoutOwner(memberIDs, groupChat, "GroupCreator");
@@ -2311,9 +2314,9 @@ module.exports = class ServerController {
         let groupChatID = groupChat.getId();
         let memberIDs = group.getGroupMemberIDs();
         let groupMeeting = group.getMeeting();
+        let meetingID = groupMeeting.getId();
 
-        this.#handleDeleteGroupMeeting(groupMeeting);
-
+        this.#handleLeaveGroupMeeting(memberIDs, meetingID);
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
@@ -2374,6 +2377,7 @@ module.exports = class ServerController {
         let groupMeeting = group.getMeeting();
         
         this.#handleJoinGroupChat(memberIDs, groupChat, "GroupCreator");
+        this.#handleJoinGroupMeeting(memberIDs, groupMeeting);
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
@@ -2385,7 +2389,6 @@ module.exports = class ServerController {
                 
                 group.addGroupMember(memberID);
                 GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
-                this.#handleJoinGroupMeeting([memberID], groupMeeting);
 
                 this.#handleLeaveOldGroup(member, groupName);
                 this.#handleChangeShirtColor(member, groupColor, socket);
@@ -2426,9 +2429,12 @@ module.exports = class ServerController {
         let groupMeeting = group.getMeeting();
         let meetingID = groupMeeting.getId();
 
+        this.#handleLeaveGroupMeeting(memberIDs, meetingID);
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
             let socketID = this.getSocketId(memberID);
+
+            this.#handleLeaveChat(memberID, groupChatID);
 
             if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
 
@@ -2437,8 +2443,6 @@ module.exports = class ServerController {
                 group.removeGroupMember(memberID);
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
                 
-                this.#handleLeaveChat(memberID, groupChatID);
-                this.#handleLeaveGroupMeeting([memberID], meetingID);
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
@@ -2487,7 +2491,7 @@ module.exports = class ServerController {
                 let otherGroupMeeting = otherGroup.getMeeting();
                 let otherGroupMeetingID = otherGroupMeeting.getId();
 
-                this.#handleLeaveGroupChat(memberID, otherGroupChatID);
+                this.#handleLeaveChat(memberID, otherGroupChatID);
                 this.#handleLeaveGroupMeeting([memberID], otherGroupMeetingID);
             }
         });
@@ -2569,18 +2573,13 @@ module.exports = class ServerController {
             meeting.addMember(memberID);
 
             let socketID = this.getSocketId(memberID);
-            // This only allows for currently online ppants to
-            // be added to meetings. It would be nicer if also
-            // offline ppants could be added to meetings, but
-            // this would require checking the database for the
-            // passed ppantId
             if(member !== undefined && socketID !== undefined) {
-                MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
                 member.joinMeeting(meeting);
 
                 this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
                 this.#io.to(socketID).emit('newMeeting', meetingData);
             }
+            MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
         });
     }
 
@@ -2603,18 +2602,12 @@ module.exports = class ServerController {
             let member = this.#ppants.get(memberID);
 
             let socketID = this.getSocketId(memberID);
-            // This only allows for currently online ppants to
-            // be removed from meetings. It would be nicer if also
-            // offline ppants could be remove from meetings, but
-            // this would require more database interaction
             if (member !== undefined && socketID !== undefined) {
-                // member is removed from meeting as well
-                // during this next operation
                 member.leaveMeeting(meetingID);
-                MeetingService.removeParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
 
                 this.#io.to(socketID).emit('leave meeting', meetingID);
             }
+            MeetingService.removeParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
         })
     }
 
