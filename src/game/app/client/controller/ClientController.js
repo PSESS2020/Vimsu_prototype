@@ -13,7 +13,6 @@ class ClientController {
     ownBusinessCard;
     gameView;
     isVideoConference;
-    jitsi;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -31,7 +30,7 @@ class ClientController {
 
         TypeChecker.isInt(port);
         TypeChecker.isInstanceOf(gameView, GameView);
-        
+
         this.port = port;
         this.openSocketConnection();
         this.gameView = gameView;
@@ -46,7 +45,7 @@ class ClientController {
      * @return {RoomClient}
      */
     getCurrentRoom() {
-       return this.currentRoom; 
+        return this.currentRoom;
     }
 
     /**
@@ -197,10 +196,12 @@ class ClientController {
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
         this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
+        this.socket.on('gotNewMeeting', this.handleFromServerGotNewMeeting.bind(this));
         this.socket.on('evalAnswer', function (data) {   //Displays evaluated input.
             console.log(data);
         });
         this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
+        this.socket.on('newMeeting', this.handleFromServerNewMeeting.bind(this));
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
         this.socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
@@ -214,6 +215,7 @@ class ClientController {
         this.socket.on('other shirt color changed', this.handleFromServerChangeOtherShirtColor.bind(this));
         this.socket.on('join group', this.handleFromServerJoinGroup.bind(this));
         this.socket.on('leave group', this.handleFromServerLeaveGroup.bind(this));
+        this.socket.on('leave meeting', this.handleFromServerLeaveMeeting.bind(this));
         this.socket.on('meetingList', this.handleFromServerShowMeetingList.bind(this));
         this.socket.on('showExternalWebsite', this.handleFromServerShowExternalWebsite.bind(this));
     }
@@ -241,8 +243,8 @@ class ClientController {
      */
     getSendMessageFailureText() {
         return {
-            username: "VIMSU Bot", 
-            timestamp: new Date(), 
+            username: "VIMSU Bot",
+            timestamp: new Date(),
             text: "Failed to send message. No connection to the server."
         }
     }
@@ -269,7 +271,7 @@ class ClientController {
      * @param {Object} initInfo initial own participant info
      */
     handleFromServerInitOwnParticipant = function (initInfo) {
-        
+
         TypeChecker.isInstanceOf(initInfo, Object);
         TypeChecker.isString(initInfo.id);
         TypeChecker.isInstanceOf(initInfo.businessCard, Object);
@@ -399,7 +401,7 @@ class ClientController {
         if (!this.currentRoom) {
             this.currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-        //If not, only swap the room
+            //If not, only swap the room
         } else {
             this.currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.currentRoom.enterParticipant(this.ownParticipant);
@@ -994,6 +996,36 @@ class ClientController {
     };
 
     /**
+     * Receives from server that a new meeting has been created
+     * 
+     * @param {Object} meeting meeting
+     * @param {String} meeting.id ID of meeting
+     * @param {String} meeting.name name of meeting
+     * @param {String} meeting.password password of meeting
+     */
+    handleFromServerNewMeeting = function (meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.gameView.addNewMeeting(meeting);
+    };
+
+    /**
+     * Receives from server that user got a new meeting, view should draw notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    handleFromServerGotNewMeeting = function (meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+
+        this.gameView.drawNewMeeting(meetingName, meetingID);
+    }
+
+    /**
      * Receives from server that user got a new chat
      * 
      * @param {String} senderUsername chat sender username
@@ -1067,7 +1099,7 @@ class ClientController {
      * 
      * @param {boolean} modState true if you become a moderator, false otherwise
      */
-    handleFromServerChangeYourModState = function(modState) {
+    handleFromServerChangeYourModState = function (modState) {
         TypeChecker.isBoolean(modState);
 
         this.gameView.setOwnModState(modState);
@@ -1080,7 +1112,7 @@ class ClientController {
      * @param {boolean} modState true if the user becomes a moderator, false otherwise
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherModState = function(modState, ppantID) {
+    handleFromServerChangeOtherModState = function (modState, ppantID) {
         TypeChecker.isBoolean(modState);
         TypeChecker.isString(ppantID);
 
@@ -1097,7 +1129,7 @@ class ClientController {
      * 
      * @param {ShirtColor} shirtColor new shirt color
      */
-    handleFromServerChangeYourShirtColor = function(shirtColor) {
+    handleFromServerChangeYourShirtColor = function (shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.gameView.setOwnShirtColor(shirtColor);
@@ -1110,7 +1142,7 @@ class ClientController {
      * @param {ShirtColor} shirtColor new shirt color
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherShirtColor = function(shirtColor, ppantID) {
+    handleFromServerChangeOtherShirtColor = function (shirtColor, ppantID) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isString(ppantID);
 
@@ -1127,7 +1159,7 @@ class ClientController {
      * 
      * @param {String} groupName name of joined group
      */
-    handleFromServerJoinGroup = function(groupName) {
+    handleFromServerJoinGroup = function (groupName) {
         TypeChecker.isString(groupName);
 
         this.gameView.addGroupName(groupName);
@@ -1138,7 +1170,7 @@ class ClientController {
      * 
      * @param {String} groupChatID chatID of left group
      */
-    handleFromServerLeaveGroup = function(groupChatID) {
+    handleFromServerLeaveGroup = function (groupChatID) {
         TypeChecker.isString(groupChatID);
 
         this.gameView.removeGroupName();
@@ -1156,7 +1188,7 @@ class ClientController {
      * @param {number} iFrameData.height height of iframe in px
      * @param {number} gameObjectID GameObject id
      */
-     handleFromServerShowExternalWebsite = function (iFrameData, gameObjectID) {
+    handleFromServerShowExternalWebsite = function (iFrameData, gameObjectID) {
         TypeChecker.isInstanceOf(iFrameData, Object);
         TypeChecker.isString(iFrameData.title);
         TypeChecker.isInt(iFrameData.width);
@@ -1164,6 +1196,18 @@ class ClientController {
         TypeChecker.isString(iFrameData.url);
         TypeChecker.isInt(gameObjectID);
         this.gameView.initExternalWebsiteView(iFrameData, gameObjectID.toString());
+    }
+
+    /** 
+     * Receives from server that you left a meeting
+     * 
+     * @param {String} meetingID meetingID of left meeting
+     */
+    handleFromServerLeaveMeeting = function (meetingID) {
+        TypeChecker.isString(meetingID);
+
+        this.gameView.removeMeeting(meetingID);
+        this.gameView.closeVideoMeetingView(meetingID);
     }
 
     /*  */
@@ -1206,7 +1250,7 @@ class ClientController {
         }
         else {
             this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
-        }            
+        }
     }
 
     /**
@@ -1237,7 +1281,7 @@ class ClientController {
         }
         else {
             this.gameView.appendLectureChatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
-        }    
+        }
     }
 
     /**
@@ -1461,7 +1505,7 @@ class ClientController {
      * 
      * @param {number} npcId NPC id
      */
-    handleFromViewGetNPCStory(npcId) {        
+    handleFromViewGetNPCStory(npcId) {
         this.gameView.addNPCStoryWindow(npcId.toString())
 
         if (this.socketReady()) {
@@ -1521,31 +1565,18 @@ class ClientController {
     /**
      * Calls the Jitsi-API to join a meeting
      * 
-     * might move the code into a seperate class?
-     * @param {*} meetingId 
+     * @param {String} meetingId id of joined meeting
+     * @param {String} meetingDomain domain of joined meeting
+     * @param {String} meetingName name of joined meeting
+     * @param {String} meetingPassword password of joined meeting
      */
-    handleFromViewJoinMeeting(meetingId) {
-        // domain name should not be hard-coded
+    handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword) {
+        TypeChecker.isString(meetingId);
+        TypeChecker.isString(meetingDomain);
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingPassword);
 
-        this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
-            roomName: 'maybenottestidontknowseemsawkward',
-            width: '100%',
-            height: window.innerHeight * 0.7,
-            // Add JWT
-            parentNode: document.getElementById('meetingModal-body'),
-            userInfo: {
-                email: 'place', // These will be the correct values from
-                displayName: 'holder' // the participants data
-            }
-        });
-
-        $('#meetingModal').modal('show');
-        
-
-        $('#meetingModal').on('hidden.bs.modal', function() { 
-            this.jitsi.dispose();
-        }.bind(this));
-
+        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownBusinessCard.getForename());
     }
 
     /**

@@ -13,7 +13,8 @@ class GameView {
 
     currentLecturesView;
     lectureView;
-    meetingListView
+    meetingListView;
+    videoMeetingView;
     chatListView;
     chatThreadView;
     statusBar;
@@ -87,6 +88,7 @@ class GameView {
         this.inviteFriendsView = new InviteFriendsView(this.eventManager);
         this.chatListView = new ChatListView(this.eventManager);
         this.meetingListView = new MeetingListView(this.eventManager);
+        this.videoMeetingView = new VideoMeetingView(this.eventManager);
         this.chatThreadView = new ChatThreadView(this.eventManager);
         this.chatParticipantListView = new ChatParticipantListView();
         this.scheduleListView = new ScheduleListView();
@@ -942,6 +944,20 @@ class GameView {
     };
 
     /**
+     * Draws jitsi meeting window
+     * 
+     * @param {String} meetingId id of joined meeting
+     * @param {String} meetingDomain domain of joined meeting
+     * @param {String} meetingName name of joined meeting
+     * @param {String} meetingPassword password of joined meeting
+     * @param {String} ownForename own forename that is shown in meeting
+     * 
+     */
+    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
+        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename);
+    }
+
+    /**
      * Draws chat list window
      * 
      * @param {Object[]} chats chats
@@ -1005,6 +1021,17 @@ class GameView {
             this.chatListView.addNewChat(chat);
         }
         this.initChatThreadView(chat, openNow);
+    };
+
+    /**
+     * Adds new meeting to meeting list
+     * 
+     * @param {Object} meeting meeting
+     */
+     addNewMeeting(meeting) {
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.addNewMeeting(meeting);
+        }
     };
 
     /**
@@ -1111,6 +1138,30 @@ class GameView {
             this.chatListView.deleteChat(chatId);
         }
     }
+
+    /**
+     * Removes meeting from meeting list window
+     * 
+     * @param {String} meetingId meeting ID
+     */
+     removeMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.deleteMeeting(meetingId);
+        }
+    }
+
+    /**
+     * Closes video meeting window with meetingId if it is currently visible
+     * 
+     * @param {String} meetingId meeting ID
+     */
+    closeVideoMeetingView(meetingId) {
+        if ($('#meetingWindow').is(':visible')) {
+            this.videoMeetingView.close(meetingId);
+        }
+    };
 
     /**
      * Add friends to friend list window and invite friends window
@@ -1229,6 +1280,18 @@ class GameView {
         TypeChecker.isString(chatId);
 
         this.notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
+    }
+
+    /**
+     * Draws new meeting notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    drawNewMeeting(meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+        this.notifBar.drawNewMeeting(meetingName, meetingID);
     }
 
     /**

@@ -1,9 +1,8 @@
 <html>
 
 <body>
-    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-100" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
@@ -37,25 +36,9 @@
         </div>
     </div>
 
-    <div class="modal fade" id="meetingModal" tabindex="-1" role="dialog" aria-labelledby="meetingModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="videoMeetingModalTitle">Jitsi-Meeting</h5>
-                    <button type="button" id="meetingModalClose" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="meetingModal-body">
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center d-block">
                 </div>
@@ -70,7 +53,7 @@
 
     <div class="modal fade" id="businessCardModal" tabindex="-1" role="dialog" aria-labelledby="businessCardModalTitle"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="businessCardModalTitle">Business Card</h5>
@@ -88,7 +71,7 @@
 
     <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle"
         aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
@@ -124,7 +107,7 @@
 
     <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog"
         aria-labelledby="friendRequestListModalTitle" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
@@ -146,7 +129,7 @@
     </div>
 
     <div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="achievementsModalTitle">Achievements</h5>
@@ -171,7 +154,7 @@
         height="100%"></canvas>
     <div style="z-index: 1052;" class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="newAchievementModalTitle">New Achievement Unlocked!</h5>
@@ -192,7 +175,7 @@
 
     <div class="modal fade" id="rankListModal" tabindex="-1" role="dialog" aria-labelledby="rankListModalTitle"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-100" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="rankListModalTitle">Best Participants</h5>
@@ -211,9 +194,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog" aria-labelledby="meetingListModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog"   aria-labelledby="meetingListModalTitle" aria-hidden="true" data-focus-on="input:first">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="meetingListModalTitle">Meetings</h5>
@@ -222,6 +204,9 @@
                     </button>
                 </div>
                 <div class="modal-body modal-body-large">
+                    <div id="meetingListWait" style="text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                    </div>
                     <div id="nomeeting"></div>
                     <ul class="list-group bg-transparent">
 
@@ -233,7 +218,7 @@
 
     <div class="modal fade" id="chatListModal" tabindex="-1" role="dialog" aria-labelledby="chatListModalTitle"
         aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
@@ -273,7 +258,7 @@
 
     <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
         data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
@@ -296,7 +281,7 @@
 
     <div class="modal" id="inputEnterCodeModal" tabindex="-1" role="dialog" aria-labelledby="inputEnterCodeModalTitle"
         data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
@@ -319,7 +304,7 @@
 
     <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
         aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
             <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
@@ -382,6 +367,24 @@
             </div>
 
         </div>
+    </div>
+
+    <div class="window" id="meetingWindow" style="width: 100%; height: 100%;">
+        <div class="p-3 d-flex window-header">
+            <div id="meetingWindowTitle"></div>
+            <button id="meetingWindowMinimize" class="close btn ml-auto pl-1 pr-1">
+                <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
+            </button>
+            <button id="meetingWindowClose" class="close btn pl-1 pr-1">
+                <i class="fa fa-close"></i>
+            </button>
+        </div>
+        <div class="p-3 window-content">
+            <div id="meetingWindowWait" style="text-align: center;">
+                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+            </div>
+            <div id="meetingWindowBody" class="row ml-auto mr-auto"></div>
+        </div>            
     </div>
 
     <div class="window" id="currentLectures" style="width: 100%; height: 100%">

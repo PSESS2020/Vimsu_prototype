@@ -263,7 +263,7 @@ module.exports = class Participant {
      * @return {Meeting[]} meetingList
      */
     getMeetingList() {
-        return this.#meetingList
+        return this.#meetingList;
     }
 
     /**
@@ -277,6 +277,38 @@ module.exports = class Participant {
         if (!this.#chatList.includes(chat)) {
             this.#chatList.push(chat);
         }
+    }
+
+    /**
+     * Adds Meeting instance to the meeting list.
+     * @method module:Participant#joinMeeting
+     * 
+     * @param {Meeting} meeting 
+     */
+    joinMeeting(meeting) {
+        TypeChecker.isInstanceOf(meeting, Meeting);
+        if(!this.#meetingList.includes(meeting)) {
+            this.#meetingList.push(meeting);
+        }
+    }
+
+    /**
+     * Removes Meeting instance from the meeting list.
+     * @method module:Participant#leaveMeeting
+     * 
+     * @param {String} meetingId
+     */
+    leaveMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.#meetingList.forEach(meeting => {
+            if(meeting.getId() === meetingId) {
+                meeting.removeMember(this.#id);
+                let index = this.#meetingList.indexOf(meeting);
+                this.#meetingList.splice(index, 1);
+            }
+        })
+
     }
 
     /**

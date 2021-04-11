@@ -24,6 +24,7 @@ class MeetingListView extends WindowView {
         MeetingListView.instance = this;
 
         this.eventManager = eventManager;
+        this.meetings = [];
     }
 
     /**
@@ -32,6 +33,7 @@ class MeetingListView extends WindowView {
      * @param {Object[]} meetings meetings
      */
     draw(meetings) {
+        $('#meetingListWait').hide();
         $('#nomeeting').empty();
         $('#meetingListModal .modal-body .list-group').empty();
 
@@ -40,12 +42,9 @@ class MeetingListView extends WindowView {
         this.meetings = meetings;
 
         this.meetings.forEach(meeting => {
-
             // Now we want to append each meeting as a clickable element
             this.appendNewMeeting(meeting);
         })
-
-        $('#meetingListModal').modal('show');
     }
 
     /**
@@ -62,7 +61,7 @@ class MeetingListView extends WindowView {
         });
 
         $("#meetingEntry" + meetingId).remove()
-        if (!this.handleEmptyMeetingList(meetings)) return
+        if (!this.handleEmptyMeetingList(this.meetings)) return;
     };
 
     /**
@@ -86,13 +85,13 @@ class MeetingListView extends WindowView {
         $('#nomeeting').empty();
 
         $('#meetingListModal .modal-body .list-group').prepend(`
-            <li class="list-group-item bg-transparent meetingthread" id="${"meetingEntry" + meeting.id}">
+            <li class="list-group-item bg-transparent chatthread" id="${"meetingEntry" + meeting.id}">
                 <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
-                            <div class="col-12 col-sm-2 px-0">
-                                <i class="fa fa-video fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                            <div class="col-2 px-0">
+                                <i class="fa fa-video fa-5x navbarIcons" style="transform: scale(0.7)" ></i>
                             </div>
-                            <div class="col-12 col-md-10 text-center text-sm-left">
+                            <div class="col-10 text-left">
                                 <label class="name lead">${meeting.name}</label>
                             </div>  
                         </div>
@@ -102,7 +101,11 @@ class MeetingListView extends WindowView {
 
         $('#meeting' + meeting.id).off();
         $('#meeting' + meeting.id).on('click', () => {
-            this.eventManager.handleMeetingThreadClicked(meeting.id);
+            /* TO FIX
+            This is not ideal, sensitive information like a password, even though it is not a particularly important, is not good practice */
+            $('#meetingWindow').show();
+            $('#meetingWindowWait').show();
+            this.eventManager.handleMeetingJoined(meeting.id, meeting.domain, meeting.name, meeting.password); 
         })
     }
 
@@ -115,7 +118,6 @@ class MeetingListView extends WindowView {
      handleEmptyMeetingList(meetings) {
         if (meetings && meetings.length < 1) {
             $('#nomeeting').text("No meetings found. Let's connect with others!")
-            $('#meetingListModal').modal('show');
             return false;
         }
 
