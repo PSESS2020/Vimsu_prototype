@@ -39,9 +39,9 @@ describe('RoomClient test', function() {
             "leftfoyerdoor_default": "../client/assets/doors/door_foyer.png",
             "table_default": "../client/assets/tables/table.png"
         }
-        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool())];
-        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false)];
-        listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT, ShirtColor.BLUE)];
+        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool(), TestUtil.randomBool())];
+        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false, TestUtil.randomBool())];
+        listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT, TestUtil.randomObjectValue(ShirtColor))];
         listOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
         width = TestUtil.randomIntWithMaxAndMin(1000, 1);
         length = TestUtil.randomIntWithMaxAndMin(1000, 1);
