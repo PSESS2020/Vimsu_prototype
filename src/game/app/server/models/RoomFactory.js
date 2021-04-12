@@ -13,6 +13,7 @@ const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
+const RoomDimensions = require('../utils/RoomDimensions.js');
 
 
 module.exports = class RoomFactory {
@@ -38,13 +39,13 @@ module.exports = class RoomFactory {
         // switch statement should be replaced by polymorphism
         switch(roomData.TYPE) {
             case TypeOfRoom.RECEPTION:
-                return new ReceptionRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
+                return new ReceptionRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)).getRoom();
             case TypeOfRoom.FOYER:
-                return new FoyerRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
+                return new FoyerRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)).getRoom();
             case TypeOfRoom.FOODCOURT:
-                return new FoodcourtRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
+                return new FoodcourtRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)).getRoom();
             case TypeOfRoom.ESCAPEROOM:
-                return new EscapeRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
+                return new EscapeRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)).getRoom();
             case TypeOfRoom.CUSTOM:
                 return this.#buildByPlan(roomData);
             default:

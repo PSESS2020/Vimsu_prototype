@@ -1,6 +1,5 @@
-const AssetPaths = require('../../client/shared/AssetPaths');
-const Direction = require('../../client/shared/Direction');
-const GlobalStrings = require('../../client/shared/GlobalStrings.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom');
+const Settings = require('./Settings');
 
 /**
  * How to use this file:
@@ -42,26 +41,23 @@ module.exports = Object.freeze({
     // contains fitting rooms for the doors to exit into
 
     ROOM1: {
-        TYPE: GlobalStrings.RECEPTION,
-        ID: 1,
-        WIDTH: 100,
-        LENGTH: 100,
+        TYPE: TypeOfRoom.RECEPTION,
+        ID: Settings.RECEPTION_ID      
+    },
 
-        //SHAPE: null, /* Here people give either holes or non-holes in the form of arrays? */
+    ROOM2: {
+        TYPE: TypeOfRoom.FOYER,
+        ID: Settings.FOYER_ID
+    },
 
-        // replace string by asset path
-        WALLTYPE_LEFT: 'default',
-        WALLTYPE_RIGHT: 'default',
-        TILETYPE: 'default',
-        MAPELEMENTS: [],
-        OBJECTS: [],
+    ROOM3: {
+        TYPE: TypeOfRoom.FOODCOURT,
+        ID: Settings.FOODCOURT_ID
+    },
 
-        // This does currently not offer support for lecture doors
-        // objData = {style, direction, positionOfDoor (array),
-        //            positionOnExit (array), directionOnExit, isOpen,
-        //            closedMessage, codeToOpen}
-        DOORS: [],    
-        NPCS: []
+    ROOM4: {
+        TYPE: TypeOfRoom.ESCAPEROOM,
+        ID: Settings.ESCAPEROOM_ID
     }
 
 
