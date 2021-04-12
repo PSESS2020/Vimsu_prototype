@@ -34,10 +34,10 @@ class AvatarView extends Views {
         this.direction = direction;
         this.shirtColor = shirtColor;
 
-        this.spriteSheet = new SpriteSheet('client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.bottomClothing = new SpriteSheet('client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.shoes = new SpriteSheet('client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.spriteSheet = new SpriteSheet('../client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.topClothing = new SpriteSheet('../client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.bottomClothing = new SpriteSheet('../client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.shoes = new SpriteSheet('../client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
 
         if (new.target === AvatarView) {
             throw new Error("Cannot construct abstract AvatarView instances directly");
@@ -171,7 +171,7 @@ class AvatarView extends Views {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         
         this.shirtColor = shirtColor;
-        this.topClothing = new SpriteSheet('client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.topClothing = new SpriteSheet('../client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         this.initSpriteAnimation();
     }
 

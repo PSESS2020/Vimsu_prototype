@@ -27,11 +27,11 @@ describe('GameObject test', function () {
         position = new Position(TestUtil.randomInt(), TestUtil.randomInt(), TestUtil.randomInt());
         isSolid = TestUtil.randomBool();
         isClickable = TestUtil.randomBool();
-        url = TestUtil.randomString();
+        iFrameData = { title: TestUtil.randomString(), url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
     });
 
     it('test constructor and getters', function () {
-        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, url);
+        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData);
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -41,7 +41,7 @@ describe('GameObject test', function () {
         assert.equal(position, gameObject.getPosition());
         assert.equal(isSolid, gameObject.getSolid());
         assert.equal(isClickable, gameObject.getClickable());
-        assert.equal(url, gameObject.getURL());
+        assert.equal(iFrameData, gameObject.getIFrameData());
     });
 
     it('test constructor invalid input', function () {

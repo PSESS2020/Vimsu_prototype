@@ -10,6 +10,7 @@ const DoorClient = require('../../../src/game/app/client/models/DoorClient.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
+const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const GameObjectType = require('../../../src/game/app/client/shared/GameObjectType.js');
 const Settings = require('../../../src/game/app/server/utils/Settings.js');
 const SettingsClient = require('../../../src/game/app/client/utils/Settings.js');
@@ -32,14 +33,14 @@ describe('RoomClient test', function() {
         roomId = TestUtil.randomInt();
         typeOfRoom = TypeOfRoom.FOODCOURT;
         assetPaths = {
-            "tile_default": "client/assets/tiles/tile_default.png",
-            "leftwall_default": "client/assets/walls/wall1.png",
-            "rightwall_default": "client/assets/walls/wall2.png",
-            "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
-            "table_default": "client/assets/tables/table.png"
+            "tile_default": "../client/assets/tiles/tile_default.png",
+            "leftwall_default": "../client/assets/walls/wall1.png",
+            "rightwall_default": "../client/assets/walls/wall2.png",
+            "leftfoyerdoor_default": "../client/assets/doors/door_foyer.png",
+            "table_default": "../client/assets/tables/table.png"
         }
-        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool())];
-        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false)];
+        listOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 1, 1, new PositionClient(1, 1), TestUtil.randomBool(), TestUtil.randomBool())];
+        listOfMapElements = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TILE, 'tile', 1, 1, new PositionClient(0, 0), false, TestUtil.randomBool())];
         listOfNPCs = [new NPCClient(TestUtil.randomInt(), TestUtil.randomString(), new PositionClient(0, 0), Direction.DOWNLEFT)];
         listOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'foyer_door', new PositionClient(1, 0), TestUtil.randomInt())];
         width = TestUtil.randomIntWithMaxAndMin(1000, 1);
@@ -86,12 +87,12 @@ describe('RoomClient test', function() {
         let ppantPosition = new PositionClient(TestUtil.randomIntWithMaxAndMin(width, 1), TestUtil.randomIntWithMaxAndMin(length, 1));
         let isVisible = TestUtil.randomBool();
         let isModerator = TestUtil.randomBool();
-        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator);
+        let ppant = new ParticipantClient(ppantID, ppantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator, ShirtColor.BLUE);
 
         //second ppant
         let secondPpantID = TestUtil.randomString();
         let secondPpantUsername = TestUtil.randomString();
-        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator);
+        let secondPpant = new ParticipantClient(secondPpantID, secondPpantUsername, ppantPosition, Direction.DOWNLEFT, isVisible, isModerator, ShirtColor.GREEN);
 
         //ppant is not in room before
         assert.equal(room.getParticipant(ppantID), undefined);
@@ -130,35 +131,26 @@ describe('RoomClient test', function() {
         let newLength = TestUtil.randomIntWithMaxAndMin(100, 5);
 
         //table with width 2 and length 1 at (0,1)
-        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 2, 1, new PositionClient(0, 1), false)];
+        let newListOfGameObjects = [new GameObjectClient(TestUtil.randomInt(), GameObjectType.TABLE, 'table', 2, 1, new PositionClient(0, 1), false, TestUtil.randomBool())];
 
         //npc at (1,1)
-        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT)];
+        let newListOfNPCs = [new NPCClient(TestUtil.randomInt(), 'collisionNPC', new PositionClient(1, 0), Direction.DOWNRIGHT, ShirtColor.RED)];
 
         let newListOfDoors = [new DoorClient(TestUtil.randomString(), TypeOfDoor.LEFT_DOOR, 'door', new PositionClient(4, 4), TestUtil.randomInt())];
-        let newAssetPaths = {"tile_default": "client/assets/tile_default.png"};
+        let newAssetPaths = {"tile_default": "../client/assets/tile_default.png"};
         let newListOfMapElements = [];
         
         //calculate occMap, normally happens in server, here just for testing purpose
-        let newOccupationMap = new Array(width);
-        for (var i = 0; i < width; i++) {
-            newOccupationMap[i] = new Array(length).fill(0);
+        let newOccupationMap = new Array(newWidth);
+        for (var i = 0; i < newWidth; i++) {
+            newOccupationMap[i] = new Array(newLength).fill(0);
         }
 
         //table
-        newOccupationMap[0][1] = 1;
-        newOccupationMap[1][1] = 1;
+        newOccupationMap[0][4] = 1;
 
-        //npc
-        newOccupationMap[1][0] = 1;
-        
-        //collision with NPCs
-        for (var i = 0; i < newListOfNPCs.length; i++) {
-            let npcPosition = newListOfNPCs[i].getPosition();
-            let cordX = npcPosition.getCordX();
-            let cordY = npcPosition.getCordY();
-            newOccupationMap[cordX][cordY] = 1;
-        }
+        //npcs
+        newOccupationMap[1][3] = 1;
 
         room.swapRoom(newRoomID, newTypeOfRoom, newAssetPaths, newListOfMapElements, newListOfGameObjects, newListOfNPCs, newListOfDoors, newWidth, newLength, newOccupationMap);
 
@@ -170,8 +162,8 @@ describe('RoomClient test', function() {
         expect(room.getListOfPPants()).to.be.an('array').and.to.have.lengthOf(0);
         expect(room.getWidth()).to.equal(newWidth);
         expect(room.getLength()).to.equal(newLength);
-        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_WIDTH);
-        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(newWidth + SettingsClient.MAP_BLANK_TILES_LENGTH);
+        expect(room.getMap()).to.be.an('array').and.to.have.lengthOf(newLength + SettingsClient.MAP_BLANK_TILES_WIDTH);
+        expect(room.getObjectMap()).to.be.an('array').and.to.have.lengthOf(newLength + SettingsClient.MAP_BLANK_TILES_LENGTH);
         expect(room.getAssetPaths()).to.equal(newAssetPaths);
         expect(room.getListOfMapElements()).to.equal(newListOfMapElements);
 
@@ -180,7 +172,6 @@ describe('RoomClient test', function() {
 
         //position where Test GameObject is
         assert.equal(room.checkForCollision(new PositionClient(0, 1)), true);
-        assert.equal(room.checkForCollision(new PositionClient(1, 1)), true);
 
         //position of random empty tile
         assert.equal(room.checkForCollision(new PositionClient(0, 0)), false);

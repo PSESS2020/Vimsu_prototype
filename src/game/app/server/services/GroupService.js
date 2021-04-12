@@ -4,6 +4,8 @@ const GroupChat = require('../models/GroupChat.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const ChatService = require('./ChatService.js');
 const db = require('../../../../config/db.js');
+const MeetingService = require('./MeetingService.js');
+const Meeting = require('../models/Meeting.js');
 
 /**
  * The Group Service
@@ -32,12 +34,14 @@ const db = require('../../../../config/db.js');
 
             await groups.forEach(group => {
                 return ChatService.loadChat(group.groupChatID, conferenceId, vimsudb).then(groupChat => {
-                    groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat));
-                })
-            })
+                    return MeetingService.loadMeeting(group.groupMeetingID, conferenceId, vimsudb).then(groupMeeting => {
+                        groupMap.set(group.groupName, new Group(group.groupName, group.groupColor, group.memberIDs, groupChat, groupMeeting));
+                    });                    
+                });
+            });
 
-            return groupMap;
-        })
+            return Promise.resolve(groupMap);
+        });
     }
 
     /**
@@ -48,12 +52,13 @@ const db = require('../../../../config/db.js');
      * @param {ShirtColor} groupColor group color
      * @param {String[]} memberIDs memberIDs
      * @param {GroupChat} groupChat chat of group
+     * @param {Meeting} groupMeeting meeting of group
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
      * 
      * @return {Group} Group instance
      */
-    static createGroup(groupName, groupColor, memberIDs, groupChat, conferenceId, vimsudb) {
+    static createGroup(groupName, groupColor, memberIDs, groupChat, groupMeeting, conferenceId, vimsudb) {
         TypeChecker.isString(groupName);
         TypeChecker.isEnumOf(groupColor, ShirtColor);
         TypeChecker.isInstanceOf(memberIDs, Array);
@@ -61,6 +66,7 @@ const db = require('../../../../config/db.js');
             TypeChecker.isString(memberID);
         });
         TypeChecker.isInstanceOf(groupChat, GroupChat)
+        TypeChecker.isInstanceOf(groupMeeting, Meeting)
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
@@ -68,12 +74,13 @@ const db = require('../../../../config/db.js');
             groupName: groupName,
             groupColor: groupColor,
             memberIDs: memberIDs, 
-            groupChatID: groupChat.getId()
+            groupChatID: groupChat.getId(),
+            groupMeetingID: groupMeeting.getId()
         }
 
         return vimsudb.insertOneToCollection("groups_" + conferenceId, group).then(res => {
             console.log("group saved in DB");
-            return new Group(groupName, groupColor, memberIDs, groupChat);
+            return new Group(groupName, groupColor, memberIDs, groupChat, groupMeeting);
 
         })
     }
@@ -116,6 +123,8 @@ const db = require('../../../../config/db.js');
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
+        // TODO: add member to meeting
+
         return vimsudb.insertToArrayInCollection("groups_" + conferenceId, { groupName: groupName }, { memberIDs: memberID }).then(res => {
             return res;
         })
@@ -137,6 +146,8 @@ const db = require('../../../../config/db.js');
         TypeChecker.isString(memberID);
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
+
+        // TODO remove member from meeting
 
         return vimsudb.deleteFromArrayInCollection("groups_" + conferenceId, { groupName: groupName }, { memberIDs: memberID }).then(res => {
 

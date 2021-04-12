@@ -47,9 +47,8 @@ module.exports = class FriendList {
      */
     removeBusinessCard(ppantID) {
         TypeChecker.isString(ppantID);
-        this.#memberList.forEach(card => {
+        this.#memberList.forEach((card, index) => {
             if (card.getParticipantId() === ppantID) {
-                let index = this.#memberList.indexOf(card);
                 this.#memberList.splice(index, 1);
             }
         });

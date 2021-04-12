@@ -9,11 +9,12 @@
     <div class="container">
 		<%- include('partials/header') %>
         <section class="large-form-content row align-items-center justify-content-center">
-            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
-                <h5>Create Lecture</h5>
-                <br>
-                <div class="row justify-content-left m-0 p-0">
-                    <% if(locals.noFilesUploaded === true) { %>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
+                <h5 class="mb-4">Create Lecture</h5>
+                <div class="row justify-content-left mb-3 m-0 p-0">
+                    <% if (locals.uploading === true) { %>
+                        <small class="success"><i class="fa fa-check-circle"></i> Lecture slot is successfully created. You may exit this page.</small>
+                    <% } else if(locals.noFilesUploaded === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> No files were
                             uploaded. Please upload a video.</small>
                     <% } else if (locals.fileSizeExceeded === true) { %>
@@ -28,42 +29,45 @@
                     <% } else if (locals.notDate === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> Starting time
                             must be a valid date.</small>
+                    <% } else if (locals.invalidLectureTitle === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Lecture title cannot be empty.</small>
                     <% } else if (locals.uploadFailed === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an
                             error while uploading the video. Please try again.</small>
                     <% } else if (locals.createSlotFailed === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an
                             error while creating the slot. Please try again.</small>
-                    <% } else if (locals.uploading === true) { %>
-                        <small class="success"><i class="fa fa-check-circle"></i> Lecture slot is successfully created. You may exit this page.</small>
                     <% } %>
                 </div>
-                <br>
+                <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
                 <form action="upload" method="POST">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="titleInput" name="title" placeholder="Title"
-                            required autocomplete="off">
+                        <label for="title" class="input-label">Title&nbsp<span class="warning">*</span></label>
+                        <input type="text" class="form-control" id="titleInput" name="title" placeholder="A New Normal Era"
+                            required autocomplete="off" value="<%=title%>">
                     </div>
                     <div class="form-group">
-                        <label for="startingTime" class="mt-2 input-label">Starting time:</label>
+                        <label for="startingTime" class="input-label">Starting time&nbsp<span class="warning">*</span></label>
                         <input type="datetime-local" class="form-control" id="startingTimeInput"
-                            name="startingTime" autocomplete="off"/>
+                            name="startingTime" autocomplete="off" required value="<%=startingTime%>"/>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-8">
+                        <div class="form-group col-6">
+                            <label for="remarks" class="input-label">Remarks&nbsp<span class="warning">*</span></label>
                             <input type="text" class="form-control" id="remarksInput" name="remarks"
-                                placeholder="Remarks" autocomplete="off">
+                                placeholder="Limited seats, ..." autocomplete="off" value="<%=remarks%>">
                         </div>
-                        <div class="form-group col-4">
+                        <div class="form-group col-6">
+                            <label for="maxParticipants" class="input-label"># Participants&nbsp<span class="warning">*</span></label>
                             <input type="number" step="1" class="form-control" id="maxParticipantsInput"
-                                name="maxParticipants" placeholder="# Participants" required autocomplete="off">
+                                name="maxParticipants" placeholder="0" required autocomplete="off" value="<%=maxParticipants%>">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="video" class="mt-2 input-label">Video: </label>
+                    <div class="form-group mb-2">
+                        <label for="video" class="input-label">Video&nbsp<span class="warning">*</span></label>
                         <input type="file" class="form-control" name="video" id="file" accept="video/mp4"/>
                     </div>
-                    <label for="video" class="input-label mt-1 mb-0">Supported file: .mp4 || Max. size: 50 MB</label>
+                    <label for="video" class="input-label mb-0">Supported file: .mp4 || Max. size: 50 MB</label>
                     <button class="primary-button mt-4 p-2" type="submit">
                         <span>Create lecture</span>
                     </button>

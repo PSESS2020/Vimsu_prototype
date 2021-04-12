@@ -13,7 +13,6 @@ class ClientController {
     ownBusinessCard;
     gameView;
     isVideoConference;
-    jitsi;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -31,7 +30,7 @@ class ClientController {
 
         TypeChecker.isInt(port);
         TypeChecker.isInstanceOf(gameView, GameView);
-        
+
         this.port = port;
         this.openSocketConnection();
         this.gameView = gameView;
@@ -46,7 +45,7 @@ class ClientController {
      * @return {RoomClient}
      */
     getCurrentRoom() {
-       return this.currentRoom; 
+        return this.currentRoom;
     }
 
     /**
@@ -197,10 +196,12 @@ class ClientController {
         this.socket.on('gotNewChat', this.handleFromServerGotNewChat.bind(this));
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
         this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
+        this.socket.on('gotNewMeeting', this.handleFromServerGotNewMeeting.bind(this));
         this.socket.on('evalAnswer', function (data) {   //Displays evaluated input.
             console.log(data);
         });
         this.socket.on('newChat', this.handleFromServerNewChat.bind(this));
+        this.socket.on('newMeeting', this.handleFromServerNewMeeting.bind(this));
         this.socket.on('newAchievement', this.handleFromServerNewAchievement.bind(this));
         this.socket.on('newFriendRequestReceived', this.handleFromServerNewFriendRequest.bind(this));
         this.socket.on('chatList', this.handleFromServerShowChatList.bind(this));
@@ -214,7 +215,10 @@ class ClientController {
         this.socket.on('other shirt color changed', this.handleFromServerChangeOtherShirtColor.bind(this));
         this.socket.on('join group', this.handleFromServerJoinGroup.bind(this));
         this.socket.on('leave group', this.handleFromServerLeaveGroup.bind(this));
+        this.socket.on('leave chat', this.handleFromServerLeaveChat.bind(this));
+        this.socket.on('leave meeting', this.handleFromServerLeaveMeeting.bind(this));
         this.socket.on('meetingList', this.handleFromServerShowMeetingList.bind(this));
+        this.socket.on('showExternalWebsite', this.handleFromServerShowExternalWebsite.bind(this));
     }
 
     /*  */
@@ -232,6 +236,18 @@ class ClientController {
         this.gameView.update()
         this.gameView.draw();
         this.gameView.updateFPS(timeStamp);
+    }
+
+    /**
+     * Gets send message failure text
+     * @returns message failure text
+     */
+    getSendMessageFailureText() {
+        return {
+            username: "VIMSU Bot",
+            timestamp: new Date(),
+            text: "Failed to send message. No connection to the server."
+        }
     }
 
     /*  */
@@ -256,7 +272,7 @@ class ClientController {
      * @param {Object} initInfo initial own participant info
      */
     handleFromServerInitOwnParticipant = function (initInfo) {
-        
+
         TypeChecker.isInstanceOf(initInfo, Object);
         TypeChecker.isString(initInfo.id);
         TypeChecker.isInstanceOf(initInfo.businessCard, Object);
@@ -321,6 +337,7 @@ class ClientController {
             TypeChecker.isInt(mapElement.cordX);
             TypeChecker.isInt(mapElement.cordY);
             TypeChecker.isBoolean(mapElement.isClickable);
+            TypeChecker.isBoolean(mapElement.isIFrameObject);
         });
         TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
         listOfGameObjectsData.forEach(gameObject => {
@@ -333,6 +350,7 @@ class ClientController {
             TypeChecker.isInt(gameObject.cordX);
             TypeChecker.isInt(gameObject.cordY);
             TypeChecker.isBoolean(gameObject.isClickable);
+            TypeChecker.isBoolean(gameObject.isIFrameObject);
         });
         TypeChecker.isInstanceOf(npcData, Array);
         npcData.forEach(npc => {
@@ -358,14 +376,14 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject))
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.url));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject));
         });
 
         //transform NPCs to NPCClients
@@ -384,7 +402,7 @@ class ClientController {
         if (!this.currentRoom) {
             this.currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-        //If not, only swap the room
+            //If not, only swap the room
         } else {
             this.currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.currentRoom.enterParticipant(this.ownParticipant);
@@ -680,12 +698,7 @@ class ClientController {
      * @param {Object} rankList rank list
      */
     handleFromServerRankList = function (rankList) {
-        //remark own participant's ranking
-        let idx = rankList.findIndex(ppant => ppant.participantId === this.ownParticipant.getId());
-        if (idx > -1) {
-            rankList[idx].self = true;
-        }
-        this.gameView.initRankListView(rankList);
+        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -763,7 +776,7 @@ class ClientController {
      * @param {Object} message allchat message
      */
     handleFromServerNewAllchatMessage = function (message) {
-        this.gameView.appendAllchatMessage(message);
+        this.gameView.appendAllchatMessage(message, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -772,7 +785,7 @@ class ClientController {
      * @param {Object} message lecture chat message
      */
     handleFromServerNewLectureChatMessage = function (message) {
-        this.gameView.appendLectureChatMessage(message);
+        this.gameView.appendLectureChatMessage(message, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -781,7 +794,7 @@ class ClientController {
      * @param {Object} messages lecture chat messages
      */
     handleFromServerUpdateLectureChat = function (messages) {
-        this.gameView.updateLectureChat(messages);
+        this.gameView.updateLectureChat(messages, this.ownBusinessCard.getUsername());
     };
 
     /**
@@ -984,6 +997,36 @@ class ClientController {
     };
 
     /**
+     * Receives from server that a new meeting has been created
+     * 
+     * @param {Object} meeting meeting
+     * @param {String} meeting.id ID of meeting
+     * @param {String} meeting.name name of meeting
+     * @param {String} meeting.password password of meeting
+     */
+    handleFromServerNewMeeting = function (meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.gameView.addNewMeeting(meeting);
+    };
+
+    /**
+     * Receives from server that user got a new meeting, view should draw notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    handleFromServerGotNewMeeting = function (meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+
+        this.gameView.drawNewMeeting(meetingName, meetingID);
+    }
+
+    /**
      * Receives from server that user got a new chat
      * 
      * @param {String} senderUsername chat sender username
@@ -1057,7 +1100,7 @@ class ClientController {
      * 
      * @param {boolean} modState true if you become a moderator, false otherwise
      */
-    handleFromServerChangeYourModState = function(modState) {
+    handleFromServerChangeYourModState = function (modState) {
         TypeChecker.isBoolean(modState);
 
         this.gameView.setOwnModState(modState);
@@ -1070,7 +1113,7 @@ class ClientController {
      * @param {boolean} modState true if the user becomes a moderator, false otherwise
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherModState = function(modState, ppantID) {
+    handleFromServerChangeOtherModState = function (modState, ppantID) {
         TypeChecker.isBoolean(modState);
         TypeChecker.isString(ppantID);
 
@@ -1087,7 +1130,7 @@ class ClientController {
      * 
      * @param {ShirtColor} shirtColor new shirt color
      */
-    handleFromServerChangeYourShirtColor = function(shirtColor) {
+    handleFromServerChangeYourShirtColor = function (shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.gameView.setOwnShirtColor(shirtColor);
@@ -1100,7 +1143,7 @@ class ClientController {
      * @param {ShirtColor} shirtColor new shirt color
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherShirtColor = function(shirtColor, ppantID) {
+    handleFromServerChangeOtherShirtColor = function (shirtColor, ppantID) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isString(ppantID);
 
@@ -1117,7 +1160,7 @@ class ClientController {
      * 
      * @param {String} groupName name of joined group
      */
-    handleFromServerJoinGroup = function(groupName) {
+    handleFromServerJoinGroup = function (groupName) {
         TypeChecker.isString(groupName);
 
         this.gameView.addGroupName(groupName);
@@ -1126,14 +1169,53 @@ class ClientController {
     /**
      * Receives from server that you left a group
      * 
-     * @param {String} groupChatID chatID of left group
      */
-    handleFromServerLeaveGroup = function(groupChatID) {
-        TypeChecker.isString(groupChatID);
-
+    handleFromServerLeaveGroup = function () {
         this.gameView.removeGroupName();
-        this.gameView.closeChatThreadView(groupChatID);
-        this.gameView.removeChat(groupChatID);
+    }
+
+    /**
+     * Receives from server that you left a chat
+     * 
+     * @param {String} chatID chatID of left chat
+     */
+    handleFromServerLeaveChat = function (chatID) {
+        TypeChecker.isString(chatID);
+
+        this.gameView.closeChatThreadView(chatID);
+        this.gameView.removeChat(chatID);
+    }
+
+    /**
+     * Receives from server after clicking an IFrameObject
+     * 
+     * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.title title of iFrame
+     * @param {String} iFrameData.url URL of iFrame
+     * @param {number} iFrameData.width width of iframe in px
+     * @param {number} iFrameData.height height of iframe in px
+     * @param {number} gameObjectID GameObject id
+     */
+    handleFromServerShowExternalWebsite = function (iFrameData, gameObjectID) {
+        TypeChecker.isInstanceOf(iFrameData, Object);
+        TypeChecker.isString(iFrameData.title);
+        TypeChecker.isInt(iFrameData.width);
+        TypeChecker.isInt(iFrameData.height);
+        TypeChecker.isString(iFrameData.url);
+        TypeChecker.isInt(gameObjectID);
+        this.gameView.initExternalWebsiteView(iFrameData, gameObjectID.toString());
+    }
+
+    /** 
+     * Receives from server that you left a meeting
+     * 
+     * @param {String} meetingID meetingID of left meeting
+     */
+    handleFromServerLeaveMeeting = function (meetingID) {
+        TypeChecker.isString(meetingID);
+
+        this.gameView.removeMeeting(meetingID);
+        this.gameView.closeVideoMeetingView(meetingID);
     }
 
     /*  */
@@ -1173,11 +1255,13 @@ class ClientController {
         if (this.socketReady() && this.socket.connected) {
             TypeChecker.isString(text);
             this.socket.emit('sendMessage', text);
+
+            if (!(text.startsWith("\\") && this.ownParticipant.getIsModerator()))
+                this.gameView.showAllchatBox()
         }
         else {
-            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-        }            
+            this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
+        }
     }
 
     /**
@@ -1191,8 +1275,7 @@ class ClientController {
             this.socket.emit('evalServer', input);
         }
         else {
-            $('#allchatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+            this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
         }
     }
 
@@ -1208,9 +1291,8 @@ class ClientController {
             this.socket.emit('lectureMessage', text);
         }
         else {
-            $('#lectureChatMessages').append($('<div>').text("Failed to send message. No connection to the server."));
-            $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
-        }    
+            this.gameView.appendLectureChatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
+        }
     }
 
     /**
@@ -1434,11 +1516,24 @@ class ClientController {
      * 
      * @param {number} npcId NPC id
      */
-    handleFromViewGetNPCStory(npcId) {        
+    handleFromViewGetNPCStory(npcId) {
         this.gameView.addNPCStoryWindow(npcId.toString())
 
         if (this.socketReady()) {
             this.socket.emit('getNPCStory', npcId);
+        }
+    }
+
+    /**
+     * called from View on IFrame Object click
+     * 
+     * @param {number} gameObjectID 
+     */
+    handleFromViewShowExternalWebsiteView(gameObjectID) {
+        this.gameView.addExternalWebsiteWindow(gameObjectID.toString());
+
+        if (this.socketReady()) {
+            this.socket.emit('getExternalWebsiteData', gameObjectID);
         }
     }
 
@@ -1481,31 +1576,18 @@ class ClientController {
     /**
      * Calls the Jitsi-API to join a meeting
      * 
-     * might move the code into a seperate class?
-     * @param {*} meetingId 
+     * @param {String} meetingId id of joined meeting
+     * @param {String} meetingDomain domain of joined meeting
+     * @param {String} meetingName name of joined meeting
+     * @param {String} meetingPassword password of joined meeting
      */
-    handleFromViewJoinMeeting(meetingId) {
-        // domain name should not be hard-coded
+    handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword) {
+        TypeChecker.isString(meetingId);
+        TypeChecker.isString(meetingDomain);
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingPassword);
 
-        this.jitsi = new JitsiMeetExternalAPI('meet.jit.si', {
-            roomName: 'maybenottestidontknowseemsawkward',
-            width: '100%',
-            height: window.innerHeight * 0.7,
-            // Add JWT
-            parentNode: document.getElementById('meetingModal-body'),
-            userInfo: {
-                email: 'place', // These will be the correct values from
-                displayName: 'holder' // the participants data
-            }
-        });
-
-        $('#meetingModal').modal('show');
-        
-
-        $('#meetingModal').on('hidden.bs.modal', function() { 
-            this.jitsi.dispose();
-        }.bind(this));
-
+        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownBusinessCard.getForename());
     }
 
     /**

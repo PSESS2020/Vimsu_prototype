@@ -21,14 +21,16 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
     #room;
 
     #assetPaths = {
-        "tile_default": "client/assets/tiles/tile_default.png",
-        "leftwall_default": "client/assets/walls/wall1.png",
-        "rightwall_default": "client/assets/walls/wall2.png",
-        "rightfoodcourtdoor_default": "client/assets/doors/door_foodcourt.png",
-        "rightwindow_default0": "client/assets/windows/right_small_window_default0.png",
-        "plant_default": "client/assets/plants/plant.png",
-        "smalldinnertable_default": "client/assets/tables/smallDinnerTable.png"
-    }
+        "tile_default": "../client/assets/tiles/tile_default.png",
+        "leftwall_default": "../client/assets/walls/wall1.png",
+        "rightwall_default": "../client/assets/walls/wall2.png",
+        "rightfoodcourtdoor_default": "../client/assets/doors/door_foodcourt.png",
+        "rightwindow_default0": "../client/assets/windows/right_small_window_default0.png",
+        "plant_default": "../client/assets/plants/plant.png",
+        "smalldinnertable_default": "../client/assets/tables/smallDinnerTable.png",
+        "tea_default": "../client/assets/food/tea.png",
+        "rightsofa_default": "../client/assets/chairs/sofa_right.png"
+        }
 
     /**
      * Creates a RoomDecorator instance for Escape Room
@@ -72,8 +74,12 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
         listOfGameObjects.push(objService.createPlant(Settings.ESCAPEROOM_ID, this.#room.getLength() - 1, this.#room.getWidth() - 1, true, false));
 
         /* These Objects are here for IFrame-Testing */
-        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 0, true, true, "https://www.youtube.com/embed/x51zMg7roIs?enablejsapi=1"));
-        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 1, true, true, "https://www.kit.edu/"));
+        listOfGameObjects.push(objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 0, true, true, {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }),
+            objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 1, true, false),
+            objService.createTea(Settings.ESCAPEROOM_ID, 0, 1, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }),
+            objService.createPlant(Settings.ESCAPEROOM_ID, 0, 2, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }),
+            objService.createRightSofa(Settings.ESCAPEROOM_ID, 0, 3, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }));
+        
 
         //Get all npcs from service
         let npcService = new NPCService();

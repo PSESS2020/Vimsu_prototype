@@ -91,7 +91,7 @@ class NPCStoryView extends WindowView {
             $('#npcStoryModalCollection').append(`
                 <div class="modal fade" id="npcStoryModal${npcId}" tabindex="-1" role="dialog" aria-labelledby="npcStoryTitle${npcId}"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
+                    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                             </div>

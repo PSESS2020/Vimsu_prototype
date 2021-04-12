@@ -297,17 +297,23 @@ class LectureView extends WindowView {
      * Appends message to lecture chat
      * 
      * @param {Object} message message
+     * @param {String} ownUsername current participant's username
      */
-    appendMessage(message) {
+    appendMessage(message, ownUsername) {
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
-        var messageDiv = `
-            <div style="padding-bottom: 10px">
-                <small style="opacity: 0.3; float: right;">${timestamp}</small><br>
-                <small><b>${message.username}</b></small>
-                <small class="wrapword">${message.text}</small>
-            </div>
-        `;
+        const isOwnParticipant = message.username === ownUsername
+
+        const messageDiv =
+            `
+                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start"}">
+                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
+                        ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}
+                        <small class="wrapword" style="text-align: ${isOwnParticipant ? "right" : "left"};">${message.text}</small>
+                    </div>
+                </div>
+            `
 
         $('#lectureChatMessages').append(messageDiv);
         $('#lectureChatMessages').scrollTop($('#lectureChatMessages')[0].scrollHeight);
@@ -317,12 +323,13 @@ class LectureView extends WindowView {
      * Draws lecture chat on lecture window
      * 
      * @param {Object} lectureChat lecture chat
+     * @param {String} ownUsername current participant's username
      */
-    drawChat(lectureChat) {
+    drawChat(lectureChat, ownUsername) {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for (var i = 0; i < lectureChat.length; i++) {
-                this.appendMessage(lectureChat[i])
+                this.appendMessage(lectureChat[i], ownUsername)
             }
         }
     }

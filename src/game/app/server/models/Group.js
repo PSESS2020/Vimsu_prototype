@@ -1,6 +1,7 @@
 const ShirtColor = require("../../client/shared/ShirtColor.js");
 const TypeChecker = require("../../client/shared/TypeChecker.js");
 const GroupChat = require("../models/GroupChat.js");
+const Meeting = require("../models/Meeting.js");
 
 /**
  * The Group Model
@@ -15,10 +16,7 @@ module.exports = class Group {
     #shirtColor;
     #groupMemberIDs;
     #groupChat;
-    #meeting
-
-    /* TODO: Meeting functionality is still missing */
-
+    #groupMeeting;
 
     /**
     * Creates a group instance
@@ -28,8 +26,9 @@ module.exports = class Group {
      * @param {ShirtColor} shirtColor shirtColor every group member wears
      * @param {String[]} groupMemberIDs array of starting group member IDs
      * @param {GroupChat} groupChat chat of this group
+     * @param {Meeting} groupMeeting meeting of this group
      */
-    constructor(name, shirtColor, groupMemberIDs, groupChat) {
+    constructor(name, shirtColor, groupMemberIDs, groupChat, groupMeeting) {
         TypeChecker.isString(name);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isInstanceOf(groupMemberIDs, Array);
@@ -37,11 +36,13 @@ module.exports = class Group {
             TypeChecker.isString(groupMemberID);
         });
         TypeChecker.isInstanceOf(groupChat, GroupChat)
+        TypeChecker.isInstanceOf(groupMeeting, Meeting);
 
         this.#name = name;
         this.#shirtColor = shirtColor;
         this.#groupMemberIDs = groupMemberIDs;
         this.#groupChat = groupChat;
+        this.#groupMeeting = groupMeeting;
     }
 
     /**
@@ -91,18 +92,7 @@ module.exports = class Group {
      * @returns {Meeting} 
      */
     getMeeting() {
-        return this.#meeting;
-    }
-
-    /**
-     * Sets the meeting belonging to the Group-instance to the passed
-     * meeting-instance.
-     * @method module:Group#setMeeting
-     * 
-     * @param {Meeting} meeting 
-     */
-    setMeeting(meeting) {
-        this.#meeting = meeting;
+        return this.#groupMeeting;
     }
 
     /**
@@ -117,6 +107,7 @@ module.exports = class Group {
         if (!this.#groupMemberIDs.includes(ppantID)) {
             this.#groupMemberIDs.push(ppantID);
             this.#groupChat.addParticipant(ppantID);
+            this.#groupMeeting.addMember(ppantID);
         }
     }
 
@@ -135,6 +126,7 @@ module.exports = class Group {
             this.#groupMemberIDs.splice(index, 1);     
             
         this.#groupChat.removeParticipant(ppantID);
+        this.#groupMeeting.removeMember(ppantID);
     }
 
     /**

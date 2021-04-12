@@ -34,7 +34,6 @@ module.exports = class RankListService {
                     rank = i + 1;
                 }
                 rankList[i].rank = rank;
-                rankList[i].self = false;
             }
             return rankList;
         })

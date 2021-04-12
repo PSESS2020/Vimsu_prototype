@@ -8,87 +8,87 @@
 module.exports = Object.freeze({
     HELPLECTURECHAT: {
         header: "List of Commands",
-        body: [ "\\help  --  This command. Displays a list of all commands and how to use them.",
-                "\\log --  Will show a log of all messages send into the lecture chat" +
-                ", including the messageID and senderID of each message.",
-                "\\showallby <list of usernames> -- Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and displays all messages " +
-                "send into the chat by these users.", 
-                "\\rmuser <list of usernames>  --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all of them from " +
-                "the lecture. They will not be able to reenter the lecture.\n WARNING: It is " +
-                "not yet possible to revert this!",
-                "\\rmmsg <list of msgIDs>  --  Takes a list of messageIDs, each one separated from the " +
-                "next one by a whitespace character, and removes the corresponding messages - " +
-                "if they exist - from the lecture chat. Will also send a warning to " +
-                "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\rmallby <list of usernames>  --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all messages posted " +
-                "by them into the lecture chat. Will also send a warning " +
-                "to these participants, reminding them to follow chat-etiquette.",
-                "\\revoke <list of usernames> --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and revokes their lecture tokens " +
-                "(if they own one). They will no longer be able to post messages into the lecture chat.",
-                "\\grant <list of usernames> --  Takes a list of usernames, each one " +
+        body: [ "\\close\nCloses the lecture and makes it inaccessible. Every current participant " +
+                "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
+                "WARNING: this command can NOT be reversed.",
+                "\\grant <list of usernames>\nTakes a list of usernames, each one " +
                 "separated from the next by a whitespace-character, and grants them lecture tokens " +
                 "(if they are currently listening to the lecture and do not own one). They will " +
                 "be able to post messages into the lecture chat.",
-                "\\close -- Closes the lecture and makes it inaccessible. Every current participant " +
-                "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
-                "WARNING: this command can NOT be reversed."]
+                "\\help\nThis command. Displays a list of all commands and how to use them.",
+                "\\msglog\nWill show a log of all messages send into the lecture chat" +
+                ", including the messageID and senderID of each message.",
+                "\\msgrm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the " +
+                "next one by a whitespace character, and removes the corresponding messages - " +
+                "if they exist - from the lecture chat. Will also send a warning to " +
+                "the senders of the messages, reminding them to follow chat etiquette.",
+                "\\msgrmallby <list of usernames>\nTakes a list of usernames, each one " +
+                "separated from the next by a whitespace-character, and removes all messages posted " +
+                "by them into the lecture chat. Will also send a warning " +
+                "to these participants, reminding them to follow chat-etiquette.",
+                "\\msgshowallby <list of usernames>\nTakes a list of usernames, each one " +
+                "separated from the next by a whitespace-character, and displays all messages " +
+                "send into the chat by these users.", 
+                "\\revoke <list of usernames>\nTakes a list of usernames, each one " +
+                "separated from the next by a whitespace-character, and revokes their lecture tokens " +
+                "(if they own one). They will no longer be able to post messages into the lecture chat.",
+                "\\userrm <list of usernames>\nTakes a list of usernames, each one " +
+                "separated from the next by a whitespace-character, and removes all of them from " +
+                "the lecture. They will not be able to reenter the lecture.\nWARNING: It is " +
+                "not yet possible to revert this!"]
 },
     HELPALLCHAT: {
         header: "List of Commands",
-        body: ["\\global <message>  --  Post a message into the global chat. " +
-                "It will display in every participants game-view as a pop-up.",
-                "\\help  --  This command. Displays a list of all commands and how to use them.",
-                "\\log --  Will show a log of all messages send into the allchat of the room you're " +
-                "currently in, including the messageID and senderID of each message.",
-                "\\showallby <list of usernames> -- Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and displays all messages " +
-                "send into the chat by these users.", 
-                "\\rmuser <list of usernames>  -- Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all of them from " +
-                "the conference. They will not be able to reenter the conference.\n WARNING: It is " +
-                "not yet possible to unban a banned user!",
-                "\\rmmsg <list of msgIDs>  -- Takes a list of messageIDs, each one separated from the next " +
-                "one by a whitespace character, and removes the corresponding messages - " +
-                "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
-                "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\rmallby <list of usernames>  --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all messages posted " +
-                "by them into the allchat of the room you're currently in. Will also send a warning " +
-                "to these participants, reminding them to follow chat-etiquette.",
-                "\\mute <list of usernames>  --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and mutes them, meaning they " +
-                "will no longer be able to post messages into the allchat.",
-                "\\unmute <list of usernames>  --  Takes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and unmutes them, meaning they " +
-                "will be able to post messages into the allchat again if they were previously muted.",
-                "\\logdoors -- Will show a log of all available doors with ID and status information.", 
-                "\\opendoor <doorID> -- Opens the door with ID <doorID> for everyone.", 
-                "\\closedoor <doorID> -- Closes the door with ID <doorID> for everyone.",
-                "\\opendoorfor <doorID> <list of usernames> -- Opens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one separated from the next one by a whitespace character.",
-                "\\closedoorfor <doorID> <list of usernames> -- Closes the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                ", each one separated from the next one by a whitespace character.",
-                "\\openalldoorsfor <list of usernames> -- Opens all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one separated from the next one by a whitespace character.",
-                "\\closealldoorsfor <list of usernames> -- Closes all existing doors for all passed usernames in <list of usernames>" + 
-                ", each one separated from the next one by a whitespace character.",
-                "\\setdoorcode <doorID> <doorCode> -- Adds <doorCode> to door with ID <doorID>.",
-                "\\portto <roomID> <cordX> <cordY> -- Teleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
-                "\\porttouser <username> -- Teleports you to user with <username>.", 
-                "\\mod <username> -- Sets a normal user with <username> to a moderator.",
-                "\\unmod <username> -- Sets a moderator with <username> to a normal user.",
-                "\\creategroup <groupName> <groupColor> <list of usernames> -- Creates a group with the unique name <groupName>. All group members will wear " +
-                " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
-                "\\deletegroup <groupName> -- Deletes group with the unique name <groupName>.",
-                "\\deleteallgroups -- Deletes all exisiting groups.",
-                "\\addtogroup <groupName> <list of usernames> -- Adds all users with username in <list of usernames> to group with name <groupName>" + 
-                ", each username separated from the next one by a whitespace character.",
-                "\\rmfromgroup <groupName> <list of usernames> -- Removes all users with username in <list of usernames> from group with name <groupName>" + 
-                ", each username separated from the next one by a whitespace character."]
+        body: [ "\\doorclose <doorID>\nCloses the door with ID <doorID> for everyone.",
+                "\\doorcloseallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\doorclosefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\doorlog\nWill show a log of all available doors with ID and status information.", 
+                "\\dooropen <doorID>\nOpens the door with ID <doorID> for everyone.", 
+                "\\dooropenallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\dooropenfor <doorID> <list of usernames>\nOpens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\doorsetcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>.",
+                "\\global <message>\nPost a message into the global chat. " +
+                    "It will display in every participants game-view as a pop-up.",
+                "\\groupadd <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>" + 
+                    ", each username separated from the next one by a whitespace character.",
+                "\\groupcreate <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear " +
+                    " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                "\\groupdelete <groupName>\nDeletes group with the unique name <groupName>.",
+                "\\groupdeleteall\nDeletes all exisiting groups.",
+                "\\grouprm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>" + 
+                    ", each username separated from the next one by a whitespace character.",
+                "\\help\nThis command. Displays a list of all commands and how to use them.",
+                "\\msglog\nWill show a log of all messages send into the allchat of the room you're " +
+                    "currently in, including the messageID and senderID of each message.",
+                "\\msgrm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next " +
+                    "one by a whitespace character, and removes the corresponding messages - " +
+                    "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
+                    "the senders of the messages, reminding them to follow chat etiquette.",
+                "\\msgrmallby <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and removes all messages posted " +
+                    "by them into the allchat of the room you're currently in. Will also send a warning " +
+                    "to these participants, reminding them to follow chat-etiquette.",
+                "\\msgshowallby <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and displays all messages " +
+                    "send into the chat by these users.", 
+                "\\portto <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
+                "\\porttouser <username>\nTeleports you to user with <username>.", 
+                "\\usermod <username>\nSets a normal user with <username> to a moderator.",
+                "\\usermute <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and mutes them, meaning they " +
+                    "will no longer be able to post messages into the allchat.",
+                "\\userrm <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and removes all of them from " +
+                    "the conference. They will not be able to reenter the conference.\nWARNING: It is " +
+                    "not yet possible to unban a banned user!",
+                "\\userunmod <username>\nSets a moderator with <username> to a normal user.",
+                "\\userunmute <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and unmutes them, meaning they " +
+                    "will be able to post messages into the allchat again if they were previously muted."]
     },
     WARNING: {
         header: "Warning",

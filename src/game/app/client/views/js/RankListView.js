@@ -25,8 +25,9 @@ class RankListView extends WindowView {
      * Draws rank list window
      * 
      * @param {Object[]} rankList rank list
+     * @param {String} ownUsername current participant username
      */
-    draw(rankList) {
+    draw(rankList, ownUsername) {
         $('#ranklistwait').hide();
         $('#rankListModal .modal-body #ranklistrow').empty();
 
@@ -70,7 +71,7 @@ class RankListView extends WindowView {
             if (ppant.rank == 1 || ppant.rank == 2 || ppant.rank == 3)
                 document.getElementById("cardtext" + ppant.participantId).style.fontWeight = "bold";
 
-            if (ppant.self)
+            if (ppant.username === ownUsername)
                 document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 4px 4px ' + color;
         })
     }

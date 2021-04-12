@@ -9,22 +9,18 @@
 	<div class="container">
 		<%- include('partials/header') %>
         <section class="large-form-content row align-items-center justify-content-center">
-            <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
-                <h5>Contact Us</h5>
-                <br>
-                <div class="row justify-content-center m-0 p-0">
-                    <small>We'd love to hear from you! <br> You can reach us by email at <a class="link" href="mailto:hello.vimsu@gmail.com">hello.vimsu@gmail.com</a>.</small>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
+                <h5 class="mb-5">Contact Us</h5>
+                <div class="row justify-content-center mb-3 m-0 p-0">
+                    <small>We'd love to hear from you! <br> You can reach us by email at <a class="link" href="mailto:hello.vimsu@gmail.com">hello.vimsu@gmail.com</a></small>
                 </div>
-                <br>
-                <div class="row justify-content-center">
+                <div class="row justify-content-center mb-3 m-0 p-0">
                     or...
                 </div>
-                <br>
-                <div class="row justify-content-center m-0 p-0">
+                <div class="row justify-content-center mb-4 m-0 p-0">
                     <small>If you'd prefer to stay anonymous, just leave us a message below :)</small>
                 </div>
-                <br>
-                <div class="row justify-content-left m-0 p-0">
+                <div class="row justify-content-left mb-3 m-0 p-0">
                     <% if(locals.messageSent === true) { %>
                         <small class="success"><i class="fa fa-check-circle"></i> We have received your message, thank you!</small>
                     <% } else if (locals.invalidEmail === true) { %>
@@ -33,15 +29,19 @@
                     <% } else if (locals.sendMessageFailed === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> There's an error while sending your message. 
                             Please try again.</small>
+                    <% } else if (locals.invalidMessage === true) { %>
+                        <small class="error"><i class="fa fa-times-circle"></i> Message cannot be empty.</small>
                     <% } %>
                 </div>
-                <br>
+                <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
                 <form action="contact-us" method="POST">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="emailInput" name="email" placeholder="Email (optional)">
+                        <label for="email" class="input-label">Email</label>
+                        <input type="text" class="form-control" id="emailInput" name="email" placeholder="maxmustermann@example.com" value="<%=email%>">
                     </div>
                     <div class="form-group">
-                        <textarea id="messageInput" class="form-control" name="message" placeholder="Your message" required rows="7"></textarea>
+                        <label for="message" class="input-label">Your message&nbsp<span class="warning">*</span></label>
+                        <textarea id="messageInput" class="form-control" name="message" required rows="7"><%=message%></textarea>
                     </div>                    
                     <button class="primary-button mt-4 p-2" type="submit">
                         <span>Send message</span>

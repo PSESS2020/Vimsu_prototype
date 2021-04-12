@@ -7,6 +7,7 @@ const TaskService = require('../../../src/game/app/server/services/TaskService.j
 const Achievement = require('../../../src/game/app/server/models/Achievement.js');
 const TypeOfTask = require('../../../src/game/app/server/utils/TypeOfTask.js');
 const Chat = require('../../../src/game/app/server/models/Chat.js');
+const Meeting = require('../../../src/game/app/server/models/Meeting.js');
 const OneToOneChat = require('../../../src/game/app/server/models/OneToOneChat.js');
 const Task = require('../../../src/game/app/server/models/Task.js');
 const assert = chai.assert;
@@ -49,8 +50,9 @@ describe('Participant test', function () {
         isMod = TestUtil.randomBool();
         awardPoints = TestUtil.randomInt();
         chatList = [new Chat(TestUtil.randomString(), [], [], TestUtil.randomIntWithMin(1))];
+        meetingList = [new Meeting(TestUtil.randomString(), TestUtil.randomString(), [], TestUtil.randomString())]
         ppant = new Participant(id, accountId, businessCard, position, direction, friendList, receivedRequestList,
-            sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList);
+            sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList, meetingList);
     });
 
     it('test getters', function () {

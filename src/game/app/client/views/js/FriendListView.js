@@ -55,10 +55,10 @@ class FriendListView extends WindowView {
                 <li class="list-group-item bg-transparent chatthread" id="${"friend" + businessCard.getParticipantId()}">
                     <div class="d-flex justify-content-between">
                         <div class="row w-100">
-                            <div class="col-12 col-sm-2 px-0">
+                            <div class="col-2 px-0">
                                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                             </div>
-                            <div class="col-12 col-md-9 text-center text-sm-left">
+                            <div class="col-9 text-left">
                                 <label class="name lead">${businessCard.getForename() + " (@" + businessCard.getUsername() + ")"}</label>
                             </div>
                         </div>
@@ -103,10 +103,9 @@ class FriendListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriend(participantId) {
-        this.businessCards.forEach(businessCard => {
+        this.businessCards.forEach((businessCard, index) => {
 
             if (businessCard.getParticipantId() === participantId) {
-                let index = this.businessCards.indexOf(businessCard);
                 this.businessCards.splice(index, 1);
             }
         });

@@ -6,8 +6,6 @@
  */
 class AllchatView extends Views {
 
-    ownUsername;
-
     /**
      * Creates an instance of Allchat View
      * 
@@ -22,22 +20,16 @@ class AllchatView extends Views {
 
         AllchatView.instance = this;
 
-        $('#hideRoomChat').hide();
-
-        const allchatWindow = document.getElementById("allchatWindow")
-        allchatWindow.style.visibility = "hidden";
+        $("#allchatWindow").hide()
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-            allchatWindow.style.visibility = "visible";
-            $('#showRoomChat').hide();
-            $('#hideRoomChat').show();
+            this.showAllchatBox()
         })
-        $('#hideRoomChat').on('click', (event) => {
+        
+        $('#allchatWindowMinimize').on('click', (event) => {
             event.preventDefault();
-            allchatWindow.style.visibility = "hidden";
-            $('#hideRoomChat').hide();
-            $('#showRoomChat').show();
+            this.hideAllchatBox()
         })
 
         const sendMessage = (event) => {
@@ -76,15 +68,11 @@ class AllchatView extends Views {
      */
     draw(typeOfRoom, messages, ownUsername) {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
-        $('#allchatHeader').text(typeOfRoom + ' Chat');
+        $('#allchatHeaderText').text(typeOfRoom + ' Chat');
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
             <small>Show ${typeOfRoom.toLowerCase()} chat messages</small>
-        `)
-        $('#hideRoomChat').empty();
-        $('#hideRoomChat').append(`
-            <small>Hide ${typeOfRoom.toLowerCase()} chat messages</small>
         `)
 
         $('#allchatMessages').empty();
@@ -93,28 +81,47 @@ class AllchatView extends Views {
             return;
         }
 
-        this.ownUsername = ownUsername;
-
         messages.forEach((message) => {
-            this.appendMessage(message)
+            this.appendMessage(message, ownUsername)
         })
+
+        setTimeout(() => {
+            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+        }, 500)
+    }
+
+    showAllchatBox() {
+        $("#allchatWindow").show()
+        $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
+        $('#showRoomChat').hide();
+    }
+
+    hideAllchatBox() {
+        $("#allchatWindow").animate({"left":"-250px"}, Settings.TOGGLE_SPEED);
+            
+        setTimeout(() => {
+            $("#allchatWindow").hide()
+        }, Settings.TOGGLE_SPEED)
+        
+        $('#showRoomChat').show();
     }
 
     /**
      * Appends message to the allchat window
      * 
      * @param {Object} message alchat message
+     * @param {String} ownUsername current participant's username
      */
-    appendMessage(message) {
+    appendMessage(message, ownUsername) {
         $('#noAllchat').empty();
 
         var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
 
-        const isOwnParticipant = message.username === this.ownUsername
+        const isOwnParticipant = message.username === ownUsername
 
         const messageDiv =
             `
-                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start ml-2"}">
+                <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start"}">
                     <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
                         ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}

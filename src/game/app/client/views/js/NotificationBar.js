@@ -30,15 +30,23 @@ class NotificationBar extends Views {
 
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
+
+            $("#notifBar").animate({"max-height": "360px"}, Settings.TOGGLE_SPEED);
             notifBar.style.display = "block";
             notifBar.style.zIndex = "5";
+            
             $('#showNotifBar').hide();
             $('#hideNotifBar').show();
         })
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
-            notifBar.style.display = "none";
-            notifBar.style.zIndex = "0";
+            $("#notifBar").animate({"max-height":"0px"}, Settings.TOGGLE_SPEED);
+
+            setTimeout(() => {
+                notifBar.style.display = "none";
+                notifBar.style.zIndex = "0";
+            }, Settings.TOGGLE_SPEED)
+            
             $('#hideNotifBar').hide();
             $('#showNotifBar').show();
         })
@@ -94,6 +102,23 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Draws new meeting notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+     drawNewMeeting(meetingName, meetingID) {
+        const id = 'notifMeeting' + meetingID;
+        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`)
+
+        $('#' + id).on('click', (e) => {
+            $('#' + id + 'Div').remove();
+            $('#meetingListModal').modal('show');
+            return this.eventManager.handleMeetingListClicked();
+        })
+    }
+
+    /**
      * Draws new friend request notification
      * 
      * @param {String} senderUsername requester username
@@ -139,10 +164,10 @@ class NotificationBar extends Views {
             $('#' + id + 'Div').show();
         } else {
             $('#notifBar').prepend(`
-                <div id="${id + 'Div'}" style="display:flex" class="list-group-item notifBarDiv">
-                    <button class="self-align-end closeBtn friendRequestListButton" id="${"close" + id}" type="button"><i class="fa fa-close"></i></button>
+                <div id="${id + 'Div'}" class="d-flex list-group-item notifBarDiv justify-content-between">
+                    <button class="self-align-end closeBtn" id="${"close" + id}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${id}" role="button" data-toggle="modal" href="">
-                        <div class="notifBarText wrapword">
+                        <div class="notifBarText wrapword self-align-end">
                             <small>${text}</small>
                         </div>
                     </a>

@@ -15,31 +15,31 @@ module.exports = Object.freeze({
         method: "globalNote"
     },
     LOGMESSAGES: {
-        string: "log",
+        string: "msglog",
         method: "logMessages"
     },
     LOGBYPLAYER: {
-        string: "showallby",
+        string: "msgshowallby",
         method: "showAllBy"
     },
     REMOVEPLAYER: {
-        string: "rmuser",
+        string: "userrm",
         method: "removeUser"
     },
     REMOVEMESSAGE: {
-        string: "rmmsg",
+        string: "msgrm",
         method: "removeMessage"
     },
     REMOVEMESSAGESBYPLAYER: {
-        string: "rmallby",
+        string: "msgrmallby",
         method: "removeAllBy"
     },
     MUTE: {
-        string: "mute",
+        string: "usermute",
         method: "muteUser"
     },
     UNMUTE: {
-        string: "unmute",
+        string: "userunmute",
         method: "unmuteUser"
     },
     REVOKETOKEN: {
@@ -63,35 +63,35 @@ module.exports = Object.freeze({
         method: "printHelp"
     },
     LOGDOORS: {
-        string: "logdoors",
+        string: "doorlog",
         method: "logAllDoors"
     },
     CLOSEDOOR: {
-        string: "closedoor",
+        string: "doorclose",
         method: "closeDoor"
     }, 
     OPENDOOR: {
-        string: "opendoor",
+        string: "dooropen",
         method: "openDoor"
     },
     CLOSEDOORFOR: {
-        string: "closedoorfor",
+        string: "doorclosefor",
         method: "closeDoorFor",
     },
     OPENDOORFOR: {
-        string: "opendoorfor",
+        string: "dooropenfor",
         method: "openDoorFor"
     },
     CLOSEALLDOORSFOR: {
-        string: "closealldoorsfor",
+        string: "doorcloseallfor",
         method: "closeAllDoorsFor"
     },
     OPENALLDOORSFOR: {
-        string: "openalldoorsfor",
+        string: "dooropenallfor",
         method: "openAllDoorsFor"
     },
     SETDOORCODE: {
-        string: "setdoorcode",
+        string: "doorsetcode",
         method: "setDoorCode"
     },
     PORTTO: {
@@ -103,31 +103,31 @@ module.exports = Object.freeze({
         method: "portToUser"
     },
     MODUSER: {
-        string: "mod",
+        string: "usermod",
         method: "modUser"
     },
     UNMODUSER: {
-        string: "unmod",
+        string: "userunmod",
         method: "unmodUser"
     },
     CREATEGROUP: {
-        string: "creategroup",
+        string: "groupcreate",
         method: "createGroup"
     },
     DELETEGROUP: {
-        string: "deletegroup",
+        string: "groupdelete",
         method: "deleteGroup"
     },
     DELETEALLGROUPS: {
-        string: "deleteallgroups",
+        string: "groupdeleteall",
         method: "deleteAllGroups"
     },
     ADDGROUPMEMBER: {
-        string: "addtogroup",
+        string: "groupadd",
         method: "addGroupMember"
     },
     REMOVEGROUPMEMBER: {
-        string: "rmfromgroup",
+        string: "grouprm",
         method: "removeGroupMember"
     }
 });

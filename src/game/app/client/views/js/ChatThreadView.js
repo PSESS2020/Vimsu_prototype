@@ -188,7 +188,7 @@ class ChatThreadView extends WindowView {
                 <div class="d-flex flex-column align-items-start ml-2">
                     <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
                     <div class="messageBubbleOthers">
-                        ${this.chat.groupChat ? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        ${this.chat.groupChat && senderUsername? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>
                     </div>
                 </div>
@@ -321,7 +321,7 @@ class ChatThreadView extends WindowView {
         $("#chatParticipantListModalCollection").append(`
             <div class="modal" id=${"chatParticipantListModal" + this.chat.chatId} tabindex="-1" role="dialog"
                 aria-labelledby=${"chatParticipantListModalTitle" + this.chat.chatId} aria-hidden="true" data-focus-on="input:first">
-                <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+                <div class="modal-dialog modal-dialog-centered mw-50" role="document">
                     <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                         <div class="modal-header">
                             <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>Chat Participant List</h5>

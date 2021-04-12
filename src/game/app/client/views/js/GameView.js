@@ -13,7 +13,8 @@ class GameView {
 
     currentLecturesView;
     lectureView;
-    meetingListView
+    meetingListView;
+    videoMeetingView;
     chatListView;
     chatThreadView;
     statusBar;
@@ -34,6 +35,7 @@ class GameView {
     successesBar;
     rankListView;
     npcStoryView;
+    externalWebsiteView;
     newAchievementView;
     achievementView;
     businessCardView;
@@ -86,6 +88,7 @@ class GameView {
         this.inviteFriendsView = new InviteFriendsView(this.eventManager);
         this.chatListView = new ChatListView(this.eventManager);
         this.meetingListView = new MeetingListView(this.eventManager);
+        this.videoMeetingView = new VideoMeetingView(this.eventManager);
         this.chatThreadView = new ChatThreadView(this.eventManager);
         this.chatParticipantListView = new ChatParticipantListView();
         this.scheduleListView = new ScheduleListView();
@@ -94,6 +97,7 @@ class GameView {
         this.profileView = new ProfileView();
         this.rankListView = new RankListView();
         this.npcStoryView = new NPCStoryView();
+        this.externalWebsiteView = new ExternalWebsiteView();
         this.newAchievementView = new NewAchievementView();
         this.achievementView = new AchievementView();
         this.businessCardView = new BusinessCardView(this.eventManager);
@@ -468,7 +472,9 @@ class GameView {
 
         TypeChecker.isInstanceOf(participant, ParticipantClient);
 
-        if (this.anotherParticipantAvatarViews.includes(participant)) {
+        let index = this.anotherParticipantAvatarViews.findIndex(participantAvatarView => participantAvatarView.getId() === participant.getId());
+        
+        if (index >= 0) {
             throw new Error(participant + " is already in list of participants")
         }
 
@@ -887,12 +893,45 @@ class GameView {
     }
 
     /**
+     * Add external website window and show
+     * 
+     * @param {String} gameObjectID GameObject id
+     */
+     addExternalWebsiteWindow(gameObjectID) {
+        TypeChecker.isString(gameObjectID);
+
+        this.externalWebsiteView.addNewExternalWebsiteWindow(gameObjectID);
+    }
+
+    /**
+     * Draws external website window 
+     * 
+     * @param {Object} iFrameData iFrame data object
+     * @param {String} iFrameData.title title of iFrame
+     * @param {String} iFrameData.url URL of iFrame
+     * @param {number} iFrameData.width width of iframe in px
+     * @param {number} iFrameData.height height of iframe in px
+     * @param {String} gameObjectID GameObject id
+     */
+    initExternalWebsiteView(iFrameData, gameObjectID) {
+        TypeChecker.isInstanceOf(iFrameData, Object);
+        TypeChecker.isString(iFrameData.title);
+        TypeChecker.isInt(iFrameData.width);
+        TypeChecker.isInt(iFrameData.height);
+        TypeChecker.isString(iFrameData.url);
+        TypeChecker.isString(gameObjectID);
+
+        this.externalWebsiteView.draw(iFrameData, gameObjectID);
+    }
+
+    /**
      * Draws rank list window
      * 
      * @param {Object[]} rankList rank list
+     * @param {String} ownUsername current participant username
      */
-    initRankListView(rankList) {
-        this.rankListView.draw(rankList);
+    initRankListView(rankList, ownUsername) {
+        this.rankListView.draw(rankList, ownUsername);
     }
 
     /**
@@ -903,6 +942,20 @@ class GameView {
     initMeetingListView(meetings) {
         this.meetingListView.draw(meetings);
     };
+
+    /**
+     * Draws jitsi meeting window
+     * 
+     * @param {String} meetingId id of joined meeting
+     * @param {String} meetingDomain domain of joined meeting
+     * @param {String} meetingName name of joined meeting
+     * @param {String} meetingPassword password of joined meeting
+     * @param {String} ownForename own forename that is shown in meeting
+     * 
+     */
+    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
+        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename);
+    }
 
     /**
      * Draws chat list window
@@ -971,6 +1024,17 @@ class GameView {
     };
 
     /**
+     * Adds new meeting to meeting list
+     * 
+     * @param {Object} meeting meeting
+     */
+     addNewMeeting(meeting) {
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.addNewMeeting(meeting);
+        }
+    };
+
+    /**
      * Updates friend request button in chat thread
      * 
      * @param {String} chatId chat ID
@@ -1007,9 +1071,17 @@ class GameView {
      * Appends all chat message
      * 
      * @param {Object} message allchat message
+     * @param {String} ownUsername current participant's username
      */
-    appendAllchatMessage(message) {
-        this.allchatView.appendMessage(message);
+    appendAllchatMessage(message, ownUsername) {
+        this.allchatView.appendMessage(message, ownUsername);
+    }
+    
+    /**
+     * Show allchat box
+     */
+    showAllchatBox() {
+        this.allchatView.showAllchatBox();
     }
 
     /**
@@ -1073,6 +1145,30 @@ class GameView {
             this.chatListView.deleteChat(chatId);
         }
     }
+
+    /**
+     * Removes meeting from meeting list window
+     * 
+     * @param {String} meetingId meeting ID
+     */
+     removeMeeting(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        if ($('#meetingListModal').is(':visible')) {
+            this.meetingListView.deleteMeeting(meetingId);
+        }
+    }
+
+    /**
+     * Closes video meeting window with meetingId if it is currently visible
+     * 
+     * @param {String} meetingId meeting ID
+     */
+    closeVideoMeetingView(meetingId) {
+        if ($('#meetingWindow').is(':visible')) {
+            this.videoMeetingView.close(meetingId);
+        }
+    };
 
     /**
      * Add friends to friend list window and invite friends window
@@ -1191,6 +1287,18 @@ class GameView {
         TypeChecker.isString(chatId);
 
         this.notifBar.drawNewGroupChat(groupName, creatorUsername, chatId);
+    }
+
+    /**
+     * Draws new meeting notification
+     * 
+     * @param {String} meetingName meeting name
+     * @param {String} meetingID meeting ID
+     */
+    drawNewMeeting(meetingName, meetingID) {
+        TypeChecker.isString(meetingName);
+        TypeChecker.isString(meetingID);
+        this.notifBar.drawNewMeeting(meetingName, meetingID);
     }
 
     /**
@@ -1315,10 +1423,11 @@ class GameView {
      * Appends messsage to lecture chat
      * 
      * @param {Object} message lecture chat message
+     * @param {String} ownUsername current participant's username
      */
-    appendLectureChatMessage(message) {
+    appendLectureChatMessage(message, ownUsername) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.lectureView.appendMessage(message);
+            this.lectureView.appendMessage(message, ownUsername);
         }
     }
 
@@ -1326,10 +1435,11 @@ class GameView {
      * Draws lecture chat
      * 
      * @param {Object} lectureChat lecture chat
+     * @param {String} ownUsername current participant's username
      */
-    updateLectureChat(lectureChat) {
+    updateLectureChat(lectureChat, ownUsername) {
         if ($('#lectureVideoWindow').is(':visible')) {
-            this.lectureView.drawChat(lectureChat);
+            this.lectureView.drawChat(lectureChat, ownUsername);
         }
     };
 

@@ -177,7 +177,7 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.verifyLoginData(username, password, suffix, vimsudb).then(account => {
-            if (!account) return false;
+            if (!account) return null;
 
             return vimsudb.updateOneToCollection("accounts" + suffix, { username: username }, { passwordHash: passwordHash.generate(newPassword) }).then(res => {
                 if (res.modifiedCount >= 0 && res.matchedCount > 0) {

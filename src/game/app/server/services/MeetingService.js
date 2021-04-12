@@ -23,9 +23,40 @@ module.exports = class Meetingservice {
      * - Add participant to meeting         [X]
      * - remove ppant                       [X]
      * - remove all meetings (clean db)     [X]
-     * - turn id into passed parameter,     [ ]
-     *   alter methods accordingly          [ ]
      */
+
+    /**
+     * Initializes meeting for whole conference if it does not exist already and returns it
+     * 
+     * @static @method module:MeetingService#getConferenceMeeting
+     * 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb
+     * 
+     * @returns {Meeting} Conference meeting
+     */
+    static getConferenceMeeting(conferenceId, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { name: Settings.CONFERENCE_MEETINGNAME }).then(conferenceMeetingData => {
+            if (conferenceMeetingData) {
+                return new Meeting(conferenceMeetingData.meetingId, conferenceMeetingData.name, conferenceMeetingData.members, conferenceMeetingData.password);
+            } else {
+                console.log("Conference meeting did not exist.");
+
+                //get all exisiting participants from db
+                return vimsudb.findAllInCollection("participants_" + conferenceId).then(participants => {
+                    let memberIdList = [];
+                    participants.forEach(ppant => {
+                        memberIdList.push(ppant.participantId);
+                    });
+
+                    return this.newMeeting(memberIdList, Settings.CONFERENCE_MEETINGNAME, conferenceId, vimsudb);
+                });
+            }       
+        });
+    }
 
     /**
      * Load a map that contains all meetings belonging to the passed
@@ -45,7 +76,7 @@ module.exports = class Meetingservice {
 
         return vimsudb.findAllInCollection("meetings_" + conferenceId).then(async meetings => {
             meetings.forEach(meeting => {
-                meetingMap.set(meeting.name, new Meeting(meeting.id, meeting.name, meeting.members));
+                meetingMap.set(meeting.name, new Meeting(meeting.meetingId, meeting.name, meeting.members, meeting.password));
             })
             return meetingMap;
         })
@@ -79,14 +110,19 @@ module.exports = class Meetingservice {
         }
 
         var meeting = {
-            id: new ObjectId().toString(),
+            meetingId: new ObjectId().toHexString(),
             name: meetingName,
-            members: memberIdList
+            members: memberIdList,
+            password: new ObjectId().toHexString()
         }
 
+        memberIdList.forEach(participantId => {
+            vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meeting.meetingId });
+        });
+            
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
             console.log("meeting saved");
-            return new Meeting(meeting.id, meeting.name, meeting.members);
+            return new Meeting(meeting.meetingId, meeting.name, meeting.members, meeting.password);
         })
     }
 
@@ -116,7 +152,7 @@ module.exports = class Meetingservice {
             if (meeting) {
                 return meeting;
             } else {
-                console.log("No meeting with id " + meetingId + " could be found in database.");
+                console.log("No meeting with name " + meetingName + " could be found in database.");
                 return false;
             }
         })
@@ -146,11 +182,12 @@ module.exports = class Meetingservice {
 
         let meetings = [];
         return Promise.all(meetingIDList.map(async meetingId => {
-            var meeting = await vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId });
+            var meeting = await vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId });
             meetings.push(new Meeting(
-                meeting.id,
+                meeting.meetingId,
                 meeting.name,
-                meeting.members
+                meeting.members,
+                meeting.password
             ));
         })).then(res => {
             return meetings;
@@ -175,12 +212,13 @@ module.exports = class Meetingservice {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, {id: meetingId }).then(meeting => {
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }).then(meeting => {
 
             if (meeting) {
-                return new Meeting(meeting.id, 
+                return new Meeting(meeting.meetingId, 
                     meeting.name, 
-                    meeting.members);
+                    meeting.members,
+                    meeting.password);
                 } else {
                     console.log("Could not find meeting with id " + meetingId);
                 }
@@ -205,7 +243,7 @@ module.exports = class Meetingservice {
         TypeChecker.isString(participantId);
         TypeChecker.isInstanceOf(vimsudb, db);
         
-        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { id: meetingId }, { members: participantId }).then(res => {
+        return vimsudb.insertToArrayInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: participantId }).then(res => {
             if (res) {
                 // Add meeting to the participant's list of meetings
                 return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meetingId }).then(res => {
@@ -243,7 +281,7 @@ module.exports = class Meetingservice {
         
         // First, we attempt to remove the ppant from the members of
         // the meeting
-        return vimsudb.deleteFromArrayInCollection("meetings_" + conferenceId, { id: meetingId }, { members: participantId }).then(res => {
+        return vimsudb.deleteFromArrayInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: participantId }).then(res => {
             var dbRes = res;
 
             // then, we attempt to remove the meeting from the meeting
@@ -251,11 +289,11 @@ module.exports = class Meetingservice {
             return vimsudb.deleteFromArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { meetingIDList: meetingId }).then(res => {
                 
                 // Finally, we now check whether there are any meeting
-                // members left. If not, we delete the meetung entry.
-                return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(meeting => {
+                // members left. If not, we delete the meeting entry.
+                return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(meeting => {
                     if (meeting && dbRes) {
                         if (meeting.members.length < 1) {
-                            return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { id: meetingId }).then(res => {
+                            return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { meetingId: meetingId }).then(res => {
                                 if (res) {
                                     console.log("Meeting with id " + meetingId + " was deleted from database.");
                                 } else {
@@ -278,8 +316,8 @@ module.exports = class Meetingservice {
      * Deletes all meetings from database.
      * @static @method module:MeetingService#cleanMeetings
      * 
-     * @param {*} conferenceId 
-     * @param {*} vimsudb 
+     * @param {String} conferenceId 
+     * @param {db} vimsudb 
      * 
      * @returns {Boolean} Whether the operation was successful.
      */
@@ -315,7 +353,7 @@ module.exports = class Meetingservice {
         TypeChecker.isInstanceOf(vimsudb, db);
         
         // Find the meeting in the database.
-        return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(meeting => {
+        return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(meeting => {
             if (meeting) {
                 /* Remove every member from the meeting. After this loop
                  * has concluded, the meeting should no longer exist in
@@ -326,12 +364,12 @@ module.exports = class Meetingservice {
 
                 // Check whether the meeting has been successfully been
                 // removed
-                return vimsudb.findOneInCollection("meetings_" + conferenceId, { id: meetingId }, { members: 1 }).then(resFirst => {
+                return vimsudb.findOneInCollection("meetings_" + conferenceId, { meetingId: meetingId }, { members: 1 }).then(resFirst => {
                     // The loop did for some reason fail to remove
                     // the meeting.
                     if (resFirst) {
                         // So now we remove it manually
-                        return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { id: meetingId }).then(resSecond => {
+                        return vimsudb.deleteOneFromCollection("meetings_" + conferenceId, { meetingId: meetingId }).then(resSecond => {
                             if (resSecond) {
                                 console.log("Meeting with id " + meetingId + " was deleted from database.");
                             } else {
@@ -353,4 +391,20 @@ module.exports = class Meetingservice {
             } 
         })
     }
+
+    /**
+     * 
+     * @param {String} conferenceId 
+     * @param {String} meetingName 
+     * @param {db} vimsudb
+     * @returns {String} A 
+     */
+    static generateMeetingId(conferenceId, meetingName, vimsudb) {
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isString(meetingName);
+        let salt = new ObjectId().toHexString();
+        let meetingId = conferenceId + "_" + meetingName + "_" + salt;
+        //if(this.checkForMeetingId
+    }
+
 }

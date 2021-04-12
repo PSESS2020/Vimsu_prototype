@@ -24,6 +24,7 @@ describe('GameObjectService test', function () {
         cordY = TestUtil.randomIntWithMin(0);
         solidity = TestUtil.randomBool();
         clickable = TestUtil.randomBool();
+        iFrameData = { title: TestUtil.randomString(), url: TestUtil.randomString(), width: TestUtil.randomInt(), height: TestUtil.randomInt() };
     });
 
     it('test create default Tile', function () {
@@ -91,7 +92,7 @@ describe('GameObjectService test', function () {
     });
 
     it('test create Table', function () {
-        let table = gameObjectService.createTable(roomId, cordX, cordY, solidity, clickable);
+        let table = gameObjectService.createTable(roomId, cordX, cordY, solidity, clickable, iFrameData);
 
         expect(table).to.be.instanceOf(GameObject);
         expect(table.getPosition().getRoomId()).to.equal(roomId);
@@ -99,6 +100,7 @@ describe('GameObjectService test', function () {
         expect(table.getPosition().getCordY()).to.equal(cordY);
         expect(table.getSolid()).to.equal(solidity);
         expect(table.getClickable()).to.equal(clickable);
+        expect(table.getIFrameData()).to.equal(iFrameData);
         expect(table.getId()).to.be.a('number');
     });
 

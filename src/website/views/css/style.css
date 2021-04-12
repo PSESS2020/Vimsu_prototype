@@ -266,6 +266,10 @@ textarea {
   color: var(--white-color);
 }
 
+option {
+  color: var(--black-color)
+}
+
 .input-label {
   text-align: left;
   font-size: 13px;
@@ -289,6 +293,11 @@ input, textarea {
 
 .error {
   color: var(--red-color);
+  text-align: left;
+}
+
+.warning { 
+  color: var(--orange-color);
   text-align: left;
 }
 

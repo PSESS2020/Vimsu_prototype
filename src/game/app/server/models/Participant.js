@@ -292,6 +292,12 @@ module.exports = class Participant {
         }
     }
 
+    /**
+     * Removes Meeting instance from the meeting list.
+     * @method module:Participant#leaveMeeting
+     * 
+     * @param {String} meetingId
+     */
     leaveMeeting(meetingId) {
         TypeChecker.isString(meetingId);
 
@@ -474,10 +480,9 @@ module.exports = class Participant {
     removeChat(chatId) {
         TypeChecker.isString(chatId);
 
-        this.#chatList.forEach(chat => {
+        this.#chatList.forEach((chat, index) => {
             if (chat.getId() === chatId) {
                 chat.removeParticipant(this.#id);
-                let index = this.#chatList.indexOf(chat);
                 this.#chatList.splice(index, 1);
             }
         });

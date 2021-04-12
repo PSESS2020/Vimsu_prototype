@@ -2,7 +2,7 @@
 
 <body style="display: none">
     <!--UPPER HUD-->
-    <div class="row mt-2 justify-content-between" id="upperHUD" style="display: none">
+    <div class="row mt-2 justify-content-between pl-1" id="upperHUD" style="display: none;">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="text-align: left;">
                 <div id="time" style="color: antiquewhite"></div>
@@ -19,12 +19,6 @@
                     <button id="allchat-emoji-trigger" title="Pick emojis"><i class="fas fa-smile-beam navbarIcons"></i></button>
                     <button style="background-color: transparent" title="Send"><i class="fas fa-paper-plane navbarIcons"></i></button>
                 </form>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showRoomChat" onclick=""
-                    href="" style="z-index: 300">
-                </a>
-                <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideRoomChat" href=""
-                    onclick="" style="z-index: 300">
-                </a>
             </div>
 
             <div class="d-flex flex-column ml-auto">
@@ -55,16 +49,25 @@
     </div>
 
     <!--MIDDLE HUD-->
-    <div class="row mt-2 justify-content-between" id="middleHUD" style="display: none">
+    <div class="row mt-2 justify-content-between pl-1" id="middleHUD" style="display: none">
         <div class="d-flex flex-row col-12">
             <div class="d-flex flex-column" style="width: 250px;">
-                <div id="allchatWindow" style="z-index: 300;">
-                    <div class="p-2" id="allchatHeader">
+                <div style="z-index: 5">
+                    <a class="action_button nav-item nav-link p-0 showRoomChat" role="button" id="showRoomChat" onclick=""
+                        href="" style="float:left; text-align: left;">
+                    </a>
+                </div>
+                <div id="allchatWindow" style="z-index: 5;">
+                    <div class="pt-2 pb-2 d-flex" id="allchatHeader">
+                        <div id="allchatHeaderText"></div>
+                        <button id="allchatWindowMinimize" class="close btn ml-auto">
+                            <i class="fa fa-window-minimize" style="transform: scale(0.6); margin-top: -5px;"></i>
+                        </button>
                     </div>
                     <div id="allchatBox">
                         <small>
-                            <div id="noAllchat" class="wrapword"
-                                style="color: antiquewhite; opacity: 0.5; padding: 5px 10px;"></div>
+                            <div id="noAllchat" class="wrapword pb-1 pt-1"
+                                style="color: antiquewhite; opacity: 0.5;"></div>
                         </small>
                         <div id="allchatMessages"></div>
                     </div>
@@ -78,19 +81,19 @@
             <div class="d-flex flex-column ml-auto" style="width: 250px;">
                 <div style="z-index: 5">
                     <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showNotifBar"
-                        onclick="" href="" style="float:right; text-align: right;"><small>Show Notification Bar</small>
+                        onclick="" href="" style="float:right; text-align: right;"><small>Show notification</small>
                     </a>
                     <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideNotifBar" href=""
-                        onclick="" style="float:right; text-align: right;"><small>Hide Notification Bar</small>
+                        onclick="" style="float:right; text-align: right;"><small>Hide notification</small>
                     </a>
                 </div>
-                <div id="notifBar" style="z-index: 5"></div>
+                <div id="notifBar"></div>
             </div>
         </div>
     </div>
 
     <!--LOWER HUD BUTTON-->
-    <div class="row justify-content-center" id="lowerHUD" style="display: none">
+    <div class="row justify-content-center pl-1" id="lowerHUD" style="display: none">
         <div class="d-flex flex-row col-12" style="bottom:0; position: absolute">
             <div class="d-flex flex-column" style="z-index: 300;">
                 <a class="action_button nav-item nav-link" title="Rank list of conference participants" href=""

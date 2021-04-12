@@ -35,6 +35,10 @@ module.exports = Object.freeze({
     /* Conference Constants */
     CONFERENCE_ID: 'LLL',
 
+    /* Meeting Constants */
+    CONFERENCE_MEETINGNAME: 'Conference Meeting',
+    DEFAULT_MEETINGDOMAIN: '//talk.lehr-lern-labor.info/',
+
     /* Lecture Constants */
     SHOWLECTURE: 10 * 60 * 1000, //lecture is shown 10 minutes before lecture start 
     TOKENCOUNTERSTART: 5 * 60 * 1000,

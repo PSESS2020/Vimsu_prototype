@@ -8,8 +8,8 @@
 <body>
     <div class="container">
         <%- include('partials/header') %>
-            <section class="medium-form-content row align-items-center justify-content-center">
-                <div class="col-lg-4 col-md-6 col-sm-8 col-10" id="form">
+            <section class="large-form-content row align-items-center justify-content-center">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
                     <div class="align-items-center justify-content-center">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
                             <a class="nav-item nav-link" id="nav-edit-account-tab" data-toggle="tab"
@@ -28,13 +28,11 @@
                             <div class="tab-pane" id="nav-edit-account" role="tabpanel"
                                 aria-labelledby="nav-edit-account-tab">
                                 <form action="account-settings" method="POST">
-                                    <h5>Edit Account Information</h5>
-                                    <br>
-                                    <div class="row justify-content-left m-0 p-0">
-                                        <% if (locals.editAccountSuccess===true) { %>
-                                            <small class="success"><i class="fa fa-check-circle"></i> Your changes have
-                                                been saved.</small>
-                                        <% } else if (locals.usernameTaken===true) { %>
+                                    <h5 class="mb-4">Edit Account Info</h5>
+                                    <div class="row justify-content-left mb-3 m-0 p-0">
+                                        <% if (locals.editAccountSuccess === true) { %>
+                                            <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                                        <% } else if (locals.usernameTaken === true) { %>
                                             <small class="error"><i class="fa fa-times-circle"></i> The username
                                                 you entered is already taken</small>
                                         <% } else if(locals.editAccountFailed===true) { %>
@@ -44,21 +42,21 @@
                                             <small class="error"><i class="fa fa-times-circle"></i> The
                                                 username
                                                 you entered doesn't match our criteria.</small>
-                                        <% } else if (locals.deleteAccountFailed===true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i>
-                                                There's an error
-                                                while deleting your account. Please try again.</small>
+                                        <% } else if(locals.invalidForename === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> Forename cannot be empty.</small>
+                                        <% } else if (locals.deleteAccountFailed === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> There's an error while deleting your account. Please try again.</small>
                                         <% } %>
                                     </div>
-                                    <br>
+                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
                                     <div class="form-group">
-                                        <label for="username" class="mt-2 input-label">Username: </label>
+                                        <label for="username" class="input-label">Username&nbsp<span class="warning">*</span></label>
                                         <input class="form-control" type="text" id="usernameInput" name="username"
                                             value="<%=username%>" maxlength="10" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="forename" class="mt-2 input-label">Forename: </label>
+                                        <label for="forename" class="mt-2 input-label">Forename&nbsp<span class="warning">*</span></label>
                                         <input type="text" class="form-control" id="inputForename" name="forename"
                                             value="<%=forename%>" required>
                                     </div>
@@ -79,27 +77,38 @@
                             <div class="tab-pane" id="nav-change-password" role="tabpanel"
                                 aria-labelledby="nav-change-password-tab">
                                 <form action="account-settings" method="POST">
-                                    <h5>Change Password</h5>
-                                    <br>
-                                    <div class="row justify-content-left m-0 p-0">
+                                    <h5 class="mb-4">Change Password</h5>
+                                    <div class="row justify-content-left mb-3 m-0 p-0">
                                         <% if (locals.changePasswordSuccess===true) { %>
                                             <small class="success"><i class="fa fa-check-circle"></i> Your password has
                                                 been changed.</small>
+                                        <% } else if (locals.oldPasswordWrong===true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> Your old password is wrong.</small>
+                                        <% } else if (locals.passwordsDontMatch===true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> New passwords do not match.</small>
+                                        <% } else if (locals.invalidPassword===true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> Passwords cannot be empty.</small>
                                         <% } else if (locals.changePasswordFailed===true) { %>
                                             <small class="error"><i class="fa fa-times-circle"></i> There's an error while changing your password. 
                                                 Please try again.</small>
                                         <% } %>
                                     </div>
-                                    <br>
+                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
                                     <div class="form-group">
-                                        <label for="oldPassword" class="mt-2 input-label">Old password: </label>
+                                        <label for="oldPassword" class="input-label">Old password&nbsp<span class="warning">*</span></label>
                                         <input class="form-control" type="password" id="oldPasswordInput" name="oldPassword"
                                             required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="newPassword" class="mt-2 input-label">New password: </label>
+                                        <label for="newPassword" class="input-label">New password&nbsp<span class="warning">*</span></label>
                                         <input type="password" class="form-control" id="newPasswordInput" name="newPassword"
+                                            required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="retypeNewPassword" class="input-label">Confirm new password&nbsp<span class="warning">*</span></label>
+                                        <input type="password" class="form-control" id="retypeNewPasswordInput" name="retypedNewPassword"
                                             required>
                                     </div>
 
@@ -148,7 +157,7 @@
         $(function() {
             `${activateTab(navEditAccountId)}
             
-            <% if (locals.changePasswordFailed===true || locals.changePasswordSuccess===true) { %>
+            <% if (locals.changingPassword === true) { %>
                 ${activateTab(navChangePasswordId)}
             <% } %>`
         });

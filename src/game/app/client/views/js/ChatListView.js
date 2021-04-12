@@ -49,7 +49,7 @@ class ChatListView extends WindowView {
     });
 
     this.chats = chats.sort(
-      (chatA, chatB) => chatB.timestamp - chatA.timestamp
+      (chatA, chatB) => chatA.timestamp - chatB.timestamp
     );
 
     this.chats.forEach((chat) => {
@@ -95,10 +95,10 @@ class ChatListView extends WindowView {
         <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
           <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
             <div class="row w-100">
-              <div class="col-12 col-sm-2 px-0">
+              <div class="col-2 px-0">
                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
               </div>
-              <div class="col-12 col-md-10 text-center text-sm-left">
+              <div class="col-10 text-left">
                 <label class="name lead">${chat.title}</label>
                 <br>
                 <span class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
@@ -122,9 +122,8 @@ class ChatListView extends WindowView {
    * @param {String} chatId chat ID
    */
   deleteChat(chatId) {
-    this.chats.forEach((chat) => {
+    this.chats.forEach((chat, index) => {
       if (chat.chatId === chatId) {
-        let index = this.chats.indexOf(chat);
         this.chats.splice(index, 1);
       }
     });
@@ -167,7 +166,7 @@ class ChatListView extends WindowView {
    * @param {Object} message chat message
    */
   addNewMessage(chatID, message) {
-    this.chats.forEach((chat) => {
+    this.chats.forEach(chat => {
       if (chat.chatId === chatID) {
         if (message.msgText.length > 35) {
           var msgText = message.msgText.slice(0, 35) + "...";
@@ -192,6 +191,8 @@ class ChatListView extends WindowView {
         $("#chatPreviewMessage" + chatID).text(previewMessage);
       }
     });
+
+    this.draw(this.chats, this.ownUsername)
   }
 
   /**
@@ -204,16 +205,11 @@ class ChatListView extends WindowView {
       $("#chatThreadModalCollection").append(`
           <div class="modal" id=${"chatThreadModal" + chatID} role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
           aria-hidden="true" data-focus-on="input:first">
-            <div class="modal-dialog modal-dialog-centered mw-50 w-50" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-50" role="document">
                 <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                     <div class="modal-header">
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
-                            <div>
-                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
-                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
-                                </button>
-                            </div>
                             <div>
                                 <button id=${"chatFriendRequestButton" + chatID} class="close btn">
                                     <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
@@ -232,6 +228,11 @@ class ChatListView extends WindowView {
                                     <i class="fa fa-plus-square navbarIcons"
                                         style="transform: scale(0.8); margin-top: 1px;"></i>
                                 </a>
+                            </div>
+                            <div>
+                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
+                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
+                                </button>
                             </div>
                             <div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

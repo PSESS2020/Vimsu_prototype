@@ -165,9 +165,8 @@ class RoomClient {
      */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
-        this.listOfPPants.forEach(participant => {
+        this.listOfPPants.forEach((participant, index) => {
             if (participant.getId() === participantId) {
-                let index = this.listOfPPants.indexOf(participant);
                 this.listOfPPants.splice(index, 1);
             }
         });
