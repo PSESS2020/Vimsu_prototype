@@ -36,38 +36,6 @@
         </div>
     </div>
 
-    <div class="currentLecturesWindow" id="meetingWindow" style="z-index: 1060">
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="currentLecturesHeader p-3 mb-3 d-flex">
-                        <h5 id="meetingWindowTitle"></h5>
-                        <div class="ml-auto">
-                            <button id="meetingWindowMinimize" class="close btn">
-                                <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
-                            </button>
-                        </div>
-                        <div class="ml-2">
-                            <button class="close"
-                            style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;"
-                            id="meetingWindowClose" type="button"><i class="fa fa-close"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="meetingWindowWait" style="text-align: center;">
-                        <i class="fas fa-circle-notch fa-spin fa-2x"></i>
-                    </div>
-                    <div id="meetingWindowBody" class="row ml-auto mr-auto">
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-50" role="document">
@@ -401,6 +369,24 @@
         </div>
     </div>
 
+    <div class="window" id="meetingWindow" style="width: 100%; height: 100%;">
+        <div class="p-3 d-flex window-header">
+            <div id="meetingWindowTitle"></div>
+            <button id="meetingWindowMinimize" class="close btn ml-auto pl-1 pr-1">
+                <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
+            </button>
+            <button id="meetingWindowClose" class="close btn pl-1 pr-1">
+                <i class="fa fa-close"></i>
+            </button>
+        </div>
+        <div class="p-3 window-content">
+            <div id="meetingWindowWait" style="text-align: center;">
+                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+            </div>
+            <div id="meetingWindowBody" class="row ml-auto mr-auto"></div>
+        </div>            
+    </div>
+    
     <div class="window" id="currentLectures" style="width: 100%; height: 100%">
         <div class="p-3 d-flex window-header">
             <div>Current Lectures</div>

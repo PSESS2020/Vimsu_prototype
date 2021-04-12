@@ -54,9 +54,9 @@ class VideoMeetingView extends WindowView {
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
-     * @param {String} ownForename own forename that is shown in meeting
+     * @param {String} ownUsername own username that is shown in meeting
      */
-    draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
+    draw(meetingId, meetingDomain, meetingName, meetingPassword, ownUsername) {
         $('#meetingWindowWait').hide();
 
         //Meeting was only minimized
@@ -83,7 +83,7 @@ class VideoMeetingView extends WindowView {
             parentNode: document.getElementById('meetingWindowBody'),
             userInfo: {
                 // email: 'place', ppant has no Email
-                displayName: ownForename
+                displayName: ownUsername
             }
         });
 

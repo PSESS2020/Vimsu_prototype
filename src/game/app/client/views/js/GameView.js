@@ -952,11 +952,11 @@ class GameView {
      * @param {String} meetingDomain domain of joined meeting
      * @param {String} meetingName name of joined meeting
      * @param {String} meetingPassword password of joined meeting
-     * @param {String} ownForename own forename that is shown in meeting
+     * @param {String} ownUsername own username that is shown in meeting
      * 
      */
-    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
-        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename);
+    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownUsername) {
+        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownUsername);
     }
 
     /**

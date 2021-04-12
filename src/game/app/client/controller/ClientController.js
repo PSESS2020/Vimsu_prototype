@@ -1597,7 +1597,7 @@ class ClientController {
         TypeChecker.isString(meetingName);
         TypeChecker.isString(meetingPassword);
 
-        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownBusinessCard.getForename());
+        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownParticipant.getUsername());
     }
 
     /**
