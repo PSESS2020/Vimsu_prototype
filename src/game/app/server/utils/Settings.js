@@ -37,7 +37,7 @@ module.exports = Object.freeze({
 
     /* Meeting Constants */
     CONFERENCE_MEETINGNAME: 'Conference Meeting',
-    DEFAULT_MEETINGDOMAIN: 'meet.jit.si',
+    DEFAULT_MEETINGDOMAIN: 'meet.jit.si/vimsu',
 
     /* Lecture Constants */
     SHOWLECTURE: 10 * 60 * 1000, //lecture is shown 10 minutes before lecture start 
