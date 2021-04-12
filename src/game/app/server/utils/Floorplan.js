@@ -1,6 +1,6 @@
 const AssetPaths = require('../../client/shared/AssetPaths');
 const Direction = require('../../client/shared/Direction');
-const Globals = require('./GlobalStrings.js');
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**
  * How to use this file:
@@ -42,7 +42,7 @@ module.exports = Object.freeze({
     // contains fitting rooms for the doors to exit into
 
     ROOM1: {
-        TYPE: Globals.RECEPTION,
+        TYPE: GlobalStrings.RECEPTION,
         ID: 1,
         WIDTH: 100,
         LENGTH: 100,

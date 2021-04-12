@@ -4,7 +4,7 @@ const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const { type } = require('jquery');
-const GlobalStrings = require('../utils/GlobalStrings.js');
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**
  * The Door Service
