@@ -2010,17 +2010,6 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets all roomDecorators
-     * @method module:ServerController#getRoomDecorators
-     * 
-     * @return {RoomDecorator[]} roomDecorators
-     * 
-     */
-    getRoomDecorators() {
-        return this.#roomDecorators;
-    }
-
-    /**
      * Gets all currently available doors in this conference
      * @method module:ServerController#getAllDoors
      * 
@@ -3383,14 +3372,7 @@ module.exports = class ServerController {
         let currentRoom = this.#getRoomById(currentRoomId);
 
         let targetRoomId = newPos.getRoomId();
-        let targetRoomDecorator = this.#roomDecorators[targetRoomId - 1];
-
-        //room does not exist
-        if (targetRoomDecorator === undefined) {
-            return;
-        }
-
-        let targetRoom = targetRoomDecorator.getRoom();
+        let targetRoom = this.#getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         currentRoom.exitParticipant(ppantID);
@@ -3517,7 +3499,7 @@ module.exports = class ServerController {
             socket.join(targetRoomId.toString());
         }
 
-        this.#io.to(socketID).emit('initAllchat', this.#roomDecorators[targetRoomId - 1].getRoom().getMessages());
+        this.#io.to(socketID).emit('initAllchat', this.#getRoomById(targetRoomId).getMessages());
 
     }
 

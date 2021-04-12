@@ -1,5 +1,5 @@
-const TypeChecker = require('../..client/shared/TypeChecker.js');
-const TypeOfRoom = require('../client/shared/TypeOfRoom.js');
+const TypeChecker = require('../../client/shared/TypeChecker.js');
+const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const AssetPaths = require('../../client/shared/AssetPaths.js');
 const Room = require('../models/Room.js');
 const GameObjectService = require('../services/GameObjectService.js');
@@ -13,13 +13,9 @@ const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
-const { TILE } = require('../../client/shared/GameObjectType.js');
+
 
 module.exports = class RoomFactory {
-
-    // I don't think the way the services are implemented
-    // is functional
-
     #objService;
     #doorService;
     #npcService;
@@ -39,6 +35,7 @@ module.exports = class RoomFactory {
     buildRoomFrom(roomData) {
         TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
 
+        // switch statement should be replaced by polymorphism
         switch(roomData.TYPE) {
             case TypeOfRoom.RECEPTION:
                 return new ReceptionRoomDecorator(new Room(roomData.ID,roomData.TYPE, roomData.WIDTH, roomData.LENGTH)).getRoom();
@@ -245,8 +242,6 @@ module.exports = class RoomFactory {
             [GlobalStrings.RIGHT]: "rightfoodcourtdoor_default"
         }
     });
-
-    
 
     #createObjectsFromData = function (objData, listToPushInto) {
         // TODO support multi-part objects
