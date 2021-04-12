@@ -215,6 +215,7 @@ class ClientController {
         this.socket.on('other shirt color changed', this.handleFromServerChangeOtherShirtColor.bind(this));
         this.socket.on('join group', this.handleFromServerJoinGroup.bind(this));
         this.socket.on('leave group', this.handleFromServerLeaveGroup.bind(this));
+        this.socket.on('leave chat', this.handleFromServerLeaveChat.bind(this));
         this.socket.on('leave meeting', this.handleFromServerLeaveMeeting.bind(this));
         this.socket.on('meetingList', this.handleFromServerShowMeetingList.bind(this));
         this.socket.on('showExternalWebsite', this.handleFromServerShowExternalWebsite.bind(this));
@@ -1186,14 +1187,21 @@ class ClientController {
     /**
      * Receives from server that you left a group
      * 
-     * @param {String} groupChatID chatID of left group
      */
-    handleFromServerLeaveGroup = function(groupChatID) {
-        TypeChecker.isString(groupChatID);
-
+    handleFromServerLeaveGroup = function () {
         this.gameView.removeGroupName();
-        this.gameView.closeChatThreadView(groupChatID);
-        this.gameView.removeChat(groupChatID);
+    }
+
+    /**
+     * Receives from server that you left a chat
+     * 
+     * @param {String} chatID chatID of left chat
+     */
+    handleFromServerLeaveChat = function (chatID) {
+        TypeChecker.isString(chatID);
+
+        this.gameView.closeChatThreadView(chatID);
+        this.gameView.removeChat(chatID);
     }
 
     /**
