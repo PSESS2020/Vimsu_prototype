@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
- const AssetPaths = Object.freeze({
+AssetPaths = Object.freeze({
     // Tiles
     "tile_default": "../client/assets/tiles/tile_default.png",
     "tile_selected": "../client/assets/tiles/tile_selected.png",
@@ -33,7 +33,7 @@
     // Windows
     "leftwindow_default0": "../client/assets/windows/left_small_window_default0.png",
     "rightwindow_default0": "../client/assets/windows/right_small_window_default0.png",
-    "leftwindow_default1": "../client/assets/windows/left_small_window_default1.png",
+    "leftwindow_default1": "../client/assets/windows/left_small_window.png",
     "rightwindow_default1": "../client/assets/windows/right_small_window_default1.png",
     
     // Plant & Picture Frames
