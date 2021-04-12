@@ -238,7 +238,8 @@ module.exports = class DoorService {
      * 
      * @method module:DoorService#createCustomDoor
      * 
-     * @param {String} assetPath 
+     * @param {String} assetPath // The path to the logo being portrayed
+     *                           // above the door
      * @param {String} wallSide 
      * @param {Position} mapPosition 
      * @param {Position} targetPosition 
@@ -253,10 +254,12 @@ module.exports = class DoorService {
 
         this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
 
+        var enterPositionData;
+
         if (wallSide === GlobalStrings.LEFT) {
-            let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+            enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         } else if (wallSide === GlobalStrings.RIGHT) {
-            let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+            enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         } else {
             throw new Error(wallSide + " is not a legal option for the wallside of a door.");
         }
