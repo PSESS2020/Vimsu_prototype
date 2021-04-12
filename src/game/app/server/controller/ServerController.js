@@ -228,7 +228,7 @@ module.exports = class ServerController {
                             socket.emit('join group', group.getName());
                         }
                     });
-                        
+                     
                     //Open all doors this ppant achieved to open through his achievements before
                     let achievements = ppant.getAchievements();
 
@@ -247,6 +247,7 @@ module.exports = class ServerController {
 
                     //Gets MapElements of the starting room
                     let mapElements = currentRoom.getListOfMapElements();
+
                     let mapElementsData = [];
 
                     mapElements.forEach(mapElement => {

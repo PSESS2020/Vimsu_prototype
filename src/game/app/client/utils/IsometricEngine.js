@@ -129,25 +129,35 @@ class IsometricEngine {
      * @return {Object} Object containing all the images loaded from the asset paths
      */
     async loadImages(assetPaths) {
+        console.log("be vewy quiet, we awe hunting bugs...")
         for (const [value] of Object.entries(assetPaths)) {
             TypeChecker.isString(value);
+            console.log("the value of the entry is " + value);
         }
 
         var imageLoader = new ImageLoader();
         var totalImages = Object.keys(assetPaths).length;
-
+        console.log(totalImages)
         var assetImages = {};
         var loadedImages = 0;
-
+        console.log("can you reach me?")
         // Load all the images before we run the app
         for (var key in assetPaths) {
+            console.log("try to load " + key)
+            console.log("should give us " + assetPaths[key])
             assetImages[key] = await imageLoader.loadImage(key, assetPaths[key]);
+            console.log("image with key " + key + " loaded successfully")
 
             loadedImages++;
 
+            console.log(loadedImages)
+
             this.loader.contentLoaded(totalImages, loadedImages);
 
+            console.log("what does it do?")
+
             if (loadedImages >= totalImages) {
+                console.log("loaded all images")
                 return Promise.all(Object.entries(assetImages)).then(() => {
                     this.loader.doneLoading();
 
