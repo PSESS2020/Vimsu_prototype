@@ -82,7 +82,7 @@ module.exports = Object.freeze({
         WIDTH: 13,
         LENGTH: 13,
         MAPELEMENTS: [
-            {type: GameObjectType.WINDOW, position: [[13, 5], [13, 6], [13, 7], [13, 8]]},
+            {type: GameObjectType.WINDOW, position: [[13, 5], [13, 6], [13, 7]]},
             //{type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
         ],
         OBJECTS: [

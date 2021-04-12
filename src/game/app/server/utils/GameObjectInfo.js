@@ -51,6 +51,9 @@ class GameObjectInfo {
     // - is there an easy way to group similar objects
     //   as variations of the same type?
 
+    // The fucking GameObjectView uses a switch statement
+    // fuck me with a rake
+
     // Have asset-paths be of style <direction><name>_<style><variation>
 
     // for the asset paths, we need to pass keys not values
@@ -113,7 +116,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "rightwall_default", // TODO object with variations
+            assetName: "rightwindow_default0", // TODO object with variations
         },
         
         // Plant & Picture Frames

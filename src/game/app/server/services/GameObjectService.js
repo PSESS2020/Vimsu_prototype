@@ -812,14 +812,18 @@ module.exports = class GameObjectService {
      * @param {Int} yPos 
      * @param {Boolean} isSolid 
      * @param {Boolean} isClickable 
-     * @param {String} url 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
      * 
      * @returns {GameObject} A custom instance of the GameObject class
      */
-    createCustomObject(roomId, type, xPos, yPos, isClickable, url) {
+    createCustomObject(roomId, type, xPos, yPos, isClickable, iFrameData) {
         this.#isKnownType(type);
         // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, url);
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
         
         return new GameObject(
             this.#generateGameObjectID(), 
@@ -830,7 +834,7 @@ module.exports = class GameObjectService {
             new Position(roomId, xPos, yPos), 
             GameObjectInfo.getInfo(type, "isSolid"), 
             isClickable, 
-            url);
+            iFrameData);
     }
 
 
