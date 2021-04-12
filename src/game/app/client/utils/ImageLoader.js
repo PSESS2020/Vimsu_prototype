@@ -40,7 +40,6 @@ class ImageLoader {
             }
 
             image.src = path;
-            console.log("loading image...")
         });
     }
 }
