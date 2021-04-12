@@ -3336,12 +3336,9 @@ module.exports = class ServerController {
      *                 undefined otherwise.
      */
     #getRoomById = function (roomId) {
-        console.log(roomId);
         for (let i = 0; i < this.#rooms.length; i++) {
             let room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
-                console.log("debug - should return room now")
-                console.log(room)
                 return room;
             }
         }
