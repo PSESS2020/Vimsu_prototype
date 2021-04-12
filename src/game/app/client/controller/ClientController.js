@@ -402,7 +402,7 @@ class ClientController {
         if (!this.currentRoom) {
             this.currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-            //If not, only swap the room
+        //If not, only swap the room
         } else {
             this.currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.currentRoom.enterParticipant(this.ownParticipant);

@@ -21,21 +21,30 @@ class ImageLoader {
         TypeChecker.isString(key);
         TypeChecker.isString(path);
 
+        console.log("do we have " + key + " cached?")
+
         const cached = new ImageCache().getImage(key);
 
         if (cached !== undefined) {
+            console.log("we do")
             return cached;
         }
+
+        console.log("we don't")
 
         return new Promise((resolve, reject) => {
             const image = new Image();
 
+            console.log("new image created")
+
             image.onload = () => {
+                console.log("loading complete")
                 new ImageCache().addImage(key, image);
                 resolve(image);
             }
 
             image.src = path;
+            console.log("loading image...")
         });
     }
 }
