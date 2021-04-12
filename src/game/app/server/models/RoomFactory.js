@@ -12,7 +12,7 @@ const FoyerRoomDecorator = require('./FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
-const GlobalStrings = require('../utils/GlobalStrings.js');
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const { TILE } = require('../../client/shared/GameObjectType.js');
 
 module.exports = class RoomFactory {
@@ -105,6 +105,7 @@ module.exports = class RoomFactory {
         //   (how to handle multi-part objects?)
         // - how to handle custom options for "standard" objects?
         // - how to handle more custom objects?
+        // - how to allow for objects with multiple styles?
 
         // offer three options for positions:
         // - [xPos, yPos] (done)
@@ -124,15 +125,19 @@ module.exports = class RoomFactory {
         })
 
         // ADD DOORS
-        // doorData = {assetName, wallSide, positionOfDoor,
+        // doorData = {wallSide, logo, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
-        //            closedMessage, codeToOpen, logo}
+        //            closedMessage, codeToOpen}
         // TODO:
-        // - logos above doors
-        roomData.DOORS.forEach(doorData => {           
+        // - allow for logos above door to not be passed
+        roomData.DOORS.forEach(doorData => {     
+            if(doorData.logo === undefined) {
+                doorData.logo = "default";
+            }
+            let logo = this.#getDoorLogo(doorData.logo, doorData.wallSide);
             if (doorData.isOpen === undefined) {
                 listOfDoors.push(
-                    this.#doorService.createCustomDoor(doorData.assetName,
+                    this.#doorService.createCustomDoor(logo,
                         doorData.wallSide,
                         new Position(roomData.ID,
                             doorData.positionOfDoor[0],
@@ -150,7 +155,7 @@ module.exports = class RoomFactory {
                 // is defined as closed but there is no message
                 // or code to open defined
                 listOfDoors.push(
-                    this.#doorService.createCustomDoor(doorData.assetName,
+                    this.#doorService.createCustomDoor(logo,
                         doorData.wallSide,
                         new Position(roomData.ID,
                             doorData.positionOfDoor[0],
@@ -179,13 +184,6 @@ module.exports = class RoomFactory {
             }
            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[wallSide + "TILE"], xPos, yPos, false, ""))
 
-           // TODO - where is this actually set?
-           // Now create logo above the door
-           // if the logo is undefined, we just do nothing
-           if (doorData.logo !== undefined) {
-               listOfMapElements.push(this.#objService.createCustomObject)
-           }
-
         })
 
         // ADD NPCS
@@ -212,7 +210,43 @@ module.exports = class RoomFactory {
         return room;
     }
 
+    #getDoorLogo = function (logoName, logoVariant) {
+        // TODO type-checking
+        let logo = this.#doorLogos[logoName];
+        return logo[logoVariant];
+    }
 
+    // This is a temporary solution that is not very good
+    // but it will hopefully make creating a door a bit
+    // more user-friendly and flexible.
+    // Basically, the reason this is here is so when
+    // adding doors while creating a floorplan, the user
+    // does not need to give the entire assetPath-key for
+    // the logo.
+    #doorLogos = Object.freeze({
+        default: {
+            [GlobalStrings.LEFT]: "leftnonedoor_default",
+            [GlobalStrings.RIGHT]: "rightnonedoor_default"
+        },
+        foyer: {
+            [GlobalStrings.LEFT]: "leftfoyerdoor_default",
+            [GlobalStrings.RIGHT]: "rightfoyerdoor_default"
+        },
+        reception: {
+            [GlobalStrings.LEFT]: "leftreceptiondoor_default",
+            [GlobalStrings.RIGHT]: "rightreceptiondoor_default"
+        },
+        lecture: {
+            [GlobalStrings.LEFT]: "leftlecturedoor_default",
+            [GlobalStrings.RIGHT]: "rightlecturedoor_default"
+        },
+        foodcourt: {
+            [GlobalStrings.LEFT]: "leftfoodcourtdoor_default",
+            [GlobalStrings.RIGHT]: "rightfoodcourtdoor_default"
+        }
+    });
+
+    
 
     #createObjectsFromData = function (objData, listToPushInto) {
         // TODO support multi-part objects

@@ -14,9 +14,15 @@
     "rightwall_default": "client/assets/walls/wall2.png",
 
     // Doors
+    "leftnonedoor_default": "client/assets/doors/door_none_alt.png",
+    "rightnonedoor_default": "client/assets/doors/door_none.png",
     "leftfoyerdoor_default": "client/assets/doors/door_foyer.png",
+    "rightfoyerdoor_default": "client/assets/doors/door_foyer_alt.png",
+    "leftreceptiondoor_default": "client/assets/doors/door_reception_alt.png",
     "rightreceptiondoor_default": "client/assets/doors/door_reception.png",
     "leftlecturedoor_default": "client/assets/doors/door_lecturehall.png",
+    "rightlecturedoor_default": "client/assets/doors/door_lecturehall_alt.png",
+    "leftfoodcourtdoor_default": "client/assets/doors/door_foodcourt_alt.png",
     "rightfoodcourtdoor_default": "client/assets/doors/door_foodcourt.png",
     
     // Schedule
