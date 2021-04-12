@@ -1,4 +1,5 @@
 const AccountService = require('../../../src/website/services/AccountService');
+const Account = require('../../../src/website/models/Account');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
@@ -13,6 +14,7 @@ var account1 = {
 }
 
 var newForename = "Hans";
+var newPassword = "newpassword";
 
 var account;
 
@@ -42,18 +44,6 @@ database.connectDB().then(res => {
 
     const verifyLoginDataUsernameInvalid = async () => {
         return AccountService.verifyLoginData("usernameinvalid", account1.password, suffix, database).then(res => {
-            return res;
-        })
-    }
-
-    const usernameNotValid = async () => {
-        return AccountService.isUsernameValid("maxmust", suffix, database).then(res => {
-            return res;
-        })
-    }
-
-    const usernameValid = async () => {
-        return AccountService.isUsernameValid("maxmustvalid", suffix, database).then(res => {
             return res;
         })
     }
@@ -88,6 +78,24 @@ database.connectDB().then(res => {
         })
     }
 
+    const changePassword = async () => {
+        return AccountService.changePassword(account1.username, account1.password, newPassword, suffix, database).then(res => {
+            return res;
+        })
+    }
+
+    const verifyLoginDataNewPassword = async () => {
+        return AccountService.verifyLoginData(account1.username, newPassword, suffix, database).then(acc => {
+            return acc;
+        })
+    }
+
+    const verifyLoginDataOldPassword = async () => {
+        return AccountService.verifyLoginData(account1.username, account1.password, suffix, database).then(res => {
+            return res;
+        })
+    }
+
     describe('AccountService methods', function () {
         var globalResults;
 
@@ -98,9 +106,6 @@ database.connectDB().then(res => {
             var verifyLoginDataPasswordInvalid_result = await verifyLoginDataPasswordInvalid();
             var verifyLoginDataUsernameInvalid_result = await verifyLoginDataUsernameInvalid();
 
-            var usernameNotValid_result = await usernameNotValid();
-            var usernameValid_result = await usernameValid();
-
             var getAccountById_result = await getAccountById();
             var getAccountByIdNotFound_result = await getAccountByIdNotFound();
 
@@ -109,11 +114,16 @@ database.connectDB().then(res => {
 
             var updateAccountData_result = await updateAccountData();
 
+            var changePassword_result = await changePassword();
+            var verifyLoginDataNewPassword_result = await verifyLoginDataNewPassword();
+            var verifyLoginDataOldPassword_result = await verifyLoginDataOldPassword();
+
             var newAccountResult = [newAccount1_result];
 
             var allResults = [verifyLoginDataValid_result, verifyLoginDataPasswordInvalid_result, verifyLoginDataUsernameInvalid_result,
-                usernameNotValid_result, usernameValid_result, getAccountById_result, getAccountByIdNotFound_result, getAccountUsername_result, 
-                getAccountUsernameNotFound_result, updateAccountData_result]
+                getAccountById_result, getAccountByIdNotFound_result, getAccountUsername_result, 
+                getAccountUsernameNotFound_result, updateAccountData_result, changePassword_result, 
+                verifyLoginDataNewPassword_result, verifyLoginDataOldPassword_result];
 
             Promise.all(newAccountResult).then(() => {
                 Promise.all(allResults).then(() => {
@@ -132,23 +142,24 @@ database.connectDB().then(res => {
             expect(globalResults[2]).to.eql(false);
         });
 
-        it('test username valid', function () {
-            expect(globalResults[3]).to.eql(false);
-            expect(globalResults[4]).to.eql(true);
-        })
-
         it('test get account by id', function () {
-            expect(globalResults[5].accountId).to.eql(account.getAccountID());
-            expect(globalResults[6]).to.eql(false);
+            expect(globalResults[3].accountId).to.eql(account.getAccountID());
+            expect(globalResults[4]).to.eql(false);
         })
 
         it('test get account username', function () {
-            expect(globalResults[7]).to.eql(account.getUsername());
-            expect(globalResults[8]).to.eql(false);
+            expect(globalResults[5]).to.eql(account.getUsername());
+            expect(globalResults[6]).to.eql(false);
         })
 
         it('test update account data', function () {
-            expect(globalResults[9].getForename()).to.eql(newForename);
+            expect(globalResults[7].getForename()).to.eql(newForename);
+        });
+        
+        it('test update password', function () {
+            expect(globalResults[8]).to.be.true;
+            expect(globalResults[9]).to.be.instanceOf(Account);
+            expect(globalResults[10]).to.be.false;
         });
 
         after(async () => {
