@@ -197,14 +197,7 @@ module.exports = class ServerController {
 
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let currentRoom = this.#getRoomById(currentRoomId);
-
-                    let typeOfCurrentRoom;
-                    for (var i = 0, n = this.#rooms.length; i < n; i++) {
-                        if (this.#rooms[i].getRoomId() === currentRoomId) {
-                            typeOfCurrentRoom = this.#rooms[i].getTypeOfRoom();
-                            break;
-                        }
-                    }
+                    let typeOfCurrentRoom = currentRoom.getTypeOfRoom();
 
                     socket.ppantID = ppant.getId();
 
@@ -1847,7 +1840,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let gameObject = this.#roomDecorators[currentRoomId - 1].getRoom().getGameObject(gameObjectID);
+                let gameObject = this.#getRoomById(currentRoomId).getGameObject(gameObjectID);
 
                 //prevents server to crash when client emits wrong GameObject ID
                 if (!gameObject) {
@@ -3343,11 +3336,15 @@ module.exports = class ServerController {
      *                 undefined otherwise.
      */
     #getRoomById = function (roomId) {
-        this.#rooms.forEach(room => {
+        console.log(roomId);
+        for (let i = 0; i < this.#rooms.length; i++) {
+            let room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
+                console.log("debug - should return room now")
+                console.log(room)
                 return room;
             }
-        })
+        }
         return undefined;
     }
 
