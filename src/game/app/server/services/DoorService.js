@@ -239,7 +239,7 @@ module.exports = class DoorService {
      * @method module:DoorService#createCustomDoor
      * 
      * @param {String} assetPath 
-     * @param {Direction} direction 
+     * @param {String} wallSide 
      * @param {Position} mapPosition 
      * @param {Position} targetPosition 
      * @param {Direction} directionOnExit 
@@ -249,16 +249,16 @@ module.exports = class DoorService {
      * 
      * @returns {Door} A door instance with the passed attributes
      */
-    createCustomDoor(assetPath, direction, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
+    createCustomDoor(assetPath, wallSide, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
 
-        this.#checkParamTypes(TypeOfDoor[direction + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
+        this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
 
-        if (direction === GlobalStrings.LEFT) {
+        if (wallSide === GlobalStrings.LEFT) {
             let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        } else if (direction === GlobalStrings.RIGHT) {
+        } else if (wallSide === GlobalStrings.RIGHT) {
             let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         } else {
-            throw new Error(direction + " is not a legal option for the direction of a door.");
+            throw new Error(wallSide + " is not a legal option for the wallside of a door.");
         }
 
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
@@ -267,7 +267,7 @@ module.exports = class DoorService {
         let doorId = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId() + this.#generateDoorSalt();
 
         return new Door(doorId,   
-                TypeOfDoor[direction + "_DOOR"], 
+                TypeOfDoor[wallSide + "_DOOR"], 
                 assetPath,
                 mapPosition, 
                 enterPositionWithoutClick, 
