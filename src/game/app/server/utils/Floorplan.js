@@ -1,4 +1,7 @@
+const Direction = require('../../client/shared/Direction');
+const GameObjectType = require('../../client/shared/GameObjectType');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
+const NPCDialog = require('./NPCDialog');
 const Settings = require('./Settings');
 
 /**
@@ -40,6 +43,7 @@ module.exports = Object.freeze({
     // note that using these requires that the rest of the conference
     // contains fitting rooms for the doors to exit into
 
+    /*
     ROOM1: {
         TYPE: TypeOfRoom.RECEPTION,
         ID: Settings.RECEPTION_ID      
@@ -59,7 +63,75 @@ module.exports = Object.freeze({
         TYPE: TypeOfRoom.ESCAPEROOM,
         ID: Settings.ESCAPEROOM_ID
     }
+    */
 
+    // TODO:
+    // - possibility to generate ID during runtime?
+    // - support choice of styles for walls and floor
+    // - add shape supports
+    // - add possibility to easily resize room without fucking
+    //   up layout
+    // - I probably need to write some hack to make sure door-unlock
+    //   will still work
+    // - This will most likely break a non-neglible amount of
+    //   achievements
+    RECEPTION: {
+        ID: 0, // needs to be integer
+        TYPE: TypeOfRoom.CUSTOM,
+        //SHAPE: ,
+        WIDTH: 13,
+        LENGTH: 13,
+        MAPELEMENTS: [
+            {type: GameObjectType.WINDOW, position: [[13, 5], [13, 6], [13, 7], [13, 8]]},
+            //{type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
+        ],
+        OBJECTS: [
+            {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},
+            {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, position: [11, 9]},
+            {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, position: [11, 3]},
+            {type: GameObjectType.PLANT, position: [[12, 0],[12, 12]]}
+        ],
+        DOORS: [],
+        NPCS: [
+            {name: "Basic Tutorial", position: [11, 6], direction: Direction.DOWNLEFT, dialog: NPCDialog.basicTutorialDialog}
+        ]
+    },
+    /*
+    FOYER: {
+        ID: "roomFoyer",
+        TYPE: TypeOfRoom.CUSTOM,
+        //SHAPE: ,
+        WIDTH: 25,
+        LENGTH: 25,
+        MAPELEMENTS: [],
+        OBJECTS: [],
+        DOORS: [],
+        NPCS: []
+    },
 
+    FOODCOURT: {
+        ID: "roomFoodcourt",
+        TYPE: TypeOfRoom.CUSTOM,
+        //SHAPE: ,
+        WIDTH: 19,
+        LENGTH: 19,
+        MAPELEMENTS: [],
+        OBJECTS: [],
+        DOORS: [],
+        NPCS: []
+    },
+
+    ESCAPEROOM: {
+        ID: "roomEscape",
+        TYPE: TypeOfRoom.CUSTOM,
+        //SHAPE: ,
+        WIDTH: 20,
+        LENGTH: 15,
+        MAPELEMENTS: [],
+        OBJECTS: [],
+        DOORS: [],
+        NPCS: []
+    }
+    */
 
 })

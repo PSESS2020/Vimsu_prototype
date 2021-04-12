@@ -3,7 +3,6 @@ const Door = require('../models/Door.js');
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
-const { type } = require('jquery');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**

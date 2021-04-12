@@ -77,18 +77,18 @@ module.exports = class RoomFactory {
         // ADD TILES
         for (var i = 0; i < room.getLength(); i++) {
             for (var j = 0; j < room.getWidth(); j++) {
-                listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false, ""));
+                listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false));
             }
         }
 
         // ADD LEFT WALLS
         for (var i = 0; i < room.getLength(); i++) {
-            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false, ""));
+            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false));
         }
 
         // ADD RIGHT WALLS
         for (var j = 0; j < room.getWidth(); j++) {
-            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false, ""));
+            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
         }
 
         // REDO the next two methods.
@@ -112,14 +112,16 @@ module.exports = class RoomFactory {
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
+        // objData = {type, position, isClickable, iFrameData}
         roomData.MAPELEMENTS.forEach(objData => {
-            this.#createObjectsFromData(objData, listOfMapElements);
+            this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
         })
 
         // ADD OBJECTS
         // tables, plants, food and more
+        // objData = {type, position, isClickable, iFrameData}
         roomData.OBJECTS.forEach(objData => {
-            this.#createObjectsFromData(objData, listOfGameObjects);   
+            this.#createObjectsFromData(roomData.ID, objData, listOfGameObjects);   
         })
 
         // ADD DOORS
@@ -180,7 +182,7 @@ module.exports = class RoomFactory {
             } else {
                 // TODO error handling
             }
-           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[wallSide + "TILE"], xPos, yPos, false, ""))
+           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[wallSide + "TILE"], xPos, yPos, false))
 
         })
 
@@ -244,19 +246,19 @@ module.exports = class RoomFactory {
         }
     });
 
-    #createObjectsFromData = function (objData, listToPushInto) {
+    #createObjectsFromData = function (roomId, objData, listToPushInto) {
         // TODO support multi-part objects
         // TODO support objects with automatic additional parts
         // TODO support variations of one object
         // TODO support for custom options
         if (objData.isClickable == undefined) {
             objData.isClickable = false;
-            objData.url = "";
+            objData.url = undefined;
         }
         if (Array.isArray(objData.position[0])) {
             objData.position.forEach(position => {
-                listToPushInto.push(objService.createCustomObject(
-                    roomData.ID,
+                listToPushInto.push(this.#objService.createCustomObject(
+                    roomId,
                     objData.type,
                     position[0],
                     position[1],
@@ -265,8 +267,8 @@ module.exports = class RoomFactory {
                 ));
             })
         } else {
-            listToPushInto.push(objService.createCustomObject(
-                roomData.ID,
+            listToPushInto.push(this.#objService.createCustomObject(
+                roomId,
                 objData.type,
                 objData.position[0],
                 objData.position[1],
