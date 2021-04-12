@@ -87,13 +87,13 @@ class GameObjectInfo {
 
         // Walls
         [GameObjectType.LEFTWALL]: {
-            isSolid: true,
+            isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftwall_default",
         },
         [GameObjectType.RIGHTWALL]: {
-            isSolid: true,
+            isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwall_default",
@@ -102,7 +102,7 @@ class GameObjectInfo {
         // Schedule
         [GameObjectType.LEFTSCHEDULE]: {
             // MULTIPART OBJECT
-            isSolid: true,
+            isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
@@ -110,7 +110,7 @@ class GameObjectInfo {
 
         // Windows
         [GameObjectType.WINDOW]: {
-            isSolid: true,
+            isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwall_default", // TODO object with variations
@@ -133,7 +133,7 @@ class GameObjectInfo {
         // Logo
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
-            isSolid: true,
+            isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftconferencelogo_default0",
@@ -192,7 +192,13 @@ class GameObjectInfo {
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "receptionCounterFrontPart_default",
         },
-        [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {},
+        [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
+            // OBJECT WITH ADDITIONAL PARTS
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "receptionCounterRightPart_default",
+        },
 
         // Food & Drinks
         [GameObjectType.DRINKS]: {

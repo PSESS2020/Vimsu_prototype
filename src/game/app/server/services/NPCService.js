@@ -3,7 +3,6 @@ const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const NPCDialog = require('../utils/NPCDialog.js');
-const { isInstanceOf } = require('../../client/shared/TypeChecker.js');
 
 /**
  * The NPC Service
@@ -130,7 +129,7 @@ module.exports = class NPCService {
 
         // If an entire array gets passed, it's contents are
         // used as dialog
-        if(isInstanceOf(dialog, Array)) {
+        if(Array.isArray(dialog)) {
             dialog.forEach(message => {
                 TypeChecker.isString(message);
             })
