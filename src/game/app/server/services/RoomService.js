@@ -72,11 +72,16 @@ module.exports = class RoomService {
      * @method module:RoomService#initAllRooms
      */
     #initAllRooms = function () {
-        for(const [roomHandle, roomData] in Object.entries(Floorplan)) {
-            if (this.#roomNotAlreadyCreated(roomData.ID)) {
-                this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData));
+        let listToBuild = Object.entries(Floorplan);
+        console.log(Object.entries(Floorplan))
+        console.log(listToBuild)
+        listToBuild.forEach(roomData => {
+            // console.log(roomHandle)
+            console.log(roomData[1])
+            if (this.#roomNotAlreadyCreated(roomData[1].ID)) {
+                this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData[1]));
             }
-        }
+        })
     }
 
     /**
