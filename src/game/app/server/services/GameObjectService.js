@@ -833,8 +833,5 @@ module.exports = class GameObjectService {
             url);
     }
 
-    createCustomObjectWithCustomOptions(roomId, ) {
-        
-    }
 
 }

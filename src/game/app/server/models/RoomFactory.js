@@ -11,6 +11,9 @@ const ReceptionRoomDecorator = require('./ReceptionRoomDecorator.js');
 const FoyerRoomDecorator = require('./FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('./FoodcourtRoomDecorator.js');
 const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
+const GameObjectType = require('../../client/shared/GameObjectType.js');
+const GlobalStrings = require('../utils/GlobalStrings.js');
+const { TILE } = require('../../client/shared/GameObjectType.js');
 
 module.exports = class RoomFactory {
 
@@ -66,33 +69,28 @@ module.exports = class RoomFactory {
 
         // these methods still need proper handling for when some arguments are missing.
 
-        // also i need to through the first couple ones and make sure they work right
-
-        // Also shape-handling
-
-        // And allow arrays as positions.
-
-        // TODO:
-        // - make sure that additional tiles like in other rooms are added
-        //   (or is this done in the Room constructor?)
-        // - those next three methods also need to be re-done
+        // TODO
+        // - Make sure methods behave correctly when arguments are
+        //   missing
+        // - Add shape-handling & support for doors not placed on
+        //   outer walls
+        // - Allow for objects to be placed in a line easily
 
         // ADD TILES
-        for (var i = 0; i < this.#room.getLength(); i++) {
-            for (var j = 0; j < this.#room.getWidth(); j++) {
-                // Whats the best way to add the shape here?
-                listOfMapElements.push(this.#objService.createEnv(roomData.ID, roomData.TILETYPE, i, j, false, false));
+        for (var i = 0; i < room.getLength(); i++) {
+            for (var j = 0; j < room.getWidth(); j++) {
+                listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false, ""));
             }
         }
 
         // ADD LEFT WALLS
-        for (var i = 0; i < this.#room.getLength(); i++) {
-            listOfMapElements.push(this.#objService.createEnv(roomData.ID, roomData.WALLTYPE_LEFT, i, -1, false, false));
+        for (var i = 0; i < room.getLength(); i++) {
+            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false, ""));
         }
 
         // ADD RIGHT WALLS
-        for (var j = 0; j < this.#room.getWidth(); j++) {
-            listOfMapElements.push(this.#objService.createEnv(roomData.ID, roomData.WALLTYPE_RIGHT, this.#room.getLength(), j, false, false));
+        for (var j = 0; j < room.getWidth(); j++) {
+            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false, ""));
         }
 
         // REDO the next two methods.
@@ -107,7 +105,6 @@ module.exports = class RoomFactory {
         //   (how to handle multi-part objects?)
         // - how to handle custom options for "standard" objects?
         // - how to handle more custom objects?
-        // - also, do all this without breaking the view if possible
 
         // offer three options for positions:
         // - [xPos, yPos] (done)
@@ -127,20 +124,16 @@ module.exports = class RoomFactory {
         })
 
         // ADD DOORS
-        // doorData = {assetName, direction, positionOfDoor,
+        // doorData = {assetName, wallSide, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
         //            closedMessage, codeToOpen, logo}
         // TODO:
         // - logos above doors
-        // - tiles "inside" of doors
-        roomData.DOORS.forEach(doorData => {
-            // this requires error handling for when a door
-            // is defined as closed but there is no message
-            // or code to open defined
+        roomData.DOORS.forEach(doorData => {           
             if (doorData.isOpen === undefined) {
                 listOfDoors.push(
                     this.#doorService.createCustomDoor(doorData.assetName,
-                        doorData.direction,
+                        doorData.wallSide,
                         new Position(roomData.ID,
                             doorData.positionOfDoor[0],
                             doorData.positionOfDoor[1]),
@@ -151,14 +144,17 @@ module.exports = class RoomFactory {
                         true,
                         "", // closedMessage
                         "") // codeToOpen
-                ); 
+                );         
             } else {
+                // this requires error handling for when a door
+                // is defined as closed but there is no message
+                // or code to open defined
                 listOfDoors.push(
                     this.#doorService.createCustomDoor(doorData.assetName,
-                        doorData.direction,
+                        doorData.wallSide,
                         new Position(roomData.ID,
-                            doorData.positionOfDoor[1],
-                            doorData.positionOfDoor[2]),
+                            doorData.positionOfDoor[0],
+                            doorData.positionOfDoor[1]),
                         new Position(doorData.positionOnExit[0],
                             doorData.positionOnExit[1],
                             doorData.positionOnExit[2]),
@@ -167,7 +163,28 @@ module.exports = class RoomFactory {
                         doorData.closedMessage,
                         doorData.codeToOpen)
                 );
+            }   
+
+            // Create tile inside of door
+            // if door is on the left side, same x, one less y
+            // if door is on the right side, same y, one more x
+            var xPos = doorData.positionOfDoor[0];
+            var yPos = doorData.positionOfDoor[1];
+            if (wallSide = GlobalStrings.LEFT) {
+                yPos--;
+            } else if (wallSide = GlobalStrings.RIGHT) {
+                xPos++;
+            } else {
+                // TODO error handling
             }
+           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[wallSide + "TILE"], xPos, yPos, false, ""))
+
+           // TODO - where is this actually set?
+           // Now create logo above the door
+           // if the logo is undefined, we just do nothing
+           if (doorData.logo !== undefined) {
+               listOfMapElements.push(this.#objService.createCustomObject)
+           }
 
         })
 
@@ -194,6 +211,8 @@ module.exports = class RoomFactory {
 
         return room;
     }
+
+
 
     #createObjectsFromData = function (objData, listToPushInto) {
         // TODO support multi-part objects
