@@ -43,6 +43,15 @@ class ImageLoader {
                 resolve(image);
             }
 
+            image.onerror = (errorMsg, url, lineNumber, column, errorObj) => {
+                console.log("big broken!")
+                console.log('Fehler: ' + errorMsg + 
+                ' Script: ' + url + 
+                ' Zeile: ' + lineNumber + 
+                ' Spalte: ' + column + 
+                ' StackTrace: ' +  errorObj)
+            }
+
             image.src = path;
             console.log("loading image...")
         });
