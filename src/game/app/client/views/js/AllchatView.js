@@ -132,7 +132,5 @@ class AllchatView extends Views {
 
         $('#allchatMessages').append(messageDiv);
         $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-
-        this.showAllchatBox();
     }
 }

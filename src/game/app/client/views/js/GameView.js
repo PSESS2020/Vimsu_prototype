@@ -1076,6 +1076,13 @@ class GameView {
     appendAllchatMessage(message, ownUsername) {
         this.allchatView.appendMessage(message, ownUsername);
     }
+    
+    /**
+     * Show allchat box
+     */
+    showAllchatBox() {
+        this.allchatView.showAllchatBox();
+    }
 
     /**
      * Draws everything about all chat
