@@ -135,7 +135,6 @@ class IsometricEngine {
 
         var imageLoader = new ImageLoader();
         var totalImages = Object.keys(assetPaths).length;
-        console.log(totalImages)
         var assetImages = {};
         var loadedImages = 0;
         // Load all the images before we run the app

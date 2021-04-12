@@ -93,9 +93,19 @@ class GameObjectViewFactory {
         TypeChecker.isString(objectName);
         TypeChecker.isBoolean(isClickable);
 
-        var gameMapElementView;
+        var gameMapElementView = null;
         var gameMapElementImage;
 
+        // calculate offset
+        var offset = this.defaultOffset;
+
+        gameMapElementImage = this.assetImages[objectName];
+        
+        if (gameMapElementImage !== undefined) {
+            gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
+        }
+
+        /*
         switch (gameObjectType) {
 
             case GameObjectType.TILE:
@@ -156,6 +166,7 @@ class GameObjectViewFactory {
             default:
                 gameMapElementView = null;
         }
+        */
 
         return gameMapElementView;
     }
@@ -182,9 +193,27 @@ class GameObjectViewFactory {
         if (gameObjectID !== undefined) 
             TypeChecker.isInt(gameObjectID);
 
-        var gameObjectView;
+        var gameObjectView = null;
         var gameObjectImage;
 
+        gameObjectImage = this.assetImages[objectName];
+
+        // calculate offset
+        var offset = this.defaultOffset;
+
+        if (gameObjectImage !== undefined) {
+            if (isClickable && isIFrameObject) {
+                gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
+            } else if (isClickable) {
+                // this is for easter eggs
+            } else {
+                gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
+            }
+        } else {
+            throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
+        }
+
+        /*
         switch (gameObjectType) {
 
             case GameObjectType.SELECTED_TILE:
@@ -386,6 +415,7 @@ class GameObjectViewFactory {
             default:
                 gameObjectView = null;
         }
+        */
 
         return gameObjectView;
     }
