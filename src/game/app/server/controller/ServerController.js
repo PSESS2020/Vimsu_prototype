@@ -2275,7 +2275,7 @@ module.exports = class ServerController {
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
-                socket.emit('leave group', groupChatID);
+                socket.emit('leave group');
                 this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
             }
         });
@@ -2392,7 +2392,7 @@ module.exports = class ServerController {
                 this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
-                socket.emit('leave group', groupChatID);
+                socket.emit('leave group');
                 this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
             }
         });
@@ -2872,6 +2872,7 @@ module.exports = class ServerController {
                 this.#io.in(chatID).emit('newChatMessage', chatID, msgToEmit);
 
             });
+            socket.emit('leave chat', chatID);
             member.removeChat(chatID);
             socket.leave(chatID);
         }
