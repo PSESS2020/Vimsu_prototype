@@ -480,7 +480,6 @@ module.exports = class CommandHandler {
             opened = true;
         }
 
-
         if (opened) {
             this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOORFORALL(doorID));
         } else {
@@ -655,8 +654,12 @@ module.exports = class CommandHandler {
         let door = this.#serverController.getDoorByID(doorID);
 
         if (door !== undefined) {
-            door.setCodeToOpen(code);
-            this.#serverController.sendNotification(socket.id, Messages.SETCODE(doorID, code));
+            if (code !== undefined) {
+                door.setCodeToOpen(code);
+                this.#serverController.sendNotification(socket.id, Messages.SETCODE(doorID, code));
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.INVALIDDOORCODE);
+            }
         } else {
             this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
         }
@@ -705,14 +708,19 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         let username = commandArgs[0];
-        let moderatorID = socket.ppantID;
 
-        //teleport was successful
-        if (this.#serverController.teleportParticipantToParticipant(moderatorID, username)) {
-            this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+        if (username === undefined) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME);
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.TELEPORTUSERFAIL);
-        }    
+            let moderatorID = socket.ppantID;
+
+            //teleport was successful
+            if (this.#serverController.teleportParticipantToParticipant(moderatorID, username)) {
+                this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.TELEPORTUSERFAIL);
+            }  
+        }  
     }
 
     /**
@@ -728,10 +736,14 @@ module.exports = class CommandHandler {
 
         let username = commandArgs[0];
 
-        if (this.#serverController.setModState(username, true)) {
-            this.#serverController.sendNotification(socket.id, Messages.SETMOD(username));
+        if (username === undefined) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME)
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+            if (this.#serverController.setModState(username, true)) {
+                this.#serverController.sendNotification(socket.id, Messages.SETMOD(username));
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+            }
         }
     }
 
@@ -748,10 +760,14 @@ module.exports = class CommandHandler {
 
         let username = commandArgs[0];
 
-        if (this.#serverController.setModState(username, false)) {
-            this.#serverController.sendNotification(socket.id, Messages.SETUNMOD(username));
+        if (username === undefined) {
+            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME)
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+            if (this.#serverController.setModState(username, false)) {
+                this.#serverController.sendNotification(socket.id, Messages.SETUNMOD(username));
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+            }
         }
     }
 
@@ -766,7 +782,10 @@ module.exports = class CommandHandler {
     createGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        let groupName = commandArgs[0];
+        if (commandArgs.length < 3) {
+            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            return;
+        }
 
         /* parse first character of color string from lowercase to uppercase (e.g. blue to Blue) */
         let groupColor = commandArgs[1].substring(0, 1).toUpperCase() + commandArgs[1].substring(1);
@@ -816,6 +835,11 @@ module.exports = class CommandHandler {
     deleteGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
+        if (commandArgs.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            return;
+        }
+
         let groupName = commandArgs[0];
 
         if (this.#serverController.deleteGroup(groupName)) {
@@ -851,6 +875,11 @@ module.exports = class CommandHandler {
      */
     addGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+
+        if (commandArgs.length < 2) {
+            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            return;
+        }
 
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
@@ -891,6 +920,11 @@ module.exports = class CommandHandler {
      */
     removeGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+
+        if (commandArgs.length < 2) {
+            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            return;
+        }
 
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
