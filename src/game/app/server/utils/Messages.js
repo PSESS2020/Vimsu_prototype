@@ -186,6 +186,10 @@ module.exports = Object.freeze({
         header: "Unknown Door ID",
         body: "You entered a wrong DoorID. Please check it again with '\\door log'."
     },
+    INVALIDDOORCODE: {
+        header: "Invalid Door Code", 
+        body: "Don't forget to pass a valid door code!"
+    },
     UNKNOWNUSERNAME: {
         header: "Unknown Username",
         body: "Entered username does not exist or user with that username is currently not online."
@@ -337,5 +341,13 @@ module.exports = Object.freeze({
             header: "Group left",
             body: "You left group " + groupName +  "."
         }
+    },
+    NOUSERNAME: {
+        header: "No username passed",
+        body: "Don't forget to pass a username!"
+    },
+    INVALIDPARAMETERS: {
+        header: "Invalid parameters",
+        body: "Invalid command parameters. Please try again and check all commands with '\\help'."
     }
 });
