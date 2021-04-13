@@ -23,15 +23,14 @@ const GameObjectType = Object.freeze({
         // Walls
         LEFTWALL: 'LEFTWALL',
         RIGHTWALL: 'RIGHTWALL',
-        // Schedule
+        // Wall-like objects
+        // Schedule, Windows, Logo, Picture Frames...
         LEFTSCHEDULE: 'LEFTSCHEDULE',
-        // Windows
         WINDOW: 'WINDOW',
-        // Plant & Picture Frames
-        PLANT: 'PLANT',
         PICTUREFRAME: 'PICTUREFRAME',
-        // Logo
         CONFERENCELOGO: 'CONFERENCELOGO',
+        // Plant
+        PLANT: 'PLANT',
         // Seating
         CHAIR: 'CHAIR',
         SOFA: 'SOFA',

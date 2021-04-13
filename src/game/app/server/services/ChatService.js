@@ -3,7 +3,7 @@ const Message = require('../models/Message');
 const OneToOneChat = require('../models/OneToOneChat');
 const GroupChat = require('../models/GroupChat');
 const ObjectId = require('mongodb').ObjectID;
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/ServerSettings.js');
 const db = require('../../../../config/db')
 
 /**

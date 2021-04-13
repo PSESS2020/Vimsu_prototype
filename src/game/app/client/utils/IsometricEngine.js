@@ -9,8 +9,8 @@ class IsometricEngine {
     yNumTiles;
     mapOriginX;
     mapOriginY;
-    tileColumnWidth = 64;
-    tileRowHeight = 32;
+    tileColumnWidth = Settings.TILE_COLUMN_WIDTH;
+    tileRowHeight = Settings.TILE_ROW_HEIGHT;
 
     loader;
 
