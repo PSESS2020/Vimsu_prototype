@@ -408,6 +408,28 @@ module.exports = class CommandHandler {
     };
 
     /**
+     * Gives all available rooms with ID to Moderator
+     * @method module:CommandHandler#logAllRooms
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    logAllRooms(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+    
+        let roomDecorators = this.#serverController.getRoomDecorators();
+        let header = "List of all exisiting Rooms";
+        let body = [];
+        for (let i = 0; i < roomDecorators.length; i++) {
+            let room = roomDecorators[i].getRoom();
+            
+            body.splice(0, 0,  room.getTypeOfRoom() + " has ID " +  room.getRoomId() + ".");
+        }
+        this.#serverController.sendNotification(socket.id, { header: header, body: body });
+    }
+
+    /**
      * Gives all available doors with ID to Moderator
      * @method module:CommandHandler#logAllDoors
      * 
@@ -419,18 +441,34 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         let roomDecorators = this.#serverController.getRoomDecorators();
+        let roomIDs = [];
+
+        for (let i = 0; i < commandArgs.length; i++) {
+            roomIDs.push(parseInt(commandArgs[i], 10));
+        }
+
         let header = "List of all exisiting Doors";
         let body = [];
         for (let i = 0; i < roomDecorators.length; i++) {
             let room = roomDecorators[i].getRoom();
-            let doors = room.getListOfDoors();
-            for (let j = 0; j < doors.length; j++) {
-                body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId() + ". Door is currently " + 
-                ((doors[j].isOpen()) ? "open" : "closed") + 
-                ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
+            let roomID = room.getRoomId();
+
+            //When no roomID was passed, log all doors. Otherwise, only log doors from the passed roomIDs
+            if (roomIDs.length === 0 || roomIDs.includes(roomID)) {
+                let doors = room.getListOfDoors();
+                for (let j = 0; j < doors.length; j++) {
+                    body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId() + ". Door is currently " + 
+                    ((doors[j].isOpen()) ? "open" : "closed") + 
+                    ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
+                }
             }
         }
-        this.#serverController.sendNotification(socket.id, { header: header, body: body });
+
+        if (body.length < 1) {
+            this.#serverController.sendNotification(socket.id, Messages.NODOORS);
+        } else {
+            this.#serverController.sendNotification(socket.id, { header: header, body: body });
+        }
     }
 
     /**
