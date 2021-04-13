@@ -8,87 +8,111 @@
 module.exports = Object.freeze({
     HELPLECTURECHAT: {
         header: "List of Commands",
-        body: [ "\\close\nCloses the lecture and makes it inaccessible. Every current participant " +
-                "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
-                "WARNING: this command can NOT be reversed.",
+        body: [  "\\ban <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and removes all of them from " +
+                    "the lecture. They will not be able to reenter the lecture.\nWARNING: It is " +
+                    "not yet possible to revert this!",
+                "\\close\nCloses the lecture and makes it inaccessible. Every current participant " +
+                    "will be forcefully ejected and nobody will be able to rejoin the lecture. " +
+                    "WARNING: this command can NOT be reversed.",
                 "\\grant <list of usernames>\nTakes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and grants them lecture tokens " +
-                "(if they are currently listening to the lecture and do not own one). They will " +
-                "be able to post messages into the lecture chat.",
+                    "separated from the next by a whitespace-character, and grants them lecture tokens " +
+                    "(if they are currently listening to the lecture and do not own one). They will " +
+                    "be able to post messages into the lecture chat.",
                 "\\help\nThis command. Displays a list of all commands and how to use them.",
-                "\\msglog\nWill show a log of all messages send into the lecture chat" +
-                ", including the messageID and senderID of each message.",
-                "\\msgrm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the " +
-                "next one by a whitespace character, and removes the corresponding messages - " +
-                "if they exist - from the lecture chat. Will also send a warning to " +
-                "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\msgrmallby <list of usernames>\nTakes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all messages posted " +
-                "by them into the lecture chat. Will also send a warning " +
-                "to these participants, reminding them to follow chat-etiquette.",
-                "\\msgshowallby <list of usernames>\nTakes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and displays all messages " +
-                "send into the chat by these users.", 
-                "\\revoke <list of usernames>\nTakes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and revokes their lecture tokens " +
-                "(if they own one). They will no longer be able to post messages into the lecture chat.",
-                "\\userrm <list of usernames>\nTakes a list of usernames, each one " +
-                "separated from the next by a whitespace-character, and removes all of them from " +
-                "the lecture. They will not be able to reenter the lecture.\nWARNING: It is " +
-                "not yet possible to revert this!"]
-},
-    HELPALLCHAT: {
-        header: "List of Commands",
-        body: [ "\\doorclose <doorID>\nCloses the door with ID <doorID> for everyone.",
-                "\\doorcloseallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>" + 
-                    ", each one separated from the next one by a whitespace character.",
-                "\\doorclosefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                    ", each one separated from the next one by a whitespace character.",
-                "\\doorlog\nWill show a log of all available doors with ID and status information.", 
-                "\\dooropen <doorID>\nOpens the door with ID <doorID> for everyone.", 
-                "\\dooropenallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>" + 
-                    ", each one separated from the next one by a whitespace character.",
-                "\\dooropenfor <doorID> <list of usernames>\nOpens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
-                    ", each one separated from the next one by a whitespace character.",
-                "\\doorsetcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>.",
-                "\\global <message>\nPost a message into the global chat. " +
-                    "It will display in every participants game-view as a pop-up.",
-                "\\groupadd <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>" + 
-                    ", each username separated from the next one by a whitespace character.",
-                "\\groupcreate <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear " +
-                    " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
-                "\\groupdelete <groupName>\nDeletes group with the unique name <groupName>.",
-                "\\groupdeleteall\nDeletes all exisiting groups.",
-                "\\grouprm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>" + 
-                    ", each username separated from the next one by a whitespace character.",
-                "\\help\nThis command. Displays a list of all commands and how to use them.",
-                "\\msglog\nWill show a log of all messages send into the allchat of the room you're " +
-                    "currently in, including the messageID and senderID of each message.",
-                "\\msgrm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next " +
-                    "one by a whitespace character, and removes the corresponding messages - " +
-                    "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
+                "\\msg log\nWill show a log of all messages send into the lecture chat" +
+                    ", including the messageID and senderID of each message.",
+                "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the " +
+                    "next one by a whitespace character, and removes the corresponding messages - " +
+                    "if they exist - from the lecture chat. Will also send a warning to " +
                     "the senders of the messages, reminding them to follow chat etiquette.",
-                "\\msgrmallby <list of usernames>\nTakes a list of usernames, each one " +
+                "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and removes all messages posted " +
-                    "by them into the allchat of the room you're currently in. Will also send a warning " +
+                    "by them into the lecture chat. Will also send a warning " +
                     "to these participants, reminding them to follow chat-etiquette.",
-                "\\msgshowallby <list of usernames>\nTakes a list of usernames, each one " +
+                "\\msg showallby <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and displays all messages " +
                     "send into the chat by these users.", 
-                "\\portto <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
-                "\\porttouser <username>\nTeleports you to user with <username>.", 
-                "\\usermod <username>\nSets a normal user with <username> to a moderator.",
-                "\\usermute <list of usernames>\nTakes a list of usernames, each one " +
-                    "separated from the next by a whitespace-character, and mutes them, meaning they " +
-                    "will no longer be able to post messages into the allchat.",
-                "\\userrm <list of usernames>\nTakes a list of usernames, each one " +
+                "\\revoke <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and revokes their lecture tokens " +
+                    "(if they own one). They will no longer be able to post messages into the lecture chat."]
+    },
+    HELPALLCHAT: {
+        header: "List of Commands",
+        body: [ "\\ban <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and removes all of them from " +
                     "the conference. They will not be able to reenter the conference.\nWARNING: It is " +
                     "not yet possible to unban a banned user!",
-                "\\userunmod <username>\nSets a moderator with <username> to a normal user.",
-                "\\userunmute <list of usernames>\nTakes a list of usernames, each one " +
+                "\\door\nDisplays a list of all door commands and how to use them.",
+                "\\door <command>\nExecutes door command <command>. Available commands: " +
+                    "close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
+                "\\global <message>\nPost a message into the global chat. " +
+                    "It will display in every participants game-view as a pop-up.",
+                "\\group\nDisplays a list of all group commands and how to use them.",
+                "\\group <command>\nExecutes group command <command>. Available commands: " +
+                    "add, create, delete, deleteall, rm.",
+                "\\help\nThis command. Displays a list of all commands and how to use them.",
+                "\\msg\nDisplays a list of all allchat message commands and how to use them.",
+                "\\msg <command>\nExecutes Allchat message command <command>. Available commands: " +
+                    "log, rm, rmallby, showallby.",
+                "\\port\nDisplays a list of all port commands and how to use them.",
+                "\\port <command>\nExecutes port command <command>. Available commands: " +
+                    "position, user.",
+                "\\mod <username>\nSets a normal user with <username> to a moderator.",
+                "\\unmod <username>\nSets a moderator with <username> to a normal user.",
+                "\\mute <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and mutes them, meaning they " +
+                    "will no longer be able to post messages into the allchat.",
+                "\\unmute <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and unmutes them, meaning they " +
                     "will be able to post messages into the allchat again if they were previously muted."]
+    },
+    DOORCOMMANDS: {
+        header: "List of Door Commands",
+        body: [ "\\door close <doorID>\nCloses the door with ID <doorID> for everyone.",
+                "\\door closeallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\door closefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\door log\nWill show a log of all available doors with ID and status information.", 
+                "\\door open <doorID>\nOpens the door with ID <doorID> for everyone.", 
+                "\\door openallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\door openfor <doorID> <list of usernames>\nOpens the door with ID <doorID> for all passed usernames in <list of usernames>" + 
+                    ", each one separated from the next one by a whitespace character.",
+                "\\door setcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>."]
+    },
+    GROUPCOMMANDS: {
+        header: "List of Group Commands",
+        body: [ "\\group add <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>" + 
+                    ", each username separated from the next one by a whitespace character.",
+                "\\group create <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear " +
+                    " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
+                "\\group deleteall\nDeletes all exisiting groups.",
+                "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>" + 
+                    ", each username separated from the next one by a whitespace character."]
+    },
+    MESSAGECOMMANDS: {
+        header: "List of Message Commands",
+        body: [ "\\msg log\nWill show a log of all messages send into the allchat of the room you're " +
+                    "currently in, including the messageID and senderID of each message.",
+                "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next " +
+                    "one by a whitespace character, and removes the corresponding messages - " +
+                    "if they exist - from the allchat of the room you're currently in. Will also send a warning to " +
+                    "the senders of the messages, reminding them to follow chat etiquette.",
+                "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and removes all messages posted " +
+                    "by them into the allchat of the room you're currently in. Will also send a warning " +
+                    "to these participants, reminding them to follow chat-etiquette.",
+                "\\msg showallby <list of usernames>\nTakes a list of usernames, each one " +
+                    "separated from the next by a whitespace-character, and displays all messages " +
+                    "send into the chat by these users."]
+    },
+    PORTCOMMANDS: {
+        header: "List of Port Commands",
+        body: [ "\\port position <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
+                "\\port user <username>\nTeleports you to user with <username>."]
     },
     WARNING: {
         header: "Warning",
@@ -129,6 +153,22 @@ module.exports = Object.freeze({
         header: "Unrecognized command",
         body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
     },
+    UNKNOWNDOORCOMMAND: {
+        header: "Unrecognized door command",
+        body: "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
+    },
+    UNKNOWNGROUPCOMMAND: {
+        header: "Unrecognized group command",
+        body: "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
+    },
+    UNKNOWNMSGCOMMAND: {
+        header: "Unrecognized message command",
+        body: "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
+    },
+    UNKNOWNPORTCOMMAND: {
+        header: "Unrecognized port command",
+        body: "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
+    },
     TESTMESSAGES: {
         header: ["Welcome", "NPC Test", "Friend Requests and Chat Messages", "Group Chats", "Allchat", "Room Switch",
                  "Lecture Join", "Lecture Chat", "Tile Clicking", "Monkey Testing", ],
@@ -144,7 +184,7 @@ module.exports = Object.freeze({
     },
     UNKNOWNDOORID: {
         header: "Unknown Door ID",
-        body: "You entered a wrong DoorID. Please check it again with '\\logdoors'."
+        body: "You entered a wrong DoorID. Please check it again with '\\door log'."
     },
     UNKNOWNUSERNAME: {
         header: "Unknown Username",

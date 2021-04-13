@@ -1,4 +1,8 @@
-const Commands = require('../utils/Commands.js');
+const Commands = require('../utils/commands/Commands.js');
+const DoorCommands = require('../utils/commands/DoorCommands.js');
+const GroupCommands = require('../utils/commands/GroupCommands.js');
+const MessageCommands = require('../utils/commands/MessageCommands.js');
+const PortCommands = require('../utils/commands/PortCommands.js');
 const Messages = require('../utils/Messages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext.js');
@@ -14,8 +18,12 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
  */
 module.exports = class CommandHandler {
 
-    #serverController
-    #commandList
+    #serverController;
+    #commandList;
+    #doorCommandList;
+    #groupCommandList;
+    #msgCommandList;
+    #portCommandList;
 
     /**
      * Creates a command handler instance
@@ -33,15 +41,15 @@ module.exports = class CommandHandler {
 
         this.#serverController = serverController;
 
-        // maybe slightly switch commands to have two fields, 
-        // one for the string needing to be entered
-        // and one for the 'kind' of command it is?
         this.#commandList = Object.values(Commands);
-
+        this.#doorCommandList = Object.values(DoorCommands);
+        this.#groupCommandList = Object.values(GroupCommands);
+        this.#msgCommandList = Object.values(MessageCommands);
+        this.#portCommandList = Object.values(PortCommands);
     }
 
     /**
-     * handles a command, where context is the room or lecture in which it was send 
+     * Handles a command, where context is the room or lecture in which it was send 
      * and socket the socket from which it was send
      * @method module:CommandHandler#handleCommand
      * 
@@ -62,8 +70,8 @@ module.exports = class CommandHandler {
         var commandType = commandArgs[0];
         commandArgs = commandArgs.slice(1);
 
-        if (this.#knowsCommand(commandType)) {
-            var commandToExecute = this.#getMethodString(commandType);
+        if (this.#knowsCommand(this.#commandList, commandType)) {
+            var commandToExecute = this.#getMethodString(this.#commandList, commandType);
             if (commandToExecute === Commands.GLOBAL.method) {
                 this.globalMsg(socket, context, commandArgs, username); //moderatorUsername is only needed for global Msg
             }
@@ -74,6 +82,110 @@ module.exports = class CommandHandler {
             this['unknownCommand'](socket);
         }
     };
+
+    /**
+     * Handles a door command, where context is the room in which it was send 
+     * @method module:CommandHandler#handleDoorCommand
+     * 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    handleDoorCommand(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        if (commandArgs.length < 1) {
+            this.#serverController.sendLargeNotification(socket.id, Messages.DOORCOMMANDS);
+        } else {
+            let doorCommandType = commandArgs[0];
+            commandArgs = commandArgs.slice(1);
+
+            if (this.#knowsCommand(this.#doorCommandList, doorCommandType)) {
+                var commandToExecute = this.#getMethodString(this.#doorCommandList, doorCommandType);
+                this[commandToExecute](socket, context, commandArgs);
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORCOMMAND);
+            }
+        }
+    }
+
+    /**
+     * Handles a group command, where context is the room in which it was send 
+     * @method module:CommandHandler#handleGroupCommand
+     * 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    handleGroupCommand(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+    
+        if (commandArgs.length < 1) {
+            this.#serverController.sendLargeNotification(socket.id, Messages.GROUPCOMMANDS);
+        } else {
+            let groupCommandType = commandArgs[0];
+            commandArgs = commandArgs.slice(1);
+        
+            if (this.#knowsCommand(this.#groupCommandList, groupCommandType)) {
+                var commandToExecute = this.#getMethodString(this.#groupCommandList, groupCommandType);
+                this[commandToExecute](socket, context, commandArgs);
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNGROUPCOMMAND);
+            }
+        }
+    }
+
+    /**
+     * Handles a message command, where context is the room in which it was send 
+     * @method module:CommandHandler#handleMsgCommand
+     * 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    handleMsgCommand(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+    
+        if (commandArgs.length < 1) {
+            this.#serverController.sendLargeNotification(socket.id, Messages.MESSAGECOMMANDS);
+        } else {
+            let msgCommandType = commandArgs[0];
+            commandArgs = commandArgs.slice(1);
+        
+            if (this.#knowsCommand(this.#msgCommandList, msgCommandType)) {
+                var commandToExecute = this.#getMethodString(this.#msgCommandList, msgCommandType);
+                this[commandToExecute](socket, context, commandArgs);
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNMSGCOMMAND);
+            }
+        }
+    }
+
+    /**
+     * Handles a port command, where context is the room in which it was send 
+     * @method module:CommandHandler#handleGroupCommand
+     * 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    handlePortCommand(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        if (commandArgs.length < 1) {
+            this.#serverController.sendLargeNotification(socket.id, Messages.PORTCOMMANDS);
+        } else {
+            let portCommandType = commandArgs[0];
+            commandArgs = commandArgs.slice(1);
+        
+            if (this.#knowsCommand(this.#portCommandList, portCommandType)) {
+                var commandToExecute = this.#getMethodString(this.#portCommandList, portCommandType);
+                this[commandToExecute](socket, context, commandArgs);
+            } else {
+                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNPORTCOMMAND);
+            }
+        }
+    }
 
     // set all of these to private?
     // also all of these need to be renamed
@@ -187,7 +299,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         var criterion;
-        if (commandArgs[0] == Commands.REMOVEMESSAGESBYPLAYER.string) {
+        if (commandArgs[0] == MessageCommands.REMOVEMESSAGESBYPLAYER.string) {
             criterion = "username";
             commandArgs.slice(1);
         } else {
@@ -222,7 +334,7 @@ module.exports = class CommandHandler {
     removeAllBy(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        commandArgs.splice(0, 0, Commands.REMOVEMESSAGESBYPLAYER.string);
+        commandArgs.splice(0, 0, MessageCommands.REMOVEMESSAGESBYPLAYER.string);
         this.removeMessage(socket, context, commandArgs);
     };
 
@@ -820,18 +932,19 @@ module.exports = class CommandHandler {
     }
 
     /**
-     * @private Checks if command is known
+     * @private Checks if command is known in a certain commandList
      * 
      * @method module:CommandHandler#knowsCommand
      * 
-     * @param {Commands.string} commandType command type
+     * @param {Object[]} commandList command list
+     * @param {String} commandType command type
      * 
      * @return {boolean} true if known, otherwise false
      */
-    #knowsCommand = function (commandType) {
+    #knowsCommand = function (commandList, commandType) {
 
-        for (var i = 0; i < this.#commandList.length; i++) {
-            if (commandType === this.#commandList[i].string) {
+        for (var i = 0; i < commandList.length; i++) {
+            if (commandType === commandList[i].string) {
                 return true;
             }
         }
@@ -854,19 +967,20 @@ module.exports = class CommandHandler {
     }
 
     /**
-     * @private Gets method name based on command type
+     * @private Gets method name based on command type in a certain command list
      * 
      * @method module:CommandHandler#getMethodString
      * 
-     * @param {Commands.string} commandType command type
+     * @param {Object[]} commandList command list
+     * @param {String} commandType command type
      * 
      * @return {String} method name
      */
-    #getMethodString = function (commandType) {
+    #getMethodString = function (commandList, commandType) {
 
-        for (var i = 0; i < this.#commandList.length; i++) {
-            if (commandType === this.#commandList[i].string) {
-                return this.#commandList[i].method;
+        for (var i = 0; i < commandList.length; i++) {
+            if (commandType === commandList[i].string) {
+                return commandList[i].method;
             }
         }
     }
