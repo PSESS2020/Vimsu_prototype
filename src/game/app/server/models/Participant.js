@@ -9,7 +9,7 @@ const Task = require('./Task.js');
 const OneToOneChat = require('./OneToOneChat.js');
 const TypeOfTask = require('../utils/TypeOfTask');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/ServerSettings.js');
 const Meeting = require('./Meeting.js');
 
 /**

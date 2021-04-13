@@ -1,3 +1,6 @@
+//const GameObjectType = require("../../shared/GameObjectType");
+//const Settings = require("../../utils/Settings");
+
 /**
  * The Game Object View Factory
  * 
@@ -8,7 +11,6 @@ class GameObjectViewFactory {
     tileColumnWidth;
     tileRowHeight;
     assetImages;
-    defaultOffset;
 
     gameEngine;
     eventManager;
@@ -29,8 +31,6 @@ class GameObjectViewFactory {
         //gets map tile size
         this.tileColumnWidth = this.gameEngine.getTileColumnWidth();
         this.tileRowHeight = this.gameEngine.getTileRowHeight();
-
-        this.defaultOffset = { x: 0, y: 0 };
     }
 
     /**
@@ -102,71 +102,9 @@ class GameObjectViewFactory {
         gameMapElementImage = this.assetImages[objectName];
         
         if (gameMapElementImage !== undefined) {
+            offset = this.#calculateMapElementOffset(gameMapElementImage, gameObjectType);
             gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
         }
-
-        /*
-        switch (gameObjectType) {
-
-            case GameObjectType.TILE:
-                gameMapElementImage = this.assetImages[objectName];
-
-                if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
-                else throw new Error("The image for the tile view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-            case GameObjectType.LEFTSCHEDULE:
-            case GameObjectType.LEFTWALL:
-                gameMapElementImage = this.assetImages[objectName];
-
-                var wallOffset = { x: 0, y: this.tileRowHeight / 2 - gameMapElementImage.width + 1 };
-
-                if (gameMapElementImage !== undefined) {
-                    if (gameObjectType === GameObjectType.LEFTSCHEDULE)
-                        gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, wallOffset), pos, wallOffset, objectName, this.eventManager);
-                    else
-                        gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
-                } else throw new Error("The image for the left wall view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.RIGHTWALL:
-                gameMapElementImage = this.assetImages[objectName];
-
-                var wallOffset = { x: -this.tileColumnWidth, y: this.tileRowHeight / 2 - gameMapElementImage.width + 1 };
-
-                if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, wallOffset, objectName);
-                else throw new Error("The image for the right wall view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.LEFTTILE:
-                gameMapElementImage = this.assetImages[objectName];
-
-                pos = new PositionClient(pos.getCordX(), (pos.getCordY() + 1));
-
-                if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
-                else throw new Error("The image for the left door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.RIGHTTILE:
-                gameMapElementImage = this.assetImages[objectName];
-
-                pos = new PositionClient((pos.getCordX() - 1), pos.getCordY());
-
-                if (gameMapElementImage !== undefined)
-                    gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, this.defaultOffset, objectName);
-                else throw new Error("The image for the right door tile view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-            default:
-                gameMapElementView = null;
-        }
-        */
 
         return gameMapElementView;
     }
@@ -199,9 +137,10 @@ class GameObjectViewFactory {
         gameObjectImage = this.assetImages[objectName];
 
         // calculate offset
-        var offset = this.defaultOffset;
+        var offset = { x: 0, y: 0 };
 
         if (gameObjectImage !== undefined) {
+            var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
             } else if (isClickable) {
@@ -212,210 +151,6 @@ class GameObjectViewFactory {
         } else {
             throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
-
-        /*
-        switch (gameObjectType) {
-
-            case GameObjectType.SELECTED_TILE:
-                gameObjectImage = this.assetImages[objectName];
-
-                if (gameObjectImage !== undefined)
-                    gameObjectView = new GameObjectView(gameObjectImage, [], pos, this.defaultOffset, objectName);
-                else throw new Error("The image for tile indicator view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.TABLE:
-                gameObjectImage = this.assetImages[objectName];
-
-                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 7 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-
-                }   
-                else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-            case GameObjectType.SMALLDINNERTABLEFOOD:
-                gameObjectImage = this.assetImages[objectName];
-
-                var tableOffset = { x: -4, y: this.tileRowHeight - gameObjectImage.height + 20 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-
-                }
-                else throw new Error("The image for the food view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.SMALLDINNERTABLE:
-                gameObjectImage = this.assetImages[objectName];
-
-                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 20 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-
-                }
-                else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.RIGHTTABLE:
-                    gameObjectImage = this.assetImages[objectName];
-    
-                    var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 52 };
-    
-                    if (gameObjectImage !== undefined) {
-
-                        if (isClickable && isIFrameObject) {
-                            gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                        } else
-                            gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-    
-                    }
-                    else throw new Error("The image for the table view could not be found in the cache for images. Did you reload the images after cache clear?");
-    
-                    break; 
-            
-            case GameObjectType.CANTEENCOUNTER:
-                gameObjectImage = this.assetImages[objectName];
-
-                var tableOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height + 50 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-
-                }
-                else throw new Error("The image for the canteen counter could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-            
-            case GameObjectType.RECEPTIONCOUNTER:
-                gameObjectImage = this.assetImages[objectName];
-
-                var receptionCounterOffset = { x: 0, y: -this.tileRowHeight + 8};
-    
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
-
-                }
-                else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
-    
-                break;
-
-            case GameObjectType.RECEPTIONCOUNTERSIDEPART:
-                gameObjectImage = this.assetImages[objectName];
-
-                var receptionCounterOffset = { x: -9, y: this.tileRowHeight - gameObjectImage.height + 28};
-    
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, receptionCounterOffset, objectName);
-
-                }
-                else throw new Error("The image for the reception counter could not be found in the cache for images. Did you reload the images after cache clear?");
-    
-                break;
-            case GameObjectType.DRINKS:
-                gameObjectImage = this.assetImages[objectName];
-
-                var tableOffset = { x: 14, y: this.tileRowHeight - gameObjectImage.height + 12 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, tableOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, tableOffset, objectName);
-
-                }
-                else throw new Error("The image for the drinking machine could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break; 
-
-            case GameObjectType.CHAIR:
-                gameObjectImage = this.assetImages[objectName];
-
-                var chairOffset = { x: 15, y: this.tileRowHeight - gameObjectImage.height - 6 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, chairOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, chairOffset, objectName);
-
-                }
-                else throw new Error("The image for the chair view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.SOFA:
-                gameObjectImage = this.assetImages[objectName];
-
-                var sofaOffset = { x: 0, y: this.tileRowHeight - gameObjectImage.height - 4 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, sofaOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, sofaOffset, objectName);
-
-                }
-                else throw new Error("The image for the sofa view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case GameObjectType.PLANT:
-                gameObjectImage = this.assetImages[objectName];
-
-                var plantOffset = { x: -5, y: this.tileRowHeight - gameObjectImage.height - 10 };
-
-                if (gameObjectImage !== undefined) {
-
-                    if (isClickable && !isIFrameObject) {
-                        gameObjectView = new PlantView(gameObjectImage, [], pos, plantOffset, objectName, gameObjectID);
-                    } else if (isClickable && isIFrameObject) {
-                        gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, plantOffset, objectName, gameObjectID, this.eventManager);
-                    } else
-                        gameObjectView = new GameObjectView(gameObjectImage, [], pos, plantOffset, objectName);
-
-                }
-                else throw new Error("The image for the plant view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            default:
-                gameObjectView = null;
-        }
-        */
 
         return gameObjectView;
     }
@@ -434,40 +169,53 @@ class GameObjectViewFactory {
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
 
-        var doorView;
+        var doorView = null;
         var doorImage;
 
-        switch (typeOfDoor) {
+        doorImage = this.assetImages[objectName];
 
-            case TypeOfDoor.LECTURE_DOOR:
-            case TypeOfDoor.LEFT_DOOR:
-
-                doorImage = this.assetImages[objectName];
-
-                var leftDoorOffset = { x: 0, y: this.tileRowHeight / 2 - doorImage.width + 1 };
-
-                if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, leftDoorOffset, objectName, this.eventManager);
-                else throw new Error("The image for lefthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            case TypeOfDoor.RIGHT_DOOR:
-
-                doorImage = this.assetImages[objectName];
-
-                var rightDoorOffset = { x: -this.tileColumnWidth, y: this.tileRowHeight / 2 - doorImage.width + 1 };
-
-                if (doorImage !== undefined)
-                    doorView = new DoorView(doorImage, [], pos, typeOfDoor, rightDoorOffset, objectName, this.eventManager);
-                else throw new Error("The image for righthandside door view could not be found in the cache for images. Did you reload the images after cache clear?");
-
-                break;
-
-            default:
-                doorView = null;
+        if (doorImage !== undefined) {
+            var offset = this.#calculateMapElementOffset(doorImage, typeOfDoor);
+            doorView = new DoorView(doorImage, [], pos, typeOfDoor, offset, objectName, this.eventManager);
+        } else {
+            throw new Error("The image for the door type " + typeOfDoor + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
+
         return doorView;
+    }
+
+    /**
+     * @param {Image} image image asset of object
+     * @param {String} objectType type of object
+     * 
+     * @returns {Object} An object containing the x- and y-offset
+     *                   necessary to properly portray the object
+     */
+    #calculateObjectOffset = function (image, objectType) {
+        if (objectType != GameObjectType.RECEPTIONCOUNTER) {
+            let offset = GameObjectInfo.getInfo(objectType, "offset");
+            return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
+        } else {
+            // some offsets do not follow the usual formula
+            return { x: 0, y: -this.tileRowHeight + 8 };
+        }
+    }
+
+    /**
+     * @param {Image} image image asset of map element
+     * @param {String} objectType type of map element
+     * 
+     * @returns {Object} An object containing the x- and y-offset
+     *                   necessary to properly portray the mapElement
+     */
+    #calculateMapElementOffset = function (image, objectType) {
+        let offset = GameObjectInfo.getInfo(objectType, "offset");
+        if (offset == Settings.DEFAULT_OFFSET) {
+            // not all offsets follow formula
+            return offset;
+        } else {
+            return { x: this.tileColumnWidth * offset.x, y: (this.tileRowHeight / 2) - image.width + offset.y } 
+        }
     }
 
 }

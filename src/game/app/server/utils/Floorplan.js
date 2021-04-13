@@ -2,7 +2,7 @@ const Direction = require('../../client/shared/Direction');
 const GameObjectType = require('../../client/shared/GameObjectType');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
 const NPCDialog = require('./NPCDialog');
-const Settings = require('./Settings');
+const Settings = require('./ServerSettings');
 
 /**
  * How to use this file:

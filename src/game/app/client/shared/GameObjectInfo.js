@@ -1,7 +1,6 @@
-const AssetPaths = require("../../client/shared/AssetPaths");
-const GameObjectType = require("../../client/shared/GameObjectType");
-const TypeChecker = require("../../client/shared/TypeChecker");
-const Settings = require("./Settings");
+//const GameObjectType = require("./GameObjectType");
+//const Settings = require("../utils/Settings");
+
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -11,7 +10,7 @@ const Settings = require("./Settings");
  * Uses the values of the GameObjectType-properties as keys.
  * This needed to be in a separate file, as changing the
  * GameObjectType-file to contain this surplus of information
- * would break several client-side classes, and I can't be bothered
+ * would break several -side classes, and I can't be bothered
  * to fix them all.
  * 
  * Done as a static class for reasons of privacy. It is just nicer to
@@ -51,9 +50,6 @@ class GameObjectInfo {
     // - is there an easy way to group similar objects
     //   as variations of the same type?
 
-    // The fucking GameObjectView uses a switch statement
-    // fuck me with a rake
-
     // Have asset-paths be of style <direction><name>_<style><variation>
 
     // for the asset paths, we need to pass keys not values
@@ -65,7 +61,8 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: '', 
+            assetName: '',
+            offset: Settings.DEFAULT_OFFSET, 
         },
 
         // Tiles
@@ -74,18 +71,28 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
+            offset: Settings.DEFAULT_OFFSET,
+        },
+        [GameObjectType.SELECTED_TILE]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "tile_selected",
+            offset: Settings.DEFAULT_OFFSET,
         },
         [GameObjectType.LEFTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
+            offset: Settings.DEFAULT_OFFSET,
         },
         [GameObjectType.RIGHTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
+            offset: Settings.DEFAULT_OFFSET,
         },
 
         // Walls
@@ -94,46 +101,40 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftwall_default",
+            offset: Settings.LEFTWALL_OFFSET,
         },
         [GameObjectType.RIGHTWALL]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwall_default",
+            offset: Settings.RIGHTWALL_OFFSET,
         },
 
-        // Schedule
+        // Wall-like objects
+        // Schedule, Windows, Logo, Picture Frames...
         [GameObjectType.LEFTSCHEDULE]: {
             // MULTIPART OBJECT
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
+            offset: Settings.LEFTWALL_OFFSET,
         },
-
-        // Windows
         [GameObjectType.WINDOW]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwindow_default0", // TODO object with variations
-        },
-        
-        // Plant & Picture Frames
-        [GameObjectType.PLANT]: {
-            isSolid: true,
-            width: Settings.SMALL_OBJECT_WIDTH,
-            length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "plant_default",
+            offset: Settings.RIGHTWALL_OFFSET,
         },
         [GameObjectType.PICTUREFRAME]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwallframe_default0",
+            offset: Settings.RIGHTWALL_OFFSET,
         },
-
-        // Logo
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
             isSolid: false,
@@ -143,7 +144,17 @@ class GameObjectInfo {
                 "leftconferencelogo_default1", "leftconferencelogo_default2",
                 "leftconferencelogo_default3",
                 "leftconferencelogo_default4"],
+            offset: Settings.LEFTWALL_OFFSET,
         },
+        
+        // Plant & Picture Frames
+        [GameObjectType.PLANT]: {
+            isSolid: true,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "plant_default",
+            offset: { x: -5, y: -10 },
+        },    
 
         // Seating
         [GameObjectType.CHAIR]: {
@@ -151,12 +162,14 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftchair_default",
+            offset: { x: 15, y: -6 },
         },
         [GameObjectType.SOFA]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftsofa_default",
+            offset: { x: 0, y: -4 },
         },
 
         // Tables
@@ -167,18 +180,21 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "table_default",
+            offset: { x: 0, y: 7 },
         },
         [GameObjectType.RIGHTTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "righttable_default",
+            offset: { x: 0, y: 52 },
         },
         [GameObjectType.SMALLDINNERTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "smalldinnertable_default",
+            offset: { x: 0, y: 20 },
         },
 
         // Counters
@@ -187,6 +203,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "canteencounter_default",
+            offset: { x: 0, y: 50 },
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
             // OBJECT WITH ADDITIONAL PARTS
@@ -194,6 +211,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "receptionCounterFrontPart_default",
+            offset: { x: 0, y: 8 },
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
             // OBJECT WITH ADDITIONAL PARTS
@@ -201,6 +219,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "receptionCounterRightPart_default",
+            offset: { x: -9, y: 28 },
         },
 
         // Food & Drinks
@@ -209,12 +228,14 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 2 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "drinks_default",
+            offset: { x: 14, y: 12 },
         },
         [GameObjectType.TEA]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tea_default",
+            offset: { x: -4, y: 20 },
         },
         [GameObjectType.SMALLDINNERTABLEFOOD]: {
             // OBJECT WITH VARIATIONS
@@ -222,6 +243,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "koeriWurst_default",
+            offset: { x: -4, y: 20 },
         },
     });
 
@@ -232,7 +254,7 @@ class GameObjectInfo {
      * 
      * TypeChecking should be done by whoever calls this method!
      * 
-     * @method moduke:GameObjectInfo#getInfo
+     * @method module:GameObjectInfo#getInfo
      * 
      * @param {String} objectType 
      * @param {String} key 
