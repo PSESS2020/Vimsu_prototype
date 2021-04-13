@@ -52,20 +52,21 @@ module.exports = Object.freeze({
                 "\\group <command>\nExecutes group command <command>. Available commands: " +
                     "add, create, delete, deleteall, rm.",
                 "\\help\nThis command. Displays a list of all commands and how to use them.",
+                "\\mod <username>\nSets a normal user with <username> to a moderator.",
+                "\\unmod <username>\nSets a moderator with <username> to a normal user.",
                 "\\msg\nDisplays a list of all allchat message commands and how to use them.",
                 "\\msg <command>\nExecutes Allchat message command <command>. Available commands: " +
                     "log, rm, rmallby, showallby.",
-                "\\port\nDisplays a list of all port commands and how to use them.",
-                "\\port <command>\nExecutes port command <command>. Available commands: " +
-                    "position, user.",
-                "\\mod <username>\nSets a normal user with <username> to a moderator.",
-                "\\unmod <username>\nSets a moderator with <username> to a normal user.",
                 "\\mute <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and mutes them, meaning they " +
                     "will no longer be able to post messages into the allchat.",
                 "\\unmute <list of usernames>\nTakes a list of usernames, each one " +
                     "separated from the next by a whitespace-character, and unmutes them, meaning they " +
-                    "will be able to post messages into the allchat again if they were previously muted."]
+                    "will be able to post messages into the allchat again if they were previously muted.",
+                "\\port\nDisplays a list of all port commands and how to use them.",
+                "\\port <command>\nExecutes port command <command>. Available commands: " +
+                    "position, user.",
+                "\\rooms\nDisplays a list of all existing rooms with their ID."]
     },
     DOORCOMMANDS: {
         header: "List of Door Commands",
@@ -75,6 +76,8 @@ module.exports = Object.freeze({
                 "\\door closefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>" + 
                     ", each one separated from the next one by a whitespace character.",
                 "\\door log\nWill show a log of all available doors with ID and status information.", 
+                "\\door log <list of roomIDs>\nWill show a log of all available doors with ID and status information in rooms whose ID is in <list of roomIDs>," + 
+                    ' each roomID separated from the next one by a whitespace character.',
                 "\\door open <doorID>\nOpens the door with ID <doorID> for everyone.", 
                 "\\door openallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>" + 
                     ", each one separated from the next one by a whitespace character.",
@@ -225,6 +228,10 @@ module.exports = Object.freeze({
     OPENEDALLDOORS: {
         header: "Successfully opened all doors",
         body: "You successfully opened all doors for all passed users."
+    },
+    NODOORS: {
+        header: "No doors available",
+        body: "There is either no room with this ID or there are no doors."
     },
     STANDARDDOORCLOSED: {
         header: "Door closed",

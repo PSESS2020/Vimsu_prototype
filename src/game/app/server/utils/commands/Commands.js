@@ -69,5 +69,9 @@ module.exports = Object.freeze({
     GROUP: {
         string: "group",
         method: "handleGroupCommand"
+    },
+    ROOMS: {
+        string: "rooms",
+        method: "logAllRooms"
     }
 });
