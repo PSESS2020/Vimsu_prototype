@@ -191,17 +191,10 @@ module.exports = class RoomFactory {
             // Create tile inside of door
             // if door is on the left side, same x, one less y
             // if door is on the right side, same y, one more x
-            var xPos, yPos;
-            if (doorData.wallSide == GlobalStrings.LEFT) {
-                xPos = doorData.positionOfDoor[0]
-                yPos = doorData.positionOfDoor[1] - 1;
-            } else if (doorData.wallSide == GlobalStrings.RIGHT) {
-                xPos = doorData.positionOfDoor[0] + 1;
-                yPos = doorData.positionOfDoor[1]
-            } else {
-                // TODO error handling
-            }
-           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
+            let xPos = (doorData.wallSide == GlobalStrings.RIGHT) ? doorData.positionOfDoor[0] + 1 : doorData.positionOfDoor[0];
+            let yPos = (doorData.wallSide == GlobalStrings.LEFT) ? doorData.positionOfDoor[1] - 1 : doorData.positionOfDoor[1];
+            
+            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
 
         })
 

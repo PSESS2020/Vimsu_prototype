@@ -99,7 +99,16 @@ class GameObjectViewFactory {
         
         if (gameMapElementImage !== undefined) {
             var offset = this.#calculateMapElementOffset(gameMapElementImage, gameObjectType);
+            // Strange fix to make sure left & right tiles
+            // are displayed properly....
+            if (gameObjectType === GameObjectType.LEFTTILE) {
+                pos = new PositionClient(pos.getCordX(), pos.getCordY() + 1);
+            } else if (gameObjectType === GameObjectType.RIGHTTILE){
+                pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
+            }
             gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
+        } else {
+            throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
 
         return gameMapElementView;
@@ -171,7 +180,7 @@ class GameObjectViewFactory {
             var offset = this.#calculateMapElementOffset(doorImage, typeOfDoor);
             doorView = new DoorView(doorImage, [], pos, typeOfDoor, offset, objectName, this.eventManager);
         } else {
-            throw new Error("The image for the door type " + typeOfDoor + " could not be found in the cache for images. Did you reload the images after cache clear?");
+            throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
 
         return doorView;
