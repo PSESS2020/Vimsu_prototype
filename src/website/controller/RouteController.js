@@ -12,6 +12,7 @@ const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
 const Account = require('../models/Account');
 const nodemailer = require("nodemailer");
+const ServerController = require('../../game/app/server/controller/ServerController');
 
 /**
  * The Route Controller
@@ -26,6 +27,7 @@ module.exports = class RouteController {
     #io;
     #db;
     #blob;
+    #serverController;
 
     /**
      * Creates an instance of RouteController
@@ -52,6 +54,8 @@ module.exports = class RouteController {
         this.#io = io;
         this.#db = db;
         this.#blob = blob;
+
+        this.#serverController = new ServerController(this.#io, this.#db, this.#blob);
         this.#init();
     }
 
@@ -255,8 +259,6 @@ module.exports = class RouteController {
         this.#app.get('/conference/:id', (request, response) => {
             if (request.session.loggedin === true && request.params.id === Settings.CONFERENCE_ID) {
 
-                const ServerController = require('../../game/app/server/controller/ServerController');
-                new ServerController(this.#io, this.#db, this.#blob);
                 return response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
 
             } else {
@@ -377,8 +379,9 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "deleteAccountButton") {
-                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then(res => {
-                    if (res) {
+                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then(ppantIdOfDeletedAcc => {
+                    if (ppantIdOfDeletedAcc) {
+                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc);
                         response.redirect('/logout');
                     } else {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: request.session.forename }, request.session.username));

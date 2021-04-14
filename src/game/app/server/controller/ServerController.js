@@ -3020,6 +3020,36 @@ module.exports = class ServerController {
     };
 
     /**
+     * Is called after a participant deleted his account, removes all references in all current instances
+     * @method module:ServerController#deleteParticipantReferences
+     * 
+     * @param {String} ppantID id of ppant that deleted his account
+     */
+    deleteParticipantReferences(ppantID) {
+
+        //remove all references from other ppant instances
+        this.#ppants.forEach(ppant => {
+            
+            //All this methods have only an effect if this ppant was actually part of these lists
+            ppant.removeFriend(ppantID);
+            ppant.declineFriendRequest(ppantID);
+            ppant.sentFriendRequestDeclined(ppantID);
+            
+            let chatList = ppant.getChatList();
+            chatList.forEach(chat => {
+                chat.removeParticipant(ppantID);
+            });
+        });
+
+        //remove all references from group instances
+        this.#groups.forEach(group => {
+            if (group.includesGroupMember(ppantID)) {
+                group.removeGroupMember(ppantID);
+            }
+        })
+    }
+
+    /**
      * @private Gets current lectures and emit to client
      * 
      * @method module:ServerController#getCurrentLectures

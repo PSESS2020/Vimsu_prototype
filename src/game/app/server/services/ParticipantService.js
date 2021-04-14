@@ -15,6 +15,8 @@ const TaskService = require('./TaskService');
 const Task = require('../models/Task');
 const db = require('../../../../config/db');
 const TypeOfTask = require('../utils/TypeOfTask');
+const FriendListService = require('./FriendListService.js');
+const FriendRequestListService = require('./FriendRequestListService.js');
 
 /**
  * The Participant Service
@@ -598,7 +600,7 @@ module.exports = class ParticipantService {
      * 
      * @param {String} accountId account ID
      * @param {String} suffix collection name suffix
-     * @return {boolean} true if deleted
+     * @return {String | boolean} ppantID if deleted, false otherwise
      */
      static deleteAccountAndParticipant(accountId, suffix, vimsudb) {
         TypeChecker.isString(accountId);
@@ -615,10 +617,29 @@ module.exports = class ParticipantService {
                     return true;
                 }
 
-                //participant is found, delete entry
+                //participant is found
+
+                //remove participant from chats and other ppants friend lists
+                par.chatIDList.forEach(chatID => {
+                    ChatService.removeParticipant(chatID, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                });
+
+                par.friendIds.forEach(friendId => {
+                    FriendListService.removeFriend(friendId, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                });
+
+                par.friendRequestIds.received.forEach(friendId => {
+                    FriendRequestListService.removeSentFriendRequest(friendId, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                });
+
+                par.friendRequestIds.sent.forEach(friendId => {
+                    FriendRequestListService.removeReceivedFriendRequest(friendId, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                });
+
+                //delete participant entry
                 return this.deleteParticipant(par.participantId, Settings.CONFERENCE_ID, vimsudb).then(res => {
                     if (res) {
-                        return true;
+                        return par.participantId;
                     }
 
                     return false;

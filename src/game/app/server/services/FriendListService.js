@@ -67,9 +67,21 @@ module.exports = class FriendListService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
-            return res;
-        })
+        //Check if friend with friendId exists
+        return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: friendId }, "").then(par => {
+
+            //friend exists, that should happen in every normal case
+            if (par) {
+                return vimsudb.insertToArrayInCollection("participants_" + conferenceId, { participantId: participantId }, { friendIds: friendId }).then(res => {
+                    return res;
+                });
+            
+            //this can be the case if a ppant accepts a friend request from an already deleted ppant right after he deleted his acc and view was not updated yet
+            } else {
+                console.log('Friend with ID ' + friendId + ' does not exist');
+                return false;
+            }
+        });
     }
 
     /**
