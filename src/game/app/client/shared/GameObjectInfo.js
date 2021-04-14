@@ -1,6 +1,6 @@
-// const GameObjectType = require("./GameObjectType");
-// const Settings = require("../utils/Settings");
-// const TypeOfDoor = require("./TypeOfDoor");
+//const GameObjectType = require("./GameObjectType");
+//const Settings = require("../utils/Settings");
+//const TypeOfDoor = require("./TypeOfDoor");
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -145,7 +145,7 @@ class GameObjectInfo {
              * (iii) assetName needs to be array of
              *       arrays, size[0] * size[1].    */
             isMultiPart: true,
-            size: [1, 5],
+            size: [5, 1],
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -231,8 +231,8 @@ class GameObjectInfo {
             hasAdditionalParts: true,
             parts: [
                 // type, positional offsets, maybe variation
-                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 6, variation: 0}, 
-                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 0, variation: 1}
+                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 0, variation: 0}, 
+                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 6, variation: 1}
             ],
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
