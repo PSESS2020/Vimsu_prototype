@@ -48,10 +48,7 @@ class GameObjectInfo {
     //   (these should not be the value, but the key)
 
     // TODO
-    // - finish up instructions (above)
-    // - finish up every multi-part object and every object w/ variations
-
-    // add custom-type object
+    // - add custom-type object
  
     // All the info for each GameObjectType
     static #INFORMATION = Object.freeze({
@@ -271,12 +268,26 @@ class GameObjectInfo {
         if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
             return GameObjectInfo.#INFORMATION[objectType][key];
         } else {
-            // Hacky solution as RoomFactory breaks otherwise... :/
-            return false;
-
-            // throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
+            throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
         }
-    }    
+    } 
+    
+    /**
+     * Takes a GameObjectType and a <key> as arguments and checks
+     * if a property with the name <key> is stored for the passed
+     * GameObjectType. If yes, returns true, if no, returns false.
+     * 
+     * @method module:GameObjectInfo#hasProperty
+     * 
+     * @param {String} objectType 
+     * @param {String} key
+     *  
+     * @returns {Boolean} If the object specified by the passed type
+     *                    has a property indexed by the passed key
+     */
+     static hasProperty(objectType, key) {
+        return GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)
+     }
     
 }
 

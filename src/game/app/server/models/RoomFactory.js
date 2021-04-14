@@ -289,7 +289,7 @@ module.exports = class RoomFactory {
         // This is the only place where this class needs to
         // access the GameObjectInfo, which doesn't sit well
         // with me...
-        if (GameObjectInfo.getInfo(objData.type, "hasAdditionalParts")) {
+        if (GameObjectInfo.hasProperty(objData.type, "hasAdditionalParts")) {
             let parts = GameObjectInfo.getInfo(objData.type, "parts");
             parts.forEach( partData => {
                 this.#createObjectsFromData(roomId, {
@@ -301,7 +301,7 @@ module.exports = class RoomFactory {
                 }, listToPushInto)
             })
         }
-        if (GameObjectInfo.getInfo(objData.type, "isMultiPart")) {
+        if (GameObjectInfo.hasProperty(objData.type, "isMultiPart")) {
             var size = GameObjectInfo.getInfo(objData.type, "size");
             var width = GameObjectInfo.getInfo(objData.type, "width");
             var length = GameObjectInfo.getInfo(objData.type, "length");
@@ -329,7 +329,7 @@ module.exports = class RoomFactory {
                 }
             }
             
-        } else if (GameObjectInfo.getInfo(objData.type, "hasVariation")) {
+        } else if (GameObjectInfo.hasProperty(objData.type, "hasVariation")) {
             // if no variation defined, set to default,
             // else do nothing
             objData.variation === undefined ? objData.variation = 0 : {};
