@@ -325,15 +325,43 @@ module.exports = class RoomFactory {
             var width = GameObjectInfo.getInfo(objData.type, "width");
             var length = GameObjectInfo.getInfo(objData.type, "length");
             console.log("got all info")
-            for (let x = 0; x < size[0]; x += width) {
-                for (let y = 0; y < size[1]; y += length) {
-                    listToPushInto.push(this.#objService.createObjectVariation(roomId,
-                    objData.type,
-                    objData.position[0] + x,
-                    objData.position[1] + y,
-                    objData.isClickable,
-                    objData.iFrameData,
-                    [x, y]))
+            if (size[0] == 1 || size[1] == 1) {
+                let n = Math.max(size[0], size[1]);
+                for (let j = 0; j < n; j += length) {
+                    listToPushInto.push(this.#objService.createObjectVariation(
+                        roomId,
+                        objData.type,
+                        objData.position[0],
+                        objData.position[1],
+                        objData.isClickable,
+                        objData.iFrameData,
+                        j
+                    ));  
+                }
+            } else {
+                for (let i = 0; i < size[0]; i ++) {
+                    let assets = GameObjectInfo.getInfo(type, "assetName");
+                    if (assets[i] instanceof Array) {
+                        for (let j = 0; j < Math.max(size[1], assets[i].length); j ++) {
+                            listToPushInto.push(this.#objService.createObjectPart(roomId,
+                                objData.type,
+                                objData.position[0] + i * length,
+                                objData.position[1] + j * width,
+                                objData.isClickable,
+                                objData.iFrameData,
+                                { x: i, y: j }))
+                        }
+                    } else {
+                        listToPushInto.push(this.#objService.createObjectVariation(
+                            roomId,
+                            objData.type,
+                            objData.position[0],
+                            objData.position[1],
+                            objData.isClickable,
+                            objData.iFrameData,
+                            i
+                        ));
+                    }
                 }
             }
         } else if (GameObjectInfo.getInfo(objData.type, "hasVariation")) {
@@ -347,10 +375,9 @@ module.exports = class RoomFactory {
                 objData.position[1],
                 objData.isClickable,
                 objData.iFrameData,
-                [objData.variation, 0]
+                objData.variation
             ));           
         } else {
-            console.log("coordinates: (" + objData.position[0] + "," + objData.position[1] + ")")
             listToPushInto.push(this.#objService.createCustomObject(
                 roomId,
                 objData.type,

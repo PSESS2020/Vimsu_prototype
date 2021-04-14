@@ -803,9 +803,7 @@ module.exports = class GameObjectService {
     /**
      * Creates a custom instance of te GameObjectClass with no hard-coded
      * parameters passed.
-     * 
-     * TODO: due to the method below, this is basically useless.
-     * 
+     *
      * @method module:GameObjectService#createCustomObject
      * 
      * @param {String} roomId 
@@ -840,6 +838,8 @@ module.exports = class GameObjectService {
     }
 
     /**
+     * A slight variation of the above class that allows for variations of
+     * objects to be created. This could probably be done more elegantly.
      * 
      * @method module:GameObjectService#createObjectVariation
      * 
@@ -854,32 +854,68 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
-     * @param {Array[number]} variation The variation of the object that is supposed to be created
+     * @param {Int} variation The variation of the object that is supposed to be created
      * 
      * @return {GameObject} A custom instance of the GameObject class
      */
     createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, variation) {
         this.#isKnownType(type);
+        TypeChecker.isInt(variation);
         // only need to check the actually passed arguments
         this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
-
-        // Get asset-image of variations.
-        let allAssets = GameObjectInfo.getInfo(type, "assetName");
-        // this is just straight-up non-workable
-        var assetName;
-        variation[1] == 0 ? assetName = allAssets[variation[0]] :  assetName = allAssets[variation[0]][variation[1]];
-
+        
         return new GameObject(
             this.#generateGameObjectID(), 
             type, 
-            assetName, 
+            GameObjectInfo.getInfo(type, "assetName")[variation], 
             GameObjectInfo.getInfo(type, "width"), 
             GameObjectInfo.getInfo(type, "length"), 
             new Position(roomId, xPos, yPos), 
             GameObjectInfo.getInfo(type, "isSolid"), 
             isClickable, 
-            iFrameData);
-        
+            iFrameData);       
+    }
+
+    /**
+     * A slight variation of the above method that allows to create
+     * objects that consist out of more than one part
+     * 
+     * @method module:GameObjectService#createObjectPart
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
+     * @param {Array[number]} part The part of the object that is supposed to be created
+     * 
+     * @return {GameObject} A custom instance of the GameObject class
+     */
+     createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, part) {
+        this.#isKnownType(type);
+        if (part.length !== 2) {
+            throw new Error("When creating object part, the part needs to be signified by an array of exactly two integers!")
+        }
+        TypeChecker.isInt(part.x);
+        TypeChecker.isInt(part.y);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
+
+        return new GameObject(
+            this.#generateGameObjectID(), 
+            GameObjectInfo.getInfo(type, "assetName")[part.x][part.y], 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            iFrameData);        
     }
 
 

@@ -9,7 +9,7 @@ const Settings = require('../utils/Settings.js');
  * Uses the values of the GameObjectType-properties as keys.
  * This needed to be in a separate file, as changing the
  * GameObjectType-file to contain this surplus of information
- * would break several -side classes, and I can't be bothered
+ * would break several client-side classes, and I can't be bothered
  * to fix them all.
  * 
  * Done as a static class for reasons of privacy. It is just nicer to
