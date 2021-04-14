@@ -3,7 +3,7 @@ const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const AssetPaths = require('../../client/shared/AssetPaths.js');
 const Room = require('../models/Room.js');
 const GameObjectService = require('../services/GameObjectService.js');
-const Settings = require('../utils/ServerSettings.js');
+const Settings = require('../utils/Settings.js');
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const NPCService = require('../services/NPCService.js');
@@ -14,7 +14,8 @@ const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
-const GameObjectInfo = require('../../client/shared/GameObjectInfo.js');
+const GameObjectInfo = require('../utils/GameObjectInfo.js');
+const Messages = require('../utils/Messages.js');
 
 /**
  * 
@@ -177,9 +178,10 @@ module.exports = class RoomFactory {
         // TODO:
         // - allow for logos above door to not be passed
         roomData.DOORS.forEach(doorData => {     
-            if(doorData.logo === undefined) {
+            if (doorData.logo === undefined) {
                 doorData.logo = "default";
             }
+
             let logo = this.#getDoorLogo(doorData.logo, doorData.wallSide);
             if (doorData.isOpen === undefined) {
                 listOfDoors.push(
@@ -192,14 +194,16 @@ module.exports = class RoomFactory {
                             doorData.positionOnExit[1],
                             doorData.positionOnExit[2]),
                         doorData.directionOnExit,
-                        true,
-                        "", // closedMessage
-                        "") // codeToOpen
+                        true, // isOpen
+                        Messages.STANDARDDOORCLOSED) // closedMessage
                 );         
             } else {
                 // this requires error handling for when a door
                 // is defined as closed but there is no message
                 // or code to open defined
+                if (doorData.closedMessage === undefined) {
+                    doorData.closedMessage = Messages.STANDARDDOORCLOSED
+                }
                 listOfDoors.push(
                     this.#doorService.createCustomDoor(logo,
                         doorData.wallSide,
@@ -221,14 +225,14 @@ module.exports = class RoomFactory {
             // if door is on the right side, same y, one more x
             var xPos = doorData.positionOfDoor[0];
             var yPos = doorData.positionOfDoor[1];
-            if (wallSide = GlobalStrings.LEFT) {
+            if (doorData.wallSide == GlobalStrings.LEFT) {
                 yPos--;
-            } else if (wallSide = GlobalStrings.RIGHT) {
+            } else if (doorData.wallSide == GlobalStrings.RIGHT) {
                 xPos++;
             } else {
                 // TODO error handling
             }
-           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[wallSide + "TILE"], xPos, yPos, false))
+           listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
 
         })
 
@@ -282,23 +286,23 @@ module.exports = class RoomFactory {
     // does not need to give the entire assetPath-key for
     // the logo.
     #doorLogos = Object.freeze({
-        default: {
+        [GlobalStrings.DEFAULT]: {
             [GlobalStrings.LEFT]: "leftnonedoor_default",
             [GlobalStrings.RIGHT]: "rightnonedoor_default"
         },
-        foyer: {
+        [GlobalStrings.FOYER]: {
             [GlobalStrings.LEFT]: "leftfoyerdoor_default",
             [GlobalStrings.RIGHT]: "rightfoyerdoor_default"
         },
-        reception: {
+        [GlobalStrings.RECEPTION]: {
             [GlobalStrings.LEFT]: "leftreceptiondoor_default",
             [GlobalStrings.RIGHT]: "rightreceptiondoor_default"
         },
-        lecture: {
+        [GlobalStrings.LECTURE]: {
             [GlobalStrings.LEFT]: "leftlecturedoor_default",
             [GlobalStrings.RIGHT]: "rightlecturedoor_default"
         },
-        foodcourt: {
+        [GlobalStrings.FOODCOURT]: {
             [GlobalStrings.LEFT]: "leftfoodcourtdoor_default",
             [GlobalStrings.RIGHT]: "rightfoodcourtdoor_default"
         }

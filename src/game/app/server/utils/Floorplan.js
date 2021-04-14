@@ -1,8 +1,9 @@
 const Direction = require('../../client/shared/Direction');
 const GameObjectType = require('../../client/shared/GameObjectType');
+const GlobalStrings = require('../../client/shared/GlobalStrings');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
 const NPCDialog = require('./NPCDialog');
-const Settings = require('./ServerSettings');
+const Settings = require('./Settings');
 
 /**
  * How to use this file:
@@ -12,7 +13,15 @@ const Settings = require('./ServerSettings');
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = Object.freeze({
+const FloorplanConstants = Object.freeze({
+    NPCNAMES: {
+        tutorial: "Basic Tutorial",
+        foyer: "Foyer Helper",
+        food: "Chef"
+    }
+})
+
+const Floorplan = Object.freeze({
 
     /*
     EXAMPLE: {
@@ -76,39 +85,59 @@ module.exports = Object.freeze({
     // - This will most likely break a non-neglible amount of
     //   achievements
     RECEPTION: {
-        ID: 0, // needs to be integer
+        ID: Settings.RECEPTION_ID, // needs to be integer
         TYPE: TypeOfRoom.CUSTOM,
         //SHAPE: ,
-        WIDTH: 13,
-        LENGTH: 13,
+        WIDTH: 13, // y dimension - along right wall
+        LENGTH: 13, // x dimension - along left wall
         MAPELEMENTS: [
-            {type: GameObjectType.WINDOW, position: [[13, 5], [13, 6], [13, 7]]},
+            {type: GameObjectType.RIGHTWINDOW, position: [[13, 5], [13, 6], [13, 7]]},
             {type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
         ],
         OBJECTS: [
             {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},
-            {type: GameObjectType.PLANT, position: [[12, 0],[12, 12]]}
+            {type: GameObjectType.PLANT, position: [[12, 0], [12, 12]]}
         ],
-        DOORS: [],
+        // doorData = {wallSide, logo, positionOfDoor,
+        //            positionOnExit, directionOnExit, isOpen,
+        //            closedMessage, codeToOpen}
+        DOORS: [ 
+            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 21], directionOnExit: Direction.DOWNLEFT, isOpen: true}
+        ],
         NPCS: [
-            {name: "Basic Tutorial", position: [11, 6], direction: Direction.DOWNLEFT, dialog: NPCDialog.basicTutorialDialog}
+            {name: FloorplanConstants.NPCNAMES.tutorial, position: [11, 6], direction: Direction.DOWNLEFT, dialog: NPCDialog.basicTutorialDialog}
         ]
     },
-    /*
+
     FOYER: {
-        ID: "roomFoyer",
+        ID: Settings.FOYER_ID,
         TYPE: TypeOfRoom.CUSTOM,
         //SHAPE: ,
         WIDTH: 25,
         LENGTH: 25,
-        MAPELEMENTS: [],
-        OBJECTS: [],
-        DOORS: [],
-        NPCS: []
+        MAPELEMENTS: [
+            {type: GameObjectType.LEFTSCHEDULE, position: [5, -1], isClickable: Settings.VIDEOSTORAGE_ACTIVATED},
+            {type: GameObjectType.LEFTWINDOW, position: [[22, -1], [23, -1], [24, -1]]},
+            {type: GameObjectType.RIGHTWINDOW, position: [[25, 0], [25, 1], [25, 2], [25, 3], [25, 4], [25, 5], [25, 23]]},
+            {type: GameObjectType.CONFERENCELOGO, position: [13, -1]},
+            {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
+        ],
+        OBJECTS: [
+            {type: GameObjectType.PLANT, position: [24, 0], isClickable: true},
+            {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
+            {type: GameObjectType.SOFA, position: [[25, 1], [25, 2], [25, 3], [25, 4], [25, 5]], variation: 1}
+        ],
+        DOORS: [
+            {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.FOODCOURT,  positionOfDoor: [25, 9], positionOnExit: [Settings.FOODCOURT_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true},
+            {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.RECEPTION,  positionOfDoor: [25, 21], positionOnExit: [Settings.RECEPTION_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true}
+        ],
+        NPCS: [
+            {name: FloorplanConstants.NPCNAMES.foyer, position: [0, 0], direction: Direction.DOWNRIGHT, dialog: NPCDialog.foyerHelperDialog}
+        ]
     },
 
     FOODCOURT: {
-        ID: "roomFoodcourt",
+        ID: Settings.FOODCOURT_ID,
         TYPE: TypeOfRoom.CUSTOM,
         //SHAPE: ,
         WIDTH: 19,
@@ -120,7 +149,7 @@ module.exports = Object.freeze({
     },
 
     ESCAPEROOM: {
-        ID: "roomEscape",
+        ID: Settings.ESCAPEROOM_ID,
         TYPE: TypeOfRoom.CUSTOM,
         //SHAPE: ,
         WIDTH: 20,
@@ -130,6 +159,9 @@ module.exports = Object.freeze({
         DOORS: [],
         NPCS: []
     }
-    */
-
+    
 })
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = Floorplan;
+}

@@ -2,7 +2,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const Position = require("./Position.js");
 const Direction = require('../../client/shared/Direction.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
-const Settings = require('../utils/ServerSettings.js');
+const Settings = require('../utils/Settings.js');
 
 /**
  * The NPC Model

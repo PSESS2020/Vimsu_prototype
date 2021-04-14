@@ -26,7 +26,8 @@ const GameObjectType = Object.freeze({
         // Wall-like objects
         // Schedule, Windows, Logo, Picture Frames...
         LEFTSCHEDULE: 'LEFTSCHEDULE',
-        WINDOW: 'WINDOW',
+        RIGHTWINDOW: 'RIGHTWINDOW',
+        LEFTWINDOW: 'LEFTWINDOW',
         PICTUREFRAME: 'PICTUREFRAME',
         CONFERENCELOGO: 'CONFERENCELOGO',
         // Plant
@@ -46,8 +47,7 @@ const GameObjectType = Object.freeze({
         // Food & Drinks
         DRINKS: 'DRINKS',   
         SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
-        TEA: 'TEA',    
-        
+        TEA: 'TEA'         
 });
     
 if (typeof module === 'object' && typeof exports === 'object') {

@@ -15,6 +15,8 @@ const GlobalStrings = Object.freeze({
     FOYER: "foyer",
     FOODCOURT: "foodcourt",
     ESCAPE: "escaperoom",
+    LECTURE: "lecture",
+    DEFAULT: "default",
     RIGHT: "RIGHT",
     LEFT: "LEFT"
 

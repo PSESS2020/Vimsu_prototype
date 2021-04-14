@@ -1,7 +1,7 @@
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const RoomService = require('../services/RoomService.js');
-const Settings = require('../utils/ServerSettings.js');
+const Settings = require('../utils/Settings.js');
 const CommandHandler = require('../models/CommandHandler.js');
 const AllchatContext = require('../models/AllchatContext.js');
 const LectureContext = require('../models/LectureContext.js');
@@ -3213,7 +3213,7 @@ module.exports = class ServerController {
         targetRoom.enterParticipant(ppant);
 
         //Get asset paths of target room
-        let assetPaths = targetRoomDecorator.getAssetPaths();
+        let assetPaths = AssetPaths;
 
         //Get MapElements of target room
         let mapElements = targetRoom.getListOfMapElements();
