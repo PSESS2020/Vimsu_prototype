@@ -1,5 +1,5 @@
-//const GameObjectType = require("./GameObjectType");
-//const Settings = require("../utils/Settings");
+// const GameObjectType = require("./GameObjectType");
+// const Settings = require("../utils/Settings");
 // const TypeOfDoor = require("./TypeOfDoor");
 
 /**
@@ -47,14 +47,12 @@ class GameObjectInfo {
     // - size
     // - necessary assetPaths
     //   (these should not be the value, but the key)
-    // - is there an easy way to group similar objects
-    //   as variations of the same type?
 
-    // Have asset-paths be of style <direction><name>_<style><variation>
+    // TODO
+    // - finish up instructions (above)
+    // - finish up every multi-part object and every object w/ variations
 
     // add custom-type object
-
-    // for the asset paths, we need to pass keys not values
  
     // All the info for each GameObjectType
     static #INFORMATION = Object.freeze({
@@ -295,7 +293,10 @@ class GameObjectInfo {
         if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
             return GameObjectInfo.#INFORMATION[objectType][key];
         } else {
-            throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
+            // Hacky solution as RoomFactory breals otherwise... :/
+            return false;
+
+            // throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
         }
     }    
     

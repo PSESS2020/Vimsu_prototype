@@ -83,12 +83,10 @@ module.exports = Object.freeze({
         LENGTH: 13,
         MAPELEMENTS: [
             {type: GameObjectType.WINDOW, position: [[13, 5], [13, 6], [13, 7]]},
-            //{type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
+            {type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
         ],
         OBJECTS: [
             {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},
-            {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, position: [11, 9]},
-            {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, position: [11, 3]},
             {type: GameObjectType.PLANT, position: [[12, 0],[12, 12]]}
         ],
         DOORS: [],
