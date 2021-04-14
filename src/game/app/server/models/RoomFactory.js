@@ -191,12 +191,13 @@ module.exports = class RoomFactory {
             // Create tile inside of door
             // if door is on the left side, same x, one less y
             // if door is on the right side, same y, one more x
-            var xPos = doorData.positionOfDoor[0];
-            var yPos = doorData.positionOfDoor[1];
+            var xPos, yPos;
             if (doorData.wallSide == GlobalStrings.LEFT) {
-                yPos--;
+                xPos = doorData.positionOfDoor[0]
+                yPos = doorData.positionOfDoor[1] - 1;
             } else if (doorData.wallSide == GlobalStrings.RIGHT) {
-                xPos++;
+                xPos = doorData.positionOfDoor[0] + 1;
+                yPos = doorData.positionOfDoor[1]
             } else {
                 // TODO error handling
             }
