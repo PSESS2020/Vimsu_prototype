@@ -5,9 +5,10 @@
  * @version 1.0.0
  */
 class NotificationBar extends Views {
-    
+
     eventManager;
-    
+    unreadNotif;
+
     /**
      * Creates an instance of NotificationBar
      * 
@@ -23,6 +24,7 @@ class NotificationBar extends Views {
         NotificationBar.instance = this;
 
         this.eventManager = eventManager;
+        this.unreadNotif = 0;
 
         $('#showNotifBar').hide();
 
@@ -31,22 +33,22 @@ class NotificationBar extends Views {
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
 
-            $("#notifBar").animate({"max-height": "360px"}, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "max-height": "360px" }, Settings.TOGGLE_SPEED);
             notifBar.style.display = "block";
             notifBar.style.zIndex = "5";
-            
+
             $('#showNotifBar').hide();
             $('#hideNotifBar').show();
         })
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
-            $("#notifBar").animate({"max-height":"0px"}, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "max-height": "0px" }, Settings.TOGGLE_SPEED);
 
             setTimeout(() => {
                 notifBar.style.display = "none";
                 notifBar.style.zIndex = "0";
             }, Settings.TOGGLE_SPEED)
-            
+
             $('#hideNotifBar').hide();
             $('#showNotifBar').show();
         })
@@ -63,7 +65,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `New message from ${senderUsername}.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -79,7 +81,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -96,7 +98,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -107,12 +109,12 @@ class NotificationBar extends Views {
      * @param {String} meetingName meeting name
      * @param {String} meetingID meeting ID
      */
-     drawNewMeeting(meetingName, meetingID) {
+    drawNewMeeting(meetingName, meetingID) {
         const id = 'notifMeeting' + meetingID;
         this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             $('#meetingListModal').modal('show');
             return this.eventManager.handleMeetingListClicked();
         })
@@ -128,7 +130,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             $('#nofriendrequest').empty();
             $('#friendRequestListModal .modal-body .list-group').empty()
             $('#friendRequestListModal').modal('show');
@@ -147,7 +149,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`)
 
         $('#' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
+            this.removeNotifDiv()
             $('#friendListModal').modal('show');
             return this.eventManager.handleFriendListClicked();
         })
@@ -173,11 +175,21 @@ class NotificationBar extends Views {
                     </a>
                 </div>
             `)
-        }
-        $('#notifBar').scrollTop(0);
 
-        $('#close' + id).on('click', (e) => {
-            $('#' + id + 'Div').remove();
-        })
+            this.unreadNotif++;
+            $('#unreadNotif').text(this.unreadNotif);
+
+            $('#close' + id).on('click', (e) => {
+                this.removeNotifDiv()
+            })
+        }
+        
+        $('#notifBar').scrollTop(0);
+    }
+
+    removeNotifDiv(id) {
+        $('#' + id + 'Div').remove();
+        this.unreadNotif--;
+        $('#unreadNotif').text(this.unreadNotif);
     }
 }
