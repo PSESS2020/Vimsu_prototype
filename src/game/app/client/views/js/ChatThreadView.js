@@ -331,7 +331,9 @@ class ChatThreadView extends WindowView {
                         </div>
                         <div class="modal-body modal-body-large">
                             <div id=${"chatParticipantListWait" + this.chat.chatId} style="text-align: center;">
-                                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                             <ul class="list-group bg-transparent">
 
