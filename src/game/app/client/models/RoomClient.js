@@ -292,19 +292,12 @@ class RoomClient {
             let yPos = mapElement.getPosition().getCordY();
             let mapEntry = this.map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
-            console.log("current entry at (" + xPos + ", " + yPos + ") is " + mapEntry)
-
-            console.log("adding " + mapElement.getGameObjectType() + " at (" + xPos + ", " + yPos + ")")
-
             if (mapEntry instanceof Array) {
                 mapEntry.push(mapElement);
             } else if (mapEntry !== null) {
-                console.log(mapEntry.getGameObjectType())
                 mapEntry = [mapEntry, mapElement];
             } else
                 mapEntry = mapElement;
-
-            console.log("current entry at (" + xPos + ", " + yPos + ") is " + mapEntry)
 
             this.map[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
@@ -314,18 +307,13 @@ class RoomClient {
             let yPos = gameObject.getPosition().getCordY();
             let mapEntry = this.objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
-            console.log("current entry at (" + xPos + ", " + yPos + ") is " + mapEntry)
-
             if (mapEntry instanceof Array) {
                 mapEntry.push(mapElement);
             } else if (mapEntry !== null) {
-                console.log(mapEntry.getGameObjectType())
                 mapEntry = [mapEntry, mapElement];
             } else
                 mapEntry = gameObject;
             
-            console.log("current entry at (" + xPos + ", " + yPos + ") is " + mapEntry)
-
             this.objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH] = mapEntry;
         });
 

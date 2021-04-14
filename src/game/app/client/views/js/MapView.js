@@ -154,9 +154,7 @@ class MapView extends Views {
                 if (mapObject !== null) {
 
                     if (mapObject instanceof Array) {
-                        console.log("building an array of objects " + mapObject)
                         mapObject.forEach(object => {
-                            console.log(object)
                             this.createMapElementView(object, position);
                         });
                     } else {
@@ -188,9 +186,6 @@ class MapView extends Views {
     createMapElementView = function(mapObject, position) {
         var tileType;
         var tile;
-
-        console.log(mapObject)
-        console.log(mapObject.getName())
 
         if (mapObject instanceof DoorClient) {
             tileType = mapObject.getTypeOfDoor();

@@ -79,8 +79,6 @@ module.exports = class RoomFactory {
         let listOfDoors = [];
         let listOfNPCs = [];
 
-        console.log("Building by plan - done w/ init")
-
         // these methods still need proper handling for when some arguments are missing.
 
         // TODO
@@ -107,8 +105,6 @@ module.exports = class RoomFactory {
             listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
         }
 
-        console.log("added walls and tiles")
-
         // REDO the next two methods.
         // TODO desired interaction
         // - For each map element, the user only needs to specify
@@ -125,51 +121,23 @@ module.exports = class RoomFactory {
 
         // offer three options for positions:
         // - [xPos, yPos] (done)
-        // - An array of positions formatted as above (done)
-        // - An area (how to implement)
+        // - An array of positions formatted as above (done)]
+        // - [[Array of xPos], yPos] & [xPos, [Array of yPos]]
+
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
         // objData = {type, position, isClickable, iFrameData, variation}
         roomData.MAPELEMENTS.forEach(objData => {
-            console.log("building object " + objData.type)
-            if (Array.isArray(objData.position[0])) {
-                console.log("has multiple positions")
-                objData.position.forEach( position => {
-                    // copy objData
-                    let creationData = Object.assign( {}, objData )
-                    console.log("copied objData")
-                    // set positions to proper value
-                    creationData.position = position;
-                    console.log("set position")
-                    this.#createObjectsFromData(roomData.ID, creationData, listOfMapElements);
-                })
-            } else {
-                console.log("has single position")
-                this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
-            }
+            this.#decodePositionDataAndCreate(roomData.ID, objData, listOfMapElements)
         })
-
-        console.log("added map elements")
 
         // ADD OBJECTS
         // tables, plants, food and more
         // objData = {type, position, isClickable, iFrameData, variation}
         roomData.OBJECTS.forEach(objData => {
-            if (Array.isArray(objData.position[0])) {
-                objData.position.forEach( position => {
-                    // copy objData
-                    let creationData = Object.assign( {}, objData )
-                    // set positions to proper value
-                    creationData.position = position;
-                    this.#createObjectsFromData(roomData.ID, creationData, listOfMapElements);
-                })
-            } else {
-                this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
-            }   
+            this.#decodePositionDataAndCreate(roomData.ID, objData, listOfGameObjects)
         })
-
-        console.log("added objects")
 
         // ADD DOORS
         // doorData = {wallSide, logo, positionOfDoor,
@@ -236,8 +204,6 @@ module.exports = class RoomFactory {
 
         })
 
-        console.log("added doors")
-
         // ADD NPCS
         roomData.NPCS.forEach(npcData => {
             listOfNPCs.push(
@@ -253,15 +219,11 @@ module.exports = class RoomFactory {
             )
         })
 
-        console.log("added npcs")
-
         room.setMapElements(listOfMapElements);
         room.setGameObjects(listOfGameObjects);
         room.setNPCs(listOfNPCs);
         room.setDoors(listOfDoors);
         room.buildOccMap();
-
-        console.log("done w/ building")
 
         return room;
     }
@@ -308,6 +270,31 @@ module.exports = class RoomFactory {
         }
     });
 
+    #decodePositionDataAndCreate = function (roomId, objData, listToPushInto) {
+            // Not the cleanest way, but workable
+            if (objData.position.every(element => Array.isArray(element))) {
+                objData.position.forEach( position => {
+                    // copy objData
+                    let creationData = Object.assign( {}, objData )
+                    // set positions to proper value
+                    creationData.position = position;
+                    this.#decodePositionDataAndCreate(roomId, creationData, listToPushInto);
+                })
+            } else if (objData.position.some(element => Array.isArray(element)) && objData.position.some(element => !Array.isArray(element))) { 
+                // we assume that position has only two fields
+                let line = (objData.position[0] instanceof Array) ? objData.position[0] : objData.position[1];
+                for (let i = 0; i < line.length; i++) {
+                    // copy objData
+                    let creationData = Object.assign( {}, objData )
+                    // set positions to proper value
+                    creationData.position = (objData.position[0] instanceof Array) ? [line[i], objData.position[1]] : [objData.position[0], line[i]];
+                    this.#createObjectsFromData(roomId, creationData, listToPushInto);
+                }
+            } else {
+                this.#createObjectsFromData(roomId, objData, listToPushInto);
+            }
+    }
+
     // This is a very hacky solution, it is not nice at all!
     // No polymorphism, tons of conditionals
     // TO-DO do some refactoring and turn this into not shit
@@ -317,7 +304,6 @@ module.exports = class RoomFactory {
             objData.isClickable = false;
             objData.iFrameData = undefined;
         }
-        console.log("checked clickability")
         // This is the only place where this class needs to
         // access the GameObjectInfo, which doesn't sit well
         // with me...
@@ -364,6 +350,7 @@ module.exports = class RoomFactory {
                 [objData.variation, 0]
             ));           
         } else {
+            console.log("coordinates: (" + objData.position[0] + "," + objData.position[1] + ")")
             listToPushInto.push(this.#objService.createCustomObject(
                 roomId,
                 objData.type,
