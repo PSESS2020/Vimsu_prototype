@@ -589,6 +589,10 @@ vertical-align: middle;
   height: 5px;
 }
 
+.spinner-border {
+  color: antiquewhite;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

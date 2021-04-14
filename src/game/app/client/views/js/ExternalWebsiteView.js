@@ -146,7 +146,9 @@
                             </div>
                             <div class="modal-body">
                                 <div id="externalWebsiteWait${gameObjectID}" style="text-align: center;">
-                                    <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                 </div>
                                 <div id="externalWebsiteBody${gameObjectID}"></div>
                             </div>
