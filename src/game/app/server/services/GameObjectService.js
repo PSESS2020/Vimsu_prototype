@@ -837,5 +837,47 @@ module.exports = class GameObjectService {
             iFrameData);
     }
 
+    /**
+     * 
+     * @method module:GameObjectService#createObjectVariation
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
+     * @param {Array[number]} variation The variation of the object that is supposed to be created
+     * 
+     * @return {GameObject} A custom instance of the GameObject class
+     */
+    createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, variation) {
+        this.#isKnownType(type);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
+
+        // Get asset-image of variations.
+        let allAssets = GameObjectInfo.getInfo(type, "assetName");
+        var assetName;
+        variation[0] == 0 ? assetName = allAssets[variation[1]] :  assetName = allAssets[variation[0]][variation[1]];
+
+        return new GameObject(
+            this.#generateGameObjectID(), 
+            type, 
+            assetName, 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            iFrameData);
+        
+    }
+
 
 }

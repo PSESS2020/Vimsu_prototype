@@ -1,6 +1,6 @@
 //const GameObjectType = require("./GameObjectType");
 //const Settings = require("../utils/Settings");
-
+// const TypeOfDoor = require("./TypeOfDoor");
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -21,25 +21,25 @@
  * @version 1.0.0
  */
 class GameObjectInfo {
-    /**********************************************************/
-    /** When adding the information for a new GameObjectType **/
-    /** file, please stick to the following instructions:    **/
-    /**                                                      **/
-    /**   (a) Add the  needed information as a  new entry to **/ 
-    /**       #INFORMATION-field. You don't need to stick to **/
-    /**       the categories,  but it helps keeping the file **/
-    /**       more clearly structured.                       **/
-    /**                                                      **/
-    /**   (b) Add a new property  to the #INFORMATION-field. **/
-    /**       It should be formatted like this:              **/
-    /**       [GameObjectType.<property_key>]: {},           **/
-    /**                  (key)               (value)         **/
-    /**       The brackets [] around the key are mandatory!  **/
-    /**       Replace  <property_key>  with the  KEY of the  **/
-    /**       property you just added to the GameObjectType. **/
-    /**                                                      **/
+    /***********************************************************/
+    /** When adding the information for a new GameObjectType  **/
+    /** file, please stick to the following instructions:     **/
+    /**                                                       **/
+    /**   (a) Add the  needed information as a  new entry to  **/ 
+    /**       #INFORMATION-field. You don't need to stick to  **/
+    /**       the categories,  but it helps keeping the file  **/
+    /**       more clearly structured.                        **/
+    /**                                                       **/
+    /**   (b) Add a new property  to the #INFORMATION-field.  **/
+    /**       It should be formatted like this:               **/
+    /**       [GameObjectType.<property_key>]: {},            **/
+    /**                  (key)               (value)          **/
+    /**       The brackets [] around the key are mandatory!   **/
+    /**       Replace  <property_key>  with the  KEY of the   **/
+    /**       property you just added to the GameObjectType.  **/
+    /**                                                       **/
     /**   (c) For the value of the just added*/
-    /**********************************************************/
+    /***********************************************************/
 
 
     // Necessary information for each to add:
@@ -51,6 +51,8 @@ class GameObjectInfo {
     //   as variations of the same type?
 
     // Have asset-paths be of style <direction><name>_<style><variation>
+
+    // add custom-type object
 
     // for the asset paths, we need to pass keys not values
  
@@ -137,6 +139,15 @@ class GameObjectInfo {
         },
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
+            /* How does this work?
+             *   (i) Set flag (isMultiPart = true) 
+             *  (ii) Set size-field (this is the size
+             *       of the completed object, whereas
+             *       width and length give part-size)
+             * (iii) assetName needs to be array of
+             *       arrays, size[0] * size[1].    */
+            isMultiPart: true,
+            size: [1, 5],
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -146,8 +157,20 @@ class GameObjectInfo {
                 "leftconferencelogo_default4"],
             offset: Settings.LEFTWALL_OFFSET,
         },
+        // Doors
+        // only need offset, the other stuff is handled
+        // elsewhere
+        [TypeOfDoor.LEFT_DOOR]: {
+            offset: Settings.LEFTWALL_OFFSET,
+        },
+        [TypeOfDoor.RIGHT_DOOR]:{
+            offset: Settings.RIGHTWALL_OFFSET,
+        },
+        [TypeOfDoor.LECTURE_DOOR]: {
+            offset: Settings.LEFTWALL_OFFSET,
+        },
         
-        // Plant & Picture Frames
+        // Plant 
         [GameObjectType.PLANT]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
@@ -207,6 +230,11 @@ class GameObjectInfo {
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
             // OBJECT WITH ADDITIONAL PARTS
+            hasAdditionalParts: true,
+            parts: [
+                // type, positional offsets, maybe variation
+                {}, {}
+            ],
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
@@ -214,7 +242,7 @@ class GameObjectInfo {
             offset: { x: 0, y: 8 },
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
-            // OBJECT WITH ADDITIONAL PARTS
+            // OBJECT WITH VARIATIONS
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,

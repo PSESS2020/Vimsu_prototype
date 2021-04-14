@@ -14,8 +14,11 @@ const EscapeRoomDecorator = require('./EscapeRoomDecorator.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
+const GameObjectInfo = require('../../client/shared/GameObjectInfo.js');
 
-
+/**
+ * 
+ */
 module.exports = class RoomFactory {
     #objService;
     #doorService;
@@ -33,6 +36,11 @@ module.exports = class RoomFactory {
         RoomFactory.instance = this;
     }
 
+    /**
+     * 
+     * @param {*} roomData 
+     * @returns 
+     */
     buildRoomFrom(roomData) {
         TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
 
@@ -55,9 +63,12 @@ module.exports = class RoomFactory {
         }
     }
 
+    /**
+     * 
+     * @param {*} roomData 
+     * @returns 
+     */
     #buildByPlan = function(roomData) {
-        // the room object should have uniform visibility
-        // throughout the entire file
         let room = new Room(roomData.ID, roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
 
         let listOfMapElements = [];
@@ -95,8 +106,8 @@ module.exports = class RoomFactory {
         // TODO desired interaction
         // - For each map element, the user only needs to specify
         //   the type, the position, whether or not the object is
-        //   supposed to be clickable and if yes, which URL is
-        //   supposed to be openend on click
+        //   supposed to be clickable and if yes, the data necessary
+        //   to construct the iFrame
         //   (does this not break stuff like the plant?) (done)
         // - the type is then "decoded" into the size, the necessary
         //   asset paths, whether the object is solid usw.
@@ -210,6 +221,12 @@ module.exports = class RoomFactory {
         return room;
     }
 
+    /**
+     * 
+     * @param {*} logoName 
+     * @param {*} logoVariant 
+     * @returns 
+     */
     #getDoorLogo = function (logoName, logoVariant) {
         // TODO type-checking
         let logo = this.#doorLogos[logoName];
@@ -246,6 +263,9 @@ module.exports = class RoomFactory {
         }
     });
 
+    // This is not a nice solutions
+    // No polymorphism, tons of conditionals
+    // But a nice solution would require a lot of refactoring
     #createObjectsFromData = function (roomId, objData, listToPushInto) {
         // TODO support multi-part objects
         // TODO support objects with automatic additional parts
@@ -253,7 +273,26 @@ module.exports = class RoomFactory {
         // TODO support for custom options
         if (objData.isClickable == undefined) {
             objData.isClickable = false;
-            objData.url = undefined;
+            objData.iFrameData = undefined;
+        }
+        // This is the only place where this class needs to
+        // access the GameObjectInfo, which doesn't sit well
+        // with me...
+        if (GameObjectInfo.getInfo(objData.type, "isMultiPart")) {
+            var size = GameObjectType.getInfo(objData.type, "size");
+            var width = GameObjectType.getInfo(objData.type, "width");
+            var length = GameObjectType.getInfo(objData.type, "length");
+            for (let x = 0; x < size[0]; x + width) {
+                for (let y = 0; y < size[1]; y + length) {
+                    listToPushInto.push(this.#objService.createObjectVariation(roomId,
+                    objData.type,
+                    position[0] + x,
+                    position[1] + y,
+                    objData.isClickable,
+                    objData.iFrameData,
+                    [x, y]))
+                }
+            }
         }
         if (Array.isArray(objData.position[0])) {
             objData.position.forEach(position => {
@@ -263,7 +302,7 @@ module.exports = class RoomFactory {
                     position[0],
                     position[1],
                     objData.isClickable,
-                    objData.url
+                    objData.iFrameData
                 ));
             })
         } else {
@@ -273,7 +312,7 @@ module.exports = class RoomFactory {
                 objData.position[0],
                 objData.position[1],
                 objData.isClickable,
-                objData.url
+                objData.iFrameData
             ));
         }      
     }
