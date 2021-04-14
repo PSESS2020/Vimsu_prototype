@@ -61,7 +61,6 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: '',
-            offset: Settings.DEFAULT_OFFSET, 
         },
 
         // Tiles
@@ -70,28 +69,24 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
-            offset: Settings.DEFAULT_OFFSET,
         },
         [GameObjectType.SELECTED_TILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_selected",
-            offset: Settings.DEFAULT_OFFSET,
         },
         [GameObjectType.LEFTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
-            offset: Settings.DEFAULT_OFFSET,
         },
         [GameObjectType.RIGHTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tile_default",
-            offset: Settings.DEFAULT_OFFSET,
         },
 
         // Walls
@@ -100,14 +95,12 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftwall_default",
-            offset: Settings.LEFTWALL_OFFSET,
         },
         [GameObjectType.RIGHTWALL]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwall_default",
-            offset: Settings.RIGHTWALL_OFFSET,
         },
 
         // Wall-like objects
@@ -119,21 +112,18 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
-            offset: Settings.LEFTWALL_OFFSET,
         },
         [GameObjectType.RIGHTWINDOW]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwindow_default0", // TODO object with variations
-            offset: Settings.RIGHTWALL_OFFSET,
         },
         [GameObjectType.LEFTWINDOW]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "leftwindow_default0", // TODO object with variations
-            offset: Settings.LEFTWALL_OFFSET,
         },
         [GameObjectType.PICTUREFRAME]: {
             isMultiPart: true,
@@ -143,7 +133,6 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["rightwallframe_default0", "rightwallframe_default1", 
             "rightwallframe_default2"],
-            offset: Settings.RIGHTWALL_OFFSET,
         },
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
@@ -163,7 +152,6 @@ class GameObjectInfo {
                 "leftconferencelogo_default1", "leftconferencelogo_default2",
                 "leftconferencelogo_default3",
                 "leftconferencelogo_default4"],
-            offset: Settings.LEFTWALL_OFFSET,
         },
         
         // Plant 
@@ -172,16 +160,15 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "plant_default",
-            offset: { x: -5, y: -10 },
         },    
 
         // Seating
         [GameObjectType.CHAIR]: {
+            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "leftchair_default",
-            offset: { x: 15, y: -6 },
+            assetName: ["leftchair_default", "leftchairback_default", "rightchair_default", "rightchairback_default",],
         },
         [GameObjectType.SOFA]: {
             hasVariation: true,
@@ -189,7 +176,6 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftsofa_default", "rightsofa_default"],
-            offset: { x: 0, y: -4 },
         },
 
         // Tables
@@ -200,21 +186,18 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "table_default",
-            offset: { x: 0, y: 7 },
         },
         [GameObjectType.RIGHTTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "righttable_default",
-            offset: { x: 0, y: 52 },
         },
         [GameObjectType.SMALLDINNERTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "smalldinnertable_default",
-            offset: { x: 0, y: 20 },
         },
 
         // Counters
@@ -223,7 +206,6 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "canteencounter_default",
-            offset: { x: 0, y: 50 },
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
             // OBJECT WITH ADDITIONAL PARTS
@@ -237,7 +219,6 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "receptionCounterFrontPart_default",
-            offset: { x: 0, y: 8 },
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
             // OBJECT WITH VARIATIONS
@@ -246,7 +227,6 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["receptionCounterLeftPart_default","receptionCounterRightPart_default"],
-            offset: { x: -9, y: 28 },
         },
 
         // Food & Drinks
@@ -255,22 +235,20 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 2 * Settings.SMALL_OBJECT_LENGTH,
             assetName: "drinks_default",
-            offset: { x: 14, y: 12 },
         },
         [GameObjectType.TEA]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tea_default",
-            offset: { x: -4, y: 20 },
         },
         [GameObjectType.SMALLDINNERTABLEFOOD]: {
             // OBJECT WITH VARIATIONS
+            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "koeriWurst_default",
-            offset: { x: -4, y: 20 },
+            assetName: ["koeriWurst_default", "koeriWurst_bothSides", "koeriWurst_upperSide", "koeriWurst_lowerSide"],
         },
     });
 

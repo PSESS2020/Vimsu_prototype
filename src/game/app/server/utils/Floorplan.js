@@ -23,23 +23,6 @@ const FloorplanConstants = Object.freeze({
 
 const Floorplan = Object.freeze({
 
-    /*
-    EXAMPLE: {
-
-    }
-    */
-
-    // ROOM0
-    // This will be the starting room
-
-    // Maybe offer "blueprints" for certain types
-    // of rooms or even conferences?
-
-    // There should be an external file where all
-    // the necessary strings are saved...
-    // (this can just be the globalStrings-file)
-    // (also asset-paths file)
-
     // Required
     // - Objects
     // - Map Elements (Walls & Windows)
@@ -47,10 +30,11 @@ const Floorplan = Object.freeze({
     // - Doors
     // Best way of doing doors is to force people to manually set ids of rooms and then give exit-room id when listing doors
 
-    // Giving any of the "standard" roomIds, the roomFactory will use
+    // Giving any of the "standard" roomTypes, the roomFactory will use
     // legacy code to build them according to the standard conference.
     // note that using these requires that the rest of the conference
     // contains fitting rooms for the doors to exit into
+    // this might also be broken by now
 
     /*
     ROOM1: {
@@ -79,11 +63,10 @@ const Floorplan = Object.freeze({
     // - support choice of styles for walls and floor
     // - add shape supports
     // - add possibility to easily resize room without fucking
-    //   up layout
+    //   up layout (can use Floorplan constants for that)
     // - I probably need to write some hack to make sure door-unlock
     //   will still work
-    // - This will most likely break a non-neglible amount of
-    //   achievements
+    // - Achievements only broken by setting IDs to non setting-versions
     RECEPTION: {
         ID: Settings.RECEPTION_ID, // needs to be integer
         TYPE: TypeOfRoom.CUSTOM,
@@ -142,10 +125,37 @@ const Floorplan = Object.freeze({
         //SHAPE: ,
         WIDTH: 19,
         LENGTH: 19,
-        MAPELEMENTS: [],
-        OBJECTS: [],
-        DOORS: [],
-        NPCS: []
+        MAPELEMENTS: [
+            {type: GameObjectType.RIGHTWINDOW, position: [[19, 3], [19, 4], [19, 14], [19, 15]]},
+            {type: GameObjectType.CONFERENCELOGO, position: [8, -1]},
+        ],
+        OBJECTS: [
+            {type: GameObjectType.CHAIR, variation: 0, position: [[2, 7, 12], 15]},
+            {type: GameObjectType.CHAIR, variation: 1, position: [[2, 7, 12], 17]},
+            {type: GameObjectType.CHAIR, variation: 2, position: [
+                [3, [3, 4, 5, 9, 10, 11, 16]], 
+                [8, [3, 4, 5, 9, 10, 11, 16]], 
+                [13, [3, 4, 5, 9, 10, 11, 16]]
+            ]},
+            {type: GameObjectType.CHAIR, variation: 3, position: [
+                [1, [3, 4, 5, 9, 10, 11, 16]], 
+                [6, [3, 4, 5, 9, 10, 11, 16]], 
+                [11, [3, 4, 5, 9, 10, 11, 16]]
+            ]},
+            {type: GameObjectType.RIGHTTABLE, position: [[2, 9], [7, 9], [12, 9]]},
+            {type: GameObjectType.SMALLDINNERTABLE, position: [[2, 16], [7, 16], [12, 16]]},
+            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 1, position: [[2, 10], [7, 9], [12, [4, 10]]]},
+            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 2, position: [[2, 5], [12, 3]]},
+            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 3, position: [[7, 4], [12, 9]]},
+            {type: GameObjectType.TEA, position: [[2, 11], [7, [3, 11, 16]], [12, 16]]}
+        ],
+        DOORS: [
+            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 9], directionOnExit: Direction.DOWNLEFT},
+            {wallSide: GlobalStrings.RIGHT,  positionOfDoor: [19, 17], positionOnExit: [Settings.ESCAPEROOM_ID, 14, 15], directionOnExit: Direction.DOWNLEFT, isOpen: false, codeToOpen: "42"}
+        ],
+        NPCS: [
+            {name: FloorplanConstants.NPCNAMES.food, position: [18, 9], direction: Direction.DOWNLEFT, dialog: NPCDialog.chefDialog}
+        ]
     },
 
     ESCAPEROOM: {

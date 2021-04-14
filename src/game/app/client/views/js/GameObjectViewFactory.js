@@ -28,6 +28,8 @@ class GameObjectViewFactory {
         //gets map tile size
         this.tileColumnWidth = this.gameEngine.getTileColumnWidth();
         this.tileRowHeight = this.gameEngine.getTileRowHeight();
+
+        console.log("tileColumnWidth " + this.tileColumnWidth + " and tileRowheight " + this.tileRowHeight)
     }
 
     /**
