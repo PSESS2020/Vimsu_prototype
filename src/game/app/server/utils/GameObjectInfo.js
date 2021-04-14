@@ -108,6 +108,7 @@ class GameObjectInfo {
         [GameObjectType.LEFTSCHEDULE]: {
             // MULTIPART OBJECT
             isMultiPart: true,
+            size: [3, 1],
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -131,8 +132,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["rightwallframe_default0", "rightwallframe_default1", 
-            "rightwallframe_default2"],
+            assetName: [["rightwallframe_default0", "rightwallframe_default1", 
+            "rightwallframe_default2"]],
         },
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
