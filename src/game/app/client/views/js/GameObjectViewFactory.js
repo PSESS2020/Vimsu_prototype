@@ -133,8 +133,7 @@ class GameObjectViewFactory {
         gameObjectImage = this.assetImages[objectName];
 
         if (gameObjectImage !== undefined) {
-            var offset = { x:0, y:0 }
-            //this.#calculateObjectOffset(gameObjectImage, gameObjectType);
+            var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
             } else if (isClickable) {
@@ -190,7 +189,7 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        console.log("drawing object " + objectType + " with offset " + offset)
+        console.log("drawing object " + objectType + " with offset { x: " + offset.x + ", y: " + offset.y + " }")
         if (objectType != GameObjectType.RECEPTIONCOUNTER) {
             return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
         } else {
@@ -211,7 +210,7 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        console.log("drawing object " + objectType + " with offset " + offset)
+        console.log("drawing object " + objectType + " with offset { x: " + offset.x + ", y: " + offset.y + " }")
         if (offset == Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula
             return offset;

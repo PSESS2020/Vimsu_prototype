@@ -300,7 +300,7 @@ module.exports = class RoomFactory {
     // TO-DO do some refactoring and turn this into not shit
     #createObjectsFromData = function (roomId, objData, listToPushInto) {
         // TODO support for custom options
-        if (objData.isClickable == undefined) {
+        if (objData.isClickable === undefined) {
             objData.isClickable = false;
             objData.iFrameData = undefined;
         }

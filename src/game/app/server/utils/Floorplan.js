@@ -75,7 +75,7 @@ const Floorplan = Object.freeze({
         LENGTH: 13, // x dimension - along left wall
         MAPELEMENTS: [
             {type: GameObjectType.RIGHTWINDOW, position: [[13, 5], [13, 6], [13, 7]]},
-            {type: GameObjectType.CONFERENCELOGO, position: [5, 5]}
+            {type: GameObjectType.CONFERENCELOGO, position: [5, 13]}
         ],
         OBJECTS: [
             {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},
@@ -106,9 +106,9 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
         ],
         OBJECTS: [
-            {type: GameObjectType.PLANT, position: [24, 0], isClickable: true},
+            {type: GameObjectType.PLANT, position: [24, 0]},
             {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
-            {type: GameObjectType.SOFA, position: [[25, 1], [25, 2], [25, 3], [25, 4], [25, 5]], variation: 1}
+            {type: GameObjectType.SOFA, position: [24, [1, 2, 3, 4, 5]], variation: 1}
         ],
         DOORS: [
             {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.FOODCOURT,  positionOfDoor: [25, 9], positionOnExit: [Settings.FOODCOURT_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true},
@@ -130,6 +130,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.CONFERENCELOGO, position: [8, -1]},
         ],
         OBJECTS: [
+            {type: GameObjectType.CANTEENCOUNTER, position: [17, 8]},
             {type: GameObjectType.CHAIR, variation: 0, position: [[2, 7, 12], 15]},
             {type: GameObjectType.CHAIR, variation: 1, position: [[2, 7, 12], 17]},
             {type: GameObjectType.CHAIR, variation: 2, position: [
@@ -142,11 +143,16 @@ const Floorplan = Object.freeze({
                 [6, [3, 4, 5, 9, 10, 11, 16]], 
                 [11, [3, 4, 5, 9, 10, 11, 16]]
             ]},
-            {type: GameObjectType.RIGHTTABLE, position: [[2, 9], [7, 9], [12, 9]]},
+            {type: GameObjectType.RIGHTTABLE, position: [
+                [2, [3, 9]], 
+                [7, [3, 9]], 
+                [12, [3, 9]]
+            ]},
             {type: GameObjectType.SMALLDINNERTABLE, position: [[2, 16], [7, 16], [12, 16]]},
             {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 1, position: [[2, 10], [7, 9], [12, [4, 10]]]},
             {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 2, position: [[2, 5], [12, 3]]},
             {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 3, position: [[7, 4], [12, 9]]},
+            {type: GameObjectType.DRINKS, position: [18, 0]},
             {type: GameObjectType.TEA, position: [[2, 11], [7, [3, 11, 16]], [12, 16]]}
         ],
         DOORS: [
@@ -165,8 +171,17 @@ const Floorplan = Object.freeze({
         WIDTH: 20,
         LENGTH: 15,
         MAPELEMENTS: [],
-        OBJECTS: [],
-        DOORS: [],
+        OBJECTS: [
+            {type: GameObjectType.PLANT, position: [[14, 0], [14, 19]]},
+            {type: GameObjectType.PLANT, position: [0, 2], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
+            {type: GameObjectType.SMALLDINNERTABLE, position: [0, 0], isClickable: true, iFrameData: {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }},
+            {type: GameObjectType.SMALLDINNERTABLE, position: [0, 1]},
+            {type: GameObjectType.TEA, position: [0, [0, 1]], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
+            {type: GameObjectType.SOFA, variation: 1, position: [0, 3], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }}
+        ],
+        DOORS: [
+            {wallSide: GlobalStrings.RIGHT,  positionOfDoor: [15, 15], positionOnExit: [Settings.FOODCOURT_ID, 18, 17], directionOnExit: Direction.DOWNLEFT, isOpen: true}
+        ],
         NPCS: []
     }
     
