@@ -44,6 +44,7 @@ module.exports = class RoomFactory {
     buildRoomFrom(roomData) {
         TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
 
+        console.log("done w/ type-checking")
         // switch statement should be replaced by polymorphism
         switch(roomData.TYPE) {
             case TypeOfRoom.RECEPTION:
@@ -55,6 +56,7 @@ module.exports = class RoomFactory {
             case TypeOfRoom.ESCAPEROOM:
                 return new EscapeRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)).getRoom();
             case TypeOfRoom.CUSTOM:
+                console.log("about to build by plan")
                 return this.#buildByPlan(roomData);
             default:
                 // This should never be reached
@@ -75,6 +77,8 @@ module.exports = class RoomFactory {
         let listOfGameObjects = [];
         let listOfDoors = [];
         let listOfNPCs = [];
+
+        console.log("Building by plan - done w/ init")
 
         // these methods still need proper handling for when some arguments are missing.
 
@@ -102,6 +106,8 @@ module.exports = class RoomFactory {
             listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
         }
 
+        console.log("added walls and tiles")
+
         // REDO the next two methods.
         // TODO desired interaction
         // - For each map element, the user only needs to specify
@@ -125,18 +131,25 @@ module.exports = class RoomFactory {
         // this includes windows, schedule usw.
         // objData = {type, position, isClickable, iFrameData, variation}
         roomData.MAPELEMENTS.forEach(objData => {
+            console.log("building object " + objData.type)
             if (Array.isArray(objData.position[0])) {
+                console.log("has multiple positions")
                 objData.position.forEach( position => {
                     // copy objData
                     let creationData = Object.assign( {}, objData )
+                    console.log("copied objData")
                     // set positions to proper value
                     creationData.position = position;
+                    console.log("set position")
                     this.#createObjectsFromData(roomData.ID, creationData, listOfMapElements);
                 })
             } else {
+                console.log("has single position")
                 this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
             }
         })
+
+        console.log("added map elements")
 
         // ADD OBJECTS
         // tables, plants, food and more
@@ -154,6 +167,8 @@ module.exports = class RoomFactory {
                 this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
             }   
         })
+
+        console.log("added objects")
 
         // ADD DOORS
         // doorData = {wallSide, logo, positionOfDoor,
@@ -217,6 +232,8 @@ module.exports = class RoomFactory {
 
         })
 
+        console.log("added doors")
+
         // ADD NPCS
         roomData.NPCS.forEach(npcData => {
             listOfNPCs.push(
@@ -232,11 +249,15 @@ module.exports = class RoomFactory {
             )
         })
 
+        console.log("added npcs")
+
         room.setMapElements(listOfMapElements);
         room.setGameObjects(listOfGameObjects);
         room.setNPCs(listOfNPCs);
         room.setDoors(listOfDoors);
         room.buildOccMap();
+
+        console.log("done w/ building")
 
         return room;
     }
@@ -292,25 +313,10 @@ module.exports = class RoomFactory {
             objData.isClickable = false;
             objData.iFrameData = undefined;
         }
+        console.log("checked clickability")
         // This is the only place where this class needs to
         // access the GameObjectInfo, which doesn't sit well
         // with me...
-        if (GameObjectInfo.getInfo(objData.type, "isMultiPart")) {
-            var size = GameObjectType.getInfo(objData.type, "size");
-            var width = GameObjectType.getInfo(objData.type, "width");
-            var length = GameObjectType.getInfo(objData.type, "length");
-            for (let x = 0; x < size[0]; x + width) {
-                for (let y = 0; y < size[1]; y + length) {
-                    listToPushInto.push(this.#objService.createObjectVariation(roomId,
-                    objData.type,
-                    objData.position[0] + x,
-                    objData.position[1] + y,
-                    objData.isClickable,
-                    objData.iFrameData,
-                    [x, y]))
-                }
-            }
-        }
         if (GameObjectInfo.getInfo(objData.type, "hasAdditionalParts")) {
             let parts = GameObjectInfo.getInfo(objData.type, "parts");
             parts.forEach( partData => {
@@ -323,10 +329,27 @@ module.exports = class RoomFactory {
                 }, listToPushInto)
             })
         }
-        if (GameObjectInfo.getInfo(objData.type, "hasVariation")) {
+        if (GameObjectInfo.getInfo(objData.type, "isMultiPart")) {
+            console.log("has multiple parts")
+            var size = GameObjectInfo.getInfo(objData.type, "size");
+            var width = GameObjectInfo.getInfo(objData.type, "width");
+            var length = GameObjectInfo.getInfo(objData.type, "length");
+            console.log("got all info")
+            for (let x = 0; x < size[0]; x += width) {
+                for (let y = 0; y < size[1]; y += length) {
+                    listToPushInto.push(this.#objService.createObjectVariation(roomId,
+                    objData.type,
+                    objData.position[0] + x,
+                    objData.position[1] + y,
+                    objData.isClickable,
+                    objData.iFrameData,
+                    [x, y]))
+                }
+            }
+        } else if (GameObjectInfo.getInfo(objData.type, "hasVariation")) {
             // if no variation defined, set to default,
             // else do nothing
-            objData.variation === undefined ? 0 : {};
+            objData.variation === undefined ? objData.variation = 0 : {};
             listToPushInto.push(this.#objService.createObjectVariation(
                 roomId,
                 objData.type,

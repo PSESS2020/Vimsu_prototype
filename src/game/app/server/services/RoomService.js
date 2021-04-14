@@ -73,7 +73,6 @@ module.exports = class RoomService {
      */
     #initAllRooms = function () {
         let listToBuild = Object.entries(Floorplan);
-        console.log(Object.entries(Floorplan))
         console.log(listToBuild)
         listToBuild.forEach(roomData => {
             // console.log(roomHandle)
