@@ -216,7 +216,7 @@ module.exports = class RoomFactory {
      * @returns {String} The key for the image asset of the logo
      */
     #getDoorLogo = function (logoName, logoVariant) {
-        TypeChecker.isEnumOf(logoName, DoorLogos)
+        //TypeChecker.isEnumOf(logoName, DoorLogos)
         let logo = DoorLogos[logoName];
         return logo[logoVariant];
     }

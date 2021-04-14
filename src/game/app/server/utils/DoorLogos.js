@@ -1,5 +1,7 @@
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
+
 /**
- * This is a temporary solution that is not very good but it will 
+ * This is a temporary solution that is not super good but it will 
  * hopefully make creating a door a bit more user-friendly and flexible.
  * Basically, the reason this is here is so when adding doors while
  * creating a floorplan, the user does not need to give the entire
