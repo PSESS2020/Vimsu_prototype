@@ -187,6 +187,9 @@ class MapView extends Views {
         var tileType;
         var tile;
 
+        console.log(mapObject)
+        console.log(mapObject.getName())
+
         if (mapObject instanceof DoorClient) {
             tileType = mapObject.getTypeOfDoor();
             tile = this.gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());

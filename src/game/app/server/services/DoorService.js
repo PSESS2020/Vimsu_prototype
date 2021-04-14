@@ -275,7 +275,7 @@ module.exports = class DoorService {
                 enterPositionWithoutClick, 
                 enterPositions, 
                 targetPosition, 
-                direction, 
+                directionOnExit, 
                 isOpen, 
                 closedMessage, 
                 codeToOpen);      

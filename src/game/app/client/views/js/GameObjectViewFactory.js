@@ -1,6 +1,3 @@
-//const GameObjectType = require("../../shared/GameObjectType");
-//const Settings = require("../../utils/Settings");
-
 /**
  * The Game Object View Factory
  * 
@@ -187,12 +184,15 @@ class GameObjectViewFactory {
      *                   necessary to properly portray the object
      */
     #calculateObjectOffset = function (image, objectType) {
+        let offset = GameObjectOffsets[objectType]
+        if (offset === undefined) {
+            offset = Settings.DEFAULT_OFFSET
+        }
         if (objectType != GameObjectType.RECEPTIONCOUNTER) {
-            let offset = GameObjectInfo.getInfo(objectType, "offset");
             return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
         } else {
             // some offsets do not follow the usual formula
-            return { x: 0, y: -this.tileRowHeight + 8 };
+            return { x: 0, y: -this.tileRowHeight + offset.y };
         }
     }
 
@@ -204,7 +204,11 @@ class GameObjectViewFactory {
      *                   necessary to properly portray the mapElement
      */
     #calculateMapElementOffset = function (image, objectType) {
-        let offset = GameObjectInfo.getInfo(objectType, "offset");
+        let offset = GameObjectOffsets[objectType]
+        if (offset === undefined) {
+            offset = Settings.DEFAULT_OFFSET
+        }
+        console.log("drawing object " + gameObjectType + " with offset " + offset)
         if (offset == Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula
             return offset;

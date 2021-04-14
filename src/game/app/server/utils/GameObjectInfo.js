@@ -1,6 +1,5 @@
-//const GameObjectType = require("./GameObjectType");
-//const Settings = require("../utils/Settings");
-//const TypeOfDoor = require("./TypeOfDoor");
+const GameObjectType = require('../../client/shared/GameObjectType.js');
+const Settings = require('../utils/Settings.js');
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -115,24 +114,35 @@ class GameObjectInfo {
         // Schedule, Windows, Logo, Picture Frames...
         [GameObjectType.LEFTSCHEDULE]: {
             // MULTIPART OBJECT
+            isMultiPart: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
             offset: Settings.LEFTWALL_OFFSET,
         },
-        [GameObjectType.WINDOW]: {
+        [GameObjectType.RIGHTWINDOW]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "rightwindow_default0", // TODO object with variations
             offset: Settings.RIGHTWALL_OFFSET,
         },
+        [GameObjectType.LEFTWINDOW]: {
+            isSolid: false,
+            width: Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetName: "leftwindow_default0", // TODO object with variations
+            offset: Settings.LEFTWALL_OFFSET,
+        },
         [GameObjectType.PICTUREFRAME]: {
+            isMultiPart: true,
+            size: [1, 3],
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "rightwallframe_default0",
+            assetName: ["rightwallframe_default0", "rightwallframe_default1", 
+            "rightwallframe_default2"],
             offset: Settings.RIGHTWALL_OFFSET,
         },
         [GameObjectType.CONFERENCELOGO]: {
@@ -155,18 +165,6 @@ class GameObjectInfo {
                 "leftconferencelogo_default4"],
             offset: Settings.LEFTWALL_OFFSET,
         },
-        // Doors
-        // only need offset, the other stuff is handled
-        // elsewhere
-        [TypeOfDoor.LEFT_DOOR]: {
-            offset: Settings.LEFTWALL_OFFSET,
-        },
-        [TypeOfDoor.RIGHT_DOOR]:{
-            offset: Settings.RIGHTWALL_OFFSET,
-        },
-        [TypeOfDoor.LECTURE_DOOR]: {
-            offset: Settings.LEFTWALL_OFFSET,
-        },
         
         // Plant 
         [GameObjectType.PLANT]: {
@@ -186,10 +184,11 @@ class GameObjectInfo {
             offset: { x: 15, y: -6 },
         },
         [GameObjectType.SOFA]: {
+            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "leftsofa_default",
+            assetName: ["leftsofa_default", "rightsofa_default"],
             offset: { x: 0, y: -4 },
         },
 
@@ -246,7 +245,7 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["receptionCounterRightPart_default", "receptionCounterLeftPart_default"],
+            assetName: ["receptionCounterLeftPart_default","receptionCounterRightPart_default"],
             offset: { x: -9, y: 28 },
         },
 
@@ -293,7 +292,7 @@ class GameObjectInfo {
         if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
             return GameObjectInfo.#INFORMATION[objectType][key];
         } else {
-            // Hacky solution as RoomFactory breals otherwise... :/
+            // Hacky solution as RoomFactory breaks otherwise... :/
             return false;
 
             // throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);

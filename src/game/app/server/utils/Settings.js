@@ -3,7 +3,7 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
 
 /**
  * other constants
- * @module ServerSettings
+ * @module Settings
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -11,10 +11,10 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
 module.exports = Object.freeze({
 
     /* Start-Position Constants */
+    RECEPTION_ID: 0,
     FOYER_ID: 1,
-    FOODCOURT_ID: 2,
-    RECEPTION_ID: 3,
-    ESCAPEROOM_ID:4,
+    FOODCOURT_ID: 2, 
+    ESCAPEROOM_ID:3,
     STARTROOM_ID: 0,
     STARTPOSITION_X: 3,
     STARTPOSITION_Y: 12,
