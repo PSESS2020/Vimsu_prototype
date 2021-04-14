@@ -26,6 +26,8 @@ class NotificationBar extends Views {
         this.eventManager = eventManager;
         this.unreadNotif = 0;
 
+        $('#unreadNotif').text(this.unreadNotif);
+
         $('#showNotifBar').hide();
 
         const notifBar = document.getElementById("notifBar")
