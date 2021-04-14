@@ -865,8 +865,9 @@ module.exports = class GameObjectService {
 
         // Get asset-image of variations.
         let allAssets = GameObjectInfo.getInfo(type, "assetName");
+        // this is just straight-up non-workable
         var assetName;
-        variation[0] == 0 ? assetName = allAssets[variation[1]] :  assetName = allAssets[variation[0]][variation[1]];
+        variation[1] == 0 ? assetName = allAssets[variation[0]] :  assetName = allAssets[variation[0]][variation[1]];
 
         return new GameObject(
             this.#generateGameObjectID(), 

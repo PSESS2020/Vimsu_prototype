@@ -357,7 +357,7 @@ module.exports = class RoomFactory {
                 objData.position[1],
                 objData.isClickable,
                 objData.iFrameData,
-                [0, objData.variation]
+                [objData.variation, 0]
             ));           
         } else {
             listToPushInto.push(this.#objService.createCustomObject(

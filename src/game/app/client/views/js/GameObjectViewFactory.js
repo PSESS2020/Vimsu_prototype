@@ -96,13 +96,10 @@ class GameObjectViewFactory {
         var gameMapElementView = null;
         var gameMapElementImage;
 
-        // calculate offset
-        var offset = this.defaultOffset;
-
         gameMapElementImage = this.assetImages[objectName];
         
         if (gameMapElementImage !== undefined) {
-            offset = this.#calculateMapElementOffset(gameMapElementImage, gameObjectType);
+            var offset = this.#calculateMapElementOffset(gameMapElementImage, gameObjectType);
             gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
         }
 
@@ -136,11 +133,9 @@ class GameObjectViewFactory {
 
         gameObjectImage = this.assetImages[objectName];
 
-        // calculate offset
-        var offset = { x: 0, y: 0 };
-
         if (gameObjectImage !== undefined) {
-            var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
+            var offset = { x:0, y:0 }
+            //this.#calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
             } else if (isClickable) {
