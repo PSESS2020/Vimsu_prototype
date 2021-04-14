@@ -308,9 +308,9 @@ class RoomClient {
             let mapEntry = this.objectMap[xPos][yPos + Settings.MAP_BLANK_TILES_WIDTH];
 
             if (mapEntry instanceof Array) {
-                mapEntry.push(mapElement);
+                mapEntry.push(gameObject);
             } else if (mapEntry !== null) {
-                mapEntry = [mapEntry, mapElement];
+                mapEntry = [mapEntry, gameObject];
             } else
                 mapEntry = gameObject;
             
