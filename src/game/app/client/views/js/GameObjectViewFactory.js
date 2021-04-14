@@ -188,6 +188,7 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
+        console.log("drawing object " + objectType + " with offset " + offset)
         if (objectType != GameObjectType.RECEPTIONCOUNTER) {
             return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
         } else {
@@ -208,7 +209,7 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        console.log("drawing object " + gameObjectType + " with offset " + offset)
+        console.log("drawing object " + objectType + " with offset " + offset)
         if (offset == Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula
             return offset;
