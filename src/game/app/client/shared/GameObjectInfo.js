@@ -233,7 +233,8 @@ class GameObjectInfo {
             hasAdditionalParts: true,
             parts: [
                 // type, positional offsets, maybe variation
-                {}, {}
+                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 6, variation: 0}, 
+                {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 0, variation: 1}
             ],
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
@@ -243,10 +244,11 @@ class GameObjectInfo {
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
             // OBJECT WITH VARIATIONS
+            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "receptionCounterRightPart_default",
+            assetName: ["receptionCounterRightPart_default", "receptionCounterLeftPart_default"],
             offset: { x: -9, y: 28 },
         },
 

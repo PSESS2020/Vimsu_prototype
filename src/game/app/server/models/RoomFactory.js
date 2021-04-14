@@ -123,16 +123,36 @@ module.exports = class RoomFactory {
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
-        // objData = {type, position, isClickable, iFrameData}
+        // objData = {type, position, isClickable, iFrameData, variation}
         roomData.MAPELEMENTS.forEach(objData => {
-            this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
+            if (Array.isArray(objData.position[0])) {
+                objData.position.forEach( position => {
+                    // copy objData
+                    let creationData = Object.assign( {}, objData )
+                    // set positions to proper value
+                    creationData.position = position;
+                    this.#createObjectsFromData(roomData.ID, creationData, listOfMapElements);
+                })
+            } else {
+                this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
+            }
         })
 
         // ADD OBJECTS
         // tables, plants, food and more
-        // objData = {type, position, isClickable, iFrameData}
+        // objData = {type, position, isClickable, iFrameData, variation}
         roomData.OBJECTS.forEach(objData => {
-            this.#createObjectsFromData(roomData.ID, objData, listOfGameObjects);   
+            if (Array.isArray(objData.position[0])) {
+                objData.position.forEach( position => {
+                    // copy objData
+                    let creationData = Object.assign( {}, objData )
+                    // set positions to proper value
+                    creationData.position = position;
+                    this.#createObjectsFromData(roomData.ID, creationData, listOfMapElements);
+                })
+            } else {
+                this.#createObjectsFromData(roomData.ID, objData, listOfMapElements);
+            }   
         })
 
         // ADD DOORS
@@ -263,13 +283,10 @@ module.exports = class RoomFactory {
         }
     });
 
-    // This is not a nice solutions
+    // This is a very hacky solution, it is not nice at all!
     // No polymorphism, tons of conditionals
-    // But a nice solution would require a lot of refactoring
+    // TO-DO do some refactoring and turn this into not shit
     #createObjectsFromData = function (roomId, objData, listToPushInto) {
-        // TODO support multi-part objects
-        // TODO support objects with automatic additional parts
-        // TODO support variations of one object
         // TODO support for custom options
         if (objData.isClickable == undefined) {
             objData.isClickable = false;
@@ -286,25 +303,39 @@ module.exports = class RoomFactory {
                 for (let y = 0; y < size[1]; y + length) {
                     listToPushInto.push(this.#objService.createObjectVariation(roomId,
                     objData.type,
-                    position[0] + x,
-                    position[1] + y,
+                    objData.position[0] + x,
+                    objData.position[1] + y,
                     objData.isClickable,
                     objData.iFrameData,
                     [x, y]))
                 }
             }
         }
-        if (Array.isArray(objData.position[0])) {
-            objData.position.forEach(position => {
-                listToPushInto.push(this.#objService.createCustomObject(
-                    roomId,
-                    objData.type,
-                    position[0],
-                    position[1],
-                    objData.isClickable,
-                    objData.iFrameData
-                ));
+        if (GameObjectInfo.getInfo(objData.type, "hasAdditionalParts")) {
+            let parts = GameObjectInfo.getInfo(objData.type, "parts");
+            parts.forEach( partData => {
+                this.#createObjectsFromData(roomId, {
+                    type: partData.type,
+                    position: [ objData.position[0] + partData.offset_x, objData.position[1] + partData.offset_y ],
+                    isClickable: objData.isClickable,
+                    iFrameData: objData.iFrameData,
+                    variation: partData.variation
+                }, listToPushInto)
             })
+        }
+        if (GameObjectInfo.getInfo(objData.type, "hasVariation")) {
+            // if no variation defined, set to default,
+            // else do nothing
+            objData.variation === undefined ? 0 : {};
+            listToPushInto.push(this.#objService.createObjectVariation(
+                roomId,
+                objData.type,
+                objData.position[0],
+                objData.position[1],
+                objData.isClickable,
+                objData.iFrameData,
+                [0, objData.variation]
+            ));           
         } else {
             listToPushInto.push(this.#objService.createCustomObject(
                 roomId,

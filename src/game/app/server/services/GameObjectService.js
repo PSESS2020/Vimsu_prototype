@@ -804,6 +804,8 @@ module.exports = class GameObjectService {
      * Creates a custom instance of te GameObjectClass with no hard-coded
      * parameters passed.
      * 
+     * TODO: due to the method below, this is basically useless.
+     * 
      * @method module:GameObjectService#createCustomObject
      * 
      * @param {String} roomId 
