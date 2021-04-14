@@ -75,7 +75,7 @@ const Floorplan = Object.freeze({
         LENGTH: 13, // x dimension - along left wall
         MAPELEMENTS: [
             {type: GameObjectType.RIGHTWINDOW, position: [[13, 5], [13, 6], [13, 7]]},
-            {type: GameObjectType.CONFERENCELOGO, position: [5, 13]}
+            {type: GameObjectType.CONFERENCELOGO, position: [5, -1]}
         ],
         OBJECTS: [
             {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},

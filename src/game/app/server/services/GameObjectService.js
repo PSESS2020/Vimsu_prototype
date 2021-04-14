@@ -899,16 +899,14 @@ module.exports = class GameObjectService {
      */
      createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, part) {
         this.#isKnownType(type);
-        if (part.length !== 2) {
-            throw new Error("When creating object part, the part needs to be signified by an array of exactly two integers!")
-        }
         TypeChecker.isInt(part.x);
         TypeChecker.isInt(part.y);
         // only need to check the actually passed arguments
         this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
 
         return new GameObject(
-            this.#generateGameObjectID(), 
+            this.#generateGameObjectID(),
+            type, 
             GameObjectInfo.getInfo(type, "assetName")[part.x][part.y], 
             GameObjectInfo.getInfo(type, "width"), 
             GameObjectInfo.getInfo(type, "length"), 
