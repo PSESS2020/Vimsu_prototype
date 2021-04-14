@@ -147,7 +147,9 @@ class MapView extends Views {
                 if (mapObject !== null) {
 
                     if (mapObject instanceof Array) {
+                        console.log("building an array of objects " + mapObject)
                         mapObject.forEach(object => {
+                            console.log(object)
                             this.createMapElementView(object, position);
                         });
                     } else {
