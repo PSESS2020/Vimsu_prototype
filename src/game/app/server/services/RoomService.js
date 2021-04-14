@@ -73,10 +73,7 @@ module.exports = class RoomService {
      */
     #initAllRooms = function () {
         let listToBuild = Object.entries(Floorplan);
-        console.log(listToBuild)
         listToBuild.forEach(roomData => {
-            // console.log(roomHandle)
-            console.log(roomData[1])
             if (this.#roomNotAlreadyCreated(roomData[1].ID)) {
                 this.#rooms.push(this.#roomFactory.buildRoomFrom(roomData[1]));
             }

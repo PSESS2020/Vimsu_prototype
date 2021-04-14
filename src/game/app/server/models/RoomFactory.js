@@ -16,9 +16,13 @@ const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
 const Messages = require('../utils/Messages.js');
+const DoorLogos = require('../utils/DoorLogos.js');
 
 /**
+ * Churns out Room instances. Singleton.
  * 
+ * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
+ * @version 1.0.0
  */
 module.exports = class RoomFactory {
     #objService;
@@ -38,14 +42,20 @@ module.exports = class RoomFactory {
     }
 
     /**
+     * Takes a data object specifying the layout of a room and
+     * creates a Room instance from it. If the room is not one of
+     * the standard types, the #buildByPlan-method is called to
+     * parse the dataObject and build a room with a custom layout.
      * 
-     * @param {*} roomData 
-     * @returns 
+     * @method module:RoomFactory#buildRoomFrom
+     * 
+     * @param {Object} roomData A data object specifying the layout of
+     *                          the room that is supposed to be created
+     * 
+     * @returns {Room} The fully built room
      */
     buildRoomFrom(roomData) {
         TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
-
-        console.log("done w/ type-checking")
         // switch statement should be replaced by polymorphism
         switch(roomData.TYPE) {
             case TypeOfRoom.RECEPTION:
@@ -57,36 +67,30 @@ module.exports = class RoomFactory {
             case TypeOfRoom.ESCAPEROOM:
                 return new EscapeRoomDecorator(new Room(roomData.ID,roomData.TYPE, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)).getRoom();
             case TypeOfRoom.CUSTOM:
-                console.log("about to build by plan")
-                return this.#buildByPlan(roomData);
             default:
-                // This should never be reached
-                throw new Error("Default option in the roomFactory switch-statement triggered. This should never happen. Please report bug to developer.");
-
+                return this.#buildByPlan(roomData);
         }
     }
 
     /**
+     * Takes a data object specifying the layout of a room and
+     * creates a Room instance from it
      * 
-     * @param {*} roomData 
-     * @returns 
+     * @method module:RoomFactory#buildByPlan
+     * 
+     * @param {Object} roomData A data object specifying the layout of
+     *                          the room that is supposed to be created
+     *  
+     * @returns {Room} The fully built room
      */
     #buildByPlan = function(roomData) {
-        let room = new Room(roomData.ID, roomData.TYPE, roomData.WIDTH, roomData.LENGTH);
+        let type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
+        let room = new Room(roomData.ID, type, roomData.WIDTH, roomData.LENGTH);
 
         let listOfMapElements = [];
         let listOfGameObjects = [];
         let listOfDoors = [];
         let listOfNPCs = [];
-
-        // these methods still need proper handling for when some arguments are missing.
-
-        // TODO
-        // - Make sure methods behave correctly when arguments are
-        //   missing
-        // - Add shape-handling & support for doors not placed on
-        //   outer walls
-        // - Allow for objects to be placed in a line easily
 
         // ADD TILES
         for (var i = 0; i < room.getLength(); i++) {
@@ -104,26 +108,6 @@ module.exports = class RoomFactory {
         for (var j = 0; j < room.getWidth(); j++) {
             listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
         }
-
-        // REDO the next two methods.
-        // TODO desired interaction
-        // - For each map element, the user only needs to specify
-        //   the type, the position, whether or not the object is
-        //   supposed to be clickable and if yes, the data necessary
-        //   to construct the iFrame
-        //   (does this not break stuff like the plant?) (done)
-        // - the type is then "decoded" into the size, the necessary
-        //   asset paths, whether the object is solid usw.
-        //   (how to handle multi-part objects?)
-        // - how to handle custom options for "standard" objects?
-        // - how to handle more custom objects?
-        // - how to allow for objects with multiple styles?
-
-        // offer three options for positions:
-        // - [xPos, yPos] (done)
-        // - An array of positions formatted as above (done)]
-        // - [[Array of xPos], yPos] & [xPos, [Array of yPos]]
-
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
@@ -143,8 +127,6 @@ module.exports = class RoomFactory {
         // doorData = {wallSide, logo, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
         //            closedMessage, codeToOpen}
-        // TODO:
-        // - allow for logos above door to not be passed
         roomData.DOORS.forEach(doorData => {     
             if (doorData.logo === undefined) {
                 doorData.logo = "default";
@@ -193,7 +175,7 @@ module.exports = class RoomFactory {
             // if door is on the right side, same y, one more x
             let xPos = (doorData.wallSide == GlobalStrings.RIGHT) ? doorData.positionOfDoor[0] + 1 : doorData.positionOfDoor[0];
             let yPos = (doorData.wallSide == GlobalStrings.LEFT) ? doorData.positionOfDoor[1] - 1 : doorData.positionOfDoor[1];
-            
+
             listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
 
         })
@@ -223,47 +205,38 @@ module.exports = class RoomFactory {
     }
 
     /**
+     * Take the desired name & variant of a logo and gets it from
+     * the DoorLogos-object.
      * 
-     * @param {*} logoName 
-     * @param {*} logoVariant 
-     * @returns 
+     * @method module:RoomFactory#getDoorLogo
+     * 
+     * @param {String} logoName name of the logo
+     * @param {String} logoVariant variant of the logo
+     *  
+     * @returns {String} The key for the image asset of the logo
      */
     #getDoorLogo = function (logoName, logoVariant) {
-        // TODO type-checking
-        let logo = this.#doorLogos[logoName];
+        TypeChecker.isEnumOf(logoName, DoorLogos)
+        let logo = DoorLogos[logoName];
         return logo[logoVariant];
     }
 
-    // This is a temporary solution that is not very good
-    // but it will hopefully make creating a door a bit
-    // more user-friendly and flexible.
-    // Basically, the reason this is here is so when
-    // adding doors while creating a floorplan, the user
-    // does not need to give the entire assetPath-key for
-    // the logo.
-    #doorLogos = Object.freeze({
-        [GlobalStrings.DEFAULT]: {
-            [GlobalStrings.LEFT]: "leftnonedoor_default",
-            [GlobalStrings.RIGHT]: "rightnonedoor_default"
-        },
-        [GlobalStrings.FOYER]: {
-            [GlobalStrings.LEFT]: "leftfoyerdoor_default",
-            [GlobalStrings.RIGHT]: "rightfoyerdoor_default"
-        },
-        [GlobalStrings.RECEPTION]: {
-            [GlobalStrings.LEFT]: "leftreceptiondoor_default",
-            [GlobalStrings.RIGHT]: "rightreceptiondoor_default"
-        },
-        [GlobalStrings.LECTURE]: {
-            [GlobalStrings.LEFT]: "leftlecturedoor_default",
-            [GlobalStrings.RIGHT]: "rightlecturedoor_default"
-        },
-        [GlobalStrings.FOODCOURT]: {
-            [GlobalStrings.LEFT]: "leftfoodcourtdoor_default",
-            [GlobalStrings.RIGHT]: "rightfoodcourtdoor_default"
-        }
-    });
-
+    /**
+     * Decoded the position-field of the object data, which exists in
+     * three 'flavors':
+     *   (i) [xPos, yPos]
+     *  (ii) [xPos, [yPos1, yPos2, ...]] (and vice versa)
+     * (iii) array of a mixture of the two variants above
+     * and creates copies of the object defined by the object data
+     * accordingly.
+     * 
+     * @method module:RoomFactory#decodePositionDataAndCreate
+     * 
+     * @param {Int} roomId id of the room we're putting stuff into
+     * @param {Object} objData data of the object we're creating
+     * @param {Array[Object]} listToPushInto list the final object is 
+     *                                       being put into
+     */
     #decodePositionDataAndCreate = function (roomId, objData, listToPushInto) {
             // Not the cleanest way, but workable
             if (objData.position.every(element => Array.isArray(element))) {
@@ -289,9 +262,24 @@ module.exports = class RoomFactory {
             }
     }
 
-    // This is a very hacky solution, it is not nice at all!
-    // No polymorphism, tons of conditionals
-    // TO-DO do some refactoring and turn this into not shit
+    /**
+     * Takes a data object defining a GameObject-instance to
+     * be created, reads it out and then creates all instances
+     * of the GameObject-class specified by the data object
+     * by calling the GameObjectService
+     * 
+     * This is a very hacky solution and not super nice, there
+     * is no polymorphism and a tom of conditionals.
+     * TODO it would be nice if this could be refactored in the
+     *      near future.
+     * 
+     * @method module:RoomFactory#createObjectsFromData
+     * 
+     * @param {Int} roomId id of the room we're putting stuff into
+     * @param {Object} objData data of the object we're creating
+     * @param {Array[Object]} listToPushInto list the final object is 
+     *                                       being put into
+     */
     #createObjectsFromData = function (roomId, objData, listToPushInto) {
         // TODO support for custom options
         if (objData.isClickable === undefined) {
@@ -314,11 +302,9 @@ module.exports = class RoomFactory {
             })
         }
         if (GameObjectInfo.getInfo(objData.type, "isMultiPart")) {
-            console.log("has multiple parts")
             var size = GameObjectInfo.getInfo(objData.type, "size");
             var width = GameObjectInfo.getInfo(objData.type, "width");
             var length = GameObjectInfo.getInfo(objData.type, "length");
-            console.log("got all info")
             for (let i = 0; i < size[0]; i ++) {
                 let assets = GameObjectInfo.getInfo(objData.type, "assetName");
                 if (assets[i] instanceof Array) {
