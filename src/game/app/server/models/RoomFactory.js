@@ -332,7 +332,7 @@ module.exports = class RoomFactory {
         } else if (GameObjectInfo.hasProperty(objData.type, "hasVariation")) {
             // if no variation defined, set to default,
             // else do nothing
-            objData.variation === undefined ? objData.variation = 0 : {};
+            objData.variation == undefined ? objData.variation = 0 : {};
             listToPushInto.push(this.#objService.createObjectVariation(
                 roomId,
                 objData.type,

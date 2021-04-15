@@ -19,33 +19,58 @@ const Settings = require('../utils/Settings.js');
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class GameObjectInfo {
-    /***********************************************************/
-    /** When adding the information for a new GameObjectType  **/
-    /** file, please stick to the following instructions:     **/
-    /**                                                       **/
-    /**   (a) Add the  needed information as a  new entry to  **/ 
-    /**       #INFORMATION-field. You don't need to stick to  **/
-    /**       the categories,  but it helps keeping the file  **/
-    /**       more clearly structured.                        **/
-    /**                                                       **/
-    /**   (b) Add a new property  to the #INFORMATION-field.  **/
-    /**       It should be formatted like this:               **/
-    /**       [GameObjectType.<property_key>]: {},            **/
-    /**                  (key)               (value)          **/
-    /**       The brackets [] around the key are mandatory!   **/
-    /**       Replace  <property_key>  with the  KEY of the   **/
-    /**       property you just added to the GameObjectType.  **/
-    /**                                                       **/
-    /**   (c) For the value of the just added*/
-    /***********************************************************/
-
-
-    // Necessary information for each to add:
-    // - isSolid
-    // - size
-    // - necessary assetPaths
-    //   (these should not be the value, but the key)
+class GameObjectInfo { 
+    /****************************************************************/
+    /************ USER GUIDE -- READ BEFORE EDITING FILE ************/
+    /****************************************************************/
+    /** When adding the information for a new GameObjectType to    **/
+    /** this file, please stick to the following instructions:     **/
+    /**                                                            **/
+    /**   (a) Make sure you have added an appropriate property     **/
+    /**       to the /client/shared/GameObjectType.js file.        **/
+    /**       While this is not strictly necessary, not doing      **/
+    /**       so risks breaking the game engine, so consider       **/
+    /**       yourself warned. This will serve as an identifier    **/
+    /**       for the object you added and be used to add a copy   **/
+    /**       of the object to a room in the Floorplan.            **/
+    /**                                                            **/
+    /**   (b) Make sure you have added an appropriate property     **/
+    /**       to the /client/shared/AssetPaths.js file. This is    **/
+    /**       strictly necessary, as the game engine needs it      **/
+    /**       to draw the object in the client view.               **/
+    /**       ATTENTION: if the object isn't drawn in the proper   **/
+    /**                  position, try adding an offset in the     **/
+    /**                  /client/utils/GameObjectOffsets.js file   **/
+    /**                                                            **/
+    /**   (c) Add the information specifying your new object to    **/
+    /**       the #INFORMATION-field as a new property.            **/
+    /**         (i) For the key, chose the value of the property   **/
+    /**             you added to the GameObjectType-file (if you   **/
+    /**             did not add one, any string will suffice).     **/
+    /**             So, if, for example, you added the property    **/
+    /**             newObjectKey: "newObjectName",                 **/
+    /**             to the GameObjectType-file, you should add     **/
+    /**             [GameObjectType.newObjectKey]: {},             **/
+    /**             to this one. You don't need to stick to the    **/
+    /**             categories,  but it helps keeping the file     **/
+    /**             more clearly structured.                       **/
+    /**        (ii) Add any of the following attributes to your    **/
+    /**             new object (attributes marked with a * are     **/
+    /**             MANDATORY):                                    **/
+    /**              - isSolid*: Boolean                           **/
+    /**              - width*: integer                             **/
+    /**              - length*: integer                            **/
+    /**              - assetName*: String                          **/
+    /**                         OR String[]                        **/
+    /**                         OR String[][] (see below)          **/
+    /**              - hasVariation: Boolean  (see below)          **/
+    /**              - isMultiPart: Boolean   (see below)          **/
+    /**              - hasAdditionalParts: Boolean (see below)     **/
+    /**              - size: integer[2]            (see below)     **/
+    /**              - parts: Object[]             (see below)     **/
+    /**                                                            **/
+    /**   (d) **/
+    /****________________________________________________________****/
 
     // TODO
     // - add custom-type object

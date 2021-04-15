@@ -6,6 +6,7 @@ const GlobalStrings = require('../../client/shared/GlobalStrings.js');
  * Basically, the reason this is here is so when adding doors while
  * creating a floorplan, the user does not need to give the entire
  * assetPath-key for the logo.
+ * 
  * @enum All logos that can be placed above a door
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
