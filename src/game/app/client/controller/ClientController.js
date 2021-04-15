@@ -122,7 +122,8 @@ class ClientController {
                 transports: ['websocket'],
                 upgrade: false,
                 'reconnection': true,
-                'reconnectionDelay': 0,
+                'reconnectionDelay': 1000,
+                'reconnectionDelayMax': 5000,
                 'reconnectionAttempts': Infinity,
                 'force new connection': true
             });
@@ -145,6 +146,8 @@ class ClientController {
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
                 if (reason !== "transport close") {
                     this.socket.close();
+                } else {
+                    window.setTimeout(() => { this.openSocketConnection() }, 5000 );
                 }
             });
 
