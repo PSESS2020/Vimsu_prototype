@@ -143,6 +143,7 @@ class ClientController {
             });
 
             this.socket.on('disconnect', (reason) => {
+                console.log(reason)
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
                 if (reason !== "transport close") {
                     this.socket.close();
