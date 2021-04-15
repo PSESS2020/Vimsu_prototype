@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 /* Setting up the server */
 const app = express();
 const httpServer = http.createServer(app);
-const io = socketio(httpServer, { pingInterval: 2000, pingTimeout: 10000 });
+const io = socketio(httpServer, { pingInterval: 2000, pingTimeout: 5000 });
 
 app.set('port', PORT);
 app.use('/website', express.static(path.join(__dirname + '/website')));
