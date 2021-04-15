@@ -14,7 +14,10 @@ const Settings = require('./Settings');
 
 /**
  * This field is not necessary for any functionality outside
- * of this module.
+ * of this module. It simply exists to offer an easy way to define
+ * constant values that can be used throughout the entire floorplan,
+ * e.g. when one wants to create a room layout where objects are
+ * placed relative to the size of the entire room.
  */
 const FloorplanConstants = Object.freeze({
     NPCNAMES: {
