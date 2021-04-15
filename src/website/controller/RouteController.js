@@ -421,9 +421,9 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "deleteAccountButton") {
-                return ParticipantService.deleteAccountAndParticipant(accountId, '', this.#db).then(ppantIdOfDeletedAcc => {
+                return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, '', this.#db).then(ppantIdOfDeletedAcc => {
                     if (ppantIdOfDeletedAcc) {
-                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc);
+                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
                         response.redirect('/logout');
                     } else {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));

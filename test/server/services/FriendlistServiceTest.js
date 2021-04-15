@@ -60,6 +60,9 @@ dbStub.findOneInCollection = (collectionName, query, projection) => {
 
         //Promise needed for .then{} block in Service
         return Promise.resolve({ friendIds: ["123", "456", "678"] });
+    } else if (collectionName === usedCollectionName && query.participantId === newFriend) {
+
+        return Promise.resolve(true);
     } else if (collectionName.startsWith("accounts")) {
 
         return Promise.resolve(accounts[query.accountId]);

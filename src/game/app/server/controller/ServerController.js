@@ -30,6 +30,7 @@ const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
 const Meeting = require('../models/Meeting.js');
+const Message = require('../models/Message.js');
 
 /**
  * The Server Controller
@@ -1720,8 +1721,10 @@ module.exports = class ServerController {
                 if (removedFriend !== undefined) {
                     removedFriend.removeFriend(removerID);
 
+                    this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend friendList', removerID);
+
                     ChatService.existsOneToOneChat(removerID, removedFriendID, Settings.CONFERENCE_ID, this.#db).then(chat => {
-                        this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend', removerID, chat.chatId);
+                        this.#io.to(this.getSocketId(removedFriend.getId())).emit('removedFriend chatThread', chat.chatId);
                     })
                 }
 
@@ -3083,20 +3086,49 @@ module.exports = class ServerController {
      * @method module:ServerController#deleteParticipantReferences
      * 
      * @param {String} ppantID id of ppant that deleted his account
+     * @param {String} username username of ppant that deleted his account
+     * 
      */
-    deleteParticipantReferences(ppantID) {
+    deleteParticipantReferences(ppantID, username) {
+
+        let msg = new Message("", "", "", new Date(), "*VIMSU Bot* " + username + " has deleted his/her account and is no longer part of the chat.");
+        let msgToEmit = {
+            senderUsername: msg.getUsername(),
+            msgId: msg.getMessageId(),
+            senderId: msg.getSenderId(),
+            timestamp: msg.getTimestamp(),
+            msgText: msg.getMessageText()
+        };    
 
         //remove all references from other ppant instances
         this.#ppants.forEach(ppant => {
+
+            let socketID = this.getSocketId(ppant.getId());
             
             //All this methods have only an effect if this ppant was actually part of these lists
-            ppant.removeFriend(ppantID);
-            ppant.declineFriendRequest(ppantID);
-            ppant.sentFriendRequestDeclined(ppantID);
-            
+            if (ppant.hasFriend(ppantID)) {
+                ppant.removeFriend(ppantID);
+                this.#io.to(socketID).emit('removedFriend friendList', ppantID);
+            }
+
+            if (ppant.hasSentFriendRequest(ppantID)) {
+                ppant.declineFriendRequest(ppantID);
+                ppant.sentFriendRequestDeclined(ppantID);
+                this.#io.to(socketID).emit('removeFriendRequest', ppantID);
+            }
+
             let chatList = ppant.getChatList();
             chatList.forEach(chat => {
-                chat.removeParticipant(ppantID);
+                if (chat.includesChatMember(ppantID)) {
+                    chat.removeParticipant(ppantID);
+
+                    //Solution not ideal, this msg is only there for current exisiting chat instances. Actual Message is stored in DB in ParticipantService
+                    chat.addMessage(msg);
+                    let chatID = chat.getId();
+
+                    this.#io.to(socketID).emit('removeFromChatParticipantList', chatID, username);
+                    this.#io.to(socketID).emit('newChatMessage', chatID, msgToEmit);
+                }
             });
         });
 
@@ -3104,8 +3136,11 @@ module.exports = class ServerController {
         this.#groups.forEach(group => {
             if (group.includesGroupMember(ppantID)) {
                 group.removeGroupMember(ppantID);
+
+                // Can be done here because every existing group is included in groupMap 
+                GroupService.removeGroupMember(group.getName(), ppantID, Settings.CONFERENCE_ID, this.#db);
             }
-        })
+        });
     }
 
     /**

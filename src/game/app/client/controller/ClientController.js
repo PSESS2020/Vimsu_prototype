@@ -198,7 +198,9 @@ class ClientController {
         this.socket.on('acceptedFriendRequest', this.handleFromServerAcceptedFriendRequest.bind(this));
         this.socket.on('rejectedFriendRequest', this.handleFromServerRejectedFriendRequest.bind(this));
         this.socket.on('addToChatParticipantList', this.handleFromServerAddToChatParticipantList.bind(this));
-        this.socket.on('removedFriend', this.handleFromServerRemovedFriend.bind(this));
+        this.socket.on('removedFriend friendList', this.handleFromServerRemovedFriendUpdateFriendList.bind(this));
+        this.socket.on('removedFriend chatThread', this.handleFromServerRemovedFriendUpdateChatThread.bind(this));
+        this.socket.on('removeFriendRequest', this.handleFromServerRemoveFriendRequest.bind(this));
         this.socket.on('showNPCStory', this.handleFromServerShowNPCStory.bind(this));
         this.socket.on('chatParticipantList', this.handleFromServerChatParticipantList.bind(this))
         this.socket.on('gameEntered', this.handleFromServerGameEntered.bind(this));
@@ -707,15 +709,32 @@ class ClientController {
     }
 
     /**
-     * Is called after removing friend is confirmed from server
+     * Is called to remove a friend request from the request list, e.g: When that ppant deleted his acc
+     * 
+     * @param {String} ppantId ppant Id
+     */
+    handleFromServerRemoveFriendRequest = function (ppantId) {
+        TypeChecker.isString(ppantId);
+        this.gameView.updateFriendRequestListView(ppantId, false);
+    }
+
+    /**
+     * Is called after removing friend is confirmed from server to update friend list
      * 
      * @param {String} friendId old friend ID
+     */
+    handleFromServerRemovedFriendUpdateFriendList = function (friendId) {
+        TypeChecker.isString(friendId);
+        this.gameView.removeFriend(friendId);
+    }
+
+    /**
+     * Is called after removing friend is confirmed from server to update one to one chat with that ppant
+     * 
      * @param {String} chatId chat ID with this participant
      */
-    handleFromServerRemovedFriend = function (friendId, chatId) {
-        TypeChecker.isString(friendId);
+    handleFromServerRemovedFriendUpdateChatThread = function (chatId) {
         TypeChecker.isString(chatId);
-        this.gameView.removeFriend(friendId);
         this.gameView.updateChatThread(chatId, false, false);
     }
 
