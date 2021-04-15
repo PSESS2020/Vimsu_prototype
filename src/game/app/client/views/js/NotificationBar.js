@@ -67,7 +67,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `New message from ${senderUsername}.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -83,7 +83,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -100,7 +100,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             return this.eventManager.handleChatThreadClicked(chatId);
         })
     }
@@ -116,7 +116,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             $('#meetingListModal').modal('show');
             return this.eventManager.handleMeetingListClicked();
         })
@@ -132,7 +132,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             $('#nofriendrequest').empty();
             $('#friendRequestListModal .modal-body .list-group').empty()
             $('#friendRequestListModal').modal('show');
@@ -151,7 +151,7 @@ class NotificationBar extends Views {
         this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`)
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv()
+            this.removeNotifDiv(id)
             $('#friendListModal').modal('show');
             return this.eventManager.handleFriendListClicked();
         })
@@ -182,7 +182,7 @@ class NotificationBar extends Views {
             $('#unreadNotif').text(this.unreadNotif);
 
             $('#close' + id).on('click', (e) => {
-                this.removeNotifDiv()
+                this.removeNotifDiv(id)
             })
         }
         
