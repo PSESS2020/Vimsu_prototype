@@ -40,7 +40,7 @@ class NPCStoryView extends WindowView {
 
         for (var i = 0; i < story.length; i++) {
             $('#npcStory' + npcId).append(`
-                <h5 style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + npcId + i.toString()}'>${story[i]}</h5>
+                <p style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + npcId + i.toString()}'>${story[i]}</p>
                 <button style="float:left; display: none; outline: none; box-shadow: none" class="btn" id='${"backwardStory" + npcId + i.toString()}'>
                     <i class="fa fa-arrow-left fa-3x navbarIcons"></i>
                 </button>
