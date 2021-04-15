@@ -143,12 +143,12 @@ class ClientController {
             });
 
             this.socket.on('disconnect', (reason) => {
-                console.log(reason)
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
-                if (reason !== "transport close") {
-                    this.socket.close();
-                } else {
+                
+                if (reason === "transport close" || reason === "ping timeout" || reason === "transport error") {
                     window.setTimeout(() => { this.openSocketConnection() }, 5000 );
+                } else {
+                    this.socket.close();
                 }
             });
 
