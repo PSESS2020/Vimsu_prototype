@@ -888,7 +888,7 @@ class ClientController {
      * @param {{senderId: String, timestamp: String, text: String}} messages allchat messages
      */
     handleFromServerInitAllchat = function (messages) {
-        this.gameView.initAllchatView(this.currentRoom.getTypeOfRoom(), messages, this.ownBusinessCard.getUsername());
+        this.gameView.initAllchatView(this.currentRoom.getRoomName(), messages, this.ownBusinessCard.getUsername());
     }
 
     /**
