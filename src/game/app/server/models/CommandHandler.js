@@ -825,6 +825,7 @@ module.exports = class CommandHandler {
             return;
         }
 
+        let groupName = commandArgs[0];
         /* parse first character of color string from lowercase to uppercase (e.g. blue to Blue) */
         let groupColor = commandArgs[1].substring(0, 1).toUpperCase() + commandArgs[1].substring(1);
         let usernames = commandArgs.slice(2);
