@@ -90,6 +90,12 @@ class ChatThreadView extends WindowView {
             $('#chatLeaveButton' + this.chat.chatId).hide();
         }
 
+        if (chat.meetingButton) {
+            $('#chatMeetingButton' + this.chat.chatId).show();
+        } else {
+            $('#chatMeetingButton' + this.chat.chatId).hide();
+        }
+
         $('#chatThreadModalList' + this.chat.chatId).scrollTop($('#chatThreadModalList' + this.chat.chatId)[0].scrollHeight);
     };
 
@@ -275,6 +281,15 @@ class ChatThreadView extends WindowView {
             this.updateFriendRequestButton(this.chat.chatId, false, true)
 
             this.eventManager.handleSendFriendRequest(this.chat.partnerId, this.chat.chatId);
+        });
+
+        $('#chatMeetingButton' + this.chat.chatId).off();
+        $('#chatMeetingButton' + this.chat.chatId).on('click', (event) => {
+            event.preventDefault();
+
+            $('#meetingWindow').show();
+            $('#meetingWindowWait').show();
+            this.eventManager.handleChatMeetingButtonClicked(this.chat.chatId);
         });
 
         $('#chatParticipantListBtn' + this.chat.chatId).off()

@@ -213,6 +213,14 @@ class EventManager {
     handleMeetingJoined(meetingId, meetingDomain, meetingName, meetingPassword) {
         this.clientController.handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword);
     }
+    
+    /**
+     * called from view when chat meeting button is clicked
+     * @param {String} chatId chat id
+     */
+    handleChatMeetingButtonClicked(chatId) {
+        this.clientController.handleFromViewChatMeeting(chatId);
+    }
 
     /**
      * 
