@@ -6,12 +6,15 @@ const NPCDialog = require('./NPCDialog');
 const Settings = require('./Settings');
 
 /**
- * How to use this file:
- * yadada
  * @module Floorplan
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
+ */
+
+/**
+ * This field is not necessary for any functionality outside
+ * of this module.
  */
 const FloorplanConstants = Object.freeze({
     NPCNAMES: {
@@ -70,9 +73,8 @@ const Floorplan = Object.freeze({
     RECEPTION: {
         ID: Settings.RECEPTION_ID, // needs to be integer
         TYPE: TypeOfRoom.CUSTOM,
-        //SHAPE: ,
-        WIDTH: 13, // y dimension - along right wall
         LENGTH: 13, // x dimension - along left wall
+        WIDTH: 13, // y dimension - along right wall   
         MAPELEMENTS: [
             {type: GameObjectType.RIGHTWINDOW, position: [[13, 5], [13, 6], [13, 7]]},
             {type: GameObjectType.CONFERENCELOGO, position: [5, -1]}
@@ -95,9 +97,8 @@ const Floorplan = Object.freeze({
     FOYER: {
         ID: Settings.FOYER_ID,
         TYPE: TypeOfRoom.CUSTOM,
-        //SHAPE: ,
-        WIDTH: 25,
         LENGTH: 25,
+        WIDTH: 25,
         MAPELEMENTS: [
             {type: GameObjectType.LEFTSCHEDULE, position: [5, -1], isClickable: Settings.VIDEOSTORAGE_ACTIVATED},
             {type: GameObjectType.LEFTWINDOW, position: [[22, -1], [23, -1], [24, -1]]},
@@ -122,9 +123,8 @@ const Floorplan = Object.freeze({
     FOODCOURT: {
         ID: Settings.FOODCOURT_ID,
         TYPE: TypeOfRoom.CUSTOM,
-        //SHAPE: ,
-        WIDTH: 19,
         LENGTH: 19,
+        WIDTH: 19,   
         MAPELEMENTS: [
             {type: GameObjectType.RIGHTWINDOW, position: [[19, 3], [19, 4], [19, 14], [19, 15]]},
             {type: GameObjectType.CONFERENCELOGO, position: [8, -1]},
@@ -167,9 +167,8 @@ const Floorplan = Object.freeze({
     ESCAPEROOM: {
         ID: Settings.ESCAPEROOM_ID,
         TYPE: TypeOfRoom.CUSTOM,
-        //SHAPE: ,
-        WIDTH: 20,
         LENGTH: 15,
+        WIDTH: 20,
         MAPELEMENTS: [],
         OBJECTS: [
             {type: GameObjectType.PLANT, position: [[14, 0], [14, 19]]},
