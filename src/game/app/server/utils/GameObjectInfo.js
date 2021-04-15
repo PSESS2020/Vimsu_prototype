@@ -15,62 +15,100 @@ const Settings = require('../utils/Settings.js');
  * Done as a static class for reasons of privacy. It is just nicer to
  * call a function instead of nested calls of object properties.
  * 
- * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
 class GameObjectInfo { 
-    /****************************************************************/
-    /************ USER GUIDE -- READ BEFORE EDITING FILE ************/
-    /****************************************************************/
-    /** When adding the information for a new GameObjectType to    **/
-    /** this file, please stick to the following instructions:     **/
-    /**                                                            **/
-    /**   (a) Make sure you have added an appropriate property     **/
-    /**       to the /client/shared/GameObjectType.js file.        **/
-    /**       While this is not strictly necessary, not doing      **/
-    /**       so risks breaking the game engine, so consider       **/
-    /**       yourself warned. This will serve as an identifier    **/
-    /**       for the object you added and be used to add a copy   **/
-    /**       of the object to a room in the Floorplan.            **/
-    /**                                                            **/
-    /**   (b) Make sure you have added an appropriate property     **/
-    /**       to the /client/shared/AssetPaths.js file. This is    **/
-    /**       strictly necessary, as the game engine needs it      **/
-    /**       to draw the object in the client view.               **/
-    /**       ATTENTION: if the object isn't drawn in the proper   **/
-    /**                  position, try adding an offset in the     **/
-    /**                  /client/utils/GameObjectOffsets.js file   **/
-    /**                                                            **/
-    /**   (c) Add the information specifying your new object to    **/
-    /**       the #INFORMATION-field as a new property.            **/
-    /**         (i) For the key, chose the value of the property   **/
-    /**             you added to the GameObjectType-file (if you   **/
-    /**             did not add one, any string will suffice).     **/
-    /**             So, if, for example, you added the property    **/
-    /**             newObjectKey: "newObjectName",                 **/
-    /**             to the GameObjectType-file, you should add     **/
-    /**             [GameObjectType.newObjectKey]: {},             **/
-    /**             to this one. You don't need to stick to the    **/
-    /**             categories,  but it helps keeping the file     **/
-    /**             more clearly structured.                       **/
-    /**        (ii) Add any of the following attributes to your    **/
-    /**             new object (attributes marked with a * are     **/
-    /**             MANDATORY):                                    **/
-    /**              - isSolid*: Boolean                           **/
-    /**              - width*: integer                             **/
-    /**              - length*: integer                            **/
-    /**              - assetName*: String                          **/
-    /**                         OR String[]                        **/
-    /**                         OR String[][] (see below)          **/
-    /**              - hasVariation: Boolean  (see below)          **/
-    /**              - isMultiPart: Boolean   (see below)          **/
-    /**              - hasAdditionalParts: Boolean (see below)     **/
-    /**              - size: integer[2]            (see below)     **/
-    /**              - parts: Object[]             (see below)     **/
-    /**                                                            **/
-    /**   (d) **/
-    /****________________________________________________________****/
+    /******************************************************************/
+    /************* USER GUIDE -- READ BEFORE EDITING FILE *************/
+    /******************************************************************/
+    /** When adding the information for a new GameObjectType to      **/
+    /** this file, please stick to the following instructions:       **/
+    /**                                                              **/
+    /**   (a) Make sure you have added an appropriate property       **/
+    /**       to the /client/shared/GameObjectType.js file.          **/
+    /**       While this is not strictly necessary, not doing        **/
+    /**       so risks breaking the game engine, so consider         **/
+    /**       yourself warned. This will serve as an identifier      **/
+    /**       for the object you added and be used to add a copy     **/
+    /**       of the object to a room in the Floorplan.              **/
+    /**                                                              **/
+    /**   (b) Make sure you have added an appropriate property       **/
+    /**       to the /client/shared/AssetPaths.js file. This is      **/
+    /**       strictly necessary, as the game engine needs it        **/
+    /**       to draw the object in the client view.                 **/
+    /**       ATTENTION: if the object isn't drawn in the proper     **/
+    /**                  position, try adding an offset in the       **/
+    /**                  /client/utils/GameObjectOffsets.js file     **/
+    /**                                                              **/
+    /**   (c) Add the information specifying your new object to      **/
+    /**       the #INFORMATION-field as a new property.              **/
+    /**         (i) For the key, chose the value of the property     **/
+    /**             you added to the GameObjectType-file (if you     **/
+    /**             did not add one, any string will suffice).       **/
+    /**             So, if, for example, you added the property      **/
+    /**             newObjectKey: "newObjectName",                   **/
+    /**             to the GameObjectType-file, you should add       **/
+    /**             [GameObjectType.newObjectKey]: {},               **/
+    /**             to this one. You don't need to stick to the      **/
+    /**             categories,  but it helps keeping the file       **/
+    /**             more clearly structured.                         **/
+    /**        (ii) Add any of the following attributes to your      **/
+    /**             new object (attributes marked with a * are       **/
+    /**             MANDATORY):                                      **/
+    /**              - isSolid*: Boolean                             **/
+    /**              - width*: integer                               **/
+    /**              - length*: integer                              **/
+    /**              - assetName*: String                            **/
+    /**                         OR String[]                          **/
+    /**                         OR String[][] (see below)            **/
+    /**              - hasVariation: Boolean  (see below)            **/
+    /**              - isMultiPart: Boolean   (see below)            **/
+    /**              - hasAdditionalParts: Boolean (see below)       **/
+    /**              - size: integer[2]            (see below)       **/
+    /**              - parts: Object[]             (see below)       **/
+    /**                                                              **/
+    /**   (d) Some notes on the more advanced options:               **/
+    /**       hasVariation: If this flag is set, the assetName must  **/
+    /**                     be an array of strings. When adding an   **/
+    /**                     in the floorplan, you can then specify   **/
+    /**                     a variation by giving a valid index.     **/
+    /**                     A different image will be drawn.         **/
+    /**        isMultiPart: If this flag is set, the size-attribute  **/
+    /**                     must be added to the object, and the     **/
+    /**                     assetName must be of type String[i][j_i] **/
+    /**                     with i = size[0], j_i <= size[1].        **/
+    /**                     (so the length of the arrays need not be **/
+    /**                     the same for all)                        **/
+    /**                     This will cause an array Object[i][j_i]  **/
+    /**                     to be drawn, each object with the same   **/
+    /**                     type, width, length and solidity, but    **/
+    /**                     the asset stored under the same indices  **/
+    /** hasAdditionalParts: If this flag is set, the parts-attribute **/
+    /**                     must be defined. It must be an array of  **/
+    /**                     which each entry is an object following  **/
+    /**                     the scheme:                              **/
+    /**                     {                                        **/
+    /**                       type*: String,     # GameObjectType    **/
+    /**                       offset_x: integer, # relative position **/
+    /**                                            x-axis            **/
+    /**                       offset_y: integer, # relative position **/
+    /**                                            y-axis            **/
+    /**                       variation: inetger # if well-defined   **/
+    /**                                            for this type     **/
+    /**                     }                                        **/
+    /**                    No other options are currently available  **/
+    /**                    for the additional parts.                 **/
+    /**         WARNING: AN OBJECT-TYPE MAY NEVER HAVE ITSELF AS AN  **/
+    /**                  ADDITIONAL PART!!!                          **/
+    /**                                                              **/
+    /** NOTE: While it won't necessarily break the game, no two of   **/
+    /**       the advanced options should be used in conjunction.    **/
+    /**       (unless you know what you're doing)                    **/
+    /**                                                              **/
+    /** NOTE: The strings in the assetName must be property-keys     **/
+    /**       from the /client/shared/AssetPaths-file.               **/
+    /****__________________________________________________________****/
 
     // TODO
     // - add custom-type object
@@ -137,16 +175,18 @@ class GameObjectInfo {
             assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
         },
         [GameObjectType.RIGHTWINDOW]: {
+            hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "rightwindow_default0", // TODO object with variations
+            assetName: ["rightwindow_default0", "rightwindow_default1"]
         },
         [GameObjectType.LEFTWINDOW]: {
+            hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "leftwindow_default0", // TODO object with variations
+            assetName: ["leftwindow_default0", "leftwindow_default1"]
         },
         [GameObjectType.PICTUREFRAME]: {
             isMultiPart: true,
