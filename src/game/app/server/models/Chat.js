@@ -149,4 +149,21 @@ module.exports = class Chat {
         });
     }
 
+    /**
+     * Checks if ppant with ppantID is currently in this chat
+     * @method module:Chat#includesChatMember
+     * 
+     * @param {String} ppantID participant ID
+     * @return {boolean} true if ppant is chat member, false otherwise
+     */
+    includesChatMember(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        for (let i = 0; i < this.#participantList.length; i++) { 
+            if (this.#participantList[i] === ppantID) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -599,11 +599,13 @@ module.exports = class ParticipantService {
      * @static @method module:AccountService#deleteAccount
      * 
      * @param {String} accountId account ID
+     * @param {String} accountUsername account username
      * @param {String} suffix collection name suffix
      * @return {String | boolean} ppantID if deleted, false otherwise
      */
-     static deleteAccountAndParticipant(accountId, suffix, vimsudb) {
+     static deleteAccountAndParticipant(accountId, accountUsername, suffix, vimsudb) {
         TypeChecker.isString(accountId);
+        TypeChecker.isString(accountUsername);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
@@ -619,10 +621,15 @@ module.exports = class ParticipantService {
 
                 //participant is found
 
-                //remove participant from chats and other ppants friend lists
+                //remove participant from chats, meetings and other ppants friend lists
                 par.chatIDList.forEach(chatID => {
                     ChatService.removeParticipant(chatID, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                    ChatService.createChatMessage(chatID, '', '', "*VIMSU Bot* " + accountUsername + " has deleted his/her account and is no longer part of the chat.", Settings.CONFERENCE_ID, vimsudb);
                 });
+
+                par.meetingIDList.forEach(meetingID => {
+                    MeetingService.removeParticipant(meetingID, par.participantId, Settings.CONFERENCE_ID, vimsudb);
+                })
 
                 par.friendIds.forEach(friendId => {
                     FriendListService.removeFriend(friendId, par.participantId, Settings.CONFERENCE_ID, vimsudb);

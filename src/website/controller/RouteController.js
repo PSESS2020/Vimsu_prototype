@@ -379,9 +379,9 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "deleteAccountButton") {
-                return ParticipantService.deleteAccountAndParticipant(accountId, Settings.CONFERENCE_ID, this.#db).then(ppantIdOfDeletedAcc => {
+                return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, Settings.CONFERENCE_ID, this.#db).then(ppantIdOfDeletedAcc => {
                     if (ppantIdOfDeletedAcc) {
-                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc);
+                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
                         response.redirect('/logout');
                     } else {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: request.session.forename }, request.session.username));

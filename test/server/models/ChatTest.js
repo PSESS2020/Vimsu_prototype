@@ -143,11 +143,13 @@ describe('Chat Testing', function () {
             it('Test remove owner from chat', function () {
                 //Status of participant List before removing creator
                 expect(participantList_result).to.be.an('array').and.to.have.members(participantList).and.to.have.lengthOf(1);
+                expect(chat.includesChatMember(ownerId)).to.be.true;
 
                 chat.removeParticipant(ownerId);
 
                 //Status of participant List after removing creator
                 expect(participantList_result).to.be.an('array').and.to.have.members([]).and.to.have.lengthOf(0);
+                expect(chat.includesChatMember(ownerId)).to.be.false;
             })
         })
 
