@@ -18,6 +18,7 @@ const Settings = require('../../client/utils/Settings.js');
 module.exports = class Room {
 
     #roomId;
+    #roomName;
     #typeOfRoom;
     #length;
     #width;
@@ -34,17 +35,20 @@ module.exports = class Room {
      * @constructor module:Room
      * 
      * @param {number} roomId room ID
+     * @param {String} roomName name of the room (used to display location)
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {number} width room width
      * @param {number} length room length
      */
-    constructor(roomId, typeOfRoom, width, length) {
+    constructor(roomId, roomName, typeOfRoom, width, length) {
         TypeChecker.isInt(roomId);
+        TypeChecker.isString(roomName);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
 
         this.#roomId = roomId;
+        this.#roomName = roomName;
         this.#typeOfRoom = typeOfRoom;
         this.#listOfPPants = [];
         this.#listOfMessages = [];
@@ -140,6 +144,16 @@ module.exports = class Room {
      */
     getRoomId() {
         return this.#roomId;
+    }
+
+    /**
+     * Gets room name
+     * @method module:Room#getRoomName
+     * 
+     * @returns {String} roomName
+     */
+    getRoomName() {
+        return this.#roomName;
     }
 
     /**

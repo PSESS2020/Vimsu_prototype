@@ -19,6 +19,7 @@ if (typeof module === 'object' && typeof exports === 'object') {
 class RoomClient {
 
     roomId;
+    roomName;
     typeOfRoom;
     assetPaths;
     listOfMapElements;
@@ -36,6 +37,7 @@ class RoomClient {
      * Creates an instance of Room on client-side
      * 
      * @param {number} roomId room ID
+     * @param {String} roomName room name
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {Object} assetPaths asset paths
      * @param {GameObjectClient[]} listOfMapElements list of map elements
@@ -46,14 +48,14 @@ class RoomClient {
      * @param {number} length room length
      * @param {number[][]} occupationMap room occupation map
      */
-    constructor(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
+    constructor(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         if (!!RoomClient.instance) {
             return RoomClient.instance;
         }
 
         RoomClient.instance = this;
 
-        this.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap)
+        this.swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap)
     }
 
     /**
@@ -63,6 +65,15 @@ class RoomClient {
      */
     getRoomId() {
         return this.roomId;
+    }
+
+    /**
+     * Gets room name
+     * 
+     * @returns {String} roomName
+     */
+    getRoomName() {
+        return this.roomName;
     }
 
     /**
@@ -226,8 +237,9 @@ class RoomClient {
      * @param {number} width room width
      * @param {number[][]} occupationMap room occupation map
      */
-    swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
+    swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
         TypeChecker.isInt(roomId);
+        TypeChecker.isString(roomName);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(assetPaths, Object);
         for (var key in assetPaths) {
@@ -259,6 +271,7 @@ class RoomClient {
         });
 
         this.roomId = roomId;
+        this.roomName = roomName;
         this.typeOfRoom = typeOfRoom;
         this.assetPaths = assetPaths;
         this.listOfMapElements = listOfMapElements;

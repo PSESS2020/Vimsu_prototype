@@ -75,6 +75,7 @@ const Floorplan = Object.freeze({
     // - Achievements only broken by setting IDs to non setting-versions
     RECEPTION: {
         ID: Settings.RECEPTION_ID, // needs to be integer
+        NAME: "Reception",
         TYPE: TypeOfRoom.CUSTOM,
         LENGTH: 13, // x dimension - along left wall
         WIDTH: 13, // y dimension - along right wall   
@@ -83,7 +84,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.CONFERENCELOGO, position: [5, -1]}
         ],
         OBJECTS: [
-            {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3]},
+            {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3],  isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
             {type: GameObjectType.PLANT, position: [[12, 0], [12, 12]]}
         ],
         // doorData = {wallSide, logo, positionOfDoor,
@@ -99,6 +100,7 @@ const Floorplan = Object.freeze({
 
     FOYER: {
         ID: Settings.FOYER_ID,
+        NAME: "Foyer",
         TYPE: TypeOfRoom.CUSTOM,
         LENGTH: 25,
         WIDTH: 25,
@@ -125,6 +127,7 @@ const Floorplan = Object.freeze({
 
     FOODCOURT: {
         ID: Settings.FOODCOURT_ID,
+        NAME: "Food Court",
         TYPE: TypeOfRoom.CUSTOM,
         LENGTH: 19,
         WIDTH: 19,   
@@ -169,6 +172,7 @@ const Floorplan = Object.freeze({
 
     ESCAPEROOM: {
         ID: Settings.ESCAPEROOM_ID,
+        NAME: "Escape Room",
         TYPE: TypeOfRoom.CUSTOM,
         LENGTH: 15,
         WIDTH: 20,
