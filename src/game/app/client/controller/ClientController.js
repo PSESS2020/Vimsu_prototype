@@ -67,11 +67,11 @@ class ClientController {
         var assetPaths = this.currentRoom.getAssetPaths();
         var map = this.currentRoom.getMap();
         var objectMap = this.currentRoom.getObjectMap();
-        var typeOfRoom = this.currentRoom.getTypeOfRoom();
+        var roomName = this.currentRoom.getRoomName();
         var listOfNPCs = this.currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
+            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
         this.gameView.drawStatusBar();
@@ -94,11 +94,11 @@ class ClientController {
         var assetPaths = this.currentRoom.getAssetPaths();
         var map = this.currentRoom.getMap();
         var objectMap = this.currentRoom.getObjectMap();
-        var typeOfRoom = this.currentRoom.getTypeOfRoom();
+        var roomName = this.currentRoom.getRoomName();
         var listOfNPCs = this.currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
+            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
         this.gameView.resetAnotherAvatarViews();
@@ -311,6 +311,7 @@ class ClientController {
      * Third message from Server, gives you information of starting room
      * 
      * @param {number} roomId room ID
+     * @param {String} roomName room name
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {Object} assetPaths asset paths
      * @param {Object[]} listOfMapElementsData list of map elements
@@ -321,9 +322,10 @@ class ClientController {
      * @param {number} length room length
      * @param {number[][]} occupationMap occupation map
      */
-    handleFromServerUpdateRoom = function (roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+    handleFromServerUpdateRoom = function (roomId, roomName, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
 
         TypeChecker.isInt(roomId);
+        TypeChecker.isString(roomName);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(assetPaths, Object);
         TypeChecker.isInstanceOf(listOfMapElementsData, Array);
@@ -400,11 +402,11 @@ class ClientController {
 
         //First room? 
         if (!this.currentRoom) {
-            this.currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom = new RoomClient(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
         //If not, only swap the room
         } else {
-            this.currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom.swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.currentRoom.enterParticipant(this.ownParticipant);
             this.switchRoomGameView();
         }

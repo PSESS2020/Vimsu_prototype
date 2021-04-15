@@ -444,9 +444,9 @@ class GameView {
      * @param {number[][]} map map
      * @param {number[][]} objectMap object map
      * @param {NPC[]} listOfNPCs list of NPCs
-     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {String} roomName name of room
      */
-    initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom) {
+    initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName) {
 
         ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
@@ -457,7 +457,7 @@ class GameView {
         });
 
         this.currentMapView = new MapView(assetPaths, map, objectMap, this.gameEngine, this.eventManager);
-        this.statusBar.updateLocation(typeOfRoom);
+        this.statusBar.updateLocation(roomName);
     }
 
     /**
@@ -1087,12 +1087,12 @@ class GameView {
     /**
      * Draws everything about all chat
      * 
-     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {String} roomName name of room
      * @param {Object[]} messages allchat messages
      * @param {String} ownUsername current participant's username
      */
-    initAllchatView(typeOfRoom, messages, ownUsername) {
-        this.allchatView.draw(typeOfRoom, messages, ownUsername);
+    initAllchatView(roomName, messages, ownUsername) {
+        this.allchatView.draw(roomName, messages, ownUsername);
     }
 
     /**

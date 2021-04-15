@@ -145,7 +145,7 @@ class GameObjectViewFactory {
             var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
-            } else if (isClickable) {
+            // } else if (isClickable) {
                 // this is for easter eggs
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);

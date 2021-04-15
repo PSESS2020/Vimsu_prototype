@@ -323,7 +323,7 @@ module.exports = class ServerController {
                     };
 
                     //Sends Room ID, typeOfRoom and listOfGameObjects to Client
-                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom,
+                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, currentRoom.getRoomName(), typeOfCurrentRoom,
                         assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength(), currentRoom.getOccMap());
 
                     //Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -3287,7 +3287,7 @@ module.exports = class ServerController {
         let socket = this.getSocketObject(socketID);
 
         //emit new room data to client
-        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
+        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoom.getRoomName(), targetRoomType,
             assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
 
         //set new position in server model
