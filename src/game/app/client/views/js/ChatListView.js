@@ -211,8 +211,13 @@ class ChatListView extends WindowView {
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
                             <div>
-                                <button id=${"chatFriendRequestButton" + chatID} class="close btn">
+                                <button id=${"chatFriendRequestButton" + chatID} class="close btn" title="Add friend">
                                     <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <button id=${"chatMeetingButton" + chatID} class="close btn" title="(Video) call with chat participants">
+                                    <i class="fa fa-video navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>

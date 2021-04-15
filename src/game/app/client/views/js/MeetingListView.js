@@ -56,7 +56,6 @@ class MeetingListView extends WindowView {
         this.meetings.forEach((meeting, index) => {
 
             if (meeting.id === meetingId) {
-                let index = this.meetings.indexOf(meeting);
                 this.meetings.splice(index, 1);
             }
         });
@@ -90,7 +89,7 @@ class MeetingListView extends WindowView {
                 <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
                             <div class="col-2 px-0">
-                                <i class="fa fa-video fa-5x navbarIcons" style="transform: scale(0.7)" ></i>
+                                <i class="fa fa-video fa-4x navbarIcons"></i>
                             </div>
                             <div class="col-10 text-left">
                                 <label class="name lead">${meeting.name}</label>

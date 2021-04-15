@@ -208,6 +208,7 @@ class ClientController {
         this.socket.on('gotNewGroupChat', this.handleFromServerGotNewGroupChat.bind(this));
         this.socket.on('gotNewChatMessage', this.handleFromServerGotNewChatMessage.bind(this));
         this.socket.on('gotNewMeeting', this.handleFromServerGotNewMeeting.bind(this));
+        this.socket.on('chatMeeting', this.handleFromServerChatMeeting.bind(this));
         this.socket.on('evalAnswer', function (data) {   //Displays evaluated input.
             console.log(data);
         });
@@ -1060,6 +1061,20 @@ class ClientController {
     };
 
     /**
+     * Receives chat meeting data from server
+     * 
+     * @param {Object} meeting meeting 
+     */
+    handleFromServerChatMeeting = function (meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.handleFromViewJoinMeeting(meeting.id, meeting.domain, meeting.name, meeting.password);
+    }
+
+    /**
      * Receives from server that user got a new meeting, view should draw notification
      * 
      * @param {String} meetingName meeting name
@@ -1634,6 +1649,18 @@ class ClientController {
         TypeChecker.isString(meetingPassword);
 
         this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownParticipant.getUsername());
+    }
+
+    /**
+     * Gets meeting domain from server
+     * @param {String} chatId chat id
+     */
+    handleFromViewChatMeeting(chatId) {
+        TypeChecker.isString(chatId);
+
+        if (this.socketReady()) {
+            this.socket.emit('getChatMeetingDomain', chatId);
+        }
     }
 
     /**

@@ -1356,6 +1356,34 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('meetingList', meetListData);
             });
 
+            socket.on('getChatMeetingDomain', (chatId) => {
+                try {
+                    TypeChecker.isString(chatId);
+                } catch (e) {
+                    console.log('Client emitted wrong type of data! ' + e);
+                    return;
+                }
+
+                if (!Settings.CHATMEETING_ACIVATED) return;
+
+                let requesterId = socket.ppantID;
+                let participant = this.#ppants.get(requesterId);
+                if (!participant)
+                    return;
+
+                if (participant.isMemberOfChat(chatId)) {
+                    let chat = participant.getChat(chatId);
+                    let meetingData = {
+                        id: chat.getId(),
+                        domain: Settings.DEFAULT_MEETINGDOMAIN,
+                        name: chat instanceof OneToOneChat ? chat.getOtherUsername(participant.getBusinessCard().getUsername()) : chat.getChatName(),
+                        password: chat.getId()
+                    }
+
+                    this.#io.to(socket.id).emit('chatMeeting', meetingData);
+                }
+            })
+
             socket.on('requestModMeeting', () => {
                 // TODO
                 // Check for available moderators
@@ -1406,6 +1434,7 @@ module.exports = class ServerController {
                                 groupChat: false,
                                 inviteButton: false,
                                 leaveButton: true,
+                                meetingButton: Settings.CHATMEETING_ACIVATED,
                                 messages: messageInfoData
                             }
 
@@ -1421,6 +1450,7 @@ module.exports = class ServerController {
                                 groupChat: false,
                                 inviteButton: false,
                                 leaveButton: true,
+                                meetingButton: Settings.CHATMEETING_ACIVATED,
                                 messages: messageInfoData
                             }
                         }
@@ -1428,10 +1458,12 @@ module.exports = class ServerController {
                     } else {
                         let leaveButton = true;
                         let inviteButton = true;
+                        let meetingButton = Settings.CHATMEETING_ACIVATED;
 
                         if (this.#isChatFromGroup(chat.getId())) {
                             leaveButton = false;
                             inviteButton = false;
+                            meetingButton = false;
                         }
 
                         var chatData = {
@@ -1443,6 +1475,7 @@ module.exports = class ServerController {
                             groupChat: true,
                             inviteButton: inviteButton,
                             leaveButton: leaveButton,
+                            meetingButton: meetingButton,
                             messages: messageInfoData
                         }
                     }
@@ -1458,6 +1491,7 @@ module.exports = class ServerController {
                         groupChat: false,
                         inviteButton: false,
                         leaveButton: true,
+                        meetingButton: false,
                         messages: [{
                             senderUsername: '',
                             timestamp: new Date(),

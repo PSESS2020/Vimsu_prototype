@@ -55,6 +55,8 @@ module.exports = Object.freeze({
     DEFAULT_SHIRTCOLOR_NPC: ShirtColor.RED,
 
     /* Decides wheter video storage is needed or not */
-    VIDEOSTORAGE_ACTIVATED: true
+    VIDEOSTORAGE_ACTIVATED: true,
 
+    /* Decides wheter chat meeting is allowed or not */
+    CHATMEETING_ACIVATED: true
 });

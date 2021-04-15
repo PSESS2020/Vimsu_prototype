@@ -75,7 +75,7 @@ class VideoMeetingView extends WindowView {
         $("#meetingWindowTitle").text(meetingName);
 
         this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
-            roomName: meetingName,
+            roomName: meetingId,
             subject: meetingName, // will this work?
             width: '100%',
             height: window.innerHeight * 0.85,
