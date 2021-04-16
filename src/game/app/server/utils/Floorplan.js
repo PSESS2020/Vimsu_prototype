@@ -90,9 +90,22 @@ const Floorplan = Object.freeze({
     /**  versa, map elements can not be made clickable.                      **/
     /**                                                                      **/
     /**  Options:                                                            **/
-    /**    type: GameObjectType.<type>,    # Any legal type of GameObject    **/
-    /**    position: <Integer[2] OR [Integer, Integer[n]] OR */
-    /**    variation: <Integer>  */
+    /**    type: GameObjectType.<type>,   # Any legal type of GameObject.    **/
+    /**    position: <Integer[2]>         # [x coordinate, y coordinate]     **/
+    /**           OR <[Integer, Integer[n]]>  # [x coord, list of y coords]  **/
+    /**                                       # will draw object copy in any **/
+    /**                                       # position that can be written **/
+    /**                                       # [x coord, entry of list]     **/
+    /**           OR <[Integer[n], Integer]>  # Analogous to above           **/
+    /**           OR Array containing any combination of the above           **/
+    /**                  # Object copies will be drawn in any position       **/
+    /**                  # given by some entry                               **/
+    /**    variation: <Integer>    # Some types of map elements and objects  **/
+    /**                            # exist in several variations, meaning    **/
+    /**                            # several different assets can be drawn   **/
+    /**                            # in their position. If there are no      **/
+    /**                            # variations available, this option will  **/
+    /**                            # be ignored                              **/
     /**                                                                      **/
     /**  NOTE See below for a complete list of all available types of map    **/
     /**       elements, their variations and possible configurations.        **/
@@ -111,13 +124,14 @@ const Floorplan = Object.freeze({
     /**  If both are defined, the iFrame takes precedence.                   **/
     /**                                                                      **/
     /**  Options:                                                            **/
-    /**    isClickable: <Boolean>,  # Self-explanatory                       **/
+    /**    isClickable: <Boolean>,  # Self-explanatory.                      **/
     /**    iFrameData: <Object>,    # Must be an object containg             **/
     /**                             #   title: <String>,   (header)          **/
     /**                             #   url: <String>,                       **/
     /**                             #   width: <Integer>,  (in pixel)        **/
     /**                             #   height: <Integer>  (in pixel)        **/
-    /**    story: <String[]>        # Each array entry gets its own textbox  **/
+    /**                             # Any additonal value is ignored.        **/
+    /**    story: <String[]>        # Each array entry gets its own textbox. **/
     /**                                                                      **/
     /**************************************************************************/
 
@@ -125,7 +139,9 @@ const Floorplan = Object.freeze({
     /*************************** HOW TO ADD A DOOR ****************************/
     /**************************************************************************/
     /**                                                                      **/
-    /**                                                                      **/
+    /** // doorData = {wallSide, logo, positionOfDoor,
+        //            positionOnExit, directionOnExit, isOpen,
+        //            closedMessage, codeToOpen}                                                          **/
     /**                                                                      **/
     /**************************************************************************/
 
@@ -133,6 +149,7 @@ const Floorplan = Object.freeze({
     /*************************** HOW TO ADD AN NPC ****************************/
     /**************************************************************************/
     /**                                                                      **/
+    
     /**                                                                      **/
     /**                                                                      **/
     /**************************************************************************/
@@ -152,9 +169,6 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.RECEPTIONCOUNTER, position: [10, 3],  isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
             {type: GameObjectType.PLANT, position: [[12, 0], [12, 12]]}
         ],
-        // doorData = {wallSide, logo, positionOfDoor,
-        //            positionOnExit, directionOnExit, isOpen,
-        //            closedMessage, codeToOpen}
         DOORS: [ 
             {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 21], directionOnExit: Direction.DOWNLEFT, isOpen: true}
         ],
@@ -260,6 +274,8 @@ const Floorplan = Object.freeze({
     /***************** COMPLETE LIST OF AVAILABLE OBJECT TYPES ****************/
     /**************************************************************************/
     /**                                                                      **/
+    /**  See the GameObjectInfo.js file for instructions on how to add your  **/
+    /**  own types of objects.                                               **/
     /**                                                                      **/
     /**                                                                      **/
     /**************************************************************************/
