@@ -7,7 +7,6 @@
 class NotificationBar extends Views {
 
     eventManager;
-    unreadNotif;
 
     /**
      * Creates an instance of NotificationBar
@@ -24,9 +23,8 @@ class NotificationBar extends Views {
         NotificationBar.instance = this;
 
         this.eventManager = eventManager;
-        this.unreadNotif = 0;
 
-        $('#unreadNotif').text(this.unreadNotif);
+        $('#unreadNotif').text($("#notifBar > div").length)
 
         $('#showNotifBar').hide();
 
@@ -195,8 +193,7 @@ class NotificationBar extends Views {
                 </div>
             `)
 
-            this.unreadNotif++;
-            $('#unreadNotif').text(this.unreadNotif);
+            $('#unreadNotif').text($("#notifBar > div").length)
 
             if (closeable) {
                 $('#close' + id).on('click', (e) => {
@@ -212,7 +209,6 @@ class NotificationBar extends Views {
 
     removeNotifDiv(id) {
         $('#' + id + 'Div').remove();
-        this.unreadNotif--;
-        $('#unreadNotif').text(this.unreadNotif);
+        $('#unreadNotif').text($("#notifBar > div").length)
     }
 }
