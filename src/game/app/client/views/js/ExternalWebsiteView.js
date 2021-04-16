@@ -43,7 +43,7 @@
 
         $('#externalWebsiteBody' + gameObjectID).append(`
             <div class="modal-body modal-body-center" style="overflow:auto; height:100%;">
-                <iframe id="iframe${gameObjectID}" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
+                <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
                     allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
             </div>
         `);
@@ -69,6 +69,12 @@
                 this.exitFullscreenMode(gameObjectID, width, height);
                 fullScreenMode = false;
             }
+
+            /* Needed to stop video after close button click */
+            $('.iframeclass').each(function() {
+                var el_src = $(this).attr("src");
+                $(this).attr("src",el_src);
+            });
         });
      }
 

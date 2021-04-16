@@ -78,7 +78,8 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
             objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 1, true, false),
             objService.createTea(Settings.ESCAPEROOM_ID, 0, 1, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }),
             objService.createPlant(Settings.ESCAPEROOM_ID, 0, 2, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }),
-            objService.createRightSofa(Settings.ESCAPEROOM_ID, 0, 3, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }));
+            objService.createRightSofa(Settings.ESCAPEROOM_ID, 0, 3, true, true, {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }),
+            objService.createSmallDinnerTable(Settings.ESCAPEROOM_ID, 0, 4, true, true, {title: "Table Video", url: "https://www.youtube.com/embed/x51zMg7roIs", width: 1280, height: 720 }));
         
 
         //Get all npcs from service
