@@ -25,6 +25,13 @@ class ChatListView extends WindowView {
     ChatListView.instance = this;
 
     this.eventManager = eventManager;
+
+    $('#newGroupChat').off();
+    $('#newGroupChat').on('click', (event) => {
+      event.preventDefault();
+      $('#inputGroupNameModal').modal('show')
+      $('#groupNameInput').trigger('focus') 
+    });
   }
 
   /**

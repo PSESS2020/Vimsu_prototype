@@ -47,5 +47,6 @@ class EnterCodeView extends WindowView {
         });
 
         $('#inputEnterCodeModal').modal('show');
+        $('#codeInput').trigger('focus');
     }
 }
