@@ -59,8 +59,6 @@ class VideoMeetingView extends WindowView {
         $('#meetingWindowWait').hide();
 
         if (this.currentMeeting) {
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
-
             //Meeting was only minimized
             if (this.currentMeeting.id === meeting.id && this.isMinimized) {
                 this.isMinimized = false;
