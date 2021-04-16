@@ -28,8 +28,6 @@ class GameObjectViewFactory {
         //gets map tile size
         this.tileColumnWidth = this.gameEngine.getTileColumnWidth();
         this.tileRowHeight = this.gameEngine.getTileRowHeight();
-
-        console.log("tileColumnWidth " + this.tileColumnWidth + " and tileRowheight " + this.tileRowHeight)
     }
 
     /**
@@ -198,7 +196,6 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        console.log("drawing object " + objectType + " with offset { x: " + offset.x + ", y: " + offset.y + " }")
         if (objectType != GameObjectType.RECEPTIONCOUNTER) {
             return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
         } else {
@@ -219,7 +216,6 @@ class GameObjectViewFactory {
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        console.log("drawing object " + objectType + " with offset { x: " + offset.x + ", y: " + offset.y + " }")
         if (offset == Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula
             return offset;
