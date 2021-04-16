@@ -8,7 +8,7 @@ class VideoMeetingView extends WindowView {
 
     eventManager;
     jitsi;
-    currentMeetingId;
+    currentMeeting;
     isMinimized;
 
     /**
@@ -35,6 +35,7 @@ class VideoMeetingView extends WindowView {
 
             this.jitsi.dispose();
             $('#meetingWindow').hide();
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
         });
 
         // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
@@ -44,39 +45,41 @@ class VideoMeetingView extends WindowView {
 
             this.isMinimized = true;
             $('#meetingWindow').hide();
+            this.eventManager.handleAddMinimizedMeetingNotif(this.currentMeeting)
         });
     }
 
     /**
      * Draws video meeting window
      * 
-     * @param {String} meetingId id of joined meeting
-     * @param {String} meetingDomain domain of joined meeting
-     * @param {String} meetingName name of joined meeting
-     * @param {String} meetingPassword password of joined meeting
+     * @param {Object} meeting joined meeting
      * @param {String} ownUsername own username that is shown in meeting
      */
-    draw(meetingId, meetingDomain, meetingName, meetingPassword, ownUsername) {
+    draw(meeting, ownUsername) {
         $('#meetingWindowWait').hide();
 
-        //Meeting was only minimized
-        if (this.currentMeetingId === meetingId && this.isMinimized) {
-            this.isMinimized = false;
-            return;
-        }
+        if (this.currentMeeting) {
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
 
-        //Another meeting was minimized before, that should be closed now
-        if (this.currentMeetingId !== meetingId && this.isMinimized) {
-            this.isMinimized = false;
-            this.jitsi.dispose();
+            //Meeting was only minimized
+            if (this.currentMeeting.id === meeting.id && this.isMinimized) {
+                this.isMinimized = false;
+                return;
+            }
+
+            //Another meeting was minimized before, that should be closed now
+            if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
+                this.isMinimized = false;
+                this.jitsi.dispose();
+            }
         }
 
         $("#meetingWindowTitle").empty();
-        $("#meetingWindowTitle").text(meetingName);
+        $("#meetingWindowTitle").text(meeting.name);
 
-        this.jitsi = new JitsiMeetExternalAPI(meetingDomain, {
-            roomName: meetingId,
-            subject: meetingName, // will this work?
+        this.jitsi = new JitsiMeetExternalAPI(meeting.domain, {
+            roomName: meeting.id,
+            subject: meeting.name, // will this work?
             width: '100%',
             height: window.innerHeight * 0.85,
             // TODO: Add JWT (maybe)
@@ -87,7 +90,7 @@ class VideoMeetingView extends WindowView {
             }
         });
 
-        this.currentMeetingId = meetingId;
+        this.currentMeeting = meeting;
 
         // This would automatically pass the password used to
         // secure the meeting.
@@ -95,7 +98,7 @@ class VideoMeetingView extends WindowView {
         // not to be possible to set the password when "setting up" the
         // meeting the way it is currently done.
         this.jitsi.on('passwordRequired', function () {
-            this.executeCommand('password', meetingPassword);
+            this.executeCommand('password', meeting.password);
         })
 
         // When user leaves meeting, then jitsi-object is disposed
@@ -111,7 +114,7 @@ class VideoMeetingView extends WindowView {
      * @param {String} meetingId if of meeting
      */
     close(meetingId) {
-        if (this.currentMeetingId === meetingId) {
+        if (this.currentMeeting.id === meetingId) {
             this.isMinimized = false;
             this.jitsi.dispose();
             $('#meetingWindow').hide();

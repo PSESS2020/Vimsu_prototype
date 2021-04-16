@@ -205,13 +205,28 @@ class EventManager {
     /** 
      * called from view when an entry in the meeting list is clicked.
      * 
-     * @param {String} meetingId id of joined meeting
-     * @param {String} meetingDomain domain of joined meeting
-     * @param {String} meetingName name of joined meeting
-     * @param {String} meetingPassword password of joined meeting
+     * @param {Object} meeting joined meeting
      */
-    handleMeetingJoined(meetingId, meetingDomain, meetingName, meetingPassword) {
-        this.clientController.handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword);
+    handleMeetingJoined(meeting) {
+        this.clientController.handleFromViewJoinMeeting(meeting);
+    }
+
+    /**
+     * called from view when a meeting is minimized
+     * 
+     * @param {Object} meeting minimized meeting
+     */
+     handleAddMinimizedMeetingNotif(meeting) {
+        this.clientController.handleFromViewAddMinimizedMeetingNotif(meeting);
+    }
+
+    /**
+     * called from view when a meeting is no more minimized
+     * 
+     * @param {String} meetingId previous minimized meeting id
+     */
+    handleRemoveMinimizedMeetingNotif(meetingId) {
+        this.clientController.handleFromViewRemoveMinimizedMeetingNotif(meetingId);
     }
     
     /**

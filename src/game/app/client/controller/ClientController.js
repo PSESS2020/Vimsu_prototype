@@ -1047,13 +1047,11 @@ class ClientController {
      * Receives from server that a new meeting has been created
      * 
      * @param {Object} meeting meeting
-     * @param {String} meeting.id ID of meeting
-     * @param {String} meeting.name name of meeting
-     * @param {String} meeting.password password of meeting
      */
      handleFromServerNewMeeting = function (meeting) {
         TypeChecker.isInstanceOf(meeting, Object);
         TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.domain);
         TypeChecker.isString(meeting.name);
         TypeChecker.isString(meeting.password);
 
@@ -1068,10 +1066,11 @@ class ClientController {
     handleFromServerChatMeeting = function (meeting) {
         TypeChecker.isInstanceOf(meeting, Object);
         TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.domain);
         TypeChecker.isString(meeting.name);
         TypeChecker.isString(meeting.password);
 
-        this.handleFromViewJoinMeeting(meeting.id, meeting.domain, meeting.name, meeting.password);
+        this.handleFromViewJoinMeeting(meeting);
     }
 
     /**
@@ -1637,18 +1636,16 @@ class ClientController {
     /**
      * Calls the Jitsi-API to join a meeting
      * 
-     * @param {String} meetingId id of joined meeting
-     * @param {String} meetingDomain domain of joined meeting
-     * @param {String} meetingName name of joined meeting
-     * @param {String} meetingPassword password of joined meeting
+     * @param {Object} meeting joined meeting
      */
-    handleFromViewJoinMeeting(meetingId, meetingDomain, meetingName, meetingPassword) {
-        TypeChecker.isString(meetingId);
-        TypeChecker.isString(meetingDomain);
-        TypeChecker.isString(meetingName);
-        TypeChecker.isString(meetingPassword);
+    handleFromViewJoinMeeting(meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.domain);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
 
-        this.gameView.initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, this.ownParticipant.getUsername());
+        this.gameView.initVideoMeetingView(meeting, this.ownParticipant.getUsername());
     }
 
     /**
@@ -1661,6 +1658,32 @@ class ClientController {
         if (this.socketReady()) {
             this.socket.emit('getChatMeetingDomain', chatId);
         }
+    }
+
+    /**
+     * Draws minimized meeting notif
+     * 
+     * @param {Object} meeting minimized meeting
+     */
+    handleFromViewAddMinimizedMeetingNotif(meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.domain);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.gameView.drawMinimizedMeetingNotif(meeting);
+    }
+
+    /**
+     * Removes minimized meeting notif
+     * 
+     * @param {String} meetingId previous minimized meeting id
+     */
+     handleFromViewRemoveMinimizedMeetingNotif(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.gameView.removeMinimizedMeetingNotif(meetingId);
     }
 
     /**

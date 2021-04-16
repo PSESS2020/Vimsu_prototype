@@ -64,7 +64,7 @@ class NotificationBar extends Views {
      */
     drawNewMessage(senderUsername, chatId) {
         const id = 'notifMessage' + senderUsername + chatId
-        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`)
+        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -80,7 +80,7 @@ class NotificationBar extends Views {
      */
     drawNewChat(senderUsername, chatId) {
         const id = 'notifChat' + chatId
-        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`)
+        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -97,7 +97,7 @@ class NotificationBar extends Views {
      */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
         const id = 'notifGroupChat' + chatId
-        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`)
+        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -113,7 +113,7 @@ class NotificationBar extends Views {
      */
     drawNewMeeting(meetingName, meetingID) {
         const id = 'notifMeeting' + meetingID;
-        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`)
+        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -129,7 +129,7 @@ class NotificationBar extends Views {
      */
     drawNewFriendRequest(senderUsername) {
         const id = 'notifFriendRequest' + senderUsername
-        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`)
+        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -148,7 +148,7 @@ class NotificationBar extends Views {
      */
     drawNewFriend(friendUsername) {
         const id = 'notifFriend' + friendUsername
-        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`)
+        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -158,12 +158,29 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Draws minimized meeting notification
+     * 
+     * @param {Object} meeting minimizedmeeting
+     */
+    drawMinimizedMeeting(meeting) {
+        const id = 'runningMeeting' + meeting.id
+        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false)
+
+        $('#' + id).on('click', (e) => {
+            $('#meetingWindow').show();
+            $('#meetingWindowWait').show();
+            return this.eventManager.handleMeetingJoined(meeting); 
+        })
+    }
+
+    /**
      * Adds new notification div to the notif bar
      * 
      * @param {String} id notification id
      * @param {String} text notification text
+     * @param {Boolean} closeable true if the notification can be closed
      */
-    addNewNotificationDiv(id, text) {
+    addNewNotificationDiv(id, text, closeable) {
         if ($('#' + id + 'Div').length) {
             $('#' + id + 'Div').show();
         } else {
@@ -181,9 +198,13 @@ class NotificationBar extends Views {
             this.unreadNotif++;
             $('#unreadNotif').text(this.unreadNotif);
 
-            $('#close' + id).on('click', (e) => {
-                this.removeNotifDiv(id)
-            })
+            if (closeable) {
+                $('#close' + id).on('click', (e) => {
+                    this.removeNotifDiv(id)
+                })
+            } else {
+                document.getElementById(`close${id}`).disabled = true;
+            }
         }
         
         $('#notifBar').scrollTop(0);

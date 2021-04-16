@@ -260,6 +260,10 @@ vertical-align: middle;
   opacity: .5 !important;
 }
 
+button:disabled {
+  opacity: .5;
+}
+
 .lectureChatContainer {
   border-style: solid;
   border-color: antiquewhite;
