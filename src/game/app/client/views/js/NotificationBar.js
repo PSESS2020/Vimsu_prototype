@@ -167,7 +167,7 @@ class NotificationBar extends Views {
         $('#' + id).on('click', (e) => {
             $('#meetingWindow').show();
             $('#meetingWindowWait').show();
-            return this.eventManager.handleMeetingJoined(meeting); 
+            return this.eventManager.handleMeetingJoined(meeting);
         })
     }
 
@@ -179,10 +179,9 @@ class NotificationBar extends Views {
      * @param {Boolean} closeable true if the notification can be closed
      */
     addNewNotificationDiv(id, text, closeable) {
-        if ($('#' + id + 'Div').length) {
-            $('#' + id + 'Div').show();
-        } else {
-            $('#notifBar').prepend(`
+        if ($('#' + id + 'Div').length > 0) return
+        
+        $('#notifBar').prepend(`
                 <div id="${id + 'Div'}" class="d-flex list-group-item notifBarDiv justify-content-between">
                     <button class="self-align-end closeBtn" id="${"close" + id}" type="button"><i class="fa fa-close"></i></button>
                     <a id="${id}" role="button" data-toggle="modal" href="">
@@ -193,17 +192,16 @@ class NotificationBar extends Views {
                 </div>
             `)
 
-            $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length)
 
-            if (closeable) {
-                $('#close' + id).on('click', (e) => {
-                    this.removeNotifDiv(id)
-                })
-            } else {
-                document.getElementById(`close${id}`).disabled = true;
-            }
+        if (closeable) {
+            $('#close' + id).on('click', (e) => {
+                this.removeNotifDiv(id)
+            })
+        } else {
+            document.getElementById(`close${id}`).disabled = true;
         }
-        
+
         $('#notifBar').scrollTop(0);
     }
 
