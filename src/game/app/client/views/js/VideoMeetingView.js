@@ -90,11 +90,14 @@ class VideoMeetingView extends WindowView {
 
         this.currentMeeting = meeting;
 
-        // This would automatically pass the password used to
-        // secure the meeting.
-        // However, only moderators can set passwords, and it seems
-        // not to be possible to set the password when "setting up" the
-        // meeting the way it is currently done.
+        // set new password for channel
+        this.jitsi.addEventListener('participantRoleChanged', function(event) {
+            if (event.role === "moderator") {
+                this.executeCommand('password', meeting.password);
+            }
+        })
+
+        // join a protected channel
         this.jitsi.on('passwordRequired', function () {
             this.executeCommand('password', meeting.password);
         })
