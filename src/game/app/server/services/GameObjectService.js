@@ -66,8 +66,11 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData, story) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -82,6 +85,11 @@ module.exports = class GameObjectService {
             TypeChecker.isInt(iFrameData.width);
             TypeChecker.isInt(iFrameData.height);
             TypeChecker.isString(iFrameData.url);
+        }
+
+        if (story !== undefined) {
+            TypeChecker.isInstanceOf(story, Array);
+            story.forEach(element => TypeChecker.isString(element));
         }
     }
 
@@ -817,13 +825,16 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      * 
      * @returns {GameObject} A custom instance of the GameObject class
      */
-    createCustomObject(roomId, type, xPos, yPos, isClickable, iFrameData) {
+    createCustomObject(roomId, type, xPos, yPos, isClickable, iFrameData, story) {
         this.#isKnownType(type);
         // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
         
         return new GameObject(
             this.#generateGameObjectID(), 
@@ -834,7 +845,8 @@ module.exports = class GameObjectService {
             new Position(roomId, xPos, yPos), 
             GameObjectInfo.getInfo(type, "isSolid"), 
             isClickable, 
-            iFrameData);
+            iFrameData,
+            story);
     }
 
     /**
@@ -854,15 +866,18 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      * @param {Int} variation The variation of the object that is supposed to be created
      * 
      * @return {GameObject} A custom instance of the GameObject class
      */
-    createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, variation) {
+    createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, story, variation) {
         this.#isKnownType(type);
         TypeChecker.isInt(variation);
         // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
         
         return new GameObject(
             this.#generateGameObjectID(), 
@@ -873,7 +888,8 @@ module.exports = class GameObjectService {
             new Position(roomId, xPos, yPos), 
             GameObjectInfo.getInfo(type, "isSolid"), 
             isClickable, 
-            iFrameData);       
+            iFrameData,
+            story);       
     }
 
     /**
@@ -893,16 +909,19 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      * @param {Array[number]} part The part of the object that is supposed to be created
      * 
      * @return {GameObject} A custom instance of the GameObject class
      */
-     createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, part) {
+     createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, story, part) {
         this.#isKnownType(type);
         TypeChecker.isInt(part.x);
         TypeChecker.isInt(part.y);
         // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData);
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
 
         return new GameObject(
             this.#generateGameObjectID(),
@@ -913,7 +932,8 @@ module.exports = class GameObjectService {
             new Position(roomId, xPos, yPos), 
             GameObjectInfo.getInfo(type, "isSolid"), 
             isClickable, 
-            iFrameData);        
+            iFrameData,
+            story);        
     }
 
 

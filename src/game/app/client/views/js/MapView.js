@@ -212,7 +212,7 @@ class MapView extends Views {
      */
     createObjectView = function(gameObject, position) {
         var objectType = gameObject.getGameObjectType();
-        var object = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getIsIFrameObject(), gameObject.getId());
+        var object = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getIsIFrameObject(), gameObject.getId(), gameObject.getStory());
 
         if (object != null) {
             this.gameObjects.push(object);

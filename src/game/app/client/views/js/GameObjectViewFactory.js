@@ -124,7 +124,7 @@ class GameObjectViewFactory {
      *
      * @return {GameObjectView} GameObjectViw instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID, story) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
@@ -133,6 +133,11 @@ class GameObjectViewFactory {
 
         if (gameObjectID !== undefined) 
             TypeChecker.isInt(gameObjectID);
+        
+        if (story !== undefined) {
+            TypeChecker.isInstanceOf(story, Array)
+            story.forEach(element => TypeChecker.isString(element))
+        }
 
         var gameObjectView = null;
         var gameObjectImage;
@@ -143,8 +148,8 @@ class GameObjectViewFactory {
             var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
-            // } else if (isClickable) {
-                // this is for easter eggs
+            } else if (isClickable && story !== undefined) {
+                gameObjectView = new GameObjectWithStoryView(gameObjectImage, [], pos, offset, objectName, gameObjectID, gameObjectID, story, gameObjectType);
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }

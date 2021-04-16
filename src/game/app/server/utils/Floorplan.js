@@ -112,7 +112,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
         ],
         OBJECTS: [
-            {type: GameObjectType.PLANT, position: [24, 0]},
+            {type: GameObjectType.PLANT, position: [24, 0], isClickable: true, story: ["I'm a plant.", "Please do not touch me.", "My precious leaves!"]},
             {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
             {type: GameObjectType.SOFA, position: [24, [1, 2, 3, 4, 5]], variation: 1}
         ],
