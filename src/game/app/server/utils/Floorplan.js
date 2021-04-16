@@ -149,8 +149,19 @@ const Floorplan = Object.freeze({
     /*************************** HOW TO ADD AN NPC ****************************/
     /**************************************************************************/
     /**                                                                      **/
-    
-    /**                                                                      **/
+    /**  Options:                                                            **/
+    /**    name: <String>,    # Name of the NPC. Purely for display purpose. **/
+    /**    position: <Integer[2]>,   # See above. One option only!           **/
+    /**    direction: Direction.<key>,   # Which way the NPC is facing.      **/
+    /**                                  # <key> may be DOWNRIGHT, DOWNLEFT, **/
+    /**                                  # UPRIGHT or UPLEFT                 **/
+    /**    dialog: <String>     # What the NPC says when spoken to. If this  **/
+    /**         OR <String[]>   # is an array, the contents will be what the **/
+    /**                         # NPC says. If it is just a string, it will  **/
+    /**                         # be used as a key to load an appropriate    **/
+    /**                         # entry from the NPCDialog.js file. If it    **/
+    /**                         # not a legal key, the NPC will say that it  **/
+    /**                         # wasn't assigned dialog.                    **/
     /**                                                                      **/
     /**************************************************************************/
     
