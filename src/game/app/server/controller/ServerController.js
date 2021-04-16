@@ -2858,7 +2858,7 @@ module.exports = class ServerController {
                 }
         
                 existingChatPartnerIDList.forEach(existingChatParticipantID => {
-                    if (newChatPartnerID !== existingChatParticipantID) {
+                    if (!chatPartnerIDList.includes(existingChatParticipantID)) {
         
                         let existingChatParticipant = this.#ppants.get(existingChatParticipantID);
         
