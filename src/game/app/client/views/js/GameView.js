@@ -946,15 +946,12 @@ class GameView {
     /**
      * Draws jitsi meeting window
      * 
-     * @param {String} meetingId id of joined meeting
-     * @param {String} meetingDomain domain of joined meeting
-     * @param {String} meetingName name of joined meeting
-     * @param {String} meetingPassword password of joined meeting
+     * @param {Object} meeting joined meeting
      * @param {String} ownForename own forename that is shown in meeting
      * 
      */
-    initVideoMeetingView(meetingId, meetingDomain, meetingName, meetingPassword, ownForename) {
-        this.videoMeetingView.draw(meetingId, meetingDomain, meetingName, meetingPassword, ownForename);
+    initVideoMeetingView(meeting, ownForename) {
+        this.videoMeetingView.draw(meeting, ownForename);
     }
 
     /**
@@ -1299,6 +1296,32 @@ class GameView {
         TypeChecker.isString(meetingName);
         TypeChecker.isString(meetingID);
         this.notifBar.drawNewMeeting(meetingName, meetingID);
+    }
+
+    /**
+     * Draws minimized meeting notification
+     * 
+     * @param {Object} meeting minimized meeting
+     */
+    drawMinimizedMeetingNotif(meeting) {
+        TypeChecker.isInstanceOf(meeting, Object);
+        TypeChecker.isString(meeting.id);
+        TypeChecker.isString(meeting.domain);
+        TypeChecker.isString(meeting.name);
+        TypeChecker.isString(meeting.password);
+
+        this.notifBar.drawMinimizedMeeting(meeting);
+    }
+
+    /**
+     * Removes minimized meeting notification
+     * 
+     * @param {String} meetingId previous minimized meeting id
+     */
+     removeMinimizedMeetingNotif(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.notifBar.removeNotifDiv('runningMeeting' + meetingId);
     }
 
     /**

@@ -105,7 +105,7 @@ class MeetingListView extends WindowView {
             This is not ideal, sensitive information like a password, even though it is not a particularly important, is not good practice */
             $('#meetingWindow').show();
             $('#meetingWindowWait').show();
-            this.eventManager.handleMeetingJoined(meeting.id, meeting.domain, meeting.name, meeting.password); 
+            this.eventManager.handleMeetingJoined(meeting); 
         })
     }
 
