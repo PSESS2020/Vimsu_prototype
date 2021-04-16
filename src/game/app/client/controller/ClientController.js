@@ -379,9 +379,9 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject, mapElement.story))
             if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
-                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
+                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.story, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
             }
         });
 
@@ -389,9 +389,9 @@ class ClientController {
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject, element.story));
             if (element.isClickable && (element.width > 1 || element.length > 1)) {
-                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.cordX, element.cordY, element.width, element.length);
+                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.story, element.cordX, element.cordY, element.width, element.length);
             }
         });
 
@@ -1778,7 +1778,7 @@ class ClientController {
      * @param {Int} width width of parent object
      * @param {Int} length length of parent object
      */
-    addDummyClickersTo(listToAddTo, id, isIFrameObject, cordX, cordY, width, length) {
+    addDummyClickersTo(listToAddTo, id, isIFrameObject, story, cordX, cordY, width, length) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < length; j++) {
                 listToAddTo.push(
@@ -1790,7 +1790,8 @@ class ClientController {
                         Settings.SMALL_OBJECT_LENGTH,
                         new PositionClient(cordX + i, cordY + j),
                         true,
-                        isIFrameObject
+                        isIFrameObject,
+                        story
                     )
                 )
             }

@@ -111,14 +111,14 @@ module.exports = class RoomFactory {
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
-        // objData = {type, position, isClickable, iFrameData, variation}
+        // objData = {type, position, isClickable, iFrameData, story, variation}
         roomData.MAPELEMENTS.forEach(objData => {
             this.#decodePositionDataAndCreate(roomData.ID, objData, listOfMapElements)
         })
 
         // ADD OBJECTS
         // tables, plants, food and more
-        // objData = {type, position, isClickable, iFrameData, variation}
+        // objData = {type, position, isClickable, iFrameData, story, variation}
         roomData.OBJECTS.forEach(objData => {
             this.#decodePositionDataAndCreate(roomData.ID, objData, listOfGameObjects)
         })
@@ -297,6 +297,7 @@ module.exports = class RoomFactory {
                     position: [ objData.position[0] + partData.offset_x, objData.position[1] + partData.offset_y ],
                     isClickable: objData.isClickable,
                     iFrameData: objData.iFrameData,
+                    story: objData.story,
                     variation: partData.variation
                 }, listToPushInto)
             })
@@ -315,6 +316,7 @@ module.exports = class RoomFactory {
                             objData.position[1] + j * width,
                             objData.isClickable,
                             objData.iFrameData,
+                            objData.story,
                             { x: i, y: j }))
                     }
                 } else {
@@ -324,6 +326,7 @@ module.exports = class RoomFactory {
                         objData.position[1],
                         objData.isClickable,
                         objData.iFrameData,
+                        objData.story,
                         i
                     ));
                 }
@@ -340,6 +343,7 @@ module.exports = class RoomFactory {
                 objData.position[1],
                 objData.isClickable,
                 objData.iFrameData,
+                objData.story,
                 objData.variation
             ));           
         } else {
@@ -349,7 +353,8 @@ module.exports = class RoomFactory {
                 objData.position[0],
                 objData.position[1],
                 objData.isClickable,
-                objData.iFrameData
+                objData.iFrameData,
+                objData.story
             ));
         }      
     }

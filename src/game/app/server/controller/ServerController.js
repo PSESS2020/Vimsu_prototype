@@ -260,7 +260,8 @@ module.exports = class ServerController {
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
                             isClickable: mapElement.getClickable(),
-                            isIFrameObject: mapElement.getIFrameData() !== undefined
+                            isIFrameObject: mapElement.getIFrameData() !== undefined,
+                            story: mapElement.getStory(),
                         });
                     });
 
@@ -279,7 +280,8 @@ module.exports = class ServerController {
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
-                            isIFrameObject: gameObject.getIFrameData() !== undefined
+                            isIFrameObject: gameObject.getIFrameData() !== undefined,
+                            story: gameObject.getStory()
                         });
                     });
 
@@ -3229,7 +3231,8 @@ module.exports = class ServerController {
                 cordX: mapElement.getPosition().getCordX(),
                 cordY: mapElement.getPosition().getCordY(),
                 isClickable: mapElement.getClickable(),
-                isIFrameObject: mapElement.getIFrameData() !== undefined
+                isIFrameObject: mapElement.getIFrameData() !== undefined,
+                story: mapElement.getStory()
             });
         });
 
@@ -3248,7 +3251,8 @@ module.exports = class ServerController {
                 cordX: gameObject.getPosition().getCordX(),
                 cordY: gameObject.getPosition().getCordY(),
                 isClickable: gameObject.getClickable(),
-                isIFrameObject: gameObject.getIFrameData() !== undefined
+                isIFrameObject: gameObject.getIFrameData() !== undefined,
+                story: gameObject.getStory()
             });
         });
 
