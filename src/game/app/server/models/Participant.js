@@ -489,6 +489,22 @@ module.exports = class Participant {
     }
 
     /**
+     * Updates an existing chat with updatedChat
+     * @method module:Participant#updateeChat
+     * 
+     * @param {String} updatedChat updated Chat
+     */
+    updateChat(updatedChat) {
+        TypeChecker.isInstanceOf(updatedChat, Chat);
+
+        this.#chatList.forEach((chat, index) => {
+            if (chat.getId() === updatedChat.getId()) {
+                this.#chatList[index] = updatedChat;
+            }
+        });
+    }
+
+    /**
      * Gets tasks and its count
      * @method module:Participant#getTaskTypeMappingCounts
      * 

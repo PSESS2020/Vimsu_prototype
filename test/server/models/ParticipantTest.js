@@ -73,7 +73,7 @@ describe('Participant test', function () {
         assert.equal(ppant.getShirtColor(), Settings.DEFAULT_SHIRTCOLOR_PPANT);
     });
 
-    it('test adding and removing a chat', function () {
+    it('test adding, removing and updating a chat', function () {
 
         let newChat = new Chat('chatId', [], [], TestUtil.randomIntWithMin(1));
         let oldChatListLength = ppant.getChatList().length;
@@ -94,6 +94,12 @@ describe('Participant test', function () {
         ppant.addChat(newChat);
         expect(ppant.getChatList()).to.be.an('array').and.to.have.lengthOf(oldChatListLength + 1);
         assert.equal(ppant.isMemberOfChat(newChat.getId()), true);
+
+        //update chat
+        let updatedChat = new Chat('chatId', ['1'], [], TestUtil.randomIntWithMin(1));
+        ppant.updateChat(updatedChat);
+        expect(ppant.getChat('chatId')).not.to.equal(newChat);
+        expect(ppant.getChat('chatId')).to.equal(updatedChat);
 
         //remove chat now
         ppant.removeChat(newChat.getId());

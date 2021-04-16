@@ -3125,15 +3125,6 @@ module.exports = class ServerController {
      */
     deleteParticipantReferences(ppantID, username) {
 
-        let msg = new Message("", "", "", new Date(), "*VIMSU Bot* " + username + " has deleted his/her account and is no longer part of the chat.");
-        let msgToEmit = {
-            senderUsername: msg.getUsername(),
-            msgId: msg.getMessageId(),
-            senderId: msg.getSenderId(),
-            timestamp: msg.getTimestamp(),
-            msgText: msg.getMessageText()
-        };    
-
         //remove all references from other ppant instances
         this.#ppants.forEach(ppant => {
 
@@ -3154,14 +3145,32 @@ module.exports = class ServerController {
             let chatList = ppant.getChatList();
             chatList.forEach(chat => {
                 if (chat.includesChatMember(ppantID)) {
-                    chat.removeParticipant(ppantID);
-
-                    //Solution not ideal, this msg is only there for current exisiting chat instances. Actual Message is stored in DB in ParticipantService
-                    chat.addMessage(msg);
                     let chatID = chat.getId();
 
-                    this.#io.to(socketID).emit('removeFromChatParticipantList', chatID, username);
-                    this.#io.to(socketID).emit('newChatMessage', chatID, msgToEmit);
+                    //Gets chat with msg that a member deleted his account and is no longer part of it
+                    ChatService.loadChat(chatID, Settings.CONFERENCE_ID, this.#db).then(updatedChat => {
+                        ppant.updateChat(updatedChat);
+
+                        //Get delete msg
+                        let msgList = updatedChat.getMessageList();
+
+                        let i = 1;
+                        while (msgList[msgList.length - i].getMessageText() !== "*VIMSU Bot* " + username + " has deleted his/her account and is no longer part of the chat.") 
+                            i--;
+                        
+                        let deleteMsg = msgList[msgList.length - i];
+
+                        let msgToEmit = {
+                            senderUsername: deleteMsg.getUsername(),
+                            msgId: deleteMsg.getMessageId(),
+                            senderId: deleteMsg.getSenderId(),
+                            timestamp: deleteMsg.getTimestamp(),
+                            msgText: deleteMsg.getMessageText()
+                        };    
+
+                        this.#io.to(socketID).emit('removeFromChatParticipantList', chatID, username);
+                        this.#io.to(socketID).emit('newChatMessage', chatID, msgToEmit);
+                    })
                 }
             });
         });
