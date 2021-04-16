@@ -43,8 +43,8 @@
 
         $('#externalWebsiteBody' + gameObjectID).append(`
             <div class="modal-body modal-body-center" style="overflow:auto; height:100%;">
-                <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
-                    allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+                <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url + '?fs=0'} width=${width} height=${height} 
+                    scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"</iframe>
             </div>
         `);
 
