@@ -1214,7 +1214,7 @@ class GameView {
         TypeChecker.isString(chatId);
         TypeChecker.isString(username);
         if ($('#chatParticipantListModal' + chatId).is(':visible')) {
-            this.chatParticipantListView.addToChatParticipantList(username);
+            this.chatParticipantListView.addToChatParticipantList(chatId, username);
         }
     }
 
