@@ -18,6 +18,9 @@ const Settings = require('./Settings');
  * constant values that can be used throughout the entire floorplan,
  * e.g. when one wants to create a room layout where objects are
  * placed relative to the size of the entire room.
+ * 
+ * Since these do not get exported, they are not visible throughout
+ * the program during runtime.
  */
 const FloorplanConstants = Object.freeze({
     NPCNAMES: {
@@ -29,56 +32,118 @@ const FloorplanConstants = Object.freeze({
 
 const Floorplan = Object.freeze({
 
-    // Required
-    // - Objects
-    // - Map Elements (Walls & Windows)
-    // - NPCs
-    // - Doors
-    // Best way of doing doors is to force people to manually set ids of rooms and then give exit-room id when listing doors
+    /**************************************************************************/
+    /**************** READ BEFORE YOU START PERUSING THE GUIDE ****************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**   After finishing the floorplan but before starting the conference,  **/
+    /**   make sure that the start position defined in the Settings.js file  **/
+    /**   (server-side version) is a legal position for the  conference you  **/
+    /**   just specified, that is to say make sure it exists.                **/
+    /**                                                                      **/
+    /**************************************************************************/
+    
 
-    // Giving any of the "standard" roomTypes, the roomFactory will use
-    // legacy code to build them according to the standard conference.
-    // note that using these requires that the rest of the conference
-    // contains fitting rooms for the doors to exit into
-    // this might also be broken by now
+    /**************************************************************************/
+    /************************** HOW TO USE THIS FILE **************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**  You can add an additional room to the conference by adding an       **/
+    /**  entry adhering to the following scheme to this file:                **/
+    /**                                                                      **/
+    /**  <key>: {                                                            **/
+    /**    ID: <Integer>,    # Needs to be an unique integer, as it is used  **/
+    /**                      # by the software to identify the room. In the  **/
+    /**                      # next update, will be changed to string.       **/
+    /**    NAME: <String>,   # Can be anything you want. Will be displayed   **/
+    /**                      # in the client though.                         **/
+    /**    TYPE: TypeOfRoom.CUSTOM,   # Must be TypeOfRoom.CUSTOM, as it     **/
+    /**                               # only exists for legacy reasons.      **/
+    /**    LENGTH: <Integer>,   # The x-axis, goes along the left wall       **/
+    /**    WIDTH: <Integer>,    # The y-axis, goes along the right wall      **/
+    /**    MAPELEMENTS: [],   # Array of objects adhering to proper scheme,  **/
+    /**                       # for more detail see below.                   **/
+    /**    OBJECTS: [],       # Array of objects adhering to proper scheme,  **/
+    /**                       # for more detail see below.                   **/
+    /**    DOORS: [],         # Array of objects adhering to proper scheme,  **/
+    /**                       # for more detail see below.                   **/
+    /**    NPCS: [],          # Array of objects adhering to proper scheme,  **/
+    /**                       # for more detail see below.                   **/
+    /**  }                                                                   **/
+    /**                                                                      **/
+    /**  NOTE The key can be whatever you like. It is not used anywhere for  **/
+    /**       anything except help you remember what room you're currently   **/
+    /**       creating.                                                      **/
+    /**                                                                      **/
+    /**  NOTE A room does not need to contain any map elements, objects,     **/
+    /**       doors or npcs. But why wouldn't it?                            **/
+    /**                                                                      **/
+    /**************************************************************************/
 
-    /*
-    ROOM1: {
-        TYPE: TypeOfRoom.RECEPTION,
-        ID: Settings.RECEPTION_ID      
-    },
+    /**************************************************************************/
+    /************************ HOW TO ADD A MAPELEMENT *************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**  Map elements are anything that functions like a wall or tile, such  **/
+    /**  as windows, the schedule, the kit logo etc., but not doors.         **/
+    /**  While any type of map element can be a type of game object and vice **/
+    /**  versa, map elements can not be made clickable.                      **/
+    /**                                                                      **/
+    /**  Options:                                                            **/
+    /**    type: GameObjectType.<type>,    # Any legal type of GameObject    **/
+    /**    position: <Integer[2] OR [Integer, Integer[n]] OR */
+    /**    variation: <Integer>  */
+    /**                                                                      **/
+    /**  NOTE See below for a complete list of all available types of map    **/
+    /**       elements, their variations and possible configurations.        **/
+    /**                                                                      **/
+    /**************************************************************************/
 
-    ROOM2: {
-        TYPE: TypeOfRoom.FOYER,
-        ID: Settings.FOYER_ID
-    },
+    /**************************************************************************/
+    /************************* HOW TO ADD AN OBJECT ***************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**  Since game objects can also be map elements, everything from the    **/
+    /**  above section still holds true. However, since game objects can be  **/
+    /**  made clickable, they offer additional options.                      **/
+    /**  Objects can either display a text message (story) or an iFrame (an  **/
+    /**  external website openend inside of the app) on click.               **/
+    /**  If both are defined, the iFrame takes precedence.                   **/
+    /**                                                                      **/
+    /**  Options:                                                            **/
+    /**    isClickable: <Boolean>,  # Self-explanatory                       **/
+    /**    iFrameData: <Object>,    # Must be an object containg             **/
+    /**                             #   title: <String>,   (header)          **/
+    /**                             #   url: <String>,                       **/
+    /**                             #   width: <Integer>,  (in pixel)        **/
+    /**                             #   height: <Integer>  (in pixel)        **/
+    /**    story: <String[]>        # Each array entry gets its own textbox  **/
+    /**                                                                      **/
+    /**************************************************************************/
 
-    ROOM3: {
-        TYPE: TypeOfRoom.FOODCOURT,
-        ID: Settings.FOODCOURT_ID
-    },
+    /**************************************************************************/
+    /*************************** HOW TO ADD A DOOR ****************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**************************************************************************/
 
-    ROOM4: {
-        TYPE: TypeOfRoom.ESCAPEROOM,
-        ID: Settings.ESCAPEROOM_ID
-    }
-    */
+    /**************************************************************************/
+    /*************************** HOW TO ADD AN NPC ****************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**************************************************************************/
+    
 
-    // TODO:
-    // - possibility to generate ID during runtime?
-    // - support choice of styles for walls and floor
-    // - add shape supports
-    // - add possibility to easily resize room without fucking
-    //   up layout (can use Floorplan constants for that)
-    // - I probably need to write some hack to make sure door-unlock
-    //   will still work
-    // - Achievements only broken by setting IDs to non setting-versions
     RECEPTION: {
-        ID: Settings.RECEPTION_ID, // needs to be integer
+        ID: Settings.RECEPTION_ID, 
         NAME: "Reception",
         TYPE: TypeOfRoom.CUSTOM,
-        LENGTH: 13, // x dimension - along left wall
-        WIDTH: 13, // y dimension - along right wall   
+        LENGTH: 13, 
+        WIDTH: 13, 
         MAPELEMENTS: [
             {type: GameObjectType.RIGHTWINDOW, position: [[13, 5], [13, 6], [13, 7]]},
             {type: GameObjectType.CONFERENCELOGO, position: [5, -1]}
@@ -190,6 +255,45 @@ const Floorplan = Object.freeze({
         ],
         NPCS: []
     }
+
+    /**************************************************************************/
+    /***************** COMPLETE LIST OF AVAILABLE OBJECT TYPES ****************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**                                                                      **/
+    /**************************************************************************/
+
+    // FINAL NOTE:
+    // Giving any of the "standard" RoomTypes, the RoomFactory will use
+    // legacy code to build them according to the standard conference.
+    // Using these requires that the rest of the conference contains the
+    // proper rooms for the doors to exit into, so it's best to either
+    // use all of them or none of them.
+    //
+    // !!! NO LONGER SUPPORTED - IF YOU USE IT AND IT BREAKS, WE CAN'T HELP !!!
+
+    /*
+    ROOM1: {
+        TYPE: TypeOfRoom.RECEPTION,
+        ID: Settings.RECEPTION_ID      
+    },
+
+    ROOM2: {
+        TYPE: TypeOfRoom.FOYER,
+        ID: Settings.FOYER_ID
+    },
+
+    ROOM3: {
+        TYPE: TypeOfRoom.FOODCOURT,
+        ID: Settings.FOODCOURT_ID
+    },
+
+    ROOM4: {
+        TYPE: TypeOfRoom.ESCAPEROOM,
+        ID: Settings.ESCAPEROOM_ID
+    }
+    */
     
 })
 
