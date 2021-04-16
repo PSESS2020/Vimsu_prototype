@@ -340,6 +340,7 @@ class ClientController {
             TypeChecker.isInt(mapElement.cordY);
             TypeChecker.isBoolean(mapElement.isClickable);
             TypeChecker.isBoolean(mapElement.isIFrameObject);
+
         });
         TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
         listOfGameObjectsData.forEach(gameObject => {
@@ -379,6 +380,9 @@ class ClientController {
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
                 new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject))
+            if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
+                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
+            }
         });
 
         //transform GameObjects to GameObjectClients
@@ -386,6 +390,9 @@ class ClientController {
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
                 new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject));
+            if (element.isClickable && (element.width > 1 || element.length > 1)) {
+                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.cordX, element.cordY, element.width, element.length);
+            }
         });
 
         //transform NPCs to NPCClients
@@ -1754,5 +1761,39 @@ class ClientController {
     handleArrowUp() {
         this.gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
+    }
+
+    /**
+     * Adds invisible, clickable dummy objects to map s.t.
+     * larger clickable objects can be clicked everywhere
+     * 
+     * @param {GameObjectClient[]} listToAddTo dummy objects should
+     *                                         be added to same list
+     *                                         as parent object
+     * @param {String} id same as parent object (to retrieve iFrame
+     *                    data)
+     * @param {Boolean} isIFrameObject same as parent object
+     * @param {Int} cordX x cord of parent object
+     * @param {Int} cordY y cord of parent object
+     * @param {Int} width width of parent object
+     * @param {Int} length length of parent object
+     */
+    addDummyClickersTo(listToAddTo, id, isIFrameObject, cordX, cordY, width, length) {
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < length; j++) {
+                listToAddTo.push(
+                    new GameObjectClient(
+                        id, 
+                        GameObjectType.BLANK,
+                        "blank",
+                        Settings.SMALL_OBJECT_WIDTH,
+                        Settings.SMALL_OBJECT_LENGTH,
+                        new PositionClient(cordX + i, cordY + j),
+                        true,
+                        isIFrameObject
+                    )
+                )
+            }
+        }
     }
 }

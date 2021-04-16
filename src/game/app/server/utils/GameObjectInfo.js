@@ -120,7 +120,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: '',
+            assetName: "blank",
         },
 
         // Tiles
