@@ -231,6 +231,8 @@ class ChatThreadView extends WindowView {
      * Init all buttons
      */
     initButtons = () => {
+        $('#chatMessageInput' + this.chat.chatId).trigger('focus');
+        
         $('#chatMessageInput' + this.chat.chatId).off();
         $('#chatMessageInputGroup' + this.chat.chatId).off();
 
