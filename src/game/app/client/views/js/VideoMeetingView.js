@@ -69,6 +69,7 @@ class VideoMeetingView extends WindowView {
             if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
                 this.isMinimized = false;
                 this.jitsi.dispose();
+                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
             }
         }
 
@@ -106,6 +107,7 @@ class VideoMeetingView extends WindowView {
         this.jitsi.on('readyToClose', function () {
             this.dispose();
             $('#meetingWindow').hide();
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
         });
     }
 
@@ -119,6 +121,7 @@ class VideoMeetingView extends WindowView {
             this.isMinimized = false;
             this.jitsi.dispose();
             $('#meetingWindow').hide();
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
         }
     }
 }
