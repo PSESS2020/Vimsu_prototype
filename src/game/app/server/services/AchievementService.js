@@ -78,7 +78,7 @@ module.exports = class AchievementService {
 
         this.#achievementDefinitions[TypeOfTask.BASICTUTORIALCLICK] = new AchievementDefinition(7, TypeOfTask.BASICTUTORIALCLICK, "First Greeting", "info", "Click on the NPC in the reception room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
-        ], 'F3T1');
+        ], 'F0T1_0');
 
         this.#achievementDefinitions[TypeOfTask.RECEPTIONVISIT] = new AchievementDefinition(8, TypeOfTask.RECEPTIONVISIT, "Vimsu Associate", "user", "Visit reception room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 10 },
@@ -86,7 +86,7 @@ module.exports = class AchievementService {
 
         this.#achievementDefinitions[TypeOfTask.CHEFCLICK] = new AchievementDefinition(9, TypeOfTask.CHEFCLICK, "Cooking Guru", "utensils", "Click on the NPC in the food court room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
-        ], 'F2T1');
+        ], 'F2T1_0');
 
         this.#achievementDefinitions[TypeOfTask.FOYERHELPERCLICK] = new AchievementDefinition(10, TypeOfTask.FOYERHELPERCLICK, "Lecture Guru", "book", "Click on the NPC in the foyer room to gain this achievement.", [
             { count: 1, color: '#C9B037', points: 15 },
