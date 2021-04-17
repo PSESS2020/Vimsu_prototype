@@ -189,14 +189,25 @@ module.exports = class RouteController {
         })
 
         this.#app.get('/verify-account/:token', (request, response) => {
-            return AccountService.verifyAccount(request.params.token, dbSuffix, this.#db).then(result => {
-                const args = { verifySuccess: result }
-                if (request.session.loggedin === true) {
-                    response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
+            return AccountService.getAccountByToken(request.params.token, dbSuffix, this.#db).then(account => {
+                if (account && !account.isActive) {
+                    return AccountService.verifyAccount(request.params.token, dbSuffix, this.#db).then(result => {
+                        const args = { verifySuccess: result }
+                        if (request.session.loggedin === true) {
+                            response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
+                        } else {
+                            response.render('verify-account', args)
+                        }
+                    })
                 } else {
-                    response.render('verify-account', args)
+                    if (request.session.loggedin === true) {
+                        response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                    } else {
+                        response.render('page-not-found');
+                    }
                 }
             })
+            
         })
 
         this.#app.get('/privacy-policy', (request, response) => {
@@ -266,7 +277,6 @@ module.exports = class RouteController {
             } else {
                 response.render('login', { usernameOrEmail: '' });
             }
-
         });
 
         this.#app.get('/conference/:id', (request, response) => {
@@ -302,6 +312,102 @@ module.exports = class RouteController {
                     response.render('login', { wrongLoginData: true, usernameOrEmail: request.body.usernameOrEmail });
                 }
                 response.end();
+            })
+        });
+
+        this.#app.get('/reset-password/:token', (request, response) => {
+            return AccountService.getAccountByToken(request.params.token, dbSuffix, this.#db).then(account => {
+                if (account) {
+                    if (request.session.loggedin === true) {
+                        response.render('reset-password', this.#getLoggedInParameters({}, request.session.username));
+                    } else {
+                        response.render('reset-password', {})
+                    }
+                } else {
+                    if (request.session.loggedin === true) {
+                        response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                    } else {
+                        response.render('page-not-found');
+                    }
+                }
+            })
+        });
+        
+        this.#app.post('/reset-password/:token', (request, response) => {
+            if (!request.body.newPassword) {
+                if (request.session.loggedin === true) {
+                    return response.render('reset-password', this.#getLoggedInParameters({ invalidPassword: true }, request.session.username))
+                } else {
+                    return response.render('reset-password', { invalidPassword: true })
+                }
+            }
+
+            if (request.body.newPassword !== request.body.retypedNewPassword) {
+                if (request.session.loggedin === true) {
+                    return response.render('reset-password', this.#getLoggedInParameters({ passwordsDontMatch: true }, request.session.username))
+                } else {
+                    return response.render('reset-password', { passwordsDontMatch: true })
+                }
+            }
+
+            return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(result => {
+                if (result) {
+                    if (request.session.loggedin === true) {
+                        response.render('reset-password', this.#getLoggedInParameters({ changePasswordSuccess: true }, request.session.username))
+                    } else {
+                        response.render('reset-password', { changePasswordSuccess: true })
+                    }
+                } else {
+                    if (request.session.loggedin === true) {
+                        response.render('reset-password', this.#getLoggedInParameters({ changePasswordFailed: true }, request.session.username))
+                    } else {
+                        response.render('reset-password', { changePasswordFailed: true })
+                    }
+                }
+            })
+        });
+
+        this.#app.get('/forgot-password', (request, response) => {
+            if (request.session.loggedin === true) {
+                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+            } else {
+                response.render('forgot-password', { email: '' });
+            }
+        });
+
+        this.#app.post('/forgot-password', (request, response) => {
+            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                return response.render('forgot-password', { invalidEmail: true, email: request.body.email });
+            }
+
+            return AccountService.setToken(request.body.email, dbSuffix, this.#db).then(token => {
+                if (token) {
+                    const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
+
+                    const mailOptions = {
+                        from: vimsuEmail,
+                        to: request.body.email,
+                        subject: "Reset your VIMSU password",
+                        html: `
+                            <div style="text-align: center;">
+                                <p>You have requested to reset your password. Please click on the link below to set a new password.</p>
+                                <h3><a href="${process.env.VIMSU_DOMAIN}/reset-password/${token}">Reset your password</a></h3>
+                            </div>                        
+                        `
+                    }
+
+                    return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                        if (result === true) {
+                            response.render('forgot-password', { messageSent: true, sentTo: request.body.email, email: '' })
+                            response.end();
+                        } else {
+                            response.render('forgot-password', { sendMessageFailed: true, email: request.body.email });
+                        }
+                    })
+                } else {
+                    response.render('forgot-password', { invalidEmail: true, email: request.body.email });
+                }
             })
         });
 
@@ -462,7 +568,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username))
                 }
 
-                return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
+                return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
                     if (res === true) {
                         response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     } else if (res === null) {

@@ -18,21 +18,24 @@
                         <small class="error"><i class="fa fa-times-circle"></i> Fields cannot be empty.</small>
                     <% } %>
                 </div>
-                <form action="login" method="POST">
+                <form action="" method="POST">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="usernameOrEmailInput" name="usernameOrEmail" placeholder="Username / Email"
+                        <label for="usernameOrEmail" class="input-label">Username / Email</label>
+                        <input type="text" class="form-control" id="usernameOrEmailInput" name="usernameOrEmail" placeholder=""
                             required value="<%=usernameOrEmail%>">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
+                        <label for="password" class="input-label justify-content-between">Password<a class="link" href="/forgot-password" style="float: right; text-align: right">Forgot your password?</a></label>
+                        <input type="password" class="form-control" id="passwordInput" name="password" placeholder=""
                             required>
-                    </div>                    
-                    <div class="row justify-content-center m-0 p-0">
+                    </div>
+                    <div class="row d-flex align-items-center justify-content-center">
                         <small>Don't have an account yet? <span><a class="link" href="/register"> Sign up now!</a></span></small>
                     </div>
                     <button class="primary-button mt-4 p-2" type="submit">
                         <span>Sign in</span>
                     </button>
+                    
                 </form>
             </div>
         </section>
