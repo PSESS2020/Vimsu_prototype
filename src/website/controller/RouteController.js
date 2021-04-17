@@ -13,6 +13,7 @@ const blobClient = require('../../config/blob');
 const Account = require('../models/Account');
 const nodemailer = require("nodemailer");
 const ServerController = require('../../game/app/server/controller/ServerController');
+const TypeOfRole = require('../utils/TypeOfRole')
 
 /**
  * The Route Controller
@@ -67,6 +68,7 @@ module.exports = class RouteController {
      * @method module:RouteController#init
      */
     #init = function () {
+        const dbSuffix = '';
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
@@ -140,7 +142,7 @@ module.exports = class RouteController {
         });
 
         this.#app.post('/contact-us', (request, response) => {
-            const vimsuEmail = process.env.VIMSU_EMAIL;
+            const vimsuEmail = process.env.VIMSU_DEFAULT_EMAIL;
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
@@ -169,7 +171,7 @@ module.exports = class RouteController {
                 `
             }
 
-            return this.#sendMail(mailOptions).then(result => {
+            return this.#sendMail(mailOptions, process.env.VIMSU_DEFAULT_EMAIL_PASSWORD).then(result => {
                 if (result === true) {
                     if (request.session.loggedin === true) {
                         response.render('contact-us', this.#getLoggedInParameters({ messageSent: true, email: '', message: '' }, request.session.username));
@@ -182,6 +184,17 @@ module.exports = class RouteController {
                     } else {
                         response.render('contact-us', { sendMessageFailed: true, email: request.body.email, message: request.body.message });
                     }
+                }
+            })
+        })
+
+        this.#app.get('/verify-account/:token', (request, response) => {
+            return AccountService.verifyAccount(request.params.token, dbSuffix, this.#db).then(result => {
+                const args = { verifySuccess: result }
+                if (request.session.loggedin === true) {
+                    response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
+                } else {
+                    response.render('verify-account', args)
                 }
             })
         })
@@ -251,27 +264,25 @@ module.exports = class RouteController {
             if (request.session.loggedin === true) {
                 response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
             } else {
-                response.render('login', { username: '' });
+                response.render('login', { usernameOrEmail: '' });
             }
 
         });
 
         this.#app.get('/conference/:id', (request, response) => {
             if (request.session.loggedin === true && request.params.id === Settings.CONFERENCE_ID) {
-
                 return response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
-
             } else {
                 response.render('page-not-found');
             }
         })
 
         this.#app.post('/login', (request, response) => {
-            if (!request.body.username || !request.body.password) {
-                return response.render('login', { fieldEmpty: true, username: request.body.username });
+            if (!request.body.usernameOrEmail || !request.body.password) {
+                return response.render('login', { fieldEmpty: true, usernameOrEmail: request.body.usernameOrEmail });
             }
 
-            return AccountService.verifyLoginData(request.body.username, request.body.password, '', this.#db).then(user => {
+            return AccountService.verifyLoginData(request.body.usernameOrEmail, request.body.password, dbSuffix, this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
@@ -283,10 +294,12 @@ module.exports = class RouteController {
                     request.session.job = user.getJob();
                     request.session.company = user.getCompany();
                     request.session.email = user.getEmail();
+                    request.session.role = user.getRole();
+                    request.session.token = user.getToken();
                     response.redirect('/');
                 }
                 else {
-                    response.render('login', { wrongLoginData: true, username: request.body.username });
+                    response.render('login', { wrongLoginData: true, usernameOrEmail: request.body.usernameOrEmail });
                 }
                 response.end();
             })
@@ -320,7 +333,7 @@ module.exports = class RouteController {
                 return response.render('register', { passwordsDontMatch: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
             }
 
-            let title = request.body.title;
+            const title = request.body.title;
 
             if (title !== "Title" && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
                 return response.render('register', { invalidTitle: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
@@ -330,22 +343,31 @@ module.exports = class RouteController {
                 return response.render('register', { invalidForename: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
             }
 
-            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, '', this.#db).then(res => {
-                if (res instanceof Account) {
-                    request.session.accountId = res.getAccountID();
-                    request.session.registerValid = false;
-                    request.session.loggedin = true;
-                    request.session.title = res.getTitle();
-                    request.session.surname = res.getSurname();
-                    request.session.forename = res.getForename();
+            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
+                if (res && res.token) {
+                    const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
 
-                    //Needed for creating business card during entering the conference.
-                    request.session.username = res.getUsername();
-                    request.session.job = res.getJob();
-                    request.session.company = res.getCompany();
-                    request.session.email = res.getEmail();
-                    response.redirect('/');
-                    response.end();
+                    const mailOptions = {
+                        from: vimsuEmail,
+                        to: request.body.email,
+                        subject: "Verify your VIMSU account",
+                        html: `
+                            <div style="text-align: center;">
+                                <p>Thank you for signing up to VIMSU!<br>Please click on the link below to activate your account.</p>
+                                <p>Your username: ${request.body.username}</p>
+                                <h3><a href="${process.env.VIMSU_DOMAIN}/verify-account/${res.token}">Verify your VIMSU account now</a></h3>
+                            </div>                        
+                        `
+                    }
+        
+                    return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                        if (result === true) {
+                            response.render('register', { registerSuccess: true, sentTo: request.body.email, username: "", email: "", forename: "", surname: "", title: "", job: "", company: "" })
+                            response.end();
+                        } else {
+                            response.render('register', { registerFailed: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                        }
+                    })
                 } else if (res && res.username) {
                     response.render('register', { usernameTaken: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company })
                 } else if (res && res.email) {
@@ -377,7 +399,7 @@ module.exports = class RouteController {
         this.#app.post('/account-settings', (request, response) => {
             var clickedButton = request.body.accountSettingsButton;
 
-            var accountId = request.session.accountId;
+            const accountId = request.session.accountId;
 
             if (clickedButton === "saveChangesButton") {
                 const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
@@ -390,7 +412,7 @@ module.exports = class RouteController {
                 if (!emailRegex.test(String(request.body.email).toLowerCase())) {
                     return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
-                let title = request.body.title;
+                const title = request.body.title;
 
                 if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
@@ -400,7 +422,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
 
-                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, '', this.#db).then(res => {
+                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, dbSuffix, this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
                         request.session.title = res.getTitle();
@@ -410,6 +432,8 @@ module.exports = class RouteController {
                         request.session.job = res.getJob();
                         request.session.company = res.getCompany();
                         request.session.email = res.getEmail();
+                        request.session.role = res.getRole();
+                        request.session.token = res.getToken();
 
                         response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     } else if (res && res.username) {
@@ -438,7 +462,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username))
                 }
 
-                return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, '', this.#db).then(res => {
+                return AccountService.changePassword(username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
                     if (res === true) {
                         response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     } else if (res === null) {
@@ -459,7 +483,7 @@ module.exports = class RouteController {
         });
     }
 
-    #sendMail = async function (mailOptions) {
+    #sendMail = async function (mailOptions, emailPassword) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
@@ -467,7 +491,7 @@ module.exports = class RouteController {
                 secure: true,
                 auth: {
                     user: mailOptions.from,
-                    pass: process.env.VIMSU_EMAIL_PASSWORD
+                    pass: emailPassword
                 }
             });
 

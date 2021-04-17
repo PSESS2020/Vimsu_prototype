@@ -171,15 +171,17 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('isVideoConference', Settings.VIDEOSTORAGE_ACTIVATED);
 
                 //variables for creating account instance
-                let username = socket.request.session.username;
-                let title = socket.request.session.title;
-                let surname = socket.request.session.surname;
-                let forename = socket.request.session.forename;
-                let job = socket.request.session.job;
-                let company = socket.request.session.company;
-                let email = socket.request.session.email;
+                const username = socket.request.session.username;
+                const title = socket.request.session.title;
+                const surname = socket.request.session.surname;
+                const forename = socket.request.session.forename;
+                const job = socket.request.session.job;
+                const company = socket.request.session.company;
+                const email = socket.request.session.email;
+                const role = socket.request.session.role;
+                const token = socket.request.session.token;
 
-                let account = new Account(accountId, username, title, surname, forename, job, company, email);
+                const account = new Account(accountId, username, title, surname, forename, job, company, email, role, token, true);
 
                 //create Participant
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {

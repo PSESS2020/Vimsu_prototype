@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<%- include('partials/head') %>
+</head>
+
+<body>
+	<div class="container">
+		<%- include('partials/header') %>
+        <section class="row align-items-center justify-content-center" id="content">
+            <div class="col-lg-6 col-md-12 col-sm-12 page-not-found">
+                <% if (locals.verifySuccess === true) { %>
+                    <div>
+                        <i class="fa fa-check-circle fa-4x"></i>
+                    </div>
+                    <div class="mt-4">
+                        Verification Successful!
+                    </div>
+                    
+                    <% if (locals.loggedIn !== true) { %>
+                        <div>
+                            <a class="btn primary-button mt-4 p-2" href="/login">
+                                <span>Sign in now</span>
+                            </a>
+                        </div>
+                    <% } %>  
+                <% } else { %>
+                    <div>
+                        <i class="fa fa-times-circle fa-4x"></i>
+                    </div>
+                   <div class="mt-4">
+                        Invalid verification!
+                   </div>
+                <% } %>
+            </div>
+        </section>
+	</div>
+	<%- include('partials/footer') %>
+</body>
+
+</html>

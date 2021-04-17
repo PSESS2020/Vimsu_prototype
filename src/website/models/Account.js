@@ -1,4 +1,5 @@
 const TypeChecker = require('../../game/app/client/shared/TypeChecker.js');
+const TypeOfRole = require('../utils/TypeOfRole')
 
 /**
  * The Account Model
@@ -17,6 +18,9 @@ module.exports = class Account {
     #job;
     #company;
     #email;
+    #role;
+    #token;
+    #isActive;
 
     /**
      * Creates an instance of Account class
@@ -30,8 +34,11 @@ module.exports = class Account {
      * @param {String} job user's job
      * @param {String} company user's company
      * @param {String} email user's email
+     * @param {TypeOfRole} role user's role
+     * @param {String} token user's token
+     * @param {Boolean} isActive true if account is active
      */
-    constructor(accountID, username, title, surname, forename, job, company, email) {
+    constructor(accountID, username, title, surname, forename, job, company, email, role, token, isActive) {
         TypeChecker.isString(accountID);
         TypeChecker.isString(username);
         TypeChecker.isString(title);
@@ -40,6 +47,9 @@ module.exports = class Account {
         TypeChecker.isString(job);
         TypeChecker.isString(company);
         TypeChecker.isString(email);
+        TypeChecker.isEnumOf(role, TypeOfRole);
+        TypeChecker.isString(token);
+        TypeChecker.isBoolean(isActive);
 
         this.#accountID = accountID;
         this.#username = username;
@@ -49,6 +59,9 @@ module.exports = class Account {
         this.#job = job;
         this.#company = company;
         this.#email = email;
+        this.#role = role;
+        this.#token = token;
+        this.#isActive = isActive;
     }
 
     /**
@@ -129,5 +142,35 @@ module.exports = class Account {
      */
     getEmail() {
         return this.#email;
+    }
+
+    /**
+     * Gets user's role
+     * @method module:Account#getRole
+     * 
+     * @returns {TypeOfRole} role
+     */
+     getRole() {
+        return this.#role;
+    }
+
+    /**
+     * Gets user's token
+     * @method module:Account#getToken
+     * 
+     * @returns {String} token
+     */
+    getToken() {
+        return this.#token;
+    }
+
+    /**
+     * Gets account activation status
+     * @method module:Account#getIsActive
+     * 
+     * @returns {Boolean} true if account is active
+     */
+    getIsActive() {
+        return this.#isActive;
     }
 }

@@ -211,6 +211,25 @@ module.exports = class db {
     }
 
     /**
+     * Updates multiple documents in a collection
+     * @method module:db#updateManyToCollection
+     * 
+     * @param {String} collectionName collection name
+     * @param {Object} query query
+     * @param {(String|number)} [newValue] new value
+     */
+    updateManyToCollection(collectionName, query, newValue) {
+        TypeChecker.isString(collectionName);
+        var collection = this.#vimsudb.collection(collectionName);
+
+        return collection.updateMany(query, { '$set': newValue }).then(res => {
+            return res;
+        }).catch(err => {
+            return err;
+        })
+    }
+
+    /**
      * Inserts a query to an array in a collection
      * @method module:db#insertToArrayInCollection
      * 

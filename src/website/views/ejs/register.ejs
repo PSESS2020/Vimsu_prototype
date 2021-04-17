@@ -12,7 +12,10 @@
             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
                 <h5 class="mb-4">Sign Up</h5>
                 <div class="row justify-content-left m-0 mb-3 p-0">
-                    <% if(locals.emailTaken === true) { %>
+                    <% if(locals.registerSuccess === true) { %>
+                        <small class="success"><i class="fa fa-check-circle"></i> We have sent you a verification link to <%=sentTo%>. 
+                            Please follow the link to complete the registration.</small>
+                    <% } else if(locals.emailTaken === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The email you
                             entered is already registered</small>
                     <% } else if (locals.usernameTaken === true) { %>

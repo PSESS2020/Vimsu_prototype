@@ -13,16 +13,15 @@
                 <h5 class="mb-4">Sign In</h5>
                 <div class="row justify-content-left mb-3 m-0 p-0">
                     <% if(locals.wrongLoginData === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> The password or
-                            the username you entered is wrong! Please try again.</small>
+                        <small class="error"><i class="fa fa-times-circle"></i> The fields you entered is wrong! Please try again.</small>
                     <% } else if (locals.fieldEmpty === true) { %>
-                        <small class="error"><i class="fa fa-times-circle"></i> Username or password cannot be empty.</small>
+                        <small class="error"><i class="fa fa-times-circle"></i> Fields cannot be empty.</small>
                     <% } %>
                 </div>
                 <form action="login" method="POST">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username"
-                            maxlength="10" required value="<%=username%>">
+                        <input type="text" class="form-control" id="usernameOrEmailInput" name="usernameOrEmail" placeholder="Username / Email"
+                            required value="<%=usernameOrEmail%>">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password"
