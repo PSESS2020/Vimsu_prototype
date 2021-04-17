@@ -14,7 +14,7 @@ const GlobalStrings = require('../../client/shared/GlobalStrings.js');
  */
 module.exports = class DoorService {
 
-    #doorCounter;
+    #doorIDPrefixList;
 
     /**
      * creates an instance of DoorService
@@ -26,7 +26,7 @@ module.exports = class DoorService {
         }
 
         DoorService.instance = this;
-        this.#doorCounter = 0;
+        this.#doorIDPrefixList = [];
     }
 
     /**
@@ -112,19 +112,22 @@ module.exports = class DoorService {
     }
 
     /**
-     * The class keeps a hidden counter of the amount of doors
-     * already generated for the conference (#doorCounter).
-     * To make sure that two doors connecting the same two rooms
-     * do not share an id, some "salt" is generated. This is not
-     * salt in the cryptographic sense, just a random integer
-     * depending on the doorCounter.
+     * Counts how many doors exist with that doorIDPrefix (doorIDPrefix is shared between doors that connect the same rooms in the same order)
      * 
-     * @method module:DoorService#generateDoorSalt
-     * @return {Int} A random integer between (doorCounter * 100) and 
-     *               (doorCounter++ * 100)
+     * @method module:DoorService#countDoorOccurrences 
+     * 
+     * @param {String} doorIDPrefix prefix of door ID (F + startingRoomID + T + targetRoomID)
+     * 
+     * @return {Number} number of doors that exist between 2 rooms already
      */
-    #generateDoorSalt = function () {
-        return Math.floor(Math.random() * 100) + (this.#doorCounter++ * 100);
+    #countDoorOccurrences = function (doorIDPrefix) {
+        let count = 0;
+        for (let i = 0; i < this.#doorIDPrefixList.length; i++) {
+            if (this.#doorIDPrefixList[i] === doorIDPrefix) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -266,7 +269,11 @@ module.exports = class DoorService {
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
 
-        let doorId = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId() + this.#generateDoorSalt();
+        
+        let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
+        let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
+
+        this.#doorIDPrefixList.push(doorIdPrefix);
 
         return new Door(doorId,   
                 TypeOfDoor[wallSide + "_DOOR"], 
