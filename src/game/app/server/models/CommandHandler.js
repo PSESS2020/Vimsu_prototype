@@ -306,14 +306,21 @@ module.exports = class CommandHandler {
     logAllDoors(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        let roomDecorators = this.#serverController.getRoomDecorators();
+        let rooms = this.#serverController.getRooms();
         let header = "List of all exisiting Doors";
         let body = [];
-        for (let i = 0; i < roomDecorators.length; i++) {
-            let room = roomDecorators[i].getRoom();
+        for (let i = 0; i < rooms.length; i++) {
+            let room = rooms[i];
             let doors = room.getListOfDoors();
             for (let j = 0; j < doors.length; j++) {
-                body.splice(0, 0,  doors[j].getName() + " in " + room.getTypeOfRoom() + " has ID " +  doors[j].getId() + ". Door is currently " + 
+                let targetRoomId = doors[j].getTargetRoomId();
+                let targetRoomName;
+                for (let k = 0; k < rooms.length; k++) {
+                    if (targetRoomId === rooms[k].getRoomId()) {
+                        targetRoomName = rooms[k].getRoomName();
+                    }
+                }
+                body.splice(0, 0,  "Door in " + room.getRoomName() + " to " + targetRoomName + " has ID " +  doors[j].getId() + ". Door is currently " + 
                 ((doors[j].isOpen()) ? "open" : "closed") + 
                 ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
             }
