@@ -68,7 +68,7 @@ module.exports = class RouteController {
      * @method module:RouteController#init
      */
     #init = function () {
-        const dbSuffix = 'klaudia';
+        const dbSuffix = '';
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
