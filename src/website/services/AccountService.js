@@ -296,7 +296,7 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
-            if (user && passwordHash.verify(password, user.passwordHash)) {
+            if (user && passwordHash.verify(password, user.passwordHash) /* TODO for production: && user.isActive */) {
                 return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.token, user.isActive);
             } 
             
