@@ -31,7 +31,6 @@
      */
      draw(iFrameData, gameObjectID) {
         $('#externalWebsiteWait' + gameObjectID).hide();
-        $(`#externalWebsiteWaitModal${gameObjectID} .modal-header`).empty();
         $("#externalWebsiteModalTitle" + gameObjectID).empty();
         $('#externalWebsiteBody' + gameObjectID).empty();
 
