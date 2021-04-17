@@ -67,6 +67,7 @@ module.exports = class RouteController {
      * @method module:RouteController#init
      */
     #init = function () {
+        const dbSuffix = Settings.CONFERENCE_ID;
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
@@ -140,7 +141,7 @@ module.exports = class RouteController {
         });
 
         this.#app.post('/contact-us', (request, response) => {
-            const vimsuEmail = process.env.VIMSU_EMAIL;
+            const vimsuEmail = process.env.VIMSU_DEFAULT_EMAIL;
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
@@ -271,7 +272,7 @@ module.exports = class RouteController {
                 return response.render('login', { fieldEmpty: true, username: request.body.username });
             }
 
-            return AccountService.verifyLoginData(request.body.username, request.body.password, Settings.CONFERENCE_ID, this.#db).then(user => {
+            return AccountService.verifyLoginData(request.body.username, request.body.password, dbSuffix, this.#db).then(user => {
 
                 if (user) {
                     request.session.loggedin = true;
@@ -314,7 +315,7 @@ module.exports = class RouteController {
                 return response.render('register', { invalidForename: true, username: request.body.username, forename: request.body.forename });
             }
 
-            return AccountService.createAccount(request.body.username, request.body.forename, request.body.password, Settings.CONFERENCE_ID, this.#db).then(res => {
+            return AccountService.createAccount(request.body.username, request.body.forename, request.body.password, dbSuffix, this.#db).then(res => {
                 if (res instanceof Account) {
                     request.session.accountId = res.getAccountID();
                     request.session.registerValid = false;
@@ -366,7 +367,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, invalidForename: true }, request.session.username));
                 }
 
-                return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, Settings.CONFERENCE_ID, this.#db).then(res => {
+                return AccountService.updateAccountData(accountId, request.body.username, request.body.forename, dbSuffix, this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
                         request.session.forename = res.getForename();
@@ -396,7 +397,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, forename: request.session.forename }, request.session.username))
                 }
 
-                return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, Settings.CONFERENCE_ID, this.#db).then(res => {
+                return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
                     if (res === true) {
                         response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, changePasswordSuccess: true }, request.session.username))
                     } else if (res === null) {
@@ -425,7 +426,7 @@ module.exports = class RouteController {
                 secure: true,
                 auth: {
                     user: mailOptions.from,
-                    pass: process.env.VIMSU_EMAIL_PASSWORD
+                    pass: process.env.VIMSU_DEFAULT_EMAIL_PASSWORD
                 }
             });
 
