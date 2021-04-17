@@ -402,12 +402,9 @@ class GameView {
 
     /**
      * Updates FPS
-     * 
-     * @param {number} timeStamp timestamp
      */
-    updateFPS(timeStamp) {
-        TypeChecker.isNumber(timeStamp);
-        this.statusBar.updateFPS(timeStamp);
+    updateFPS() {
+        this.statusBar.updateFPS();
     }
 
     /**

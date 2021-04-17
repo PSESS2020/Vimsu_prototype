@@ -239,15 +239,11 @@ class ClientController {
 
     /**
      * updates game view
-     * 
-     * @param {number} timeStamp timestamp
      */
-    updateGame(timeStamp) {
-        TypeChecker.isNumber(timeStamp);
-
+    updateGame() {
         this.gameView.update()
         this.gameView.draw();
-        this.gameView.updateFPS(timeStamp);
+        this.gameView.updateFPS();
     }
 
     /**

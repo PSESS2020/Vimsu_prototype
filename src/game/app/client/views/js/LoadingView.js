@@ -39,6 +39,5 @@ class LoadingView extends Views {
         $("#upperHUD").show();
         $("#middleHUD").show();
         $("#lowerHUD").show();
-        $('#allchatMessageInput').trigger('focus');
     }
 }

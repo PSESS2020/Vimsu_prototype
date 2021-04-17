@@ -5,11 +5,8 @@
  * @version 1.0.0
  */
 class StatusBar extends Views {
-    connectionStatus;
 
-    //FPS variables
-    secondsPassed;
-    oldTimeStamp;
+    connectionStatus;
     fps;
 
     /**
@@ -37,6 +34,12 @@ class StatusBar extends Views {
         $('#time').text(now);
     }
 
+    drawFPS = function() {
+        $('#fps').empty();
+        $('#fps').text('FPS: ' + this.fps + ', ');
+        this.fps = 0;
+    }
+
     /**
      * draws connection status
      */
@@ -57,9 +60,11 @@ class StatusBar extends Views {
      */
     draw() {
         this.drawClock();
+        this.drawFPS();
 
         setInterval(() => {
             this.drawClock();
+            this.drawFPS();
         }, 1000);
     }
 
@@ -76,21 +81,9 @@ class StatusBar extends Views {
 
     /**
      * Updates FPS
-     * 
-     * @param {number} timeStamp timestamp
      */
-    updateFPS(timeStamp) {
-        $('#fps').empty();
-
-        // Calculate the number of seconds passed since the last frame
-        this.secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
-        this.oldTimeStamp = timeStamp;
-
-        // Calculate fps
-        this.fps = Math.round(1 / this.secondsPassed);
-
-        // Draw number to the screen
-        $('#fps').text('FPS: ' + this.fps + ', ');
+    updateFPS() {
+        this.fps++;
     }
 
     /**
