@@ -2015,6 +2015,17 @@ module.exports = class ServerController {
     };
 
     /**
+     * Gets all rooms of current conference
+     * @method module:ServerController#getRooms
+     * 
+     * @return {Room[]} rooms
+     * 
+     */
+    getRooms() {
+        return this.#rooms;
+    }
+
+    /**
      * Gets all currently available doors in this conference
      * @method module:ServerController#getAllDoors
      * 
