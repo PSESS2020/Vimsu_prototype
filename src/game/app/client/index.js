@@ -34,17 +34,14 @@ function index() {
 
   /**
    * @private Updates game constantly through a game loop
-   * 
-   * @param {number} timeStamp 
    */
-  var gameLoop = function (timeStamp) {
-    TypeChecker.isNumber(timeStamp);
+  var gameLoop = function () {
 
     // Clear canvas
     ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     // Perform the drawing operation
-    clientController.updateGame(timeStamp);
+    clientController.updateGame();
 
     // The loop function has reached it's end. Keep requesting new frames
     window.requestAnimationFrame(gameLoop);
