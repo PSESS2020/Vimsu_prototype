@@ -32,10 +32,10 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var accountId = new ObjectId().toString();
-        var account = new Account(accountId, username, forename);
+        const accountId = new ObjectId().toString();
+        const account = new Account(accountId, username, forename);
 
-        var acc = {
+        const acc = {
             accountId: account.getAccountID(),
             username: account.getUsername(),
             forename: account.getForename(),
@@ -73,9 +73,8 @@ module.exports = class AccountService {
             if (user) {
                 return user;
             }
-            else {
-                return false;
-            }
+
+            return false;
         })
     }
 
@@ -98,9 +97,8 @@ module.exports = class AccountService {
             if (user) {
                 return user;
             }
-            else {
-                return false;
-            }
+
+            return false;
         })
     }
 
@@ -123,9 +121,8 @@ module.exports = class AccountService {
             if (user) {
                 return user.username;
             }
-            else {
-                return false;
-            }
+            
+            return false;
         })
     }
 
@@ -148,11 +145,9 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        var account = new Account(accountId, newUsername, newForename);
-
         return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, forename: newForename }).then(res => {
             if (res.modifiedCount >= 0 && res.matchedCount > 0) {
-                return account;
+                return new Account(accountId, newUsername, newForename);
             } else if (res.code === 11000) {
                 return res.keyValue;
             }
@@ -207,11 +202,10 @@ module.exports = class AccountService {
 
         return this.#getAccountByUsername(username, suffix, vimsudb).then(user => {
             if (user && passwordHash.verify(password, user.passwordHash)) {
-                var account = new Account(user.accountId, user.username, user.forename);
-                return account;
-            } else {
-                return false;
+                return new Account(user.accountId, user.username, user.forename);
             }
+
+            return false;
         })
     }
 
