@@ -47,8 +47,8 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         const accountId = new ObjectId().toString();
-        const token = crypto.randomBytes(64).toString('hex');
-        const account = new Account(accountId, username, title, surname, forename, job, company, email, role, token, false);
+        const verificationToken = crypto.randomBytes(64).toString('hex');
+        const account = new Account(accountId, username, title, surname, forename, job, company, email, role, verificationToken, "", /* TODO Production: false */ true);
 
         const acc = {
             accountId: account.getAccountID(),
@@ -61,13 +61,14 @@ module.exports = class AccountService {
             email: account.getEmail(),
             passwordHash: passwordHash.generate(password),
             role: account.getRole(),
-            token: account.getToken(),
+            verificationToken: account.getVerificationToken(),
+            forgotPasswordToken: account.getForgotPasswordToken(),
             isActive: account.getIsActive()
         }
 
         return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
             if (res.insertedCount > 0) {
-                return { token: token };
+                return { token: verificationToken };
             } else if (res.code === 11000) {
                 //duplicate entry found
                 return res.keyValue;
@@ -126,21 +127,45 @@ module.exports = class AccountService {
     }
 
     /**
-     * @private gets account by token from the database
-     * @method module:AccountService#getAccountByToken
+     * @private gets account by verification token from the database
+     * @method module:AccountService#getAccountByVerificationToken
      * 
-     * @param {String} token account token
+     * @param {String} token account verification token
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * 
      * @return {Object|boolean} user data if found, otherwise false
      */
-    static getAccountByToken = function (token, suffix, vimsudb) {
+    static getAccountByVerificationToken = function (token, suffix, vimsudb) {
         TypeChecker.isString(token);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findOneInCollection("accounts" + suffix, { token: token }, "").then(user => {
+        return vimsudb.findOneInCollection("accounts" + suffix, { verificationToken: token }, "").then(user => {
+            if (user) {
+                return user;
+            }
+
+            return false;
+        })
+    }
+
+    /**
+     * @private gets account by forgot password token from the database
+     * @method module:AccountService#getAccountByForgotPasswordToken
+     * 
+     * @param {String} token forgot password token
+     * @param {String} suffix collection name suffix
+     * @param {db} vimsudb db instance
+     * 
+     * @return {Object|boolean} user data if found, otherwise false
+     */
+     static getAccountByForgotPasswordToken = function (token, suffix, vimsudb) {
+        TypeChecker.isString(token);
+        TypeChecker.isString(suffix);
+        TypeChecker.isInstanceOf(vimsudb, db);
+
+        return vimsudb.findOneInCollection("accounts" + suffix, { forgotPasswordToken: token }, "").then(user => {
             if (user) {
                 return user;
             }
@@ -206,7 +231,7 @@ module.exports = class AccountService {
             if (res.modifiedCount >= 0 && res.matchedCount > 0) {
                 return this.getAccountById(accountId, suffix, vimsudb).then(account => {
                     if (account) {
-                        return new Account(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, account.role, account.token, account.isActive);
+                        return new Account(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, account.role, account.verificationToken, account.forgotPasswordToken, account.isActive);
                     }
 
                     return false;
@@ -221,6 +246,8 @@ module.exports = class AccountService {
 
     /**
      * changes user's password
+     * @static @method module:AccountService#changePassword
+     * 
      * @param {String} username account username
      * @param {String} password user's password
      * @param {String} newPassword user's new password
@@ -249,6 +276,7 @@ module.exports = class AccountService {
 
     /**
      * Resets password
+     * @static @method module:AccountService#resetPassword
      * 
      * @param {String} token token
      * @param {String} newPassword user's new password
@@ -262,11 +290,9 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.getAccountByToken(token, suffix, vimsudb).then(user => {
+        return this.getAccountByForgotPasswordToken(token, suffix, vimsudb).then(user => {
             if (user) {
-                const newToken = "";
-
-                return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: user.accountId }, { token: newToken, passwordHash: passwordHash.generate(newPassword) }).then(res => {
+                return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: user.accountId }, { forgotPasswordToken: "", passwordHash: passwordHash.generate(newPassword) }).then(res => {
                     if (res.modifiedCount >= 0 && res.matchedCount > 0) {
                         return true;
                     }
@@ -280,44 +306,56 @@ module.exports = class AccountService {
     }
 
     /**
-     * Sets token for account
+     * Generates forgot password token
+     * @static @method module:AccountService#generateForgotPasswordToken
+     * 
      * @param {String} email user's email
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * @returns {String|boolean} token if token is set
      */
-    static setToken(email, suffix, vimsudb) {
+    static generateForgotPasswordToken(email, suffix, vimsudb) {
         TypeChecker.isString(email);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        const token = crypto.randomBytes(64).toString('hex');
+        return this.#getAccountByUsernameOrEmail(email, suffix, vimsudb).then(user => {
+            if (user) {
+                if (user.forgotPasswordToken) {
+                    return user.forgotPasswordToken;
+                }
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { email: email }, { token: token }).then(res => {
-            if (res.modifiedCount >= 0 && res.matchedCount > 0) {
-                return token;
-            }
+                const token = crypto.randomBytes(64).toString('hex');
+
+                return vimsudb.updateOneToCollection("accounts" + suffix, { email: email }, { forgotPasswordToken: token }).then(res => {
+                    if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                        return token;
+                    }
+                    return false;
+                })
+            } 
+            
             return false;
         })
     }
 
     /**
      * Verifies account with token
+     * @static @method module:AccountService#activateAccount
      * 
+     * @param {String} accountId account id
      * @param {String} token token
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
      * @returns true if verified successfully
      */
-    static verifyAccount(token, suffix, vimsudb) {
+    static activateAccount(accountId, token, suffix, vimsudb) {
+        TypeChecker.isString(accountId);
         TypeChecker.isString(token);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        const newToken = "";
-        const isActive = true;
-
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: user.accountId }, { token: newToken, isActive: isActive }).then(res => {
+        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { verificationToken: "", isActive: true }).then(res => {
             if (res.modifiedCount >= 0 && res.matchedCount > 0) {
                 return true;
             }
@@ -344,8 +382,8 @@ module.exports = class AccountService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
-            if (user && passwordHash.verify(password, user.passwordHash) /* TODO for production: && user.isActive */) {
-                return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.token, user.isActive);
+            if (user && passwordHash.verify(password, user.passwordHash) && user.isActive) {
+                return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.verificationToken, user.forgotPasswordToken, user.isActive);
             } 
             
             return false;

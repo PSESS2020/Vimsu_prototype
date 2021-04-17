@@ -68,7 +68,7 @@ module.exports = class RouteController {
      * @method module:RouteController#init
      */
     #init = function () {
-        const dbSuffix = '';
+        const dbSuffix = 'klaudia';
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
@@ -189,9 +189,9 @@ module.exports = class RouteController {
         })
 
         this.#app.get('/verify-account/:token', (request, response) => {
-            return AccountService.getAccountByToken(request.params.token, dbSuffix, this.#db).then(account => {
-                if (account && !account.isActive) {
-                    return AccountService.verifyAccount(request.params.token, dbSuffix, this.#db).then(result => {
+            return AccountService.getAccountByVerificationToken(request.params.token, dbSuffix, this.#db).then(account => {
+                if (account /* TODO Production && !account.isActive*/) {
+                    return AccountService.activateAccount(account.accountId, request.params.token, dbSuffix, this.#db).then(result => {
                         const args = { verifySuccess: result }
                         if (request.session.loggedin === true) {
                             response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
@@ -305,7 +305,6 @@ module.exports = class RouteController {
                     request.session.company = user.getCompany();
                     request.session.email = user.getEmail();
                     request.session.role = user.getRole();
-                    request.session.token = user.getToken();
                     response.redirect('/');
                 }
                 else {
@@ -316,7 +315,7 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/reset-password/:token', (request, response) => {
-            return AccountService.getAccountByToken(request.params.token, dbSuffix, this.#db).then(account => {
+            return AccountService.getAccountByForgotPasswordToken(request.params.token, dbSuffix, this.#db).then(account => {
                 if (account) {
                     if (request.session.loggedin === true) {
                         response.render('reset-password', this.#getLoggedInParameters({}, request.session.username));
@@ -381,7 +380,7 @@ module.exports = class RouteController {
                 return response.render('forgot-password', { invalidEmail: true, email: request.body.email });
             }
 
-            return AccountService.setToken(request.body.email, dbSuffix, this.#db).then(token => {
+            return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(token => {
                 if (token) {
                     const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
 
@@ -539,7 +538,6 @@ module.exports = class RouteController {
                         request.session.company = res.getCompany();
                         request.session.email = res.getEmail();
                         request.session.role = res.getRole();
-                        request.session.token = res.getToken();
 
                         response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     } else if (res && res.username) {

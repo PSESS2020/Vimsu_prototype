@@ -19,7 +19,8 @@ module.exports = class Account {
     #company;
     #email;
     #role;
-    #token;
+    #verificationToken
+    #forgotPasswordToken;
     #isActive;
 
     /**
@@ -35,10 +36,11 @@ module.exports = class Account {
      * @param {String} company user's company
      * @param {String} email user's email
      * @param {TypeOfRole} role user's role
-     * @param {String} token user's token
+     * @param {String} verificationToken token for account verification
+     * @param {String} forgotPasswordToken token for forgot password
      * @param {Boolean} isActive true if account is active
      */
-    constructor(accountID, username, title, surname, forename, job, company, email, role, token, isActive) {
+    constructor(accountID, username, title, surname, forename, job, company, email, role, verificationToken, forgotPasswordToken, isActive) {
         TypeChecker.isString(accountID);
         TypeChecker.isString(username);
         TypeChecker.isString(title);
@@ -48,7 +50,8 @@ module.exports = class Account {
         TypeChecker.isString(company);
         TypeChecker.isString(email);
         TypeChecker.isEnumOf(role, TypeOfRole);
-        TypeChecker.isString(token);
+        TypeChecker.isString(verificationToken);
+        TypeChecker.isString(forgotPasswordToken);
         TypeChecker.isBoolean(isActive);
 
         this.#accountID = accountID;
@@ -60,7 +63,8 @@ module.exports = class Account {
         this.#company = company;
         this.#email = email;
         this.#role = role;
-        this.#token = token;
+        this.#verificationToken = verificationToken;
+        this.#forgotPasswordToken = forgotPasswordToken;
         this.#isActive = isActive;
     }
 
@@ -155,13 +159,23 @@ module.exports = class Account {
     }
 
     /**
-     * Gets user's token
-     * @method module:Account#getToken
+     * Gets token for account verification
+     * @method module:Account#getVerificationToken
      * 
      * @returns {String} token
      */
-    getToken() {
-        return this.#token;
+    getVerificationToken() {
+        return this.#verificationToken;
+    }
+
+    /**
+     * Gets token for forgot password
+     * @method module:Account#getForgotPasswordToken
+     * 
+     * @returns {String} token
+     */
+     getForgotPasswordToken() {
+        return this.#forgotPasswordToken;
     }
 
     /**

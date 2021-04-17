@@ -179,9 +179,8 @@ module.exports = class ServerController {
                 const company = socket.request.session.company;
                 const email = socket.request.session.email;
                 const role = socket.request.session.role;
-                const token = socket.request.session.token;
 
-                const account = new Account(accountId, username, title, surname, forename, job, company, email, role, token, true);
+                const account = new Account(accountId, username, title, surname, forename, job, company, email, role, "", "", true);
 
                 //create Participant
                 ParticipantService.createParticipant(account, Settings.CONFERENCE_ID, this.#db).then(ppant => {
