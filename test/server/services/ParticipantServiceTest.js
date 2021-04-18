@@ -1,5 +1,6 @@
 const ParticipantService = require('../../../src/game/app/server/services/ParticipantService');
 const TaskService = require('../../../src/game/app/server/services/TaskService.js');
+const TypeOfRole = require('../../../src/website/utils/TypeOfRole')
 const ServiceTestData = require('./TestData/ServiceTestData.js');
 const chai = require('chai');
 const expect = chai.expect;
@@ -45,7 +46,7 @@ function generateAchievements() {
 
 
 var participantCollectionName = "participants_" + conferenceId;
-var account = new Account("accountId", "asdf", "prof", "", "", "", "", "");
+var account = new Account("accountId", "asdf", "prof", "", "", "", "", "", TypeOfRole.PARTICIPANT, "", "", true);
 
 
 const dbStub = sinon.createStubInstance(db);

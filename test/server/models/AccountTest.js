@@ -1,15 +1,20 @@
 const Account = require('../../../src/website/models/Account')
+const TypeOfRole = require('../../../src/website/utils/TypeOfRole')
 const expect = require('chai').expect;
 
-var accountID = "53f";
-var username = "maxmust";
-var title = "Prof.";
-var surname = "Mustermann";
-var forename = "Max";
-var job = "Professor";
-var company = "KIT";
-var email = "maxmustermann@kit.edu";
-var account = new Account(accountID, username, title, surname, forename, job, company, email);
+const accountID = "53f";
+const username = "maxmust";
+const title = "Prof.";
+const surname = "Mustermann";
+const forename = "Max";
+const job = "Professor";
+const company = "KIT";
+const email = "maxmustermann@kit.edu";
+const role = TypeOfRole.PARTICIPANT;
+const verificationToken = "token1";
+const forgotPasswordToken = "token2";
+const isActive = true;
+const account = new Account(accountID, username, title, surname, forename, job, company, email, role, verificationToken, forgotPasswordToken, isActive);
 
 
 describe("Account Test getter", function () {
@@ -43,5 +48,21 @@ describe("Account Test getter", function () {
 
     it("Test getEmail", function () {
         expect(account.getEmail()).to.be.a('string').and.equal(email);
+    })
+
+    it("Test getRole", function () {
+        expect(account.getRole()).to.be.a('string').and.equal(role);
+    })
+    
+    it("Test getVerificationToken", function () {
+        expect(account.getVerificationToken()).to.be.a('string').and.equal(verificationToken);
+    })
+    
+    it("Test getForgotPasswordToken", function () {
+        expect(account.getForgotPasswordToken()).to.be.a('string').and.equal(forgotPasswordToken);
+    })
+
+    it("Test getIsActive", function () {
+        expect(account.getIsActive()).to.be.a('boolean').and.equal(isActive);
     })
 })

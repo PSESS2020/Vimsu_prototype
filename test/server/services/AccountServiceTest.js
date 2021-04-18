@@ -1,5 +1,6 @@
 const AccountService = require('../../../src/website/services/AccountService');
 const Account = require('../../../src/website/models/Account');
+const TypeOfRole = require('../../../src/website/utils/TypeOfRole')
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
@@ -15,24 +16,37 @@ var account1 = {
     job: "Professor",
     company: "KIT",
     email: "maxmustermann@kit.edu",
-    password: "maxpassword"
+    password: "maxpassword",
+    role: TypeOfRole.PARTICIPANT,
 }
 
 var account;
 var newCompany = "TUM";
 var newPassword = "newpassword";
+var newNewPassword = "newNewPassword";
+
+var verificationToken;
 
 const db = require('../../../src/config/db');
+const { resetPassword } = require('../../../src/website/services/AccountService');
 const database = new db();
 database.connectDB().then(res => {
 
     const newAccount1 = async () => {
         return AccountService.createAccount(account1.username, account1.title, account1.surname,
-            account1.forename, account1.job, account1.company, account1.email, account1.password, suffix, database).then(acc => {
-                account = acc;
+            account1.forename, account1.job, account1.company, account1.email, account1.password, account1.role, suffix, database).then(res => {
+                if (res.token) {
+                    verificationToken = res.token;
+                }
             }).catch(err => {
                 console.error(err);
             })
+    }
+
+    const getAccount1 = async () => {
+        return AccountService.getAccountByVerificationToken(verificationToken, suffix, database).then(user => {
+            account = new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.verificationToken, user.forgotPasswordToken, user.isActive);
+        })
     }
 
     const verifyLoginDataValid = async () => {
@@ -90,6 +104,12 @@ database.connectDB().then(res => {
         })
     }
 
+    const verifyLoginDataNewNewPassword = async () => {
+        return AccountService.verifyLoginData(account1.username, newNewPassword, suffix, database).then(acc => {
+            return acc;
+        })
+    }
+
     const verifyLoginDataNewPassword = async () => {
         return AccountService.verifyLoginData(account1.username, newPassword, suffix, database).then(acc => {
             return acc;
@@ -102,11 +122,27 @@ database.connectDB().then(res => {
         })
     }
 
+    const activateAccount = async () => {
+        return AccountService.activateAccount(account.getAccountID(), verificationToken, suffix, database).then(res => {
+            return res;
+        })
+    }
+
+    const resetPassword = async () => {
+        return AccountService.generateForgotPasswordToken(account.getEmail(), suffix, database).then(res => {
+            return AccountService.resetPassword(res.token, newNewPassword, suffix, database).then(res => {
+                return res;
+            })
+        })
+    }
+
     describe('AccountService methods', function () {
         var globalResults;
 
         before(async () => {
             var newAccount1_result = await newAccount1();
+
+            var getAccount1_result = await getAccount1();
 
             var verifyLoginDataValid_result = await verifyLoginDataValid();
             var verifyLoginDataPasswordInvalid_result = await verifyLoginDataPasswordInvalid();
@@ -124,15 +160,27 @@ database.connectDB().then(res => {
             var verifyLoginDataNewPassword_result = await verifyLoginDataNewPassword();
             var verifyLoginDataOldPassword_result = await verifyLoginDataOldPassword();
 
+            var activateAccount_result = await activateAccount();
+
+            var resetPassword_result = await resetPassword();
+            var verifyLoginDataNewNewPassword_result = await verifyLoginDataNewNewPassword();
+            var verifyLoginDataOldNewPassword_result = await verifyLoginDataNewPassword();
+
             var newAccountResult = [newAccount1_result];
+
+            var getAccountResult = [getAccount1_result];
 
             var allResults = [verifyLoginDataValid_result, verifyLoginDataPasswordInvalid_result, verifyLoginDataUsernameInvalid_result,
                 getAccountById_result, getAccountByIdNotFound_result, getAccountUsername_result, getAccountUsernameNotFound_result, updateAccountData_result,
-                changePassword_result, verifyLoginDataNewPassword_result, verifyLoginDataOldPassword_result];
+                changePassword_result, verifyLoginDataNewPassword_result, verifyLoginDataOldPassword_result, activateAccount_result, resetPassword_result, verifyLoginDataNewNewPassword_result, verifyLoginDataOldNewPassword_result];
 
             Promise.all(newAccountResult).then(() => {
-                Promise.all(allResults).then(() => {
-                    globalResults = allResults;
+                Promise.all(getAccountResult).then(() => {
+                    Promise.all(allResults).then(() => {
+                        globalResults = allResults;
+                    }).catch(err => {
+                        console.log(err);
+                    })
                 }).catch(err => {
                     console.log(err);
                 })
@@ -166,6 +214,16 @@ database.connectDB().then(res => {
             expect(globalResults[9]).to.be.instanceOf(Account);
             expect(globalResults[10]).to.be.false;
         });
+
+        it('test activate account', function () {
+            expect(globalResults[11]).to.be.true;
+        })
+
+        it('test reset password', function () {
+            expect(globalResults[12]).to.be.true;
+            expect(globalResults[13]).to.be.instanceOf(Account);
+            expect(globalResults[14]).to.be.false;
+        })
 
         after(async () => {
             AccountService.deleteAccount(account.getAccountID(), suffix, database);

@@ -1,6 +1,7 @@
-var RankListService = require('../../../src/game/app/server/services/RankListService');
-var ParticipantService = require('../../../src/game/app/server/services/ParticipantService')
-var Account = require('../../../src/website/models/Account')
+const RankListService = require('../../../src/game/app/server/services/RankListService');
+const ParticipantService = require('../../../src/game/app/server/services/ParticipantService')
+const Account = require('../../../src/website/models/Account')
+const TypeOfRole = require('../../../src/website/utils/TypeOfRole')
 const chai = require('chai');
 const expect = chai.expect;
 const chaiAsPromised = require("chai-as-promised");
@@ -15,7 +16,7 @@ const database = new db()
 database.connectDB().then(res => {
 
     const newParticipant1 = async () => {
-        var account = new Account("123a", "testuserA", "Mr.", "User", "Test", "Employee", "Abc", "testuserA@test.com")
+        var account = new Account("123a", "testuserA", "Mr.", "User", "Test", "Employee", "Abc", "testuserA@test.com", TypeOfRole.PARTICIPANT, "", "", true)
         return ParticipantService.createParticipant(account, conferenceId, database).then(par => {
             participantId1 = par.getId();
             return ParticipantService.updatePoints(participantId1, conferenceId, 100000, database);
@@ -25,7 +26,7 @@ database.connectDB().then(res => {
     }
 
     const newParticipant2 = async () => {
-        var account = new Account("123b", "testuserB", "Mr.", "User", "Test", "Employee", "Abc", "testuserB@test.com")
+        var account = new Account("123b", "testuserB", "Mr.", "User", "Test", "Employee", "Abc", "testuserB@test.com", TypeOfRole.PARTICIPANT, "", "", true)
         return ParticipantService.createParticipant(account, conferenceId, database).then(par => {
             participantId2 = par.getId()
             return ParticipantService.updatePoints(participantId2, conferenceId, 5000, database);
@@ -35,7 +36,7 @@ database.connectDB().then(res => {
     }
 
     const newParticipant3 = async () => {
-        var account = new Account("123c", "testuserC", "Mr.", "User", "Test", "Employee", "Abc", "testuserC@test.com")
+        var account = new Account("123c", "testuserC", "Mr.", "User", "Test", "Employee", "Abc", "testuserC@test.com", TypeOfRole.PARTICIPANT, "", "", true)
         return ParticipantService.createParticipant(account, conferenceId, database).then(par => {
             participantId3 = par.getId()
             return ParticipantService.updatePoints(participantId3, conferenceId, 1000, database);
