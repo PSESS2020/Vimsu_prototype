@@ -5,7 +5,8 @@
  * @version 1.0.0
  */
 const TypeOfDoor = Object.freeze({
-    LECTURE_DOOR: "LECTURE_DOOR",
+    LEFT_LECTUREDOOR: "LEFT_LECTUREDOOR",
+    RIGHT_LECTUREDOOR: "RIGHT_LECTUREDOOR",
     LEFT_DOOR: "LEFT_DOOR",
     RIGHT_DOOR: "RIGHT_DOOR",
 });

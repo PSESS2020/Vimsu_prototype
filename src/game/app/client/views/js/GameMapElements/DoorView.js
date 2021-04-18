@@ -40,7 +40,7 @@ class DoorView extends GameMapElementView {
      * @param {number} targetRoomId target room ID
      */
     onclick(targetRoomId) {
-        if (this.DOORTYPE === TypeOfDoor.LECTURE_DOOR) {
+        if (this.DOORTYPE === TypeOfDoor.LEFT_LECTUREDOOR || this.DOORTYPE === TypeOfDoor.RIGHT_LECTUREDOOR) {
             this.eventManager.handleLectureDoorClick();
         } else {
             this.eventManager.handleDoorClick(targetRoomId);

@@ -513,7 +513,7 @@ module.exports = class ServerController {
                 let doors = currentRoom.getListOfDoors();
                 doors.forEach(door => {
                     if (door.isValidEnterPositionWithoutClick(oldPos, oldDir, direction)) {
-                        if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
+                        if (door.isLectureDoor())
                             this.#getCurrentLectures(socket);
                         else
                             this.#enterRoom(door.getTargetRoomId(), socket);

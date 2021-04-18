@@ -25,7 +25,8 @@ const GameObjectOffsets = Object.freeze({
     // Doors
     [TypeOfDoor.LEFT_DOOR]: Settings.LEFTWALL_OFFSET,
     [TypeOfDoor.RIGHT_DOOR]:Settings.RIGHTWALL_OFFSET,
-    [TypeOfDoor.LECTURE_DOOR]: Settings.LEFTWALL_OFFSET,
+    [TypeOfDoor.LEFT_LECTUREDOOR]: Settings.LEFTWALL_OFFSET,
+    [TypeOfDoor.RIGHT_LECTUREDOOR]:Settings.RIGHTWALL_OFFSET,
 
     // Plant 
     [GameObjectType.PLANT]: { x: -5, y: -10 },

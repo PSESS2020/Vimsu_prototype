@@ -180,6 +180,56 @@ module.exports = class RoomFactory {
 
         })
 
+        // ADD LECTURE DOORS 
+        // This is only needed if this conference uses the lecture feature and video storage is activated in Settings
+        // Otherwise, it can be ignored
+        // lectureDoorData = {wallSide, logo, positionOfDoor, isOpen, closedMessage, codeToOpen}        
+        if (Settings.VIDEOSTORAGE_ACTIVATED && roomData.LECTUREDOORS !== undefined) {
+            roomData.LECTUREDOORS.forEach(lectureDoorData => {   
+                if (lectureDoorData.logo === undefined) {
+                    lectureDoorData.logo = "default";
+                }
+        
+                let logo = this.#getDoorLogo(lectureDoorData.logo, lectureDoorData.wallSide);
+                if (lectureDoorData.isOpen === undefined) {
+                    listOfDoors.push(
+                        this.#doorService.createCustomLectureDoor(logo,
+                            lectureDoorData.wallSide,
+                            new Position(roomData.ID,
+                                lectureDoorData.positionOfDoor[0],
+                                lectureDoorData.positionOfDoor[1]),
+                            true, // isOpen
+                            Messages.STANDARDDOORCLOSED) // closedMessage
+                    );         
+                } else {
+                    // this requires error handling for when a door
+                    // is defined as closed but there is no message
+                    // or code to open defined
+                    if (lectureDoorData.closedMessage === undefined) {
+                        lectureDoorData.closedMessage = Messages.STANDARDDOORCLOSED
+                    }
+                    listOfDoors.push(
+                        this.#doorService.createCustomLectureDoor(logo,
+                            lectureDoorData.wallSide,
+                            new Position(roomData.ID,
+                                lectureDoorData.positionOfDoor[0],
+                                lectureDoorData.positionOfDoor[1]),
+                            lectureDoorData.isOpen,
+                            lectureDoorData.closedMessage,
+                            lectureDoorData.codeToOpen)
+                    );
+                }
+                
+                // Create tile inside of door
+                // if door is on the left side, same x, one less y
+                // if door is on the right side, same y, one more x
+                let xPos = (lectureDoorData.wallSide == GlobalStrings.RIGHT) ? lectureDoorData.positionOfDoor[0] + 1 : lectureDoorData.positionOfDoor[0];
+                let yPos = (lectureDoorData.wallSide == GlobalStrings.LEFT) ? lectureDoorData.positionOfDoor[1] - 1 : lectureDoorData.positionOfDoor[1];
+
+                listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType[lectureDoorData.wallSide + "TILE"], xPos, yPos, false))
+            });
+        }
+
         // ADD NPCS
         roomData.NPCS.forEach(npcData => {
             listOfNPCs.push(

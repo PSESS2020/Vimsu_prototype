@@ -320,7 +320,9 @@ module.exports = class CommandHandler {
                         targetRoomName = rooms[k].getRoomName();
                     }
                 }
-                body.splice(0, 0,  "Door in " + room.getRoomName() + " to " + targetRoomName + " has ID " +  doors[j].getId() + ". Door is currently " + 
+                body.splice(0, 0,  "Door in " + room.getRoomName() + 
+                ((doors[j].isLectureDoor()) ? (" is a LectureDoor and") : (" to " + targetRoomName))
+                + " has ID " +  doors[j].getId() + ". Door is currently " + 
                 ((doors[j].isOpen()) ? "open" : "closed") + 
                 ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
             }
