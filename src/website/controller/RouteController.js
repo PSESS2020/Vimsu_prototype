@@ -13,7 +13,9 @@ const blobClient = require('../../config/blob');
 const Account = require('../models/Account');
 const nodemailer = require("nodemailer");
 const ServerController = require('../../game/app/server/controller/ServerController');
-const TypeOfRole = require('../utils/TypeOfRole')
+const TypeOfRole = require('../utils/TypeOfRole');
+const handlebars = require("handlebars");
+const fs = require("fs");
 
 /**
  * The Route Controller
@@ -207,7 +209,7 @@ module.exports = class RouteController {
                     }
                 }
             })
-            
+
         })
 
         this.#app.get('/privacy-policy', (request, response) => {
@@ -331,7 +333,7 @@ module.exports = class RouteController {
                 }
             })
         });
-        
+
         this.#app.post('/reset-password/:token', (request, response) => {
             if (!request.body.newPassword) {
                 if (request.session.loggedin === true) {
@@ -380,20 +382,32 @@ module.exports = class RouteController {
                 return response.render('forgot-password', { invalidEmail: true, email: request.body.email });
             }
 
-            return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(token => {
-                if (token) {
-                    const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
+            return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(({username, token}) => {
+                if (username && token) {
+                    const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
+                    const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
+                    const htmlTemplate = handlebars.compile(source);
+                    const replacements = {
+                        username: username,
+                        action_url: `${process.env.VIMSU_DOMAIN}/reset-password/${token}`,
+                        type_of_action: "reset your password",
+                        vimsu_domain: process.env.VIMSU_DOMAIN,
+                        vimsu_default_email: process.env.VIMSU_DEFAULT_EMAIL,
+                        button_name: "Reset Password",
+                        message: "We got a request to reset your VIMSU password. Please click on the link below to set a new password for your account. Your password will not be changed if you ignore this message."
+                    };
+                    const htmlToSend = htmlTemplate(replacements);
 
                     const mailOptions = {
-                        from: vimsuEmail,
+                        from: process.env.VIMSU_NOREPLY_EMAIL,
                         to: request.body.email,
                         subject: "Reset your VIMSU password",
-                        html: `
-                            <div style="text-align: center;">
-                                <p>You have requested to reset your password. Please click on the link below to set a new password.</p>
-                                <h3><a href="${process.env.VIMSU_DOMAIN}/reset-password/${token}">Reset your password</a></h3>
-                            </div>                        
-                        `
+                        attachments: [{
+                            filename: 'vimsu_logo_schrift_transparent.png',
+                            path: path.join(__dirname, '../assets/vimsu_logo_schrift_transparent.png'),
+                            cid: 'logo'
+                        }],
+                        html: htmlToSend
                     }
 
                     return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
@@ -450,21 +464,32 @@ module.exports = class RouteController {
 
             return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
                 if (res && res.token) {
-                    const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
+                    const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
+                    const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
+                    const htmlTemplate = handlebars.compile(source);
+                    const replacements = {
+                        username: request.body.username,
+                        action_url: `${process.env.VIMSU_DOMAIN}/verify-account/${res.token}`,
+                        type_of_action: "verify your email address",
+                        vimsu_domain: process.env.VIMSU_DOMAIN,
+                        vimsu_default_email: process.env.VIMSU_DEFAULT_EMAIL,
+                        button_name: "Verify Email",
+                        message: "Thanks for signing up for VIMSU! Before we get started, we need to confirm that it's you. Please click on the link below to verify your email address."
+                    };
+                    const htmlToSend = htmlTemplate(replacements);
 
                     const mailOptions = {
-                        from: vimsuEmail,
+                        from: process.env.VIMSU_NOREPLY_EMAIL,
                         to: request.body.email,
-                        subject: "Verify your VIMSU account",
-                        html: `
-                            <div style="text-align: center;">
-                                <p>Thank you for signing up to VIMSU!<br>Please click on the link below to activate your account.</p>
-                                <p>Your username: ${request.body.username}</p>
-                                <h3><a href="${process.env.VIMSU_DOMAIN}/verify-account/${res.token}">Verify your VIMSU account now</a></h3>
-                            </div>                        
-                        `
+                        subject: "Verify your email address for VIMSU",
+                        attachments: [{
+                            filename: 'vimsu_logo_schrift_transparent.png',
+                            path: path.join(__dirname, '../assets/vimsu_logo_schrift_transparent.png'),
+                            cid: 'logo'
+                        }],
+                        html: htmlToSend
                     }
-        
+
                     return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
                         if (result === true) {
                             response.render('register', { registerSuccess: true, sentTo: request.body.email, username: "", email: "", forename: "", surname: "", title: "", job: "", company: "" })

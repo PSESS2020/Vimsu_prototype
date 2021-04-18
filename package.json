@@ -36,6 +36,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "express-session": "^1.17.1",
     "get-video-duration": "^3.0.1",
+    "handlebars": "^4.7.7",
     "jquery": "^3.5.1",
     "jsdoc": "^3.6.5",
     "jsdom": "^16.4.0",

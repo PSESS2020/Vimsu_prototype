@@ -66,15 +66,17 @@ module.exports = class AccountService {
             isActive: account.getIsActive()
         }
 
-        return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
-            if (res.insertedCount > 0) {
-                return { token: verificationToken };
-            } else if (res.code === 11000) {
-                //duplicate entry found
-                return res.keyValue;
-            }
-
-            return false;
+        return vimsudb.createUniqueIndexInCollection("accounts" + suffix, { username: 1, email: 1 }).then(() => {
+            return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
+                if (res.insertedCount > 0) {
+                    return { token: verificationToken };
+                } else if (res.code === 11000) {
+                    //duplicate entry found
+                    return res.keyValue;
+                }
+    
+                return false;
+            })
         })
     }
 
@@ -322,14 +324,14 @@ module.exports = class AccountService {
         return this.#getAccountByUsernameOrEmail(email, suffix, vimsudb).then(user => {
             if (user) {
                 if (user.forgotPasswordToken) {
-                    return user.forgotPasswordToken;
+                    return { username: user.username, token: user.forgotPasswordToken };
                 }
 
                 const token = crypto.randomBytes(64).toString('hex');
 
                 return vimsudb.updateOneToCollection("accounts" + suffix, { email: email }, { forgotPasswordToken: token }).then(res => {
                     if (res.modifiedCount >= 0 && res.matchedCount > 0) {
-                        return token;
+                        return { username: user.username, token: token };
                     }
                     return false;
                 })
