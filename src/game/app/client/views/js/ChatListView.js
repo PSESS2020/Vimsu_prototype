@@ -218,31 +218,31 @@ class ChatListView extends WindowView {
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
                             <div>
-                                <button id=${"chatFriendRequestButton" + chatID} class="close btn" title="Add friend">
+                                <button id=${"chatFriendRequestButton" + chatID} class="close btn" style="display: none" title="Add friend">
                                     <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
-                                <button id=${"chatMeetingButton" + chatID} class="close btn" title="(Video) call with chat participants">
+                                <button id=${"chatMeetingButton" + chatID} class="close btn" style="display: none" title="(Video) call with chat participants">
                                     <i class="fa fa-video navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
-                                <a class="action_button nav-item nav-link close btn" title="Show chat participant list"
+                                <a class="action_button nav-item nav-link close btn" style="display: none" title="Show chat participant list"
                                     role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-info-circle navbarIcons"
                                         style="transform: scale(0.8); margin-top: 1px;"></i>
                                 </a>
                             </div>
                             <div>
-                                <a class="action_button nav-item nav-link close btn" title="Invite friends to group chat"
+                                <a class="action_button nav-item nav-link close btn" style="display: none" title="Invite friends to group chat"
                                     role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-plus-square navbarIcons"
                                         style="transform: scale(0.8); margin-top: 1px;"></i>
                                 </a>
                             </div>
                             <div>
-                                <button id=${"chatLeaveButton" + chatID} class="close btn" title="Leave chat">
+                                <button id=${"chatLeaveButton" + chatID} class="close btn" style="display: none" title="Leave chat">
                                     <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
                                 </button>
                             </div>

@@ -393,7 +393,9 @@ button:disabled {
 }
 
 .btn-blue:hover {
-  background-color: #015a66;
+  opacity: 1;
+  background-color: #017281;
+  color: antiquewhite;
 }
 
 .btn-white {
@@ -402,7 +404,9 @@ button:disabled {
 }
 
 .btn-white:hover {
-  background-color: rgb(179, 170, 159);
+  opacity: 1;
+  background-color: rgb(212, 202, 188);
+  color: rgba(34, 43, 46, 1);
 }
 
 .messageBubbleMyself {
