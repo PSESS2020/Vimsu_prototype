@@ -12,10 +12,10 @@
             <div class="col-lg-6 col-md-12 col-sm-12 page-not-found">
                 <% if (locals.verifySuccess === true) { %>
                     <div>
-                        <i class="fa fa-check-circle fa-4x"></i>
+                        <i class="fa fa-user-check fa-4x"></i>
                     </div>
                     <div class="mt-4">
-                        Verification Successful!
+                        Verification successful!
                     </div>
                     
                     <% if (locals.loggedIn !== true) { %>
@@ -27,10 +27,10 @@
                     <% } %>  
                 <% } else { %>
                     <div>
-                        <i class="fa fa-times-circle fa-4x"></i>
+                        <i class="fa fa-exclamation-triangle fa-4x"></i>
                     </div>
                    <div class="mt-4">
-                        Verification Failed! Please try again.
+                        Verification failed! Please try again.
                    </div>
                 <% } %>
             </div>
