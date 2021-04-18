@@ -68,6 +68,10 @@ const Floorplan = Object.freeze({
     /**                       # for more detail see below.                   **/
     /**    DOORS: [],         # Array of objects adhering to proper scheme,  **/
     /**                       # for more detail see below.                   **/
+    /**    LECTUREDOORS: [],  # If this is a conference without video        **/
+    /**                       # storage and lectures, these can be ignored.  **/
+    /**                       # Array of objects adhering to proper scheme,  **/
+    /**                       # for more detail see below.                   **/
     /**    NPCS: [],          # Array of objects adhering to proper scheme,  **/
     /**                       # for more detail see below.                   **/
     /**  }                                                                   **/
@@ -147,6 +151,20 @@ const Floorplan = Object.freeze({
     /**************************************************************************/
 
     /**************************************************************************/
+    /************************ HOW TO ADD A LECTUREDOOR ************************/
+    /**************************************************************************/
+    /**                                                                      **/
+    /** Note: Lecture doors can be completely ignored if this is a           **/
+    /**       conference without video storage and lectures.                 **/ 
+    /**                                                                      **/ 
+    /** Options:                                                             **/ 
+    /**   LectureDoors have basically the same options as normal Doors.      **/ 
+    /**   The only difference is, that it is not possible to define          **/ 
+    /**   a positionOnExit and a directionOnExit.                            **/     
+    /**                                                                      **/
+    /**************************************************************************/
+
+    /**************************************************************************/
     /*************************** HOW TO ADD AN NPC ****************************/
     /**************************************************************************/
     /**                                                                      **/
@@ -210,6 +228,9 @@ const Floorplan = Object.freeze({
         DOORS: [
             {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.FOODCOURT,  positionOfDoor: [25, 9], positionOnExit: [Settings.FOODCOURT_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true},
             {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.RECEPTION,  positionOfDoor: [25, 21], positionOnExit: [Settings.RECEPTION_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true}
+        ],
+        LECTUREDOORS: [
+            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.LECTURE, positionOfDoor: [2, -1]}
         ],
         NPCS: [
             {name: FloorplanConstants.NPCNAMES.foyer, position: [0, 0], direction: Direction.DOWNRIGHT, dialog: NPCDialog.foyerHelperDialog}

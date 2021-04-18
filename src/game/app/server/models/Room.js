@@ -465,12 +465,8 @@ module.exports = class Room {
      * @return {Door} lecture door
      */
     getLectureDoor() {
-        if (this.#typeOfRoom !== TypeOfRoom.FOYER) {
-            throw new Error('Lecture Door is only in FOYER!');
-        }
-
         for (var i = 0; i < this.#listOfDoors.length; i++) {
-            if (this.#listOfDoors[i].getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR) {
+            if (this.#listOfDoors[i].isLectureDoor()) {
                 return this.#listOfDoors[i];
             }
         }
