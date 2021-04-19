@@ -333,8 +333,9 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.PLANT, position: [0, 2], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
             {type: GameObjectType.SMALLTABLE, position: [0, 0], isClickable: true, iFrameData: {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }},
             {type: GameObjectType.SMALLTABLE, position: [0, 1]},
-            {type: GameObjectType.TEA, position: [0, [0, 1]], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
-            {type: GameObjectType.SOFA, variation: 1, position: [0, 3], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }}
+            {type: GameObjectType.TEA, position: [0, 1], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
+            {type: GameObjectType.SOFA, variation: 1, position: [0, 3], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
+            {type: GameObjectType.SMALLTABLE, position: [0, 4], isClickable: true, iFrameData: {title: "Table Video", url: "https://www.youtube.com/embed/x51zMg7roIs", width: 768, height: 432 }}
         ],
         DOORS: [
             {wallSide: GlobalStrings.RIGHT,  positionOfDoor: [15, 15], positionOnExit: [Settings.FOODCOURT_ID, 18, 17], directionOnExit: Direction.DOWNLEFT, isOpen: true}
