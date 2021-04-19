@@ -62,7 +62,8 @@ AssetPaths = Object.freeze({
     
     // Tables
     "table_default": "../client/assets/tables/table.png",
-    "righttable_default": "../client/assets/tables/dinnerTableRight.png",     
+    "righttable_default": "../client/assets/tables/dinnerTableRight.png",
+    "lefttable_default": "../client/assets/tables/dinnerTableLeft.png",       
     "smalldinnertable_default": "../client/assets/tables/smallDinnerTable.png",
     
     // Counters

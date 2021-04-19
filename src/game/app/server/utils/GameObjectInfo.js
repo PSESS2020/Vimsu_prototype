@@ -94,7 +94,7 @@ class GameObjectInfo {
     /**                                            x-axis            **/
     /**                       offset_y: integer, # relative position **/
     /**                                            y-axis            **/
-    /**                       variation: inetger # if well-defined   **/
+    /**                       variation: integer # if well-defined   **/
     /**                                            for this type     **/
     /**                     }                                        **/
     /**                    No other options are currently available  **/
@@ -250,13 +250,14 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "table_default",
         },
-        [GameObjectType.RIGHTTABLE]: {
+        [GameObjectType.LARGETABLE]: {
+            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: "righttable_default",
+            assetName: ["righttable_default", "lefttable_default"]
         },
-        [GameObjectType.SMALLDINNERTABLE]: {
+        [GameObjectType.SMALLTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -305,7 +306,7 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: "tea_default",
         },
-        [GameObjectType.SMALLDINNERTABLEFOOD]: {
+        [GameObjectType.SMALLFOOD]: {
             // OBJECT WITH VARIATIONS
             hasVariation: true,
             isSolid: true,

@@ -35,8 +35,8 @@ const GameObjectOffsets = Object.freeze({
     [GameObjectType.SOFA]: { x: 0, y: -4 },
     // Tables
     [GameObjectType.TABLE]: { x: 0, y: 7 },
-    [GameObjectType.RIGHTTABLE]: { x: 0, y: 52 },
-    [GameObjectType.SMALLDINNERTABLE]: { x: 0, y: 20 },
+    [GameObjectType.LARGETABLE]: { x: 0, y: 52 },
+    [GameObjectType.SMALLTABLE]: { x: 0, y: 20 },
     // Counters
     [GameObjectType.CANTEENCOUNTER]: { x: 0, y: 50 },
     [GameObjectType.RECEPTIONCOUNTER]: { x: 0, y: 8 },
@@ -44,7 +44,7 @@ const GameObjectOffsets = Object.freeze({
     // Food & Drinks
     [GameObjectType.DRINKS]: { x: 14, y: 12 },
     [GameObjectType.TEA]: { x: -4, y: 20 },
-    [GameObjectType.SMALLDINNERTABLEFOOD]: { x: -4, y: 20 },  
+    [GameObjectType.SMALLFOOD]: { x: -4, y: 20 },  
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
