@@ -601,6 +601,11 @@ button:disabled {
   color: antiquewhite;
 }
 
+.tooltip-inner {
+  color: antiquewhite;
+  background: none;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
