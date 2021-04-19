@@ -1242,8 +1242,8 @@ module.exports = class ServerController {
                     if (chat.getMessageList().length > 0) {
                         let lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         let previewText = lastMessage.getMessageText();
-                        if (previewText.length > 35) {
-                            previewText = previewText.slice(0, 35) + "...";
+                        if (previewText.length > 60) {
+                            previewText = previewText.slice(0, 60) + "...";
                         }
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {
@@ -2761,8 +2761,8 @@ module.exports = class ServerController {
                         var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
         
-                        if (previewText.length > 35) {
-                            previewText = previewText.slice(0, 35) + "...";
+                        if (previewText.length > 60) {
+                            previewText = previewText.slice(0, 60) + "...";
                         }
 
                         let inviteButton = true;
