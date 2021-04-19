@@ -418,13 +418,12 @@ module.exports = class CommandHandler {
     logAllRooms(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
     
-        let roomDecorators = this.#serverController.getRoomDecorators();
+        let rooms = this.#serverController.getRooms();
         let header = "List of all exisiting Rooms";
         let body = [];
-        for (let i = 0; i < roomDecorators.length; i++) {
-            let room = roomDecorators[i].getRoom();
-            
-            body.splice(0, 0,  room.getTypeOfRoom() + " has ID " +  room.getRoomId() + ".");
+        for (let i = 0; i < rooms.length; i++) {
+        
+            body.splice(0, 0,  rooms[i].getRoomName() + " has ID " +  rooms[i].getRoomId() + ".");
         }
         this.#serverController.sendNotification(socket.id, { header: header, body: body });
     }
