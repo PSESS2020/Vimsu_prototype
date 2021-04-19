@@ -67,12 +67,12 @@ class AllchatView extends Views {
      * @param {String} ownUsername current participant's username
      */
     draw(roomName, messages, ownUsername) {
-        $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName + ' chat message ...'
+        $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName.toLowerCase() + ' chat message ...'
         $('#allchatHeaderText').text(roomName + ' Chat');
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
-            <small>Show ${roomName} chat messages</small>
+            <small>Show ${roomName.toLowerCase()} chat messages</small>
         `)
 
         $('#allchatMessages').empty();
