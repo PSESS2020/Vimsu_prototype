@@ -479,7 +479,7 @@ class GameView {
         }
 
         if (participant !== this.ownAvatarView) {
-            this.anotherParticipantAvatarViews.push(new ParticipantAvatarView(
+            let ppantView = new ParticipantAvatarView(
                 participant.getPosition(),
                 participant.getDirection(),
                 participant.getShirtColor(),
@@ -490,9 +490,10 @@ class GameView {
                 false,
                 this.gameEngine,
                 this.eventManager
-            ));
+            );
+            this.anotherParticipantAvatarViews.push(ppantView);
+            this.addToUpdateList(ppantView);
         }
-        this.addToUpdateList(this.anotherParticipantAvatarViews);
     }
 
     /**
