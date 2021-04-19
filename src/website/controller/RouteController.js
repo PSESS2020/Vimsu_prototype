@@ -245,6 +245,8 @@ module.exports = class RouteController {
 
 
             this.#app.post('/upload', (request, response) => {
+                if (request.session.role !== TypeOfRole.ADMIN) return;
+                
                 if (!request.files || Object.keys(request.files).length === 0) {
                     return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
                 }
