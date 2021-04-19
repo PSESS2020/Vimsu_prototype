@@ -300,15 +300,15 @@ const Floorplan = Object.freeze({
                 [6, [3, 4, 5, 9, 10, 11, 16]], 
                 [11, [3, 4, 5, 9, 10, 11, 16]]
             ]},
-            {type: GameObjectType.RIGHTTABLE, position: [
+            {type: GameObjectType.LARGETABLE, position: [
                 [2, [3, 9]], 
                 [7, [3, 9]], 
                 [12, [3, 9]]
             ]},
-            {type: GameObjectType.SMALLDINNERTABLE, position: [[2, 16], [7, 16], [12, 16]]},
-            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 1, position: [[2, 10], [7, 9], [12, [4, 10]]]},
-            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 2, position: [[2, 5], [12, 3]]},
-            {type: GameObjectType.SMALLDINNERTABLEFOOD, variation: 3, position: [[7, 4], [12, 9]]},
+            {type: GameObjectType.SMALLTABLE, position: [[2, 16], [7, 16], [12, 16]]},
+            {type: GameObjectType.SMALLFOOD, variation: 1, position: [[2, 10], [7, 9], [12, [4, 10]]]},
+            {type: GameObjectType.SMALLFOOD, variation: 2, position: [[2, 5], [12, 3]]},
+            {type: GameObjectType.SMALLFOOD, variation: 3, position: [[7, 4], [12, 9]]},
             {type: GameObjectType.DRINKS, position: [18, 0]},
             {type: GameObjectType.TEA, position: [[2, 11], [7, [3, 11, 16]], [12, 16]]}
         ],
@@ -331,8 +331,8 @@ const Floorplan = Object.freeze({
         OBJECTS: [
             {type: GameObjectType.PLANT, position: [[14, 0], [14, 19]]},
             {type: GameObjectType.PLANT, position: [0, 2], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
-            {type: GameObjectType.SMALLDINNERTABLE, position: [0, 0], isClickable: true, iFrameData: {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }},
-            {type: GameObjectType.SMALLDINNERTABLE, position: [0, 1]},
+            {type: GameObjectType.SMALLTABLE, position: [0, 0], isClickable: true, iFrameData: {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }},
+            {type: GameObjectType.SMALLTABLE, position: [0, 1]},
             {type: GameObjectType.TEA, position: [0, [0, 1]], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
             {type: GameObjectType.SOFA, variation: 1, position: [0, 3], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }}
         ],
@@ -349,6 +349,58 @@ const Floorplan = Object.freeze({
     /**  See the GameObjectInfo.js file for instructions on how to add your  **/
     /**  own types of objects.                                               **/
     /**                                                                      **/
+    /**        type     |         description         |     variations       **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   LEFTSCHEDULE  | A 1 x 3 schedule table.     |        none          **/
+    /**                 | Should be placed as part    |                      **/
+    /**                 | of the left wall.           |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   LEFTWINDOW    | A 1 x 1 window. Should be   | 0: without sill      **/
+    /**                 | placed as part of the left  | 1: with sill         **/
+    /**                 | wall.                       |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   RIGHTWINDOW   | A 1 x 1 window. Should be   | 0: without sill      **/
+    /**                 | placed as part of the right | 1: with sill         **/
+    /**                 | wall.                       |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   PICTUREFRAME  | A 1 x 3 set of pictures.    |        none          **/
+    /**                 | Should be placed as part of |                      **/
+    /**                 | the right wall.             |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   CONFERENCELOGO| A 1 x 5 logo. Should be     |        none          **/
+    /**                 | placed as part of the left  |                      **/
+    /**                 | wall. */
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   PLANT         | A small 1 x 1 potted plant. |        none          **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   CHAIR         | A small 1 x 1 chair.        | 0: facing DOWNRIGHT  **/
+    /**                 |                             | 1: facing UPLEFT     **/
+    /**                 |                             | 2: facing DOWNLEFT   **/
+    /**                 |                             | 3: facing UPRIGHT    **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   SOFA          | A more luxurious 1 x 1 chair| 0: facing DOWNRIGHT  **/
+    /**                 |                             | 1: facing DOWNLEFT   **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   LARGETABLE    | A large 1 x 3 table.        | 0: Turned right.     **/
+    /**                 |                             | 1: Turned left.      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   SMALLTABLE    | A small 1 x 1 table         |        none          **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   CANTEENCOUNTER| A small 1 x 3 counter with  |        none          **/
+    /**                 | some food on it.            |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /** RECEPTIONCOUNTER| A large 2 x 7 counter with  |        none          **/
+    /**                 | a computer on it.           |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   DRINKS        | A 1 x 2 vending machine     |        none          **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   TEA           | A small cup of tea. Should  |        none          **/
+    /**                 | be placed on top of a table.|                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
+    /**   SMALLFOOD     | A small plate of food.      | 0 to 3. All slightly **/
+    /**                 | Should be placed on top of  | different placings.  **/
+    /**                 | a table.                    |                      **/
+    /**  ---------------|-----------------------------|--------------------  **/
     /**                                                                      **/
     /**************************************************************************/
 

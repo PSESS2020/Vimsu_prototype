@@ -38,15 +38,15 @@ const GameObjectType = Object.freeze({
         // Tables
         TABLE: 'TABLE',  // NOT COHERENT WITH ART STYLE
                          // DO NOT USE
-        RIGHTTABLE: 'RIGHTTABLE',      
-        SMALLDINNERTABLE: 'SMALLDINNERTABLE',
+        LARGETABLE: 'LARGETABLE',      
+        SMALLTABLE: 'SMALLTABLE',
         // Counters
         CANTEENCOUNTER: 'CANTEENCOUNTER',
         RECEPTIONCOUNTER: 'RECEPTIONCOUNTER',
         RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
         // Food & Drinks
         DRINKS: 'DRINKS',   
-        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
+        SMALLFOOD: 'SMALLFOOD',
         TEA: 'TEA'         
 });
     
