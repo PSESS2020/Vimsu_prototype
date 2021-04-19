@@ -56,7 +56,7 @@ module.exports = class Door {
         });
 
         //these 2 arguments are only defined when door is not a lecture door
-        if (typeOfDoor !== TypeOfDoor.LECTURE_DOOR) {
+        if (typeOfDoor !== TypeOfDoor.LEFT_LECTUREDOOR && typeOfDoor !== TypeOfDoor.RIGHT_LECTUREDOOR) {
             TypeChecker.isInstanceOf(targetPosition, Position);
             TypeChecker.isEnumOf(direction, Direction);
         }
@@ -395,5 +395,15 @@ module.exports = class Door {
      */
     getClosedMessage() {
         return this.#closedMessage;
+    }
+
+    /**
+     * Gets if this door is a lecture door or not
+     * @method module:Door#isLectureDoor
+     * 
+     * @return {boolean} true if this door is a lecture door, false otherwise
+     */
+    isLectureDoor() {
+        return (this.#typeOfDoor === TypeOfDoor.LEFT_LECTUREDOOR || this.#typeOfDoor === TypeOfDoor.RIGHT_LECTUREDOOR);
     }
 }

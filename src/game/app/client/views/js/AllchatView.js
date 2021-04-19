@@ -62,22 +62,22 @@ class AllchatView extends Views {
     /**
      * Draws all chat window and all chat message input
      * 
-     * @param {TypeOfRoom} typeOfRoom type of room
+     * @param {String} roomName name of room
      * @param {Object[]} messages allchat messages
      * @param {String} ownUsername current participant's username
      */
-    draw(typeOfRoom, messages, ownUsername) {
-        $('#allchatMessageInput')[0].placeholder = 'Enter ' + typeOfRoom.toLowerCase() + ' chat message ...'
-        $('#allchatHeaderText').text(typeOfRoom + ' Chat');
+    draw(roomName, messages, ownUsername) {
+        $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName + ' chat message ...'
+        $('#allchatHeaderText').text(roomName + ' Chat');
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
-            <small>Show ${typeOfRoom.toLowerCase()} chat messages</small>
+            <small>Show ${roomName} chat messages</small>
         `)
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text("The " + typeOfRoom.toLowerCase() + " chat is somehow quiet. Send some love here?")
+            $('#noAllchat').text("The " + roomName + " chat is somehow quiet. Send some love here?")
             return;
         }
 

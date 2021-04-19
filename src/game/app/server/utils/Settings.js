@@ -11,15 +11,15 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
 module.exports = Object.freeze({
 
     /* Start-Position Constants */
+    RECEPTION_ID: 0,
     FOYER_ID: 1,
-    FOODCOURT_ID: 2,
-    RECEPTION_ID: 3,
-    ESCAPEROOM_ID:4,
-    STARTROOM_ID: 3,
+    FOODCOURT_ID: 2, 
+    ESCAPEROOM_ID:3,
+    STARTROOM_ID: 0,
     STARTPOSITION_X: 3,
     STARTPOSITION_Y: 12,
     STARTDIRECTION: Direction.UPLEFT,
-    TYPE_OF_STARTROOM: 'RECEPTION',
+    TYPE_OF_STARTROOM: 'CUSTOM',
 
     /* Chat Constants */
     MAXNUMMESSAGES_LECTURECHAT: 100,

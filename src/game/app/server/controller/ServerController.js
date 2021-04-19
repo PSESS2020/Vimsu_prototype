@@ -29,6 +29,7 @@ const Participant = require('../models/Participant.js');
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
+const AssetPaths = require('../../client/shared/AssetPaths.js');
 const Meeting = require('../models/Meeting.js');
 const Message = require('../models/Message.js');
 
@@ -48,11 +49,12 @@ module.exports = class ServerController {
     #DEBUGMODE;
     #banList;
     #muteList;
-    #roomDecorators;
+    #rooms;
     #allDoors;
     #roomService;
     #interval;
     #currentLecturesData;
+    #roomFactory;
 
     //map from socket-id to ppant-id
     #socketMap;
@@ -99,12 +101,11 @@ module.exports = class ServerController {
         this.#roomService = new RoomService();
 
         //Array to hold all Rooms
-        this.#roomDecorators = this.#roomService.getAllRooms();
+        this.#rooms = this.#roomService.getAllRooms();
 
         //Array to hold all Doors
         this.#allDoors = [];
-        this.#roomDecorators.forEach(decorator => {
-            let room = decorator.getRoom();
+        this.#rooms.forEach(room => {
             this.#allDoors = this.#allDoors.concat(room.getListOfDoors());
         });
         
@@ -187,15 +188,17 @@ module.exports = class ServerController {
                     }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
-                    let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
-
-                    let typeOfCurrentRoom;
-                    for (var i = 0, n = this.#roomDecorators.length; i < n; i++) {
-                        if (this.#roomDecorators[i].getRoom().getRoomId() === currentRoomId) {
-                            typeOfCurrentRoom = this.#roomDecorators[i].getRoom().getTypeOfRoom();
-                            break;
-                        }
+                    let currentRoom = this.#getRoomById(currentRoomId);
+                    // in case the ppant is at a position
+                    // that no longer exists in the current
+                    // floorplan, we move him to the startposition
+                    if (currentRoom === undefined) {
+                        ppant.setPosition(new Position(Settings.STARTROOM_ID, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y));
+                        ppant.setDirection(Settings.STARTDIRECTION);
+                        currentRoomId = Settings.STARTROOM_ID;
+                        currentRoom = this.#getRoomById(currentRoomId);
                     }
+                    let typeOfCurrentRoom = currentRoom.getTypeOfRoom();
 
                     socket.ppantID = ppant.getId();
 
@@ -226,7 +229,7 @@ module.exports = class ServerController {
                             socket.emit('join group', group.getName());
                         }
                     });
-                        
+                     
                     //Open all doors this ppant achieved to open through his achievements before
                     let achievements = ppant.getAchievements();
 
@@ -241,10 +244,11 @@ module.exports = class ServerController {
                     });
 
                     //Gets asset paths of the starting room
-                    let assetPaths = this.#roomDecorators[currentRoomId - 1].getAssetPaths();
+                    let assetPaths = AssetPaths;
 
                     //Gets MapElements of the starting room
                     let mapElements = currentRoom.getListOfMapElements();
+
                     let mapElementsData = [];
 
                     mapElements.forEach(mapElement => {
@@ -257,7 +261,8 @@ module.exports = class ServerController {
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
                             isClickable: mapElement.getClickable(),
-                            isIFrameObject: mapElement.getIFrameData() !== undefined
+                            isIFrameObject: mapElement.getIFrameData() !== undefined,
+                            story: mapElement.getStory(),
                         });
                     });
 
@@ -276,7 +281,8 @@ module.exports = class ServerController {
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
-                            isIFrameObject: gameObject.getIFrameData() !== undefined
+                            isIFrameObject: gameObject.getIFrameData() !== undefined,
+                            story: gameObject.getStory()
                         });
                     });
 
@@ -320,7 +326,7 @@ module.exports = class ServerController {
                     };
 
                     //Sends Room ID, typeOfRoom and listOfGameObjects to Client
-                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, typeOfCurrentRoom,
+                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, currentRoom.getRoomName(), typeOfCurrentRoom,
                         assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength(), currentRoom.getOccMap());
 
                     //Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
@@ -384,7 +390,7 @@ module.exports = class ServerController {
                     return;
 
                 let roomID = participant.getPosition().getRoomId();
-                let room = this.#roomDecorators[roomID - 1].getRoom();
+                let room = this.#getRoomById(roomID);
                 let username = participant.getBusinessCard().getUsername();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -490,7 +496,7 @@ module.exports = class ServerController {
                     }
                 } 
 
-                let currentRoom = this.#roomDecorators[roomId - 1].getRoom();
+                let currentRoom = this.#getRoomById(roomId);
 
                 //Collision Checking
 
@@ -508,7 +514,7 @@ module.exports = class ServerController {
                 let doors = currentRoom.getListOfDoors();
                 doors.forEach(door => {
                     if (door.isValidEnterPositionWithoutClick(oldPos, oldDir, direction)) {
-                        if (door.getTypeOfDoor() === TypeOfDoor.LECTURE_DOOR)
+                        if (door.isLectureDoor())
                             this.#getCurrentLectures(socket);
                         else
                             this.#enterRoom(door.getTargetRoomId(), socket);
@@ -1751,7 +1757,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let npc = this.#roomDecorators[currentRoomId - 1].getRoom().getNPC(npcID);
+                let npc = this.#getRoomById(currentRoomId).getNPC(npcID);
 
                 //prevents server to crash when client emits wrong NPC ID
                 if (!npc) {
@@ -1789,7 +1795,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let gameObject = this.#roomDecorators[currentRoomId - 1].getRoom().getGameObject(gameObjectID);
+                let gameObject = this.#getRoomById(currentRoomId).getGameObject(gameObjectID);
 
                 //prevents server to crash when client emits wrong GameObject ID
                 if (!gameObject) {
@@ -1858,7 +1864,7 @@ module.exports = class ServerController {
                 ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
-                this.#roomDecorators[currentRoomId - 1].getRoom().exitParticipant(ppantID);
+                this.#getRoomById(currentRoomId).exitParticipant(ppantID);
 
                 this.#socketMap.delete(socket.id);
                 this.#ppants.delete(ppantID);
@@ -1952,14 +1958,14 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets all roomDecorators
-     * @method module:ServerController#getRoomDecorators
+     * Gets all rooms of current conference
+     * @method module:ServerController#getRooms
      * 
-     * @return {RoomDecorator[]} roomDecorators
+     * @return {Room[]} rooms
      * 
      */
-    getRoomDecorators() {
-        return this.#roomDecorators;
+    getRooms() {
+        return this.#rooms;
     }
 
     /**
@@ -2119,11 +2125,11 @@ module.exports = class ServerController {
         }
 
         //room does not exist
-        if (this.#roomDecorators[newRoomID - 1] === undefined) {
+        if (this.#getRoomById(newRoomID) === undefined) {
             return false;
         }
 
-        let newRoom = this.#roomDecorators[newRoomID - 1].getRoom();
+        let newRoom = this.#getRoomById(newRoomID);
 
         //passed position is invalid
         if (newRoom.checkForCollision(position)) {
@@ -3148,7 +3154,7 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let lectureDoor = this.#roomDecorators[currentRoomId - 1].getRoom().getLectureDoor();
+        let lectureDoor = this.#getRoomById(currentRoomId).getLectureDoor();
 
         //check if participant is in right position to enter room
         if (!lectureDoor.isValidEnterPosition(enterPosition)) {
@@ -3234,15 +3240,15 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
+        let currentRoom = this.#getRoomById(currentRoomId);
 
         //prevents server to crash when client emits a non existing room ID
-        if (!this.#roomDecorators[targetRoomId - 1]) {
+        if (!this.#getRoomById(targetRoomId)) {
             console.log('Client emitted wrong Room-ID!');
             return;
         }
 
-        let targetRoom = this.#roomDecorators[targetRoomId - 1].getRoom();
+        let targetRoom = this.#getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         //get door from current room to target room
@@ -3283,6 +3289,24 @@ module.exports = class ServerController {
     }
 
     /**
+     * @method module:ServerController#getRoomById
+     * 
+     * @param {String} roomId 
+     * @returns {Room} Returns the room with the passed id, if
+     *                 the conference has such room. Returns
+     *                 undefined otherwise.
+     */
+    #getRoomById = function (roomId) {
+        for (let i = 0; i < this.#rooms.length; i++) {
+            let room = this.#rooms[i];
+            if (room.getRoomId() == roomId) {
+                return room;
+            }
+        }
+        return undefined;
+    }
+
+    /**
      * @private Handles changing a ppants position
      * 
      * @method module:ServerController#changeParticipantPosition
@@ -3300,24 +3324,17 @@ module.exports = class ServerController {
 
         let currentPosition = ppant.getPosition();
         let currentRoomId = currentPosition.getRoomId();
-        let currentRoom = this.#roomDecorators[currentRoomId - 1].getRoom();
+        let currentRoom = this.#getRoomById(currentRoomId);
 
         let targetRoomId = newPos.getRoomId();
-        let targetRoomDecorator = this.#roomDecorators[targetRoomId - 1];
-
-        //room does not exist
-        if (targetRoomDecorator === undefined) {
-            return;
-        }
-
-        let targetRoom = targetRoomDecorator.getRoom();
+        let targetRoom = this.#getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         currentRoom.exitParticipant(ppantID);
         targetRoom.enterParticipant(ppant);
 
         //Get asset paths of target room
-        let assetPaths = targetRoomDecorator.getAssetPaths();
+        let assetPaths = AssetPaths;
 
         //Get MapElements of target room
         let mapElements = targetRoom.getListOfMapElements();
@@ -3333,7 +3350,8 @@ module.exports = class ServerController {
                 cordX: mapElement.getPosition().getCordX(),
                 cordY: mapElement.getPosition().getCordY(),
                 isClickable: mapElement.getClickable(),
-                isIFrameObject: mapElement.getIFrameData() !== undefined
+                isIFrameObject: mapElement.getIFrameData() !== undefined,
+                story: mapElement.getStory()
             });
         });
 
@@ -3352,7 +3370,8 @@ module.exports = class ServerController {
                 cordX: gameObject.getPosition().getCordX(),
                 cordY: gameObject.getPosition().getCordY(),
                 isClickable: gameObject.getClickable(),
-                isIFrameObject: gameObject.getIFrameData() !== undefined
+                isIFrameObject: gameObject.getIFrameData() !== undefined,
+                story: gameObject.getStory()
             });
         });
 
@@ -3391,7 +3410,7 @@ module.exports = class ServerController {
         let socket = this.getSocketObject(socketID);
 
         //emit new room data to client
-        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoomType,
+        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoom.getRoomName(), targetRoomType,
             assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
 
         //set new position in server model
@@ -3437,7 +3456,7 @@ module.exports = class ServerController {
             socket.join(targetRoomId.toString());
         }
 
-        this.#io.to(socketID).emit('initAllchat', this.#roomDecorators[targetRoomId - 1].getRoom().getMessages());
+        this.#io.to(socketID).emit('initAllchat', this.#getRoomById(targetRoomId).getMessages());
 
     }
 

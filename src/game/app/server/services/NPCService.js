@@ -2,6 +2,7 @@ const NPC = require('../models/NPC.js');
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
+const NPCDialog = require('../utils/NPCDialog.js');
 
 /**
  * The NPC Service
@@ -25,25 +26,6 @@ module.exports = class NPCService {
 
         NPCService.instance = this;
         this.#npcIDs = [];
-    }
-
-    #STORIES = {
-        foyerHelperStory: ['Hey! Welcome to our Foyer!',
-            'The door to my left leads to the lectures. Take a look and have fun! If you are on time and stay till the end, you can ask questions to the orator through the lecture chat.',
-            'Enjoy your stay!'],
-        basicTutorialStory: ['Hello and welcome to this conference hosted by VIMSU!',
-            'I would like to give you a short introduction with some basic tips.',
-            'You can move around using WASD, arrow keys or by double-clicking the tile you want to move to.',
-            'You can enter a room by clicking the door tile or running against the door. You need to be in range to enter a door.',
-            'The door in this room leads you to the Foyer. From there, you can go anywhere and visit lectures!',
-            'Keep in mind: you can interact with other participants by clicking the tile they are standing on.',
-            'Earn points by visiting lectures, interacting with others or by reaching achievements!',
-            'You can see the current points standings by clicking the Ranklist Button.',
-            "Almost all buttons have a description. If you don't understand what a button does, just hover your mouse over the button and wait for the description to appear.",
-            'There are other NPCs at this conference who would like to help you. You can recognize them by the red bar above them.',
-            "That's it for now! Have fun and enjoy your stay!"],
-        chefStory: ['Hello mate. Are you hungry?',
-            'Come back later to eat some of my fresh food!'],
     }
 
     /**
@@ -81,7 +63,7 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, this.#STORIES.foyerHelperStory);
+        return new NPC(this.#generateNpcID(), 'FoyerHelper', new Position(roomId, xPos, yPos), direction, NPCDialog.foyerHelperDialog);
     }
 
     /**
@@ -101,7 +83,7 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, this.#STORIES.basicTutorialStory)
+        return new NPC(this.#generateNpcID(), 'BasicTutorial', new Position(roomId, xPos, yPos), direction, NPCDialog.basicTutorialDialog);
     }
 
     /**
@@ -121,6 +103,44 @@ module.exports = class NPCService {
         TypeChecker.isInt(yPos);
         TypeChecker.isEnumOf(direction, Direction);
 
-        return new NPC(this.#generateNpcID(), 'Chef', new Position(roomId, xPos, yPos), direction, this.#STORIES.chefStory);
+        return new NPC(this.#generateNpcID(), 'Chef', new Position(roomId, xPos, yPos), direction, NPCDialog.chefDialog);
+    }
+
+    /**
+     * Creates a custom NPC with the passed attributes
+     * 
+     * @method module:NPCService#createCustomNPC
+     * 
+     * @param {String} name 
+     * @param {String} roomId 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Direction} direction 
+     * @param {*} dialog 
+     * 
+     * @returns {NPC} An NPC instance with the passed attributes
+     */
+    createCustomNPC(name, roomId, xPos, yPos, direction, dialog) {
+        TypeChecker.isString(name);
+        TypeChecker.isInt(roomId);
+        TypeChecker.isInt(xPos);
+        TypeChecker.isInt(yPos);
+        TypeChecker.isEnumOf(direction, Direction);
+
+        // If an entire array gets passed, it's contents are
+        // used as dialog
+        if(Array.isArray(dialog)) {
+            dialog.forEach(message => {
+                TypeChecker.isString(message);
+            })
+            return new NPC(this.#generateNpcID(), name, new Position(roomId, xPos, yPos), direction, dialog);
+        } else {
+            // else it is assumed that the dialog parameter
+            // is a string that can be used as a key in the
+            // NPCDialog file
+            TypeChecker.isString(dialog);
+            let npcDialog = (NPCDialog[dialog] !== undefined) ? NPCDialog[dialog] : ["I wasn't given anyting to say."];
+            return new NPC(this.#generateNpcID(), name, new Position(roomId, xPos, yPos), direction, npcDialog);
+        }
     }
 }

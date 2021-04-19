@@ -20,11 +20,22 @@ const Settings = Object.freeze({
 
     SHOWLECTURE: 10 * 60 * 1000,
 
+    /* View constants */
+    TILE_COLUMN_WIDTH: 64,
+    TILE_ROW_HEIGHT: 32,
+    DEFAULT_OFFSET: { x: 0, y: 0 },
+    LEFTWALL_OFFSET: { x: 0, y: 1 },
+    RIGHTWALL_OFFSET: { x: -1, y: 1 },
+
+    /* Object constants */
+    SMALL_OBJECT_WIDTH: 1,
+    SMALL_OBJECT_LENGTH: 1,
+
     /* Avatar constants */
     AVATAR_WIDTH: 64,
     AVATAR_HEIGHT: 128,
 
-    //Needed for calculating because avatar asset gets shrinked when drawn. 
+    //Needed for calculating because avatar asset gets shrunk when drawn. 
     AVATAR_SCALE_WIDTH: 1.5,
     AVATAR_SCALE_HEIGHT: 0.3125,
 

@@ -19,7 +19,8 @@ class GameObjectClient {
     position;
     gameObjectType;
     isClickable;
-    isIFrameObject
+    isIFrameObject;
+    story;
 
     /**
      * Creates an instance of Game Object on client-side
@@ -32,8 +33,10 @@ class GameObjectClient {
      * @param {PositionClient} position game object position
      * @param {boolean} isClickable game object clickable status
      * @param {boolean} isIFrameObject true if object is an IFrameObject, false otherwise
+     * @param {String[]} story text message that is displayed on click
+     *                         (if clickable)
      */
-    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject) {
+    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject, story) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -43,6 +46,8 @@ class GameObjectClient {
         TypeChecker.isInstanceOf(position, PositionClient);
         TypeChecker.isBoolean(isClickable);
         TypeChecker.isBoolean(isIFrameObject);
+        TypeChecker.isInstanceOf(story, Array);
+        story.forEach(element => TypeChecker.isString(element));
         
         this.id = id;
         this.gameObjectType = gameObjectType;
@@ -54,6 +59,7 @@ class GameObjectClient {
         this.position = position;
         this.isClickable = isClickable;
         this.isIFrameObject = isIFrameObject;
+        this.story = story;
     }
 
     /**
@@ -126,6 +132,16 @@ class GameObjectClient {
      */
      getIsIFrameObject() {
         return this.isIFrameObject;
+    }
+
+    /**
+     * Gets game object story
+     * 
+     * @returns {String[]} story text message that is displayed on click
+     *                     (if clickable)
+     */
+    getStory() {
+        return this.story;
     }
 }
 

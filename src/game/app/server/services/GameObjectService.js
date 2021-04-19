@@ -3,6 +3,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const Settings = require('../utils/Settings.js');
 const Position = require('../models/Position.js');
+const GameObjectInfo = require('../utils/GameObjectInfo.js');
 
 
 /**
@@ -13,6 +14,12 @@ const Position = require('../models/Position.js');
  * @version 1.0.0
  */
 module.exports = class GameObjectService {
+
+    /* TODO:
+     * createTile
+     * createWall
+     * createWindow
+    */
 
     #gameObjectIDs;
 
@@ -59,8 +66,11 @@ module.exports = class GameObjectService {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData, story) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -75,6 +85,17 @@ module.exports = class GameObjectService {
             TypeChecker.isInt(iFrameData.width);
             TypeChecker.isInt(iFrameData.height);
             TypeChecker.isString(iFrameData.url);
+        }
+
+        if (story !== undefined) {
+            TypeChecker.isInstanceOf(story, Array);
+            story.forEach(element => TypeChecker.isString(element));
+        }
+    }
+
+    #isKnownType = function (type) {
+        if(!GameObjectType.hasOwnProperty(type)) {
+            throw new TypeError(type + ' is not a known objecttype!')
         }
     }
 
@@ -661,7 +682,7 @@ module.exports = class GameObjectService {
      * @param {boolean} solidity true if solid, otherwise false
      * @param {boolean} clickable true if clickable, otherwise false
      * 
-     * @return {GameObject} defult left window
+     * @return {GameObject} default left window
      */
     createLeftWindowDefault(roomId, width, length, xPos, yPos, solidity, clickable) {
         this.#checkParamTypes(roomId, width, length, xPos, yPos, solidity, clickable);
@@ -786,4 +807,134 @@ module.exports = class GameObjectService {
         } else
             return new GameObject(this.#generateGameObjectID(), GameObjectType.LEFTWALL, "leftconferencelogo_default", width, length, new Position(roomId, xPos, yPos), solidity, clickable);
     }
+
+    /**
+     * Creates a custom instance of te GameObjectClass with no hard-coded
+     * parameters passed.
+     *
+     * @method module:GameObjectService#createCustomObject
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
+     * 
+     * @returns {GameObject} A custom instance of the GameObject class
+     */
+    createCustomObject(roomId, type, xPos, yPos, isClickable, iFrameData, story) {
+        this.#isKnownType(type);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
+        
+        return new GameObject(
+            this.#generateGameObjectID(), 
+            type, 
+            GameObjectInfo.getInfo(type, "assetName"), 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            iFrameData,
+            story);
+    }
+
+    /**
+     * A slight variation of the above class that allows for variations of
+     * objects to be created. This could probably be done more elegantly.
+     * 
+     * @method module:GameObjectService#createObjectVariation
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
+     * @param {Int} variation The variation of the object that is supposed to be created
+     * 
+     * @return {GameObject} A custom instance of the GameObject class
+     */
+    createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, story, variation) {
+        this.#isKnownType(type);
+        TypeChecker.isInt(variation);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
+        
+        return new GameObject(
+            this.#generateGameObjectID(), 
+            type, 
+            GameObjectInfo.getInfo(type, "assetName")[variation], 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            iFrameData,
+            story);       
+    }
+
+    /**
+     * A slight variation of the above method that allows to create
+     * objects that consist out of more than one part
+     * 
+     * @method module:GameObjectService#createObjectPart
+     * 
+     * @param {String} roomId 
+     * @param {String} type 
+     * @param {Int} xPos 
+     * @param {Int} yPos 
+     * @param {Boolean} isSolid 
+     * @param {Boolean} isClickable 
+     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
+     * @param {?String} iFrameData.title title of iFrame
+     * @param {?String} iFrameData.url URL of iFrame
+     * @param {?number} iFrameData.width width of iframe in px
+     * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
+     * @param {Array[number]} part The part of the object that is supposed to be created
+     * 
+     * @return {GameObject} A custom instance of the GameObject class
+     */
+     createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, story, part) {
+        this.#isKnownType(type);
+        TypeChecker.isInt(part.x);
+        TypeChecker.isInt(part.y);
+        // only need to check the actually passed arguments
+        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
+
+        return new GameObject(
+            this.#generateGameObjectID(),
+            type, 
+            GameObjectInfo.getInfo(type, "assetName")[part.x][part.y], 
+            GameObjectInfo.getInfo(type, "width"), 
+            GameObjectInfo.getInfo(type, "length"), 
+            new Position(roomId, xPos, yPos), 
+            GameObjectInfo.getInfo(type, "isSolid"), 
+            isClickable, 
+            iFrameData,
+            story);        
+    }
+
+
 }

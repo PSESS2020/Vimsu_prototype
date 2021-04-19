@@ -291,10 +291,8 @@ describe('test Door handling', function () {
     });
 
     it('test lectureDoor', function () {
-        expect(() => testFoodcourt.getLectureDoor()).to.throw(Error, 'Lecture Door is only in FOYER!');
-        expect(() => testReception.getLectureDoor()).to.throw(Error, 'Lecture Door is only in FOYER!');
         expect(testFoyer.getLectureDoor()).to.be.instanceof(Door);
-        expect(testFoyer.getLectureDoor().getTypeOfDoor()).to.equal(TypeOfDoor.LECTURE_DOOR);
+        expect(testFoyer.getLectureDoor().getTypeOfDoor()).to.equal(TypeOfDoor.LEFT_LECTUREDOOR);
     });
 
 })

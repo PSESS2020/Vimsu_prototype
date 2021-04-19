@@ -440,6 +440,7 @@ module.exports = class CommandHandler {
     logAllDoors(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
+<<<<<<< HEAD
         let roomDecorators = this.#serverController.getRoomDecorators();
         let roomIDs = [];
 
@@ -461,6 +462,27 @@ module.exports = class CommandHandler {
                     ((doors[j].isOpen()) ? "open" : "closed") + 
                     ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
                 }
+=======
+        let rooms = this.#serverController.getRooms();
+        let header = "List of all exisiting Doors";
+        let body = [];
+        for (let i = 0; i < rooms.length; i++) {
+            let room = rooms[i];
+            let doors = room.getListOfDoors();
+            for (let j = 0; j < doors.length; j++) {
+                let targetRoomId = doors[j].getTargetRoomId();
+                let targetRoomName;
+                for (let k = 0; k < rooms.length; k++) {
+                    if (targetRoomId === rooms[k].getRoomId()) {
+                        targetRoomName = rooms[k].getRoomName();
+                    }
+                }
+                body.splice(0, 0,  "Door in " + room.getRoomName() + 
+                ((doors[j].isLectureDoor()) ? (" is a LectureDoor and") : (" to " + targetRoomName))
+                + " has ID " +  doors[j].getId() + ". Door is currently " + 
+                ((doors[j].isOpen()) ? "open" : "closed") + 
+                ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
+>>>>>>> M200Rooms
             }
         }
 

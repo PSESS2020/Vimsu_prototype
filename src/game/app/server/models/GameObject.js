@@ -20,6 +20,7 @@ module.exports = class GameObject {
     #gameObjectType;
     #isClickable;
     #iFrameData;
+    #story
 
     /**
      * Creates a game object instance
@@ -38,8 +39,11 @@ module.exports = class GameObject {
      * @param {?String} iFrameData.url URL of iFrame
      * @param {?number} iFrameData.width width of iframe in px
      * @param {?number} iFrameData.height height of iframe in px
+     * @param {?String[]} story Array of strings if clicking this
+     *                          displays a text message, otherwise
+     *                          undefined
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData, story) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -69,6 +73,7 @@ module.exports = class GameObject {
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;
         this.#iFrameData = iFrameData;
+        this.#story = ((story === undefined) ? [''] : story);
     }
 
     /**
@@ -159,5 +164,15 @@ module.exports = class GameObject {
      */
     getIFrameData() {
         return this.#iFrameData;
+    }
+
+    /**
+     * Gets game object story. May be empty array.
+     * @method module:GameObject#getStory
+     * 
+     * @returns {String[]} story (may be empty array)
+     */
+    getStory() {
+        return this.#story;
     }
 }

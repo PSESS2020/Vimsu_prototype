@@ -9,8 +9,8 @@ class IsometricEngine {
     yNumTiles;
     mapOriginX;
     mapOriginY;
-    tileColumnWidth = 64;
-    tileRowHeight = 32;
+    tileColumnWidth = Settings.TILE_COLUMN_WIDTH;
+    tileRowHeight = Settings.TILE_ROW_HEIGHT;
 
     loader;
 
@@ -135,10 +135,8 @@ class IsometricEngine {
 
         var imageLoader = new ImageLoader();
         var totalImages = Object.keys(assetPaths).length;
-
         var assetImages = {};
         var loadedImages = 0;
-
         // Load all the images before we run the app
         for (var key in assetPaths) {
             assetImages[key] = await imageLoader.loadImage(key, assetPaths[key]);

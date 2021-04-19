@@ -67,11 +67,11 @@ class ClientController {
         var assetPaths = this.currentRoom.getAssetPaths();
         var map = this.currentRoom.getMap();
         var objectMap = this.currentRoom.getObjectMap();
-        var typeOfRoom = this.currentRoom.getTypeOfRoom();
+        var roomName = this.currentRoom.getRoomName();
         var listOfNPCs = this.currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
+            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
         this.gameView.drawStatusBar();
@@ -95,11 +95,11 @@ class ClientController {
         var assetPaths = this.currentRoom.getAssetPaths();
         var map = this.currentRoom.getMap();
         var objectMap = this.currentRoom.getObjectMap();
-        var typeOfRoom = this.currentRoom.getTypeOfRoom();
+        var roomName = this.currentRoom.getRoomName();
         var listOfNPCs = this.currentRoom.getListOfNPCs();
 
         if (map !== null) {
-            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom);
+            this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
         this.gameView.resetAnotherAvatarViews();
@@ -319,6 +319,7 @@ class ClientController {
      * Third message from Server, gives you information of starting room
      * 
      * @param {number} roomId room ID
+     * @param {String} roomName room name
      * @param {TypeOfRoom} typeOfRoom type of room
      * @param {Object} assetPaths asset paths
      * @param {Object[]} listOfMapElementsData list of map elements
@@ -329,9 +330,10 @@ class ClientController {
      * @param {number} length room length
      * @param {number[][]} occupationMap occupation map
      */
-    handleFromServerUpdateRoom = function (roomId, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
+    handleFromServerUpdateRoom = function (roomId, roomName, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
 
         TypeChecker.isInt(roomId);
+        TypeChecker.isString(roomName);
         TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
         TypeChecker.isInstanceOf(assetPaths, Object);
         TypeChecker.isInstanceOf(listOfMapElementsData, Array);
@@ -346,6 +348,7 @@ class ClientController {
             TypeChecker.isInt(mapElement.cordY);
             TypeChecker.isBoolean(mapElement.isClickable);
             TypeChecker.isBoolean(mapElement.isIFrameObject);
+
         });
         TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
         listOfGameObjectsData.forEach(gameObject => {
@@ -384,14 +387,20 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject, mapElement.story))
+            if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
+                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.story, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
+            }
         });
 
         //transform GameObjects to GameObjectClients
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject, element.story));
+            if (element.isClickable && (element.width > 1 || element.length > 1)) {
+                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.story, element.cordX, element.cordY, element.width, element.length);
+            }
         });
 
         //transform NPCs to NPCClients
@@ -408,11 +417,11 @@ class ClientController {
 
         //First room? 
         if (!this.currentRoom) {
-            this.currentRoom = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom = new RoomClient(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
 
-            //If not, only swap the room
+        //If not, only swap the room
         } else {
-            this.currentRoom.swapRoom(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom.swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
             this.currentRoom.enterParticipant(this.ownParticipant);
             this.switchRoomGameView();
         }
@@ -868,7 +877,7 @@ class ClientController {
      * @param {{senderId: String, timestamp: String, text: String}} messages allchat messages
      */
     handleFromServerInitAllchat = function (messages) {
-        this.gameView.initAllchatView(this.currentRoom.getTypeOfRoom(), messages, this.ownBusinessCard.getUsername());
+        this.gameView.initAllchatView(this.currentRoom.getRoomName(), messages, this.ownBusinessCard.getUsername());
     }
 
     /**
@@ -1826,5 +1835,40 @@ class ClientController {
     handleArrowUp() {
         this.gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
+    }
+
+    /**
+     * Adds invisible, clickable dummy objects to map s.t.
+     * larger clickable objects can be clicked everywhere
+     * 
+     * @param {GameObjectClient[]} listToAddTo dummy objects should
+     *                                         be added to same list
+     *                                         as parent object
+     * @param {String} id same as parent object (to retrieve iFrame
+     *                    data)
+     * @param {Boolean} isIFrameObject same as parent object
+     * @param {Int} cordX x cord of parent object
+     * @param {Int} cordY y cord of parent object
+     * @param {Int} width width of parent object
+     * @param {Int} length length of parent object
+     */
+    addDummyClickersTo(listToAddTo, id, isIFrameObject, story, cordX, cordY, width, length) {
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < length; j++) {
+                listToAddTo.push(
+                    new GameObjectClient(
+                        id, 
+                        GameObjectType.BLANK,
+                        "blank",
+                        Settings.SMALL_OBJECT_WIDTH,
+                        Settings.SMALL_OBJECT_LENGTH,
+                        new PositionClient(cordX + i, cordY + j),
+                        true,
+                        isIFrameObject,
+                        story
+                    )
+                )
+            }
+        }
     }
 }

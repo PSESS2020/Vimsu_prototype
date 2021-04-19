@@ -5,28 +5,51 @@
  * @version 1.0.0
  */
 const GameObjectType = Object.freeze({
-    SELECTED_TILE: 'SELECTED_TILE',
-    BLANK: 'BLANK',
-    TILE: 'TILE',
-    LEFTWALL: 'LEFTWALL',
-    RIGHTWALL: 'RIGHTWALL',
-    TABLE: 'TABLE',
-    LEFTTILE: 'LEFTTILE',
-    RIGHTTILE: 'RIGHTTILE',
-    LEFTSCHEDULE: 'LEFTSCHEDULE',
-    PLANT: 'PLANT',
-    CONFERENCELOGO: 'CONFERENCELOGO',
-    SOFA: 'SOFA',
-    RIGHTTABLE: 'RIGHTTABLE',
-    CHAIR: 'CHAIR',
-    SMALLDINNERTABLE: 'SMALLDINNERTABLE',
-    SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
-    DRINKS: 'DRINKS',
-    CANTEENCOUNTER: 'CANTEENCOUNTER',
-    RECEPTIONCOUNTER: 'RECEPTIONCOUNTER',
-    RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
-});
+        /*********************************/
+        /** When new GameObjectType  is **/
+        /** added here, don't forget to **/
+        /** add  necessary  information **/
+        /** for  easy  creation  to the **/
+        /** GameObjectInfo-file!        **/
+        /*********************************/
 
+        // Blank
+        BLANK: 'BLANK',
+        // Tiles
+        TILE: 'TILE',
+        SELECTED_TILE: 'SELECTED_TILE',
+        LEFTTILE: 'LEFTTILE',
+        RIGHTTILE: 'RIGHTTILE',
+        // Walls
+        LEFTWALL: 'LEFTWALL',
+        RIGHTWALL: 'RIGHTWALL',
+        // Wall-like objects
+        // Schedule, Windows, Logo, Picture Frames...
+        LEFTSCHEDULE: 'LEFTSCHEDULE',
+        RIGHTWINDOW: 'RIGHTWINDOW',
+        LEFTWINDOW: 'LEFTWINDOW',
+        PICTUREFRAME: 'PICTUREFRAME',
+        CONFERENCELOGO: 'CONFERENCELOGO',
+        // Plant
+        PLANT: 'PLANT',
+        // Seating
+        CHAIR: 'CHAIR',
+        SOFA: 'SOFA',
+        // Tables
+        TABLE: 'TABLE',  // NOT COHERENT WITH ART STYLE
+                         // DO NOT USE
+        RIGHTTABLE: 'RIGHTTABLE',      
+        SMALLDINNERTABLE: 'SMALLDINNERTABLE',
+        // Counters
+        CANTEENCOUNTER: 'CANTEENCOUNTER',
+        RECEPTIONCOUNTER: 'RECEPTIONCOUNTER',
+        RECEPTIONCOUNTERSIDEPART: 'RECEPTIONCOUNTERSIDEPART',
+        // Food & Drinks
+        DRINKS: 'DRINKS',   
+        SMALLDINNERTABLEFOOD: 'SMALLDINNERTABLEFOOD',
+        TEA: 'TEA'         
+});
+    
 if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = GameObjectType;
+        module.exports = GameObjectType;
 }

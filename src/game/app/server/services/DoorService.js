@@ -3,6 +3,7 @@ const Door = require('../models/Door.js');
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**
  * The Door Service
@@ -12,6 +13,8 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
  * @version 1.0.0
  */
 module.exports = class DoorService {
+
+    #doorIDPrefixList;
 
     /**
      * creates an instance of DoorService
@@ -23,6 +26,7 @@ module.exports = class DoorService {
         }
 
         DoorService.instance = this;
+        this.#doorIDPrefixList = [];
     }
 
     /**
@@ -47,7 +51,7 @@ module.exports = class DoorService {
         if (codeToOpen !== undefined)
             TypeChecker.isString(codeToOpen);
 
-        if (typeOfDoor !== TypeOfDoor.LECTURE_DOOR) {
+        if (typeOfDoor !== TypeOfDoor.LEFT_LECTUREDOOR && typeOfDoor !== TypeOfDoor.RIGHT_LECTUREDOOR) {
             TypeChecker.isInstanceOf(targetPosition, Position);
             TypeChecker.isEnumOf(direction, Direction);
         }
@@ -108,6 +112,26 @@ module.exports = class DoorService {
     }
 
     /**
+     * Counts how many doors exist with that doorIDPrefix (doorIDPrefix is shared between doors that connect the same rooms in the same order)
+     * 
+     * @method module:DoorService#countDoorOccurrences 
+     * 
+     * @param {String} doorIDPrefix prefix of door ID (F + startingRoomID + T + targetRoomID)
+     * 
+     * @return {Number} number of doors that exist between 2 rooms already
+     */
+    #countDoorOccurrences = function (doorIDPrefix) {
+        let count = 0;
+        for (let i = 0; i < this.#doorIDPrefixList.length; i++) {
+            if (this.#doorIDPrefixList[i] === doorIDPrefix) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
      * creates an instance of lecture door
      * @method module:DoorService#createLectureDoor
      * 
@@ -119,15 +143,17 @@ module.exports = class DoorService {
      * @return {Door} lecture door instance
      */
     createLectureDoor(mapPosition, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor.LECTURE_DOOR, mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
+        this.#checkParamTypes(TypeOfDoor.LEFT_LECTUREDOOR, mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
 
         let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
         let enterPositions = enterPositionData.enterPositions;
-        return new Door('L' + mapPosition.getRoomId(), TypeOfDoor.LECTURE_DOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined, isOpen, closedMessage, codeToOpen);
+
+        return new Door('L' + mapPosition.getRoomId(), TypeOfDoor.LEFT_LECTUREDOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined, isOpen, closedMessage, codeToOpen);
     }
 
     /**
+     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
      * creates an instance of foyer door
      * @method module:DoorService#createFoyerDoor
      * 
@@ -150,6 +176,7 @@ module.exports = class DoorService {
     }
 
     /**
+     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
      * creates an instance of food court door
      * @method module:DoorService#createFoodCourtDoor
      * 
@@ -172,6 +199,7 @@ module.exports = class DoorService {
     }
 
     /**
+     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
      * creates an instance of reception door
      * @method module:DoorService#createReceptionDoor
      * 
@@ -194,6 +222,7 @@ module.exports = class DoorService {
     }
 
     /**
+     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
      * creates an instance of escape room door
      * @method module:DoorService#createEscapeRoomDoor
      * 
@@ -212,5 +241,104 @@ module.exports = class DoorService {
         return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
     }
 
+    /**
+     * Creates a custom door with the passed attributes.
+     * 
+     * @method module:DoorService#createCustomDoor
+     * 
+     * @param {String} assetPath // The path to the logo being portrayed
+     *                           // above the door
+     * @param {String} wallSide 
+     * @param {Position} mapPosition 
+     * @param {Position} targetPosition 
+     * @param {Direction} directionOnExit 
+     * @param {Boolean} isOpen 
+     * @param {String} closedMessage 
+     * @param {String} codeToOpen 
+     * 
+     * @returns {Door} A door instance with the passed attributes
+     */
+    createCustomDoor(assetPath, wallSide, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
 
+        this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
+
+        var enterPositionData;
+
+        if (wallSide === GlobalStrings.LEFT) {
+            enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+        } else if (wallSide === GlobalStrings.RIGHT) {
+            enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+        } else {
+            throw new Error(wallSide + " is not a legal option for the wallside of a door.");
+        }
+
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+
+        
+        let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
+        let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
+
+        this.#doorIDPrefixList.push(doorIdPrefix);
+
+        return new Door(doorId,   
+                TypeOfDoor[wallSide + "_DOOR"], 
+                assetPath,
+                mapPosition, 
+                enterPositionWithoutClick, 
+                enterPositions, 
+                targetPosition, 
+                directionOnExit, 
+                isOpen, 
+                closedMessage, 
+                codeToOpen);      
+    } 
+
+    /**
+     * Creates a custom lecture door with the passed attributes.
+     * 
+     * @method module:DoorService#createCustomLectureDoor
+     * 
+     * @param {String} assetPath The path to the logo being portrayed above the door                     
+     * @param {String} wallSide Wallside, either left or right
+     * @param {Position} mapPosition lecture door position
+     * @param {boolean} isOpen decides if door is initially open or closed
+     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
+     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
+     * 
+     * @return {Door} lecture door instance
+     */
+    createCustomLectureDoor(assetPath, wallSide, mapPosition, isOpen, closedMessage, codeToOpen) {
+        this.#checkParamTypes(TypeOfDoor[wallSide + "_LECTUREDOOR"], mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
+    
+        var enterPositionData;
+
+        if (wallSide === GlobalStrings.LEFT) {
+            enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
+        } else if (wallSide === GlobalStrings.RIGHT) {
+            enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
+        } else {
+            throw new Error(wallSide + " is not a legal option for the wallside of a door.");
+        }
+
+        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
+        let enterPositions = enterPositionData.enterPositions;
+    
+
+        let lectureDoorIdPrefix = 'L' + mapPosition.getRoomId();
+        let lectureDoorId = lectureDoorIdPrefix + '_' + this.#countDoorOccurrences(lectureDoorIdPrefix);
+
+        this.#doorIDPrefixList.push(lectureDoorIdPrefix);
+        return new Door(lectureDoorId, 
+                        TypeOfDoor[wallSide + "_LECTUREDOOR"], 
+                        assetPath,
+                        mapPosition, 
+                        enterPositionWithoutClick, 
+                        enterPositions, 
+                        undefined,
+                        undefined,
+                        isOpen, 
+                        closedMessage, 
+                        codeToOpen);   
+    }
 } 

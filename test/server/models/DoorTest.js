@@ -95,7 +95,7 @@ describe('test Door class functionality', function () {
 
 
     it('test LectureDoor constructor', function () {
-        testDoorType = TypeOfDoor.LECTURE_DOOR;
+        testDoorType = TypeOfDoor.LEFT_LECTUREDOOR;
         expect(() => new Door(undefined, testDoorType, testDoorName, testMapPosition,
             testEnterPosition, testEnterPositions, testTargetPosition, testDirection, testIsOpen, testClosedMessage, testCodeToOpen)).to.throw(TypeError);
         expect(() => new Door(testDoorId, undefined, testDoorName, testMapPosition,
@@ -136,6 +136,7 @@ describe('test Door class functionality', function () {
         assert.strictEqual(testDoor.getClosedMessage(), testClosedMessage);
         assert.strictEqual(testDoor.getCodeToOpen(), testCodeToOpen);
         assert.equal(testDoor.hasCodeToOpen(), true);
+        assert.equal(testDoor.isLectureDoor(), true);
     });
 
     it('test ValidEnterPosition check', function () {
