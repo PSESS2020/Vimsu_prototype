@@ -28,7 +28,6 @@ var newNewPassword = "newNewPassword";
 var verificationToken;
 
 const db = require('../../../src/config/db');
-const { resetPassword } = require('../../../src/website/services/AccountService');
 const database = new db();
 database.connectDB().then(res => {
 
@@ -220,7 +219,7 @@ database.connectDB().then(res => {
         })
 
         it('test reset password', function () {
-            expect(globalResults[12]).to.be.true;
+            expect(globalResults[12].success).to.be.true;
             expect(globalResults[13]).to.be.instanceOf(Account);
             expect(globalResults[14]).to.be.false;
         })
