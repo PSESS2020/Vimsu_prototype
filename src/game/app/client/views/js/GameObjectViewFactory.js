@@ -104,7 +104,11 @@ class GameObjectViewFactory {
             } else if (gameObjectType === GameObjectType.RIGHTTILE){
                 pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
             }
-            gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
+            if (isClickable && gameObjectType === GameObjectType.LEFTSCHEDULE) {
+                gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, offset), pos, offset, objectName, this.eventManager);
+            } else {
+                gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
+            }
         } else {
             throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
