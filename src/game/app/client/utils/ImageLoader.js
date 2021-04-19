@@ -35,6 +35,10 @@ class ImageLoader {
                 resolve(image);
             }
 
+            image.onerror = () => {
+                throw new Error('Could not load image at path: ' + path);
+            }
+
             image.src = path;
         });
     }
