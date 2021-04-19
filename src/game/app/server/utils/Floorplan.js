@@ -144,9 +144,48 @@ const Floorplan = Object.freeze({
     /*************************** HOW TO ADD A DOOR ****************************/
     /**************************************************************************/
     /**                                                                      **/
-    /** // doorData = {wallSide, logo, positionOfDoor,
-        //            positionOnExit, directionOnExit, isOpen,
-        //            closedMessage, codeToOpen}                                                          **/
+    /**  Options:                                                            **/
+    /**    wallSide: GlobalStrings.LEFT,    # On which wall the door is      **/
+    /**           OR GlobalStrings.RIGHT,   # supposed to be placed          **/
+    /**        logo: DoorLogos.<key>,       # What logo is displayed above   **/
+    /**                                     # the door. Current options are  **/
+    /**                                     # FOYER, FOODCOURT, RECEPTION    **/
+    /**                                     # LECTURE or DEFAULT. If none    **/
+    /**                                     # is specified, DEFAULT is used. **/
+    /**    position: [xCoord, yCoord],   # The position at which the door is **/
+    /**                                  # placed.                           **/
+    /**    positionOnExit: [roomId, xCoord, yCoord],   # roomId MUST be id   **/
+    /**                                                # of a room that is   **/
+    /**                                                # part of the confer- **/
+    /**                                                # ence.               **/
+    /**    directionOnExit: Direction.<key>,   # What direction the avatar   **/
+    /**                                        # will face upon entering the **/
+    /**                                        # target room.                **/
+    /**                                        # <key> may be DOWNRIGHT,     **/
+    /**                                        # DOWNLEFT, UPRIGHT or UPLEFT **/
+    /**    isOpen: <Boolean>,   # Whether the door is open or not. If it is  **/
+    /**                         # closed, participants may not enter it. If  **/
+    /**                         # not defined, will be set to true.          **/
+    /**    closedMessage: { header: <String>,   # The message that will be   **/
+    /**                     body: <String> },   # displayed if a participant **/
+    /**                                         # attempts to enter the door **/
+    /**                                         # while it is closed. If not **/
+    /**                                         # defined, is set to default **/
+    /**                                         # message.                   **/
+    /**    codeToOpen: <String>    # It this is defined, trying to enter the **/
+    /**                            # door while it is closed will open an    **/
+    /**                            # input prompt where participants can     **/
+    /**                            # enter this code to unlock the door. The **/
+    /**                            # door will only be unlocked for them and **/
+    /**                            # for nobody else.                        **/
+    /**                                                                      **/
+    /**  NOTE If the door is placed on the right wall, the xCoord should be  **/
+    /**       the length of the room. If it is placed on the left wall, the  **/
+    /**       yCoord should be -1. Otherwise, the door will be placed inside **/
+    /**       of the room and look weird (though it should work fine).       **/
+    /**                                                                      **/
+    /**  NOTE The last three options can be set during runtime by a modera-  **/
+    /**       tor using commands.                                            **/
     /**                                                                      **/
     /**************************************************************************/
 
@@ -155,12 +194,12 @@ const Floorplan = Object.freeze({
     /**************************************************************************/
     /**                                                                      **/
     /** Note: Lecture doors can be completely ignored if this is a           **/
-    /**       conference without video storage and lectures.                 **/ 
-    /**                                                                      **/ 
-    /** Options:                                                             **/ 
-    /**   LectureDoors have basically the same options as normal Doors.      **/ 
-    /**   The only difference is, that it is not possible to define          **/ 
-    /**   a positionOnExit and a directionOnExit.                            **/     
+    /**       conference without video storage and lectures.                 **/
+    /**                                                                      **/
+    /** Options:                                                             **/
+    /**   LectureDoors have basically the same options as normal Doors.      **/
+    /**   The only difference is, that it is not possible to define          **/
+    /**   a positionOnExit and a directionOnExit.                            **/
     /**                                                                      **/
     /**************************************************************************/
 
