@@ -20,6 +20,8 @@ class HUDView extends Views {
 
         HUDView.instance = this;
 
+        $('[data-toggle="tooltip"]').tooltip()
+
         $('#rankListButton').off();
         $('#rankListButton').on('click', (event) => {
             $('#rankListModal').modal('show');
