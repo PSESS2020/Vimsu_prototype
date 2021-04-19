@@ -177,7 +177,7 @@ class ParticipantAvatarView extends AvatarView {
             }
 
             ctx_avatar.textAlign = "center";
-            ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 1, Settings.AVATAR_WIDTH * 1.5, parseInt(ctx_avatar.font, 10));
+            ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 2, Settings.AVATAR_WIDTH * 1.5, parseInt($(document.body).css("font-size"), 10) + 2);
 
             ctx_avatar.fillStyle = "black";
             ctx_avatar.fillText(this.username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
