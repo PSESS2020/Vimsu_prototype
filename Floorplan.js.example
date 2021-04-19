@@ -42,6 +42,9 @@ const Floorplan = Object.freeze({
     /**   (server-side version) is a legal position for the  conference you  **/
     /**   just specified, that is to say make sure it exists.                **/
     /**                                                                      **/
+    /**   This is just an example. The actual floorplan (the one you need to **/
+    /**   edit) can be found under /src/game/server/utils/                   **/
+    /**                                                                      **/
     /**************************************************************************/
     
 
