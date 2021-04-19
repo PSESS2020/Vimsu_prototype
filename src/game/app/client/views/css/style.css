@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 * {
   margin: 0px;
   padding: 0px;
@@ -12,6 +14,7 @@ body {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
   user-select: none;
+  font-family: 'Inter', sans-serif;
 }
 
 body.modal-open {
