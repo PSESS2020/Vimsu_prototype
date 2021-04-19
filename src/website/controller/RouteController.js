@@ -144,7 +144,7 @@ module.exports = class RouteController {
         });
 
         this.#app.post('/contact-us', (request, response) => {
-            const vimsuEmail = process.env.VIMSU_DEFAULT_EMAIL;
+            const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
@@ -165,20 +165,33 @@ module.exports = class RouteController {
 
             const mailOptions = {
                 from: vimsuEmail,
-                to: vimsuEmail,
+                to: process.env.VIMSU_DEFAULT_EMAIL,
                 subject: "New message from contact us form",
                 html: `
                     <p>From: <a href="mailto:${request.body.email}">${request.body.email}</a></p>
-                    <p>Message: ${request.body.message}</p>
+                    <p>Message:<br>${request.body.message}</p>
                 `
             }
 
-            return this.#sendMail(mailOptions, process.env.VIMSU_DEFAULT_EMAIL_PASSWORD).then(result => {
+            return this.#sendMail(mailOptions, vimsuEmail, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
                 if (result === true) {
                     if (request.session.loggedin === true) {
                         response.render('contact-us', this.#getLoggedInParameters({ messageSent: true, email: '', message: '' }, request.session.username));
                     } else {
                         response.render('contact-us', { messageSent: true, email: '', message: '' });
+                    }
+
+                    if (request.body.email) {
+                        const from = process.env.VIMSU_NOREPLY_EMAIL;
+                        const subject = "Your message to VIMSU";
+                        const message = `
+                            This is a confirmation message that we have received your message and will get back to you as soon as possible.<br><br>
+                            <small>Your message:<br>${request.body.message}</small>
+                        `;
+                        const messageReason = "we received a message from the contact us form";
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate("there", from, request.body.email, { show: false }, subject, message, messageReason)
+                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
                     }
                 } else {
                     if (request.session.loggedin === true) {
@@ -236,12 +249,12 @@ module.exports = class RouteController {
                     return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
                 }
 
-                var maxParticipants = parseInt(request.body.maxParticipants);
+                const maxParticipants = parseInt(request.body.maxParticipants);
                 if (maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))) {
                     return response.render('upload', this.#getLoggedInParameters({ notInt: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
                 }
 
-                var startingTime = new Date(request.body.startingTime);
+                const startingTime = new Date(request.body.startingTime);
                 if (startingTime == "Invalid Date") {
                     return response.render('upload', this.#getLoggedInParameters({ notDate: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
                 }
@@ -250,8 +263,8 @@ module.exports = class RouteController {
                     return response.render('upload', this.#getLoggedInParameters({ invalidLectureTitle: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
                 }
 
-                var oratorId = request.session.accountId;
-                var video = request.files.video;
+                const oratorId = request.session.accountId;
+                const video = request.files.video;
 
                 if (path.parse(video.name).ext === '.mp4') {
                     if (video.size > 50 * 1024 * 1024) {
@@ -259,6 +272,24 @@ module.exports = class RouteController {
                     }
                     else {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true, title: '', startingTime: '', remarks: '', maxParticipants: '' }, request.session.username))
+
+                        const from = process.env.VIMSU_NOREPLY_EMAIL
+                        const subject = "Your lecture has been submitted";
+                        const message = `
+                            This is a confirmation message that you have successfully submitted your lecture:<br><br><small>
+                            Title: ${request.body.title}<br>
+                            Starting time: ${request.body.startingTime}<br>
+                            Max participants: ${request.body.maxParticipants}<br>
+                            Remarks: ${request.body.remarks}<br>
+                            Video: ${video.name}
+                            </small>
+                        `;
+                        const messageReason = "we received a request to submit a lecture with your account";
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+
+                        this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
                                 return SlotService.createSlot(videoData.fileId, videoData.duration, Settings.CONFERENCE_ID, request.body.title, request.body.remarks, startingTime, oratorId, maxParticipants, this.#db).then(res => {
@@ -351,13 +382,23 @@ module.exports = class RouteController {
                 }
             }
 
-            return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(result => {
-                if (result) {
+            return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(({username, email, success}) => {
+                if (username && email && success) {
                     if (request.session.loggedin === true) {
                         response.render('reset-password', this.#getLoggedInParameters({ changePasswordSuccess: true }, request.session.username))
                     } else {
                         response.render('reset-password', { changePasswordSuccess: true })
                     }
+
+                    const from = process.env.VIMSU_NOREPLY_EMAIL
+                    const subject = "Your password has been changed";
+                    const message = "This is a confirmation message that you have successfully changed your password.";
+                    const messageReason = "we received a request to change your password for your account";
+
+                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, email, { show: false }, subject, message, messageReason)
+
+                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                    
                 } else {
                     if (request.session.loggedin === true) {
                         response.render('reset-password', this.#getLoggedInParameters({ changePasswordFailed: true }, request.session.username))
@@ -384,33 +425,19 @@ module.exports = class RouteController {
 
             return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(({username, token}) => {
                 if (username && token) {
-                    const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
-                    const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
-                    const htmlTemplate = handlebars.compile(source);
-                    const replacements = {
-                        username: username,
-                        action_url: `${process.env.VIMSU_DOMAIN}/reset-password/${token}`,
-                        type_of_action: "reset your password",
-                        vimsu_domain: process.env.VIMSU_DOMAIN,
-                        vimsu_default_email: process.env.VIMSU_DEFAULT_EMAIL,
-                        button_name: "Reset Password",
-                        message: "We got a request to reset your VIMSU password. Please click on the link below to set a new password for your account. Your password will not be changed if you ignore this message."
-                    };
-                    const htmlToSend = htmlTemplate(replacements);
-
-                    const mailOptions = {
-                        from: process.env.VIMSU_NOREPLY_EMAIL,
-                        to: request.body.email,
-                        subject: "Reset your VIMSU password",
-                        attachments: [{
-                            filename: 'vimsu_logo_schrift_transparent.png',
-                            path: path.join(__dirname, '../assets/vimsu_logo_schrift_transparent.png'),
-                            cid: 'logo'
-                        }],
-                        html: htmlToSend
+                    const from = process.env.VIMSU_NOREPLY_EMAIL;
+                    const subject = "Reset your VIMSU password";
+                    const message = "We received a request to reset your VIMSU password. Please click on the link below to set a new password for your account. Your password will not be changed if you ignore this message.";
+                    const messageReason = "we received a request to reset your password for your account";
+                    const button = {
+                        show: true, 
+                        name: "Reset Password", 
+                        url: `${process.env.VIMSU_DOMAIN}/reset-password/${token}`
                     }
 
-                    return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, request.body.email, button, subject, message, messageReason)
+
+                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
                         if (result === true) {
                             response.render('forgot-password', { messageSent: true, sentTo: request.body.email, email: '' })
                             response.end();
@@ -464,33 +491,19 @@ module.exports = class RouteController {
 
             return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
                 if (res && res.token) {
-                    const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
-                    const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
-                    const htmlTemplate = handlebars.compile(source);
-                    const replacements = {
-                        username: request.body.username,
-                        action_url: `${process.env.VIMSU_DOMAIN}/verify-account/${res.token}`,
-                        type_of_action: "verify your email address",
-                        vimsu_domain: process.env.VIMSU_DOMAIN,
-                        vimsu_default_email: process.env.VIMSU_DEFAULT_EMAIL,
-                        button_name: "Verify Email",
-                        message: "Thanks for signing up for VIMSU! Before we get started, we need to confirm that it's you. Please click on the link below to verify your email address."
-                    };
-                    const htmlToSend = htmlTemplate(replacements);
-
-                    const mailOptions = {
-                        from: process.env.VIMSU_NOREPLY_EMAIL,
-                        to: request.body.email,
-                        subject: "Verify your email address for VIMSU",
-                        attachments: [{
-                            filename: 'vimsu_logo_schrift_transparent.png',
-                            path: path.join(__dirname, '../assets/vimsu_logo_schrift_transparent.png'),
-                            cid: 'logo'
-                        }],
-                        html: htmlToSend
+                    const from = process.env.VIMSU_NOREPLY_EMAIL;
+                    const subject = "Verify your email address for VIMSU";
+                    const message = "Thanks for signing up for VIMSU! Before we get started, we need to confirm that it's you. Please click on the link below to verify your email address.";
+                    const messageReason = "we received a request to activate your account";
+                    const button = {
+                        show: true, 
+                        name: "Verify Email", 
+                        url: `${process.env.VIMSU_DOMAIN}/verify-account/${res.token}`
                     }
 
-                    return this.#sendMail(mailOptions, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.body.username, from, request.body.email, button, subject, message, messageReason)
+
+                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
                         if (result === true) {
                             response.render('register', { registerSuccess: true, sentTo: request.body.email, username: "", email: "", forename: "", surname: "", title: "", job: "", company: "" })
                             response.end();
@@ -575,8 +588,19 @@ module.exports = class RouteController {
                 })
             } else if (clickedButton === "deleteAccountButton") {
                 return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, '', this.#db).then(ppantIdOfDeletedAcc => {
-                    if (ppantIdOfDeletedAcc) {
-                        this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
+                    if (ppantIdOfDeletedAcc !== false) {
+                        if (ppantIdOfDeletedAcc !== "")
+                            this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
+                        
+                        const from = process.env.VIMSU_NOREPLY_EMAIL
+                        const subject = "Your account has been deleted";
+                        const message = "This is a confirmation message that you have successfully deleted your VIMSU account.";
+                        const messageReason = "we received a request to delete your account";
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+
+                        this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+
                         response.redirect('/logout');
                     } else {
                         response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
@@ -594,6 +618,15 @@ module.exports = class RouteController {
                 return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
                     if (res === true) {
                         response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        
+                        const from = process.env.VIMSU_NOREPLY_EMAIL
+                        const subject = "Your password has been changed";
+                        const message = "This is a confirmation message that you have successfully changed your password.";
+                        const messageReason = "we received a request to change your password for your account";
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+
+                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
                     } else if (res === null) {
                         response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, oldPasswordWrong: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     } else {
@@ -612,14 +645,44 @@ module.exports = class RouteController {
         });
     }
 
-    #sendMail = async function (mailOptions, emailPassword) {
+    #getMailOptionsWithDefaultTemplate = function (username, senderEmail, receiverEmail, button, subject, message, messageReason) {
+        const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
+        const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
+        const htmlTemplate = handlebars.compile(source);
+        const replacements = {
+            username: username,
+            vimsu_domain: process.env.VIMSU_DOMAIN,
+            vimsu_default_email: process.env.VIMSU_DEFAULT_EMAIL,
+            sent_to: receiverEmail,
+            button: button.show,
+            button_name: button.name,
+            action_url: button.url,
+            message: message,
+            message_reason: messageReason
+        };
+        const htmlToSend = htmlTemplate(replacements);
+
+        return {
+            from: senderEmail,
+            to: receiverEmail,
+            subject: subject,
+            attachments: [{
+                filename: 'vimsu_logo_schrift_transparent.png',
+                path: path.join(__dirname, '../assets/vimsu_logo_schrift_transparent.png'),
+                cid: 'logo'
+            }],
+            html: htmlToSend
+        }
+    }
+
+    #sendMail = async function (mailOptions, email, emailPassword) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
                 service: "Gmail",
                 port: 465,
                 secure: true,
                 auth: {
-                    user: mailOptions.from,
+                    user: email,
                     pass: emailPassword
                 }
             });

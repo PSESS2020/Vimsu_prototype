@@ -633,7 +633,7 @@ module.exports = class ParticipantService {
             return this.getParticipant(accountId, Settings.CONFERENCE_ID, vimsudb).then(par => {
                 //if participant not found then do nothing
                 if (!par) {
-                    return true;
+                    return "";
                 }
 
                 //participant is found

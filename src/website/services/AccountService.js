@@ -284,7 +284,7 @@ module.exports = class AccountService {
      * @param {String} newPassword user's new password
      * @param {String} suffix collection name suffix
      * @param {db} vimsudb db instance
-     * @returns true if verified successfully
+     * @returns username, email, and true if verified successfully
      */
     static resetPassword(token, newPassword, suffix, vimsudb) {
         TypeChecker.isString(token);
@@ -296,14 +296,14 @@ module.exports = class AccountService {
             if (user) {
                 return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: user.accountId }, { forgotPasswordToken: "", passwordHash: passwordHash.generate(newPassword) }).then(res => {
                     if (res.modifiedCount >= 0 && res.matchedCount > 0) {
-                        return true;
+                        return { username: user.username, email: user.email, success: true };
                     }
 
-                    return false;
+                    return { username: undefined, email: undefined, success: false };
                 })
             }
 
-            return false;
+            return { username: undefined, email: undefined, success: false };
         })
     }
 
