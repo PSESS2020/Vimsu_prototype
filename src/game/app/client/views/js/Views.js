@@ -6,6 +6,8 @@
  */
 class Views {
 
+    isVisible;
+
     /**
      * @abstract abstract Views class
      */
@@ -13,6 +15,25 @@ class Views {
         if (new.target === Views) {
             throw new Error("Cannot construct abstract Views instances directly");
         }
+    }
+
+    /**
+     * Sets visibility
+     * 
+     * @param {boolean} visible true if visible, otherwise false
+     */
+    setVisibility(visible) {
+        TypeChecker.isBoolean(visible);
+        this.isVisible = visible;
+    }
+
+     /**
+     * Gets visibility
+     * 
+     * @return {boolean} true if visible, otherwise false
+     */
+    isVisible() {
+        return this.isVisible;
     }
 
     /**

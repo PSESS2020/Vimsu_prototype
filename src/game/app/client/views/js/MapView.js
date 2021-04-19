@@ -13,7 +13,7 @@ class MapView extends Views {
     gameObjects;
     xNumTiles;
     yNumTiles;
-    selectedTile;
+    tileIndicator;
 
     gameObjectViewFactory;
     gameEngine;
@@ -30,26 +30,10 @@ class MapView extends Views {
      * @param {IsometricEngine} gameEngine game engine
      * @param {eventManager} eventManager event manager
      */
-    constructor(assetPaths, map, objectMap, gameEngine, eventManager) {
+    constructor(assetPaths, map, objectMap, eventManager) {
         super();
 
-        this.map = map;
-        this.objectMap = objectMap;
-
-        //map components that are drawn on screen
-        this.tiles = [];
-
-        //map gameObjects that are drawn on screen
-        this.gameObjects = [];
-
-        //map components that can be clicked
-        this.clickableTiles = [];
-        this.clickableObjects = [];
-
-        this.gameEngine = gameEngine;
-        this.eventManager = eventManager;
-
-        this.initProperties(assetPaths);
+        this.initProperties(assetPaths, map, objectMap, eventManager);
     }
 
     /**
@@ -100,10 +84,10 @@ class MapView extends Views {
     /**
      * Gets selected tile
      * 
-     * @return {GameObjectView} the selectedTile
+     * @return {GameObjectView} the tileIndicator
      */
     getSelectedTile() {
-        return this.selectedTile;
+        return this.tileIndicator;
     }
 
     /**
@@ -116,16 +100,39 @@ class MapView extends Views {
     }
 
     /**
-     * initializes properties and build map
+     * Needed for waiting until all images are loaded before building the map.
+     * 
+     * @private initializes properties and build map
      * @param {Object[]} assetPaths asset paths
+     * @param {number[][]} map map array
+     * @param {number[][]} objectMap object map array
+     * @param {eventManager} eventManager event manager
      */
-    initProperties = async (assetPaths) => {
-        this.xNumTiles = this.map.length;
-        this.yNumTiles = this.map[0].length;
-
+    initProperties = async (assetPaths, map, objectMap, eventManager) => {
         assetPaths.tileselected_default = "../client/assets/tiles/tile_selected.png";
-        var assetImages = await this.gameEngine.initGameEngine(assetPaths, this.xNumTiles, this.yNumTiles);
+        this.gameEngine = new IsometricEngine();
 
+        super.setVisibility(true);
+        var assetImages = await this.gameEngine.initGameEngine(assetPaths, map.length, map[0].length);
+        if(!super.isVisible())
+            return;
+
+        this.map = map;
+        this.objectMap = objectMap;
+        this.xNumTiles = map.length;
+        this.yNumTiles = map[0].length;
+
+        //map components that are drawn on screen
+        this.tiles = [];
+
+        //map gameObjects that are drawn on screen
+        this.gameObjects = [];
+
+        //map components that can be clicked
+        this.clickableTiles = [];
+        this.clickableObjects = [];
+
+        this.eventManager = eventManager;
         this.gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.gameEngine, this.eventManager);
 
         this.buildMap();
@@ -136,7 +143,7 @@ class MapView extends Views {
      */
     buildMap = function() {
 
-        this.selectedTile = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
+        this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
 
         for (var row = (this.xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.yNumTiles; col++) {
@@ -167,9 +174,7 @@ class MapView extends Views {
             };
         };
 
-        this.updateMapElements();
-        this.update();
-        this.drawMapElements();
+        this.refreshDisplay();
     }
 
     /**
@@ -402,8 +407,8 @@ class MapView extends Views {
 
         let position = new PositionClient(screenXY.x, screenXY.y);
 
-        if (this.selectedTile !== undefined)
-            this.selectedTile.updateScreenPos(position);
+        if (this.tileIndicator !== undefined)
+            this.tileIndicator.updateScreenPos(position);
     }
 
     /**
@@ -446,6 +451,19 @@ class MapView extends Views {
     drawMapElements = function() {
         if (this.tiles.length !== 0) {
             this.tiles.forEach(object => object.draw());
+        }
+    }
+
+    /**
+     * Updates objects screen position and redraws them
+     */
+    refreshDisplay() {
+        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
+        
+        if(super.isVisible()) {
+            this.updateMapElements();
+            this.update();
+            this.drawMapElements();
         }
     }
 }

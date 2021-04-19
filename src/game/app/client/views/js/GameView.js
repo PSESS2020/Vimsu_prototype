@@ -445,15 +445,18 @@ class GameView {
      */
     initRoomView(assetPaths, map, objectMap, listOfNPCs, typeOfRoom) {
 
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
         $('#avatarCanvas').off();
+
+        if(this.currentMapView !== undefined)
+            this.currentMapView.setVisibility(false);
+
+        this.currentMapView = new MapView(assetPaths, map, objectMap, this.eventManager);
 
         this.npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
             this.npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.gameEngine, this.eventManager));
         });
 
-        this.currentMapView = new MapView(assetPaths, map, objectMap, this.gameEngine, this.eventManager);
         this.statusBar.updateLocation(typeOfRoom);
     }
 

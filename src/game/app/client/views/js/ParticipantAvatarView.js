@@ -17,7 +17,6 @@ class ParticipantAvatarView extends AvatarView {
     standingDownRightAnimation;
     currentAnimation;
     walking = false;
-    isVisible;
     username;
     isModerator;
     isOwnAvatar;
@@ -48,7 +47,7 @@ class ParticipantAvatarView extends AvatarView {
 
         this.currentAnimation = this.standingDownRightAnimation;
         this.username = username;
-        this.isVisible = isVisible;
+        super.setVisibility(isVisible);
         this.isModerator = isModerator;
         this.isOwnAvatar = isOwnAvatar;
 
@@ -73,24 +72,6 @@ class ParticipantAvatarView extends AvatarView {
      */
     setId(participantId) {
         this.participantId = participantId;
-    }
-
-    /**
-     * Gets visibility
-     * 
-     * @return {boolean} true if visible, otherwise false
-     */
-    getVisibility() {
-        return this.isVisible;
-    }
-
-    /**
-     * Sets visibility
-     * 
-     * @param {boolean} visible true if visible, otherwise false
-     */
-    setVisibility(visible) {
-        this.isVisible = visible;
     }
 
     /**
@@ -153,7 +134,7 @@ class ParticipantAvatarView extends AvatarView {
      * Draws participant avatar
      */
     draw() {
-        if (this.isVisible) {
+        if (super.isVisible()) {
 
             let cordX = super.getGridPosition().getCordX();
             let cordY = super.getGridPosition().getCordY();
@@ -190,7 +171,7 @@ class ParticipantAvatarView extends AvatarView {
      * Called if participant avatar is clicked
      */
     onClick() {
-        if (this.isVisible) {
+        if (super.isVisible()) {
             $('#businessCardModal').modal('show');
             $('#businessCardModal .modal-body').append(`
                 <div id=${"businessCardWait" + this.participantId} style="text-align: center;">

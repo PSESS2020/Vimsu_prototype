@@ -33,6 +33,7 @@ class NPCAvatarView extends AvatarView {
         TypeChecker.isInt(npcId);
         TypeChecker.isString(name);
 
+        super.setVisibility(true);
         this.initSpriteAnimation();
         this.npcId = npcId;
         this.name = name;
@@ -55,6 +56,9 @@ class NPCAvatarView extends AvatarView {
      * Draws NPC avatar
      */
     draw() {
+        if(!super.isVisible())
+            return;
+
         let cordX = super.getGridPosition().getCordX();
         let cordY = super.getGridPosition().getCordY();
 
@@ -92,6 +96,8 @@ class NPCAvatarView extends AvatarView {
      * called if npc is clicked
      */
     onClick() {
-        this.eventManager.handleNPCClick(this.npcId);
+        if(super.isVisible()) {
+            this.eventManager.handleNPCClick(this.npcId);
+        }
     }
 }
