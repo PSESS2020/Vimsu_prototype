@@ -1,483 +1,476 @@
-<html>
-
-<body>
-    <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <table id="schedule" class="table" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Orator Name</th>
-                                <th scope="col">Starting Time</th>
-                                <th scope="col">Duration (Minutes)</th>
-                                <th scope="col">Seat Amount</th>
-                                <th scope="col">Remarks</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                    <div id="scheduleWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-100" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large">
+                <table id="schedule" class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Orator Name</th>
+                            <th scope="col">Starting Time</th>
+                            <th scope="col">Duration (Minutes)</th>
+                            <th scope="col">Seat Amount</th>
+                            <th scope="col">Remarks</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <div id="scheduleWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
-                    <div id="noschedule"></div>
                 </div>
+                <div id="noschedule"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header text-center d-block">
-                </div>
-                <div class="modal-body">
-                    <div id="profileWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                </div>
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center d-block">
             </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="businessCardModal" tabindex="-1" role="dialog" aria-labelledby="businessCardModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="businessCardModalTitle">Business Card</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto; max-height: 500px">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="npcStoryModalCollection"></div>
-
-    <div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
-                    <div class="d-flex flex-row justify-content-end">
-                        <div class="friendRequestListButton">
-                            <a class="action_button nav-item nav-link d-flex flex-column"
-                                style="position: absolute; top: 0.5rem; right: 2rem;" role="button"
-                                id="friendRequestList" data-toggle="modal" title="Received friend requests" href="">
-                                <i class="fa fa-user-plus navbarIcons"
-                                    style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                                <small style="color: antiquewhite; font-size: 10px;">Requests</small>
-                            </a>
-                        </div>
-                        <div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="friendlistWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="nofriend"></div>
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog"
-        aria-labelledby="friendRequestListModalTitle" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="friendRequestListWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="nofriendrequest"></div>
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="achievementsModalTitle">Achievements</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="achievementWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div class="container container-fluid">
-                        <div class="row" id="achievementModalContent">
-                        </div>
+            <div class="modal-body">
+                <div id="profileWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <canvas style="position: fixed; top: 0; left: 0; z-index: 4;" id="confettiCanvas" width="100%"
-        height="100%"></canvas>
-    <div style="z-index: 1052;" class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="newAchievementModalTitle">New Achievement Unlocked!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container container-fluid">
-                        <div class="row" id="newAchievementModalContent">
-
-                        </div>
-                    </div>
-                </div>
+<div class="modal fade" id="businessCardModal" tabindex="-1" role="dialog" aria-labelledby="businessCardModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="businessCardModalTitle">Business Card</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: auto; max-height: 500px">
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="rankListModal" tabindex="-1" role="dialog" aria-labelledby="rankListModalTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered mw-100" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rankListModalTitle">Best Participants</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="ranklistwait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+<div id="npcStoryModalCollection"></div>
+
+<div class="modal fade" id="friendListModal" tabindex="-1" role="dialog" aria-labelledby="friendListModalTitle"
+    aria-hidden="true" data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
+                <div class="d-flex flex-row justify-content-end">
+                    <div class="friendRequestListButton">
+                        <a class="action_button nav-item nav-link d-flex flex-column"
+                            style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList"
+                            data-toggle="modal" title="Received friend requests" href="">
+                            <i class="fa fa-user-plus navbarIcons"
+                                style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
+                            <small style="color: antiquewhite; font-size: 10px;">Requests</small>
+                        </a>
                     </div>
-                    <div id="noranklist"></div>
-                    <div class="row" id="ranklistrow"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog"   aria-labelledby="meetingListModalTitle" aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="meetingListModalTitle">Group Meetings</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="meetingListWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="nomeeting"></div>
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="chatListModal" tabindex="-1" role="dialog" aria-labelledby="chatListModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
-                    <div class="d-flex flex-row justify-content-end">
-                        <div class="friendRequestListButton">
-                            <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat"
-                                href="" style="position: absolute; top: 0.5rem; right: 2rem;"
-                                role="button" id="newGroupChat">
-                                <i class="fa fa-edit navbarIcons"
-                                    style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                                <small style="color: antiquewhite; font-size: 10px;">Group</small>
-                            </a>
-                        </div>
-                        <div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body modal-body-large">
-                    <div id="chatListWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="nochat"></div>
-                    <ul class="list-group bg-transparent">
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="chatThreadModalCollection">
-
-    </div>
-
-    <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
-        data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-center modal-body-large">
-                    <form id="groupName" action="" style="text-align: center; width: 100%">
-                        <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
-                            placeholder="Enter group name" maxlength="20" required autocomplete="off"/>
-                        <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
-                            style=" width: auto;">Invite
-                            Friends</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="inputEnterCodeModal" tabindex="-1" role="dialog" aria-labelledby="inputEnterCodeModalTitle"
-        data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-body-center" style="height: 200px;">
-                    <form id="enteredCode" action="" style="text-align: center; width: 100%">
-                        <input id="codeInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
-                            placeholder="Enter code" required autocomplete="off" />
-                        <button class="btn btn-blue mt-3" title="Sends the code you entered in the input field"
-                            style=" width: auto;"> Send Code
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
-                    </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="friendlistWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="nofriend"></div>
+                <ul class="list-group bg-transparent">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog" aria-labelledby="friendRequestListModalTitle"
+    data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="friendRequestListWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="nofriendrequest"></div>
+                <ul class="list-group bg-transparent">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="achievementsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="achievementsModalTitle">Achievements</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="achievementWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div class="container container-fluid">
+                    <div class="row" id="achievementModalContent">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
-        aria-hidden="true" data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+<canvas style="position: fixed; top: 0; left: 0; z-index: 4;" id="confettiCanvas" width="100%" height="100%"></canvas>
+<div style="z-index: 1052;" class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newAchievementModalTitle">New Achievement Unlocked!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container container-fluid">
+                    <div class="row" id="newAchievementModalContent">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rankListModal" tabindex="-1" role="dialog" aria-labelledby="rankListModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-100" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rankListModalTitle">Best Participants</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="ranklistwait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="noranklist"></div>
+                <div class="row" id="ranklistrow"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="meetingListModal" tabindex="-1" role="dialog" aria-labelledby="meetingListModalTitle"
+    aria-hidden="true" data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="meetingListModalTitle">Group Meetings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="meetingListWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="nomeeting"></div>
+                <ul class="list-group bg-transparent">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chatListModal" tabindex="-1" role="dialog" aria-labelledby="chatListModalTitle"
+    aria-hidden="true" data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
+                <div class="d-flex flex-row justify-content-end">
+                    <div class="friendRequestListButton">
+                        <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat" href=""
+                            style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat">
+                            <i class="fa fa-edit navbarIcons"
+                                style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
+                            <small style="color: antiquewhite; font-size: 10px;">Group</small>
+                        </a>
+                    </div>
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body modal-body-large">
+                <div id="chatListWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="nochat"></div>
+                <ul class="list-group bg-transparent">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chatThreadModalCollection">
+
+</div>
+
+<div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
+    data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-center modal-body-large">
+                <form id="groupName" action="" style="text-align: center; width: 100%">
+                    <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                        placeholder="Enter group name" maxlength="20" required autocomplete="off" />
+                    <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
+                        style=" width: auto;">Invite
+                        Friends</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="inputEnterCodeModal" tabindex="-1" role="dialog" aria-labelledby="inputEnterCodeModalTitle"
+    data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-center" style="height: 200px;">
+                <form id="enteredCode" action="" style="text-align: center; width: 100%">
+                    <input id="codeInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                        placeholder="Enter code" required autocomplete="off" />
+                    <button class="btn btn-blue mt-3" title="Sends the code you entered in the input field"
+                        style=" width: auto;"> Send Code
                     </button>
-                </div>
-                <div class="modal-body modal-body-large" style="text-align: center">
-                    <div id="inviteFriendsWait" style="text-align: center;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </div>
-                    <div id="nofriendtoinvite"></div>
-                    <ul class="list-group bg-transparent">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    </ul>
-                    </br>
-                    <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!
+<div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
+    aria-hidden="true" data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-body-large" style="text-align: center">
+                <div id="inviteFriendsWait" style="text-align: center;">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
-                    <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                    <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
-                        friends to group chat</button>
+                </div>
+                <div id="nofriendtoinvite"></div>
+                <ul class="list-group bg-transparent">
+
+                </ul>
+                </br>
+                <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!
+                </div>
+                <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
+                <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
+                    friends to group chat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="chatParticipantListModalCollection"></div>
+
+<div id="externalWebsiteModalCollection"></div>
+
+<div class="lectureVideoWindow" id="lectureVideoWindow">
+    <div class="container-fluid p-1">
+        <div class="row">
+            <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
+                <h5 class="ml-2" id="lectureTitleLabel"></h5>
+                <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel">
+                </div>
+                <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
+            </div>
+        </div>
+        <div class="row pl-0 pr-1 mt-4">
+            <div class="col-7 mr-4 ml-3">
+                <div id="lectureVideo"></div>
+                <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">
+                    <div id="tokenIcon"></div>
+                    <div>
+                        <p class="ml-2 mt-1" id="tokenLabel"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
+                <div class="lectureChatHeader">
+                    <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
+                </div>
+                <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
+                </div>
+                <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="window" id="meetingWindow" style="width: 100%; height: 100%;">
+    <div class="p-3 d-flex window-header">
+        <div id="meetingWindowTitle"></div>
+        <button id="meetingWindowMinimize" class="close btn ml-auto pl-1 pr-1">
+            <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
+        </button>
+        <button id="meetingWindowClose" class="close btn pl-1 pr-1">
+            <i class="fa fa-close"></i>
+        </button>
+    </div>
+    <div class="p-3 window-content">
+        <div id="meetingWindowWait" style="text-align: center;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div id="meetingWindowBody" class="row ml-auto mr-auto"></div>
+    </div>
+</div>
+
+<div class="window" id="currentLectures" style="width: 100%; height: 100%">
+    <div class="p-3 d-flex window-header">
+        <div>Current Lectures</div>
+        <button id="closeCurrentLecturesButton" class="close btn ml-auto pl-1 pr-1">
+            <i class="fa fa-close"></i>
+        </button>
+    </div>
+    <div class="p-3 window-content">
+        <div id="nolecture"></div>
+        <div id="currentLecturesContainer" class="row justify-content-around">
+        </div>
+    </div>
+</div>
+
+<div class="viewBlockerWindow" id="viewBlocker">
+    <div class="container-fluid">
+
+        <div class="row" style="height:100%;">
+            <div class="col-12 p-0" style="position:absolute; height: 10%;">
+                <div class="removelHeader p-3 mb-3 d-flex" id="removalHeader">
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="removalMessage" class="row ml-auto mr-auto">
+                    <div style="font-size: large; position: absolute; top: 30%; width: 100%; text-align:center;">
+                        <h5>You have been removed from this conference.</h5>
+                    </div>
+                    <div style="position: absolute; width:100%; top: 60%;">
+                        <a class="action_button nav-item nav-link" href="/">
+                            <!--<i class="fa fa-sign-out fa-4x navbarIcons" style="position:absolute; left: 40%;"></i>-->
+                            <p class="navbarIconsText" style="margin-left: 7px; width: 100%; text-align: center;">
+                                Return to Homepage.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="globalChat" tabindex="-1" role="dialog" aria-labelledby="globalChatWindowHeaderText"
+    data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered mw-50" role="document">
+        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="globalChatWindowHeaderText"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: auto; max-height: 500px;">
+                <div id="globalChatMessage" style="text-align: left;">
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="chatParticipantListModalCollection"></div>
-
-    <div id="externalWebsiteModalCollection"></div>
-
-    <div class="lectureVideoWindow" id="lectureVideoWindow">
-        <div class="container-fluid p-1">
-            <div class="row">
-                <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
-                    <h5 class="ml-2" id="lectureTitleLabel"></h5>
-                    <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel">
-                    </div>
-                    <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
-                </div>
-            </div>
-            <div class="row pl-0 pr-1 mt-4">
-                <div class="col-7 mr-4 ml-3">
-                    <div id="lectureVideo"></div>
-                    <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">
-                        <div id="tokenIcon"></div>
-                        <div>
-                            <p class="ml-2 mt-1" id="tokenLabel"></p>
-                        </div>
-                    </div>
-                </div>
-                <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
-                    <div class="lectureChatHeader">
-                        <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
-                    </div>
-                    <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
-                    </div>
-                    <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
-                    </div>
-                </div>
-            </div>
-
+<div class="window" id="largerGlobalChat" style="width: 60%; height: 80%; z-index: 1050">
+    <div class="p-3 d-flex window-header">
+        <div id="largerGlobalChatWindowHeaderText"></div>
+        <button id="closeLargerGlobalChatButton" class="close btn ml-auto">
+            <i class="fa fa-close"></i>
+        </button>
+    </div>
+    <div class="p-3 window-content">
+        <div id="largerGlobalChatMessage" style="text-align: left; white-space: pre-line">
         </div>
     </div>
-
-    <div class="window" id="meetingWindow" style="width: 100%; height: 100%;">
-        <div class="p-3 d-flex window-header">
-            <div id="meetingWindowTitle"></div>
-            <button id="meetingWindowMinimize" class="close btn ml-auto pl-1 pr-1">
-                <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
-            </button>
-            <button id="meetingWindowClose" class="close btn pl-1 pr-1">
-                <i class="fa fa-close"></i>
-            </button>
-        </div>
-        <div class="p-3 window-content">
-            <div id="meetingWindowWait" style="text-align: center;">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <div id="meetingWindowBody" class="row ml-auto mr-auto"></div>
-        </div>            
-    </div>
-
-    <div class="window" id="currentLectures" style="width: 100%; height: 100%">
-        <div class="p-3 d-flex window-header">
-            <div>Current Lectures</div>
-            <button id="closeCurrentLecturesButton" class="close btn ml-auto pl-1 pr-1">
-                <i class="fa fa-close"></i>
-            </button>
-        </div>
-        <div class="p-3 window-content">
-            <div id="nolecture"></div>
-            <div id="currentLecturesContainer" class="row justify-content-around">
-            </div>
-        </div>
-    </div>
-
-    <div class="viewBlockerWindow" id="viewBlocker">
-        <div class="container-fluid">
-
-            <div class="row" style="height:100%;">
-                <div class="col-12 p-0" style="position:absolute; height: 10%;">
-                    <div class="removelHeader p-3 mb-3 d-flex" id="removalHeader">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div id="removalMessage" class="row ml-auto mr-auto">
-                        <div style="font-size: large; position: absolute; top: 30%; width: 100%; text-align:center;">
-                            <h5>You have been removed from this conference.</h5>
-                        </div>
-                        <div style="position: absolute; width:100%; top: 60%;">
-                            <a class="action_button nav-item nav-link" href="/">
-                                <!--<i class="fa fa-sign-out fa-4x navbarIcons" style="position:absolute; left: 40%;"></i>-->
-                                <p class="navbarIconsText" style="margin-left: 7px; width: 100%; text-align: center;">
-                                    Return to Homepage.</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="globalChat" tabindex="-1" role="dialog" aria-labelledby="globalChatWindowHeaderText"
-        data-focus-on="input:first">
-        <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-            <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="globalChatWindowHeaderText"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="overflow: auto; max-height: 500px;">
-                    <div id="globalChatMessage" style="text-align: left;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="window" id="largerGlobalChat" style="width: 60%; height: 80%; z-index: 1050">
-        <div class="p-3 d-flex window-header">
-            <div id="largerGlobalChatWindowHeaderText"></div>
-            <button id="closeLargerGlobalChatButton" class="close btn ml-auto">
-                <i class="fa fa-close"></i>
-            </button>
-        </div>
-        <div class="p-3 window-content">
-            <div id="largerGlobalChatMessage" style="text-align: left; white-space: pre-line">
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
+</div>
