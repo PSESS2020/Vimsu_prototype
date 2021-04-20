@@ -61,7 +61,7 @@ body {
 }
 
 .container {
-  min-height: 95vh;
+  min-height: 100vh;
 }
 
 .header {
@@ -217,7 +217,7 @@ a, a:hover {
   padding: 1rem 1rem;
 }
 
-#content, .large-form-content, .medium-form-content, .small-form-content {
+#content, .large-form-content, .medium-large-form-content, .medium-form-content, .small-form-content {
   min-height: 75vh;
 }
 
@@ -225,6 +225,12 @@ a, a:hover {
   text-align: center;
   margin-top: 5vh;
   margin-bottom: 5vh;
+}
+
+.medium-large-form-content {
+  text-align: center;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
 }
 
 .medium-form-content {
@@ -375,7 +381,7 @@ input, textarea {
 }
 
 @media (max-height: 430px) {
-  #content, .small-form-content, .medium-form-content, .large-form-content {
+  #content, .small-form-content, .medium-form-content, .medium-large-form-content, .large-form-content {
     margin-top: 10vh;
     margin-bottom: 10vh;
   }
