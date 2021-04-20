@@ -49,6 +49,15 @@ class ClientController {
     }
 
     /**
+     * Gets own participants position
+     * 
+     * @return {PositionClient}
+     */
+    getOwnParticipantPosition() {
+        return this.ownParticipant.getPosition();
+    }
+
+    /**
      * checks if there is an existing socket
      * 
      * @return {boolean} true if socket is ready, otherwise false
@@ -1781,6 +1790,7 @@ class ClientController {
         let currPos = this.gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() - Settings.MOVEMENTSPEED_Y);
         if (!this.currentRoom.checkForCollision(newPos)) {
+            this.ownParticipant.setPosition(newPos);
             this.gameView.updateOwnAvatarPosition(newPos);
             this.gameView.updateOwnAvatarWalking(true);
         }
@@ -1795,6 +1805,7 @@ class ClientController {
         let currPos = this.gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX(), currPos.getCordY() + Settings.MOVEMENTSPEED_Y);
         if (!this.currentRoom.checkForCollision(newPos)) {
+            this.ownParticipant.setPosition(newPos);
             this.gameView.updateOwnAvatarPosition(newPos);
             this.gameView.updateOwnAvatarWalking(true);
         }
@@ -1809,6 +1820,7 @@ class ClientController {
         let currPos = this.gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX() + Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.currentRoom.checkForCollision(newPos)) {
+            this.ownParticipant.setPosition(newPos);
             this.gameView.updateOwnAvatarPosition(newPos);
             this.gameView.updateOwnAvatarWalking(true);
         }
@@ -1823,6 +1835,7 @@ class ClientController {
         let currPos = this.gameView.getOwnAvatarView().getGridPosition();
         let newPos = new PositionClient(currPos.getCordX() - Settings.MOVEMENTSPEED_X, currPos.getCordY());
         if (!this.currentRoom.checkForCollision(newPos)) {
+            this.ownParticipant.setPosition(newPos);
             this.gameView.updateOwnAvatarPosition(newPos);
             this.gameView.updateOwnAvatarWalking(true);
         }
