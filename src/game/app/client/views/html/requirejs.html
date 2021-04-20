@@ -1,96 +1,88 @@
-<html>
+<script>
+    requirejs(['../client/utils/ConnectionState',
+        '../client/shared/TypeChecker',
+        '../client/utils/LectureStatus',
+        '../client/utils/DateParser',
+        '../client/utils/TokenMessages',
+        '../client/shared/Direction',
+        '../client/shared/ShirtColor',
+        '../client/config/GameConfig',
+        '../client/shared/TypeOfRoom',
+        '../client/shared/TypeOfDoor',
+        '../client/shared/GameObjectType',
+        '../client/models/BusinessCardClient',
+        '../client/models/ParticipantClient',
+        '../client/models/PositionClient',
+        '../client/models/NPCClient',
+        '../client/models/GameObjectClient',
+        '../client/models/DoorClient',
+        '../client/models/RoomClient'], () => {
 
-<body>
-    <script>
-        requirejs(['../client/utils/ConnectionState',
-            '../client/shared/TypeChecker',
-            '../client/utils/LectureStatus',
-            '../client/utils/DateParser',
-            '../client/utils/TokenMessages',
-            '../client/shared/Direction',
-            '../client/shared/ShirtColor',
-            '../client/config/GameConfig',
-            '../client/shared/TypeOfRoom',
-            '../client/shared/TypeOfDoor',
-            '../client/shared/GameObjectType',
-            '../client/models/BusinessCardClient',
-            '../client/models/ParticipantClient',
-            '../client/models/PositionClient',
-            '../client/models/NPCClient',
-            '../client/models/GameObjectClient',
-            '../client/models/DoorClient',
-            '../client/models/RoomClient'], () => {
+            requirejs(['../client/views/js/Views',
+                '../client/utils/Settings'], () => {
 
-                requirejs(['../client/views/js/Views',
-                    '../client/utils/Settings'], () => {
+                    requirejs([
+                        '../client/utils/ImageLoader',
+                        '../client/utils/ImageCache',
+                        '../client/utils/IsometricEngine',
+                        '../client/utils/SpriteAnimation',
+                        '../client/views/js/GameObjectView',
+                        '../client/utils/SpriteSheet',
+                        '../client/utils/algorithms/AStar',], () => {
 
-                        requirejs([
-                            '../client/utils/ImageLoader',
-                            '../client/utils/GameObjectOffsets',
-                            '../client/utils/ImageCache',
-                            '../client/utils/IsometricEngine',
-                            '../client/utils/SpriteAnimation',
-                            '../client/views/js/GameObjectView',
-                            '../client/utils/SpriteSheet',
-                            '../client/utils/algorithms/AStar',], () => {
+                            requirejs(['../client/views/js/WindowView',
+                                '../client/views/js/MapView',
+                                '../client/views/js/GameMapElementView',
+                                '../client/views/js/AvatarView',
+                                '../client/views/js/LoadingView'], () => {
 
-                                requirejs(['../client/views/js/WindowView',
-                                    '../client/views/js/MapView',
-                                    '../client/views/js/GameMapElementView',
-                                    '../client/views/js/AvatarView',
-                                    '../client/views/js/LoadingView'], () => {
+                                    requirejs([
+                                        '../client/views/js/EmojiPicker',
+                                        '../client/views/js/AllchatView',
+                                        '../client/views/js/GameObjectViewFactory',
+                                        '../client/views/js/ProfileView',
+                                        '../client/views/js/NotificationBar',
+                                        '../client/views/js/ChatParticipantListView',
+                                        '../client/views/js/MeetingListView',
+                                        '../client/views/js/VideoMeetingView',
+                                        '../client/views/js/ChatListView',
+                                        '../client/views/js/ChatThreadView',
+                                        '../client/views/js/GlobalChatView',
+                                        '../client/views/js/LargerGlobalChatView',
+                                        '../client/views/js/StatusBar',
+                                        '../client/views/js/SuccessesBar',
+                                        '../client/views/js/HUDView',
+                                        '../client/views/js/FriendListView',
+                                        '../client/views/js/InviteFriendsView',
+                                        '../client/views/js/FriendRequestListView',
+                                        '../client/views/js/BusinessCardView',
+                                        '../client/views/js/NPCStoryView',
+                                        '../client/views/js/ScheduleListView',
+                                        '../client/views/js/RankListView',
+                                        '../client/views/js/AchievementView',
+                                        '../client/views/js/NewAchievementView',
+                                        '../client/views/js/CurrentLecturesView',
+                                        '../client/views/js/LectureView',
+                                        '../client/views/js/NPCAvatarView',
+                                        '../client/views/js/InputGroupNameView',
+                                        '../client/views/js/ParticipantAvatarView',
+                                        '../client/views/js/ExternalWebsiteView',
+                                        '../client/views/js/GameMapElements/ScheduleView',
+                                        '../client/views/js/GameMapElements/DoorView',
+                                        '../client/views/js/GameObjects/PlantView',
+                                        '../client/views/js/GameObjects/IFrameObjectView',
+                                        '../client/views/js/EnterCodeView'], () => {
 
-                                        requirejs([
-                                            '../client/views/js/EmojiPicker',
-                                            '../client/views/js/AllchatView',
-                                            '../client/views/js/GameObjectViewFactory',
-                                            '../client/views/js/ProfileView',
-                                            '../client/views/js/NotificationBar',
-                                            '../client/views/js/ChatParticipantListView',
-                                            '../client/views/js/MeetingListView',
-                                            '../client/views/js/VideoMeetingView',
-                                            '../client/views/js/ChatListView',
-                                            '../client/views/js/ChatThreadView',
-                                            '../client/views/js/GlobalChatView',
-                                            '../client/views/js/LargerGlobalChatView',
-                                            '../client/views/js/StatusBar',
-                                            '../client/views/js/SuccessesBar',
-                                            '../client/views/js/HUDView',
-                                            '../client/views/js/FriendListView',
-                                            '../client/views/js/InviteFriendsView',
-                                            '../client/views/js/FriendRequestListView',
-                                            '../client/views/js/BusinessCardView',
-                                            '../client/views/js/NPCStoryView',
-                                            '../client/views/js/ScheduleListView',
-                                            '../client/views/js/RankListView',
-                                            '../client/views/js/AchievementView',
-                                            '../client/views/js/NewAchievementView',
-                                            '../client/views/js/CurrentLecturesView',
-                                            '../client/views/js/LectureView',
-                                            '../client/views/js/NPCAvatarView',
-                                            '../client/views/js/InputGroupNameView',
-                                            '../client/views/js/ParticipantAvatarView',
-                                            '../client/views/js/ExternalWebsiteView',
-                                            '../client/views/js/GameMapElements/ScheduleView',
-                                            '../client/views/js/GameMapElements/DoorView',
-                                            '../client/views/js/GameObjects/GameObjectWithStoryView',
-                                            '../client/views/js/GameObjects/IFrameObjectView',
-                                            '../client/views/js/EnterCodeView'], () => {
+                                            requirejs(['../client/views/js/GameView',
+                                                '../client/controller/ClientController',
+                                                '../client/utils/EventManager'], () => {
 
-                                                requirejs(['../client/views/js/GameView',
-                                                    '../client/controller/ClientController',
-                                                    '../client/utils/EventManager'], () => {
-
-                                                        requirejs(['../client/index'], () => {
-                                                        });
+                                                    requirejs(['../client/index'], () => {
                                                     });
-                                            });
-                                    });
-                            });
-                    });
-            });
-    </script>
-
-</body>
-
-</html>
+                                                });
+                                        });
+                                });
+                        });
+                });
+        });
+</script>

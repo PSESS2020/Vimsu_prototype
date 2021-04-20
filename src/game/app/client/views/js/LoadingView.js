@@ -36,8 +36,9 @@ class LoadingView extends Views {
      */
     doneLoading() {
         document.getElementById("overlay").style.opacity = 0;
-        $("#upperHUD").show();
-        $("#middleHUD").show();
-        $("#lowerHUD").show();
+        $("#hudHTML").show();
+        $("#mapCanvas").show();
+        $("#avatarCanvas").show();
+        $("#windowHTML").show();
     }
 }
