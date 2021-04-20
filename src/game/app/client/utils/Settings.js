@@ -10,6 +10,9 @@ const Settings = Object.freeze({
     MOVEMENTSPEED_X: 1,
     MOVEMENTSPEED_Y: 1,
 
+    //Timeout time per step in ms, needed for Point&Click Movement
+    TIMEOUT_PER_STEP: 40,
+
     /* StatusBar Constants */
     TIME_UNTIL_LEAVE: 60,
 

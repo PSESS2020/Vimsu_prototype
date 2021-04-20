@@ -309,7 +309,9 @@ class MapView extends Views {
                 return object instanceof GameObjectClient && object.getId() === viewObject.getGameObjectID();
             });
 
-            if (viewObject != undefined) viewObject.onclick();
+            if (viewObject != undefined) {
+                this.eventManager.handleMoveToObjectAndClick(viewObject);
+            }
         }
     }
 

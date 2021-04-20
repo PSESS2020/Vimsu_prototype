@@ -27,6 +27,16 @@ class EventManager {
 
     /**
      * called frow View when the tiles on the playground are clicked
+     * 
+     * @param {Object} startPos startingPosition Cords
+     * @param {Number} startPos.x startingPosition CordX
+     * @param {Number} startPos.y startingPosition CordY
+     * @param {Object} goalPos goalPosition Cords
+     * @param {Number} goalPos.x goalPosition CordX
+     * @param {Number} goalPos.y goalPosition CordY
+     * 
+     * @returns {Number} Length of walk path
+     * 
      */
     handlePlayGroundClicked(startPos, goalPos) {
         
@@ -47,8 +57,10 @@ class EventManager {
 
         var walkPath = AStar.astarSearch(occupationMap, "manhattan", false);
 
-        if ( walkPath == null) this.handlingPlaygroundClicked = false;
-        else
+        if ( walkPath == null) {
+            this.handlingPlaygroundClicked = false;
+            return 0;
+        } else
         {
             var prev = startPos;
 
@@ -59,38 +71,39 @@ class EventManager {
                     setTimeout(()=>{
                     this.handleUpArrowDown();
 
-                    }, i * 40);
+                    }, i * Settings.TIMEOUT_PER_STEP);
                 }
                 else if ( xDiff > 0 ) {
                     setTimeout(()=>{
                     this.handleDownArrowDown();
-                    }, i * 40);
+                    }, i * Settings.TIMEOUT_PER_STEP);
                 }
                 else if ( yDiff < 0){
                     setTimeout(()=>{
                     this.handleRightArrowDown();
-                    }, i * 40);
+                    }, i * Settings.TIMEOUT_PER_STEP);
                 }
                 else if ( yDiff > 0 ){
                     setTimeout(()=>{
                         this.handleLeftArrowDown();
-                    }, i * 40);
+                    }, i * Settings.TIMEOUT_PER_STEP);
                 }
 
                 //wait till the animation for walk path has ended
                 if ( i === array.length - 1) {
                     setTimeout(()=>{
                         this.handleArrowUp();
-                    }, i * 40 + 80);
+                    }, i * Settings.TIMEOUT_PER_STEP + 2 * Settings.TIMEOUT_PER_STEP);
 
                     setTimeout(()=>{
                         this.handlingPlaygroundClicked = false;
-                    }, i * 40);
+                    }, i * Settings.TIMEOUT_PER_STEP);
                 }
 
                 prev = next;
 
             })
+            return walkPath.length;
         }
     }
 
@@ -429,5 +442,24 @@ class EventManager {
      */
     handleCodeEntered(doorId, enteredCode) {
         this.clientController.handleFromViewCodeEntered(doorId, enteredCode);
+    }
+
+    /**
+     * called from View when user clicked a clickable object
+     * 
+     * @param {GameObjectView} viewObject clickable object view
+     */
+    handleMoveToObjectAndClick(viewObject) {
+        let startPos = this.clientController.getOwnParticipantPosition();
+        let targetPos = viewObject.getGridPosition();
+
+        let startCords = {x: startPos.getCordX(), y: startPos.getCordY() + Settings.MAP_BLANK_TILES_WIDTH};
+        let targetCords = {x: targetPos.getCordX(), y: targetPos.getCordY()};
+
+        let walkPathLength = this.handlePlayGroundClicked(startCords, targetCords);
+
+        setTimeout(()=>{
+            viewObject.onclick();;
+        }, Settings.TIMEOUT_PER_STEP * walkPathLength);
     }
 }
