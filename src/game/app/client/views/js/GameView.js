@@ -457,7 +457,6 @@ class GameView {
             this.npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.gameEngine, this.eventManager));
         });
 
-        this.currentMapView = new MapView(assetPaths, map, objectMap, this.gameEngine, this.eventManager);
         this.statusBar.updateLocation(roomName);
     }
 
