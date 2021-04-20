@@ -8,6 +8,7 @@ class StatusBar extends Views {
 
     connectionStatus;
     fps;
+    drawloop;
 
     /**
      * Creates an instance of StatusBar
@@ -59,10 +60,12 @@ class StatusBar extends Views {
      * draws status bar every 1 seconds
      */
     draw() {
+        clearInterval(this.drawloop);
+
         this.drawClock();
         this.drawFPS();
 
-        setInterval(() => {
+        this.drawloop = setInterval(() => {
             this.drawClock();
             this.drawFPS();
         }, 1000);
