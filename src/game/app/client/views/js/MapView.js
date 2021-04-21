@@ -113,7 +113,8 @@ class MapView extends Views {
         this.gameEngine = new IsometricEngine();
 
         super.setVisibility(true);
-        var assetImages = await this.gameEngine.initGameEngine(assetPaths, map.length, map[0].length);
+        this.gameEngine.initGameEngine(ctx_map.canvas.width, ctx_map.canvas.height, map.length, map[0].length);
+        var assetImages = await this.gameEngine.loadImages(assetPaths);
         if(!super.isVisible())
             return;
 

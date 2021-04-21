@@ -5,12 +5,15 @@
  * @version 1.0.0
  */
 class IsometricEngine {
-    xNumTiles;
-    yNumTiles;
+    mapNumTilesX;
+    mapNumTilesY;
+
+    //origin that indicates where to start drawing the map assets.
     mapOriginX;
     mapOriginY;
-    tileColumnWidth = Settings.TILE_COLUMN_WIDTH;
-    tileRowHeight = Settings.TILE_ROW_HEIGHT;
+
+    tileWidth = Settings.TILE_WIDTH;
+    tileHeight = Settings.TILE_HEIGHT;
 
     loader;
 
@@ -22,8 +25,8 @@ class IsometricEngine {
             return IsometricEngine.instance;
         }
         IsometricEngine.instance = this;
-        this.xNumTiles = 0;
-        this.yNumTiles = 0;
+        this.mapNumTilesX = 0;
+        this.mapNumTilesY = 0;
         this.mapOriginX = 0;
         this.mapOriginY = 0;
 
@@ -33,79 +36,75 @@ class IsometricEngine {
     /**
      * Initializes the engines properties
      * 
-     * @param {String[]} assetPaths asset paths
-     * @param {number} xNumTiles number of x tiles
-     * @param {number} yNumTiles number of y tiles
+     * @param {number} canvasWidth width of canvas
+     * @param {number} canvasHeight height of canvas
+     * @param {number} mapNumTilesX number of map's x tiles
+     * @param {number} mapNumTilesY number of map's y tiles
      */
-    async initGameEngine(assetPaths, xNumTiles, yNumTiles) {
-        TypeChecker.isInt(xNumTiles);
-        TypeChecker.isInt(yNumTiles);
+    async initGameEngine(canvasWidth, canvasHeight, mapNumTilesX, mapNumTilesY) {
+        TypeChecker.isInt(mapNumTilesX);
+        TypeChecker.isInt(mapNumTilesY);
 
-        this.xNumTiles = xNumTiles;
-        this.yNumTiles = yNumTiles;
+        this.mapNumTilesX = mapNumTilesX;
+        this.mapNumTilesY = mapNumTilesY;
 
-        //origin that indicates where to start drawing the map assets.
-        this.mapOriginX = ctx_map.canvas.width / 2 - this.xNumTiles * this.tileRowHeight;
-        this.mapOriginY = ctx_map.canvas.height / 2;
-
-        return await this.loadImages(assetPaths);
+        this.setMapOriginXY(canvasWidth, canvasHeight);
     }
 
     /**
      * Sets number of x and y tiles
      * 
-     * @param {number} xNumTiles number of x tiles
-     * @param {number} yNumTiles number of y tiles
+     * @param {number} mapNumTilesX number of map's x tiles
+     * @param {number} mapNumTilesY number of map's y tiles
      */
-    setNumMapTilesXY(xNumTiles, yNumTiles) {
-        TypeChecker.isInt(xNumTiles);
-        TypeChecker.isInt(yNumTiles);
+    setNumMapTilesXY(mapNumTilesX, mapNumTilesY) {
+        TypeChecker.isInt(mapNumTilesX);
+        TypeChecker.isInt(mapNumTilesY);
 
-        this.xNumTiles = xNumTiles;
-        this.yNumTiles = yNumTiles;
+        this.mapNumTilesX = mapNumTilesX;
+        this.mapNumTilesY = mapNumTilesY;
     }
 
     /**
      * Sets map x and y origin
-     * 
-     * @param {number} mapOriginX map x origin
-     * @param {number} mapOriginY map y origin
+     * @param {number} canvasWidth width of canvas
+     * @param {number} canvasHeight height of canvas
      */
-    setMapOriginXY(mapOriginX, mapOriginY) {
-        TypeChecker.isInt(mapOriginX);
-        TypeChecker.isInt(mapOriginY);
+    setMapOriginXY(canvasWidth, canvasHeight) {
+        TypeChecker.isInt(canvasWidth);
+        TypeChecker.isInt(canvasHeight);
 
-        this.mapOriginX = mapOriginX;
-        this.mapOriginY = mapOriginY;
+        this.mapOriginX = canvasWidth / 2 - this.mapNumTilesX * this.tileHeight;
+        this.mapOriginY = canvasHeight / 2;
     }
 
     /**
      * Gets tile column width
      * 
-     * @return {number} tileColumnWidth
+     * @return {number} tileWidth
      */
-    getTileColumnWidth() {
-        return this.tileColumnWidth;
+    getTileWidth() {
+        return this.tileWidth;
     }
 
     /**
      * Gets tile row height
      * 
-     * @return {number} tileRowHeight
+     * @return {number} tileHeight
      */
-    getTileRowHeight() {
-        return this.tileRowHeight;
+    getTileHeight() {
+        return this.tileHeight;
     }
 
     /**
      * Gets number of x and y tiles
      * 
-     * @return {Object} Object of xNumTiles and yNumTiles
+     * @return {Object} Object of mapNumTilesX and mapNumTilesY
      */
     getNumMapTilesXY() {
         return {
-            x: this.xNumTiles,
-            y: this.yNumTiles
+            x: this.mapNumTilesX,
+            y: this.mapNumTilesY
         }
     }
 
@@ -169,10 +168,10 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined) {
+        if (this.tileWidth !== undefined && this.tileHeight !== undefined) {
             return {
-                x: xPos * this.tileColumnWidth / 2 + yPos * this.tileColumnWidth / 2 + this.mapOriginX,
-                y: yPos * this.tileRowHeight / 2 - xPos * this.tileRowHeight / 2 + this.mapOriginY
+                x: xPos * this.tileWidth / 2 + yPos * this.tileWidth / 2 + this.mapOriginX,
+                y: yPos * this.tileHeight / 2 - xPos * this.tileHeight / 2 + this.mapOriginY
             }
         }
     }
@@ -189,8 +188,8 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined)
-            return xPos * this.tileColumnWidth / 2 + yPos * this.tileColumnWidth / 2 + this.mapOriginX;
+        if (this.tileWidth !== undefined && this.tileHeight !== undefined)
+            return xPos * this.tileWidth / 2 + yPos * this.tileWidth / 2 + this.mapOriginX;
     }
 
     /**
@@ -205,8 +204,8 @@ class IsometricEngine {
         TypeChecker.isInt(xPos);
         TypeChecker.isInt(yPos);
 
-        if (this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined)
-            return yPos * this.tileRowHeight / 2 - xPos * this.tileRowHeight / 2 + this.mapOriginY;
+        if (this.tileWidth !== undefined && this.tileHeight !== undefined)
+            return yPos * this.tileHeight / 2 - xPos * this.tileHeight / 2 + this.mapOriginY;
     }
 
     /**
@@ -247,15 +246,15 @@ class IsometricEngine {
         TypeChecker.isNumber(newPosition.y);
 
         if (this.mapOriginX !== undefined && this.mapOriginY !== undefined
-            && this.tileColumnWidth !== undefined && this.tileRowHeight !== undefined) {
+            && this.tileWidth !== undefined && this.tileHeight !== undefined) {
 
             //Adjusts mouse position to the tile position. 
-            var newPosX = newPosition.x - this.tileColumnWidth / 2 - this.mapOriginX;
-            var newPosY = newPosition.y - this.tileRowHeight / 2 - this.mapOriginY;
+            var newPosX = newPosition.x - this.tileWidth / 2 - this.mapOriginX;
+            var newPosY = newPosition.y - this.tileHeight / 2 - this.mapOriginY;
 
             //Calculate the tile at which the current mouse cursor points.
-            var selectedTileX = Math.round(newPosX / this.tileColumnWidth - newPosY / this.tileRowHeight);
-            var selectedTileY = Math.round(newPosX / this.tileColumnWidth + newPosY / this.tileRowHeight);
+            var selectedTileX = Math.round(newPosX / this.tileWidth - newPosY / this.tileHeight);
+            var selectedTileY = Math.round(newPosX / this.tileWidth + newPosY / this.tileHeight);
 
             return {
                 x: selectedTileX,

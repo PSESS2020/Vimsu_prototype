@@ -276,6 +276,17 @@ class GameView {
             this.eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
         }
     }
+
+    /**
+     * Updates GameView's origin and redraws map
+     */
+    onResize() {
+        if (this.currentMapView === null || this.currentMapView === undefined)
+            return;
+            
+        this.gameEngine.setMapOriginXY(ctx_map.canvas.width, ctx_map.canvas.height);
+        this.currentMapView.refreshDisplay();
+    }
     
     /**
      * Adds view instance to list of views to be updated steadily

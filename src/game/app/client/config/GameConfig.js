@@ -11,14 +11,14 @@ class GameConfig {
    * The width of the game context. Determines how broad the game window will be.
    */
    static get CTX_WIDTH() { 
-      return 1900;
+      return 1800;
    }
 
    /*
    * The height of the game context. Determines how height the game window will be.
    */
    static get CTX_HEIGHT() { 
-      return 950;
+      return 900;
    }
 
    /*
