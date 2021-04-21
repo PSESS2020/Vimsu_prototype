@@ -77,7 +77,7 @@ class AllchatView extends Views {
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text("The " + roomName + " chat is somehow quiet. Send some love here?")
+            $('#noAllchat').text("The " + roomName.toLowerCase() + " chat is somehow quiet. Send some love here?")
             return;
         }
 
