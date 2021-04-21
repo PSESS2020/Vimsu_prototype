@@ -30,18 +30,18 @@
      * @param {String} gameObjectID GameObject Id
      */
      draw(iFrameData, gameObjectID) {
-        $('#externalWebsiteWait' + gameObjectID).hide();
-        $("#externalWebsiteModalTitle" + gameObjectID).empty();
-        $('#externalWebsiteBody' + gameObjectID).empty();
+        $('#externalWebsiteWindowWait' + gameObjectID).hide();
+        $("#externalWebsiteWindowTitle" + gameObjectID).empty();
+        $('#externalWebsiteWindowBody' + gameObjectID).empty();
 
         let fullScreenMode = false;
         let width = iFrameData.width.toString() + 'px';
         let height = iFrameData.height.toString() + 'px';
 
-        $('#externalWebsiteModalTitle' + gameObjectID).text(iFrameData.title);
+        $('#externalWebsiteWindowTitle' + gameObjectID).text(iFrameData.title);
 
-        $('#externalWebsiteBody' + gameObjectID).append(`
-            <div class="modal-body modal-body-center" style="overflow:auto; height:100%;">
+        $('#externalWebsiteWindowBody' + gameObjectID).append(`
+            <div style="text-align: center;">
                 <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url + '?fs=0'} width=${width} height=${height} 
                     scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"</iframe>
             </div>
@@ -74,6 +74,8 @@
                 var el_src = $(this).attr("src");
                 $(this).attr("src",el_src);
             });
+
+            $('#externalWebsiteWindow' + gameObjectID).hide();
         });
      }
 
@@ -83,21 +85,11 @@
      * @param {String} gameObjectID GameObject Id
      */
      enterFullscreenMode(gameObjectID) {
-        let modalContent = document.getElementById("externalWebsiteModalContent" + gameObjectID);
-        let iFrame = document.getElementById("iframe" + gameObjectID);
-
-        iFrame.width = '100%';
-        iFrame.height = '100%';
-        iFrame.scrolling = 'yes';
-
-        if (modalContent.requestFullscreen) {
-            modalContent.requestFullscreen();
-        } else if (modalContent.webkitRequestFullscreen) { /* Safari */
-            modalContent.webkitRequestFullscreen();
-        } else if (modalContent.msRequestFullscreen) { /* IE11 */
-            modalContent.msRequestFullscreen();
-        }
-        
+        document.getElementById("externalWebsiteWindow" + gameObjectID).style.width = '100%';
+        document.getElementById("externalWebsiteWindow" + gameObjectID).style.height = '100%';
+        document.getElementById("iframe" + gameObjectID).width = '100%';
+        document.getElementById("iframe" + gameObjectID).height = '100%';
+        document.getElementById("iframe" + gameObjectID).scrolling = 'yes';
     }
 
     /**
@@ -108,19 +100,11 @@
      * @param {String} height height of iframe in px after exiting fullScreenMode
      */
     exitFullscreenMode(gameObjectID, width, height) {
-        let iFrame = document.getElementById("iframe" + gameObjectID);
-
-        iFrame.width = width;
-        iFrame.height = height;
-        iFrame.scrolling = 'no';
-
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { /* Safari */
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE11 */
-            document.msExitFullscreen();
-        }
+        document.getElementById("externalWebsiteWindow" + gameObjectID).style.width = '';
+        document.getElementById("externalWebsiteWindow" + gameObjectID).style.height = '';
+        document.getElementById("iframe" + gameObjectID).width = width;
+        document.getElementById("iframe" + gameObjectID).height = height;
+        document.getElementById("iframe" + gameObjectID).scrolling = 'no';
     }
     
     /**
@@ -129,40 +113,30 @@
      * @param {String} gameObjectID GameObject id
      */
      addNewExternalWebsiteWindow(gameObjectID) {
-        if (!($('#externalWebsiteModal' + gameObjectID).length)) {
-            $('#externalWebsiteModalCollection').append(`
-                <div class="modal fade" id="externalWebsiteModal${gameObjectID}" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered mw-100 w-75" role="document">
-                        <div class="modal-content" id="externalWebsiteModalContent${gameObjectID}">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="externalWebsiteModalTitle${gameObjectID}"></h5>
-                                <div class="d-flex flex-row justify-content-end">
-                                    <div>
-                                        <button id="fullscreenBtn${gameObjectID}" class="close btn">
-                                            <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 1px;"></i>
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button id="closeBtn${gameObjectID}" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div id="externalWebsiteWait${gameObjectID}" style="text-align: center;">
-                                    <div class="spinner-border" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-                                <div id="externalWebsiteBody${gameObjectID}"></div>
+        if (!($('#externalWebsiteWindow' + gameObjectID).length)) {
+            $('#externalWebsiteWindowCollection').append(`
+                <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050">
+                    <div class="p-3 d-flex window-header">
+                        <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
+                        <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-1 pr-1">
+                            <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 1px;"></i>
+                        </button>
+                        <button id="closeBtn${gameObjectID}" class="close btn pl-1 pr-1">
+                            <i class="fa fa-close"></i>
+                        </button>
+                    </div>
+                    <div class="p-3 window-content">
+                        <div id="externalWebsiteWindowWait${gameObjectID}" style="text-align: center;">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
                             </div>
                         </div>
+                        <div id="externalWebsiteWindowBody${gameObjectID}"></div>
                     </div>
                 </div>
             `)
         }
 
-        $('#externalWebsiteModal' + gameObjectID).modal('show');
+        $('#externalWebsiteWindow' + gameObjectID).show();
     }
 }
