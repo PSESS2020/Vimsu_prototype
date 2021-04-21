@@ -46,6 +46,13 @@ module.exports = Object.freeze({
     /* Moderator-Settings */
     CMDSTARTCHAR: "\\", // moved the actual commands into a separate file for easier handling,
 
+    /* Regular Expression for variable use in iFrameData
+     * If you want to add another variable but can't be bothered to figure 
+     * out the regex, just add it into the brackets, separated by a |.     
+     * Also make sure to add a replacement method to the VariableReplacer
+     * class.*/
+    VARREGEX: /\$(?:name|username|room)/gi,
+
     /* Movement-Speed Constants */
     MOVEMENTSPEED_X: 1,
     MOVEMENTSPEED_Y: 1,
