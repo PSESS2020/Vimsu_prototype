@@ -33,6 +33,7 @@ const Message = require('../models/Message.js');
 const RoomFactory = require('../models/RoomFactory.js');
 const Floorplan = require('../utils/Floorplan.js');
 const AssetPaths = require('../../client/shared/AssetPaths.js');
+const VariableReplacer = require('../utils/VariableReplacer.js');
 
 /**
  * The Server Controller
@@ -1883,7 +1884,8 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let gameObject = this.getRoomById(currentRoomId).getGameObject(gameObjectID);
+                let currentRoom = this.#getRoomById(currentRoomId);
+                let gameObject = currentRoom.getGameObject(gameObjectID);
 
                 //prevents server to crash when client emits wrong GameObject ID
                 if (!gameObject) {
@@ -1892,6 +1894,15 @@ module.exports = class ServerController {
                 }
 
                 let iFrameData = gameObject.getIFrameData();
+
+                iFrameData.url = iFrameData.url.replaceAll(Settings.VARREGEX, match => {
+                    // We remove the $ from the beginning of the match and
+                    // cast it to lower case to turn it into the name of
+                    // a callable function in the VariableReplacer class
+                    let varToReplace = match.substring(1).toLowerCase();
+                    return VariableReplacer[varToReplace](ppant, currentRoom)
+                })
+
         
                 socket.emit('showExternalWebsite', iFrameData, gameObjectID);
             });
