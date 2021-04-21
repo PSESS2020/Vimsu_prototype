@@ -63,7 +63,8 @@
 <script>
     $(function() {
         $('nav a[href~="' + location.pathname + '"]').addClass('active');
-        if (location.pathname.split("/")[1])
-            $(`.dropdown-toggle:contains(${location.pathname.split("/")[1].replace(/-/g,' ')})`).addClass('active');
+        const rootUrl = location.pathname.split("/")[1];
+        if (rootUrl !== "")
+            $(`.dropdown-toggle:contains(${rootUrl.replace(/-/g,' ')})`).addClass('active');
     });
 </script>
