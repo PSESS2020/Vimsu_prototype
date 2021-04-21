@@ -88,7 +88,6 @@
         document.getElementById("iframe" + gameObjectID).width = '100%';
         document.getElementById("iframe" + gameObjectID).height = '100%';
         document.getElementById("iframe" + gameObjectID).scrolling = 'yes';
-        document.getElementById("externalWebsiteWindowBody")
     }
 
     /**
