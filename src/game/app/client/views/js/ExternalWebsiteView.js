@@ -41,10 +41,8 @@
         $('#externalWebsiteWindowTitle' + gameObjectID).text(iFrameData.title);
 
         $('#externalWebsiteWindowBody' + gameObjectID).append(`
-            <div style="text-align: center;">
-            <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
+            <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="0" src=${iFrameData.url} width=${width} height=${height} 
                 allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
-            </div>
         `);
 
         $('#fullscreenBtn' + gameObjectID).off();
@@ -125,13 +123,13 @@
                             <i class="fa fa-close"></i>
                         </button>
                     </div>
-                    <div class="p-3 window-content">
+                    <div class="p-3 window-content" style="overflow-y: hidden">
                         <div id="externalWebsiteWindowWait${gameObjectID}" style="text-align: center;">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
-                        <div id="externalWebsiteWindowBody${gameObjectID}"></div>
+                        <div id="externalWebsiteWindowBody${gameObjectID}" align="center"></div>
                     </div>
                 </div>
             `)
