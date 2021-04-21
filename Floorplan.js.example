@@ -126,6 +126,12 @@ const Floorplan = Object.freeze({
     /**                             # Any additonal value is ignored.        **/
     /**    story: <String[]>        # Each array entry gets its own textbox. **/
     /**                                                                      **/
+    /**  NOTE You can add a selection of variables to the iFrameData.url     **/
+    /**       Any occurence of '$name', '$username' or '$room' will be       **/
+    /**       replaced with the participant's forename, username or the      **/
+    /**       name of the room they're currently in, respectively.           **/
+    /**       The occurences are not case-sensitive.                         **/
+    /**                                                                      **/
     /**************************************************************************/
 
     /**************************************************************************/
