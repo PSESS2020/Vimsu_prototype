@@ -189,10 +189,10 @@ module.exports = class ServerController {
 
                     let currentRoomId = ppant.getPosition().getRoomId();
                     let currentRoom = this.#getRoomById(currentRoomId);
-                    // in case the ppant is at a position
-                    // that no longer exists in the current
-                    // floorplan, we move him to the startposition
-                    if (currentRoom === undefined) {
+
+                    /* In case the ppant is at a position that no longer exists in the current floorplan
+                     * or is no longer walkable, we move him to the startposition */ 
+                    if ((currentRoom === undefined) || (currentRoom.checkForCollision(ppant.getPosition()))) {
                         ppant.setPosition(new Position(Settings.STARTROOM_ID, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y));
                         ppant.setDirection(Settings.STARTDIRECTION);
                         currentRoomId = Settings.STARTROOM_ID;
