@@ -40,7 +40,7 @@
                             my dashboard
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/upload">upload video</a>
+                            <a class="dropdown-item" href="/my-dashboard/upload">upload video</a>
                         </div>
                     </li>
                 <% } %>
@@ -50,7 +50,7 @@
                         <%=username%>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/account-settings">account settings</a>
+                        <a class="dropdown-item" href="/<%=username%>/account-settings">account settings</a>
                         <a class="dropdown-item" href="/logout">log out</a>
                     </div>
                 </li>
@@ -62,6 +62,8 @@
 
 <script>
     $(function() {
-        $('nav a[href="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+        $('nav a[href~="' + location.pathname + '"]').addClass('active');
+        if (location.pathname.split("/")[1])
+            $(`.dropdown-toggle:contains(${location.pathname.split("/")[1].replace(/-/g,' ')})`).addClass('active');
     });
 </script>
