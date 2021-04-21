@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 const Settings = Object.freeze({
+    /* Game UI constants */
+    FONT_SIZE: 16,
 
     /* Movement-Speed Constants */
     MOVEMENTSPEED_X: 1,
@@ -24,8 +26,8 @@ const Settings = Object.freeze({
     SHOWLECTURE: 10 * 60 * 1000,
 
     /* View constants */
-    TILE_COLUMN_WIDTH: 64,
-    TILE_ROW_HEIGHT: 32,
+    TILE_WIDTH: 64,
+    TILE_HEIGHT: 32,
     DEFAULT_OFFSET: { x: 0, y: 0 },
     LEFTWALL_OFFSET: { x: 0, y: 1 },
     RIGHTWALL_OFFSET: { x: -1, y: 1 },

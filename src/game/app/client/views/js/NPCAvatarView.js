@@ -65,11 +65,11 @@ class NPCAvatarView extends AvatarView {
         var screenX = this.gameEngine.calculateScreenPosX(cordX, cordY) + Settings.AVATAR_SCALE_WIDTH * Settings.AVATAR_WIDTH;
         var screenY = this.gameEngine.calculateScreenPosY(cordX, cordY) - Settings.AVATAR_SCALE_HEIGHT * Settings.AVATAR_HEIGHT;
 
-        ctx_avatar.font = "1em sans-serif";
+        ctx_avatar.font = Settings.FONT_SIZE + "px sans-serif";
         ctx_avatar.textBaseline = 'top';
         ctx_avatar.fillStyle = "firebrick";
         ctx_avatar.textAlign = "center";
-        ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 2, Settings.AVATAR_WIDTH * 1.5, parseInt($(document.body).css("font-size"), 10) + 2);
+        ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 2, Settings.AVATAR_WIDTH * 1.5, Settings.FONT_SIZE + 2);
 
         ctx_avatar.fillStyle = "white";
         ctx_avatar.fillText(this.name, screenX + Settings.AVATAR_WIDTH / 2, screenY);
