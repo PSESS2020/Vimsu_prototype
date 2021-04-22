@@ -14,8 +14,12 @@ class VariableReplacer {
     /* In order to add a replacement method for a variable, simply
      * add a static method with the name of the variable.
      * It should take a Participant and a Room instance as arguments.
-     * If you want to create a variable not referencing data in one of
-     * those two classes, please reconsider. */
+     * Additional variables that could be added:
+     *   - Group name
+     *   - conference name
+     * 
+     * Also, I'll move the .replaceAll() call from the ServerController
+     * to here to allow for easier unit-testing. */
 
     /**
      * Replacement for $name variable
