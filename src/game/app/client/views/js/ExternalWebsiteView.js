@@ -49,6 +49,8 @@
         $('#fullscreenBtn' + gameObjectID).on('click', (event) => {
             event.preventDefault();
 
+            document.getElementById("fullscreenBtn" + gameObjectID).style.opacity = 1;
+
             if (!fullScreenMode) {
                 this.enterFullscreenMode(gameObjectID);
                 fullScreenMode = true;
@@ -116,8 +118,8 @@
                 <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050">
                     <div class="p-3 d-flex window-header">
                         <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
-                        <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-1 pr-1">
-                            <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 1px;"></i>
+                        <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-2 pr-2">
+                            <i class="fa fa-window-maximize" style=" transform: scale(0.8);"></i>
                         </button>
                         <button id="closeBtn${gameObjectID}" class="close btn pl-1 pr-1">
                             <i class="fa fa-close"></i>
