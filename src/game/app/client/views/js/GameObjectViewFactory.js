@@ -96,7 +96,7 @@ class GameObjectViewFactory {
         gameMapElementImage = this.assetImages[objectName];
         
         if (gameMapElementImage !== undefined) {
-            var offset = this.#calculateMapElementOffset(gameMapElementImage, gameObjectType);
+            var offset = this.calculateMapElementOffset(gameMapElementImage, gameObjectType);
             // Strange fix to make sure left & right tiles
             // are displayed properly....
             if (gameObjectType === GameObjectType.LEFTTILE) {
@@ -149,7 +149,7 @@ class GameObjectViewFactory {
         gameObjectImage = this.assetImages[objectName];
 
         if (gameObjectImage !== undefined) {
-            var offset = this.#calculateObjectOffset(gameObjectImage, gameObjectType);
+            var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
             } else if (isClickable && story !== undefined) {
@@ -184,7 +184,7 @@ class GameObjectViewFactory {
         doorImage = this.assetImages[objectName];
 
         if (doorImage !== undefined) {
-            var offset = this.#calculateMapElementOffset(doorImage, typeOfDoor);
+            var offset = this.calculateMapElementOffset(doorImage, typeOfDoor);
             doorView = new DoorView(doorImage, [], pos, typeOfDoor, offset, objectName, this.eventManager);
         } else {
             throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
@@ -200,7 +200,7 @@ class GameObjectViewFactory {
      * @returns {Object} An object containing the x- and y-offset
      *                   necessary to properly portray the object
      */
-    #calculateObjectOffset = function (image, objectType) {
+    calculateObjectOffset = function (image, objectType) {
         let offset = GameObjectOffsets[objectType]
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
@@ -220,7 +220,7 @@ class GameObjectViewFactory {
      * @returns {Object} An object containing the x- and y-offset
      *                   necessary to properly portray the mapElement
      */
-    #calculateMapElementOffset = function (image, objectType) {
+    calculateMapElementOffset = function (image, objectType) {
         let offset = GameObjectOffsets[objectType]
         if (offset === undefined) {
             offset = Settings.DEFAULT_OFFSET
