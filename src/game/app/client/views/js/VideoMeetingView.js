@@ -107,6 +107,7 @@ class VideoMeetingView extends WindowView {
         this.jitsi.on('readyToClose', function () {
             this.dispose();
             $('#meetingWindow').hide();
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
         });
     }
 
