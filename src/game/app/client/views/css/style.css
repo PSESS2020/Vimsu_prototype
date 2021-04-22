@@ -27,8 +27,11 @@ body.modal-open {
 
 input,
 textarea {
-     -moz-user-select: text;
-     outline: none;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  outline: none;
 }
 
 .form-control:focus {
@@ -138,6 +141,22 @@ form button:hover {
   color: firebrick; 
   z-index: 10000;
   text-align: center;
+}
+
+.list-group, 
+#profileModal, 
+#businessCardModal .modal-body, 
+.messageBubbleMyself, 
+.messageBubbleOthers,
+.allChatMessageBubbleMyself,
+.allChatMessageBubbleOthers,
+#scheduleModal .modal-body #schedule,
+#globalChatMessage,
+#largerGlobalChatMessage {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 #notifBar {

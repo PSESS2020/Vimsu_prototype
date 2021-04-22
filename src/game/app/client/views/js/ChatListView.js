@@ -107,10 +107,10 @@ class ChatListView extends WindowView {
               </div>
               <div class="col-10 text-left">
                 <label class="name lead">${chat.title}</label>
-                <br>
-                <span class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
-                <br>
-                <span class ="small p-0 wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>                                
+                <div class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">
+                  ${timestamp}
+                </div>
+                <div class ="small p-0 wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</div>                                
               </div>  
             </div>
           </a>
@@ -247,8 +247,8 @@ class ChatListView extends WindowView {
                                 </button>
                             </div>
                             <div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                                  <i class="fa fa-close" style="transform: scale(0.8); margin-top: 2px;"></i>
                                 </button>
                             </div>
                         </div>

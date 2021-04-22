@@ -60,12 +60,12 @@ class FriendListView extends WindowView {
                             </div>
                             <div class="col-9 text-left">
                                 <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                                <br> 
-                                <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                <br>
-                                <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                <span class="small">${businessCard.getEmail()}</span>
+                                <div>
+                                    <i class="fa fa-briefcase fa-fw mr-1"></i>${businessCard.getJob() + " at " + businessCard.getCompany()}
+                                </div>
+                                <div>
+                                    <i class="fa fa-envelope fa-fw mr-1"></i>${businessCard.getEmail()}
+                                </div>
                             </div>
                         </div>
                     

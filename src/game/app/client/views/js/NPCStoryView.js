@@ -33,8 +33,8 @@ class NPCStoryView extends WindowView {
         
         $(`#npcStoryModal${npcId} .modal-header`).append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle${npcId}">${name + " says..."}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                <i class="fa fa-close"></i>
             </button>
         `)
 

@@ -342,8 +342,8 @@ class ChatThreadView extends WindowView {
                     <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
                         <div class="modal-header">
                             <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>Chat Participant List</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-close"></i>
                             </button>
                         </div>
                         <div class="modal-body modal-body-large">

@@ -37,10 +37,9 @@ class ProfileView extends WindowView {
 
         $('#profileModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="profileModalTitle">
-            <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-            ${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+            <i class="fa fa-user-circle pr-2 navbarIcons mr-1" style="transform: scale(1)"></i>${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
+            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                <i class="fa fa-close"></i>
             </button>
         `)
 
