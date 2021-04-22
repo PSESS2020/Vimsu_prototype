@@ -86,14 +86,11 @@ class AllchatView extends Views {
         messages.forEach((message) => {
             this.appendMessage(message, ownUsername)
         })
-
-        setTimeout(() => {
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-        }, 500)
     }
 
     showAllchatBox() {
         $("#allchatWindow").show()
+        $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
         $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
         $('#showRoomChatDiv').hide();
         $("#unreadAllchatMessage").text(0)
