@@ -176,7 +176,7 @@ class ChatListView extends WindowView {
     this.chats.forEach(chat => {
       if (chat.chatId === chatID) {
         if (message.msgText.length > 35) {
-          var msgText = message.msgText.slice(0, 60) + "...";
+          var msgText = message.msgText.slice(0, 35) + "...";
         } else {
           var msgText = message.msgText;
         }

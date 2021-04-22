@@ -54,8 +54,11 @@
     <div class="d-flex flex-row col-12">
         <div class="d-flex flex-column" style="width: 250px;">
             <div style="z-index: 5">
-                <a class="action_button nav-item nav-link p-0 showRoomChat" role="button" id="showRoomChat" onclick=""
-                    href="" style="float:left; text-align: left;">
+                <a class="action_button nav-item nav-link p-0 showRoomChat" id="showRoomChatDiv" role="button" onclick="" href=""
+                    style="float:left; text-align: left;"><span id="showRoomChat"></span>
+                    <small>
+                        (<span id="unreadAllchatMessage">0</span>)
+                    </small>
                 </a>
             </div>
             <div id="allchatWindow" style="z-index: 5;">
