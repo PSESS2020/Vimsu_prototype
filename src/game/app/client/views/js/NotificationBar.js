@@ -72,7 +72,7 @@ class NotificationBar extends Views {
      * @param {String} chatId chat ID
      */
     drawNewMessage(senderUsername, chatId) {
-        const id = this.getNewMessageId(senderUsername, this.chatId)
+        const id = this.getNewMessageId(senderUsername, chatId)
         this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -277,7 +277,9 @@ class NotificationBar extends Views {
     }
 
     removeNotifDiv(id) {
-        $('#' + id + 'Div').remove();
-        $('#unreadNotif').text($("#notifBar > div").length)
+        if ($('#' + id + 'Div').length) {
+            $('#' + id + 'Div').remove();
+            $('#unreadNotif').text($("#notifBar > div").length)
+        }
     }
 }
