@@ -1741,7 +1741,7 @@ class ClientController {
      * @param {String} meetingID meeting ID
      */
     handleFromViewRemoveNewMeetingNotif(meetingID) {
-        TypeChecker.isString(meetingId);
+        TypeChecker.isString(meetingID);
 
         this.gameView.removeNewMeetingNotif(meetingID);
     }
