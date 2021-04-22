@@ -40,8 +40,8 @@ class EmojiPicker extends Views {
         const trigger = document.querySelector('#' + emojiTriggerButtonId);
 
         picker.on('emoji', selectedEmoji => {
-            const allchatMessageInput = document.getElementById(inputId);
-            allchatMessageInput.value += selectedEmoji;
+            const messageInput = document.getElementById(inputId);
+            messageInput.value += selectedEmoji;
         });
 
         trigger.addEventListener('click', (event) => {
