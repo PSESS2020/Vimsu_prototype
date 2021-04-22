@@ -1701,6 +1701,74 @@ class ClientController {
     }
 
     /**
+     * Removes message notif
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewMessageNotif(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewMessageNotif(senderUsername, chatId);
+    }
+
+    /**
+     * Removes chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewChatNotif(chatId);
+    }
+
+    /**
+     * removes group chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewGroupChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewGroupChatNotif(chatId);
+    }
+
+    /**
+     * removes meeting notif
+     * 
+     * @param {String} meetingID meeting ID
+     */
+    handleFromViewRemoveNewMeetingNotif(meetingID) {
+        TypeChecker.isString(meetingId);
+
+        this.gameView.removeNewMeetingNotif(meetingID);
+    }
+
+    /**
+     * removes new friend request notif
+     * 
+     * @param {String} senderUsername requester username
+     */
+     handleFromViewRemoveNewFriendRequestNotif(senderUsername) {
+        TypeChecker.isString(senderUsername);
+
+        this.gameView.removeNewFriendRequestNotif(senderUsername);
+    }
+
+    /**
+     * removes new friend notif
+     * 
+     * @param {String} friendUsername friend username
+     */
+     handleFromViewRemoveNewFriendNotif(friendUsername) {
+        TypeChecker.isString(friendUsername);
+
+        this.gameView.removeNewFriendNotif(friendUsername);
+    }
+
+    /**
      * Gets chat thread from server
      * 
      * @param {String} chatID chat ID

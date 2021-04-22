@@ -83,6 +83,7 @@ class MeetingListView extends WindowView {
      */
     appendNewMeeting(meeting) {
         $('#nomeeting').empty();
+        this.eventManager.handleRemoveNewMeetingNotif(meeting.id);
 
         $('#meetingListModal .modal-body .list-group').prepend(`
             <li class="list-group-item bg-transparent chatthread" id="${"meetingEntry" + meeting.id}">

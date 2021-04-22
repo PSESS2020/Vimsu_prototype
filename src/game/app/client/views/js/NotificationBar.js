@@ -55,13 +55,24 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets new message notif id
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     * @returns new message notif id
+     */
+    getNewMessageId(senderUsername, chatId) {
+        return 'notifMessage' + senderUsername + chatId
+    }
+
+    /**
      * Draws new message notification
      * 
      * @param {String} senderUsername message sender username
      * @param {String} chatId chat ID
      */
     drawNewMessage(senderUsername, chatId) {
-        const id = 'notifMessage' + senderUsername + chatId
+        const id = this.getNewMessageId(senderUsername, this.chatId)
         this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -71,19 +82,39 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets new chat notif id
+     * 
+     * @param {String} chatId chat ID
+     * @returns new chat notif id
+     */
+    getNewChatId(chatId) {
+        return 'notifChat' + chatId
+    }
+
+    /**
      * Draws new chat notification
      * 
      * @param {String} senderUsername chat requester username
      * @param {String} chatId chat ID
      */
     drawNewChat(senderUsername, chatId) {
-        const id = 'notifChat' + chatId
+        const id = this.getNewChatId(chatId)
         this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
             return this.eventManager.handleChatThreadClicked(chatId);
         })
+    }
+
+    /**
+     * Gets new group chat notif id
+     * 
+     * @param {String} chatId chat ID
+     * @returns new group chat notif id
+     */
+    getNewGroupChatId(chatId) {
+        return 'notifGroupChat' + chatId
     }
 
     /**
@@ -94,7 +125,7 @@ class NotificationBar extends Views {
      * @param {String} chatId chat ID
      */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
-        const id = 'notifGroupChat' + chatId
+        const id = this.getNewGroupChatId(chatId)
         this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -104,13 +135,23 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets new meeting notif id
+     * 
+     * @param {String} meetingID meeting ID
+     * @returns new meeting notif id
+     */
+    getNewMeetingId(meetingID) {
+        return 'notifMeeting' + meetingID;
+    }
+
+    /**
      * Draws new meeting notification
      * 
      * @param {String} meetingName meeting name
      * @param {String} meetingID meeting ID
      */
     drawNewMeeting(meetingName, meetingID) {
-        const id = 'notifMeeting' + meetingID;
+        const id = this.getNewMeetingId(meetingID)
         this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -121,12 +162,22 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets new friend request notif id
+     * 
+     * @param {String} senderUsername requester username
+     * @returns new friend request notif id
+     */
+    getNewFriendRequestId(senderUsername) {
+        return 'notifFriendRequest' + senderUsername
+    }
+
+    /**
      * Draws new friend request notification
      * 
      * @param {String} senderUsername requester username
      */
     drawNewFriendRequest(senderUsername) {
-        const id = 'notifFriendRequest' + senderUsername
+        const id = this.getNewFriendRequestId(senderUsername)
         this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -140,12 +191,22 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets new friend notif id
+     * 
+     * @param {String} friendUsername friend username
+     * @returns new friend notif id
+     */
+    getNewFriendId(friendUsername) {
+        return 'notifFriend' + friendUsername
+    }
+
+    /**
      * Draws new friend notification
      * 
      * @param {String} friendUsername friend username
      */
     drawNewFriend(friendUsername) {
-        const id = 'notifFriend' + friendUsername
+        const id = this.getNewFriendId(friendUsername)
         this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true)
 
         $('#' + id).on('click', (e) => {
@@ -156,12 +217,22 @@ class NotificationBar extends Views {
     }
 
     /**
+     * Gets minimized meeting notif id
+     * 
+     * @param {String} meetingId meeting id
+     * @returns minimized meeting notif id
+     */
+    getMinimizedMeetingId(meetingId) {
+        return 'runningMeeting' + meetingId
+    }
+
+    /**
      * Draws minimized meeting notification
      * 
      * @param {Object} meeting minimizedmeeting
      */
     drawMinimizedMeeting(meeting) {
-        const id = 'runningMeeting' + meeting.id
+        const id = this.getMinimizedMeetingId(meeting.id)
         this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false)
 
         $('#' + id).on('click', (e) => {

@@ -1324,7 +1324,75 @@ class GameView {
      removeMinimizedMeetingNotif(meetingId) {
         TypeChecker.isString(meetingId);
 
-        this.notifBar.removeNotifDiv('runningMeeting' + meetingId);
+        this.notifBar.removeNotifDiv(this.notifBar.getMinimizedMeetingId(meetingId));
+    }
+
+    /**
+     * Removes new message notif
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
+     removeNewMessageNotif(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewMessageId(senderUsername, chatId));
+    }
+
+    /**
+     * Removes new chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     removeNewChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewChatId(chatId));
+    }
+
+    /**
+     * Removes new group chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+    removeNewGroupChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewGroupChatId(chatId));
+    }
+
+    /**
+     * removes meeting notif
+     * 
+     * @param {String} meetingId meeting ID
+     */
+    removeNewMeetingNotif(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewMeetingId(meetingId));
+    }
+
+    /**
+     * removes new friend request notif
+     * 
+     * @param {String} senderUsername requester username
+     */
+    removeNewFriendRequestNotif(senderUsername) {
+        TypeChecker.isString(senderUsername);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewFriendRequestId(senderUsername));
+    }
+
+    /**
+     * removes new friend notif
+     * 
+     * @param {String} friendUsername friend username
+     */
+     removeNewFriendNotif(friendUsername) {
+        TypeChecker.isString(friendUsername);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewFriendId(friendUsername));
     }
 
     /**
