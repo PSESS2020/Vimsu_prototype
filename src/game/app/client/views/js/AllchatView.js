@@ -22,7 +22,7 @@ class AllchatView extends Views {
 
         $("#allchatWindow").hide()
 
-        $('#showRoomChat').on('click', (event) => {
+        $('#showRoomChatDiv').on('click', (event) => {
             event.preventDefault();
             this.showAllchatBox()
         })
@@ -70,6 +70,8 @@ class AllchatView extends Views {
         $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName.toLowerCase() + ' chat message ...'
         $('#allchatHeaderText').text(roomName + ' Chat');
 
+        $("#unreadAllchatMessage").text(0)
+
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
             <small>Show ${roomName.toLowerCase()} chat messages</small>
@@ -93,7 +95,8 @@ class AllchatView extends Views {
     showAllchatBox() {
         $("#allchatWindow").show()
         $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
-        $('#showRoomChat').hide();
+        $('#showRoomChatDiv').hide();
+        $("#unreadAllchatMessage").text(0)
     }
 
     hideAllchatBox() {
@@ -103,7 +106,8 @@ class AllchatView extends Views {
             $("#allchatWindow").hide()
         }, Settings.TOGGLE_SPEED)
         
-        $('#showRoomChat').show();
+        $("#unreadAllchatMessage").text(0)
+        $('#showRoomChatDiv').show();
     }
 
     /**
@@ -132,5 +136,11 @@ class AllchatView extends Views {
 
         $('#allchatMessages').append(messageDiv);
         $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+
+        let currentCounter = $("#unreadAllchatMessage").text()
+
+        if (!isOwnParticipant) {
+            $("#unreadAllchatMessage").text(++currentCounter)
+        }
     }
 }
