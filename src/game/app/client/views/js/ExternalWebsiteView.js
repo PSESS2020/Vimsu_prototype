@@ -77,6 +77,27 @@
 
             $('#externalWebsiteWindow' + gameObjectID).hide();
         });
+
+        $(document).on('mouseup', (e) => {
+            const externalWebsiteWindow = $(`#externalWebsiteWindow${gameObjectID}`);
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!externalWebsiteWindow.is(e.target) && externalWebsiteWindow.has(e.target).length === 0) {
+
+                if (fullScreenMode) {
+                    this.exitFullscreenMode(gameObjectID, width, height);
+                    fullScreenMode = false;
+                }
+                
+                /* Needed to stop video */
+                $('.iframeclass').each(function() {
+                    var el_src = $(this).attr("src");
+                    $(this).attr("src",el_src);
+                });
+                               
+                externalWebsiteWindow.hide();
+            }
+        });
      }
 
     /**
@@ -84,7 +105,7 @@
      * 
      * @param {String} gameObjectID GameObject Id
      */
-     enterFullscreenMode(gameObjectID) {
+    enterFullscreenMode(gameObjectID) {
         document.getElementById("externalWebsiteWindow" + gameObjectID).style.width = '100%';
         document.getElementById("externalWebsiteWindow" + gameObjectID).style.height = '100%';
         document.getElementById("iframe" + gameObjectID).width = '100%';
@@ -112,7 +133,7 @@
      * 
      * @param {String} gameObjectID GameObject id
      */
-     addNewExternalWebsiteWindow(gameObjectID) {
+    addNewExternalWebsiteWindow(gameObjectID) {
         if (!($('#externalWebsiteWindow' + gameObjectID).length)) {
             $('#externalWebsiteWindowCollection').append(`
                 <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050">
@@ -136,15 +157,6 @@
                 </div>
             `)
         }
-
-        $(document).on('mouseup', (e) => {
-            const externalWebsiteWindow = $(`#externalWebsiteWindow${gameObjectID}`);
-
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!externalWebsiteWindow.is(e.target) && externalWebsiteWindow.has(e.target).length === 0) {
-                externalWebsiteWindow.hide();
-            }
-        });
 
         $('#externalWebsiteWindow' + gameObjectID).show();
     }
