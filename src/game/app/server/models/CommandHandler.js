@@ -1,4 +1,5 @@
-const Commands = require('../utils/commands/Commands.js');
+const AllchatCommands = require('../utils/commands/AllchatCommands.js');
+const LectureChatCommands = require('../utils/commands/LectureChatCommands.js');
 const DoorCommands = require('../utils/commands/DoorCommands.js');
 const GroupCommands = require('../utils/commands/GroupCommands.js');
 const MessageCommands = require('../utils/commands/MessageCommands.js');
@@ -8,6 +9,8 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext.js');
 const Position = require('../models/Position.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
+const AllchatContext = require('./AllchatContext.js');
+const LectureContext = require('./LectureContext.js');
 
 /**
  * The Command Handler Model
@@ -19,7 +22,8 @@ const ShirtColor = require('../../client/shared/ShirtColor.js');
 module.exports = class CommandHandler {
 
     #serverController;
-    #commandList;
+    #allchatCommandList;
+    #lectureChatCommandList;
     #doorCommandList;
     #groupCommandList;
     #msgCommandList;
@@ -41,7 +45,8 @@ module.exports = class CommandHandler {
 
         this.#serverController = serverController;
 
-        this.#commandList = Object.values(Commands);
+        this.#allchatCommandList = Object.values(AllchatCommands);
+        this.#lectureChatCommandList = Object.values(LectureChatCommands);
         this.#doorCommandList = Object.values(DoorCommands);
         this.#groupCommandList = Object.values(GroupCommands);
         this.#msgCommandList = Object.values(MessageCommands);
@@ -56,28 +61,23 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
-     * @param {String} username participant username
      */
-    handleCommand(socket, context, commandArgs, username) {
+    handleCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-
-        //only defined by allchat commands
-        if (username !== undefined) {
-            TypeChecker.isString(username);
-        }
 
         // commandArgs will be an array containing the command-string in first place
         var commandType = commandArgs[0];
         commandArgs = commandArgs.slice(1);
 
-        if (this.#knowsCommand(this.#commandList, commandType)) {
-            var commandToExecute = this.#getMethodString(this.#commandList, commandType);
-            if (commandToExecute === Commands.GLOBAL.method) {
-                this.globalMsg(socket, context, commandArgs, username); //moderatorUsername is only needed for global Msg
-            }
-            else {
-                this[commandToExecute](socket, context, commandArgs); // we need to check commandArgs for undefined
-            }
+        if (context instanceof AllchatContext) {
+            var commandList = this.#allchatCommandList;
+        } else if (context instanceof LectureContext) {
+            var commandList = this.#lectureChatCommandList;
+        }
+
+        if (this.#knowsCommand(commandList, commandType)) {
+            var commandToExecute = this.#getMethodString(commandList, commandType);
+            this[commandToExecute](socket, context, commandArgs); // we need to check commandArgs for undefined
         } else {
             this['unknownCommand'](socket);
         }
@@ -200,10 +200,10 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      * @param {String} username participant username
      */
-    globalMsg(socket, context, commandArgs, username) {
+    globalMsg(socket, context, commandArgs) {
         // maybe make sure context is allchat?
         this.#checkParamTypes(context, commandArgs);
-        TypeChecker.isString(username);
+        let username = socket.username;
 
         if (commandArgs.length > 0) {
             var text = commandArgs[0];
@@ -258,9 +258,8 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket socket instance
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
-     * @param {?String} username participant username
      */
-    removeUser(socket, context, commandArgs, username) {
+    removeUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
         commandArgs.forEach((username) => {

@@ -1,5 +1,5 @@
 /**
- * General commands that a moderator/orator can enter
+ * Allchat commands that a moderator/orator can enter
  * @module Commands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
@@ -25,22 +25,6 @@ module.exports = Object.freeze({
     UNMUTE: {
         string: "unmute",
         method: "unmuteUser"
-    },
-    REVOKETOKEN: {
-        string: "revoke",
-        method: "muteUser"
-    },
-    GRANTTOKEN: {
-        string: "grant",
-        method: "unmuteUser"
-    },
-    UNBANPLAYER: {
-        string: "unban",
-        method: "unbanUser"
-    },
-    CLOSE: {
-        string: "close",
-        method: "close"
     },
     HELP: {
         string: "help",
