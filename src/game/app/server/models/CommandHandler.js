@@ -215,22 +215,6 @@ module.exports = class CommandHandler {
     };
 
     /**
-     * Sends a global note from VIMSU to all connected participants.
-     * Ignores context in which it was send.
-     * @method module:CommandHandler#globalNote
-     * 
-     * @param {?SocketIO} socket socket instance
-     * @param {?CommandContext} context context instance
-     * @param {String[]} commandArgs command arguments
-     */
-    globalNote(socket, context, commandArgs) {
-        this.#checkParamTypes(context, commandArgs);
-
-        var arg = Number.parseInt(commandArgs[0], 10);
-        this.#serverController.sendGlobalAnnouncement("VIMSU", CommandMessages.TESTMESSAGES.body[arg]);
-    };
-
-    /**
      * Prints help message to the user
      * @method module:CommandHandler#printHelp
      * 

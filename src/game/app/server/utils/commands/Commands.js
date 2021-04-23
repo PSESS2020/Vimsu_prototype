@@ -10,10 +10,6 @@ module.exports = Object.freeze({
         string: "global",
         method: "globalMsg"
     },
-    GLOBALNOTE: {
-        string: "testmsg",
-        method: "globalNote"
-    },
     MESSAGE: {
         string: "msg",
         method: "handleMsgCommand"
