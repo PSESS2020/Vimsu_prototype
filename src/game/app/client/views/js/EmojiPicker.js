@@ -24,28 +24,31 @@ class EmojiPicker extends Views {
      * @param {String} emojiTriggerId id of the emoji trigger button
      * @param {String} emojiPickerId id of the emoji picker button
      * @param {String} inputId input field id
-     * @param {?String} chatId chat id, if not chatthread then undefined
      */
-    draw(emojiTriggerId, emojiPickerId, inputId, chatId) {
+    draw(emojiTriggerId, emojiPickerId, inputId) {
         $('#' + emojiTriggerId).off()
         $('#' + emojiTriggerId).on('click', (event) => {
             event.preventDefault();
-            
-            if ($('#' + emojiPickerId + 'Div').css('display') !== 'none'){
-                $('#' + emojiPickerId + 'Div').hide()  
-            } else {                
-                $('#' + emojiPickerId + 'Div').show()  
+
+            if ($('#' + emojiPickerId + 'Div').css('display') !== 'none') {
+                $('#' + emojiPickerId + 'Div').hide()
+            } else {
+                $('#' + emojiPickerId + 'Div').show()
 
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.search-row').setAttribute('style', 'display:none');
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.favorites').setAttribute('style', 'display:none');
             }
         })
 
-        if (chatId) {
-            $('#chatThreadModal' + chatId).on('hide.bs.modal', function (e) {
-                $('#' + emojiPickerId + 'Div').hide()  
-            })
-        }
+        $(document).on('mouseup', (e) => {
+            const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
+            const inputField = $('#' + inputId);
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!emojiPickerDiv.is(e.target) && emojiPickerDiv.has(e.target).length === 0 && !inputField.is(e.target) && inputField.has(e.target).length === 0) {
+                emojiPickerDiv.hide();
+            }
+        });
 
         document.getElementById(emojiPickerId).addEventListener('emoji-click', event => {
             const messageInput = document.getElementById(inputId);
