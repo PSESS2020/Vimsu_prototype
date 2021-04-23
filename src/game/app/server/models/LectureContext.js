@@ -78,7 +78,7 @@ module.exports = class LectureContext extends CommandContext {
     removeUser(userToRemove) {
         TypeChecker.isString(userToRemove);
 
-        var ppantId = this.#serverController.getIdOf(userToRemove);
+        var ppantId = this.#serverController.getIdOfOnlineParticipant(userToRemove);
         if (ppantId !== undefined && this.#contextObject.hasPPant(ppantId)) {
             this.#removeByID(ppantId, CommandMessages.REMOVAL);
         }
@@ -108,7 +108,7 @@ module.exports = class LectureContext extends CommandContext {
 
         //it is not possible to mute the orator
         if (userToMute !== this.#contextObject.getOratorUsername()) {
-            var ppantID = this.#serverController.getIdOf(userToMute);
+            var ppantID = this.#serverController.getIdOfOnlineParticipant(userToMute);
             if (ppantID !== undefined) {
                 this.#contextObject.revokeToken(ppantID);
                 var socketid = this.#serverController.getSocketId(ppantID);
@@ -127,7 +127,7 @@ module.exports = class LectureContext extends CommandContext {
     unmuteUser(userToUnmute) {
         TypeChecker.isString(userToUnmute);
 
-        var ppantID = this.#serverController.getIdOf(userToUnmute);
+        var ppantID = this.#serverController.getIdOfOnlineParticipant(userToUnmute);
         // If the uses did not previously posess a token, we need to inform him he now does
         if (ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
             var socketid = this.#serverController.getSocketId(ppantID);

@@ -230,6 +230,31 @@ module.exports = class ChatService {
     }
 
     /**
+     * gets the member list from chat with chatId
+     * @static @method module:ChatService#loadChat
+     * 
+     * @param {String} chatId chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return {Chat} Chat instance if found, otherwise false
+     */
+    static loadMemberList(chatId, conferenceId, vimsudb) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+    
+        return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
+            if (chat) {
+                return chat.memberId;
+            } else {
+                console.log("could not find chat with chatId" + chatId);
+                return false;
+            }
+        })
+    }
+
+    /**
      * stores a participant in the chat member list in the database
      * @static @method module:ChatService#storeParticipant
      * 

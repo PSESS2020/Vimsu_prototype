@@ -79,7 +79,7 @@ module.exports = class AllchatContext extends CommandContext {
     removeUser(userToRemove) {
         TypeChecker.isString(userToRemove);
 
-        var ppantID = this.#serverController.getIdOf(userToRemove);
+        var ppantID = this.#serverController.getIdOfOnlineParticipant(userToRemove);
         if (ppantID !== undefined) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
 
@@ -126,7 +126,7 @@ module.exports = class AllchatContext extends CommandContext {
     muteUser(userToMute) {
         TypeChecker.isString(userToMute);
 
-        var ppantID = this.#serverController.getIdOf(userToMute);
+        var ppantID = this.#serverController.getIdOfOnlineParticipant(userToMute);
         if (ppantID !== undefined) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;
@@ -146,7 +146,7 @@ module.exports = class AllchatContext extends CommandContext {
     unmuteUser(userToUnmute) {
         TypeChecker.isString(userToUnmute);
 
-        var ppantID = this.#serverController.getIdOf(userToUnmute);
+        var ppantID = this.#serverController.getIdOfOnlineParticipant(userToUnmute);
         if (ppantID !== undefined) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;

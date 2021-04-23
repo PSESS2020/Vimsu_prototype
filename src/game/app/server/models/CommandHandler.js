@@ -758,11 +758,13 @@ module.exports = class CommandHandler {
         if (username === undefined) {
             this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
         } else {
-            if (this.#serverController.setModState(username, true)) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.SETMOD(username));
-            } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-            }
+            this.#serverController.setModState(username, true).then(res => {
+                if (res) {
+                    this.#serverController.sendNotification(socket.id, CommandMessages.SETMOD(username));
+                } else {
+                    this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
+                }
+            });
         }
     }
 
@@ -782,11 +784,13 @@ module.exports = class CommandHandler {
         if (username === undefined) {
             this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
         } else {
-            if (this.#serverController.setModState(username, false)) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.SETUNMOD(username));
-            } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-            }
+            this.#serverController.setModState(username, false).then(res => {
+                if (res) {
+                    this.#serverController.sendNotification(socket.id, CommandMessages.SETUNMOD(username));
+                } else {
+                    this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
+                }
+            });
         }
     }
 
@@ -798,7 +802,7 @@ module.exports = class CommandHandler {
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-    createGroup(socket, context, commandArgs) {
+    async createGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 3) {
@@ -818,16 +822,21 @@ module.exports = class CommandHandler {
             return;
         }
 
-        let memberIDs = [];
-        
+        let usernamesWithoutDuplicates = [];
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
+            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
+                usernamesWithoutDuplicates.push(usernames[i]);
             }
-            //Eliminates duplicates
-            if (!memberIDs.includes(ppantID)) {
+        }
+
+        let memberIDs = [];
+        let unknownUsernames = [];
+        
+        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
+            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
+            if (ppantID === undefined) {
+                unknownUsernames.push(usernames[i]);
+            } else {
                 memberIDs.push(ppantID);
             }
         }
@@ -838,7 +847,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.CREATEDGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.CREATEDGROUP(groupName, unknownUsernames));
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPNAME);
         } 
@@ -877,7 +886,7 @@ module.exports = class CommandHandler {
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-     deleteAllGroups(socket, context, commandArgs) {
+    deleteAllGroups(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
         this.#serverController.deleteAllGroups();
@@ -893,7 +902,7 @@ module.exports = class CommandHandler {
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-    addGroupMember(socket, context, commandArgs) {
+    async addGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 2) {
@@ -904,16 +913,21 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
 
-        let memberIDs = [];
-        
+        let usernamesWithoutDuplicates = [];
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
+            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
+                usernamesWithoutDuplicates.push(usernames[i]);
             }
-            //Eliminates duplicates
-            if (!memberIDs.includes(ppantID)) {
+        }
+
+        let memberIDs = [];
+        let unknownUsernames = [];
+        
+        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
+            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
+            if (ppantID === undefined) {
+                unknownUsernames.push(usernames[i]);
+            } else {
                 memberIDs.push(ppantID);
             }
         }
@@ -924,7 +938,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.ADDEDUSERSTOGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.ADDEDUSERSTOGROUP(groupName, unknownUsernames))
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
         } 
@@ -938,7 +952,7 @@ module.exports = class CommandHandler {
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-    removeGroupMember(socket, context, commandArgs) {
+    async removeGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 2) {
@@ -949,16 +963,21 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
 
-        let memberIDs = [];
-        
+        let usernamesWithoutDuplicates = [];
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
+            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
+                usernamesWithoutDuplicates.push(usernames[i]);
             }
-            //Eliminates duplicates
-            if (!memberIDs.includes(ppantID)) {
+        }
+
+        let memberIDs = [];
+        let unknownUsernames = [];
+        
+        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
+            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
+            if (ppantID === undefined) {
+                unknownUsernames.push(usernames[i]);
+            } else {
                 memberIDs.push(ppantID);
             }
         }
@@ -969,7 +988,7 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.RMUSERSFROMGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.RMUSERSFROMGROUP(groupName, unknownUsernames));
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
         } 

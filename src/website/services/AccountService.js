@@ -114,7 +114,7 @@ module.exports = class AccountService {
      * 
      * @return {Object|boolean} user data if found, otherwise false
      */
-    static #getAccountByUsernameOrEmail = function (usernameOrEmail, suffix, vimsudb) {
+    static getAccountByUsernameOrEmail = function (usernameOrEmail, suffix, vimsudb) {
         TypeChecker.isString(usernameOrEmail);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
@@ -321,7 +321,7 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.#getAccountByUsernameOrEmail(email, suffix, vimsudb).then(user => {
+        return this.getAccountByUsernameOrEmail(email, suffix, vimsudb).then(user => {
             if (user) {
                 if (user.forgotPasswordToken) {
                     return { username: user.username, token: user.forgotPasswordToken };
@@ -383,7 +383,7 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.#getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
+        return this.getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
             if (user && passwordHash.verify(password, user.passwordHash) && user.isActive) {
                 return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.verificationToken, user.forgotPasswordToken, user.isActive);
             } 

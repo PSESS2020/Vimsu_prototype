@@ -281,6 +281,34 @@ module.exports = class ParticipantService {
     }
 
     /**
+     * @static Gets participant's ID from the database by username
+     * @method module:ParticipantService#getIDByUsername
+     * 
+     * @param {String} username username of participant
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return {String|undefined} ID, if ppant exists. Undefined otherwise
+     */
+    static getIDByUsername(username, conferenceId, vimsudb) {
+        TypeChecker.isString(username);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+    
+        return AccountService.getAccountByUsernameOrEmail(username, '', vimsudb).then(acc => {
+            if (acc) {
+                return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: acc.accountId }).then(par => {
+                        return par.participantId;
+                });
+            }
+            else {
+                console.log("participant with username " + username + " is not found in collection participants_" + conferenceId);
+                return undefined;
+            }
+        })
+    }
+
+    /**
      * @static Gets participant's account from the database and creates a business card instance with 
      * the data
      * @method module:ParticipantService#getBusinessCard

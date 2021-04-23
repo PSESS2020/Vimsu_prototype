@@ -309,10 +309,22 @@ module.exports = Object.freeze({
         header: "Successfully deleted all groups",
         body: "All exisiting groups were sucessfully deleted."
     },
-    CREATEDGROUP(groupName) {
+    CREATEDGROUP(groupName, unknownUsernames) {
+        let usersNotFoundMsg = "";
+        if (unknownUsernames.length > 0) {
+            usersNotFoundMsg = " Users that were not found: ";
+            for (let i = 0; i < unknownUsernames.length; i++) {
+                if (i === (unknownUsernames.length - 1)) {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
+                } else {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
+                }
+            }
+        }
+
         return {
             header: "Group successfully created",
-            body: "Successfully created group " + groupName + "."
+            body: "Successfully created group " + groupName + "." + usersNotFoundMsg
         }
     },
     DELETEDGROUP(groupName) {
@@ -321,16 +333,40 @@ module.exports = Object.freeze({
             body: "Successfully deleted group " + groupName + "."
         }
     },
-    ADDEDUSERSTOGROUP(groupName) {
+    ADDEDUSERSTOGROUP(groupName, unknownUsernames) {
+        let usersNotFoundMsg = "";
+        if (unknownUsernames.length > 0) {
+            usersNotFoundMsg = " Users that were not found: ";
+            for (let i = 0; i < unknownUsernames.length; i++) {
+                if (i === (unknownUsernames.length - 1)) {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
+                } else {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
+                }
+            }
+        }
+
         return {
             header: "Added users to group",
-            body: "Successfully added users to group " + groupName + "."
+            body: "Successfully added users to group " + groupName + "." + usersNotFoundMsg
         }
     },
-    RMUSERSFROMGROUP(groupName) {
+    RMUSERSFROMGROUP(groupName, unknownUsernames) {
+        let usersNotFoundMsg = "";
+        if (unknownUsernames.length > 0) {
+            usersNotFoundMsg = " Users that were not found: ";
+            for (let i = 0; i < unknownUsernames.length; i++) {
+                if (i === (unknownUsernames.length - 1)) {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
+                } else {
+                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
+                }
+            }
+        }
+
         return {
             header: "Removed users from group",
-            body: "Successfully removed users from group " + groupName + "."
+            body: "Successfully removed users from group " + groupName + "." + usersNotFoundMsg
         }
     }, 
     YOUJOINEDGROUP(groupName) {
