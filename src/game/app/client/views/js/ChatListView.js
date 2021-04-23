@@ -281,7 +281,7 @@ class ChatListView extends WindowView {
             </div>
         </div>
         <div style="position: relative; width: 0; height: 0; display: none; z-index: 1070" id=${"chatthreadEmojiPicker" + chatID + "Div"}>
-          <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+          <div style="position: fixed; top: calc(50% + 100px); top: -moz-calc(50% + 100px); top: -webkit-calc(50% + 100px); top: -o-calc(50% + 100px); left: calc(50% - 50px); left: -moz-calc(50% - 50px); left: -webkit-calc(50% - 50px); left: -o-calc(50% - 50px); transform: translate(-50%, -50%);">
               <emoji-picker class="dark" id=${"chatthreadEmojiPicker" + chatID}></emoji-picker>
           </div>
         </div>
