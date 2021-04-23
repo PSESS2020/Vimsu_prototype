@@ -16,7 +16,7 @@ const { expect } = require('chai');
 const Participant = require('../../../src/game/app/server/models/Participant.js');
 const NPC = require('../../../src/game/app/server/models/NPC.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList.js');
-const Messages = require('../../../src/game/app/server/utils/Messages.js');
+const DoorClosedMessages = require('../../../src/game/app/server/utils/messages/DoorClosedMessages.js');
 const assert = chai.assert;
 
 var testGameObjectService;
@@ -275,9 +275,9 @@ describe('test Door handling', function () {
     before(function () {
         testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
         testDoorService = new DoorService();
-        testFoyer.setDoors([testDoorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, Messages.STANDARDDOORCLOSED),
-        testDoorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED),
-        testDoorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED)]);
+        testFoyer.setDoors([testDoorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, DoorClosedMessages.STANDARDDOORCLOSED),
+        testDoorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, DoorClosedMessages.STANDARDDOORCLOSED),
+        testDoorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, DoorClosedMessages.STANDARDDOORCLOSED)]);
         testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH);
         testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH);
     });

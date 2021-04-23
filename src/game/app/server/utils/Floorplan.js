@@ -2,7 +2,7 @@ const Direction = require('../../client/shared/Direction');
 const GameObjectType = require('../../client/shared/GameObjectType');
 const GlobalStrings = require('../../client/shared/GlobalStrings');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
-const Messages = require('./Messages');
+const DoorClosedMessages = require('./messages/DoorClosedMessages');
 const NPCDialog = require('./NPCDialog');
 const Settings = require('./Settings');
 
@@ -239,7 +239,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.PLANT, position: [[12, 0], [12, 12]]}
         ],
         DOORS: [ 
-            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 21], directionOnExit: Direction.DOWNLEFT, isOpen: false, closedMessage: Messages.FIRSTDOORCLOSED }
+            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 21], directionOnExit: Direction.DOWNLEFT, isOpen: false, closedMessage: DoorClosedMessages.FIRSTDOORCLOSED }
         ],
         NPCS: [
             {name: FloorplanConstants.NPCNAMES.tutorial, position: [11, 6], direction: Direction.DOWNLEFT, dialog: NPCDialog.basicTutorialDialog}
@@ -313,7 +313,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.TEA, position: [[2, 11], [7, [3, 11, 16]], [12, 16]]}
         ],
         DOORS: [
-            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 9], directionOnExit: Direction.DOWNLEFT, isOpen: false, closedMessage: Messages.FOODCOURTDOORCLOSED},
+            {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.FOYER,  positionOfDoor: [2, -1], positionOnExit: [Settings.FOYER_ID, 24, 9], directionOnExit: Direction.DOWNLEFT, isOpen: false, closedMessage: DoorClosedMessages.FOODCOURTDOORCLOSED},
             {wallSide: GlobalStrings.RIGHT,  positionOfDoor: [19, 17], positionOnExit: [Settings.ESCAPEROOM_ID, 14, 15], directionOnExit: Direction.DOWNLEFT, isOpen: false, codeToOpen: "42"}
         ],
         NPCS: [

@@ -15,7 +15,7 @@ const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
-const Messages = require('../utils/Messages.js');
+const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const DoorLogos = require('../utils/DoorLogos.js');
 
 /**
@@ -145,14 +145,14 @@ module.exports = class RoomFactory {
                             doorData.positionOnExit[2]),
                         doorData.directionOnExit,
                         true, // isOpen
-                        Messages.STANDARDDOORCLOSED) // closedMessage
+                        DoorClosedMessages.STANDARDDOORCLOSED) // closedMessage
                 );         
             } else {
                 // this requires error handling for when a door
                 // is defined as closed but there is no message
                 // or code to open defined
                 if (doorData.closedMessage === undefined) {
-                    doorData.closedMessage = Messages.STANDARDDOORCLOSED
+                    doorData.closedMessage = DoorClosedMessages.STANDARDDOORCLOSED
                 }
                 listOfDoors.push(
                     this.#doorService.createCustomDoor(logo,
@@ -199,14 +199,14 @@ module.exports = class RoomFactory {
                                 lectureDoorData.positionOfDoor[0],
                                 lectureDoorData.positionOfDoor[1]),
                             true, // isOpen
-                            Messages.STANDARDDOORCLOSED) // closedMessage
+                            DoorClosedMessages.STANDARDDOORCLOSED) // closedMessage
                     );         
                 } else {
                     // this requires error handling for when a door
                     // is defined as closed but there is no message
                     // or code to open defined
                     if (lectureDoorData.closedMessage === undefined) {
-                        lectureDoorData.closedMessage = Messages.STANDARDDOORCLOSED
+                        lectureDoorData.closedMessage = DoorClosedMessages.STANDARDDOORCLOSED
                     }
                     listOfDoors.push(
                         this.#doorService.createCustomLectureDoor(logo,

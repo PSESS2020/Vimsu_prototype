@@ -1,11 +1,47 @@
 /**
  * Messages that will be emitted from a command input by a moderator/orator
- * @module Messages
+ * @module CommandMessages
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
 module.exports = Object.freeze({
+
+    /**************************************************************************/
+    /************************** GENERAL MESSAGES ******************************/
+    /**************************************************************************/
+
+    WARNING: {
+        header: "Warning",
+        body: "One of your messages was removed by a moderator. Please follow the " +
+              "general chat etiquette. Additional infractions may result in a permanent " +
+              "ban."
+    },
+    UNKNOWNCOMMAND: {
+        header: "Unrecognized command",
+        body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+    },
+    INVALIDPARAMETERS: {
+        header: "Invalid parameters",
+        body: "Invalid command parameters. Please try again and check all commands with '\\help'."
+    },
+    UNKNOWNUSERNAME: {
+        header: "Unknown username",
+        body: "Entered username does not exist or user with that username is currently not online."
+    },
+    NOUSERSFOUND: {
+        header: "No users found",
+        body: "No users were found. Don't forget to pass valid usernames!"
+    }, 
+    NOUSERNAME: {
+        header: "No username passed",
+        body: "Don't forget to pass a username!"
+    },
+
+    /**************************************************************************/
+    /************************ LECTURECHAT MESSAGES ****************************/
+    /**************************************************************************/
+
     HELPLECTURECHAT: {
         header: "List of Commands",
         body: [  "\\ban <list of usernames>\nTakes a list of usernames, each one " +
@@ -37,6 +73,30 @@ module.exports = Object.freeze({
                     "separated from the next by a whitespace-character, and revokes their lecture tokens " +
                     "(if they own one). They will no longer be able to post messages into the lecture chat."]
     },
+    REVOKE: {
+        header: "Token revoked",
+        body: "Your token has been revoked for not following chat etiquette. You will no longer " +
+              "be able to post messages into the lecture chat."
+    },
+    GRANT: {
+        header: "Token granted",
+        body: "You have been granted a token. You will now be able to post messages into the lecture " +
+              "chat. Please remember to follow the chat etiquette."
+    },
+    REMOVAL: {
+        header: "Removal",
+        body: "You have been removed from this lecture by a moderator. Please follow the " +
+              "general chat etiquette."
+    },
+    CLOSED: {
+        header: "Lecture closed",
+        body: "The orator has closed this lecture. It is no longer accessible."
+    },
+
+    /**************************************************************************/
+    /************************ ALLCHAT HELP MESSAGES ***************************/
+    /**************************************************************************/
+
     HELPALLCHAT: {
         header: "List of Commands",
         body: [ "\\ban <list of usernames>\nTakes a list of usernames, each one " +
@@ -117,27 +177,12 @@ module.exports = Object.freeze({
         body: [ "\\port position <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
                 "\\port user <username>\nTeleports you to user with <username>."]
     },
-    WARNING: {
-        header: "Warning",
-        body: "One of your messages was removed by a moderator. Please follow the " +
-              "general chat etiquette. Additional infractions may result in a permanent " +
-              "ban."
-    },
-    REMOVAL: {
-        header: "Removal",
-        body: "You have been removed from this lecture by a moderator. Please follow the " +
-              "general chat etiquette."
-    },
-    REVOKE: {
-        header: "Token revoked",
-        body: "Your token has been revoked for not following chat etiquette. You will no longer " +
-              "be able to post messages into the lecture chat."
-    },
-    GRANT: {
-        header: "Token granted",
-        body: "You have been granted a token. You will now be able to post messages into the lecture " +
-              "chat. Please remember to follow the chat etiquette."
-    },
+
+
+    /**************************************************************************/
+    /************************ GENERAL ALLCHAT MESSAGES ************************/
+    /**************************************************************************/
+
     MUTE: {
         header: "Muted",
         body: "You have been muted for not following proper chat etiquette. You will no longer " +
@@ -148,42 +193,38 @@ module.exports = Object.freeze({
         body: "You are no longer muted and able to post messages into the allchat again. " +
               "Please remember to follow the chat etiquette."
     },
-    CLOSED: {
-        header: "Lecture closed",
-        body: "The orator has closed this lecture. It is no longer accessible."
-    },
-    UNKNOWNCOMMAND: {
-        header: "Unrecognized command",
-        body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-    },
-    UNKNOWNDOORCOMMAND: {
-        header: "Unrecognized door command",
-        body: "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
-    },
-    UNKNOWNGROUPCOMMAND: {
-        header: "Unrecognized group command",
-        body: "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
-    },
     UNKNOWNMSGCOMMAND: {
         header: "Unrecognized message command",
         body: "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
     },
-    UNKNOWNPORTCOMMAND: {
-        header: "Unrecognized port command",
-        body: "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
+    SETMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is now a moderator.",
+        }
     },
-    TESTMESSAGES: {
-        header: ["Welcome", "NPC Test", "Friend Requests and Chat Messages", "Group Chats", "Allchat", "Room Switch",
-                 "Lecture Join", "Lecture Chat", "Tile Clicking", "Monkey Testing", ],
-        body: ["Welcome to and thank your for participating in this stresstest of our app VIMSU. Throughout the test, you will receive messages like this one, instructing you on which feature to try out next. Please follow them as closely as possible, but do also please feel free to explore the app. Thank you for your cooperation!",
-               "Please take a short amount of time to talk to the NPC in the reception area. You will receive some important information on how to use the app. You can talk to the NPC by clicking it.",
-               "We will start out this test by testing the 'Friend Request' and 'Chat Messages' features. Please send out as many friend requests and private chat messages to other participants as possible.",
-               "The next feature being tested is the 'Group Chat' feature. Please create new group chats and post messages into them.",
-               "We will proceed by testing the 'Allchat' feature. Please feel free to spam messages into the allchat to your heart's content.",
-               "Next up is the 'Room Switch' feature. Please start to switch rooms as rapidly as you can. Try to visit each of the rooms the app offers!",
-               "Finally, we will test the 'Lecture' feature. Please proceed to the lecture door, pick out a lecture to watch and enter it. Once the lecture has concluded, please take a short while to spam messages into the lecture chat.",
-               "To conclude the test, we would like to ask you to just wildly spam clicks all over the graphical interface for the next minute.",
-               "Thank you for participating in this test! Please take a couple of minutes to fill out the survey and share your user experience with us."]
+    SETUNMOD(username) {
+        return {
+            header: "Mod status set successfully",
+            body: username + " is no longer a moderator.",
+        }
+    },
+    YOUARENOWMOD: {
+        header: "Your mod state changed",
+        body: "You are now a moderator. Type in \\help to see all commands.",
+    },
+    YOUARENOLONGERMOD: {
+        header: "Your mod state changed",
+        body: "You are no longer a moderator."  
+    },
+
+    /**************************************************************************/
+    /************************* DOOR ALLCHAT MESSAGES **************************/
+    /**************************************************************************/
+
+    UNKNOWNDOORCOMMAND: {
+        header: "Unrecognized door command",
+        body: "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
     },
     UNKNOWNDOORID: {
         header: "Unknown Door ID",
@@ -192,10 +233,6 @@ module.exports = Object.freeze({
     INVALIDDOORCODE: {
         header: "Invalid Door Code", 
         body: "Don't forget to pass a valid door code!"
-    },
-    UNKNOWNUSERNAME: {
-        header: "Unknown Username",
-        body: "Entered username does not exist or user with that username is currently not online."
     },
     OPEPNEDDOOR(doorID) {
         return {
@@ -233,20 +270,6 @@ module.exports = Object.freeze({
         header: "No doors available",
         body: "There is either no room with this ID or there are no doors."
     },
-    STANDARDDOORCLOSED: {
-        header: "Door closed",
-        body: "This door is currently closed for you."
-    },
-    FIRSTDOORCLOSED: {
-        header: 'Welcome to VIMSU!',
-        body: "Please talk to our BasicTutorial NPC by clicking" +
-               " the tile he is standing on. He will give you a" +
-               " short introduction that will help you to learn the basics of using VIMSU."
-    },
-    FOODCOURTDOORCLOSED: {
-        header: "Door closed",
-        body: "Greet our Chef before you leave!"
-    },
     SETCODE(doorID, code) {
         return {
             header: "Code set successfully",
@@ -261,37 +284,14 @@ module.exports = Object.freeze({
         header: "Code was wrong!",
         body: "The code you entered was wrong! Try again."
     },
-    TELEPORTSUCCESS: {
-        header: "Teleport was successful",
-        body: "Your Teleport was successful."
-    },
-    TELEPORTFAIL: {
-        header: "Your teleport failed",
-        body: "Your teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
-    },
-    TELEPORTUSERFAIL: {
-        header: "Your teleport failed",
-        body: "Your teleport failed. Please check the passed username again."
-    },
-    SETMOD(username) {
-        return {
-            header: "Mod status set successfully",
-            body: username + " is now a moderator.",
-        }
-    },
-    SETUNMOD(username) {
-        return {
-            header: "Mod status set successfully",
-            body: username + " is no longer a moderator.",
-        }
-    },
-    YOUARENOWMOD: {
-        header: "Your mod state changed",
-        body: "You are now a moderator. Type in \\help to see all commands.",
-    },
-    YOUARENOLONGERMOD: {
-        header: "Your mod state changed",
-        body: "You are no longer a moderator."  
+
+    /**************************************************************************/
+    /************************* GROUP ALLCHAT MESSAGES *************************/
+    /**************************************************************************/
+
+    UNKNOWNGROUPCOMMAND: {
+        header: "Unrecognized group command",
+        body: "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
     },
     UNKNOWNCOLOR: {
         header: "Unknown color",
@@ -305,10 +305,6 @@ module.exports = Object.freeze({
         header: "Group does not exist",
         body: "A group with this name does not exist. Please try again."
     },
-    NOUSERSFOUND: {
-        header: "No Users found",
-        body: "No Users were found. Don't forget to pass valid usernames!"
-    }, 
     DELETEDALLGROUPS: {
         header: "Successfully deleted all groups",
         body: "All exisiting groups were sucessfully deleted."
@@ -349,12 +345,25 @@ module.exports = Object.freeze({
             body: "You left group " + groupName +  "."
         }
     },
-    NOUSERNAME: {
-        header: "No username passed",
-        body: "Don't forget to pass a username!"
+
+    /**************************************************************************/
+    /************************* PORT ALLCHAT MESSAGES **************************/
+    /**************************************************************************/
+
+    UNKNOWNPORTCOMMAND: {
+        header: "Unrecognized port command",
+        body: "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
     },
-    INVALIDPARAMETERS: {
-        header: "Invalid parameters",
-        body: "Invalid command parameters. Please try again and check all commands with '\\help'."
-    }
+    TELEPORTSUCCESS: {
+        header: "Teleport was successful",
+        body: "Your Teleport was successful."
+    },
+    TELEPORTFAIL: {
+        header: "Your teleport failed",
+        body: "Your teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+    },
+    TELEPORTUSERFAIL: {
+        header: "Your teleport failed",
+        body: "Your teleport failed. Please check the passed username again."
+    },
 });

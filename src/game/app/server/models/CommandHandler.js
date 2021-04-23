@@ -3,7 +3,7 @@ const DoorCommands = require('../utils/commands/DoorCommands.js');
 const GroupCommands = require('../utils/commands/GroupCommands.js');
 const MessageCommands = require('../utils/commands/MessageCommands.js');
 const PortCommands = require('../utils/commands/PortCommands.js');
-const Messages = require('../utils/Messages.js');
+const CommandMessages = require('../utils/messages/CommandMessages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext.js');
 const Position = require('../models/Position.js');
@@ -95,7 +95,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, Messages.DOORCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, CommandMessages.DOORCOMMANDS);
         } else {
             let doorCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -104,7 +104,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#doorCommandList, doorCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORCOMMAND);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORCOMMAND);
             }
         }
     }
@@ -121,7 +121,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
     
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, Messages.GROUPCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, CommandMessages.GROUPCOMMANDS);
         } else {
             let groupCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -130,7 +130,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#groupCommandList, groupCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNGROUPCOMMAND);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNGROUPCOMMAND);
             }
         }
     }
@@ -147,7 +147,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
     
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, Messages.MESSAGECOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, CommandMessages.MESSAGECOMMANDS);
         } else {
             let msgCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -156,7 +156,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#msgCommandList, msgCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNMSGCOMMAND);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNMSGCOMMAND);
             }
         }
     }
@@ -173,7 +173,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, Messages.PORTCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, CommandMessages.PORTCOMMANDS);
         } else {
             let portCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -182,7 +182,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#portCommandList, portCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNPORTCOMMAND);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNPORTCOMMAND);
             }
         }
     }
@@ -227,7 +227,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         var arg = Number.parseInt(commandArgs[0], 10);
-        this.#serverController.sendGlobalAnnouncement("VIMSU", Messages.TESTMESSAGES.body[arg]);
+        this.#serverController.sendGlobalAnnouncement("VIMSU", CommandMessages.TESTMESSAGES.body[arg]);
     };
 
     /**
@@ -318,7 +318,7 @@ module.exports = class CommandHandler {
         }
         toWarn.forEach((senderID) => {
             this.#serverController.sendNotification(this.#serverController.getSocketId(senderID),
-                Messages.WARNING);
+                CommandMessages.WARNING);
         });
         context.updateMessages();
     };
@@ -462,7 +462,7 @@ module.exports = class CommandHandler {
         }
 
         if (body.length < 1) {
-            this.#serverController.sendNotification(socket.id, Messages.NODOORS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.NODOORS);
         } else {
             this.#serverController.sendNotification(socket.id, { header: header, body: body });
         }
@@ -489,9 +489,9 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOORFORALL(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOORFORALL(doorID));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
     }
 
@@ -516,9 +516,9 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOORFORALL(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOORFORALL(doorID));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
     }
 
@@ -540,7 +540,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             ppantIDs.push(ppantID);
@@ -557,9 +557,9 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            this.#serverController.sendNotification(socket.id, Messages.CLOSEDDOOR(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOOR(doorID));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
     }
 
@@ -581,7 +581,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             ppantIDs.push(ppantID);
@@ -598,9 +598,9 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            this.#serverController.sendNotification(socket.id, Messages.OPEPNEDDOOR(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOOR(doorID));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
     }
 
@@ -621,7 +621,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             ppantIDs.push(ppantID);
@@ -635,7 +635,7 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, Messages.CLOSEDALLDOORS)
+        this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDALLDOORS)
     }
 
     /**
@@ -655,7 +655,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             ppantIDs.push(ppantID);
@@ -669,7 +669,7 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, Messages.OPENEDALLDOORS)
+        this.#serverController.sendNotification(socket.id, CommandMessages.OPENEDALLDOORS)
     }
 
     /**
@@ -691,12 +691,12 @@ module.exports = class CommandHandler {
         if (door !== undefined) {
             if (code !== undefined) {
                 door.setCodeToOpen(code);
-                this.#serverController.sendNotification(socket.id, Messages.SETCODE(doorID, code));
+                this.#serverController.sendNotification(socket.id, CommandMessages.SETCODE(doorID, code));
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.INVALIDDOORCODE);
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDDOORCODE);
             }
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
     }
 
@@ -717,7 +717,7 @@ module.exports = class CommandHandler {
 
         //moderator sent invalid position data
         if (isNaN(roomID) || isNaN(cordX) || isNaN(cordY)) {
-            this.#serverController.sendNotification(socket.id, Messages.TELEPORTFAIL);
+            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTFAIL);
             return;
         }
 
@@ -725,9 +725,9 @@ module.exports = class CommandHandler {
 
         //teleport was successful
         if (this.#serverController.teleportParticipantToPosition(moderatorID, new Position(roomID, cordX, cordY))) {
-            this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.TELEPORTFAIL);
+            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTFAIL);
         }
     }
 
@@ -745,15 +745,15 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME);
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME);
         } else {
             let moderatorID = socket.ppantID;
 
             //teleport was successful
             if (this.#serverController.teleportParticipantToParticipant(moderatorID, username)) {
-                this.#serverController.sendNotification(socket.id, Messages.TELEPORTSUCCESS);
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.TELEPORTUSERFAIL);
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTUSERFAIL);
             }  
         }  
     }
@@ -772,12 +772,12 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME)
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
         } else {
             if (this.#serverController.setModState(username, true)) {
-                this.#serverController.sendNotification(socket.id, Messages.SETMOD(username));
+                this.#serverController.sendNotification(socket.id, CommandMessages.SETMOD(username));
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
             }
         }
     }
@@ -796,12 +796,12 @@ module.exports = class CommandHandler {
         let username = commandArgs[0];
 
         if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERNAME)
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
         } else {
             if (this.#serverController.setModState(username, false)) {
-                this.#serverController.sendNotification(socket.id, Messages.SETUNMOD(username));
+                this.#serverController.sendNotification(socket.id, CommandMessages.SETUNMOD(username));
             } else {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
             }
         }
     }
@@ -818,7 +818,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 3) {
-            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
             return;
         }
 
@@ -830,7 +830,7 @@ module.exports = class CommandHandler {
         try {
             TypeChecker.isEnumOf(groupColor, ShirtColor);
         } catch (e) {
-            this.#serverController.sendNotification(socket.id, Messages.UNKNOWNCOLOR);
+            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNCOLOR);
             return;
         }
 
@@ -839,7 +839,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             //Eliminates duplicates
@@ -849,14 +849,14 @@ module.exports = class CommandHandler {
         }
         
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
             return;
         }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, Messages.CREATEDGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.CREATEDGROUP(groupName));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.INVALIDGROUPNAME);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPNAME);
         } 
     }
 
@@ -872,16 +872,16 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
             return;
         }
 
         let groupName = commandArgs[0];
 
         if (this.#serverController.deleteGroup(groupName)) {
-            this.#serverController.sendNotification(socket.id, Messages.DELETEDGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.DELETEDGROUP(groupName));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
         } 
     }
 
@@ -897,7 +897,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         this.#serverController.deleteAllGroups();
-        this.#serverController.sendNotification(socket.id, Messages.DELETEDALLGROUPS);
+        this.#serverController.sendNotification(socket.id, CommandMessages.DELETEDALLGROUPS);
     } 
     
 
@@ -913,7 +913,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 2) {
-            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
             return;
         }
 
@@ -925,7 +925,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             //Eliminates duplicates
@@ -935,14 +935,14 @@ module.exports = class CommandHandler {
         }
 
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
             return;
         }
 
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, Messages.ADDEDUSERSTOGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.ADDEDUSERSTOGROUP(groupName));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
         } 
     }
 
@@ -958,7 +958,7 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         if (commandArgs.length < 2) {
-            this.#serverController.sendNotification(socket.id, Messages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
             return;
         }
 
@@ -970,7 +970,7 @@ module.exports = class CommandHandler {
         for (let i = 0; i < usernames.length; i++) {
             let ppantID = this.#serverController.getIdOf(usernames[i]);
             if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, Messages.UNKNOWNUSERNAME);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
             }
             //Eliminates duplicates
@@ -980,14 +980,14 @@ module.exports = class CommandHandler {
         }
 
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, Messages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
             return;
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, Messages.RMUSERSFROMGROUP(groupName));
+            this.#serverController.sendNotification(socket.id, CommandMessages.RMUSERSFROMGROUP(groupName));
         } else {
-            this.#serverController.sendNotification(socket.id, Messages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
         } 
     }
 
@@ -998,7 +998,7 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket socket instance
      */
     unknownCommand(socket) {
-        this.#serverController.sendNotification(socket.id, Messages.UNKNOWNCOMMAND);
+        this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNCOMMAND);
     }
 
     /**

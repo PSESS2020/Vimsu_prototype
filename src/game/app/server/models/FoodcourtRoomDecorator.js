@@ -7,7 +7,7 @@ const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const Room = require('./Room.js');
 const TypeChecker = require('../../client/shared/TypeChecker');
-const Messages = require('../utils/Messages.js');
+const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 
 
@@ -157,9 +157,9 @@ module.exports = class FoodcourtRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, false, Messages.FOODCOURTDOORCLOSED),
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.FOODCOURT_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 9), Direction.DOWNLEFT, false, DoorClosedMessages.FOODCOURTDOORCLOSED),
             doorService.createEscapeRoomDoor(new Position(Settings.FOODCOURT_ID, this.#room.getLength(), this.#room.getWidth() - 2), 
-                new Position(Settings.ESCAPEROOM_ID, RoomDimensions.ESCAPEROOM_LENGTH - 1, RoomDimensions.ESCAPEROOM_WIDTH - 5), Direction.DOWNLEFT, false, Messages.STANDARDDOORCLOSED, '42'));
+                new Position(Settings.ESCAPEROOM_ID, RoomDimensions.ESCAPEROOM_LENGTH - 1, RoomDimensions.ESCAPEROOM_WIDTH - 5), Direction.DOWNLEFT, false, DoorClosedMessages.STANDARDDOORCLOSED, '42'));
 
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.FOODCOURT_ID, 2, -2, false, false), 
             objService.createDefaultRightTile(Settings.FOODCOURT_ID, this.#room.getLength() + 1, this.#room.getWidth() - 2, false, false));

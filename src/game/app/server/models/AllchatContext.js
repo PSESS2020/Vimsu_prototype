@@ -1,6 +1,6 @@
 const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Messages = require('../utils/Messages.js');
+const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Room = require('./Room.js');
 
 /**
@@ -59,7 +59,7 @@ module.exports = class AllchatContext extends CommandContext {
      * @return {Object} help messages
      */
     getHelpMessage() {
-        return Messages.HELPALLCHAT;
+        return CommandMessages.HELPALLCHAT;
     };
 
     /**
@@ -132,7 +132,7 @@ module.exports = class AllchatContext extends CommandContext {
             var accountId = socket.request.session.accountId;
             if (socket != undefined && !this.#serverController.isMuted(accountId)) {
                 this.#serverController.mute(accountId);
-                this.#serverController.sendNotification(socket.id, Messages.MUTE);
+                this.#serverController.sendNotification(socket.id, CommandMessages.MUTE);
             }
         }
     };
@@ -152,7 +152,7 @@ module.exports = class AllchatContext extends CommandContext {
             var accountId = socket.request.session.accountId;
             if (socket != undefined && this.#serverController.isMuted(accountId)) {
                 this.#serverController.unmute(accountId);
-                this.#serverController.sendNotification(socket.id, Messages.UNMUTE);
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNMUTE);
             }
         };
     }

@@ -11,7 +11,7 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../utils/TypeOfTask.js')
-const Messages = require('../utils/Messages.js');
+const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 const ParticipantService = require('../services/ParticipantService.js');
@@ -430,7 +430,7 @@ module.exports = class ServerController {
 
                     // muted ppants can't post messages into any allchat
                     if (this.#muteList.includes(socket.request.session.accountId)) {
-                        this.sendNotification(socket.id, Messages.MUTE);
+                        this.sendNotification(socket.id, CommandMessages.MUTE);
                         return;
                     }
 
@@ -654,7 +654,7 @@ module.exports = class ServerController {
                 let lecture = schedule.getLecture(lectureId);
 
                 if (lecture.isBanned(socket.request.session.accountId)) {
-                    this.sendNotification(socket.id, Messages.REMOVAL);
+                    this.sendNotification(socket.id, CommandMessages.REMOVAL);
                     return;
                 }
 
@@ -1893,9 +1893,9 @@ module.exports = class ServerController {
                 }
 
                 if (door.enterCodeToOpen(ppantID, enteredCode)) {
-                    this.sendNotification(socket.id, Messages.CORRECTCODE);
+                    this.sendNotification(socket.id, CommandMessages.CORRECTCODE);
                 } else {
-                    this.sendNotification(socket.id, Messages.WRONGCODE);
+                    this.sendNotification(socket.id, CommandMessages.WRONGCODE);
                 }
             });
 
@@ -2268,9 +2268,9 @@ module.exports = class ServerController {
 
         //Emit to ppant that his mod state changed and notfiy him
         if (modState) {
-            this.sendNotification(socketID, Messages.YOUARENOWMOD);
+            this.sendNotification(socketID, CommandMessages.YOUARENOWMOD);
         } else {
-            this.sendNotification(socketID, Messages.YOUARENOLONGERMOD);
+            this.sendNotification(socketID, CommandMessages.YOUARENOLONGERMOD);
         }
         socket.emit('your mod state changed', modState);
         
@@ -2329,7 +2329,7 @@ module.exports = class ServerController {
                     
                             //Notify user that he joined a new group (right now only for status bar)
                             socket.emit('join group', groupName);
-                            this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
+                            this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
                         }
                     });
                 })    
@@ -2376,7 +2376,7 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group');
-                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
+                this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
             }
         });
 
@@ -2441,7 +2441,7 @@ module.exports = class ServerController {
 
                 //Notify user that he joined a new group (right now only for status bar)
                 socket.emit('join group', groupName);
-                this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
+                this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
             }
         });
         return true;
@@ -2493,7 +2493,7 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group');
-                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
+                this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
             }
         });
 
