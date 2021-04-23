@@ -137,6 +137,15 @@
             `)
         }
 
+        $(document).on('mouseup', (e) => {
+            const externalWebsiteWindow = $(`#externalWebsiteWindow${gameObjectID}`);
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!externalWebsiteWindow.is(e.target) && externalWebsiteWindow.has(e.target).length === 0) {
+                externalWebsiteWindow.hide();
+            }
+        });
+
         $('#externalWebsiteWindow' + gameObjectID).show();
     }
 }

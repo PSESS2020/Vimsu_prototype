@@ -18,12 +18,21 @@ class LargerGlobalChatView extends WindowView {
 
         LargerGlobalChatView.instance = this;
 
-        $(document).ready(() => {
-            $('#closeLargerGlobalChatButton').off();
-            $('#closeLargerGlobalChatButton').on('click', (event) => {
-                $('#largerGlobalChat').hide();
-            })
+        $('#closeLargerGlobalChatButton').off();
+        $('#closeLargerGlobalChatButton').on('click', (event) => {
+            $('#largerGlobalChat').hide();
         })
+
+        $(document).on('mouseup', (e) => {
+            const globalChat = $('#globalChat');
+            const largerGlobalChat = $('#largerGlobalChat');
+            const inputField = $('#allchatMessageInput')
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!largerGlobalChat.is(e.target) && largerGlobalChat.has(e.target).length === 0 && !inputField.is(e.target) && inputField.has(e.target).length === 0 && !globalChat.is(e.target) && globalChat.has(e.target).length === 0) {
+                largerGlobalChat.hide();
+            }
+        });
     }
 
     /**
