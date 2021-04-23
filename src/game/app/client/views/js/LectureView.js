@@ -202,7 +202,7 @@ class LectureView extends WindowView {
         if (this.currentTimeDifference < 0) {
             $('#lecturePending').remove();
             $('#lectureVideo').append(`
-                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1080; padding: 15%;" class="text-center">
                     <div id="countdown"></div>
                     <div>seconds left till the</div>
                     <div>presentation starts</div>
@@ -349,9 +349,9 @@ class LectureView extends WindowView {
         if (this.hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
-                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" autocomplete="off" placeholder="Enter message ...">
+                    <input id="lectureChatInput" type="text" class="form-control chatInputGroup" autocomplete="off" placeholder="Enter message ...">
                     <div class="input-group-append">
-                        <button id="lectureChatButton" class="btn btn-blue mr-3" type="button">Send</button>
+                        <button id="lectureChatButton" class="btn btn-blue" type="button">Send</button>
                     </div>
                 `)
             }

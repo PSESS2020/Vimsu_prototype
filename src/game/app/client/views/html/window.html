@@ -348,37 +348,31 @@
 
 <div id="externalWebsiteWindowCollection"></div>
 
-<div class="lectureVideoWindow" id="lectureVideoWindow">
-    <div class="container-fluid p-1">
-        <div class="row">
-            <div class="lectureVideoHeader p-3 mb-3 d-flex align-items-center col-12">
-                <h5 class="ml-2" id="lectureTitleLabel"></h5>
-                <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel">
-                </div>
-                <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
-            </div>
-        </div>
-        <div class="row pl-0 pr-1 mt-4">
-            <div class="col-7 mr-4 ml-3">
-                <div id="lectureVideo"></div>
-                <div class="d-flex flex-row mb-4 ml-4 mt-4 align-items-center">
-                    <div id="tokenIcon"></div>
-                    <div>
-                        <p class="ml-2 mt-1" id="tokenLabel"></p>
-                    </div>
-                </div>
-            </div>
-            <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-0 mr-1 mb-6">
-                <div class="lectureChatHeader">
-                    <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
-                </div>
-                <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
-                </div>
-                <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
+<div class="window" id="lectureVideoWindow" style="width: 100%; height: 100%; z-index: 1070">
+    <div class="p-3 d-flex window-header align-items-center">
+        <h5 class="ml-2" id="lectureTitleLabel"></h5>
+        <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
+        <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
+    </div>
+    <div class="p-3 window-content d-flex justify-content-between">
+        <div class="col-8">
+            <div id="lectureVideo" style="height: 80%"></div>
+            <div class="d-flex flex-row mb-4 mt-4 align-items-center">
+                <div id="tokenIcon"></div>
+                <div>
+                    <p class="ml-2 mt-1" id="tokenLabel"></p>
                 </div>
             </div>
         </div>
-
+        <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-1 mb-6">
+            <div class="lectureChatHeader">
+                <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
+            </div>
+            <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
+            </div>
+            <div id="lectureChatInputGroup" class="input-group mb-3 mr-3 ml-2 mt-auto">
+            </div>
+        </div>
     </div>
 </div>
 

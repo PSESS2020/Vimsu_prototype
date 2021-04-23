@@ -61,6 +61,8 @@ class ScheduleListView extends WindowView {
      * draws schedule window
      */
     drawSchedule = function (interval) {
+        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
+        
         var count = 0;
         var now = Date.now();
 
