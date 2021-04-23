@@ -539,6 +539,13 @@ button:disabled {
   box-shadow: 0px 0px 0px transparent;
 }
 
+emoji-picker {
+  width: 350px;
+  height: 200px;
+  --num-columns: 9;
+  --background: rgba(34, 43, 46, 1);
+}
+
 .showRoomChat {
   color: antiquewhite;
 }

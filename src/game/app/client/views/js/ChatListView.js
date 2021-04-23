@@ -253,6 +253,7 @@ class ChatListView extends WindowView {
                             </div>
                         </div>
                     </div>
+                    
                     <div class="modal-body d-flex flex-column modal-body-large">
                         <div id=${"chatThreadWait" + chatID} style="text-align: center;">
                           <div class="spinner-border" role="status">
@@ -262,9 +263,11 @@ class ChatListView extends WindowView {
                         <div id=${"chatThreadModalList" + chatID} class="mb-3"
                             style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
                         </div>
+                        
                         <div class="d-flex">
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
-                                <button id="chatthread-emoji-trigger" class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
+                                
+                                <button id=${"chatthreadEmojiTrigger" + chatID} class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
                                 <input id=${"chatMessageInput" + chatID} type="text"
                                     style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite; border-radius: 5px 0px 0px 5px;"
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
@@ -277,9 +280,16 @@ class ChatListView extends WindowView {
                 </div>
             </div>
         </div>
+        <div style="position: relative; width: 0; height: 0; display: none; z-index: 1070" id=${"chatthreadEmojiPicker" + chatID + "Div"}>
+          <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+              <emoji-picker class="dark" id=${"chatthreadEmojiPicker" + chatID}></emoji-picker>
+          </div>
+        </div>
       `);
+
+      new EmojiPicker().draw('chatthreadEmojiTrigger' + chatID, 'chatthreadEmojiPicker' + chatID, `chatMessageInput${chatID}`, chatID)
     }
 
-    $("#chatThreadModal" + chatID).modal("show");
+    $("#chatThreadModal" + chatID).modal("show");    
   }
 }

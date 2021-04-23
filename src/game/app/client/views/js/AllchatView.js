@@ -44,7 +44,7 @@ class AllchatView extends Views {
             }
         }
 
-        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput")
+        new EmojiPicker().draw('allchatEmojiTrigger', 'allchatEmojiPicker', 'allchatMessageInput', undefined)
 
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();

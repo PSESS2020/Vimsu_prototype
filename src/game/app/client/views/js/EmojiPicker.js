@@ -21,33 +21,35 @@ class EmojiPicker extends Views {
 
     /**
      * Draws emoji picker window
-     * @param {String} position position of the window
-     * @param {String} emojiTriggerButtonId id of the emoji trigger button
+     * @param {String} emojiTriggerId id of the emoji trigger button
+     * @param {String} emojiPickerId id of the emoji picker button
      * @param {String} inputId input field id
+     * @param {?String} chatId chat id, if not chatthread then undefined
      */
-    draw(position, emojiTriggerButtonId, inputId) {
-        const picker = new EmojiButton({
-            theme: 'dark',
-            position: position,
-            emojiSize: '25px',
-            emojisPerRow: 8,
-            rows: 4,
-            showPreview: false,
-            showSearch: false,
-            autoHide: false
-        });
+    draw(emojiTriggerId, emojiPickerId, inputId, chatId) {
+        $('#' + emojiTriggerId).off()
+        $('#' + emojiTriggerId).on('click', (event) => {
+            event.preventDefault();
+            
+            if ($('#' + emojiPickerId + 'Div').css('display') !== 'none'){
+                $('#' + emojiPickerId + 'Div').hide()  
+            } else {                
+                $('#' + emojiPickerId + 'Div').show()  
 
-        const trigger = document.querySelector('#' + emojiTriggerButtonId);
-
-        picker.on('emoji', selectedEmoji => {
-            const messageInput = document.getElementById(inputId);
-            messageInput.value += selectedEmoji;
-        });
-
-        trigger.addEventListener('click', (event) => {
-            event.preventDefault()
-            picker.togglePicker(trigger);
-            $('.wrapper')[0].style.zIndex = 1050;
+                document.getElementById(emojiPickerId).shadowRoot.querySelector('.search-row').setAttribute('style', 'display:none');
+                document.getElementById(emojiPickerId).shadowRoot.querySelector('.favorites').setAttribute('style', 'display:none');
+            }
         })
+
+        if (chatId) {
+            $('#chatThreadModal' + chatId).on('hide.bs.modal', function (e) {
+                $('#' + emojiPickerId + 'Div').hide()  
+            })
+        }
+
+        document.getElementById(emojiPickerId).addEventListener('emoji-click', event => {
+            const messageInput = document.getElementById(inputId);
+            messageInput.value += event.detail.unicode;
+        }, false);
     }
 }

@@ -12,12 +12,20 @@
         </div>
         <div class="d-flex flex-column ml-4">
             <form id="allchat" action="">
-                <input id="allchatMessageInput" autocomplete="off" placeholder="" />
-                <button id="allchat-emoji-trigger" title="Pick emojis"><i
-                        class="fas fa-smile-beam navbarIcons"></i></button>
-                <button style="background-color: transparent" title="Send"><i
-                        class="fas fa-paper-plane navbarIcons"></i></button>
+                <span><input id="allchatMessageInput" autocomplete="off" placeholder="" /></span>
+                <button id="allchatEmojiTrigger" title="Pick emojis">
+                    <i class="fas fa-smile-beam navbarIcons"></i>
+                </button>
+                <button style="background-color: transparent" title="Send">
+                    <i class="fas fa-paper-plane navbarIcons"></i>
+                </button>
             </form>
+            <div style="position: relative; width: 0; height: 0; display: none; z-index: 1070"
+                id="allchatEmojiPickerDiv">
+                <div style="position: absolute;">
+                    <emoji-picker class="dark" id="allchatEmojiPicker"></emoji-picker>
+                </div>
+            </div>
         </div>
 
         <div class="d-flex flex-column ml-auto">
@@ -54,8 +62,8 @@
     <div class="d-flex flex-row col-12">
         <div class="d-flex flex-column" style="width: 250px;">
             <div style="z-index: 5">
-                <a class="action_button nav-item nav-link p-0 showRoomChat" id="showRoomChatDiv" role="button" onclick="" href=""
-                    style="float:left; text-align: left;"><span id="showRoomChat"></span>
+                <a class="action_button nav-item nav-link p-0 showRoomChat" id="showRoomChatDiv" role="button"
+                    onclick="" href="" style="float:left; text-align: left;"><span id="showRoomChat"></span>
                     <small>
                         (<span id="unreadAllchatMessage">0</span>)
                     </small>
@@ -178,3 +186,4 @@
         </div>
     </div>
 </div>
+
