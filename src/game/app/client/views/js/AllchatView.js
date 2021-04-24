@@ -50,14 +50,14 @@ class AllchatView extends Views {
         }
 
         const putCommandOnInput = () => {
-            const input = $('#allchatMessageInput')
-            input.val(this.lastCommands[counter]);
-            const inputLength = input.val().length;
+            var input = $('#allchatMessageInput')
+            input.val(this.lastCommands[counter] ? this.lastCommands[counter] : input.val());
 
+            var inputLength = input.val().length;
             setTimeout(() => {
                 input[0].focus()
                 input[0].setSelectionRange(inputLength, inputLength);
-            }, 0)
+            }, 1)
         }
 
         new EmojiPicker().draw('allchatEmojiTrigger', 'allchatEmojiPicker', 'allchatMessageInput')
@@ -65,7 +65,6 @@ class AllchatView extends Views {
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
             
-
             if (event.keyCode === 13) {
                 sendMessage(event);
             } else if (event.keyCode === 38) {
@@ -75,7 +74,7 @@ class AllchatView extends Views {
 
                 putCommandOnInput();
             } else if (event.keyCode === 40) {
-                if (counter !== -1) {
+                if (counter !== 0) {
                     --counter;
                 }
 

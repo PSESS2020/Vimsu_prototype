@@ -51,8 +51,54 @@ class EmojiPicker extends Views {
         });
 
         document.getElementById(emojiPickerId).addEventListener('emoji-click', event => {
-            const messageInput = document.getElementById(inputId);
-            messageInput.value += event.detail.unicode;
+            this.insertAtCursor(document.getElementById(inputId), event.detail.unicode)
         }, false);
+    }
+
+    insertAtCursor(inputField, valueToAdd) {
+        //IE support
+        if (document.selection) {
+            inputField.focus();
+            sel = document.selection.createRange();
+            sel.text = valueToAdd;
+        }
+        // Microsoft Edge
+        else if (window.navigator.userAgent.indexOf("Edge") > -1) {
+            var startPos = inputField.selectionStart;
+            var endPos = inputField.selectionEnd;
+
+            inputField.value = inputField.value.substring(0, startPos) + valueToAdd
+                + inputField.value.substring(endPos, inputField.value.length);
+        }
+        //MOZILLA and others
+        else if (inputField.selectionStart || inputField.selectionStart == '0') {
+            var startPos = inputField.selectionStart;
+            var endPos = inputField.selectionEnd;
+            inputField.value = inputField.value.substring(0, startPos)
+                + valueToAdd
+                + inputField.value.substring(endPos, inputField.value.length);
+        } else {
+            inputField.value += valueToAdd;
+        }
+        
+        var pos = startPos + valueToAdd.length;
+        inputField.focus();
+        inputField.setSelectionRange(pos, pos);
+
+        this.triggerEvent(inputField, 'input');
+    }
+
+    triggerEvent(inputField, valueToAdd) {
+        if ('createEvent' in document) {
+            // modern browsers, IE9+
+            var e = document.createEvent('HTMLEvents');
+            e.initEvent(valueToAdd, false, true);
+            inputField.dispatchEvent(e);
+        } else {
+            // IE 8
+            var e = document.createEventObject();
+            e.eventType = valueToAdd;
+            inputField.fireEvent('on' + e.eventType, e);
+        }
     }
 }
