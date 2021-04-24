@@ -155,7 +155,7 @@ class ClientController {
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
                 
                 if (reason === "transport close" || reason === "ping timeout" || reason === "transport error") {
-                    window.setTimeout(() => { this.openSocketConnection() }, 5000 );
+                    setTimeout(() => { this.openSocketConnection() }, 5000 );
                 } else {
                     this.socket.close();
                 }

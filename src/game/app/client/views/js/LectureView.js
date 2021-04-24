@@ -38,7 +38,7 @@ class LectureView extends WindowView {
 
         /* sets functions when document is ready, without this it is not possible to assign functions to
           appended buttons */
-        $(document).ready(() => {
+        $(document).on('ready', () => {
             $(document).on('click', '#lectureChatButton', () => {
                 this.sendMessage(event);
             });
