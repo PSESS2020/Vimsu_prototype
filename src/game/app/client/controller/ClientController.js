@@ -1330,8 +1330,11 @@ class ClientController {
             TypeChecker.isString(text);
             this.socket.emit('sendMessage', text);
 
-            if (!(text.startsWith("\\") && this.ownParticipant.getIsModerator()))
+            if (!(text.startsWith("\\") && this.ownParticipant.getIsModerator())) {
                 this.gameView.showAllchatBox()
+            } else if (text.startsWith("\\") && this.ownParticipant.getIsModerator()) {
+                this.gameView.saveCommand(text);
+            }
         }
         else {
             this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())

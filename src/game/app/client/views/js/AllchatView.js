@@ -6,6 +6,8 @@
  */
 class AllchatView extends Views {
 
+    lastCommands = [];
+
     /**
      * Creates an instance of Allchat View
      * 
@@ -32,12 +34,15 @@ class AllchatView extends Views {
             this.hideAllchatBox()
         })
 
+        let counter = -1;
+
         const sendMessage = (event) => {
             event.preventDefault();
             //Replace needed to replace html tags.
-            let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             if (messageVal !== '') {
+                counter = -1;
                 eventManager.handleAllchatMessageInput(messageVal)
                 $('#allchatMessageInput').val('');
                 return false;
@@ -51,12 +56,32 @@ class AllchatView extends Views {
 
             if (event.keyCode === 13) {
                 sendMessage(event);
+            } else if (event.keyCode === 38) {
+                if (counter !== this.lastCommands.length - 1) {
+                    ++counter;
+                }
+
+                $('#allchatMessageInput').val(this.lastCommands[counter]);
+            } else if (event.keyCode === 40) {
+                if (counter !== -1) {
+                    --counter;
+                }
+
+                $('#allchatMessageInput').val(this.lastCommands[counter]);
             }
         });
 
         $('#allchat').on('submit', (event) => {
             sendMessage(event)
         });
+    }
+
+    /**
+     * Adds command into last commands array
+     * @param {String} command last command
+     */
+    saveCommand(command) {
+        this.lastCommands.unshift(command);
     }
 
     /**
