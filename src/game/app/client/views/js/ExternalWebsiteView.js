@@ -63,41 +63,39 @@
         $('#closeBtn' + gameObjectID).off();
         $('#closeBtn' + gameObjectID).on('click', (event) => {
             event.preventDefault();
-
-            if (fullScreenMode) {
-                this.exitFullscreenMode(gameObjectID, width, height);
-                fullScreenMode = false;
-            }
-
-            /* Needed to stop video after close button click */
-            $('.iframeclass').each(function() {
-                var el_src = $(this).attr("src");
-                $(this).attr("src",el_src);
-            });
-
-            $('#externalWebsiteWindow' + gameObjectID).hide();
+            handleClose()
         });
 
         $(document).on('mouseup', (e) => {
             const externalWebsiteWindow = $(`#externalWebsiteWindow${gameObjectID}`);
 
-            // if the target of the click isn't the container nor a descendant of the container
-            if (!externalWebsiteWindow.is(e.target) && externalWebsiteWindow.has(e.target).length === 0) {
+            const descendants = [externalWebsiteWindow];
+            let isNotDescendant = true;
 
-                if (fullScreenMode) {
-                    this.exitFullscreenMode(gameObjectID, width, height);
-                    fullScreenMode = false;
-                }
-                
-                /* Needed to stop video */
-                $('.iframeclass').each(function() {
-                    var el_src = $(this).attr("src");
-                    $(this).attr("src",el_src);
-                });
-                               
-                externalWebsiteWindow.hide();
+            descendants.forEach(descendant => {
+                isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
+            })
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (isNotDescendant) {
+                handleClose()
             }
         });
+
+        function handleClose() {
+            if (fullScreenMode) {
+                this.exitFullscreenMode(gameObjectID, width, height);
+                fullScreenMode = false;
+            }
+            
+            /* Needed to stop video */
+            $('.iframeclass').each(function() {
+                var el_src = $(this).attr("src");
+                $(this).attr("src",el_src);
+            });
+                           
+            $('#externalWebsiteWindow' + gameObjectID).hide();
+        }
      }
 
     /**
