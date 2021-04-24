@@ -28,7 +28,7 @@ class AllchatView extends Views {
             event.preventDefault();
             this.showAllchatBox()
         })
-        
+
         $('#allchatWindowMinimize').on('click', (event) => {
             event.preventDefault();
             this.hideAllchatBox()
@@ -49,10 +49,22 @@ class AllchatView extends Views {
             }
         }
 
+        const putCommandOnInput = () => {
+            const input = $('#allchatMessageInput')
+            input.val(this.lastCommands[counter]);
+            const inputLength = input.val().length;
+
+            setTimeout(() => {
+                input[0].focus()
+                input[0].setSelectionRange(inputLength, inputLength);
+            }, 0)
+        }
+
         new EmojiPicker().draw('allchatEmojiTrigger', 'allchatEmojiPicker', 'allchatMessageInput')
 
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
+            
 
             if (event.keyCode === 13) {
                 sendMessage(event);
@@ -61,13 +73,13 @@ class AllchatView extends Views {
                     ++counter;
                 }
 
-                $('#allchatMessageInput').val(this.lastCommands[counter]);
+                putCommandOnInput();
             } else if (event.keyCode === 40) {
                 if (counter !== -1) {
                     --counter;
                 }
 
-                $('#allchatMessageInput').val(this.lastCommands[counter]);
+                putCommandOnInput();
             }
         });
 
@@ -116,18 +128,18 @@ class AllchatView extends Views {
     showAllchatBox() {
         $("#allchatWindow").show()
         $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-        $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
+        $("#allchatWindow").animate({ "left": "15px" }, Settings.TOGGLE_SPEED);
         $('#showRoomChatDiv').hide();
         $("#unreadAllchatMessage").text(0)
     }
 
     hideAllchatBox() {
-        $("#allchatWindow").animate({"left":"-250px"}, Settings.TOGGLE_SPEED);
-            
+        $("#allchatWindow").animate({ "left": "-250px" }, Settings.TOGGLE_SPEED);
+
         setTimeout(() => {
             $("#allchatWindow").hide()
         }, Settings.TOGGLE_SPEED)
-        
+
         $("#unreadAllchatMessage").text(0)
         $('#showRoomChatDiv').show();
     }
