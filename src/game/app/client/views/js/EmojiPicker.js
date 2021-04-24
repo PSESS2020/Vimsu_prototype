@@ -43,9 +43,10 @@ class EmojiPicker extends Views {
         $(document).on('mouseup', (e) => {
             const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
             const inputField = $('#' + inputId);
+            const emojiTrigger = $('#' + emojiTriggerId);
 
             // if the target of the click isn't the container nor a descendant of the container
-            if (!emojiPickerDiv.is(e.target) && emojiPickerDiv.has(e.target).length === 0 && !inputField.is(e.target) && inputField.has(e.target).length === 0) {
+            if (!emojiPickerDiv.is(e.target) && emojiPickerDiv.has(e.target).length === 0 && !inputField.is(e.target) && inputField.has(e.target).length === 0 && !emojiTrigger.is(e.target) && emojiTrigger.has(e.target).length === 0) {
                 emojiPickerDiv.hide();
             }
         });
