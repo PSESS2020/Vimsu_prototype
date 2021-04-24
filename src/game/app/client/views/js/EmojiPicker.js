@@ -56,6 +56,12 @@ class EmojiPicker extends Views {
         }, false);
     }
 
+    /**
+     * insert value at current cursor
+     * 
+     * @param {Object} inputField input field
+     * @param {String} valueToAdd value to add in the input field
+     */
     insertAtCursor(inputField, valueToAdd) {
         //IE support
         if (document.selection) {
@@ -85,21 +91,5 @@ class EmojiPicker extends Views {
         var pos = startPos + valueToAdd.length;
         inputField.focus();
         inputField.setSelectionRange(pos, pos);
-
-        this.triggerEvent(inputField, 'input');
-    }
-
-    triggerEvent(inputField, valueToAdd) {
-        if ('createEvent' in document) {
-            // modern browsers, IE9+
-            var e = document.createEvent('HTMLEvents');
-            e.initEvent(valueToAdd, false, true);
-            inputField.dispatchEvent(e);
-        } else {
-            // IE 8
-            var e = document.createEventObject();
-            e.eventType = valueToAdd;
-            inputField.fireEvent('on' + e.eventType, e);
-        }
     }
 }
