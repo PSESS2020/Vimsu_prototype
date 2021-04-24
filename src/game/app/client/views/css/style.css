@@ -223,10 +223,10 @@ form button:hover {
 }
 
 .chatInputGroup {
-  background-color: #1b1e24; 
-  color: antiquewhite; 
-  border-color: antiquewhite; 
-  border-radius: 5px 0px 0px 5px;
+  background-color: #1b1e24 !important; 
+  color: antiquewhite !important; 
+  border-color: antiquewhite !important; 
+  border-radius: 5px 0px 0px 5px !important;
 }
 
 .navbarIcons {
