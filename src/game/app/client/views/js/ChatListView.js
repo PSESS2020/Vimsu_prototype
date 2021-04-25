@@ -30,7 +30,7 @@ class ChatListView extends WindowView {
     $('#newGroupChat').on('click', (event) => {
       event.preventDefault();
       $('#inputGroupNameModal').modal('show')
-      $('#groupNameInput').trigger('focus') 
+      $('#groupNameInput').trigger('focus')
     });
   }
 
@@ -268,8 +268,8 @@ class ChatListView extends WindowView {
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
                                 
                                 <button id=${"chatthreadEmojiTrigger" + chatID} class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
-                                <input id=${"chatMessageInput" + chatID} type="text"
-                                    class="form-control chatInputGroup" placeholder="Enter message ..." autocomplete="off">
+                                <textarea id=${"chatMessageInput" + chatID} type="text"
+                                    class="form-control chatInputGroup" placeholder="Enter message ..." autocomplete="off" rows="1"></textarea>
                                 <div class="input-group-append">
                                     <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
                                 </div>
@@ -289,6 +289,6 @@ class ChatListView extends WindowView {
       new EmojiPicker().draw('chatthreadEmojiTrigger' + chatID, 'chatthreadEmojiPicker' + chatID, `chatMessageInput${chatID}`)
     }
 
-    $("#chatThreadModal" + chatID).modal("show");    
+    $("#chatThreadModal" + chatID).modal("show");
   }
 }

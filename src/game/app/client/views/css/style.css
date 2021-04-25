@@ -32,6 +32,7 @@ textarea {
   -ms-user-select: text;
   user-select: text;
   outline: none;
+  resize: none;
 }
 
 .form-control:focus {
