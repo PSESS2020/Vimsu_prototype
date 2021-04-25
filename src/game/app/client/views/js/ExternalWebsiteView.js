@@ -146,7 +146,7 @@ class ExternalWebsiteView extends WindowView {
                             <i class="fa fa-close"></i>
                         </button>
                     </div>
-                    <div class="p-3 window-content">
+                    <div class="p-3 window-content" style="overflow-y: hidden">
                         <div id="externalWebsiteWindowWait${gameObjectID}" style="text-align: center;">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
