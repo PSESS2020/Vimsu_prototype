@@ -24,7 +24,7 @@ class CurrentLecturesView extends WindowView {
 
         this.eventManager = eventManager;
 
-        $(document).on('ready', () => {
+        $(function () {
             $('#closeCurrentLecturesButton').off();
             $('#closeCurrentLecturesButton').on('click', (event) => {
                 this.eventManager.handleClearInterval();
