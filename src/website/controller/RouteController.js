@@ -137,30 +137,33 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/contact-us', (request, response) => {
+            const vimsuDefaultEmail = process.env.VIMSU_DEFAULT_EMAIL;
+
             if (request.session.loggedin === true) {
-                response.render('contact-us', this.#getLoggedInParameters({ email: '', message: '' }, request.session.username));
+                response.render('contact-us', this.#getLoggedInParameters({ email: '', message: '', vimsu_default_email: vimsuDefaultEmail }, request.session.username));
             } else {
-                response.render('contact-us', { email: '', message: '' });
+                response.render('contact-us', { email: '', message: '', vimsu_default_email: vimsuDefaultEmail });
             }
         });
 
         this.#app.post('/contact-us', (request, response) => {
             const vimsuEmail = process.env.VIMSU_NOREPLY_EMAIL;
+            const vimsuDefaultEmail = process.env.VIMSU_DEFAULT_EMAIL;
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (request.body.email && !emailRegex.test(String(request.body.email).toLowerCase())) {
                 if (request.session.loggedin === true) {
-                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true, email: request.body.email, message: request.body.message }, request.session.username));
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidEmail: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail }, request.session.username));
                 } else {
-                    return response.render('contact-us', { invalidEmail: true, email: request.body.email, message: request.body.message });
+                    return response.render('contact-us', { invalidEmail: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail });
                 }
             }
 
             if (!request.body.message) {
                 if (request.session.loggedin === true) {
-                    return response.render('contact-us', this.#getLoggedInParameters({ invalidMessage: true, email: request.body.email, message: request.body.message }, request.session.username));
+                    return response.render('contact-us', this.#getLoggedInParameters({ invalidMessage: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail }, request.session.username));
                 } else {
-                    return response.render('contact-us', { invalidMessage: true, email: request.body.email, message: request.body.message });
+                    return response.render('contact-us', { invalidMessage: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail });
                 }
             }
 
@@ -168,7 +171,7 @@ module.exports = class RouteController {
 
             const mailOptions = {
                 from: vimsuEmail,
-                to: process.env.VIMSU_DEFAULT_EMAIL,
+                to: vimsuDefaultEmail,
                 subject: "New message from contact us form",
                 html: `
                     <p>From: <a href="mailto:${request.body.email}">${request.body.email}</a></p>
@@ -179,13 +182,13 @@ module.exports = class RouteController {
             return this.#sendMail(mailOptions, vimsuEmail, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
                 if (result === true) {
                     if (request.session.loggedin === true) {
-                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true, email: '', message: '' }, request.session.username));
+                        response.render('contact-us', this.#getLoggedInParameters({ messageSent: true, email: '', message: '', vimsu_default_email: vimsuDefaultEmail }, request.session.username));
                     } else {
-                        response.render('contact-us', { messageSent: true, email: '', message: '' });
+                        response.render('contact-us', { messageSent: true, email: '', message: '', vimsu_default_email: vimsuDefaultEmail });
                     }
 
                     if (request.body.email) {
-                        const from = process.env.VIMSU_NOREPLY_EMAIL;
+                        const from = vimsuEmail;
                         const subject = "Your message to VIMSU";
                         const message = `
                             This is a confirmation message that we have received your message and will get back to you as soon as possible.<br><br>
@@ -198,9 +201,9 @@ module.exports = class RouteController {
                     }
                 } else {
                     if (request.session.loggedin === true) {
-                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true, email: request.body.email, message: request.body.message }, request.session.username));
+                        response.render('contact-us', this.#getLoggedInParameters({ sendMessageFailed: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail }, request.session.username));
                     } else {
-                        response.render('contact-us', { sendMessageFailed: true, email: request.body.email, message: request.body.message });
+                        response.render('contact-us', { sendMessageFailed: true, email: request.body.email, message: request.body.message, vimsu_default_email: vimsuDefaultEmail });
                     }
                 }
             })
