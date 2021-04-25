@@ -1,5 +1,5 @@
 /**
- * Group commands that a moderator/orator can enter
+ * Group commands that a moderator can enter in allchat
  * @module GroupCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher

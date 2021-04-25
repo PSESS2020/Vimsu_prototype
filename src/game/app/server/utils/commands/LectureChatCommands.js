@@ -1,5 +1,5 @@
 /**
- * Lecture Chat commands that a moderator/orator can enter
+ * General commands that a moderator/orator can enter in lecture chat
  * @module LectureChatCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher

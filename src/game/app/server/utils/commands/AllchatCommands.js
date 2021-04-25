@@ -1,5 +1,5 @@
 /**
- * Allchat commands that a moderator/orator can enter
+ * General commands that a moderator can enter in allchat
  * @module AllchatCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher

@@ -1,5 +1,5 @@
 /**
- * Allchat message commands that a moderator/orator can enter
+ * Message commands that a moderator can enter in allchat and a moderator/orator can enter in lecture chat
  * @module MessageCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
