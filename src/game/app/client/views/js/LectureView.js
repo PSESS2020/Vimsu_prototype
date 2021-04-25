@@ -47,7 +47,7 @@ class LectureView extends WindowView {
                 if (document.activeElement === $("#lectureChatInput")[0]) {
                     e.stopPropagation();
 
-                    if (e.keyCode === 13 && !e.shiftKey)
+                    if (e.key === 'Enter' && !e.shiftKey)
                         this.sendMessage(e);
                 }
             });

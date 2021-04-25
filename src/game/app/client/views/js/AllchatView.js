@@ -65,15 +65,15 @@ class AllchatView extends Views {
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
             
-            if (event.keyCode === 13 && !event.shiftKey) {
+            if (event.key === 'Enter' && !event.shiftKey) {
                 sendMessage(event);
-            } else if (event.keyCode === 38) {
+            } else if (event.key === 'ArrowUp') {
                 if (counter !== this.lastCommands.length - 1) {
                     ++counter;
                 }
 
                 putCommandOnInput();
-            } else if (event.keyCode === 40) {
+            } else if (event.key === 'ArrowDown') {
                 if (counter !== 0) {
                     --counter;
                 }
