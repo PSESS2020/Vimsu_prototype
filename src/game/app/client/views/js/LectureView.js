@@ -39,16 +39,16 @@ class LectureView extends WindowView {
         /* sets functions when document is ready, without this it is not possible to assign functions to
           appended buttons */
         $(document).on('ready', () => {
-            $(document).on('click', '#lectureChatButton', () => {
-                this.sendMessage(event);
+            $(document).on('click', '#lectureChatButton', (e) => {
+                this.sendMessage(e);
             });
 
             $(document).on('keydown', (e) => {
                 if (document.activeElement === $("#lectureChatInput")[0]) {
                     e.stopPropagation();
 
-                    if (e.keyCode === 13)
-                        this.sendMessage(event);
+                    if (e.keyCode === 13 && !e.shiftKey)
+                        this.sendMessage(e);
                 }
             });
 

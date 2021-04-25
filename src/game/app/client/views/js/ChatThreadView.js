@@ -235,7 +235,7 @@ class ChatThreadView extends WindowView {
         $('#chatMessageInputGroup' + this.chat.chatId).on('keydown', (event) => {
             event.stopPropagation();
 
-            if (event.keyCode === 13) {
+            if (event.keyCode === 13 && !event.shiftKey) {
                 event.preventDefault();
                 this.sendMessage();
             }

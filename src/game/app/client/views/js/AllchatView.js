@@ -65,7 +65,7 @@ class AllchatView extends Views {
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
             
-            if (event.keyCode === 13) {
+            if (event.keyCode === 13 && !event.shiftKey) {
                 sendMessage(event);
             } else if (event.keyCode === 38) {
                 if (counter !== this.lastCommands.length - 1) {
