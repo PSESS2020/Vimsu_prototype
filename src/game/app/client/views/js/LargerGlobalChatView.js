@@ -26,16 +26,18 @@ class LargerGlobalChatView extends WindowView {
         $(document).on('mouseup', (e) => {
             const largerGlobalChat = $('#largerGlobalChat');
 
-            const descendants = [largerGlobalChat, $('#allchatMessageInput'), $('#globalChat'), $('#allchatSendButton')]
-            let isNotDescendant = true;
+            if (largerGlobalChat.is(':visible')) {
+                const descendants = [largerGlobalChat, $('#allchatMessageInput'), $('#globalChat'), $('#allchatSendButton')]
+                let isNotDescendant = true;
 
-            descendants.forEach(descendant => {
-                isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-            })
+                descendants.forEach(descendant => {
+                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                })
 
-            // if the target of the click isn't the container nor a descendant of the container
-            if (isNotDescendant) {
-                largerGlobalChat.hide();
+                // if the target of the click isn't the container nor a descendant of the container
+                if (isNotDescendant) {
+                    largerGlobalChat.hide();
+                }
             }
         });
     }

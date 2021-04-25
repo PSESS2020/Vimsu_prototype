@@ -43,16 +43,18 @@ class EmojiPicker extends Views {
         $(document).on('mouseup', (e) => {
             const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
 
-            const descendants = [emojiPickerDiv, $('#' + inputId), $('#' + emojiTriggerId)]
-            let isNotDescendant = true;
+            if (emojiPickerDiv.css('display') !== 'none') {
+                const descendants = [emojiPickerDiv, $('#' + inputId), $('#' + emojiTriggerId)]
+                let isNotDescendant = true;
 
-            descendants.forEach(descendant => {
-                isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-            })
+                descendants.forEach(descendant => {
+                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                })
 
-            // if the target of the click isn't the container nor a descendant of the container
-            if (isNotDescendant) {
-                emojiPickerDiv.hide();
+                // if the target of the click isn't the container nor a descendant of the container
+                if (isNotDescendant) {
+                    emojiPickerDiv.hide();
+                }
             }
         });
 
@@ -92,7 +94,7 @@ class EmojiPicker extends Views {
         } else {
             inputField.value += valueToAdd;
         }
-        
+
         var pos = startPos + valueToAdd.length;
         inputField.focus();
         inputField.setSelectionRange(pos, pos);

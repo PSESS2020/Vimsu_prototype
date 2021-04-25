@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
- class ExternalWebsiteView extends WindowView {
+class ExternalWebsiteView extends WindowView {
 
     /**
      * Creates an instance of ExternalWebsiteView
@@ -29,7 +29,7 @@
      * @param {number} iFrameData.height height of iframe in px
      * @param {String} gameObjectID GameObject Id
      */
-     draw(iFrameData, gameObjectID) {
+    draw(iFrameData, gameObjectID) {
         $('#externalWebsiteWindowWait' + gameObjectID).hide();
         $("#externalWebsiteWindowTitle" + gameObjectID).empty();
         $('#externalWebsiteWindowBody' + gameObjectID).empty();
@@ -69,16 +69,18 @@
         $(document).on('mouseup', (e) => {
             const externalWebsiteWindow = $(`#externalWebsiteWindow${gameObjectID}`);
 
-            const descendants = [externalWebsiteWindow];
-            let isNotDescendant = true;
+            if (externalWebsiteWindow.is(':visible')) {
+                const descendants = [externalWebsiteWindow];
+                let isNotDescendant = true;
 
-            descendants.forEach(descendant => {
-                isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-            })
+                descendants.forEach(descendant => {
+                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                })
 
-            // if the target of the click isn't the container nor a descendant of the container
-            if (isNotDescendant) {
-                handleClose()
+                // if the target of the click isn't the container nor a descendant of the container
+                if (isNotDescendant) {
+                    handleClose()
+                }
             }
         });
 
@@ -87,16 +89,16 @@
                 this.exitFullscreenMode(gameObjectID, width, height);
                 fullScreenMode = false;
             }
-            
+
             /* Needed to stop video */
-            $('.iframeclass').each(function() {
+            $('.iframeclass').each(function () {
                 var el_src = $(this).attr("src");
-                $(this).attr("src",el_src);
+                $(this).attr("src", el_src);
             });
-                           
+
             $('#externalWebsiteWindow' + gameObjectID).hide();
         }
-     }
+    }
 
     /**
      * Enter FullscreenMode
@@ -125,7 +127,7 @@
         document.getElementById("iframe" + gameObjectID).height = height;
         document.getElementById("iframe" + gameObjectID).scrolling = 'no';
     }
-    
+
     /**
      * Add new External Website window
      * 
