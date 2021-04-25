@@ -164,13 +164,15 @@ module.exports = class RouteController {
                 }
             }
 
+            const filteredMessage = request.body.message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
+
             const mailOptions = {
                 from: vimsuEmail,
                 to: process.env.VIMSU_DEFAULT_EMAIL,
                 subject: "New message from contact us form",
                 html: `
                     <p>From: <a href="mailto:${request.body.email}">${request.body.email}</a></p>
-                    <p>Message:<br>${request.body.message}</p>
+                    <p>Message:<br>${filteredMessage}</p>
                 `
             }
 
@@ -187,7 +189,7 @@ module.exports = class RouteController {
                         const subject = "Your message to VIMSU";
                         const message = `
                             This is a confirmation message that we have received your message and will get back to you as soon as possible.<br><br>
-                            <small>Your message:<br>${request.body.message}</small>
+                            <small>Your message:<br>${filteredMessage}</small>
                         `;
                         const messageReason = "we received a message from the contact us form";
 
