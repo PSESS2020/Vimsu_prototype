@@ -136,7 +136,7 @@ class ExternalWebsiteView extends WindowView {
     addNewExternalWebsiteWindow(gameObjectID) {
         if (!($('#externalWebsiteWindow' + gameObjectID).length)) {
             $('#externalWebsiteWindowCollection').append(`
-                <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050">
+                <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050; max-width: 100%; max-height: 100%">
                     <div class="p-3 d-flex window-header">
                         <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
                         <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-2 pr-2">
@@ -146,7 +146,7 @@ class ExternalWebsiteView extends WindowView {
                             <i class="fa fa-close"></i>
                         </button>
                     </div>
-                    <div class="p-3 window-content" style="overflow-y: hidden">
+                    <div class="p-3 window-content">
                         <div id="externalWebsiteWindowWait${gameObjectID}" style="text-align: center;">
                             <div class="spinner-border" role="status">
                                 <span class="sr-only">Loading...</span>
