@@ -406,7 +406,7 @@ module.exports = class ServerController {
                 let roomID = participant.getPosition().getRoomId();
                 let room = this.#getRoomById(roomID);
                 let username = participant.getBusinessCard().getUsername();
-                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -582,7 +582,7 @@ module.exports = class ServerController {
                 let lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 let lecture = this.#conference.getSchedule().getLecture(lectureID);
                 let lectureChat = lecture.getLectureChat();
-                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 if (!lecture.isOpened() && !lecture.isEnded()) {
                     return;
@@ -1531,7 +1531,7 @@ module.exports = class ServerController {
                     return;
 
                 let senderUsername = sender.getBusinessCard().getUsername();
-                msgText = msgText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                msgText = msgText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 if (sender.isMemberOfChat(chatId)) {
                     //gets list of chat participants to which send the message to
