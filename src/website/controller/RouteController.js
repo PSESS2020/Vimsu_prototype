@@ -16,6 +16,7 @@ const ServerController = require('../../game/app/server/controller/ServerControl
 const TypeOfRole = require('../utils/TypeOfRole');
 const handlebars = require("handlebars");
 const fs = require("fs");
+const LectureService = require('../../game/app/server/services/LectureService');
 
 /**
  * The Route Controller
@@ -591,6 +592,9 @@ module.exports = class RouteController {
             } else if (clickedButton === "deleteAccountButton") {
                 return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, '', this.#db).then(ppantIdOfDeletedAcc => {
                     if (ppantIdOfDeletedAcc !== false) {
+                        if (Settings.VIDEOSTORAGE_ACTIVATED) {
+                            LectureService.deleteLecturesByOratorId(this.#db, this.#blob, accountId);
+                        }
                         if (ppantIdOfDeletedAcc !== "")
                             this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
                         
