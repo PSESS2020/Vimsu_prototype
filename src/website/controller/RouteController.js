@@ -468,7 +468,7 @@ module.exports = class RouteController {
         });
 
         this.#app.post('/register', (request, response) => {
-            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
+            const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,32}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
             if (!usernameRegex.test(request.body.username)) {
                 return response.render('register', { invalidUsernameString: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
@@ -553,7 +553,7 @@ module.exports = class RouteController {
             const accountId = request.session.accountId;
 
             if (clickedButton === "saveChangesButton") {
-                const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,10}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
+                const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,32}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
                 if (!usernameRegex.test(request.body.username)) {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidUsernameString: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));

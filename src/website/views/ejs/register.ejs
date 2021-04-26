@@ -46,7 +46,7 @@
                 <form action="" method="POST">
                     <div class="form-group">
                         <label for="username" class="input-label">Username&nbsp<span class="warning">*</span></label>
-                        <input class="form-control" type="text" id="usernameInput" name="username" placeholder="maxmuster" maxlength="10" required value="<%=username%>">
+                        <input class="form-control" type="text" id="usernameInput" name="username" placeholder="maxmuster" maxlength="32" required value="<%=username%>">
                     </div>
                     <div class="form-group">
                         <label for="email" class="input-label">Email&nbsp<span class="warning">*</span></label>
@@ -118,7 +118,7 @@
             document.getElementById("inputTitle").value = title ? title : "Title";
         })
 
-        $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-10 characters containing only numbers, letters, and characters such as dash, underscore, or dot. No 2 characters in a row or any characters at the start or at the end.'});
+        $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-32 characters containing only numbers, letters, and characters such as dash, underscore, or dot. 2 characters in a row or any characters at the start or at the end are not allowed.'});
     </script>
 </body>
 
