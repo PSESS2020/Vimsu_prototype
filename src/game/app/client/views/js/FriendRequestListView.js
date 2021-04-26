@@ -55,7 +55,7 @@ class FriendRequestListView extends WindowView {
         $('#friendRequestListModal .modal-body .list-group').prepend(`
             <li class="list-group-item bg-transparent" id="${"friendRequest" + businessCard.getParticipantId()}">
                 <div class="row w-100">
-                    <div class="col-2 px-0">
+                    <div class="col-2 px-0 my-auto">
                         <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                     </div>
                     <div class="col-8 text-left">

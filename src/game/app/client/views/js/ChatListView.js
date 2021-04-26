@@ -102,7 +102,7 @@ class ChatListView extends WindowView {
         <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
           <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
             <div class="row w-100">
-              <div class="col-2 px-0">
+              <div class="col-2 px-0 my-auto">
                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
               </div>
               <div class="col-10 text-left">
@@ -175,10 +175,13 @@ class ChatListView extends WindowView {
   addNewMessage(chatID, message) {
     this.chats.forEach(chat => {
       if (chat.chatId === chatID) {
+
+        let msgText = message.msgText;
+
         if (message.msgText.length > 35) {
-          var msgText = message.msgText.slice(0, 35) + "...";
-        } else {
-          var msgText = message.msgText;
+          msgText = message.msgText.slice(0, 35) + "...";
+        } else if (msgText.includes('<br/>')) {
+            msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
         }
 
         chat.timestamp = message.timestamp;

@@ -63,7 +63,7 @@ class InviteFriendsView extends WindowView {
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent" >
                             <div class="row w-100">
-                                <div class="col-2 px-0">
+                                <div class="col-2 px-0 my-auto">
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
                                 <div class="col-9 text-left">
