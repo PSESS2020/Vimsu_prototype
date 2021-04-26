@@ -24,11 +24,9 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }).then(ppants => {
-            var rankList = ppants.sort((a, b) => b.points - a.points);
-
-            var rank = 1;
-            for (var i = 0; i < rankList.length; i++) {
+        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }, { points: -1 }).then(rankList => {
+            let rank = 1;
+            for (let i = 0; i < rankList.length; i++) {
                 // increase rank only if current points less than previous
                 if (i > 0 && rankList[i].points < rankList[i - 1].points) {
                     rank = i + 1;
@@ -55,9 +53,9 @@ module.exports = class RankListService {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
-            var rankListLength = 1;
-            for (var i = rankList.length - 1; i >= 0; i--) {
+            let rankListLength = 1;
 
+            for (let i = rankList.length - 1; i >= 0; i--) {
                 if (rankList[i].rank <= lastRank) {
                     rankListLength = rankListLength + i;
                     rankList = rankList.slice(0, rankListLength);
@@ -66,8 +64,7 @@ module.exports = class RankListService {
             }
 
             return Promise.all(rankList.map(async ppant => {
-                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb)
-                ppant.username = username;
+                ppant.username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb);
             })).then(res => {
                 return rankList;
             })
@@ -91,12 +88,7 @@ module.exports = class RankListService {
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
-            if (idx < 0)
-                var rank = undefined;
-            else
-                var rank = rankList[idx].rank;
-
-            return rank;
+            return idx >= 0 ? rankList[idx].rank : undefined;
         })
     }
-} 
+}

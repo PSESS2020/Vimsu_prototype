@@ -92,6 +92,7 @@ module.exports = class db {
      * @method module:db#findAllInCollection
      * 
      * @param {String} collectionName collection name
+     * @param {?Object} sortedBy sorted by
      * 
      * @return {Object[]} documents
      */
@@ -99,7 +100,7 @@ module.exports = class db {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.find().toArray()
+        return collection.find().sort(sortedBy).toArray()
             .then(results => {
                 return results;
             })
@@ -114,15 +115,16 @@ module.exports = class db {
      * 
      * @param {String} collectionName collection name
      * @param {Object} query query
-     * @param {Object} projection projection
+     * @param {?Object} projection projection
+     * @param {?Object} sortedBy sorted by
      * 
      * @return {Object[]} documents
      */
-    findInCollection(collectionName, query, projection) {
+    findInCollection(collectionName, query, projection, sortedBy) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.find(query, { projection: projection }).toArray()
+        return collection.find(query, { projection: projection }).sort(sortedBy).toArray()
             .then(results => {
                 return results;
             })
