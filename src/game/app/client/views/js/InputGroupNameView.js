@@ -23,7 +23,7 @@ class InputGroupNameView extends WindowView {
         $('#groupName').on('submit', (event) => {
             event.preventDefault();
             let groupName = $('#groupNameInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            if (groupName.length > 20) {
+            if (groupName.length > 64) {
                 return false;
             }
 

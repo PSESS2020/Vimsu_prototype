@@ -940,8 +940,8 @@ module.exports = class ServerController {
                 let ppantID = socket.ppantID;
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
-                if (!groupName || groupName.length > 20) {
-                    //group name is empty or has length more than 20 chars
+                if (!groupName || groupName.length > 64) {
+                    //group name is empty or has length more than 64 chars
 
                     socket.emit('inviteFriends', undefined, groupName, undefined, undefined);
                 } else {
