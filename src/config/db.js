@@ -96,7 +96,7 @@ module.exports = class db {
      * 
      * @return {Object[]} documents
      */
-    findAllInCollection(collectionName) {
+    findAllInCollection(collectionName, sortedBy) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
