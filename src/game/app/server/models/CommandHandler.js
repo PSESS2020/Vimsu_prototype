@@ -4,6 +4,7 @@ const DoorCommands = require('../utils/commands/DoorCommands.js');
 const GroupCommands = require('../utils/commands/GroupCommands.js');
 const MessageCommands = require('../utils/commands/MessageCommands.js');
 const PortCommands = require('../utils/commands/PortCommands.js');
+const RoomCommands = require('../utils/commands/RoomCommands.js');
 const CommandMessages = require('../utils/messages/CommandMessages.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const CommandContext = require('./CommandContext.js');
@@ -28,6 +29,7 @@ module.exports = class CommandHandler {
     #groupCommandList;
     #msgCommandList;
     #portCommandList;
+    #roomCommandList;
 
     /**
      * Creates a command handler instance
@@ -51,6 +53,7 @@ module.exports = class CommandHandler {
         this.#groupCommandList = Object.values(GroupCommands);
         this.#msgCommandList = Object.values(MessageCommands);
         this.#portCommandList = Object.values(PortCommands);
+        this.#roomCommandList = Object.values(RoomCommands);
     }
 
     /**
@@ -183,6 +186,32 @@ module.exports = class CommandHandler {
                 this[commandToExecute](socket, context, commandArgs);
             } else {
                 this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNPORTCOMMAND);
+            }
+        }
+    }
+
+    /**
+     * Handles a room command, where context is the room in which it was send 
+     * @method module:CommandHandler#handleRoomCommand
+     * 
+     * @param {SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    handleRoomCommand(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        if (commandArgs.length < 1) {
+            this.#serverController.sendLargeNotification(socket.id, CommandMessages.ROOMCOMMANDS);
+        } else {
+            let roomCommandType = commandArgs[0];
+            commandArgs = commandArgs.slice(1);
+        
+            if (this.#knowsCommand(this.#roomCommandList, roomCommandType)) {
+                var commandToExecute = this.#getMethodString(this.#roomCommandList, roomCommandType);
+                this[commandToExecute](socket, context, commandArgs);
+            } else {
+                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNROOMCOMMAND);
             }
         }
     }
@@ -389,6 +418,71 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
         context.close();
     };
+
+    /**
+     * Gives a list of all currently online participants with their username to Moderator
+     * @method module:CommandHandler#logAllParticipants
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    logAllParticipants(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+        
+        let ppants = this.#serverController.getOnlineParticipants();
+        let allUsernames = [];
+        for (let i = 0; i < ppants.length; i++) {
+            allUsernames.push(ppants[i].getBusinessCard().getUsername());
+        } 
+
+        //Should never happen, because at least moderator who executed this command is online
+        if (allUsernames.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+        } else {
+            this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOG(allUsernames));
+        }
+    }
+
+    /**
+     * Gives a list of all currently online participants that are in room with passed roomID with their username to Moderator
+     * @method module:CommandHandler#logAllParticipantsByRoom
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    logAllParticipantsByRoom(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+        
+        //no roomID was passed
+        if (commandArgs.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOROOMIDPASSED);
+            return;
+        }
+        
+        let roomID = parseInt(commandArgs[0], 10);
+        let room = this.#serverController.getRoomById(roomID);
+
+        //roomID was passed, but is not valid
+        if (room === undefined) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.ROOMNOTFOUND);
+            return;
+        }
+
+        let roomName = room.getRoomName();
+        let ppants = room.getListOfPPants();
+        let allUsernames = [];
+        for (let i = 0; i < ppants.length; i++) {
+            allUsernames.push(ppants[i].getBusinessCard().getUsername());
+        } 
+
+        if (allUsernames.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+        } else {
+            this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOGBYROOM(roomName, allUsernames));
+        }
+    }
 
     /**
      * Gives all available rooms with ID to Moderator

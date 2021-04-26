@@ -31,7 +31,7 @@ module.exports = Object.freeze({
     },
     NOUSERSFOUND: {
         header: "No users found",
-        body: "No users were found. Don't forget to pass valid usernames!"
+        body: "No users were found with this search criterion. Please try again."
     }, 
     NOUSERNAME: {
         header: "No username passed",
@@ -126,7 +126,10 @@ module.exports = Object.freeze({
                 "\\port\nDisplays a list of all port commands and how to use them.",
                 "\\port <command>\nExecutes port command <command>. Available commands: " +
                     "position, user.",
-                "\\rooms\nDisplays a list of all existing rooms with their ID."]
+                "\\room\nDisplays a list of all room commands and how to use them.",
+                "\\room <command>\nExecutes room command <command>. Available commands: " +
+                    "log, userlog.",
+                "\\userlog\nDisplays a list of all participants that are currently online with their username."]
     },
     DOORCOMMANDS: {
         header: "List of Door Commands",
@@ -177,6 +180,11 @@ module.exports = Object.freeze({
         body: [ "\\port position <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
                 "\\port user <username>\nTeleports you to user with <username>."]
     },
+    ROOMCOMMANDS: {
+        header: "List of Room Commands",
+        body: [ "\\room log\nDisplays a list of all existing rooms with their ID.",
+                "\\room userlog <roomID>\nDisplays a list of all participants that are currently online and in room with ID <roomID> with their username."]
+    },
 
 
     /**************************************************************************/
@@ -197,6 +205,17 @@ module.exports = Object.freeze({
         header: "Unrecognized message command",
         body: "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
     },
+    PARTICIPANTLOG(usernames) {
+        return {
+            header: "List of all participants",
+            body: usernames
+        }
+    },
+
+    /**************************************************************************/
+    /************************** MOD ALLCHAT MESSAGES **************************/
+    /**************************************************************************/
+
     SETMOD(username) {
         return {
             header: "Mod status set successfully",
@@ -401,5 +420,28 @@ module.exports = Object.freeze({
     TELEPORTUSERFAIL: {
         header: "Your teleport failed",
         body: "Your teleport failed. Please check the passed username again."
+    },
+
+    /**************************************************************************/
+    /************************* ROOM ALLCHAT MESSAGES **************************/
+    /**************************************************************************/
+
+    UNKNOWNROOMCOMMAND: {
+        header: "Unrecognized room command",
+        body: "You entered an unrecognized command. Enter '\\room' to receive an overview of all room commands and how to use them."
+    },
+    ROOMNOTFOUND: {
+        header: "Room not found",
+        body: "There is no room with the passed ID. Please try again."
+    },
+    NOROOMIDPASSED: {
+        header: "No room ID passed",
+        body: "Don't forget to pass a valid room ID. See all rooms and their ID with '\\room log'."
+    },
+    PARTICIPANTLOGBYROOM(roomName, usernames) {
+        return {
+            header: "List of all participants in room " + roomName,
+            body: usernames
+        }
     },
 });

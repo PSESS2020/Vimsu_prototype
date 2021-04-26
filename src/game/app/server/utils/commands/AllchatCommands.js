@@ -50,8 +50,12 @@ module.exports = Object.freeze({
         string: "group",
         method: "handleGroupCommand"
     },
-    ROOMS: {
-        string: "rooms",
-        method: "logAllRooms"
+    ROOM: {
+        string: "room",
+        method: "handleRoomCommand"
+    },
+    USERLOG: {
+        string: "userlog",
+        method: "logAllParticipants"
     }
 });

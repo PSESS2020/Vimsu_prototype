@@ -196,7 +196,7 @@ module.exports = class ServerController {
                     }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
-                    let currentRoom = this.#getRoomById(currentRoomId);
+                    let currentRoom = this.getRoomById(currentRoomId);
 
                     /* In case the ppant is at a position that no longer exists in the current floorplan
                      * or is no longer walkable, we move him to the startposition */ 
@@ -204,7 +204,7 @@ module.exports = class ServerController {
                         ppant.setPosition(new Position(Settings.STARTROOM_ID, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y));
                         ppant.setDirection(Settings.STARTDIRECTION);
                         currentRoomId = Settings.STARTROOM_ID;
-                        currentRoom = this.#getRoomById(currentRoomId);
+                        currentRoom = this.getRoomById(currentRoomId);
                     }
                     let typeOfCurrentRoom = currentRoom.getTypeOfRoom();
 
@@ -404,7 +404,7 @@ module.exports = class ServerController {
                     return;
 
                 let roomID = participant.getPosition().getRoomId();
-                let room = this.#getRoomById(roomID);
+                let room = this.getRoomById(roomID);
                 let username = participant.getBusinessCard().getUsername();
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
@@ -510,7 +510,7 @@ module.exports = class ServerController {
                     }
                 } 
 
-                let currentRoom = this.#getRoomById(roomId);
+                let currentRoom = this.getRoomById(roomId);
 
                 //Collision Checking
 
@@ -1815,7 +1815,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let npc = this.#getRoomById(currentRoomId).getNPC(npcID);
+                let npc = this.getRoomById(currentRoomId).getNPC(npcID);
 
                 //prevents server to crash when client emits wrong NPC ID
                 if (!npc) {
@@ -1853,7 +1853,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let gameObject = this.#getRoomById(currentRoomId).getGameObject(gameObjectID);
+                let gameObject = this.getRoomById(currentRoomId).getGameObject(gameObjectID);
 
                 //prevents server to crash when client emits wrong GameObject ID
                 if (!gameObject) {
@@ -1922,7 +1922,7 @@ module.exports = class ServerController {
                 ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
-                this.#getRoomById(currentRoomId).exitParticipant(ppantID);
+                this.getRoomById(currentRoomId).exitParticipant(ppantID);
 
                 this.#socketMap.delete(socket.id);
                 this.#ppants.delete(ppantID);
@@ -2046,6 +2046,17 @@ module.exports = class ServerController {
      */
     getRooms() {
         return this.#rooms;
+    }
+
+    /**
+     * Gets all participant instances that are currently online
+     * @method module:ServerController#getOnlineParticipants
+     * 
+     * @return {Participant[]} online participants
+     * 
+     */
+    getOnlineParticipants() {
+        return Array.from(this.#ppants.values());
     }
 
     /**
@@ -2205,11 +2216,11 @@ module.exports = class ServerController {
         }
 
         //room does not exist
-        if (this.#getRoomById(newRoomID) === undefined) {
+        if (this.getRoomById(newRoomID) === undefined) {
             return false;
         }
 
-        let newRoom = this.#getRoomById(newRoomID);
+        let newRoom = this.getRoomById(newRoomID);
 
         //passed position is invalid
         if (newRoom.checkForCollision(position)) {
@@ -3262,7 +3273,7 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let lectureDoor = this.#getRoomById(currentRoomId).getLectureDoor();
+        let lectureDoor = this.getRoomById(currentRoomId).getLectureDoor();
 
         //check if participant is in right position to enter room
         if (!lectureDoor.isValidEnterPosition(enterPosition)) {
@@ -3348,15 +3359,15 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let currentRoom = this.#getRoomById(currentRoomId);
+        let currentRoom = this.getRoomById(currentRoomId);
 
         //prevents server to crash when client emits a non existing room ID
-        if (!this.#getRoomById(targetRoomId)) {
+        if (!this.getRoomById(targetRoomId)) {
             console.log('Client emitted wrong Room-ID!');
             return;
         }
 
-        let targetRoom = this.#getRoomById(targetRoomId);
+        let targetRoom = this.getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         //get door from current room to target room
@@ -3404,7 +3415,7 @@ module.exports = class ServerController {
      *                 the conference has such room. Returns
      *                 undefined otherwise.
      */
-    #getRoomById = function (roomId) {
+    getRoomById(roomId) {
         for (let i = 0; i < this.#rooms.length; i++) {
             let room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
@@ -3432,10 +3443,10 @@ module.exports = class ServerController {
 
         let currentPosition = ppant.getPosition();
         let currentRoomId = currentPosition.getRoomId();
-        let currentRoom = this.#getRoomById(currentRoomId);
+        let currentRoom = this.getRoomById(currentRoomId);
 
         let targetRoomId = newPos.getRoomId();
-        let targetRoom = this.#getRoomById(targetRoomId);
+        let targetRoom = this.getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         currentRoom.exitParticipant(ppantID);
@@ -3564,7 +3575,7 @@ module.exports = class ServerController {
             socket.join(targetRoomId.toString());
         }
 
-        this.#io.to(socketID).emit('initAllchat', this.#getRoomById(targetRoomId).getMessages());
+        this.#io.to(socketID).emit('initAllchat', this.getRoomById(targetRoomId).getMessages());
 
     }
 
