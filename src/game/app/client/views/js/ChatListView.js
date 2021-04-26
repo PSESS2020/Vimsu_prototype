@@ -178,8 +178,8 @@ class ChatListView extends WindowView {
 
         let msgText = message.msgText;
 
-        if (message.msgText.length > 35) {
-          msgText = message.msgText.slice(0, 35) + "...";
+        if (msgText.length > 35) {
+          msgText = msgText.slice(0, 35) + "...";
         } else if (msgText.includes('<br/>')) {
             msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
         }
