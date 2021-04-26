@@ -53,7 +53,8 @@ class ParticipantAvatarView extends AvatarView {
         while (ctx_avatar.measureText(username.slice(0, maxUsernameLength)).width > Settings.AVATAR_WIDTH * 1.5) 
             maxUsernameLength--;
 
-        this.username = username.slice(0, maxUsernameLength - 1) + "..";
+        this.username = username.length > maxUsernameLength ? username.slice(0, maxUsernameLength - 1) + ".." : username;
+            
         super.setVisibility(isVisible);
         this.isModerator = isModerator;
         this.isOwnAvatar = isOwnAvatar;
