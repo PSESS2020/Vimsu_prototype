@@ -25,5 +25,9 @@ module.exports = Object.freeze({
     REMOVEGROUPMEMBER: {
         string: "rm",
         method: "removeGroupMember"
+    },
+    LOGGROUPS: {
+        string: "log",
+        method: "logAllGroups"
     }
 });

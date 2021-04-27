@@ -110,7 +110,7 @@ module.exports = Object.freeze({
                     "It will display in every participants game-view as a pop-up.",
                 "\\group\nDisplays a list of all group commands and how to use them.",
                 "\\group <command>\nExecutes group command <command>. Available commands: " +
-                    "add, create, delete, deleteall, rm.",
+                    "add, create, delete, deleteall, log, rm.",
                 "\\help\nThis command. Displays a list of all commands and how to use them.",
                 "\\mod <username>\nSets a normal user with <username> to a moderator.",
                 "\\unmod <username>\nSets a moderator with <username> to a normal user.",
@@ -156,6 +156,7 @@ module.exports = Object.freeze({
                     " a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
                 "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
                 "\\group deleteall\nDeletes all exisiting groups.",
+                "\\group log\nWill show a log of all existing groups with their group name and group color.",
                 "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>" + 
                     ", each username separated from the next one by a whitespace character."]
     },
@@ -404,6 +405,22 @@ module.exports = Object.freeze({
             header: "Group left",
             body: "You left group " + groupName +  "."
         }
+    },
+    GROUPLOG(groupInfo) {
+        msgBody = [];
+        for (let i = 0; i < groupInfo.length; i++) {
+            msgBody.push('Group ' + groupInfo[i].name + ' has group color ' + groupInfo[i].color.toLowerCase() + '.');
+        }
+
+        return {
+            header: "List of all existing groups",
+            body: msgBody
+        }
+    },
+    NOGROUPSEXISTING: {
+        header: "No groups",
+        body: ["There are no existing groups at the moment.",
+               "Enter '\\group' to receive an overview of all group commands and how to create them."]
     },
 
     /**************************************************************************/

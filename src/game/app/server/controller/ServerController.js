@@ -2057,6 +2057,17 @@ module.exports = class ServerController {
         return this.#rooms;
     }
 
+     /**
+     * Gets all group instances
+     * @method module:ServerController#getGroups
+     * 
+     * @return {Group[]} groups
+     * 
+     */
+    getGroups() {
+        return Array.from(this.#groups.values());
+    }
+
     /**
      * Gets all participant instances that are currently online
      * @method module:ServerController#getOnlineParticipants

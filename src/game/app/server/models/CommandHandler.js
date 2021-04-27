@@ -1168,6 +1168,31 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Gives all existing groups with group name and color to Moderator
+     * @method module:CommandHandler#logAllGroups
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    logAllGroups(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+
+        let groups = this.#serverController.getGroups();
+        let groupInfo = [];
+
+        groups.forEach(group => {
+            groupInfo.push({name: group.getName(), color: group.getShirtColor()});
+        })
+
+        if (groupInfo.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.NOGROUPSEXISTING);
+        } else {
+            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPLOG(groupInfo));
+        }
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 
