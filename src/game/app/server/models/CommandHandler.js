@@ -778,61 +778,141 @@ module.exports = class CommandHandler {
     }
 
     /**
-     * Ports moderator who executed this command to passed position
-     * @method module:CommandHandler#portTo
+     * Ports a user to a position or to another user
+     * @method module:CommandHandler#portUser
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-    portTo(socket, context, commandArgs) {
+    portUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        let roomID = parseInt(commandArgs[0], 10);
-        let cordX = parseInt(commandArgs[1], 10);
-        let cordY = parseInt(commandArgs[2], 10);
-
-        //moderator sent invalid position data
-        if (isNaN(roomID) || isNaN(cordX) || isNaN(cordY)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTFAIL);
+        if (commandArgs.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
             return;
         }
 
-        let moderatorID = socket.ppantID;
+        let username = commandArgs[0];
+        let userId = this.#serverController.getIdOfOnlineParticipant(username);
 
-        //teleport was successful
-        if (this.#serverController.teleportParticipantToPosition(moderatorID, new Position(roomID, cordX, cordY))) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
+        if (userId === undefined) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
+            return;
+        }
+        
+        if (commandArgs[1] === "topos") {
+            if (commandArgs.length < 5) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
+                return;
+            }
+
+            let roomID = parseInt(commandArgs[2], 10);
+            let cordX = parseInt(commandArgs[3], 10);
+            let cordY = parseInt(commandArgs[4], 10);
+            
+            if (isNaN(roomID) || isNaN(cordX) || isNaN(cordY)) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
+                return;
+            }
+
+            //teleport was successful
+            if (this.#serverController.teleportParticipantToPosition(userId, new Position(roomID, cordX, cordY))) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
+            //teleport fail, could be because of an invalid position or collision
+            } else {
+                this.#serverController.sendNotification(socket.id, CommandMessages.USERTELEPORTFAIL);
+            }
+        } else if (commandArgs[1] === "touser") {
+            if (commandArgs.length < 3) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
+                return;
+            }
+            
+            let targetUsername = commandArgs[2];
+            let targetUserId = this.#serverController.getIdOfOnlineParticipant(targetUsername);
+
+            if (targetUserId === undefined) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
+                return;
+            }
+
+            //teleport was successful
+            if (this.#serverController.teleportParticipantToParticipant(userId, targetUserId)) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
+            //teleport fail, could be because of one the ppants went offline during execution
+            } else {
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTTOUSERFAIL);
+            }
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTFAIL);
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDUSERPORT);
         }
     }
 
     /**
-     * Ports moderator who executed this command to user with passed username
-     * @method module:CommandHandler#portToUser
+     * Ports a group to a position or to another user
+     * @method module:CommandHandler#portGroup
      * 
      * @param {?SocketIO} socket socket instance
      * @param {CommandContext} context context instance
      * @param {String[]} commandArgs command arguments
      */
-    portToUser(socket, context, commandArgs) {
+    portGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        let username = commandArgs[0];
+        if (commandArgs.length < 1) {
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+            return;
+        }
 
-        if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME);
-        } else {
-            let moderatorID = socket.ppantID;
+        let groupName = commandArgs[0];
+        
+        if (commandArgs[1] === "topos") {
+            if (commandArgs.length < 5) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+                return;
+            }
+
+            let roomID = parseInt(commandArgs[2], 10);
+            let cordX = parseInt(commandArgs[3], 10);
+            let cordY = parseInt(commandArgs[4], 10);
+            
+            if (isNaN(roomID) || isNaN(cordX) || isNaN(cordY)) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+                return;
+            }
 
             //teleport was successful
-            if (this.#serverController.teleportParticipantToParticipant(moderatorID, username)) {
+            if (this.#serverController.teleportGroupToPosition(groupName, new Position(roomID, cordX, cordY))) {
                 this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
+            //teleport fail, could be because group does not exist or no group members are online
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTUSERFAIL);
-            }  
-        }  
+                this.#serverController.sendNotification(socket.id, CommandMessages.GROUPTELEPORTFAIL);
+            }
+        } else if (commandArgs[1] === "touser") {
+            if (commandArgs.length < 3) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+                return;
+            }
+            
+            let targetUsername = commandArgs[2];
+            let targetUserId = this.#serverController.getIdOfOnlineParticipant(targetUsername);
+
+            if (targetUserId === undefined) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+                return;
+            }
+
+            //teleport was successful
+            if (this.#serverController.teleportGroupToParticipant(groupName, targetUserId)) {
+                this.#serverController.sendNotification(socket.id, CommandMessages.TELEPORTSUCCESS);
+            //teleport fail, could be because target ppant went offline during execution or group does not exist or no group members are online
+            } else {
+                this.#serverController.sendNotification(socket.id, CommandMessages.GROUPTELEPORTFAIL);
+            }
+        } else {
+            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPPORT);
+        }
     }
 
     /**

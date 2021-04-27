@@ -125,7 +125,7 @@ module.exports = Object.freeze({
                     "will be able to post messages into the allchat again if they were previously muted.",
                 "\\port\nDisplays a list of all port commands and how to use them.",
                 "\\port <command>\nExecutes port command <command>. Available commands: " +
-                    "position, user.",
+                    "group, user.",
                 "\\room\nDisplays a list of all room commands and how to use them.",
                 "\\room <command>\nExecutes room command <command>. Available commands: " +
                     "log, userlog.",
@@ -177,8 +177,13 @@ module.exports = Object.freeze({
     },
     PORTCOMMANDS: {
         header: "List of Port Commands",
-        body: [ "\\port position <roomID> <cordX> <cordY>\nTeleports you to Position with cordX <cordX> and cordY <cordY> in room with roomID <roomID>.",
-                "\\port user <username>\nTeleports you to user with <username>."]
+        body: [  "\\port group <groupname> topos <roomID> <cordX> <cordY>\nTeleports all group members of group with groupname <groupname> " + 
+                    "to position (<cordX>, <cordY>) in room with roomID <roomID>.",
+                "\\port group <groupname> touser <username>\nTeleports all group members of group with groupname <groupname> " + 
+                    "to user with username <username>.",
+                "\\port user <username> topos <roomID> <cordX> <cordY>\nTeleports user with username <username> to position " +
+                    "(<cordX>, <cordY>) in room with roomID <roomID>.",
+                "\\port user <username1> touser <username2>\nTeleports user with username <username1> to user with username <username2>."]
     },
     ROOMCOMMANDS: {
         header: "List of Room Commands",
@@ -411,15 +416,35 @@ module.exports = Object.freeze({
     },
     TELEPORTSUCCESS: {
         header: "Teleport was successful",
-        body: "Your Teleport was successful."
+        body: "Teleport was successful."
     },
-    TELEPORTFAIL: {
-        header: "Your teleport failed",
-        body: "Your teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+    USERTELEPORTFAIL: {
+        header: "Teleport failed",
+        body: ["Teleport failed. Please check the passed parameters again. There could be a collision at your passed position.",
+               "Enter '\\port' to receive an overview of all port commands and how to use them."]
     },
-    TELEPORTUSERFAIL: {
-        header: "Your teleport failed",
-        body: "Your teleport failed. Please check the passed username again."
+    GROUPTELEPORTFAIL: {
+        header: "Teleport failed",
+        body: ["Teleport failed. Please check the passed parameters again. There could be a collision at your passed position, " + 
+                "the passed groupname could be wrong or no group members are currently online."  ,
+               "Enter '\\port' to receive an overview of all port commands and how to use them."]
+    },
+    TELEPORTTOUSERFAIL: {
+        header: "Teleport failed",
+        body: ["Teleport failed. Please check the passed usernames again.",
+               "Enter '\\port' to receive an overview of all port commands and how to use them."]       
+    },
+    INVALIDUSERPORT: {
+        header: "Invalid user port command",
+        body: [ "Invalid user port command. Valid commands:",
+                "\\port user <username> topos <roomID> <cordX> <cordY>",
+                "\\port user <username1> touser <username2>"]
+    },
+    INVALIDGROUPPORT: {
+        header: "Invalid group port command",
+        body: [ "Invalid group port command. Valid commands:",
+                "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                "\\port group <groupname> touser <username>",]
     },
 
     /**************************************************************************/

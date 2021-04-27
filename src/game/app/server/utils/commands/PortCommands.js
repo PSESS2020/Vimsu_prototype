@@ -7,11 +7,11 @@
  */
 module.exports = Object.freeze({
     PORTTO: {
-        string: "position",
-        method: "portTo"
+        string: "group",
+        method: "portGroup"
     },
     PORTTOUSER: {
         string: "user",
-        method: "portToUser"
+        method: "portUser"
     }
 });

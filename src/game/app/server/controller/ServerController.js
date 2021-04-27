@@ -2069,6 +2069,29 @@ module.exports = class ServerController {
     }
 
     /**
+     * Gets all participant instances that are currently online and member of the passed group instance
+     * @method module:ServerController#getOnlineGroupMemberIDs
+     * 
+     * @param {Group} group group
+     * 
+     * @return {String[]} memberIDs of members that are currently online
+     * 
+     */
+    getOnlineGroupMemberIDs(group) {
+        TypeChecker.isInstanceOf(group, Group);
+
+        let groupMemberIDs = group.getGroupMemberIDs();
+        let onlineGroupMemberIDs = [];
+        groupMemberIDs.forEach(memberID => {
+            if (this.#ppants.get(memberID) !== undefined) {
+                onlineGroupMemberIDs.push(memberID);
+            }
+        });
+
+        return onlineGroupMemberIDs;
+    }
+
+    /**
      * Gets all currently available doors in this conference
      * @method module:ServerController#getAllDoors
      * 
@@ -2204,7 +2227,7 @@ module.exports = class ServerController {
 
     /**
      * Teleports ppant with ppantID to passed position if possible
-     * @method module:ServerController#moveParticipantToPosition
+     * @method module:ServerController#teleportParticipantToPosition
      * 
      * @param {String} ppantID ID of moved ppant
      * @param {Position} position new position of user
@@ -2219,7 +2242,7 @@ module.exports = class ServerController {
         let newRoomID = position.getRoomId();
         let direction = ppant.getDirection();
 
-        //ppant went offline
+        //ppant is not online
         if (!ppant) {
             return false; 
         }
@@ -2242,39 +2265,97 @@ module.exports = class ServerController {
     }
 
     /**
-     * Teleports ppant with ppantID to ppant with passed username
-     * @method module:ServerController#moveParticipantToParticipant
+     * Teleports ppant with ppantID to ppant with targetID
+     * @method module:ServerController#teleportParticipantToParticipant
      * 
      * @param {String} ppantID ID of moved ppant
-     * @param {String} username username of other ppant
+     * @param {String} targetID ID of target ppant
      * 
      * @return {boolean} true by success, false otherwise
      */    
-    teleportParticipantToParticipant(ppantID, username) {
+    teleportParticipantToParticipant(ppantID, targetID) {
         TypeChecker.isString(ppantID);
-        TypeChecker.isString(username);
+        TypeChecker.isString(targetID);
 
         let ppant = this.#ppants.get(ppantID);
+        let target = this.#ppants.get(targetID);
 
-        //ppant went offline
-        if (!ppant) {
+        //one of the ppants is not online
+        if (!ppant || !target) {
             return false; 
         }
 
-        let otherPPantID = this.getIdOfOnlineParticipant(username);
-
-        //other ppant does not exist or is offline
-        if (otherPPantID === undefined) {
-            return false;
-        } 
-
-        let otherPPant = this.#ppants.get(otherPPantID);
-
-        let newPosition = otherPPant.getPosition();
+        let newPosition = target.getPosition();
         let direction = ppant.getDirection();
 
         this.#changeParticipantPosition(ppant, newPosition, direction);
         return true;
+    }
+
+    /**
+     * Teleports all group members in group with groupName to passed position if possible
+     * @method module:ServerController#teleportGroupToPosition
+     * 
+     * @param {String} groupName name of group
+     * @param {Position} position new position of group members
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    teleportGroupToPosition(groupName, position) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isInstanceOf(position, Position);
+
+        let group = this.#groups.get(groupName);
+
+        if (group === undefined) {
+            return false;
+        }
+
+        let onlineGroupMemberIDs = this.getOnlineGroupMemberIDs(group);
+
+        if (onlineGroupMemberIDs.length < 1) {
+            return false;
+        }
+
+        let portSuccess = true;
+        onlineGroupMemberIDs.forEach(memberID => {
+            portSuccess = portSuccess && this.teleportParticipantToPosition(memberID, position);
+        });
+
+        return portSuccess;
+    }
+
+    /**
+     * Teleports all group members in group with groupName to ppant with targetID
+     * @method module:ServerController#teleportGroupToParticipant
+     * 
+     * @param {String} groupName name of group
+     * @param {String} targetID ID of target ppant
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    teleportGroupToParticipant(groupName, targetID) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isString(targetID);
+
+        let group = this.#groups.get(groupName);
+
+        if (group === undefined) {
+            return false;
+        }
+
+        let onlineGroupMemberIDs = this.getOnlineGroupMemberIDs(group);
+
+        if (onlineGroupMemberIDs.length < 1) {
+            return false;
+        }
+
+        let portSuccess = true;
+        onlineGroupMemberIDs.forEach(memberID => {
+            portSuccess = portSuccess && this.teleportParticipantToParticipant(memberID, targetID);
+        });
+       
+        return portSuccess;
     }
 
     /**
