@@ -360,7 +360,7 @@ button:disabled {
   top: 0px; 
   left: 0px; 
   border-radius: 10px; 
-  z-index: 2000; 
+  z-index: 5000; 
   width: 100%; 
   height: 100%;
 }

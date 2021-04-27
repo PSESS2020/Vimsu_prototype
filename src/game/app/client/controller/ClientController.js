@@ -984,6 +984,7 @@ class ClientController {
      * Receives from server that client has been removed from the conference
      */
     handleFromServerRemoved = function () {
+        $("#windowHTML").show();
         $('#viewBlocker').show();
     };
 
