@@ -7,11 +7,14 @@
 class RankListView extends WindowView {
 
     rankList;
+    eventManager
 
     /**
      * Creates an instance of RankListView
+     * 
+     * @param {EventManager} eventManager event manager
      */
-    constructor() {
+    constructor(eventManager) {
         super();
 
         if (!!RankListView.instance) {
@@ -19,6 +22,8 @@ class RankListView extends WindowView {
         }
 
         RankListView.instance = this;
+
+        this.eventManager = eventManager;
     }
 
     /**
@@ -26,19 +31,30 @@ class RankListView extends WindowView {
      * 
      * @param {Object[]} rankList rank list
      * @param {String} ownUsername current participant username
+     * @param {Boolean} emptyRankList true if ranklist should be emptied
      */
-    draw(rankList, ownUsername) {
+    draw(rankList, ownUsername, emptyRankList) {
         $('#ranklistwait').hide();
-        $('#rankListModal .modal-body #ranklistrow').empty();
+
+        if (emptyRankList) {
+            $('#rankListModal .modal-body #ranklistrow').empty();
+            this.rankList = [];
+        }
 
         if (rankList.length < 1) {
-            $('#noranklist').text("There are no participants in this conference yet.");
+            if (emptyRankList) {
+                $('#noranklist').text("There are no participants in this conference yet.");
+            }
+            
             return;
         }
 
-        this.rankList = rankList;
+        const modalBody = $('#rankListModal .modal-body');
+        modalBody.data('ready', true);
+        
+        this.rankList = this.rankList.concat(rankList);
 
-        this.rankList.forEach(ppant => {
+        rankList.forEach(ppant => {
 
             var color;
 
@@ -74,5 +90,24 @@ class RankListView extends WindowView {
             if (ppant.username === ownUsername)
                 document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 4px 4px ' + color;
         })
+
+        const loadMore = () => {
+            if (modalBody.scrollTop() + modalBody.innerHeight() >= (modalBody[0].scrollHeight)) {    
+                modalBody.data('ready', false);
+                const lastPpant = this.rankList[this.rankList.length - 1]
+                const lastRank = lastPpant.rank;
+                const lastPoints = lastPpant.points;
+                const lastPointsLength = this.rankList.filter(ppant => ppant.points == lastPoints).length
+                this.eventManager.handleLoadMoreRankList(this.rankList.length, lastRank, lastPoints, lastPointsLength);
+            }
+        }
+        
+        loadMore();
+
+        modalBody.data('ready', true).on('scroll', () => {
+            if (modalBody.data('ready') == false) return;
+
+            loadMore()
+        });
     }
 }

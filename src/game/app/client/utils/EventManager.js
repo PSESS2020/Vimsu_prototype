@@ -384,6 +384,18 @@ class EventManager {
     }
 
     /**
+     * called from View to load more rank list data
+     * 
+     * @param {Number} currentRankListLength current rank list length on rank list board
+     * @param {Number} lastRank last rank on rank list board
+     * @param {Number} lastPoints last points on rank list board
+     * @param {Number} lastPointsLength number of participants with last points
+     */
+    handleLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength) {
+        this.clientController.handleFromViewLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength);
+    }
+
+    /**
      * called from View on accepting friend request
      * 
      * @param {BusinessCardClient} businessCard accepted business card

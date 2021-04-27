@@ -754,12 +754,13 @@ class ClientController {
     }
 
     /**
-     * Is called after server send the answer of ranklistclick
+     * Is called after server sends the answer of ranklistclick
      * 
      * @param {Object} rankList rank list
+     * @param {Boolean} emptyRankList if rank list should be emptied
      */
-    handleFromServerRankList = function (rankList) {
-        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername());
+    handleFromServerRankList = function (rankList, emptyRankList) {
+        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername(), emptyRankList);
     }
 
     /**
@@ -1620,6 +1621,20 @@ class ClientController {
     handleFromViewShowRankList() {
         if (this.socketReady()) {
             this.socket.emit('getRankList');
+        }
+    }
+
+    /**
+     * Gets more rank list data from server
+     * 
+     * @param {Number} currentRankListLength current rank list length on rank list board
+     * @param {Number} lastRank last rank on rank list board
+     * @param {Number} lastPoints last points on rank list board
+     * @param {Number} lastPointsLength number of participants with last points
+     */
+    handleFromViewLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength) {
+        if (this.socketReady()) {
+            this.socket.emit('getMoreDataRankList', currentRanklistLength, lastRank, lastPoints, lastPointsLength);
         }
     }
 

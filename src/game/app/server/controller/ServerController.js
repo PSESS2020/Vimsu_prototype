@@ -883,10 +883,17 @@ module.exports = class ServerController {
                 socket.emit('achievements', achData);
             });
 
-            /* handles rank list clicked, show rank list*/
+            /* handles rank list clicked, show rank list */
             socket.on('getRankList', () => {
-                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30, this.#db).then(rankList => {
-                    socket.emit('rankList', rankList);
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, this.#db, 0, 1, 0, 0).then(rankList => {
+                    socket.emit('rankList', rankList, true);
+                })
+            })
+
+            /* handles rank list load more */
+            socket.on('getMoreDataRankList', (currentRankListLength, lastRank, lastPoints, lastPointsLength) => {
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, this.#db, currentRankListLength, lastRank, lastPoints, lastPointsLength).then(rankList => {
+                    socket.emit('rankList', rankList, false);
                 })
             })
 

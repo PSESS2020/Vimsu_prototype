@@ -117,14 +117,16 @@ module.exports = class db {
      * @param {Object} query query
      * @param {?Object} projection projection
      * @param {?Object} sortedBy sorted by
+     * @param {?Number} skipLength no of entries to be skipped
+     * @param {?Number} limitLength no of entries to be returned
      * 
      * @return {Object[]} documents
      */
-    findInCollection(collectionName, query, projection, sortedBy) {
+    findInCollection(collectionName, query, projection, sortedBy, skipLength, limitLength) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
-        return collection.find(query, { projection: projection }).sort(sortedBy).toArray()
+        return collection.find(query, { projection: projection }).sort(sortedBy).skip(skipLength).limit(limitLength).toArray()
             .then(results => {
                 return results;
             })

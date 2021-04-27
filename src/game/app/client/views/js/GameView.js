@@ -95,7 +95,7 @@ class GameView {
         this.globalChatView = new GlobalChatView();
         this.largerGlobalChatView = new LargerGlobalChatView();
         this.profileView = new ProfileView();
-        this.rankListView = new RankListView();
+        this.rankListView = new RankListView(this.eventManager);
         this.npcStoryView = new NPCStoryView();
         this.externalWebsiteView = new ExternalWebsiteView();
         this.newAchievementView = new NewAchievementView();
@@ -932,9 +932,10 @@ class GameView {
      * 
      * @param {Object[]} rankList rank list
      * @param {String} ownUsername current participant username
+     * @param {Boolean} emptyRankList true if ranklist should be emptied
      */
-    initRankListView(rankList, ownUsername) {
-        this.rankListView.draw(rankList, ownUsername);
+    initRankListView(rankList, ownUsername, emptyRankList) {
+        this.rankListView.draw(rankList, ownUsername, emptyRankList);
     }
 
     /**
