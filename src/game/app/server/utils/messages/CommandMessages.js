@@ -320,7 +320,7 @@ module.exports = Object.freeze({
     },
     UNKNOWNCOLOR: {
         header: "Unknown color",
-        body: "Entered color does not exist. Currently available colors are blue, red, green, yellow and white."
+        body: "Entered color does not exist. Currently available colors are blue, red, green, yellow, tosca, purple, orange, pink, and white."
     },
     INVALIDGROUPNAME: {
         header: "Invalid group name",

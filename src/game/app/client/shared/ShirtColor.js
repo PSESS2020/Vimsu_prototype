@@ -9,8 +9,11 @@ const ShirtColor = Object.freeze({
     RED: "Red",
     GREEN: "Green",
     YELLOW: "Yellow",
-    WHITE: "White"
-
+    WHITE: "White",
+    PURPLE: "Purple",
+    ORANGE: "Orange",
+    PINK: "Pink",
+    TOSCA: "Tosca"
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
