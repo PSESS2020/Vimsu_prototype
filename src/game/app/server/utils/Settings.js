@@ -28,6 +28,9 @@ module.exports = Object.freeze({
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
 
+    /* Ranklist Constants */
+    MAXNUMRANKLIST: 21,
+
     /* Object Constants */
     SMALL_OBJECT_WIDTH: 1,
     SMALL_OBJECT_LENGTH: 1,

@@ -21,10 +21,11 @@ module.exports = class RankListService {
      * @param {Number} lastRank last rank on rank list board
      * @param {Number} lastPoints last points on rank list board
      * @param {Number} lastPointsLength number of participants with last points
+     * @param {?Number} limit search limit
      * 
      * @return {Object} rank list
      */
-    static #getRankList = function (conferenceId, vimsudb, currentRankListLength, lastRank, lastPoints, lastPointsLength) {
+    static #getRankList = function (conferenceId, vimsudb, currentRankListLength = 0, lastRank = 1, lastPoints = 0, lastPointsLength = 0, limit = 0) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
         TypeChecker.isInt(currentRankListLength);
@@ -32,9 +33,7 @@ module.exports = class RankListService {
         TypeChecker.isInt(lastPoints);
         TypeChecker.isInt(lastPointsLength);
 
-        const LIMIT = 21;
-
-        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }, { points: -1, participantId: 1 }, currentRankListLength, LIMIT).then(rankList => {
+        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }, { points: -1, participantId: 1 }, currentRankListLength, limit).then(rankList => {
             let lastIndex;
             let nextRank;
 
@@ -74,21 +73,23 @@ module.exports = class RankListService {
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
+     * @param {Number} limit search limit
      * @param {Number} currentRankListLength current rank list length on rank list board
      * @param {Number} lastRank last rank on rank list board
      * @param {Number} lastPoints last points on rank list board
      * 
      * @return {Object} rank list with usernames
      */
-    static getRankListWithUsername(conferenceId, vimsudb, currentRankListLength, lastRank, lastPoints, lastPointsLength) {
+    static getRankListWithUsername(conferenceId, vimsudb, limit = 0, currentRankListLength = 0, lastRank = 1, lastPoints = 0, lastPointsLength = 0) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
         TypeChecker.isInt(currentRankListLength);
         TypeChecker.isInt(lastRank);
         TypeChecker.isInt(lastPoints);
         TypeChecker.isInt(lastPointsLength);
+        TypeChecker.isInt(limit);
 
-        return this.#getRankList(conferenceId, vimsudb, currentRankListLength, lastRank, lastPoints, lastPointsLength).then(rankList => {
+        return this.#getRankList(conferenceId, vimsudb, currentRankListLength, lastRank, lastPoints, lastPointsLength, limit).then(rankList => {
             return Promise.all(rankList.map(async ppant => {
                 ppant.username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb);
             })).then(res => {
@@ -112,7 +113,7 @@ module.exports = class RankListService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.#getRankList(conferenceId, vimsudb, 0, 1, 0, 0).then(rankList => {
+        return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
             return idx >= 0 ? rankList[idx].rank : undefined;
         })
