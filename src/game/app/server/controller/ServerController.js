@@ -2928,6 +2928,14 @@ module.exports = class ServerController {
             return;
         }
 
+        //Remove every ID that is already part of the chat from list
+        chatPartnerIDList.forEach(newChatPartnerID => {
+            if (existingChatPartnerIDList.includes(newChatPartnerID)) {
+                let index = chatPartnerIDList.indexOf(newChatPartnerID);
+                chatPartnerIDList.splice(index, 1);
+            }
+        });
+
         Promise.all(chatPartnerIDList.map(async newChatPartnerID => {
                 
             if (newChatPartnerID !== creatorID && !existingChatPartnerIDList.includes(newChatPartnerID)) {
