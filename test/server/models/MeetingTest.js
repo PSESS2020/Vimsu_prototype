@@ -33,14 +33,14 @@ describe('Meeting test', function () {
         var goodPPant;
         do {
             goodPPant = TestUtil.randomString();
-        } while (testMeeting.getMemberIdList().includes(goodPPant));
+        } while (testMeeting.includesMember(goodPPant));
         assert.equal(testMeeting.addMember(goodPPant), true);
-        assert.equal(testMeeting.getMemberIdList().includes(goodPPant), true);
+        assert.equal(testMeeting.includesMember(goodPPant), true);
         /* The following assertion fails for some reason, 
          * but the one afterwards is fine. */
         //assert.equal(testMeeting.removeMember(goodPPant), true);
         testMeeting.removeMember(goodPPant);
-        assert.equal(testMeeting.getMemberIdList().includes(goodPPant), false);
+        assert.equal(testMeeting.includesMember(goodPPant), false);
     })
 
     it('test adding an already joined participant', function () {
@@ -58,7 +58,7 @@ describe('Meeting test', function () {
         var goodPPant;
         do {
             goodPPant = TestUtil.randomString();
-        } while (testMeeting.getMemberIdList().includes(goodPPant));
+        } while (testMeeting.includesMember(goodPPant));
         assert.equal(testMeeting.removeMember(goodPPant), false);
     })
 })

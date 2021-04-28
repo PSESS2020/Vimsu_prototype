@@ -2757,17 +2757,19 @@ module.exports = class ServerController {
         };
                 
         memberIDList.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            meeting.addMember(memberID);
+            if (!meeting.includesMember(memberID)) {
+                let member = this.#ppants.get(memberID);
+                meeting.addMember(memberID);
 
-            let socketID = this.getSocketId(memberID);
-            if(member !== undefined && socketID !== undefined) {
-                member.joinMeeting(meeting);
+                let socketID = this.getSocketId(memberID);
+                if(member !== undefined && socketID !== undefined) {
+                    member.joinMeeting(meeting);
 
-                this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
-                this.#io.to(socketID).emit('newMeeting', meetingData);
+                    this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
+                    this.#io.to(socketID).emit('newMeeting', meetingData);
+                }
+                MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
             }
-            MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
         });
     }
 

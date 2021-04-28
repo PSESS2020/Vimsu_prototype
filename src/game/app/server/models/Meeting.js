@@ -116,4 +116,21 @@ module.exports = class Meeting{
         return false;
     }
 
+    /**
+     * Checks if ppant with ppantID is currently in this meeting
+     * @method module:Meeting#includesMember
+     * 
+     * @param {String} ppantID participant ID
+     * @return {boolean} true if ppant is meeting member, false otherwise
+     */
+    includesMember(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        for (let i = 0; i < this.#memberIdList.length; i++) { 
+            if (this.#memberIdList[i] === ppantID) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
