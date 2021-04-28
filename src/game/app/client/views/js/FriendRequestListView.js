@@ -56,7 +56,7 @@ class FriendRequestListView extends WindowView {
             <li class="list-group-item bg-transparent" id="${"friendRequest" + businessCard.getParticipantId()}">
                 <div class="row w-100">
                     <div class="col-2 px-0">
-                        <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                        <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
                     </div>
                     <div class="col-8 text-left">
                         <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
@@ -66,12 +66,12 @@ class FriendRequestListView extends WindowView {
                         <br>
                     </div>
                     <div class="col-2")>
-                        <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>
-                        <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 10px; width: 75px;">Reject</button>
-                        <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
-                        <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
+                        <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 4.6875rem;">Accept</button>
+                        <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 0.625rem; width: 4.6875rem;">Reject</button>
+                        <h6 style="margin-top: 0.5625rem; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
+                        <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 0.625rem; cursor: not-allowed; display:none;" disabled>Reject</button>
                         <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-blue" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
-                        <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
+                        <h6 style="margin-top: 1.25rem; margin-left: 0.25rem; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
                     </div>
                 </div>
             </li>

@@ -39,7 +39,7 @@ class ChatParticipantListView extends Views {
                 <li class="list-group-item bg-transparent chatthread" id="${"chatParticipantEntry" + username}">
                     <div class="row w-100">
                         <div class="col-12 col-sm-1 px-0">
-                            <i class="fa fa-user fa-2x navbarIcons" style="margin-left: 5px" ></i>
+                            <i class="fa fa-user fa-2x navbarIcons" style="margin-left: 0.3125rem" ></i>
                         </div>
                         <div class="col-12 col-md-11 text-center text-sm-left">
                             <label class="name lead">${username}</label>

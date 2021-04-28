@@ -92,12 +92,12 @@ class AllchatView extends Views {
 
     showAllchatBox() {
         $("#allchatWindow").show()
-        $("#allchatWindow").animate({"left":"15px"}, Settings.TOGGLE_SPEED);
+        $("#allchatWindow").animate({"left":"0.9375rem"}, Settings.TOGGLE_SPEED);
         $('#showRoomChat').hide();
     }
 
     hideAllchatBox() {
-        $("#allchatWindow").animate({"left":"-250px"}, Settings.TOGGLE_SPEED);
+        $("#allchatWindow").animate({"left":"-15.625rem"}, Settings.TOGGLE_SPEED);
             
         setTimeout(() => {
             $("#allchatWindow").hide()
@@ -122,7 +122,7 @@ class AllchatView extends Views {
         const messageDiv =
             `
                 <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start"}">
-                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <small style="opacity: 0.3; float: right; padding: 0.3125rem 0rem 0.3125rem 0rem">${timestamp}</small>
                     <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
                         ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: ${isOwnParticipant ? "right" : "left"};">${message.text}</small>

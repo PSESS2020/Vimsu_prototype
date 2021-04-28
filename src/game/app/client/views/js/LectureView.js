@@ -145,7 +145,7 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-            <button id="${this.lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0px 0px 0px transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+            <button id="${this.lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0rem 0rem 0rem transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
         //participant with token
@@ -215,7 +215,7 @@ class LectureView extends WindowView {
             if (this.timeLeft !== newTimeLeft) {
                 this.timeLeft = newTimeLeft;
                 $('#countdown').empty()
-                $('#countdown').append(`<div style="font-size: 40px;" class="animate__animated animate__bounceIn"><b>${this.timeLeft}</b></div>`);
+                $('#countdown').append(`<div style="font-size: 2.5rem;" class="animate__animated animate__bounceIn"><b>${this.timeLeft}</b></div>`);
             }
         }
 
@@ -307,7 +307,7 @@ class LectureView extends WindowView {
         const messageDiv =
             `
                 <div class="d-flex flex-column ${isOwnParticipant ? "align-items-end mr-2" : "align-items-start"}">
-                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <small style="opacity: 0.3; float: right; padding: 0.3125rem 0rem 0.3125rem 0rem">${timestamp}</small>
                     <div class="${isOwnParticipant ? "allChatMessageBubbleMyself" : "allChatMessageBubbleOthers"}">
                         ${!isOwnParticipant ? `<small><b>${message.username}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: ${isOwnParticipant ? "right" : "left"};">${message.text}</small>

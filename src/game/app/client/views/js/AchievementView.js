@@ -45,7 +45,7 @@ class AchievementView extends WindowView {
 
             $('#achievementModalContent').append(`
                 <div class="col-4 d-flex flex-column align-items-center text-center">
-                    <i style="color: ${color} !important; text-shadow: 4px 4px 25px ${color};" class="fas fa-${achievement.icon} achievement-icon ${blur} mb-5 mt-4"></i>
+                    <i style="color: ${color} !important; text-shadow: 0.25rem 0.25rem 1.5625rem ${color};" class="fas fa-${achievement.icon} achievement-icon ${blur} mb-5 mt-4"></i>
                     
                     <small style="opacity: 0.5"><b>${next}</b></small>
                     <small style="opacity: 0.5">Level: [${level} / ${maxLevel}]</small>

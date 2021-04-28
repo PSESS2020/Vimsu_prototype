@@ -182,7 +182,7 @@ class ChatThreadView extends WindowView {
             messageDiv =
                 `
                 <div class="d-flex flex-column align-items-end mr-2">
-                    <small style="opacity: 0.3; float: right; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <small style="opacity: 0.3; float: right; padding: 0.3125rem 0rem 0.3125rem 0rem">${timestamp}</small>
                     <div class="messageBubbleMyself">
                         <small class="wrapword" style="text-align: right; float: right;">${message.msgText}</small>
                     </div>
@@ -192,7 +192,7 @@ class ChatThreadView extends WindowView {
             messageDiv =
                 `
                 <div class="d-flex flex-column align-items-start ml-2">
-                    <small style="opacity: 0.3; padding: 5px 0px 5px 0px">${timestamp}</small>
+                    <small style="opacity: 0.3; padding: 0.3125rem 0rem 0.3125rem 0rem">${timestamp}</small>
                     <div class="messageBubbleOthers">
                         ${this.chat.groupChat && senderUsername? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>

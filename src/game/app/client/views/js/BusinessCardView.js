@@ -50,25 +50,25 @@ class BusinessCardView extends WindowView {
 
         $('#businessCardModal .modal-body').append(`
                 
-            <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">
+            <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 0.3125rem; text-align: center">
             <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
             ${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
             </br>
             <table id="${"profile" + this.businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
                 <tr>
-                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                    <td style="padding: 15px">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
+                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
+                    <td style="padding: 0.9375rem">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
                 </tr>
                 ${this.isFriend || !this.isModerator ?
                 `<tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.isFriend ? "Email" : "Rank"}</td>
-                    <td style="padding: 15px">${this.isFriend ? this.businessCard.getEmail() : this.rank}</td>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${this.isFriend ? "Email" : "Rank"}</td>
+                    <td style="padding: 0.9375rem">${this.isFriend ? this.businessCard.getEmail() : this.rank}</td>
                 </tr>`
                 : ``
                 }
                 <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Role</td>
+                    <td style="padding: 0.9375rem">${this.isModerator ? "Moderator" : "Participant"}</td>
                 </tr>
             </table>
             </br>

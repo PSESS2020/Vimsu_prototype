@@ -64,7 +64,7 @@ class InviteFriendsView extends WindowView {
                         <li class="list-group-item bg-transparent" >
                             <div class="row w-100">
                                 <div class="col-2 px-0">
-                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
                                 </div>
                                 <div class="col-9 text-left">
                                     <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
@@ -76,10 +76,10 @@ class InviteFriendsView extends WindowView {
                                     <span class="small">${businessCard.getEmail()}</span>
                                 </div>
                                 <div class="col-1">
-                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">
+                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -0.4375rem; margin-left: 0.3125rem; outline: none; box-shadow: none;" class="btn">
                                         <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
                                     </button>
-                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none" class="btn">
+                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -0.4375rem; margin-left: 0.3125rem; outline: none; box-shadow: none" class="btn">
                                         <i class="fa fa-check-circle fa-2x navbarIcons"></i>
                                     </button>
                                 </div>    

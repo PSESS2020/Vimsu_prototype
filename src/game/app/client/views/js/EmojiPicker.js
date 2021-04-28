@@ -29,7 +29,7 @@ class EmojiPicker extends Views {
         const picker = new EmojiButton({
             theme: 'dark',
             position: position,
-            emojiSize: '25px',
+            emojiSize: '1.5625rem',
             emojisPerRow: 8,
             rows: 4,
             showPreview: false,

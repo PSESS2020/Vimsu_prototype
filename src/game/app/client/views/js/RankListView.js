@@ -54,7 +54,7 @@ class RankListView extends WindowView {
 
             $('#rankListModal .modal-body #ranklistrow').append(`
                 <div class="col-sm-4 mb-2 mt-2">
-                    <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0px; border-color: ${color}; color: ${color}; border-style: groove;">
+                    <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0rem; border-color: ${color}; color: ${color}; border-style: groove;">
                         <div class="card-body">
                             <div class="card-text" id="${"cardtext" + ppant.participantId}">
                                 <div class="row">
@@ -72,7 +72,7 @@ class RankListView extends WindowView {
                 document.getElementById("cardtext" + ppant.participantId).style.fontWeight = "bold";
 
             if (ppant.username === ownUsername)
-                document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 4px 4px ' + color;
+                document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 0.25rem 0.25rem ' + color;
         })
     }
 }

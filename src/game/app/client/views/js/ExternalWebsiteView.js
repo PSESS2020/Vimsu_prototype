@@ -35,8 +35,8 @@
         $('#externalWebsiteBody' + gameObjectID).empty();
 
         let fullScreenMode = false;
-        let width = iFrameData.width.toString() + 'px';
-        let height = iFrameData.height.toString() + 'px';
+        let width = (iFrameData.width / Settings.FONT_SIZE).toString() + 'rem';
+        let height = (iFrameData.height / Settings.FONT_SIZE).toString() + 'rem';
 
         $('#externalWebsiteModalTitle' + gameObjectID).text(iFrameData.title);
 
@@ -139,7 +139,7 @@
                                 <div class="d-flex flex-row justify-content-end">
                                     <div>
                                         <button id="fullscreenBtn${gameObjectID}" class="close btn">
-                                            <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 1px;"></i>
+                                            <i class="fa fa-window-maximize" style=" transform: scale(0.8); margin-top: 0.0625rem;"></i>
                                         </button>
                                     </div>
                                     <div>

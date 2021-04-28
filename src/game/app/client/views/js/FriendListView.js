@@ -56,7 +56,7 @@ class FriendListView extends WindowView {
                     <div class="d-flex justify-content-between">
                         <div class="row w-100">
                             <div class="col-2 px-0 my-auto">
-                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
                             </div>
                             <div class="col-9 text-left">
                                 <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
@@ -73,7 +73,7 @@ class FriendListView extends WindowView {
                             <a class="action_button nav-item nav-link" href="" style="position: absolute;" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 5px; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
+                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: rgba(34, 43, 46, 0) !important; border: 0rem;" aria-labelledby="dropdownFriendOption">
                                 <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
                                 <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
                             </div>
