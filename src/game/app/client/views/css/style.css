@@ -4,6 +4,7 @@
   margin: 0rem;
   padding: 0rem;
   scroll-behavior: smooth;
+  color: antiquewhite;
 }
 
 /**
@@ -12,12 +13,10 @@
 * Classes although have.
 */
 body {
-  margin: 0;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: antiquewhite;
   text-align: left;
   background-color: rgb(15, 15, 15);
 
@@ -80,7 +79,6 @@ textarea {
   margin-top: -1.25rem;
   width: 100%;
   text-align: center;
-  color: antiquewhite;
 }
 
 .canvas {
@@ -128,7 +126,6 @@ form button {
   box-shadow: none !important;
   background: rgb(15, 15, 15);
   border: none;
-  color: antiquewhite;
   padding: 0.125rem;
 }
 
@@ -168,7 +165,6 @@ form button:hover {
 }
 
 .notifBarText {
-  color: antiquewhite;
   text-align: right;
   padding: 0.3125rem;
 }
@@ -206,22 +202,18 @@ form button:hover {
 #allchatMessageInput {
   outline: none;
   background-color: rgb(15, 15, 15); 
-  color: antiquewhite;
   font-size: 0.875rem;
   width: 14.0625rem;
 }
 
-#allchatMessages div {
-  color: antiquewhite;
-}
+/*#allchatMessages div {
+}*/
 
 .navbarIcons {
-  color: antiquewhite;
   transform: scale(0.8)
 }
 
 .navbarIconsText {
-  color: antiquewhite;
   font-size: 0.9375rem;
 }
 
@@ -258,14 +250,12 @@ vertical-align: middle;
 
 .lectureChatInput {
   background-color: #1b1e24; 
-  color: antiquewhite;
   outline: none;
 }
 
 .closeBtn {
   background-color: transparent !important; 
   border-color: transparent !important; 
-  color: antiquewhite; 
   outline: none !important;
   -webkit-appearance:none !important;
   box-shadow: none !important;
@@ -288,7 +278,6 @@ button:disabled {
 
 .lectureVideoWindow {
   background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
   padding: 0rem !important;
   overflow: scroll;
   display: none; 
@@ -303,20 +292,16 @@ button:disabled {
 
 .lectureVideoHeader {
   background-color: rgba(24, 30, 32, 1);
-  color: antiquewhite;
   font-size: 1.875rem;
-
 }
 
 .lectureChatHeader {
   background-color: rgba(24, 30, 32, 1);
   border-color: transparent !important; 
   border-radius: 0.625rem 0.625rem 0rem 0rem;
-  color: antiquewhite;
 }
 
 .window-header {
-  color: antiquewhite;
   font-size: 1.875rem;
   background-color: rgba(24, 30, 32, 0.699);
   border-radius: 0.625rem 0.625rem 0rem 0rem;
@@ -337,7 +322,6 @@ button:disabled {
 
 .window {
   position: fixed;
-  color: antiquewhite;
   background-color:rgba(34, 43, 46, 1) !important;
   display: none; 
   border: 0.0625rem solid antiquewhite;
@@ -350,7 +334,6 @@ button:disabled {
 
 .externalWebsiteWindow {
   background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
   padding: 0rem !important;
   overflow-y: auto;
   display: none; 
@@ -365,7 +348,6 @@ button:disabled {
 
 .viewBlockerWindow {
   background-color:rgba(15, 15, 15, 1) !important;
-  color: antiquewhite;
   padding: 0rem !important;
   overflow: hidden;
   display: none; 
@@ -382,7 +364,6 @@ button:disabled {
   background-color: #028090;
   border: none;
   border-radius: 0.1875rem;
-  color: antiquewhite;
   text-decoration: none;
 }
 
@@ -390,7 +371,6 @@ button:disabled {
   background-color: #028090;
   border: none;
   border-radius: 0.1875rem;
-  color: antiquewhite;
   text-decoration: none;
 }
 
@@ -404,13 +384,11 @@ button:disabled {
 
 .btn-blue {
   background-color: #028090;
-  color: antiquewhite;
 }
 
 .btn-blue:hover {
   opacity: 1;
   background-color: #017281;
-  color: antiquewhite;
 }
 
 .btn-white {
@@ -427,7 +405,6 @@ button:disabled {
 .messageBubbleMyself {
   max-width: 25vw;
   background-color: rgb(0, 135, 153);
-  color: antiquewhite;
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -436,7 +413,6 @@ button:disabled {
 .messageBubbleOthers {
   max-width: 25vw;
   background-color: rgb(68, 68, 68);
-  color: antiquewhite;
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -445,7 +421,6 @@ button:disabled {
 .allChatMessageBubbleMyself {
   max-width: 12.5rem;
   background-color: rgb(68, 68, 68);
-  color: antiquewhite;
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -454,7 +429,6 @@ button:disabled {
 .allChatMessageBubbleOthers {
   max-width: 12.5rem;
   background-color: rgb(68, 68, 68);
-  color: antiquewhite;
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -463,7 +437,6 @@ button:disabled {
 .modal-header {
   text-align: center;
   background-color: rgba(24, 30, 32, 0.699);
-  color: antiquewhite;
   font-size: 1.875rem;
   border-color: transparent !important; 
   box-shadow: 0rem 0rem 0rem transparent;
@@ -492,12 +465,10 @@ button:disabled {
   width: 29rem !important;
   min-height: 31.3125rem !important;
   background-color: rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
 }
 
 .modal-content {
   background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
   padding: 0rem !important;
   overflow: scroll;
   border-color: antiquewhite;
@@ -517,7 +488,6 @@ button:disabled {
  .close {
   background-color: transparent !important; 
   border-color: transparent !important; 
-  color: antiquewhite; 
   opacity: 1;
   outline: none !important;
   box-shadow: none !important;
@@ -527,22 +497,18 @@ button:disabled {
 .close:hover {
   background-color: transparent !important; 
   border-color: transparent !important; 
-  color: antiquewhite; 
   opacity: .5 !important;
   box-shadow: 0rem 0rem 0rem transparent;
 }
 
-.showRoomChat {
-  color: antiquewhite;
-}
+/*.showRoomChat {
+}*/
 
 .showRoomChat:hover {
   opacity: .5;
-  color: antiquewhite;
 }
 
 .table {
-  color: antiquewhite;
   font-size: 1rem;
 }
 
@@ -613,12 +579,10 @@ button:disabled {
   height: 0.3125rem;
 }
 
-.spinner-border {
-  color: antiquewhite;
-}
+/*.spinner-border {
+}*/
 
 .tooltip-inner {
-  color: antiquewhite;
   background: none;
 }
 
