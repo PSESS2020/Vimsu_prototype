@@ -287,7 +287,7 @@ module.exports = class Participant {
      */
     joinMeeting(meeting) {
         TypeChecker.isInstanceOf(meeting, Meeting);
-        if(!this.#meetingList.includes(meeting)) {
+        if (!this.#meetingList.includes(meeting)) {
             this.#meetingList.push(meeting);
         }
     }
@@ -301,10 +301,9 @@ module.exports = class Participant {
     leaveMeeting(meetingId) {
         TypeChecker.isString(meetingId);
 
-        this.#meetingList.forEach(meeting => {
-            if(meeting.getId() === meetingId) {
+        this.#meetingList.forEach((meeting, index) => {
+            if (meeting.getId() === meetingId) {
                 meeting.removeMember(this.#id);
-                let index = this.#meetingList.indexOf(meeting);
                 this.#meetingList.splice(index, 1);
             }
         })

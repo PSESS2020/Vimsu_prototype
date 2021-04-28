@@ -2929,9 +2929,8 @@ module.exports = class ServerController {
         }
 
         //Remove every ID that is already part of the chat from list
-        chatPartnerIDList.forEach(newChatPartnerID => {
+        chatPartnerIDList.forEach((newChatPartnerID, index) => {
             if (existingChatPartnerIDList.includes(newChatPartnerID)) {
-                let index = chatPartnerIDList.indexOf(newChatPartnerID);
                 chatPartnerIDList.splice(index, 1);
             }
         });
