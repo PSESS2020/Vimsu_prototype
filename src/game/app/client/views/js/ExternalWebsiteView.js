@@ -45,6 +45,21 @@ class ExternalWebsiteView extends WindowView {
                 allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
         `);
 
+        const handleClose = () => {
+            if (fullScreenMode) {
+                this.exitFullscreenMode(gameObjectID, width, height);
+                fullScreenMode = false;
+            }
+
+            /* Needed to stop video */
+            $('.iframeclass').each(function () {
+                var el_src = $(this).attr("src");
+                $(this).attr("src", el_src);
+            });
+
+            $('#externalWebsiteWindow' + gameObjectID).hide();
+        }
+
         $('#fullscreenBtn' + gameObjectID).off();
         $('#fullscreenBtn' + gameObjectID).on('click', (event) => {
             event.preventDefault();
@@ -83,21 +98,6 @@ class ExternalWebsiteView extends WindowView {
                 }
             }
         });
-
-        function handleClose() {
-            if (fullScreenMode) {
-                this.exitFullscreenMode(gameObjectID, width, height);
-                fullScreenMode = false;
-            }
-
-            /* Needed to stop video */
-            $('.iframeclass').each(function () {
-                var el_src = $(this).attr("src");
-                $(this).attr("src", el_src);
-            });
-
-            $('#externalWebsiteWindow' + gameObjectID).hide();
-        }
     }
 
     /**
