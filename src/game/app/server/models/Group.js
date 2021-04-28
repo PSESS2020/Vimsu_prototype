@@ -139,11 +139,6 @@ module.exports = class Group {
     includesGroupMember(ppantID) {
         TypeChecker.isString(ppantID);
 
-        for (let i = 0; i < this.#groupMemberIDs.length; i++) { 
-            if (this.#groupMemberIDs[i] === ppantID) {
-                return true;
-            }
-        }
-        return false;
+        return this.#groupMemberIDs.includes(ppantID);
     }
 }

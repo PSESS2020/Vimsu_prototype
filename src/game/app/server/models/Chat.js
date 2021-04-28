@@ -159,11 +159,6 @@ module.exports = class Chat {
     includesChatMember(ppantID) {
         TypeChecker.isString(ppantID);
 
-        for (let i = 0; i < this.#participantList.length; i++) { 
-            if (this.#participantList[i] === ppantID) {
-                return true;
-            }
-        }
-        return false;
+        return this.#participantList.includes(ppantID);
     }
 }

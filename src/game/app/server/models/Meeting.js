@@ -126,11 +126,6 @@ module.exports = class Meeting{
     includesMember(ppantID) {
         TypeChecker.isString(ppantID);
 
-        for (let i = 0; i < this.#memberIdList.length; i++) { 
-            if (this.#memberIdList[i] === ppantID) {
-                return true;
-            }
-        }
-        return false;
+        return this.#memberIdList.includes(ppantID);
     }
 }
