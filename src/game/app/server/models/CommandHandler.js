@@ -615,7 +615,7 @@ module.exports = class CommandHandler {
         let ppantIDs = [];
    
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
             if (ppantID === undefined) {
                 this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
@@ -656,7 +656,7 @@ module.exports = class CommandHandler {
         let ppantIDs = [];
         
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
             if (ppantID === undefined) {
                 this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
@@ -696,7 +696,7 @@ module.exports = class CommandHandler {
         let ppantIDs = [];
    
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
             if (ppantID === undefined) {
                 this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
@@ -730,7 +730,7 @@ module.exports = class CommandHandler {
         let ppantIDs = [];
    
         for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOf(usernames[i]);
+            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
             if (ppantID === undefined) {
                 this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
                 return; 
