@@ -53,7 +53,7 @@ class LargerGlobalChatView extends WindowView {
      * @param {String} text message text
      */
     addMessage = function (text) {
-        var $newMessageBody = $("<div style='font-size: medium; overflow-wrap: break-word;'></div><br>");
+        var $newMessageBody = $("<div style='font-size: 1rem; overflow-wrap: break-word;'></div><br>");
         $newMessageBody.text(text);
         $('#largerGlobalChatMessage').append($newMessageBody);
     };

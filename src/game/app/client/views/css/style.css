@@ -306,7 +306,7 @@ button:disabled {
   background-color: rgba(24, 30, 32, 0.699);
   border-radius: 0.625rem 0.625rem 0rem 0rem;
   box-shadow: 0rem 0rem 0rem transparent; 
-  font-size: large;
+  font-size: 1.25rem;
   height: 10%;
   align-items: center;
 }
