@@ -35,8 +35,8 @@
         $('#externalWebsiteBody' + gameObjectID).empty();
 
         let fullScreenMode = false;
-        let width = (iFrameData.width / Settings.FONT_SIZE).toString() + 'rem';
-        let height = (iFrameData.height / Settings.FONT_SIZE).toString() + 'rem';
+        let width = iFrameData.width;
+        let height = iFrameData.height;
 
         $('#externalWebsiteModalTitle' + gameObjectID).text(iFrameData.title);
 
