@@ -46,7 +46,7 @@ class ProfileView extends WindowView {
 
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">
-                <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
+                <table id="profile" class="center ml-auto mr-auto">
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
                         <td style="padding: 0.9375rem">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>

@@ -100,7 +100,7 @@ class ChatListView extends WindowView {
     // Now we want to append each chat as a clickable element
     $("#chatListModal .modal-body .list-group").prepend(`
         <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
-          <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
+          <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
             <div class="row w-100">
               <div class="col-2 px-0">
                 <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
@@ -266,7 +266,7 @@ class ChatListView extends WindowView {
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
                                 <button id="chatthread-emoji-trigger" class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
                                 <input id=${"chatMessageInput" + chatID} type="text"
-                                    style="background-color: #1b1e24; color: antiquewhite; border-color: antiquewhite; border-radius: 0.3125rem 0rem 0rem 0.3125rem;"
+                                    style="background-color: #1b1e24; border-color: antiquewhite; border-radius: 0.3125rem 0rem 0rem 0.3125rem;"
                                     class="form-control" placeholder="Enter message ..." autocomplete="off">
                                 <div class="input-group-append">
                                     <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>

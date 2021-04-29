@@ -145,7 +145,7 @@ class LectureView extends WindowView {
         $('#closeButton').empty();
 
         $('#closeButton').append(`
-            <button id="${this.lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; color: antiquewhite; box-shadow: 0rem 0rem 0rem transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
+            <button id="${this.lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; box-shadow: 0rem 0rem 0rem transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
         `)
 
         //participant with token
@@ -349,7 +349,7 @@ class LectureView extends WindowView {
         if (this.hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
-                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24; color: antiquewhite" class="form-control" autocomplete="off" placeholder="Enter message ...">
+                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24;" class="form-control" autocomplete="off" placeholder="Enter message ...">
                     <div class="input-group-append">
                         <button id="lectureChatButton" class="btn btn-blue mr-3" type="button">Send</button>
                     </div>
