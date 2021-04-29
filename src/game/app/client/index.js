@@ -120,9 +120,8 @@ function index() {
     props["transform-origin"] = `0 0 0`;
     $('#gameDiv').css(props);
 
-    let scale = scaleFactor * 100;
     let style = {};
-    style["font-size"] = `${scale}%`;
+    style["font-size"] = Settings.FONT_SIZE * scaleFactor;
     $("html").css(style);
   }
 }
