@@ -7,6 +7,7 @@
 const Settings = Object.freeze({
     /* Game UI constants */
     FONT_SIZE: 16,
+    HUD_FONT_SIZE: 20,
 
     /* Movement-Speed Constants */
     MOVEMENTSPEED_X: 1,
