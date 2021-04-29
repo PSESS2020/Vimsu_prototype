@@ -612,16 +612,10 @@ module.exports = class CommandHandler {
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
-        let ppantIDs = [];
-   
-        for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
-            }
-            ppantIDs.push(ppantID);
-        }
+
+        let participantData = this.#findOnlineParticipantIDs(usernames);
+        let ppantIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
        
         let door = this.#serverController.getDoorByID(doorID);
         let closed = false;
@@ -634,7 +628,7 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOOR(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOOR(doorID, unknownUsernames));
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
@@ -653,16 +647,10 @@ module.exports = class CommandHandler {
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
-        let ppantIDs = [];
-        
-        for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
-            }
-            ppantIDs.push(ppantID);
-        }
+
+        let participantData = this.#findOnlineParticipantIDs(usernames);
+        let ppantIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
 
         let door = this.#serverController.getDoorByID(doorID);
         let opened = false;
@@ -675,7 +663,7 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOOR(doorID));
+            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOOR(doorID, unknownUsernames));
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
         }
@@ -693,16 +681,10 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         let usernames = commandArgs;
-        let ppantIDs = [];
-   
-        for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
-            }
-            ppantIDs.push(ppantID);
-        }
+
+        let participantData = this.#findOnlineParticipantIDs(usernames);
+        let ppantIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
        
         let doors = this.#serverController.getAllDoors();
       
@@ -712,7 +694,7 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDALLDOORS)
+        this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDALLDOORS(unknownUsernames))
     }
 
     /**
@@ -727,16 +709,10 @@ module.exports = class CommandHandler {
         this.#checkParamTypes(context, commandArgs);
 
         let usernames = commandArgs;
-        let ppantIDs = [];
    
-        for (let i = 0; i < usernames.length; i++) {
-            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
-                return; 
-            }
-            ppantIDs.push(ppantID);
-        }
+        let participantData = this.#findOnlineParticipantIDs(usernames);
+        let ppantIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
        
         let doors = this.#serverController.getAllDoors();
       
@@ -746,7 +722,7 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, CommandMessages.OPENEDALLDOORS)
+        this.#serverController.sendNotification(socket.id, CommandMessages.OPENEDALLDOORS(unknownUsernames))
     }
 
     /**
@@ -995,24 +971,9 @@ module.exports = class CommandHandler {
             return;
         }
 
-        let usernamesWithoutDuplicates = [];
-        for (let i = 0; i < usernames.length; i++) {
-            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
-                usernamesWithoutDuplicates.push(usernames[i]);
-            }
-        }
-
-        let memberIDs = [];
-        let unknownUsernames = [];
-        
-        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
-            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                unknownUsernames.push(usernames[i]);
-            } else {
-                memberIDs.push(ppantID);
-            }
-        }
+        let participantData = await this.#findParticipantIDs(usernames);
+        let memberIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
         
         if (memberIDs.length < 1) {
             this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
@@ -1086,24 +1047,9 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
 
-        let usernamesWithoutDuplicates = [];
-        for (let i = 0; i < usernames.length; i++) {
-            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
-                usernamesWithoutDuplicates.push(usernames[i]);
-            }
-        }
-
-        let memberIDs = [];
-        let unknownUsernames = [];
-        
-        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
-            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                unknownUsernames.push(usernames[i]);
-            } else {
-                memberIDs.push(ppantID);
-            }
-        }
+        let participantData = await this.#findParticipantIDs(usernames);
+        let memberIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
 
         if (memberIDs.length < 1) {
             this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
@@ -1136,24 +1082,9 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
         let usernames = commandArgs.slice(1);
 
-        let usernamesWithoutDuplicates = [];
-        for (let i = 0; i < usernames.length; i++) {
-            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
-                usernamesWithoutDuplicates.push(usernames[i]);
-            }
-        }
-
-        let memberIDs = [];
-        let unknownUsernames = [];
-        
-        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
-            let ppantID = await this.#serverController.getIdOfParticipant(usernames[i]);
-            if (ppantID === undefined) {
-                unknownUsernames.push(usernames[i]);
-            } else {
-                memberIDs.push(ppantID);
-            }
-        }
+        let participantData = await this.#findParticipantIDs(usernames);
+        let memberIDs = participantData.ppantIDs;
+        let unknownUsernames = participantData.unknownUsernames;
 
         if (memberIDs.length < 1) {
             this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
@@ -1200,6 +1131,70 @@ module.exports = class CommandHandler {
      */
     unknownCommand(socket) {
         this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNCOMMAND);
+    }
+
+    /**
+     * @private Tries to find IDs for the passed usernames, doesn't matter if user is online or not
+     * 
+     * @method module:CommandHandler#findParticipantIDs
+     * 
+     * @param {String[]} usernames
+     * 
+     * @return {Object} contains found IDs and also usernames, for which no ID was found. No duplicates included
+     */
+    #findParticipantIDs = async function (usernames) {
+        let usernamesWithoutDuplicates = [];
+        for (let i = 0; i < usernames.length; i++) {
+            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
+                usernamesWithoutDuplicates.push(usernames[i]);
+            }
+        }
+
+        let ppantIDs = [];
+        let unknownUsernames = [];
+        
+        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
+            let ppantID = await this.#serverController.getIdOfParticipant(usernamesWithoutDuplicates[i]);
+            if (ppantID === undefined) {
+                unknownUsernames.push(usernamesWithoutDuplicates[i]);
+            } else {
+                ppantIDs.push(ppantID);
+            }
+        }
+
+        return {ppantIDs: ppantIDs, unknownUsernames: unknownUsernames};
+    }
+
+    /**
+     * @private Tries to find IDs for the passed usernames if they are currently online
+     * 
+     * @method module:CommandHandler#findOnlineParticipantIDs
+     * 
+     * @param {String[]} usernames
+     * 
+     * @return {Object} contains found IDs and also usernames, for which no ID was found. No duplicates included
+     */
+    #findOnlineParticipantIDs = function (usernames) {
+        let usernamesWithoutDuplicates = [];
+        for (let i = 0; i < usernames.length; i++) {
+            if (!usernamesWithoutDuplicates.includes(usernames[i])) {
+                usernamesWithoutDuplicates.push(usernames[i]);
+            }
+        }
+        
+        let ppantIDs = [];
+        let unknownUsernames = [];
+
+        for (let i = 0; i < usernamesWithoutDuplicates.length; i++) {
+            let ppantID = this.#serverController.getIdOfOnlineParticipant(usernamesWithoutDuplicates[i]);
+            if (ppantID === undefined) {
+                unknownUsernames.push(usernamesWithoutDuplicates[i]);
+            } else {
+                ppantIDs.push(ppantID);
+            }
+        }
+
+        return {ppantIDs: ppantIDs, unknownUsernames: unknownUsernames};
     }
 
     /**

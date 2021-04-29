@@ -1,3 +1,5 @@
+const MessageBodyParts = require('./MessageBodyParts.js');
+
 /**
  * Messages that will be emitted from a command input by a moderator/orator
  * @module CommandMessages
@@ -265,10 +267,10 @@ module.exports = Object.freeze({
             body: "You successfully opened the door with the ID " + doorID + " for all passed users."
         }
     },
-    CLOSEDDOOR(doorID) {
+    CLOSEDDOOR(doorID, unknownUsernames) {
         return {
             header: "Successfully closed door",
-            body: "You successfully closed the door with the ID " + doorID + " for all passed users."
+            body: "You successfully closed the door with the ID " + doorID + " for all passed users." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
         }
     },
     OPEPNEDDOORFORALL(doorID) {
@@ -283,13 +285,17 @@ module.exports = Object.freeze({
             body: "You successfully closed the door with the ID " + doorID + " for all users."
         }
     },
-    CLOSEDALLDOORS: {
-        header: "Successfully closed all doors",
-        body: "You successfully closed all doors for all passed users."
+    CLOSEDALLDOORS(unknownUsernames) {
+        return {
+            header: "Successfully closed all doors",
+            body: "You successfully closed all doors for all passed users." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
+        }
     },
-    OPENEDALLDOORS: {
-        header: "Successfully opened all doors",
-        body: "You successfully opened all doors for all passed users."
+    OPENEDALLDOORS(unknownUsernames) {
+        return {
+            header: "Successfully opened all doors",
+            body: "You successfully opened all doors for all passed users."  + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
+        }
     },
     NODOORS: {
         header: "No doors available",
@@ -335,21 +341,9 @@ module.exports = Object.freeze({
         body: "All exisiting groups were sucessfully deleted."
     },
     CREATEDGROUP(groupName, unknownUsernames) {
-        let usersNotFoundMsg = "";
-        if (unknownUsernames.length > 0) {
-            usersNotFoundMsg = " Users that were not found: ";
-            for (let i = 0; i < unknownUsernames.length; i++) {
-                if (i === (unknownUsernames.length - 1)) {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
-                } else {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
-                }
-            }
-        }
-
         return {
             header: "Group successfully created",
-            body: "Successfully created group " + groupName + "." + usersNotFoundMsg
+            body: "Successfully created group " + groupName + "." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
         }
     },
     DELETEDGROUP(groupName) {
@@ -359,39 +353,15 @@ module.exports = Object.freeze({
         }
     },
     ADDEDUSERSTOGROUP(groupName, unknownUsernames) {
-        let usersNotFoundMsg = "";
-        if (unknownUsernames.length > 0) {
-            usersNotFoundMsg = " Users that were not found: ";
-            for (let i = 0; i < unknownUsernames.length; i++) {
-                if (i === (unknownUsernames.length - 1)) {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
-                } else {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
-                }
-            }
-        }
-
         return {
             header: "Added users to group",
-            body: "Successfully added users to group " + groupName + "." + usersNotFoundMsg
+            body: "Successfully added users to group " + groupName + "." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
         }
     },
     RMUSERSFROMGROUP(groupName, unknownUsernames) {
-        let usersNotFoundMsg = "";
-        if (unknownUsernames.length > 0) {
-            usersNotFoundMsg = " Users that were not found: ";
-            for (let i = 0; i < unknownUsernames.length; i++) {
-                if (i === (unknownUsernames.length - 1)) {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + '.';
-                } else {
-                    usersNotFoundMsg = usersNotFoundMsg + unknownUsernames[i] + ', ';
-                }
-            }
-        }
-
         return {
             header: "Removed users from group",
-            body: "Successfully removed users from group " + groupName + "." + usersNotFoundMsg
+            body: "Successfully removed users from group " + groupName + "." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
         }
     }, 
     YOUJOINEDGROUP(groupName) {
