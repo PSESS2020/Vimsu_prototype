@@ -121,7 +121,7 @@ function index() {
     $('#gameDiv').css(props);
 
     let style = {};
-    style["font-size"] = Settings.FONT_SIZE * scaleFactor;
+    style["font-size"] = Math.round(Settings.FONT_SIZE * scaleFactor);
     $("html").css(style);
   }
 }
