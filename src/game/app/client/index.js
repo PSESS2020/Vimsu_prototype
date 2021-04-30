@@ -68,13 +68,8 @@ function index() {
    */
   var gameLoop = function () {
 
-    // Scale canvas conext back
-    ctx_avatar.scale(1 / scaleFactor, 1 / scaleFactor);
-
     // Clear canvas
-    ctx_avatar.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-    ctx_avatar.scale(scaleFactor, scaleFactor);
+    ctx_avatar.clearRect(0, 0, ctx_avatar.canvas.width, ctx_avatar.canvas.height);
 
     // Perform the drawing operation
     clientController.updateGame();

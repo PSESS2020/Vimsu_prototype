@@ -461,7 +461,7 @@ class MapView extends Views {
      * Updates objects screen position and redraws them
      */
     refreshDisplay() {
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
+        ctx_map.clearRect(0, 0, ctx_map.canvas.width, ctx_map.canvas.height);
         
         if(super.isVisible()) {
             this.updateMapElements();
