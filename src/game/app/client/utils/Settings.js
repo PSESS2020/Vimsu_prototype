@@ -45,7 +45,11 @@ const Settings = Object.freeze({
     AVATAR_SCALE_HEIGHT: 0.3125,
 
     PARTICIPANT_COLOR: 'antiquewhite',
-    MODERATOR_COLOR: 'gold',
+    PARTICIPANT_NAME_COLOR: 'black',
+    MODERATOR_COLOR: '#69AF2A',
+    MODERATOR_NAME_COLOR: '#142108',
+    NPC_COLOR: 'firebrick',
+    NPC_NAME_COLOR: 'white',
 
     //constants for arrow drawn above own Avatar
     ARROW_LENGTH: 20,

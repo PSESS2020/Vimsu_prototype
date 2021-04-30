@@ -168,7 +168,12 @@ class ParticipantAvatarView extends AvatarView {
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 2, Settings.AVATAR_WIDTH * 1.5, Settings.FONT_SIZE + 2);
 
-            ctx_avatar.fillStyle = "black";
+            if (this.isModerator) {
+                ctx_avatar.fillStyle = Settings.MODERATOR_NAME_COLOR;
+            } else {
+                ctx_avatar.fillStyle = Settings.PARTICIPANT_NAME_COLOR;
+            }
+
             ctx_avatar.fillText(this.displayName, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
             this.currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
