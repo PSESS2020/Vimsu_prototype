@@ -87,7 +87,11 @@ class VideoMeetingView extends WindowView {
             userInfo: {
                 // email: 'place', ppant has no Email
                 displayName: ownUsername
-            }
+            },
+            configOverwrite: { 
+                startWithAudioMuted: true,
+                startWithVideoMuted: true
+            },
         });
 
         this.currentMeeting = meeting;
