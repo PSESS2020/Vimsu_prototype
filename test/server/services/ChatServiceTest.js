@@ -10,7 +10,7 @@ const Message = require('../../../src/game/app/server/models/Message.js');
 const OneToOneChatTestData = require('../models/TestData/OneToOneChatTestData.js');
 const GroupChatTestData = require('../models/TestData/GroupChatTestData.js');
 const MessageTestData = require('../models/TestData/MessageTestData.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const ServiceTestData = require('./TestData/ServiceTestData.js');
 
 const db = require('../../../src/config/db');

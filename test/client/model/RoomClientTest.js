@@ -12,7 +12,7 @@ const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
 const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 const GameObjectType = require('../../../src/game/app/client/shared/GameObjectType.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const SettingsClient = require('../../../src/game/app/client/utils/Settings.js');
 
 var roomId;

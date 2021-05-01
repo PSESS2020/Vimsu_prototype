@@ -14,7 +14,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 const TestUtil = require('./utils/TestUtil.js');
 const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 
 var id;
 var accountId;

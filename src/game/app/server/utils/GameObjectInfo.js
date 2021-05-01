@@ -1,5 +1,5 @@
 const GameObjectType = require('../../client/shared/GameObjectType.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 
 /**
  * Indexed by the contents of the GameObjectType-file,

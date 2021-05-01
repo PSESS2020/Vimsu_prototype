@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const LectureChat = require('./LectureChat.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 
 /**
  * The Lecture Model
