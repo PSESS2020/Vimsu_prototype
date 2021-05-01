@@ -365,22 +365,6 @@ button:disabled {
   height: 100%;
 }
 
-.btn-lecture {
-  background-color: #028090;
-  border: none;
-  border-radius: 3px;
-  color: antiquewhite;
-  text-decoration: none;
-}
-
-.btn-lecture:hover {
-  background-color: #028090;
-  border: none;
-  border-radius: 3px;
-  color: antiquewhite;
-  text-decoration: none;
-}
-
 .btn-blue, .btn-white {
   border: none !important;
   box-shadow: 0px 0px 0px transparent !important;
