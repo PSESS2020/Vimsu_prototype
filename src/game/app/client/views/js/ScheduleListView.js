@@ -6,7 +6,7 @@
  */
 class ScheduleListView extends WindowView {
 
-    lectures = [];
+    lectures;
     timeOffset;
 
     /**
@@ -20,6 +20,8 @@ class ScheduleListView extends WindowView {
         }
 
         ScheduleListView.instance = this;
+
+        this.lectures = [];
     }
 
     /**

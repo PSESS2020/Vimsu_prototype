@@ -49,7 +49,7 @@ class NPCStoryView extends WindowView {
                 </button>
 
                 <script>
-                    $("#backwardStory${npcId}${i}").on('click', function(event) {
+                    $("#backwardStory${npcId}${i}").on('click', function() {
                         $('#story${npcId}${i}').hide();
                         $('#backwardStory${npcId}${i}').hide();
                         $('#forwardStory${npcId}${i}').hide();
@@ -60,7 +60,7 @@ class NPCStoryView extends WindowView {
                             $('#backwardStory${npcId}${i - 1}').show();
                         }
                     })    
-                    $("#forwardStory${npcId}${i}").on('click', function(event) {
+                    $("#forwardStory${npcId}${i}").on('click', function() {
                         $('#story${npcId}${i}').hide();
                         $('#backwardStory${npcId}${i}').hide();
                         $('#forwardStory${npcId}${i}').hide();

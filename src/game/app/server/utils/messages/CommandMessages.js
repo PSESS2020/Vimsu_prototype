@@ -377,7 +377,7 @@ module.exports = Object.freeze({
         }
     },
     GROUPLOG(groupInfo) {
-        msgBody = [];
+        let msgBody = [];
         for (let i = 0; i < groupInfo.length; i++) {
             msgBody.push('Group ' + groupInfo[i].name + ' has group color ' + groupInfo[i].color.toLowerCase() + '.');
         }

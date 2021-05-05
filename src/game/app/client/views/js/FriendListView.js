@@ -26,7 +26,7 @@ class FriendListView extends WindowView {
         this.eventManager = eventManager;
 
         $('#friendRequestList').off();
-        $('#friendRequestList').on('click', (event) => {
+        $('#friendRequestList').on('click', () => {
             $('#nofriendrequest').empty();
             $('#friendRequestListModal .modal-body .list-group').empty()
             $('#friendRequestListModal').modal('show');
@@ -83,7 +83,7 @@ class FriendListView extends WindowView {
             `)
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
-            $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
+            $('#chatfriend' + businessCard.getParticipantId()).on('click', () => {
                 this.eventManager.handleRemoveNewFriendNotif(businessCard.getUsername());
                 this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
             })

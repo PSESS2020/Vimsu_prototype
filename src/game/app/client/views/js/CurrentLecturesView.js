@@ -25,7 +25,7 @@ class CurrentLecturesView extends WindowView {
         this.eventManager = eventManager;
 
         $('#closeCurrentLecturesButton').off();
-        $('#closeCurrentLecturesButton').on('click', (event) => {
+        $('#closeCurrentLecturesButton').on('click', () => {
             this.eventManager.handleClearInterval();
             $('#currentLectures').hide();
         })
@@ -61,7 +61,7 @@ class CurrentLecturesView extends WindowView {
                 </div>
             `)
 
-            $('#show' + lecture.id).on('click', (event) => {
+            $('#show' + lecture.id).on('click', () => {
                 $('#show' + lecture.id).hide();
                 this.eventManager.handleLectureClicked(lecture.id);
             })

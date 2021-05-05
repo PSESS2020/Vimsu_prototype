@@ -19,7 +19,7 @@ class LargerGlobalChatView extends WindowView {
         LargerGlobalChatView.instance = this;
 
         $('#closeLargerGlobalChatButton').off();
-        $('#closeLargerGlobalChatButton').on('click', (event) => {
+        $('#closeLargerGlobalChatButton').on('click', () => {
             $('#largerGlobalChat').hide();
         })
 

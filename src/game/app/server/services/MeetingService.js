@@ -105,7 +105,7 @@ module.exports = class Meetingservice {
         TypeChecker.isInstanceOf(vimsudb, db);
 
         if(!this.existsMeeting(memberIdList, meetingName, conferenceId, vimsudb)) {
-            console.log("Meeting with id " + meetingId + " already exists in database.");
+            console.log("Meeting with name " + meetingName + " already exists in database.");
             return false;
         }
 
@@ -123,8 +123,6 @@ module.exports = class Meetingservice {
         return vimsudb.insertOneToCollection("meetings_" + conferenceId, meeting).then(res => {
             console.log("meeting saved");
             return new Meeting(meeting.meetingId, meeting.name, meeting.members, meeting.password);
-        }).catch(err => {
-            console.error(err);
         })
     }
 
@@ -393,20 +391,4 @@ module.exports = class Meetingservice {
             } 
         })
     }
-
-    /**
-     * 
-     * @param {String} conferenceId 
-     * @param {String} meetingName 
-     * @param {db} vimsudb
-     * @returns {String} A 
-     */
-    static generateMeetingId(conferenceId, meetingName, vimsudb) {
-        TypeChecker.isString(conferenceId);
-        TypeChecker.isString(meetingName);
-        let salt = new ObjectId().toHexString();
-        let meetingId = conferenceId + "_" + meetingName + "_" + salt;
-        //if(this.checkForMeetingId
-    }
-
 }
