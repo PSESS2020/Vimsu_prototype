@@ -24,32 +24,35 @@ class BusinessCardClient {
      * 
      * @param {String} participantId participant ID
      * @param {String} username participant username
-     * @param {String} title participant title
-     * @param {String} surname participant surname
      * @param {String} forename participant forename
-     * @param {String} job participant job
-     * @param {String} company participant company
-     * @param {String} email participant email
+     * @param {?String} title participant title
+     * @param {?String} surname participant surname
+     * @param {?String} job participant job
+     * @param {?String} company participant company
+     * @param {?String} email participant email
      */
-    constructor(participantId, username, title, surname, forename, job, company, email) {
+    constructor(participantId, username, forename, title, surname, job, company, email) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
 
-        //email is only defined when ppant is a friend
-        if (email !== undefined) {
+        //following attributes can be undefined if registration system is not advanced
+        if (title !== undefined)
+            TypeChecker.isString(title);
+        if (surname !== undefined)
+            TypeChecker.isString(surname);
+        if (job !== undefined)
+            TypeChecker.isString(job);
+        if (company !== undefined)
+            TypeChecker.isString(company);
+        if (email !== undefined) 
             TypeChecker.isString(email);
-        }
-
+        
         this.participantId = participantId;
         this.username = username;
+        this.forename = forename;
         this.title = title;
         this.surname = surname;
-        this.forename = forename;
         this.job = job;
         this.company = company;
         this.email = email;
@@ -76,7 +79,7 @@ class BusinessCardClient {
     /**
      * Gets participant title
      * 
-     * @return {String} title
+     * @return {?String} title
      */
     getTitle() {
         return this.title;
@@ -85,7 +88,7 @@ class BusinessCardClient {
     /**
      * Gets participant surname
      * 
-     * @return {String} surname
+     * @return {?String} surname
      */
     getSurname() {
         return this.surname;
@@ -103,7 +106,7 @@ class BusinessCardClient {
     /**
      * Gets participant job
      * 
-     * @return {String} job
+     * @return {?String} job
      */
     getJob() {
         return this.job;
@@ -112,7 +115,7 @@ class BusinessCardClient {
     /**
      * Gets participant company
      * 
-     * @return {String} company
+     * @return {?String} company
      */
     getCompany() {
         return this.company;
@@ -121,7 +124,7 @@ class BusinessCardClient {
     /**
      * Gets participant email
      * 
-     * @return {String} email
+     * @return {?String} email
      */
     getEmail() {
         return this.email;

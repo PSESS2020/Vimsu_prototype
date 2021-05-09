@@ -59,6 +59,10 @@ class InviteFriendsView extends WindowView {
             this.chatId = chatId;
 
             this.businessCards.forEach(businessCard => {
+                let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                               (businessCard.getForename() + " ") + 
+                               (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                               (" (@" + businessCard.getUsername() + ")");
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent" >
@@ -67,11 +71,13 @@ class InviteFriendsView extends WindowView {
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
                                 <div class="col-9 text-left">
-                                    <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                                    <br> 
+                                    <label class="name lead">${fullname}</label>
+                                    ${businessCard.getJob() && businessCard.getCompany() && businessCard.getEmail() ?
+                                    `<br> 
                                     <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
                                     <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                    <br>
+                                    <br>`
+                                    : ``}
                                     <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
                                     <span class="small">${businessCard.getEmail()}</span>
                                 </div>

@@ -53,9 +53,9 @@ class VideoMeetingView extends WindowView {
      * Draws video meeting window
      * 
      * @param {Object} meeting joined meeting
-     * @param {String} ownUsername own username that is shown in meeting
+     * @param {String} ownDisplayName own display name that is shown in meeting
      */
-    draw(meeting, ownUsername) {
+    draw(meeting, ownDisplayName) {
         $('#meetingWindowWait').hide();
 
         if (this.currentMeeting) {
@@ -86,7 +86,7 @@ class VideoMeetingView extends WindowView {
             parentNode: document.getElementById('meetingWindowBody'),
             userInfo: {
                 // email: 'place', ppant has no Email
-                displayName: ownUsername
+                displayName: ownDisplayName
             },
             configOverwrite: { 
                 startWithAudioMuted: true,

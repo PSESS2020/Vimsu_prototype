@@ -50,6 +50,11 @@ class FriendRequestListView extends WindowView {
      * @param {BusinessCardClient} businessCard 
      */
     appendFriendRequest(businessCard) {
+        let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                       (businessCard.getForename() + " ") + 
+                       (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                       (" (@" + businessCard.getUsername() + ")");
+    
         $('#nofriendrequest').empty();
 
         $('#friendRequestListModal .modal-body .list-group').prepend(`
@@ -59,10 +64,13 @@ class FriendRequestListView extends WindowView {
                         <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                     </div>
                     <div class="col-8 text-left">
-                        <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                        <div>
+                        <label class="name lead">${fullname}</label>
+                        ${this.businessCard.getJob() && this.businessCard.getCompany() ?
+                        `<div>
                             <i class="fa fa-briefcase fa-fw mr-1"></i>${businessCard.getJob() + " at " + businessCard.getCompany()}
-                        </div>
+                        </div>`
+                        : ``
+                        }
                     </div>
                     <div class="col-2")>
                         <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>

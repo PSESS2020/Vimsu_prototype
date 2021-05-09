@@ -5,8 +5,8 @@
  * @version 1.0.0
  */
  const DisplayName = Object.freeze({
-    USERNAME: "username",
-    FORENAME: "forename",
+    USERNAME: "Username",
+    FORENAME: "Forename",
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

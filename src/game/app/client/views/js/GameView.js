@@ -484,7 +484,7 @@ class GameView {
                 participant.getDirection(),
                 participant.getShirtColor(),
                 participant.getId(),
-                participant.getUsername(),
+                participant.getDisplayName(),
                 participant.getIsVisible(),
                 participant.getIsModerator(),
                 false,
@@ -594,10 +594,10 @@ class GameView {
         let startingDir = ownParticipant.getDirection();
         let shirtColor = ownParticipant.getShirtColor();
         let id = ownParticipant.getId();
-        let username = ownParticipant.getUsername();
+        let displayName = ownParticipant.getDisplayName();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, username, true, isModerator, true, this.gameEngine, this.eventManager);
+        this.ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, displayName, true, isModerator, true, this.gameEngine, this.eventManager);
         this.addToUpdateList(this.ownAvatarView);
     }
 
@@ -951,11 +951,11 @@ class GameView {
      * Draws jitsi meeting window
      * 
      * @param {Object} meeting joined meeting
-     * @param {String} ownUsername own username that is shown in meeting
+     * @param {String} ownDisplayName own display name that is shown in meeting
      * 
      */
-    initVideoMeetingView(meeting, ownUsername) {
-        this.videoMeetingView.draw(meeting, ownUsername);
+    initVideoMeetingView(meeting, ownDisplayName) {
+        this.videoMeetingView.draw(meeting, ownDisplayName);
     }
 
     /**

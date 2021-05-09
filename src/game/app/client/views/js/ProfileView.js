@@ -35,9 +35,14 @@ class ProfileView extends WindowView {
         this.businessCard = businessCard;
         this.isModerator = isModerator;
 
+        let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                       (businessCard.getForename() + " ") + 
+                       (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                       (" (@" + businessCard.getUsername() + ")");
+
         $('#profileModal .modal-header').append(`
             <h5 class="modal-title d-inline-block" id="profileModalTitle">
-            <i class="fa fa-user-circle pr-2 navbarIcons mr-1" style="transform: scale(1)"></i>${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
+            <i class="fa fa-user-circle pr-2 navbarIcons mr-1" style="transform: scale(1)"></i>${fullname}</h5>
             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-close"></i>
             </button>
@@ -46,7 +51,8 @@ class ProfileView extends WindowView {
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">
                 <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
-                    <tr>
+                    ${businessCard.getJob() && businessCard.getCompany() && businessCard.getEmail() ?
+                    `<tr>
                         <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
                         <td style="padding: 15px">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
                     </tr>
@@ -57,7 +63,8 @@ class ProfileView extends WindowView {
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
                         <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
-                    </tr>
+                    </tr>`
+                    : ``}
                 </table>
             </div>
         `)

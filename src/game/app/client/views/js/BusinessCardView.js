@@ -46,19 +46,27 @@ class BusinessCardView extends WindowView {
         this.rank = rank;
         this.isModerator = isModerator;
 
+        let fullname = (this.businessCard.getTitle() ? this.businessCard.getTitle() + " " : "") + 
+                       (this.businessCard.getForename() + " ") + 
+                       (this.businessCard.getSurname() ? this.businessCard.getSurname() + " " : "") + 
+                       (" (@" + this.businessCard.getUsername() + ")");
+
         $('#businessCardWait' + this.businessCard.getParticipantId()).remove();
 
         $('#businessCardModal .modal-body').append(`
                 
             <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 5px; text-align: center">
             <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-            ${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
+            ${fullname}</h5>
             </br>
             <table id="${"profile" + this.businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
-                <tr>
+                ${this.businessCard.getJob() && this.businessCard.getCompany() ?
+                `<tr>
                     <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
                     <td style="padding: 15px">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
-                </tr>
+                </tr>`
+                : ``
+                }
                 ${this.isFriend || !this.isModerator ?
                 `<tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.isFriend ? "Email" : "Rank"}</td>
