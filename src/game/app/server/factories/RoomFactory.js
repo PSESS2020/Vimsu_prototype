@@ -251,6 +251,7 @@ module.exports = class RoomFactory {
 
     }
 
+    // TODO move to DoorFactory
     /**
      * Take the desired name & variant of a logo and gets it from
      * the DoorLogos-object.
@@ -313,6 +314,7 @@ module.exports = class RoomFactory {
             }
     }
 
+    // TODO move to GameObjectFactory
     /**
      * Takes a data object defining a GameObject-instance to
      * be created, reads it out and then creates all instances
@@ -333,15 +335,18 @@ module.exports = class RoomFactory {
      */
     #createObjectsFromData = function (roomId, objData, listToPushInto) {
         // TODO support for custom options
+
         if (objData.isClickable === undefined) {
             objData.isClickable = false;
             objData.iFrameData = undefined;
         }
 
-        // This is the only place where this class needs to
-        // access the GameObjectInfo, which doesn't sit well
-        // with me...
-        if (GameObjectInfo.hasProperty(objData.type, "hasAdditionalParts")) {
+        if (objData.variation === undefined) {
+            objData.variation = GlobalStrings.DEFAULT
+        }
+
+        // if the object has additional parts, create them
+        if (GameObjectInfo.hasProperty(objData.type, "parts")) {
             let parts = GameObjectInfo.getInfo(objData.type, "parts");
             parts.forEach( partData => {
                 this.#createObjectsFromData(roomId, {
@@ -354,6 +359,8 @@ module.exports = class RoomFactory {
                 }, listToPushInto)
             })
         }
+
+        // TODO rewrite
         if (GameObjectInfo.hasProperty(objData.type, "isMultiPart")) {
             var size = GameObjectInfo.getInfo(objData.type, "size");
             var width = GameObjectInfo.getInfo(objData.type, "width");

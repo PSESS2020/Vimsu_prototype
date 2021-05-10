@@ -1,5 +1,6 @@
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**
  * Indexed by the contents of the GameObjectType-file,
@@ -120,7 +121,9 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "blank",
+            assetName: {
+                [GlobalStrings.DEFAULT]: "blank",
+            }
         },
 
         // Tiles
@@ -128,25 +131,33 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "tile_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "tile_default",
+            }
         },
         [GameObjectType.SELECTED_TILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "tile_selected",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "tile_selected",
+            }
         },
         [GameObjectType.LEFTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "tile_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "tile_default",
+            }
         },
         [GameObjectType.RIGHTTILE]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "tile_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "tile_default",
+            }
         },
 
         // Walls
@@ -154,13 +165,17 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "leftwall_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "leftwall_default",
+            }
         },
         [GameObjectType.RIGHTWALL]: {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "rightwall_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "rightwall_default",
+            }
         },
 
         // Wall-like objects
@@ -172,21 +187,29 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
+            }
         },
         [GameObjectType.RIGHTWINDOW]: {
             hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["rightwindow_default0", "rightwindow_default1"]
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "rightwindow_default0",
+                withSill:                "rightwindow_default1",
+            }
         },
         [GameObjectType.LEFTWINDOW]: {
             hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["leftwindow_default0", "leftwindow_default1"]
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "leftwindow_default0",
+                withSill:                "leftwindow_default1",
+            }
         },
         [GameObjectType.PICTUREFRAME]: {
             isMultiPart: true,
@@ -194,8 +217,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: [["rightwallframe_default0", "rightwallframe_default1", 
-            "rightwallframe_default2"]],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: [["rightwallframe_default0", "rightwallframe_default1", "rightwallframe_default2"]],
+            }
         },
         [GameObjectType.CONFERENCELOGO]: {
             // MULTIPART OBJECT
@@ -211,10 +235,11 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["leftconferencelogo_default0",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: ["leftconferencelogo_default0",
                 "leftconferencelogo_default1", "leftconferencelogo_default2",
-                "leftconferencelogo_default3",
-                "leftconferencelogo_default4"],
+                "leftconferencelogo_default3", "leftconferencelogo_default4"],
+            }
         },
         
         // Plant 
@@ -222,7 +247,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "plant_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "plant_default",
+            }
         },    
 
         // Seating
@@ -231,14 +258,22 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["leftchair_default", "leftchairback_default", "rightchair_default", "rightchairback_default",],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "leftchair_default",
+                leftBack:                "leftchairback_default", 
+                rightFront:              "rightchair_default", 
+                rightBack:               "rightchairback_default",
+            }
         },
         [GameObjectType.SOFA]: {
             hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["leftsofa_default", "rightsofa_default"],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "leftsofa_default",
+                rightFacing:             "rightsofa_default",
+            }
         },
 
         // Tables
@@ -248,20 +283,27 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "table_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "table_default",
+            }
         },
         [GameObjectType.LARGETABLE]: {
             hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["righttable_default", "lefttable_default"]
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "righttable_default",
+                turnedLeft:              "lefttable_default",
+            }
         },
         [GameObjectType.SMALLTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "smalldinnertable_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "smalldinnertable_default",
+            }
         },
 
         // Counters
@@ -269,7 +311,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: "canteencounter_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "canteencounter_default",
+            }
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
             // OBJECT WITH ADDITIONAL PARTS
@@ -282,7 +326,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: "receptionCounterFrontPart_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "receptionCounterFrontPart_default",
+            }
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
             // OBJECT WITH VARIATIONS
@@ -290,7 +336,10 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["receptionCounterLeftPart_default","receptionCounterRightPart_default"],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "receptionCounterLeftPart_default",
+                rightPart:               "receptionCounterRightPart_default",
+            }
         },
 
         // Food & Drinks
@@ -298,13 +347,17 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 2 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: "drinks_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "drinks_default",
+            }
         },
         [GameObjectType.TEA]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: "tea_default",
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "tea_default",
+            }
         },
         [GameObjectType.SMALLFOOD]: {
             // OBJECT WITH VARIATIONS
@@ -312,7 +365,12 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: ["koeriWurst_default", "koeriWurst_bothSides", "koeriWurst_upperSide", "koeriWurst_lowerSide"],
+            assetName: { 
+                [GlobalStrings.DEFAULT]: "koeriWurst_default",
+                bothSides:               "koeriWurst_bothSides",
+                upperSide:               "koeriWurst_upperSide",
+                lowerSide:               "koeriWurst_lowerSide",
+            }
         },
     });
 
@@ -330,14 +388,14 @@ class GameObjectInfo {
      * @returns {*} The information saved for the passed GameObjectType
      *              under the passed key (if it exists).
      */
-     static getInfo(objectType, key) {
+    static getInfo(objectType, key) {
         if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
             return GameObjectInfo.#INFORMATION[objectType][key];
         } else {
             throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
         }
-    } 
-    
+    }
+
     /**
      * Takes a GameObjectType and a <key> as arguments and checks
      * if a property with the name <key> is stored for the passed
@@ -351,9 +409,9 @@ class GameObjectInfo {
      * @returns {Boolean} If the object specified by the passed type
      *                    has a property indexed by the passed key
      */
-     static hasProperty(objectType, key) {
+    static hasProperty(objectType, key) {
         return GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)
-     }
+    }
     
 }
 
