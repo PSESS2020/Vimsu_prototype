@@ -137,6 +137,62 @@ module.exports = class Room {
     }
 
     /**
+     * Takes a list of GameObjects and adds it to the
+     * listOfMapElements of the instance.
+     * 
+     * @param {GameObject[]} listOfElements 
+     */
+    addMapElements(listOfElements) {
+        TypeChecker.isInstanceOf(listOfElements, Array)
+        listOfElements.forEach(element => {
+            TypeChecker.isInstanceOf(element, GameObject)
+        })
+        this.setMapElements(this.#listOfMapElements.concat(listOfElements))
+    }
+
+    /**
+     * Takes a list of GameObjects and adds it to the
+     * listOfGameObjects of the instance.
+     * 
+     * @param {GameObject[]} listOfObjects 
+     */
+    addGameObjects(listOfObjects) {
+        TypeChecker.isInstanceOf(listOfObjects, Array)
+        listOfObjects.forEach(element => {
+            TypeChecker.isInstanceOf(element, GameObject)
+        })
+        this.setGameObjects(this.#listOfGameObjects.concat(listOfObjects))
+    }
+
+    /**
+     * Takes a list of NPCs and adds it to the
+     * listOfNPCs of the instance.
+     * 
+     * @param {NPC[]} NPClist 
+     */
+    addNPCs(NPClist) {
+        TypeChecker.isInstanceOf(NPClist, Array)
+        NPClist.forEach(element => {
+            TypeChecker.isInstanceOf(element, NPC)
+        })
+        this.setNPCs(this.#listOfNPCs.concat(NPClist))
+    }
+
+    /**
+     * Takes a list of Doors and adds it to the
+     * listOfDoors of the instance.
+     * 
+     * @param {Door[]} doorList 
+     */
+    addDoors(doorList) {
+        TypeChecker.isInstanceOf(doorList, Array)
+        doorList.forEach(element => {
+            TypeChecker.isInstanceOf(element, Door)
+        })
+        this.setDoors(this.#listOfNPCs.concat(doorList))
+    }
+
+    /**
      * Gets room ID
      * @method module:Room#getRoomId
      * 

@@ -1,5 +1,4 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Room = require('../models/Room.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);

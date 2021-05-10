@@ -1,18 +1,17 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
-const AssetPaths = require('../../client/shared/AssetPaths.js');
 const Room = require('../models/Room.js');
-const GameObjectService = require('../services/GameObjectService.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
+const GameObjectFactory = require('./GameObjectFactory.js');
 const DoorService = require('../services/DoorService.js');
-const Position = require('./Position.js');
+const Position = require('../models/Position.js');
 const NPCService = require('../services/NPCService.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
-const RoomDimensions = require('../utils/RoomDimensions.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
 const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const DoorLogos = require('../utils/DoorLogos.js');
+const { RMUSERSFROMGROUP } = require('../utils/Messages.js');
 
 /**
  * Churns out Room instances. Singleton.
@@ -30,12 +29,14 @@ module.exports = class RoomFactory {
             return RoomFactory.instance;
         }
 
-        this.#objService = new GameObjectService();
+        this.#objService = new GameObjectFactory();
         this.#doorService = new DoorService();
         this.#npcService = new NPCService();
 
         RoomFactory.instance = this;
     }
+
+    // TODO: refactor this class
 
     /**
      * Takes a data object specifying the layout of a room and
@@ -51,21 +52,25 @@ module.exports = class RoomFactory {
      * @returns {Room} The fully built room
      */
     buildRoomFrom(roomData) {
-        TypeChecker.isEnumOf(roomData.TYPE, TypeOfRoom);
-        // switch statement should be replaced by polymorphism
-        switch(roomData.TYPE) {
-            case TypeOfRoom.RECEPTION:
-                return new ReceptionRoomDecorator(new Room(roomData.ID, roomData.NAME, roomData.TYPE, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH)).getRoom();
-            case TypeOfRoom.FOYER:
-                return new FoyerRoomDecorator(new Room(roomData.ID, roomData.NAME, roomData.TYPE, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH)).getRoom();
-            case TypeOfRoom.FOODCOURT:
-                return new FoodcourtRoomDecorator(new Room(roomData.ID, roomData.NAME, roomData.TYPE, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH)).getRoom();
-            case TypeOfRoom.ESCAPEROOM:
-                return new EscapeRoomDecorator(new Room(roomData.ID, roomData.NAME, roomData.TYPE, RoomDimensions.ESCAPEROOM_WIDTH, RoomDimensions.ESCAPEROOM_LENGTH)).getRoom();
-            case TypeOfRoom.CUSTOM:
-            default:
-                return this.#buildByPlan(roomData);
-        }
+        var type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
+        var room = new Room(roomData.ID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
+
+        room.addMapElements(
+            this.#buildWallsAndTiles(
+                roomData.WALLSTYLE, 
+                roomData.TILESTYLE, 
+                room.getWidth(), 
+                room.getLength()
+            )
+        )
+        room.addMapElements(this.#buildMapElements(roomData.MAPELEMENTS));
+        room.setGameObjects(this.#buildGameObjects(roomData.OBJECTS));
+        room.setNPCs(this.#buildNPCs(roomData.NPCS));
+        room.setDoors(this.#buildDoors(roomData.DOORS));
+
+        room.buildOccMap();
+
+        return room;
     }
 
     /**
@@ -88,22 +93,7 @@ module.exports = class RoomFactory {
         let listOfDoors = [];
         let listOfNPCs = [];
 
-        // ADD TILES
-        for (var i = 0; i < room.getLength(); i++) {
-            for (var j = 0; j < room.getWidth(); j++) {
-                listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false));
-            }
-        }
-
-        // ADD LEFT WALLS
-        for (var i = 0; i < room.getLength(); i++) {
-            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false));
-        }
-
-        // ADD RIGHT WALLS
-        for (var j = 0; j < room.getWidth(); j++) {
-            listOfMapElements.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
-        }
+        
 
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
@@ -118,12 +108,66 @@ module.exports = class RoomFactory {
         roomData.OBJECTS.forEach(objData => {
             this.#decodePositionDataAndCreate(roomData.ID, objData, listOfGameObjects)
         })
+    }
 
+    #buildWallsAndTiles = function(wallstyle, tilestyle, width, length) {
+        var listOfWallsAndTiles = []
+        if (wallstyle === undefined) wallstyle = GlobalStrings.DEFAULT
+        if (tilestyle === undefined) tilestyle = GlobalStrings.DEFAULT
+        // ADD TILES
+        for (var i = 0; i < length; i++) {
+            for (var j = 0; j < width; j++) {
+                // TODO replace
+                listOfWallsAndTiles.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false));
+            }
+        }
+        // ADD LEFT WALLS
+        for (var i = 0; i < length; i++) {
+            // TODO replace
+            listOfWallsAndTiles.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false));
+        }
+        // ADD RIGHT WALLS
+        for (var j = 0; j < width; j++) {
+            // TODO replace
+            listOfWallsAndTiles.push(this.#objService.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
+        }
+        return listOfWallsAndTiles
+    }
+
+    #buildMapElements = function (mapElements) {
+        let listOfElements = []
+    }
+
+    #buildGameObjects = function (gameObjects) {
+        let listOfObjects = []
+    }
+
+    #buildNPCs = function (npcs) {
+        let listOfNPCs = []
+        npcs.forEach(npcData => {
+            listOfNPCs.push(
+                this.#npcService.createCustomNPC(
+                    npcData.name, // npc name
+                    roomData.ID,  // roomID of position
+                    npcData.position[0], // x coordinate of position
+                    npcData.position[1], // y coordinate of position
+                    npcData.direction,   // direction npc is facing
+                    npcData.dialog       // what the npc says when
+                                         // talked to
+                )
+            )
+        })
+        return listOfNPCs
+    }
+
+    #buildDoors = function (doors) {
+        // TODO rewrite
+        let listOfDoors = []
         // ADD DOORS
         // doorData = {wallSide, logo, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
         //            closedMessage, codeToOpen}
-        roomData.DOORS.forEach(doorData => {     
+        doors.forEach(doorData => {     
             if (doorData.logo === undefined) {
                 doorData.logo = "default";
             }
@@ -226,28 +270,6 @@ module.exports = class RoomFactory {
             });
         }
 
-        // ADD NPCS
-        roomData.NPCS.forEach(npcData => {
-            listOfNPCs.push(
-                this.#npcService.createCustomNPC(
-                    npcData.name, // npc name
-                    roomData.ID,  // roomID of position
-                    npcData.position[0], // x coordinate of position
-                    npcData.position[1], // y coordinate of position
-                    npcData.direction,   // direction npc is facing
-                    npcData.dialog       // what the npc says when
-                                         // talked to
-                )
-            )
-        })
-
-        room.setMapElements(listOfMapElements);
-        room.setGameObjects(listOfGameObjects);
-        room.setNPCs(listOfNPCs);
-        room.setDoors(listOfDoors);
-        room.buildOccMap();
-
-        return room;
     }
 
     /**
@@ -316,7 +338,7 @@ module.exports = class RoomFactory {
      * Takes a data object defining a GameObject-instance to
      * be created, reads it out and then creates all instances
      * of the GameObject-class specified by the data object
-     * by calling the GameObjectService
+     * by calling the GameObjectFactory
      * 
      * This is a very hacky solution and not super nice, there
      * is no polymorphism and a tom of conditionals.
