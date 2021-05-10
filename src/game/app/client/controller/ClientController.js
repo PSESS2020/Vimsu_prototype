@@ -303,7 +303,7 @@ class ClientController {
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
         TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
-        TypeChecker.isEnumOf(initInfo.displayName, DisplayName);
+        TypeChecker.isString(initInfo.displayName);
         if (initInfo.businessCard.title !== undefined)
             TypeChecker.isString(initInfo.businessCard.title);
         if (initInfo.businessCard.surname !== undefined) 
@@ -327,7 +327,7 @@ class ClientController {
         );
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
 
-        this.displayName = initInfo.businessCard[initInfo.displayName.toLowerCase()];
+        this.displayName = initInfo.displayName;
 
         this.ownParticipant = new ParticipantClient(
             initInfo.id,
