@@ -72,14 +72,21 @@ class InviteFriendsView extends WindowView {
                                 </div>
                                 <div class="col-9 text-left">
                                     <label class="name lead">${fullname}</label>
-                                    ${businessCard.getJob() && businessCard.getCompany() && businessCard.getEmail() ?
-                                    `<br> 
-                                    <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                    <br>`
-                                    : ``}
-                                    <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                    <span class="small">${businessCard.getEmail()}</span>
+                                    ${businessCard.getJob() || businessCard.getCompany() ?
+                                        `<br> 
+                                        <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
+                                        <span >${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
+                                            " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}</span>
+                                        <br>`
+                                    : 
+                                        ``
+                                    }
+                                    ${businessCard.getEmail() ?
+                                        `<span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
+                                        <span class="small">${businessCard.getEmail()}</span>`
+                                    : 
+                                        ``
+                                    }
                                 </div>
                                 <div class="col-1">
                                     <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">

@@ -497,7 +497,7 @@ module.exports = class RouteController {
                 return response.render('register', { invalidForename: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
             }
 
-            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
+            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
                 if (res && res.token) {
                     const from = process.env.VIMSU_NOREPLY_EMAIL;
                     const subject = "Verify your email address for VIMSU";
@@ -573,7 +573,7 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
 
-                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, dbSuffix, this.#db).then(res => {
+                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, dbSuffix, this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
                         request.session.title = res.getTitle();

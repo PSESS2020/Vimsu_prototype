@@ -51,20 +51,27 @@ class ProfileView extends WindowView {
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">
                 <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
-                    ${businessCard.getJob() && businessCard.getCompany() && businessCard.getEmail() ?
-                    `<tr>
-                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                        <td style="padding: 15px">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                        <td style="padding: 15px">${this.businessCard.getEmail()}</td>
-                    </tr>
+                    ${businessCard.getJob() || businessCard.getCompany() ?
+                        `<tr>
+                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
+                            <td style="padding: 15px">${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
+                                " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}</td>
+                        </tr>`
+                    : 
+                        ``
+                    }
+                    ${businessCard.getEmail() ?
+                        `<tr>
+                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
+                            <td style="padding: 15px">${this.businessCard.getEmail()}</td>
+                        </tr>`
+                    : 
+                        ``
+                    }
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
                         <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
-                    </tr>`
-                    : ``}
+                    </tr>
                 </table>
             </div>
         `)

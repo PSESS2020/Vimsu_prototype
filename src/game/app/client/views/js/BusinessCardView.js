@@ -60,19 +60,22 @@ class BusinessCardView extends WindowView {
             ${fullname}</h5>
             </br>
             <table id="${"profile" + this.businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
-                ${this.businessCard.getJob() && this.businessCard.getCompany() ?
-                `<tr>
-                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                    <td style="padding: 15px">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
-                </tr>`
-                : ``
+                ${this.businessCard.getJob() || this.businessCard.getCompany() ?
+                    `<tr>
+                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
+                        <td style="padding: 15px">${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
+                            " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}</td>
+                    </tr>`
+                : 
+                    ``
                 }
                 ${this.isFriend || !this.isModerator ?
-                `<tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.isFriend ? "Email" : "Rank"}</td>
-                    <td style="padding: 15px">${this.isFriend ? this.businessCard.getEmail() : this.rank}</td>
-                </tr>`
-                : ``
+                    `<tr>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.isFriend ? "Email" : "Rank"}</td>
+                        <td style="padding: 15px">${this.isFriend ? this.businessCard.getEmail() : this.rank}</td>
+                    </tr>`
+                : 
+                    ``
                 }
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
