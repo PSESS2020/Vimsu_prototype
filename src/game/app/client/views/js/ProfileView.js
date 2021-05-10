@@ -5,9 +5,6 @@
  * @version 1.0.0
  */
 class ProfileView extends WindowView {
-    businessCard;
-    isModerator;
-
     /**
      * Creates an instance of ProfileView
      */
@@ -32,9 +29,6 @@ class ProfileView extends WindowView {
         $('#profileModal .modal-header').empty()
         $('#profileModal .modal-body').empty()
 
-        this.businessCard = businessCard;
-        this.isModerator = isModerator;
-
         let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
                        (businessCard.getForename() + " ") + 
                        (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
@@ -54,8 +48,8 @@ class ProfileView extends WindowView {
                     ${businessCard.getJob() || businessCard.getCompany() ?
                         `<tr>
                             <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                            <td style="padding: 15px">${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
-                                " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}</td>
+                            <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
                         </tr>`
                     : 
                         ``
@@ -63,14 +57,14 @@ class ProfileView extends WindowView {
                     ${businessCard.getEmail() ?
                         `<tr>
                             <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                            <td style="padding: 15px">${this.businessCard.getEmail()}</td>
+                            <td style="padding: 15px">${businessCard.getEmail()}</td>
                         </tr>`
                     : 
                         ``
                     }
                     <tr>
                         <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                        <td style="padding: 15px">${this.isModerator ? "Moderator" : "Participant"}</td>
+                        <td style="padding: 15px">${isModerator ? "Moderator" : "Participant"}</td>
                     </tr>
                 </table>
             </div>

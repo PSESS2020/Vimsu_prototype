@@ -623,7 +623,7 @@ module.exports = class RouteController {
                     }
                     const title = request.body.title;
 
-                    if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                    if (title !== "Title" && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
                         return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     }
                 }
