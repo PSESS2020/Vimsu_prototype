@@ -82,7 +82,7 @@ module.exports = class AccountService {
                 })
             })
         } else {
-            const account = new Account(accountId, username, undefined, undefined, undefined, forename, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+            const account = new Account(accountId, username, undefined, undefined, forename, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
             const acc = {
                 accountId: account.getAccountID(),

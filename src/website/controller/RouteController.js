@@ -558,7 +558,7 @@ module.exports = class RouteController {
                     }
                 })
             } else {
-                return AccountService.createAccount(request.body.username, undefined, undefined, request.body.forename, undefined, undefined, undefined, request.body.password, dbSuffix, this.#db).then(res => {
+                return AccountService.createAccount(request.body.username, undefined, undefined, request.body.forename, undefined, undefined, undefined, request.body.password, undefined, dbSuffix, this.#db).then(res => {
                     if (res instanceof Account) {
                         request.session.accountId = res.getAccountID();
                         request.session.registerValid = false;
