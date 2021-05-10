@@ -78,15 +78,14 @@
                                         <div class="form-row">
                                             <div class="form-group col-6">
                                                 <label for="title" class="input-label">Title</label>
-                                                <select class="form-control" name="title" id="inputTitle" required>
-                                                    <option selected>Title</option>
-                                                    <option>Mr.</option>
-                                                    <option>Mrs.</option>
-                                                    <option>Ms.</option>
-                                                    <option>Miss</option>
-                                                    <option>Dr.</option>
-                                                    <option>Prof.</option>
-                                                    <option>Rev.</option>
+                                                <select class="form-control" name="title" id="inputTitle">
+                                                    <option selected value="">Title</option>
+                                                    <% 
+                                                        const options=[ "Mr." , "Mrs." , "Ms." , "Miss" , "Dr." , "Prof.", "Rev." ]; 
+                                                        options.map(option => { 
+                                                    %>
+                                                        <option <%=title === option ? "selected" : "" %>><%=option %></option>
+                                                    <% }) %>
                                                 </select>
                                             </div>
                                         

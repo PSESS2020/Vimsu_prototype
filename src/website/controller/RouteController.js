@@ -491,13 +491,6 @@ module.exports = class RouteController {
                 }
             }
 
-            if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidEmail: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
-                }
-            }
-
             if (!request.body.password) {
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidPassword: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
@@ -514,14 +507,6 @@ module.exports = class RouteController {
                 }
             }
 
-            if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                const title = request.body.title;
-
-                if (title !== "Title" && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidTitle: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
-                }
-            }
-
             if (!request.body.forename) {
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidForename: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
@@ -531,7 +516,18 @@ module.exports = class RouteController {
             }
 
             if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
+                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidEmail: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                }
+
+                const title = request.body.title;
+
+                if (title && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidTitle: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                }
+
+                return AccountService.createAccount(request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
                     if (res && res.token) {
                         const from = process.env.VIMSU_NOREPLY_EMAIL;
                         const subject = "Verify your email address for VIMSU";
@@ -616,18 +612,6 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidUsernameString: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
 
-                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                        return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                    }
-                    const title = request.body.title;
-
-                    if (title !== "Title" && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                        return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                    }
-                }
-
                 if (!request.body.forename) {
                     if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                         return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
@@ -637,7 +621,17 @@ module.exports = class RouteController {
                 }
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                    return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, dbSuffix, this.#db).then(res => {
+                    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                        return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    }
+                    const title = request.body.title;
+
+                    if (title && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                        return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    }
+
+                    return AccountService.updateAccountData(accountId, request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, dbSuffix, this.#db).then(res => {
                         if (res instanceof Account) {
                             request.session.accountId = res.getAccountID();
                             request.session.title = res.getTitle();
