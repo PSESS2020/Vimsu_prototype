@@ -5,6 +5,7 @@ const passwordHash = require('password-hash');
 const db = require('../../config/db');
 const crypto = require('crypto');
 const TypeOfRole = require('../utils/TypeOfRole')
+const Settings = require('../../game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 
 /**
  * The Account Service
@@ -34,50 +35,73 @@ module.exports = class AccountService {
      * @return {Account|boolean} Account instance if successful
      */
     static createAccount(username, title, surname, forename, job, company, email, password, role, suffix, vimsudb) {
+        const accountId = new ObjectId().toString();
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
-        TypeChecker.isString(email);
-        TypeChecker.isString(password);
-        TypeChecker.isEnumOf(role, TypeOfRole);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        const accountId = new ObjectId().toString();
-        const verificationToken = crypto.randomBytes(64).toString('hex');
-        const account = new Account(accountId, username, title, surname, forename, job, company, email, role, verificationToken, "", /* TODO Production: false */ true);
+        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+            TypeChecker.isString(password);
+            TypeChecker.isString(title);
+            TypeChecker.isString(surname);
+            TypeChecker.isString(job);
+            TypeChecker.isString(company);
+            TypeChecker.isString(email);
+            TypeChecker.isEnumOf(role, TypeOfRole);
 
-        const acc = {
-            accountId: account.getAccountID(),
-            username: account.getUsername(),
-            title: account.getTitle(),
-            surname: account.getSurname(),
-            forename: account.getForename(),
-            job: account.getJob(),
-            company: account.getCompany(),
-            email: account.getEmail(),
-            passwordHash: passwordHash.generate(password),
-            role: account.getRole(),
-            verificationToken: account.getVerificationToken(),
-            forgotPasswordToken: account.getForgotPasswordToken(),
-            isActive: account.getIsActive()
-        }
+            const verificationToken = crypto.randomBytes(64).toString('hex');
+            const account = new Account(accountId, username, title, surname, forename, job, company, email, role, verificationToken, "", /* TODO Production: false */ true);
 
-        return vimsudb.createUniqueIndexInCollection("accounts" + suffix, { username: 1, email: 1 }).then(() => {
+            const acc = {
+                accountId: account.getAccountID(),
+                username: account.getUsername(),
+                title: account.getTitle(),
+                surname: account.getSurname(),
+                forename: account.getForename(),
+                job: account.getJob(),
+                company: account.getCompany(),
+                email: account.getEmail(),
+                passwordHash: passwordHash.generate(password),
+                role: account.getRole(),
+                verificationToken: account.getVerificationToken(),
+                forgotPasswordToken: account.getForgotPasswordToken(),
+                isActive: account.getIsActive()
+            }
+
+            return vimsudb.createUniqueIndexInCollection("accounts" + suffix, { username: 1, email: 1 }).then(() => {
+                return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
+                    if (res.insertedCount > 0) {
+                        return { token: verificationToken };
+                    } else if (res.code === 11000) {
+                        //duplicate entry found
+                        return res.keyValue;
+                    }
+        
+                    return false;
+                })
+            })
+        } else {
+            const account = new Account(accountId, username, undefined, undefined, undefined, forename, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+
+            const acc = {
+                accountId: account.getAccountID(),
+                username: account.getUsername(),
+                forename: account.getForename(),
+                passwordHash: passwordHash.generate(password),
+                registrationTime: new Date()
+            }
+    
             return vimsudb.insertOneToCollection("accounts" + suffix, acc).then(res => {
                 if (res.insertedCount > 0) {
-                    return { token: verificationToken };
+                    return account;
                 } else if (res.code === 11000) {
-                    //duplicate entry found
                     return res.keyValue;
                 }
     
                 return false;
             })
-        })
+        }
     }
 
     /**
@@ -105,7 +129,7 @@ module.exports = class AccountService {
     }
 
     /**
-     * @private gets account by account username / email from the database
+     * gets account by account username / email from the database
      * @method module:AccountService#getAccountByUsernameOrEmail
      * 
      * @param {String} usernameOrEmail account username or account email
@@ -220,30 +244,42 @@ module.exports = class AccountService {
     static updateAccountData(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, suffix, vimsudb) {
         TypeChecker.isString(accountId);
         TypeChecker.isString(newUsername);
-        TypeChecker.isString(newTitle);
-        TypeChecker.isString(newSurname);
         TypeChecker.isString(newForename);
-        TypeChecker.isString(newJob);
-        TypeChecker.isString(newCompany);
-        TypeChecker.isString(newEmail);
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, email: newEmail, title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
-            if (res.modifiedCount >= 0 && res.matchedCount > 0) {
-                return this.getAccountById(accountId, suffix, vimsudb).then(account => {
-                    if (account) {
-                        return new Account(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, account.role, account.verificationToken, account.forgotPasswordToken, account.isActive);
-                    }
+        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+            TypeChecker.isString(newTitle);
+            TypeChecker.isString(newSurname);
+            TypeChecker.isString(newJob);
+            TypeChecker.isString(newCompany);
+            TypeChecker.isString(newEmail);
 
-                    return false;
-                })
-            } else if (res.code === 11000) {
-                //duplicate entry found
-                return res.keyValue;
-            }
-            return false;
-        })
+            return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, email: newEmail, title: newTitle, surname: newSurname, forename: newForename, job: newJob, company: newCompany }).then(res => {
+                if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                    return this.getAccountById(accountId, suffix, vimsudb).then(account => {
+                        if (account) {
+                            return new Account(accountId, newUsername, newTitle, newSurname, newForename, newJob, newCompany, newEmail, account.role, account.verificationToken, account.forgotPasswordToken, account.isActive);
+                        }
+
+                        return false;
+                    })
+                } else if (res.code === 11000) {
+                    //duplicate entry found
+                    return res.keyValue;
+                }
+                return false;
+            })
+        } else {    
+            return vimsudb.updateOneToCollection("accounts" + suffix, { accountId: accountId }, { username: newUsername, forename: newForename }).then(res => {
+                if (res.modifiedCount >= 0 && res.matchedCount > 0) {
+                    return new Account(accountId, newUsername, undefined, undefined, newForename, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+                } else if (res.code === 11000) {
+                    return res.keyValue;
+                }
+                return false;
+            })
+        }
     }
 
     /**
@@ -383,13 +419,23 @@ module.exports = class AccountService {
         TypeChecker.isString(suffix);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return this.getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
-            if (user && passwordHash.verify(password, user.passwordHash) && user.isActive) {
-                return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.verificationToken, user.forgotPasswordToken, user.isActive);
-            } 
-            
-            return false;
-        })
+        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+            return this.getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
+                if (user && passwordHash.verify(password, user.passwordHash) && user.isActive) {
+                    return new Account(user.accountId, user.username, user.title, user.surname, user.forename, user.job, user.company, user.email, user.role, user.verificationToken, user.forgotPasswordToken, user.isActive);
+                } 
+                
+                return false;
+            })
+        } else {
+            return this.getAccountByUsernameOrEmail(usernameOrEmail, suffix, vimsudb).then(user => {
+                 if (user && passwordHash.verify(password, user.passwordHash)) {
+                    return new Account(user.accountId, user.username, undefined, undefined, user.forename, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+                }
+
+                return false;
+            })
+        }
     }
 
     /**

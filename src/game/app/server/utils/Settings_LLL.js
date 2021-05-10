@@ -70,5 +70,8 @@ module.exports = Object.freeze({
     ADVANCED_REGISTRATION_SYSTEM: false,
 
     /* Name that is displayed above avatar and in meetings */
-    DISPLAY_NAME: DisplayName.FORENAME
+    DISPLAY_NAME: DisplayName.FORENAME,
+
+    /* Suffix of account collection in DB: account collection name = accountsACCOUNTDB_SUFFIX */
+    ACCOUNTDB_SUFFIX: "LLL"
 });

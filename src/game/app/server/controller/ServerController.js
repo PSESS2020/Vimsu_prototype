@@ -850,7 +850,7 @@ module.exports = class ServerController {
 
                 //Check if ppant with targetID is a friend
                 //if so, emit the email. if not, emit the rank
-                if (ppant.hasFriend(targetID)) {
+                if (ppant.hasFriend(targetID) && Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                 } else {
@@ -3651,8 +3651,8 @@ module.exports = class ServerController {
         ppant.setPosition(newPos);
         ppant.setDirection(direction);
 
-        //Get username, isModerator, isVisible, shirtColor
-        let username = ppant.getBusinessCard().getUsername();
+        //displayName, isModerator, isVisible, shirtColor
+        let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
         let isModerator = ppant.getIsModerator();
         let isVisible = ppant.getIsVisible();
         let shirtColor = ppant.getShirtColor();
@@ -3667,7 +3667,6 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
         socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, displayName: displayName, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
 
         //Emit to participant all participant positions, that were in new room before him

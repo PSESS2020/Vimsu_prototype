@@ -87,9 +87,9 @@ module.exports = class ParticipantService {
                         accountId,
                         new BusinessCard(par.participantId,
                             account.getUsername(),
+                            account.getForename(),
                             account.getTitle(),
                             account.getSurname(),
-                            account.getForename(),
                             account.getJob(),
                             account.getCompany(),
                             account.getEmail()),
@@ -183,9 +183,9 @@ module.exports = class ParticipantService {
                             accountId,
                             new BusinessCard(par.participantId,
                                 account.getUsername(),
+                                account.getForename(),
                                 account.getTitle(),
                                 account.getSurname(),
-                                account.getForename(),
                                 account.getJob(),
                                 account.getCompany(),
                                 account.getEmail()),
@@ -268,7 +268,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
             if (par) {
-                return AccountService.getAccountUsername(par.accountId, '', vimsudb).then(username => {
+                return AccountService.getAccountUsername(par.accountId, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(username => {
                     return username;
                 })
             }
@@ -295,7 +295,7 @@ module.exports = class ParticipantService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
     
-        return AccountService.getAccountByUsernameOrEmail(username, '', vimsudb).then(acc => {
+        return AccountService.getAccountByUsernameOrEmail(username, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(acc => {
             if (acc) {
                 return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: acc.accountId }).then(par => {
                         return par.participantId;
@@ -326,12 +326,12 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
-                return AccountService.getAccountById(par.accountId, '', vimsudb).then(account => {
+                return AccountService.getAccountById(par.accountId, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
                         account.username,
+                        account.forename,
                         account.title,
                         account.surname,
-                        account.forename,
                         account.job,
                         account.company,
                         account.email);
