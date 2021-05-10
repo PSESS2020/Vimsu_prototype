@@ -85,7 +85,7 @@ class ClientController {
         }
 
         this.gameView.drawStatusBar();
-        this.gameView.drawHUD(this.displayName, this.isVideoConference);
+        this.gameView.drawHUD(this.ownBusinessCard.getUsername(), this.isVideoConference);
         this.gameView.initOwnAvatarView(this.ownParticipant);
         this.gameView.initCanvasEvents();
 
