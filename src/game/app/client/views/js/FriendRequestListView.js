@@ -65,10 +65,10 @@ class FriendRequestListView extends WindowView {
                     </div>
                     <div class="col-8 text-left">
                         <label class="name lead">${fullname}</label>
-                        ${this.businessCard.getJob() || this.businessCard.getCompany() ?
+                        ${businessCard.getJob() || businessCard.getCompany() ?
                             `<div>
-                                <i class="fa fa-briefcase fa-fw mr-1"></i>${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
-                                    " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}
+                                <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                    " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
                             </div>`
                         : 
                             ``

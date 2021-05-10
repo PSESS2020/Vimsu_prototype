@@ -73,17 +73,17 @@ class InviteFriendsView extends WindowView {
                                 <div class="col-9 text-left">
                                     <label class="name lead">${fullname}</label>
                                     ${businessCard.getJob() || businessCard.getCompany() ?
-                                        `<br> 
-                                        <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                        <span >${(this.businessCard.getJob() ? this.businessCard.getJob() : "Unknown") + 
-                                            " at " + (this.businessCard.getCompany() ? this.businessCard.getCompany() : "Unknown")}</span>
-                                        <br>`
+                                        `<div>
+                                            <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                        </div>`
                                     : 
                                         ``
                                     }
                                     ${businessCard.getEmail() ?
-                                        `<span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                        <span class="small">${businessCard.getEmail()}</span>`
+                                        `<div>
+                                            <i class="fa fa-envelope fa-fw mr-1"></i>${businessCard.getEmail()}
+                                        </div>`
                                     : 
                                         ``
                                     }
