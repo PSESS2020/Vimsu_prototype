@@ -6,32 +6,32 @@ const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 /**
- * The Door Service
- * @module DoorService
+ * The Door Factory
+ * @module DoorFactory
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class DoorService {
+module.exports = class DoorFactory {
 
     #doorIDPrefixList;
 
     /**
-     * creates an instance of DoorService
+     * creates an instance of DoorFactory
      * @constructor 
      */
     constructor() {
-        if (!!DoorService.instance) {
-            return DoorService.instance;
+        if (!!DoorFactory.instance) {
+            return DoorFactory.instance;
         }
 
-        DoorService.instance = this;
+        DoorFactory.instance = this;
         this.#doorIDPrefixList = [];
     }
 
     /**
      * @private checks parameters' data type
-     * @method module:DoorService#checkParamTypes
+     * @method module:DoorFactory#checkParamTypes
      * 
      * @param {TypeOfDoor} typeOfDoor type of checked door
      * @param {Position} mapPosition foyer door position
@@ -59,7 +59,7 @@ module.exports = class DoorService {
 
     /**
      * @private generates valid enter positions for left door
-     * @method module:DoorService#generateEnterPositionsLeftWall
+     * @method module:DoorFactory#generateEnterPositionsLeftWall
      * 
      * @param {Position} doorPosition door position
      * 
@@ -86,7 +86,7 @@ module.exports = class DoorService {
 
     /**
      * @private generates valid enter positions for right door
-     * @method module:DoorService#generateEnterPositionsRightWall
+     * @method module:DoorFactory#generateEnterPositionsRightWall
      * 
      * @param {Position} doorPosition door position
      * 
@@ -114,7 +114,7 @@ module.exports = class DoorService {
     /**
      * Counts how many doors exist with that doorIDPrefix (doorIDPrefix is shared between doors that connect the same rooms in the same order)
      * 
-     * @method module:DoorService#countDoorOccurrences 
+     * @method module:DoorFactory#countDoorOccurrences 
      * 
      * @param {String} doorIDPrefix prefix of door ID (F + startingRoomID + T + targetRoomID)
      * 
@@ -131,120 +131,9 @@ module.exports = class DoorService {
     }
 
     /**
-     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
-     * creates an instance of lecture door
-     * @method module:DoorService#createLectureDoor
-     * 
-     * @param {Position} mapPosition lecture door position
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} lecture door instance
-     */
-    createLectureDoor(mapPosition, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor.LEFT_LECTUREDOOR, mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
-
-        let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
-
-        return new Door('L' + mapPosition.getRoomId(), TypeOfDoor.LEFT_LECTUREDOOR, "leftlecturedoor_default", mapPosition, enterPositionWithoutClick, enterPositions, undefined, undefined, isOpen, closedMessage, codeToOpen);
-    }
-
-    /**
-     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
-     * creates an instance of foyer door
-     * @method module:DoorService#createFoyerDoor
-     * 
-     * @param {Position} mapPosition foyer door position
-     * @param {Position} targetPosition avatar's position on entering foyer door
-     * @param {Direction} direction avatar's direction on entering foyer door
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} foyer door instance
-     */
-    createFoyerDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor.LEFT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-
-        let enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
-        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.LEFT_DOOR, "leftfoyerdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-    }
-
-    /**
-     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
-     * creates an instance of food court door
-     * @method module:DoorService#createFoodCourtDoor
-     * 
-     * @param {Position} mapPosition food court door position
-     * @param {Position} targetPosition avatar's position on entering food court door
-     * @param {Direction} direction avatar's direction on entering food court door
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} food court door instance
-     */
-    createFoodCourtDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor.RIGHT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-
-        let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
-        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightfoodcourtdoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-    }
-
-    /**
-     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
-     * creates an instance of reception door
-     * @method module:DoorService#createReceptionDoor
-     * 
-     * @param {Position} mapPosition reception door position
-     * @param {Position} targetPosition avatar's position on entering reception door
-     * @param {Direction} direction avatar's direction on entering reception door
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} reception door instance
-     */
-    createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor.RIGHT_DOOR, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-
-        let enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
-        return new Door('F' + mapPosition.getRoomId() + 'T' + targetPosition.getRoomId(), TypeOfDoor.RIGHT_DOOR, "rightreceptiondoor_default", mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-    }
-
-    /**
-     * This method should only be used it this is not a custom created conference and the rooms are created with RoomDecorators
-     * creates an instance of escape room door
-     * @method module:DoorService#createEscapeRoomDoor
-     * 
-     * @param {Position} mapPosition escape room door position
-     * @param {Position} targetPosition avatar's position on entering escape room door
-     * @param {Direction} direction avatar's direction on entering escape room door
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} escape room door instance
-     */
-    createEscapeRoomDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
-        //Assets for this door are still missing, so for now it's just a reception door
-
-        return this.createReceptionDoor(mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen);
-    }
-
-    /**
      * Creates a custom door with the passed attributes.
      * 
-     * @method module:DoorService#createCustomDoor
+     * @method module:DoorFactory#createCustomDoor
      * 
      * @param {String} assetPath // The path to the logo being portrayed
      *                           // above the door
@@ -297,7 +186,7 @@ module.exports = class DoorService {
     /**
      * Creates a custom lecture door with the passed attributes.
      * 
-     * @method module:DoorService#createCustomLectureDoor
+     * @method module:DoorFactory#createCustomLectureDoor
      * 
      * @param {String} assetPath The path to the logo being portrayed above the door                     
      * @param {String} wallSide Wallside, either left or right
