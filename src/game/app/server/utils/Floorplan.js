@@ -4,7 +4,7 @@ const GlobalStrings = require('../../client/shared/GlobalStrings');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
 const DoorClosedMessages = require('./messages/DoorClosedMessages');
 const NPCDialog = require('./NPCDialog');
-const Settings = require('./Settings');
+const Settings = require('./' + process.env.SETTINGS_FILENAME);
 
 /**
  * @module Floorplan

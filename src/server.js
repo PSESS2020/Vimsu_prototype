@@ -13,7 +13,10 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
-const Settings = require('./game/app/server/utils/Settings.js');
+
+/* Allows reading from a .env file */
+require('dotenv').config();
+const Settings = require('./game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 
 /* ############################################################################### */
 /* ######################### SETTING UP THE SERVER ############################### */
@@ -46,8 +49,6 @@ httpServer.listen(PORT, () => console.log(`Vimsu-Server listening on port ${PORT
 /* ######################## LOADING VIMSU REQUIREMENTS ########################### */
 /* ############################################################################### */
 
-/* Allows reading from a .env file */
-require('dotenv').config();
 
 
 /* Initializes blob instance if video storage is needed for this conference */

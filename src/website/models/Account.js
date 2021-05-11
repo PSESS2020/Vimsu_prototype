@@ -43,16 +43,26 @@ module.exports = class Account {
     constructor(accountID, username, title, surname, forename, job, company, email, role, verificationToken, forgotPasswordToken, isActive) {
         TypeChecker.isString(accountID);
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
-        TypeChecker.isString(email);
-        TypeChecker.isEnumOf(role, TypeOfRole);
-        TypeChecker.isString(verificationToken);
-        TypeChecker.isString(forgotPasswordToken);
-        TypeChecker.isBoolean(isActive);
+        //following attributes can be undefined if registration system is not advanced
+        if (title !== undefined)
+            TypeChecker.isString(title);
+        if (surname !== undefined)
+            TypeChecker.isString(surname);
+        if (job !== undefined)
+            TypeChecker.isString(job);
+        if (company !== undefined)
+            TypeChecker.isString(company);
+        if (email !== undefined) 
+            TypeChecker.isString(email);
+        if (role !== undefined)
+            TypeChecker.isEnumOf(role, TypeOfRole);
+        if (verificationToken !== undefined)
+            TypeChecker.isString(verificationToken);
+        if (forgotPasswordToken !== undefined)
+            TypeChecker.isString(forgotPasswordToken);
+        if (isActive !== undefined)
+            TypeChecker.isBoolean(isActive);
 
         this.#accountID = accountID;
         this.#username = username;
@@ -92,7 +102,7 @@ module.exports = class Account {
      * Gets user's title
      * @method module:Account#getTitle
      * 
-     * @return {String} title
+     * @return {?String} title
      */
     getTitle() {
         return this.#title;
@@ -102,7 +112,7 @@ module.exports = class Account {
      * Gets user's surname
      * @method module:Account#getSurname
      * 
-     * @return {String} surname
+     * @return {?String} surname
      */
     getSurname() {
         return this.#surname;
@@ -122,7 +132,7 @@ module.exports = class Account {
      * Gets user's job
      * @method module:Account#getJob
      * 
-     * @return {String} job
+     * @return {?String} job
      */
     getJob() {
         return this.#job;
@@ -132,7 +142,7 @@ module.exports = class Account {
      * Gets user's company
      * @method module:Account#getCompany
      * 
-     * @return {String} company
+     * @return {?String} company
      */
     getCompany() {
         return this.#company;
@@ -142,7 +152,7 @@ module.exports = class Account {
      * Gets user's email
      * @method module:Account#getEmail
      * 
-     * @return {String} email
+     * @return {?String} email
      */
     getEmail() {
         return this.#email;
@@ -152,7 +162,7 @@ module.exports = class Account {
      * Gets user's role
      * @method module:Account#getRole
      * 
-     * @returns {TypeOfRole} role
+     * @returns {?TypeOfRole} role
      */
      getRole() {
         return this.#role;
@@ -162,7 +172,7 @@ module.exports = class Account {
      * Gets token for account verification
      * @method module:Account#getVerificationToken
      * 
-     * @returns {String} token
+     * @returns {?String} token
      */
     getVerificationToken() {
         return this.#verificationToken;
@@ -172,9 +182,9 @@ module.exports = class Account {
      * Gets token for forgot password
      * @method module:Account#getForgotPasswordToken
      * 
-     * @returns {String} token
+     * @returns {?String} token
      */
-     getForgotPasswordToken() {
+    getForgotPasswordToken() {
         return this.#forgotPasswordToken;
     }
 
@@ -182,7 +192,7 @@ module.exports = class Account {
      * Gets account activation status
      * @method module:Account#getIsActive
      * 
-     * @returns {Boolean} true if account is active
+     * @returns {?Boolean} true if account is active
      */
     getIsActive() {
         return this.#isActive;

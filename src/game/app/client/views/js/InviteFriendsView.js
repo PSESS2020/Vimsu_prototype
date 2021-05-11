@@ -59,6 +59,10 @@ class InviteFriendsView extends WindowView {
             this.chatId = chatId;
 
             this.businessCards.forEach(businessCard => {
+                let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                               (businessCard.getForename() + " ") + 
+                               (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                               (" (@" + businessCard.getUsername() + ")");
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent" >
@@ -67,13 +71,22 @@ class InviteFriendsView extends WindowView {
                                     <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
                                 </div>
                                 <div class="col-9 text-left">
-                                    <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                                    <br> 
-                                    <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                    <br>
-                                    <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                    <span class="small">${businessCard.getEmail()}</span>
+                                    <label class="name lead">${fullname}</label>
+                                    ${businessCard.getJob() || businessCard.getCompany() ?
+                                        `<div>
+                                            <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
+                                    ${businessCard.getEmail() ?
+                                        `<div>
+                                            <i class="fa fa-envelope fa-fw mr-1"></i>${businessCard.getEmail()}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
                                 </div>
                                 <div class="col-1">
                                     <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">

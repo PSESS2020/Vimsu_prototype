@@ -14,7 +14,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 const TestUtil = require('./utils/TestUtil.js');
 const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 
 var id;
 var accountId;
@@ -37,12 +37,12 @@ describe('Participant test', function () {
     beforeEach(function () {
         id = TestUtil.randomString();
         accountId = TestUtil.randomString();
-        businessCard = new BusinessCard(id, 'username', 'title', 'surname', 'forename', 'job', 'company', 'email');
+        businessCard = new BusinessCard(id, 'username', 'forename', 'title', 'surname', 'job', 'company', 'email');
         position = TestUtil.randomPosition();
         direction = TestUtil.randomObjectValue(Direction);
-        friendList = new FriendList([new BusinessCard(id + 'friend', 'friend', 'title', 'surname', 'forename', 'job', 'company', 'friendEmail')]);
-        receivedRequestList = new FriendList([new BusinessCard(id + 'friendRequester', 'friendRequester', 'title', 'surname', 'forename', 'job', 'company', 'friendRequesterEmail')]);
-        sentRequestList = new FriendList([new BusinessCard(id + 'friendTarget', 'friendTarget', 'title', 'surname', 'forename', 'job', 'company', 'friendTargetEmail')]);
+        friendList = new FriendList([new BusinessCard(id + 'friend', 'friend', 'forename', 'title', 'surname', 'job', 'company', 'friendEmail')]);
+        receivedRequestList = new FriendList([new BusinessCard(id + 'friendRequester', 'friendRequester', 'forename', 'title', 'surname', 'job', 'company', 'friendRequesterEmail')]);
+        sentRequestList = new FriendList([new BusinessCard(id + 'friendTarget', 'friendTarget', 'forename', 'title', 'surname', 'job', 'company', 'friendTargetEmail')]);
         achievements = [];
         new TaskService().getAllTasks().forEach(x => {
             taskMapping[x.getTaskType()] = 0;
@@ -165,7 +165,7 @@ describe('Participant test', function () {
         let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
-        let busCard = new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        let busCard = new BusinessCard('4', 'friendReceiver', 'Max', 'Dr', 'Mustermann', 'job', 'company', 'email');
         ppant.addSentFriendRequest(busCard);
 
         assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
@@ -192,7 +192,7 @@ describe('Participant test', function () {
         let oldLength = ppant.getSentRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
-        let busCard = new BusinessCard('4', 'friendReceiver', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        let busCard = new BusinessCard('4', 'friendReceiver', 'Max', 'Dr', 'Mustermann', 'job', 'company', 'email');
         ppant.addSentFriendRequest(busCard);
 
         assert.equal(ppant.getSentRequestList().getAllBusinessCards().length, oldLength + 1);
@@ -215,7 +215,7 @@ describe('Participant test', function () {
         let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
-        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        let busCard = new BusinessCard('44', 'testUser', 'Max', 'Dr', 'Mustermann', 'job', 'company', 'email');
         ppant.addFriendRequest(busCard);
 
         assert.equal(ppant.getReceivedRequestList().includes('44'), true);
@@ -243,7 +243,7 @@ describe('Participant test', function () {
         let oldLength = ppant.getReceivedRequestList().getAllBusinessCards().length;
 
         //add new friendRequest
-        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        let busCard = new BusinessCard('44', 'testUser', 'Max', 'Dr', 'Mustermann', 'job', 'company', 'email');
         ppant.addFriendRequest(busCard);
 
         assert.equal(ppant.getReceivedRequestList().includes('44'), true);
@@ -262,7 +262,7 @@ describe('Participant test', function () {
 
     it('test remove friend', function () {
         //add new friendRequest and accept it 
-        let busCard = new BusinessCard('44', 'testUser', 'Dr', 'Mustermann', 'Max', 'job', 'company', 'email');
+        let busCard = new BusinessCard('44', 'testUser', 'Max', 'Dr', 'Mustermann', 'job', 'company', 'email');
         ppant.addFriendRequest(busCard);
         ppant.acceptFriendRequest('44');
 

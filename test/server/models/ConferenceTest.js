@@ -6,7 +6,7 @@ const expect = chai.expect;
 const Conference = require('../../../src/game/app/server/models/Conference.js');
 const Schedule = require('../../../src/game/app/server/models/Schedule.js');
 const Lecture = require('../../../src/game/app/server/models/Lecture.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const LectureTestData = require('./TestData/LectureTestData.js');
 
 //Lecture Test Data

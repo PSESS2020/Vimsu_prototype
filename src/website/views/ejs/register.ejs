@@ -12,10 +12,10 @@
             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
                 <h5 class="mb-4">Sign Up</h5>
                 <div class="row justify-content-left m-0 mb-3 p-0">
-                    <% if(locals.registerSuccess === true) { %>
+                    <% if(locals.advancedRegistrationSystem && locals.registerSuccess === true) { %>
                         <small class="success"><i class="fa fa-check-circle"></i> We have sent you a verification link to <%=sentTo%>. 
                             Please follow the link to complete the registration.</small>
-                    <% } else if(locals.emailTaken === true) { %>
+                    <% } else if(locals.advancedRegistrationSystem && locals.emailTaken === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The email you
                             entered is already registered</small>
                     <% } else if (locals.usernameTaken === true) { %>
@@ -26,10 +26,10 @@
                     <% } else if (locals.invalidUsernameString === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The username
                             you entered doesn't match our criteria.</small>
-                    <% } else if (locals.invalidEmail === true) { %>
+                    <% } else if (locals.advancedRegistrationSystem && locals.invalidEmail === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> The email you
                             entered is invalid. Please try again.</small>
-                    <% } else if (locals.invalidTitle === true) { %>
+                    <% } else if (locals.advancedRegistrationSystem && locals.invalidTitle === true) { %>
                         <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
                             Please choose a title from the options we provided.</small>
                     <% } else if (locals.invalidPassword === true) { %>
@@ -48,10 +48,13 @@
                         <label for="username" class="input-label">Username&nbsp<span class="warning">*</span></label>
                         <input class="form-control" type="text" id="usernameInput" name="username" placeholder="maxmuster" maxlength="32" required value="<%=username%>">
                     </div>
-                    <div class="form-group">
-                        <label for="email" class="input-label">Email&nbsp<span class="warning">*</span></label>
-                        <input class="form-control" type="text" id="emailInput" name="email" placeholder="maxmustermann@example.com" required value="<%=email%>">
-                    </div>
+
+                    <% if (locals.advancedRegistrationSystem) { %>
+                        <div class="form-group">
+                            <label for="email" class="input-label">Email&nbsp<span class="warning">*</span></label>
+                            <input class="form-control" type="text" id="emailInput" name="email" placeholder="maxmustermann@example.com" required value="<%=email%>">
+                        </div>
+                    <% } %>
                     
                     <div class="form-group">
                         <label for="forename" class="input-label">Forename&nbsp<span class="warning">*</span></label>
@@ -69,37 +72,39 @@
                             required autocomplete="new-password">
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="title" class="input-label">Title</label>
-                            <select class="form-control" name="title" id="titleInput" required>
-                                <option selected>Title</option>
-                                <option>Mr.</option>
-                                <option>Mrs.</option>
-                                <option>Ms.</option>
-                                <option>Miss</option>
-                                <option>Dr.</option>
-                                <option>Prof.</option>
-                                <option>Rev.</option>
-                            </select>
+                    <% if (locals.advancedRegistrationSystem) { %>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="title" class="input-label">Title</label>
+                                <select class="form-control" name="title" id="titleInput">
+                                    <option selected value="">Title</option>
+                                    <% 
+                                        const options=[ "Mr." , "Mrs." , "Ms." , "Miss" , "Dr." , "Prof.", "Rev." ]; 
+                                        options.map(option => { 
+                                    %>
+                                        <option <%=title === option ? "selected" : "" %>><%=option %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="surname" class="input-label">Surname</label>
+                                <input type="text" class="form-control" id="surnameInput" name="surname" placeholder="Mustermann" value="<%=surname%>">
+                            </div>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="surname" class="input-label">Surname</label>
-                            <input type="text" class="form-control" id="surnameInput" name="surname" placeholder="Mustermann" value="<%=surname%>">
+        
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="job" class="input-label">Job/Profession</label>
+                                <input type="text" class="form-control" id="jobInput" name="job" placeholder="Student" value="<%=job%>">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="company" class="input-label">Company/School</label>
+                                <input type="text" class="form-control" id="companyInput" name="company"
+                                    placeholder="MIT" value="<%=company%>">
+                            </div>
                         </div>
-                    </div>
-    
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="job" class="input-label">Job/Profession</label>
-                            <input type="text" class="form-control" id="jobInput" name="job" placeholder="Student" value="<%=job%>">
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="company" class="input-label">Company/School</label>
-                            <input type="text" class="form-control" id="companyInput" name="company"
-                                placeholder="MIT" value="<%=company%>">
-                        </div>
-                    </div>
+                    <% } %>
+
                     <div class="row justify-content-center m-0 p-0">
                         <small>Already have an account? <span><a class="link" href="/login"> Sign in now!</a></span></small>
                     </div>
@@ -112,12 +117,7 @@
 	</div>
     <%- include('partials/footer') %>
 
-    <script>
-        $(document).ready(() => {
-            var title = "<%=title%>";
-            document.getElementById("inputTitle").value = title ? title : "Title";
-        })
-
+    <script>    
         $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-32 characters containing only numbers, letters, and characters such as dash, underscore, or dot. 2 characters in a row or any characters at the start or at the end are not allowed.'});
     </script>
 </body>

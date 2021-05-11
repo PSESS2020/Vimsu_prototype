@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const ObjectId = require('mongodb').ObjectID;
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const db = require('../../../../config/db');
 const Meeting = require('../models/Meeting.js');
 

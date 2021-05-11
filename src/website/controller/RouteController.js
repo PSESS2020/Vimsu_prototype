@@ -6,7 +6,7 @@ const AccountService = require('../services/AccountService');
 const ParticipantService = require('../../game/app/server/services/ParticipantService');
 const SlotService = require('../services/SlotService')
 const path = require('path');
-const Settings = require('../../game/app/server/utils/Settings.js');
+const Settings = require('../../game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const TypeChecker = require('../../game/app/client/shared/TypeChecker');
 const dbClient = require('../../config/db');
 const blobClient = require('../../config/blob');
@@ -71,7 +71,7 @@ module.exports = class RouteController {
      * @method module:RouteController#init
      */
     #init = function () {
-        const dbSuffix = '';
+        const dbSuffix = Settings.ACCOUNTDB_SUFFIX;
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
@@ -209,27 +209,29 @@ module.exports = class RouteController {
             })
         })
 
-        this.#app.get('/verify-account/:token', (request, response) => {
-            return AccountService.getAccountByVerificationToken(request.params.token, dbSuffix, this.#db).then(account => {
-                if (account /* TODO Production && !account.isActive*/) {
-                    return AccountService.activateAccount(account.accountId, request.params.token, dbSuffix, this.#db).then(result => {
-                        const args = { verifySuccess: result }
-                        if (request.session.loggedin === true) {
-                            response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
-                        } else {
-                            response.render('verify-account', args)
-                        }
-                    })
-                } else {
-                    if (request.session.loggedin === true) {
-                        response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+            this.#app.get('/verify-account/:token', (request, response) => {
+                return AccountService.getAccountByVerificationToken(request.params.token, dbSuffix, this.#db).then(account => {
+                    if (account /* TODO Production && !account.isActive*/) {
+                        return AccountService.activateAccount(account.accountId, request.params.token, dbSuffix, this.#db).then(result => {
+                            const args = { verifySuccess: result }
+                            if (request.session.loggedin === true) {
+                                response.render('verify-account', this.#getLoggedInParameters(args, request.session.username));
+                            } else {
+                                response.render('verify-account', args)
+                            }
+                        })
                     } else {
-                        response.render('page-not-found');
+                        if (request.session.loggedin === true) {
+                            response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                        } else {
+                            response.render('page-not-found');
+                        }
                     }
-                }
-            })
+                })
 
-        })
+            })
+        }
 
         this.#app.get('/privacy-policy', (request, response) => {
             if (request.session.loggedin === true) {
@@ -251,7 +253,7 @@ module.exports = class RouteController {
 
 
             this.#app.post('/my-dashboard/upload', (request, response) => {
-                if (request.session.role !== TypeOfRole.ADMIN) return;
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM && request.session.role !== TypeOfRole.ADMIN) return;
                 
                 if (!request.files || Object.keys(request.files).length === 0) {
                     return response.render('upload', this.#getLoggedInParameters({ noFilesUploaded: true, title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }, request.session.username));
@@ -281,22 +283,24 @@ module.exports = class RouteController {
                     else {
                         response.render('upload', this.#getLoggedInParameters({ uploading: true, title: '', startingTime: '', remarks: '', maxParticipants: '' }, request.session.username))
 
-                        const from = process.env.VIMSU_NOREPLY_EMAIL
-                        const subject = "Your lecture has been submitted";
-                        const message = `
-                            This is a confirmation message that you have successfully submitted your lecture:<br><br><small>
-                            Title: ${request.body.title}<br>
-                            Starting time: ${request.body.startingTime}<br>
-                            Max participants: ${request.body.maxParticipants}<br>
-                            Remarks: ${request.body.remarks}<br>
-                            Video: ${video.name}
-                            </small>
-                        `;
-                        const messageReason = "we received a request to submit a lecture with your account";
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            const from = process.env.VIMSU_NOREPLY_EMAIL
+                            const subject = "Your lecture has been submitted";
+                            const message = `
+                                This is a confirmation message that you have successfully submitted your lecture:<br><br><small>
+                                Title: ${request.body.title}<br>
+                                Starting time: ${request.body.startingTime}<br>
+                                Max participants: ${request.body.maxParticipants}<br>
+                                Remarks: ${request.body.remarks}<br>
+                                Video: ${video.name}
+                                </small>
+                            `;
+                            const messageReason = "we received a request to submit a lecture with your account";
 
-                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+                            const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
 
-                        this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                            this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                        }
 
                         return SlotService.storeVideo(video, this.#blob).then(videoData => {
                             if (videoData) {
@@ -339,13 +343,15 @@ module.exports = class RouteController {
                     request.session.loggedin = true;
                     request.session.accountId = user.getAccountID();
                     request.session.username = user.getUsername();
-                    request.session.title = user.getTitle();
-                    request.session.surname = user.getSurname();
                     request.session.forename = user.getForename();
-                    request.session.job = user.getJob();
-                    request.session.company = user.getCompany();
-                    request.session.email = user.getEmail();
-                    request.session.role = user.getRole();
+                    if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                        request.session.title = user.getTitle();
+                        request.session.surname = user.getSurname();
+                        request.session.job = user.getJob();
+                        request.session.company = user.getCompany();
+                        request.session.email = user.getEmail();
+                        request.session.role = user.getRole();
+                    }
                     response.redirect('/');
                 }
                 else {
@@ -355,115 +361,122 @@ module.exports = class RouteController {
             })
         });
 
-        this.#app.get('/reset-password/:token', (request, response) => {
-            return AccountService.getAccountByForgotPasswordToken(request.params.token, dbSuffix, this.#db).then(account => {
-                if (account) {
-                    if (request.session.loggedin === true) {
-                        response.render('reset-password', this.#getLoggedInParameters({}, request.session.username));
-                    } else {
-                        response.render('reset-password', {})
-                    }
-                } else {
-                    if (request.session.loggedin === true) {
-                        response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
-                    } else {
-                        response.render('page-not-found');
-                    }
-                }
-            })
-        });
-
-        this.#app.post('/reset-password/:token', (request, response) => {
-            if (!request.body.newPassword) {
-                if (request.session.loggedin === true) {
-                    return response.render('reset-password', this.#getLoggedInParameters({ invalidPassword: true }, request.session.username))
-                } else {
-                    return response.render('reset-password', { invalidPassword: true })
-                }
-            }
-
-            if (request.body.newPassword !== request.body.retypedNewPassword) {
-                if (request.session.loggedin === true) {
-                    return response.render('reset-password', this.#getLoggedInParameters({ passwordsDontMatch: true }, request.session.username))
-                } else {
-                    return response.render('reset-password', { passwordsDontMatch: true })
-                }
-            }
-
-            return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(({username, email, success}) => {
-                if (username && email && success) {
-                    if (request.session.loggedin === true) {
-                        response.render('reset-password', this.#getLoggedInParameters({ changePasswordSuccess: true }, request.session.username))
-                    } else {
-                        response.render('reset-password', { changePasswordSuccess: true })
-                    }
-
-                    const from = process.env.VIMSU_NOREPLY_EMAIL
-                    const subject = "Your password has been changed";
-                    const message = "This is a confirmation message that you have successfully changed your password.";
-                    const messageReason = "we received a request to change your password for your account";
-
-                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, email, { show: false }, subject, message, messageReason)
-
-                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
-                    
-                } else {
-                    if (request.session.loggedin === true) {
-                        response.render('reset-password', this.#getLoggedInParameters({ changePasswordFailed: true }, request.session.username))
-                    } else {
-                        response.render('reset-password', { changePasswordFailed: true })
-                    }
-                }
-            })
-        });
-
-        this.#app.get('/forgot-password', (request, response) => {
-            if (request.session.loggedin === true) {
-                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
-            } else {
-                response.render('forgot-password', { email: '' });
-            }
-        });
-
-        this.#app.post('/forgot-password', (request, response) => {
-            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                return response.render('forgot-password', { invalidEmail: true, email: request.body.email });
-            }
-
-            return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(({username, token}) => {
-                if (username && token) {
-                    const from = process.env.VIMSU_NOREPLY_EMAIL;
-                    const subject = "Reset your VIMSU password";
-                    const message = "We received a request to reset your VIMSU password. Please click on the link below to set a new password for your account. Your password will not be changed if you ignore this message.";
-                    const messageReason = "we received a request to reset your password for your account";
-                    const button = {
-                        show: true, 
-                        name: "Reset Password", 
-                        url: `${process.env.VIMSU_DOMAIN}/reset-password/${token}`
-                    }
-
-                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, request.body.email, button, subject, message, messageReason)
-
-                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
-                        if (result === true) {
-                            response.render('forgot-password', { messageSent: true, sentTo: request.body.email, email: '' })
-                            response.end();
+        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+            this.#app.get('/reset-password/:token', (request, response) => {
+                return AccountService.getAccountByForgotPasswordToken(request.params.token, dbSuffix, this.#db).then(account => {
+                    if (account) {
+                        if (request.session.loggedin === true) {
+                            response.render('reset-password', this.#getLoggedInParameters({}, request.session.username));
                         } else {
-                            response.render('forgot-password', { sendMessageFailed: true, email: request.body.email });
+                            response.render('reset-password', {})
                         }
-                    })
-                } else {
-                    response.render('forgot-password', { invalidEmail: true, email: request.body.email });
+                    } else {
+                        if (request.session.loggedin === true) {
+                            response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                        } else {
+                            response.render('page-not-found');
+                        }
+                    }
+                })
+            });
+        
+
+            this.#app.post('/reset-password/:token', (request, response) => {
+                if (!request.body.newPassword) {
+                    if (request.session.loggedin === true) {
+                        return response.render('reset-password', this.#getLoggedInParameters({ invalidPassword: true }, request.session.username))
+                    } else {
+                        return response.render('reset-password', { invalidPassword: true })
+                    }
                 }
-            })
-        });
+
+                if (request.body.newPassword !== request.body.retypedNewPassword) {
+                    if (request.session.loggedin === true) {
+                        return response.render('reset-password', this.#getLoggedInParameters({ passwordsDontMatch: true }, request.session.username))
+                    } else {
+                        return response.render('reset-password', { passwordsDontMatch: true })
+                    }
+                }
+
+                return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(({username, email, success}) => {
+                    if (username && email && success) {
+                        if (request.session.loggedin === true) {
+                            response.render('reset-password', this.#getLoggedInParameters({ changePasswordSuccess: true }, request.session.username))
+                        } else {
+                            response.render('reset-password', { changePasswordSuccess: true })
+                        }
+
+                        const from = process.env.VIMSU_NOREPLY_EMAIL
+                        const subject = "Your password has been changed";
+                        const message = "This is a confirmation message that you have successfully changed your password.";
+                        const messageReason = "we received a request to change your password for your account";
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, email, { show: false }, subject, message, messageReason)
+
+                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                        
+                    } else {
+                        if (request.session.loggedin === true) {
+                            response.render('reset-password', this.#getLoggedInParameters({ changePasswordFailed: true }, request.session.username))
+                        } else {
+                            response.render('reset-password', { changePasswordFailed: true })
+                        }
+                    }
+                })
+            });
+
+            this.#app.get('/forgot-password', (request, response) => {
+                if (request.session.loggedin === true) {
+                    response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                } else {
+                    response.render('forgot-password', { email: '' });
+                }
+            });
+
+            this.#app.post('/forgot-password', (request, response) => {
+                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                    return response.render('forgot-password', { invalidEmail: true, email: request.body.email });
+                }
+
+                return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(({username, token}) => {
+                    if (username && token) {
+                        const from = process.env.VIMSU_NOREPLY_EMAIL;
+                        const subject = "Reset your VIMSU password";
+                        const message = "We received a request to reset your VIMSU password. Please click on the link below to set a new password for your account. Your password will not be changed if you ignore this message.";
+                        const messageReason = "we received a request to reset your password for your account";
+                        const button = {
+                            show: true, 
+                            name: "Reset Password", 
+                            url: `${process.env.VIMSU_DOMAIN}/reset-password/${token}`
+                        }
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(username, from, request.body.email, button, subject, message, messageReason)
+
+                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                            if (result === true) {
+                                response.render('forgot-password', { messageSent: true, sentTo: request.body.email, email: '' })
+                                response.end();
+                            } else {
+                                response.render('forgot-password', { sendMessageFailed: true, email: request.body.email });
+                            }
+                        })
+                    } else {
+                        response.render('forgot-password', { invalidEmail: true, email: request.body.email });
+                    }
+                })
+            });
+        }
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
                 response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
             } else {
-                response.render('register', { username: '', email: '', forename: '', surname: '', title: '', job: '', company: '' });
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', email: '', forename: '', surname: '', title: '', job: '', company: '' });
+                } else {
+                    response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', forename: '' });
+                }
             }
         });
 
@@ -471,62 +484,98 @@ module.exports = class RouteController {
             const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,32}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
 
             if (!usernameRegex.test(request.body.username)) {
-                return response.render('register', { invalidUsernameString: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
-            }
-
-            const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                return response.render('register', { invalidEmail: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidUsernameString: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                } else {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidUsernameString: true, username: request.body.username, forename: request.body.forename });
+                }
             }
 
             if (!request.body.password) {
-                return response.render('register', { invalidPassword: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidPassword: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                } else {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidPassword: true, username: request.body.username, forename: request.body.forename });
+                }
             }
 
             if (request.body.password !== request.body.retypedPassword) {
-                return response.render('register', { passwordsDontMatch: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
-            }
-
-            const title = request.body.title;
-
-            if (title !== "Title" && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                return response.render('register', { invalidTitle: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, passwordsDontMatch: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                } else {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, passwordsDontMatch: true, username: request.body.username, forename: request.body.forename });
+                }
             }
 
             if (!request.body.forename) {
-                return response.render('register', { invalidForename: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidForename: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                } else {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidForename: true, username: request.body.username, forename: request.body.forename });
+                }
             }
 
-            return AccountService.createAccount(request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
-                if (res && res.token) {
-                    const from = process.env.VIMSU_NOREPLY_EMAIL;
-                    const subject = "Verify your email address for VIMSU";
-                    const message = "Thanks for signing up for VIMSU! Before we get started, we need to confirm that it's you. Please click on the link below to verify your email address.";
-                    const messageReason = "we received a request to activate your account";
-                    const button = {
-                        show: true, 
-                        name: "Verify Email", 
-                        url: `${process.env.VIMSU_DOMAIN}/verify-account/${res.token}`
-                    }
-
-                    const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.body.username, from, request.body.email, button, subject, message, messageReason)
-
-                    return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
-                        if (result === true) {
-                            response.render('register', { registerSuccess: true, sentTo: request.body.email, username: "", email: "", forename: "", surname: "", title: "", job: "", company: "" })
-                            response.end();
-                        } else {
-                            response.render('register', { registerFailed: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
-                        }
-                    })
-                } else if (res && res.username) {
-                    response.render('register', { usernameTaken: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company })
-                } else if (res && res.email) {
-                    response.render('register', { emailTaken: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company })
-                } else {
-                    response.render('register', { registerFailed: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+            if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidEmail: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
                 }
-            })
+
+                const title = request.body.title;
+
+                if (title && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                    return response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, invalidTitle: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                }
+
+                return AccountService.createAccount(request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, request.body.password, TypeOfRole.PARTICIPANT, dbSuffix, this.#db).then(res => {
+                    if (res && res.token) {
+                        const from = process.env.VIMSU_NOREPLY_EMAIL;
+                        const subject = "Verify your email address for VIMSU";
+                        const message = "Thanks for signing up for VIMSU! Before we get started, we need to confirm that it's you. Please click on the link below to verify your email address.";
+                        const messageReason = "we received a request to activate your account";
+                        const button = {
+                            show: true, 
+                            name: "Verify Email", 
+                            url: `${process.env.VIMSU_DOMAIN}/verify-account/${res.token}`
+                        }
+
+                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.body.username, from, request.body.email, button, subject, message, messageReason)
+
+                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD).then(result => {
+                            if (result === true) {
+                                response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, registerSuccess: true, sentTo: request.body.email, username: "", email: "", forename: "", surname: "", title: "", job: "", company: "" })
+                                response.end();
+                            } else {
+                                response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, registerFailed: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                            }
+                        })
+                    } else if (res && res.username) {
+                        response.render('register', { usernameTaken: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company })
+                    } else if (res && res.email) {
+                        response.render('register', { emailTaken: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company })
+                    } else {
+                        response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, registerFailed: true, username: request.body.username, email: request.body.email, forename: request.body.forename, surname: request.body.surname, title: request.body.title, job: request.body.job, company: request.body.company });
+                    }
+                })
+            } else {
+                return AccountService.createAccount(request.body.username, undefined, undefined, request.body.forename, undefined, undefined, undefined, request.body.password, undefined, dbSuffix, this.#db).then(res => {
+                    if (res instanceof Account) {
+                        request.session.accountId = res.getAccountID();
+                        request.session.registerValid = false;
+                        request.session.loggedin = true;
+                        request.session.forename = res.getForename();
+    
+                        //Needed for creating business card during entering the conference.
+                        request.session.username = res.getUsername();
+                        response.redirect('/');
+                        response.end();
+                    } else if (res && res.username) {
+                        response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, usernameTaken: true, username: request.body.username, forename: request.body.forename });
+                    } else {
+                        response.render('register', { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, registerFailed: true, username: request.body.username, forename: request.body.forename });
+                    }
+                })
+            }
         });
 
         this.#app.get('/logout', (request, response) => {
@@ -540,7 +589,11 @@ module.exports = class RouteController {
 
         this.#app.get('/:username/account-settings', (request, response) => {
             if (request.session.loggedin === true && request.params.username === request.session.username) {
-                response.render('account-settings', this.#getLoggedInParameters({ email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    response.render('account-settings', this.#getLoggedInParameters({ email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                } else {
+                    response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename }, request.session.username));
+                }
             }
             else {
                 response.render('page-not-found');
@@ -559,43 +612,62 @@ module.exports = class RouteController {
                     return response.render('account-settings', this.#getLoggedInParameters({ invalidUsernameString: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                 }
 
-                const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if (!emailRegex.test(String(request.body.email).toLowerCase())) {
-                    return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                }
-                const title = request.body.title;
-
-                if (title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
-                    return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                }
-
                 if (!request.body.forename) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                        return response.render('account-settings', this.#getLoggedInParameters({ invalidForename: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    } else {
+                        return response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, invalidForename: true }, request.session.username));
+                    }
                 }
 
-                return AccountService.updateAccountData(accountId, request.body.username, title === "Title" ? "" : title, request.body.surname, request.body.forename, request.body.job ? request.body.job : "Unknown", request.body.company ? request.body.company : "Unknown", request.body.email, dbSuffix, this.#db).then(res => {
-                    if (res instanceof Account) {
-                        request.session.accountId = res.getAccountID();
-                        request.session.title = res.getTitle();
-                        request.session.surname = res.getSurname();
-                        request.session.forename = res.getForename();
-                        request.session.username = res.getUsername();
-                        request.session.job = res.getJob();
-                        request.session.company = res.getCompany();
-                        request.session.email = res.getEmail();
-                        request.session.role = res.getRole();
-
-                        response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                    } else if (res && res.username) {
-                        response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                    } else if (res && res.email) {
-                        response.render('account-settings', this.#getLoggedInParameters({ emailTaken: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                    } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    if (!emailRegex.test(String(request.body.email).toLowerCase())) {
+                        return response.render('register', this.#getLoggedInParameters({ invalidEmail: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
                     }
-                })
+                    const title = request.body.title;
+
+                    if (title && title !== "Mr." && title !== "Mrs." && title !== "Ms." && title !== "Dr." && title !== "Rev." && title !== "Miss" && title !== "Prof.") {
+                        return response.render('account-settings', this.#getLoggedInParameters({ invalidTitle: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    }
+
+                    return AccountService.updateAccountData(accountId, request.body.username, title, request.body.surname, request.body.forename, request.body.job, request.body.company, request.body.email, dbSuffix, this.#db).then(res => {
+                        if (res instanceof Account) {
+                            request.session.accountId = res.getAccountID();
+                            request.session.title = res.getTitle();
+                            request.session.surname = res.getSurname();
+                            request.session.forename = res.getForename();
+                            request.session.username = res.getUsername();
+                            request.session.job = res.getJob();
+                            request.session.company = res.getCompany();
+                            request.session.email = res.getEmail();
+                            request.session.role = res.getRole();
+
+                            response.render('account-settings', this.#getLoggedInParameters({ editAccountSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else if (res && res.username) {
+                            response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else if (res && res.email) {
+                            response.render('account-settings', this.#getLoggedInParameters({ emailTaken: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        }
+                    })
+                } else {
+                    return AccountService.updateAccountData(accountId, request.body.username, undefined, undefined, request.body.forename, undefined, undefined, undefined, dbSuffix, this.#db).then(res => {
+                        if (res instanceof Account) {
+                            request.session.accountId = res.getAccountID();
+                            request.session.forename = res.getForename();
+                            request.session.username = res.getUsername();
+                            response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, editAccountSuccess: true }, request.session.username))
+                        } else if (res && res.username) {
+                            response.render('account-settings', this.#getLoggedInParameters({ usernameTaken: true, forename: request.session.forename }, request.session.username));
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ editAccountFailed: true, forename: request.session.forename }, request.session.username));
+                        }
+                    })
+                }
             } else if (clickedButton === "deleteAccountButton") {
-                return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, '', this.#db).then(ppantIdOfDeletedAcc => {
+                return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, Settings.ACCOUNTDB_SUFFIX, this.#db).then(ppantIdOfDeletedAcc => {
                     if (ppantIdOfDeletedAcc !== false) {
                         if (Settings.VIDEOSTORAGE_ACTIVATED) {
                             LectureService.deleteLecturesByOratorId(this.#db, this.#blob, accountId);
@@ -603,45 +675,71 @@ module.exports = class RouteController {
                         if (ppantIdOfDeletedAcc !== "")
                             this.#serverController.deleteParticipantReferences(ppantIdOfDeletedAcc, request.session.username);
                         
-                        const from = process.env.VIMSU_NOREPLY_EMAIL
-                        const subject = "Your account has been deleted";
-                        const message = "This is a confirmation message that you have successfully deleted your VIMSU account.";
-                        const messageReason = "we received a request to delete your account";
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            const from = process.env.VIMSU_NOREPLY_EMAIL
+                            const subject = "Your account has been deleted";
+                            const message = "This is a confirmation message that you have successfully deleted your VIMSU account.";
+                            const messageReason = "we received a request to delete your account";
 
-                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+                            const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
 
-                        this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                            this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                        }
 
                         response.redirect('/logout');
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ deleteAccountFailed: true, forename: request.session.forename }, request.session.username));
+                        }
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
                 if (!request.body.oldPassword || !request.body.newPassword) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                        return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                    } else {
+                        return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, invalidPassword: true, forename: request.session.forename }, request.session.username))
+                    }
                 }
 
                 if (request.body.newPassword !== request.body.retypedNewPassword) {
-                    return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username))
+                    if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                        return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username))
+                    } else {
+                        return response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, passwordsDontMatch: true, forename: request.session.forename }, request.session.username));
+                    }
                 }
 
                 return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
                     if (res === true) {
-                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
-                        
-                        const from = process.env.VIMSU_NOREPLY_EMAIL
-                        const subject = "Your password has been changed";
-                        const message = "This is a confirmation message that you have successfully changed your password.";
-                        const messageReason = "we received a request to change your password for your account";
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordSuccess: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                            
+                            const from = process.env.VIMSU_NOREPLY_EMAIL
+                            const subject = "Your password has been changed";
+                            const message = "This is a confirmation message that you have successfully changed your password.";
+                            const messageReason = "we received a request to change your password for your account";
 
-                        const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
+                            const mailOptions = this.#getMailOptionsWithDefaultTemplate(request.session.username, from, request.session.email, { show: false }, subject, message, messageReason)
 
-                        return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                            return this.#sendMail(mailOptions, from, process.env.VIMSU_NOREPLY_EMAIL_PASSWORD);
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, changePasswordSuccess: true }, request.session.username));
+                        }
                     } else if (res === null) {
-                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, oldPasswordWrong: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, oldPasswordWrong: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, oldPasswordWrong: true }, request.session.username));
+                        }
                     } else {
-                        response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
+                            response.render('account-settings', this.#getLoggedInParameters({ changingPassword: true, changePasswordFailed: true, email: request.session.email, title: request.session.title, forename: request.session.forename, surname: request.session.surname, job: request.session.job, company: request.session.company }, request.session.username));
+                        } else {
+                            response.render('account-settings', this.#getLoggedInParameters({ forename: request.session.forename, changingPassword: true, changePasswordFailed: true }, request.session.username));
+                        }
                     }
                 })
             }
@@ -711,6 +809,6 @@ module.exports = class RouteController {
     }
 
     #getLoggedInParameters = function (otherParameters, username) {
-        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, loggedIn: true, username: username }
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, username: username }
     }
 }

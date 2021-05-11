@@ -2,7 +2,7 @@ const NPC = require('../../../src/game/app/server/models/NPC.js');
 const chai = require('chai');
 const Position = require('../../../src/game/app/server/models/Position.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const assert = chai.assert;
 
 //create example NPC

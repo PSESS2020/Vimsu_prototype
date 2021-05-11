@@ -24,22 +24,29 @@ module.exports = class BusinessCard {
      * 
      * @param {String} participantId participant ID
      * @param {String} username participant username
-     * @param {String} title participant title
-     * @param {String} surname participant surname
      * @param {String} forename participant forename
-     * @param {String} job participant job
-     * @param {String} company participant company
-     * @param {String} email participant email
+     * @param {?String} title participant title
+     * @param {?String} surname participant surname
+     * @param {?String} job participant job
+     * @param {?String} company participant company
+     * @param {?String} email participant email
      */
-    constructor(participantId, username, title, surname, forename, job, company, email) {
+    constructor(participantId, username, forename, title, surname, job, company, email) {
         TypeChecker.isString(participantId);
         TypeChecker.isString(username);
-        TypeChecker.isString(title);
-        TypeChecker.isString(surname);
         TypeChecker.isString(forename);
-        TypeChecker.isString(job);
-        TypeChecker.isString(company);
-        TypeChecker.isString(email);
+
+        //following attributes can be undefined if registration system is not advanced
+        if (title !== undefined)
+            TypeChecker.isString(title);
+        if (surname !== undefined)
+            TypeChecker.isString(surname);
+        if (job !== undefined)
+            TypeChecker.isString(job);
+        if (company !== undefined)
+            TypeChecker.isString(company);
+        if (email !== undefined) 
+            TypeChecker.isString(email);
 
         this.#participantId = participantId;
         this.#username = username;
@@ -75,7 +82,7 @@ module.exports = class BusinessCard {
      * Gets participant title
      * @method module:BusinessCard#getTitle
      * 
-     * @return {String} title
+     * @return {?String} title
      */
     getTitle() {
         return this.#title;
@@ -85,7 +92,7 @@ module.exports = class BusinessCard {
      * Gets participant surname
      * @method module:BusinessCard#getSurname
      * 
-     * @return {String} surname
+     * @return {?String} surname
      */
     getSurname() {
         return this.#surname;
@@ -105,7 +112,7 @@ module.exports = class BusinessCard {
      * Gets participant job
      * @method module:BusinessCard#getJob
      * 
-     * @return {String} job
+     * @return {?String} job
      */
     getJob() {
         return this.#job;
@@ -115,7 +122,7 @@ module.exports = class BusinessCard {
      * Gets participant company
      * @method module:BusinessCard#getCompany
      * 
-     * @return {String} company
+     * @return {?String} company
      */
     getCompany() {
         return this.#company;
@@ -125,7 +132,7 @@ module.exports = class BusinessCard {
      * Gets participant email
      * @method module:BusinessCard#getEmail
      * 
-     * @return {String} email
+     * @return {?String} email
      */
     getEmail() {
         return this.#email;
