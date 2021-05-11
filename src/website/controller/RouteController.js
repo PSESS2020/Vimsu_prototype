@@ -79,7 +79,7 @@ module.exports = class RouteController {
             SlotService.createVideoContainer(this.#blob);
         }
 
-        const titleOptions = [ "Mr." , "Mrs." , "Ms." , "Miss" , "Dr." , "Prof.", "Rev." ]; 
+        const titleOptions = ["Mr.", "Mrs.", "Ms.", "Miss", "Dr.", "Prof.", "Rev."];
 
         //sets the view engine to ejs, ejs is required to render templates
         this.#app.set('view engine', 'ejs');
@@ -149,21 +149,14 @@ module.exports = class RouteController {
 
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-            const invalidEmail = request.body.email && !emailRegex.test(String(request.body.email).toLowerCase());
-            const invalidMessage = !request.body.message
+            const invalidEmail = { name: 'invalidEmail', value: request.body.email && !emailRegex.test(String(request.body.email).toLowerCase()) }
+            const invalidMessage = { name: 'invalidMessage', value: !request.body.message }
 
             const errors = [invalidEmail, invalidMessage]
-            const isError = errors.some((error) => error === true);
-
-            if (invalidEmail) {
-                parameter = { ...defaultParameters, invalidEmail: true };
-            }
-
-            if (invalidMessage) {
-                parameter = { ...defaultParameters, invalidMessage: true }
-            }
+            const isError = errors.some((error) => error.value === true);
 
             if (isError) {
+                parameter = this.#getErrorParameter(defaultParameters, errors)
                 return this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
             }
 
@@ -243,51 +236,28 @@ module.exports = class RouteController {
                 let defaultParameters = { title: request.body.title, startingTime: request.body.startingTime, remarks: request.body.remarks, maxParticipants: request.body.maxParticipants }
                 let parameter = undefined
 
-                const noFilesUploaded = !request.files || Object.keys(request.files).length === 0;
-
-                if (noFilesUploaded) {
-                    parameter = { ...defaultParameters, noFilesUploaded: true }
-                }
+                const noFilesUploaded = { name: 'noFilesUploaded', value: !request.files || Object.keys(request.files).length === 0 }
 
                 const maxParticipants = parseInt(request.body.maxParticipants);
-                const notInt = maxParticipants % 1 !== 0 || !(isFinite(maxParticipants))
-
-                if (notInt) {
-                    parameter = { ...defaultParameters, notInt: true }
-                }
+                const notInt = { name: 'notInt', value: maxParticipants % 1 !== 0 || !(isFinite(maxParticipants)) }
 
                 const startingTime = new Date(request.body.startingTime);
-                const notDate = startingTime == "Invalid Date"
+                const notDate = { name: 'notDate', value: startingTime == "Invalid Date" }
 
-                if (notDate) {
-                    parameter = { ...defaultParameters, notDate: true }
-                }
-
-                const invalidLectureTitle = !request.body.title;
-
-                if (invalidLectureTitle) {
-                    parameter = { ...defaultParameters, invalidLectureTitle: true }
-                }
+                const invalidLectureTitle = { name: 'invalidLectureTitle', value: !request.body.title };
 
                 const oratorId = request.session.accountId;
                 const video = request.files.video;
 
-                const supportedFileType = path.parse(video.name).ext === '.mp4'
+                const unsupportedFileType = { name: 'unsupportedFileType', value: path.parse(video.name).ext === '.mp4' }
 
-                if (!supportedFileType) {
-                    parameter = { ...defaultParameters, fileSizeExceeded: true }
-                }
+                const fileSizeExceeded = { name: 'fileSizeExceeded', value: !unsupportedFileType && video.size > 50 } * 1024 * 1024
 
-                const fileSizeExceeded = supportedFileType && video.size > 50 * 1024 * 1024
-
-                if (fileSizeExceeded) {
-                    parameter = { ...defaultParameters, unsupportedFileType: true }
-                }
-
-                const errors = [noFilesUploaded, notInt, notDate, invalidLectureTitle, !supportedFileType, fileSizeExceeded]
-                const isError = errors.some((error) => error === true);
+                const errors = [noFilesUploaded, notInt, notDate, invalidLectureTitle, unsupportedFileType, fileSizeExceeded]
+                const isError = errors.some((error) => error.value === true);
 
                 if (isError) {
+                    parameter = this.#getErrorParameter(defaultParameters, errors)
                     return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username));
                 }
 
@@ -342,16 +312,13 @@ module.exports = class RouteController {
             let defaultParameters = { usernameOrEmail: request.body.usernameOrEmail }
             let parameter = undefined
 
-            const fieldEmpty = !request.body.usernameOrEmail || !request.body.password
-
-            if (fieldEmpty) {
-                parameter = { ...defaultParameters, fieldEmpty: true }
-            }
+            const fieldEmpty = { name: 'fieldEmpty', value: !request.body.usernameOrEmail || !request.body.password }
 
             const errors = [fieldEmpty]
-            const isError = errors.some((error) => error === true);
+            const isError = errors.some((error) => error.value === true);
 
             if (isError) {
+                parameter = this.#getErrorParameter(defaultParameters, errors)
                 return response.render(viewToRender, parameter);
             }
 
@@ -401,22 +368,14 @@ module.exports = class RouteController {
                 let defaultParameters = {}
                 let parameter = undefined
 
-                const invalidPassword = !request.body.newPassword;
-
-                if (invalidPassword) {
-                    parameter = { ...defaultParameters, invalidPassword: true }
-                }
-
-                const passwordsDontMatch = request.body.newPassword !== request.body.retypedNewPassword
-
-                if (passwordsDontMatch) {
-                    parameter = { ...defaultParameters, passwordsDontMatch: true }
-                }
+                const invalidPassword = { name: 'invalidPassword', value: !request.body.newPassword }
+                const passwordsDontMatch = { name: 'passwordsDontMatch', value: request.body.newPassword !== request.body.retypedNewPassword }
 
                 const errors = [invalidPassword, passwordsDontMatch]
-                const isError = errors.some((error) => error === true);
+                const isError = errors.some((error) => error.value === true);
 
                 if (isError) {
+                    parameter = this.#getErrorParameter(defaultParameters, errors)
                     return this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
                 }
 
@@ -451,16 +410,13 @@ module.exports = class RouteController {
                 let parameter = undefined
 
                 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                const invalidEmail = !emailRegex.test(String(request.body.email).toLowerCase());
-
-                if (invalidEmail) {
-                    parameter = { ...defaultParameters, invalidEmail: true }
-                }
+                const invalidEmail = { name: 'invalidEmail', value: !emailRegex.test(String(request.body.email).toLowerCase()) }
 
                 const errors = [invalidEmail]
-                const isError = errors.some((error) => error === true);
+                const isError = errors.some((error) => error.value === true);
 
                 if (isError) {
+                    parameter = this.#getErrorParameter(defaultParameters, errors)
                     return response.render(viewToRender, parameter);
                 }
 
@@ -501,7 +457,7 @@ module.exports = class RouteController {
             } else {
                 const viewToRender = 'register'
                 let parameters = { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', forename: '' }
-                
+
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     parameters = { ...parameters, email: '', surname: '', title: '', job: '', company: '', titleOptions: titleOptions }
                 }
@@ -522,53 +478,28 @@ module.exports = class RouteController {
             let parameter = undefined
 
             const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,32}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
-            const invalidUsernameString = !usernameRegex.test(request.body.username);
+            const invalidUsernameString = { name: 'invalidUsernameString', value: !usernameRegex.test(request.body.username) }
 
-            if (invalidUsernameString) {
-                parameter = { ...defaultParameters, invalidUsernameString: true }
-            }
-
-            const invalidPassword = !request.body.password;
-
-            if (invalidPassword) {
-                parameter = { ...defaultParameters, invalidPassword: true }
-            }
-
-            const passwordsDontMatch = request.body.password !== request.body.retypedPassword
-
-            if (passwordsDontMatch) {
-                parameter = { ...defaultParameters, passwordsDontMatch: true }
-            }
-
-            const invalidForename = !request.body.forename
-
-            if (invalidForename) {
-                parameter = { ...defaultParameters, invalidForename: true }
-            }
+            const invalidPassword = { name: 'invalidPassword', value: !request.body.password }
+            const passwordsDontMatch = { name: 'passwordsDontMatch', value: request.body.password !== request.body.retypedPassword }
+            const invalidForename = { name: 'invalidForename', value: !request.body.forename }
 
             let errors = [invalidUsernameString, invalidPassword, passwordsDontMatch, invalidForename]
 
             if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                const invalidEmail = !emailRegex.test(String(request.body.email).toLowerCase())
-
-                if (invalidEmail) {
-                    parameter = { ...defaultParameters, invalidEmail: true }
-                }
+                const invalidEmail = { name: 'invalidEmail', value: !emailRegex.test(String(request.body.email).toLowerCase()) }
 
                 const title = request.body.title
-                const invalidTitle = title && !titleOptions.includes(title)
-
-                if (invalidTitle) {
-                    parameter = { ...defaultParameters, invalidTitle: true }
-                }
+                const invalidTitle = { name: 'invalidTitle', value: title && !titleOptions.includes(title) }
 
                 errors.push(invalidEmail, invalidTitle)
             }
 
-            const isError = errors.some((error) => error === true);
+            const isError = errors.some((error) => error.value === true);
 
             if (isError) {
+                parameter = this.#getErrorParameter(defaultParameters, errors)
                 return response.render(viewToRender, parameter);
             }
 
@@ -621,8 +552,8 @@ module.exports = class RouteController {
                     //Needed for creating business card during entering the conference.
                     request.session.username = res.getUsername();
                     return response.redirect('/');
-                } 
-                
+                }
+
                 if (res && res.username) {
                     parameter = { ...defaultParameters, usernameTaken: true }
                 } else if (Settings.ADVANCED_REGISTRATION_SYSTEM && res && res.email) {
@@ -649,7 +580,7 @@ module.exports = class RouteController {
             if (request.session.loggedin === true && request.params.username === request.session.username) {
                 let defaultParameters = { forename: request.session.forename }
                 let parameter = undefined;
-            
+
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     parameter = { ...defaultParameters, email: request.session.email, title: request.session.title, surname: request.session.surname, job: request.session.job, company: request.session.company, titleOptions: titleOptions }
                 } else {
@@ -680,41 +611,25 @@ module.exports = class RouteController {
 
             if (clickedButton === "saveChangesButton") {
                 const usernameRegex = /^(?=[a-zA-Z0-9._-]{1,32}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/;
-                const invalidUsernameString = !usernameRegex.test(request.body.username);
-
-                if (invalidUsernameString) {
-                    parameter = { ...defaultParameters, invalidUsernameString: true }
-                }
-
-                const invalidForename = !request.body.forename
-
-                if (invalidForename) {
-                    parameter = { ...defaultParameters, invalidForename: true }
-                }
+                const invalidUsernameString = { name: 'invalidUsernameString', value: !usernameRegex.test(request.body.username) }
+                const invalidForename = { name: 'invalidForename', value: !request.body.forename }
 
                 let errors = [invalidUsernameString, invalidForename]
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    const invalidEmail = !emailRegex.test(String(request.body.email).toLowerCase())
-
-                    if (invalidEmail) {
-                        parameter = { ...defaultParameters, invalidEmail: true }
-                    }
+                    const invalidEmail = { name: 'invalidEmail', value: !emailRegex.test(String(request.body.email).toLowerCase()) }
 
                     const title = request.body.title
-                    const invalidTitle = title && !titleOptions.includes(title)
-
-                    if (invalidTitle) {
-                        parameter = { ...defaultParameters, invalidTitle: true }
-                    }
+                    const invalidTitle = { name: 'invalidTitle', value: title && !titleOptions.includes(title) }
 
                     errors.push(invalidEmail, invalidTitle)
                 }
 
-                const isError = errors.some((error) => error === true);
+                const isError = errors.some((error) => error.value === true);
 
                 if (isError) {
+                    parameter = this.#getErrorParameter(defaultParameters, errors)
                     return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username));
                 }
 
@@ -778,24 +693,16 @@ module.exports = class RouteController {
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
-                const invalidPassword = !request.body.oldPassword || !request.body.newPassword;
-
                 defaultParameters = { ...defaultParameters, changingPassword: true }
 
-                if (invalidPassword) {
-                    parameter = { ...defaultParameters, invalidPassword: true }
-                }
-
-                const passwordsDontMatch = request.body.newPassword !== request.body.retypedNewPassword
-
-                if (passwordsDontMatch) {
-                    parameter = { ...defaultParameters, passwordsDontMatch: true }
-                }
+                const invalidPassword = { name: 'invalidPassword', value: !request.body.oldPassword || !request.body.newPassword }
+                const passwordsDontMatch = { name: 'passwordsDontMatch', value: request.body.newPassword !== request.body.retypedNewPassword }
 
                 const errors = [invalidPassword, passwordsDontMatch]
-                const isError = errors.some((error) => error === true);
+                const isError = errors.some((error) => error.value === true);
 
                 if (isError) {
+                    parameter = this.#getErrorParameter(defaultParameters, errors)
                     return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username))
                 }
 
@@ -894,5 +801,15 @@ module.exports = class RouteController {
         } else {
             return response.render(notLoggedInViewToRender, notLoggedInParameter);
         }
+    }
+
+    #getErrorParameter = function (defaultParameters, errors) {
+        for (const error of errors) {
+            if (error.value === true) {
+                return { ...defaultParameters, [error.name]: true }
+            }
+        }
+
+        return undefined
     }
 }
