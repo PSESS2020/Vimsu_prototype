@@ -79,8 +79,7 @@
                                 <select class="form-control" name="title" id="titleInput">
                                     <option selected value="">Title</option>
                                     <% 
-                                        const options=[ "Mr." , "Mrs." , "Ms." , "Miss" , "Dr." , "Prof.", "Rev." ]; 
-                                        options.map(option => { 
+                                        titleOptions.map(option => { 
                                     %>
                                         <option <%=title === option ? "selected" : "" %>><%=option %></option>
                                     <% }) %>
