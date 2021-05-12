@@ -4,6 +4,7 @@ const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
+const DoorLogos = require('../utils/DoorLogos.js');
 
 /**
  * The Door Factory
@@ -229,5 +230,24 @@ module.exports = class DoorFactory {
                         isOpen, 
                         closedMessage, 
                         codeToOpen);   
+    }
+
+    /**
+     * TODO 
+     * @param {*} logoName 
+     * @param {*} logoVariant 
+     * @returns 
+     */
+    getDoorLogo (logoName, logoVariant) {
+        if (DoorLogos.hasOwnProperty(logoName)) {
+            let logo = DoorLogos[logoName]
+            if (logo.hasOwnProperty(logoVariant)) {
+                return logo[logoVariant]
+            } else {
+                // TODO
+            }
+        } else {
+            // TODO
+        }
     }
 } 

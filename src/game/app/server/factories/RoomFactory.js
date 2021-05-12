@@ -10,7 +10,6 @@ const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
 const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const DoorLogos = require('../utils/DoorLogos.js');
-const { RMUSERSFROMGROUP } = require('../utils/Messages.js');
 
 /**
  * Churns out Room instances. Singleton.
@@ -52,27 +51,35 @@ module.exports = class RoomFactory {
      */
     buildRoomFrom(roomData) {
         var type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
-        var room = new Room(roomData.ID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
+        var room = new Room(this.#roomID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
 
         room.addMapElements(
             this.#buildWallsAndTiles(
+                room.getRoomId(),
                 roomData.WALLSTYLE, 
                 roomData.TILESTYLE, 
                 room.getWidth(), 
                 room.getLength()
             )
         )
-        room.addMapElements(this.#buildMapElements(roomData.MAPELEMENTS));
-        room.setGameObjects(this.#buildGameObjects(roomData.OBJECTS));
-        room.setNPCs(this.#buildNPCs(roomData.NPCS));
-        room.setDoors(this.#buildDoors(roomData.DOORS));
+        room.addMapElements(this.#buildMapElements(room.getRoomId(), roomData.MAPELEMENTS));
+        room.setGameObjects(this.#buildGameObjects(room.getRoomId(), roomData.OBJECTS));
+        room.setNPCs(this.#buildNPCs(room.getRoomId(), roomData.NPCS));
+        room.setDoors(this.#buildDoors(room.getRoomId(), roomData.DOORS));
 
         room.buildOccMap();
-
         return room;
     }
 
-    #buildWallsAndTiles = function(wallstyle, tilestyle, width, length) {
+    /**
+     * 
+     * @param {*} wallstyle 
+     * @param {*} tilestyle 
+     * @param {*} width 
+     * @param {*} length 
+     * @returns 
+     */
+    #buildWallsAndTiles = function(roomId, wallstyle, tilestyle, width, length) {
         var listOfWallsAndTiles = []
         if (wallstyle === undefined) wallstyle = GlobalStrings.DEFAULT
         if (tilestyle === undefined) tilestyle = GlobalStrings.DEFAULT
@@ -80,53 +87,78 @@ module.exports = class RoomFactory {
         for (var i = 0; i < length; i++) {
             for (var j = 0; j < width; j++) {
                 // TODO replace
-                listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomData.ID, GameObjectType.TILE, i, j, false));
+                listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.TILE, i, j, false));
             }
         }
         // ADD LEFT WALLS
         for (var i = 0; i < length; i++) {
             // TODO replace
-            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomData.ID, GameObjectType.LEFTWALL, i, -1, false));
+            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.LEFTWALL, i, -1, false));
         }
         // ADD RIGHT WALLS
         for (var j = 0; j < width; j++) {
             // TODO replace
-            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomData.ID, GameObjectType.RIGHTWALL, room.getLength(), j, false));
+            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.RIGHTWALL, room.getLength(), j, false));
         }
         return listOfWallsAndTiles
     }
 
-    #buildMapElements = function (mapElements) {
+    /**
+     * 
+     * @param {*} mapElements 
+     * @returns 
+     */
+    #buildMapElements = function (roomId, mapElements) {
         let listOfElements = []
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
         // objData = {type, position, isClickable, iFrameData, story, variation}
         // TODO replace
-        roomData.MAPELEMENTS.forEach(objData => {
-            this.#decodePositionDataAndCreate(roomData.ID, objData, listOfMapElements)
+        // TODO this no longer knows roomData-Object
+        mapElements.forEach(objData => {
+            this.#decodePositionDataAndCreate(roomId, objData, listOfElements)
         })
         return listOfElements
     }
 
-    #buildGameObjects = function (gameObjects) {
+    /**
+     * 
+     * @param {*} gameObjects 
+     * @returns 
+     */
+    #buildGameObjects = function (roomId, gameObjects) {
         let listOfObjects = []
         // ADD OBJECTS
         // tables, plants, food and more
         // objData = {type, position, isClickable, iFrameData, story, variation}
         // TODO replace
-        roomData.OBJECTS.forEach(objData => {
-            this.#decodePositionDataAndCreate(roomData.ID, objData, listOfGameObjects)
+        // TODO this no longer knows roomData-Object
+        gameObjects.forEach(objData => {
+            this.#decodePositionDataAndCreate(roomId, objData, listOfObjects)
         })
         return listOfObjects
     }
 
-    #buildNPCs = function (npcs) {
+    /**
+     * Takes a list of data-packets, stored in JSON, parses the relevant data
+     * and passes it to the NPCfactory to create new NPC instances.
+     * 
+     * npcData = { name: String, position: int[2], direction: Direction,
+     *             dialog: String[] }
+     * 
+     * @param {Object[]} npcs
+     *  
+     * @returns 
+     */
+
+        // TODO this no longer knows roomData-Object
+    #buildNPCs = function (roomId, npcs) {
         let listOfNPCs = []
         npcs.forEach(npcData => {
             listOfNPCs.push(
                 this.#npcFactory.createCustomNPC(
                     npcData.name, // npc name
-                    roomData.ID,  // roomID of position
+                    roomId,  // roomID of position
                     npcData.position[0], // x coordinate of position
                     npcData.position[1], // y coordinate of position
                     npcData.direction,   // direction npc is facing
@@ -138,8 +170,14 @@ module.exports = class RoomFactory {
         return listOfNPCs
     }
 
-    #buildDoors = function (doors) {
+    /**
+     * 
+     * @param {*} doors 
+     */
+    #buildDoors = function (roomId, doors) {
         // TODO rewrite
+
+        // TODO this no longer knows roomData-Object
         let listOfDoors = []
         // ADD DOORS
         // doorData = {wallSide, logo, positionOfDoor,
@@ -155,7 +193,7 @@ module.exports = class RoomFactory {
                 listOfDoors.push(
                     this.#doorFactory.createCustomDoor(logo,
                         doorData.wallSide,
-                        new Position(roomData.ID,
+                        new Position(this.#roomID,
                             doorData.positionOfDoor[0],
                             doorData.positionOfDoor[1]),
                         new Position(doorData.positionOnExit[0],
@@ -175,7 +213,7 @@ module.exports = class RoomFactory {
                 listOfDoors.push(
                     this.#doorFactory.createCustomDoor(logo,
                         doorData.wallSide,
-                        new Position(roomData.ID,
+                        new Position(this.#roomID,
                             doorData.positionOfDoor[0],
                             doorData.positionOfDoor[1]),
                         new Position(doorData.positionOnExit[0],
@@ -194,7 +232,7 @@ module.exports = class RoomFactory {
             let xPos = (doorData.wallSide == GlobalStrings.RIGHT) ? doorData.positionOfDoor[0] + 1 : doorData.positionOfDoor[0];
             let yPos = (doorData.wallSide == GlobalStrings.LEFT) ? doorData.positionOfDoor[1] - 1 : doorData.positionOfDoor[1];
 
-            listOfMapElements.push(this.#objFactory.createCustomObject(roomData.ID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
+            listOfMapElements.push(this.#objFactory.createCustomObject(this.#roomID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
 
         })
 
@@ -214,7 +252,7 @@ module.exports = class RoomFactory {
                     listOfDoors.push(
                         this.#doorFactory.createCustomLectureDoor(logo,
                             lectureDoorData.wallSide,
-                            new Position(roomData.ID,
+                            new Position(this.#roomID,
                                 lectureDoorData.positionOfDoor[0],
                                 lectureDoorData.positionOfDoor[1]),
                             true, // isOpen
@@ -230,7 +268,7 @@ module.exports = class RoomFactory {
                     listOfDoors.push(
                         this.#doorFactory.createCustomLectureDoor(logo,
                             lectureDoorData.wallSide,
-                            new Position(roomData.ID,
+                            new Position(this.#roomID,
                                 lectureDoorData.positionOfDoor[0],
                                 lectureDoorData.positionOfDoor[1]),
                             lectureDoorData.isOpen,
@@ -245,7 +283,7 @@ module.exports = class RoomFactory {
                 let xPos = (lectureDoorData.wallSide == GlobalStrings.RIGHT) ? lectureDoorData.positionOfDoor[0] + 1 : lectureDoorData.positionOfDoor[0];
                 let yPos = (lectureDoorData.wallSide == GlobalStrings.LEFT) ? lectureDoorData.positionOfDoor[1] - 1 : lectureDoorData.positionOfDoor[1];
 
-                listOfMapElements.push(this.#objFactory.createCustomObject(roomData.ID, GameObjectType[lectureDoorData.wallSide + "TILE"], xPos, yPos, false))
+                listOfMapElements.push(this.#objFactory.createCustomObject(this.#roomID, GameObjectType[lectureDoorData.wallSide + "TILE"], xPos, yPos, false))
             });
         }
 
@@ -307,10 +345,10 @@ module.exports = class RoomFactory {
                     let creationData = Object.assign( {}, objData )
                     // set positions to proper value
                     creationData.position = (objData.position[0] instanceof Array) ? [line[i], objData.position[1]] : [objData.position[0], line[i]];
-                    this.#createObjectsFromData(roomId, creationData, listToPushInto);
+                    listToPushInto.push(this.#objFactory.createGameObject(roomId, creationData))
                 }
             } else {
-                this.#createObjectsFromData(roomId, objData, listToPushInto);
+                listToPushInto.push(this.#objFactory.createGameObject(roomId, creationData))
             }
     }
 

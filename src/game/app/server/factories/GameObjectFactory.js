@@ -3,6 +3,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
 const Position = require('../models/Position.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
+const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 
 
 /**
@@ -103,133 +104,59 @@ module.exports = class GameObject {
      * Also when objects should overlap, then first push the background object to the object array and then the foreground objects.
      */
 
-    /**
-     * Creates a custom instance of te GameObjectClass with no hard-coded
-     * parameters passed.
-     *
-     * @method module:GameObjectService#createCustomObject
-     * 
-     * @param {String} roomId 
-     * @param {String} type 
-     * @param {Int} xPos 
-     * @param {Int} yPos 
-     * @param {Boolean} isSolid 
-     * @param {Boolean} isClickable 
-     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
-     * @param {?String} iFrameData.title title of iFrame
-     * @param {?String} iFrameData.url URL of iFrame
-     * @param {?number} iFrameData.width width of iframe in px
-     * @param {?number} iFrameData.height height of iframe in px
-     * @param {?String[]} story Array of strings if clicking this
-     *                          displays a text message, otherwise
-     *                          undefined
-     * 
-     * @returns {GameObject} A custom instance of the GameObject class
-     */
-    createCustomObject(roomId, type, xPos, yPos, isClickable, iFrameData, story) {
-        this.#isKnownType(type);
-        // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
-        
-        return new GameObject(
-            this.#generateGameObjectID(), 
-            type, 
-            GameObjectInfo.getInfo(type, "assetName"), 
-            GameObjectInfo.getInfo(type, "width"), 
-            GameObjectInfo.getInfo(type, "length"), 
-            new Position(roomId, xPos, yPos), 
-            GameObjectInfo.getInfo(type, "isSolid"), 
-            isClickable, 
-            iFrameData,
-            story);
-    }
 
     /**
-     * A slight variation of the above class that allows for variations of
-     * objects to be created. This could probably be done more elegantly.
-     * 
-     * @method module:GameObjectService#createObjectVariation
      * 
      * @param {String} roomId 
-     * @param {String} type 
-     * @param {Int} xPos 
-     * @param {Int} yPos 
-     * @param {Boolean} isSolid 
-     * @param {Boolean} isClickable 
-     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
-     * @param {?String} iFrameData.title title of iFrame
-     * @param {?String} iFrameData.url URL of iFrame
-     * @param {?number} iFrameData.width width of iframe in px
-     * @param {?number} iFrameData.height height of iframe in px
-     * @param {?String[]} story Array of strings if clicking this
-     *                          displays a text message, otherwise
-     *                          undefined
-     * @param {Int} variation The variation of the object that is supposed to be created
-     * 
-     * @return {GameObject} A custom instance of the GameObject class
+     * @param { { type:         GameObjectType, 
+     *            position:     number[2],
+     *            ?variation:   String,
+     *            ?isClickable: Boolean,
+     *            ?iFrameData:  { title:  String,
+     *                            url:    String,
+     *                            width:  number,
+     *                            height: number },
+     *            ?story:       String             } } objData 
      */
-    createObjectVariation(roomId, type, xPos, yPos, isClickable, iFrameData, story, variation) {
-        this.#isKnownType(type);
-        TypeChecker.isInt(variation);
-        // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
-        
-        return new GameObject(
-            this.#generateGameObjectID(), 
-            type, 
-            GameObjectInfo.getInfo(type, "assetName")[variation], 
-            GameObjectInfo.getInfo(type, "width"), 
-            GameObjectInfo.getInfo(type, "length"), 
-            new Position(roomId, xPos, yPos), 
-            GameObjectInfo.getInfo(type, "isSolid"), 
-            isClickable, 
-            iFrameData,
-            story);       
-    }
+    createGameObject (roomId, objData) {
+        // Destructuring the object for easier reference and a more flexible
+        // method.
+        // TODO This is where we will add support for custom options
+        // TODO split in multiples for constants, variables and custom
+        const { type, position: [xPos, yPos] } = objData
+        var { variation, isClickable, iFrameData, story } = objData
 
-    /**
-     * A slight variation of the above method that allows to create
-     * objects that consist out of more than one part
-     * 
-     * @method module:GameObjectService#createObjectPart
-     * 
-     * @param {String} roomId 
-     * @param {String} type 
-     * @param {Int} xPos 
-     * @param {Int} yPos 
-     * @param {Boolean} isSolid 
-     * @param {Boolean} isClickable 
-     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
-     * @param {?String} iFrameData.title title of iFrame
-     * @param {?String} iFrameData.url URL of iFrame
-     * @param {?number} iFrameData.width width of iframe in px
-     * @param {?number} iFrameData.height height of iframe in px
-     * @param {?String[]} story Array of strings if clicking this
-     *                          displays a text message, otherwise
-     *                          undefined
-     * @param {Array[number]} part The part of the object that is supposed to be created
-     * 
-     * @return {GameObject} A custom instance of the GameObject class
-     */
-     createObjectPart(roomId, type, xPos, yPos, isClickable, iFrameData, story, part) {
-        this.#isKnownType(type);
-        TypeChecker.isInt(part.x);
-        TypeChecker.isInt(part.y);
-        // only need to check the actually passed arguments
-        this.#checkParamTypes(roomId, 0, 0, xPos, yPos, true, isClickable, iFrameData, story);
+        if (isClickable === undefined) {
+            isClickable = false
+            iFrameData = story = undefined
+        }
+
+        if (variation == undefined) variation = GlobalStrings.DEFAULT
+        
+        // TODO type-checking
+        // TODO handle multi-part objects
+        if (GameObjectInfo.hasProperty(type, "parts")) {
+            let parts = GameObjectInfo.getInfo(type, "parts")
+            parts.forEach( partData => {
+                
+            })
+        }
+
+        // TODO if variation is int, turn into String
 
         return new GameObject(
             this.#generateGameObjectID(),
-            type, 
-            GameObjectInfo.getInfo(type, "assetName")[part.x][part.y], 
-            GameObjectInfo.getInfo(type, "width"), 
-            GameObjectInfo.getInfo(type, "length"), 
-            new Position(roomId, xPos, yPos), 
-            GameObjectInfo.getInfo(type, "isSolid"), 
-            isClickable, 
+            type,
+            // assetName
+            // width
+            // length
+            new Position(roomId, xPos, yPos),
+            isClickable,
             iFrameData,
-            story);        
-    }
+            story,
+        )
 
+
+    }
 
 }
