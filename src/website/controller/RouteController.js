@@ -18,6 +18,10 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const LectureService = require('../../game/app/server/services/LectureService');
 
+//languages
+const germanLanguagePackage = require("../views/language/de.json");
+const englishLaguagePackage = require("../views/language/en.json");
+
 /**
  * The Route Controller
  * @module RouteController
@@ -32,6 +36,7 @@ module.exports = class RouteController {
     #db;
     #blob;
     #serverController;
+    #languagePackages;
 
     /**
      * Creates an instance of RouteController
@@ -58,6 +63,10 @@ module.exports = class RouteController {
         this.#io = io;
         this.#db = db;
         this.#blob = blob;
+        this.#languagePackages = new Map();
+        this.#languagePackages.set('de', germanLanguagePackage);
+        this.#languagePackages.set('en', englishLaguagePackage);
+        
 
         this.#serverController = new ServerController(this.#io, this.#db, this.#blob);
         this.#init();
@@ -115,6 +124,15 @@ module.exports = class RouteController {
         this.#app.use(sessionMiddleware);
 
         this.#app.get('/', (request, response) => {
+            const viewToRender = 'home'
+            this.#renderView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
+        });
+
+        this.#app.post('/', (request, response) => {
+            const clickedLanguageButton = request.body.languageButton;
+
+            request.session.language = clickedLanguageButton;
+
             const viewToRender = 'home'
             this.#renderView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
         });
@@ -791,16 +809,33 @@ module.exports = class RouteController {
         });
     }
 
-    #getLoggedInParameters = function (otherParameters, username) {
-        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, username: username }
+    #getLoggedInParameters = function (otherParameters, languageData, username) {
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: username }
+    }
+
+    #getNotLoggedInParameters = function (otherParameters, languageData) {
+        return { ...otherParameters, languageData: languageData }
     }
 
     #renderView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {
+        var languageData = this.#languagePackages.get(this.#getLanguage(request));
         if (request.session.loggedin === true) {
-            return response.render(loggedInViewToRender, this.#getLoggedInParameters(loggedInParameter, request.session.username));
+            return response.render(loggedInViewToRender, this.#getLoggedInParameters(loggedInParameter, languageData, request.session.username));
         } else {
-            return response.render(notLoggedInViewToRender, notLoggedInParameter);
+            return response.render(notLoggedInViewToRender, this.#getNotLoggedInParameters(notLoggedInParameter, languageData));
         }
+    }
+
+    #getLanguage = function (request) {
+        let language = request.session.language;
+        if (!language) {
+            language = request.acceptsLanguages('de', 'en');
+            if (!language) {
+                language = Settings.DEFAULT_LANGUAGE;
+            }
+            request.session.language = language;
+        }
+        return language;
     }
 
     #getErrorParameter = function (defaultParameters, errors) {
