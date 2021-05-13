@@ -36,7 +36,6 @@ module.exports = class RouteController {
     #db;
     #blob;
     #serverController;
-    #languages;
     #languagePackages;
 
     /**
@@ -64,12 +63,11 @@ module.exports = class RouteController {
         this.#io = io;
         this.#db = db;
         this.#blob = blob;
-        
-        this.#languages = [ 'de', 'en' ]
+
         this.#languagePackages = new Map();
         this.#languagePackages.set('de', germanLanguagePackage);
         this.#languagePackages.set('en', englishLaguagePackage);
-        
+
 
         this.#serverController = new ServerController(this.#io, this.#db, this.#blob);
         this.#init();
@@ -134,7 +132,7 @@ module.exports = class RouteController {
         this.#app.get('/language', (request, response) => {
             const selectedLanguage = request.query.type
 
-            if (!selectedLanguage || !this.#languages.includes(selectedLanguage)) {
+            if (!selectedLanguage || ![...this.#languagePackages.keys()].includes(selectedLanguage)) {
                 const viewToRender = 'page-not-found'
                 return this.#renderView(request, response, viewToRender, {}, viewToRender, {})
             }
@@ -837,13 +835,13 @@ module.exports = class RouteController {
         let language = request.session.language;
 
         if (!language) {
-            language = request.acceptsLanguages(...this.#languages);
+            language = request.acceptsLanguages(...[...this.#languagePackages.keys()]);
             if (!language) {
                 language = Settings.DEFAULT_LANGUAGE;
             }
             request.session.language = language;
         }
-        
+
         return language;
     }
 
