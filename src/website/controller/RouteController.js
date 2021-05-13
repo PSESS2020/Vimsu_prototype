@@ -36,6 +36,7 @@ module.exports = class RouteController {
     #db;
     #blob;
     #serverController;
+    #languages;
     #languagePackages;
 
     /**
@@ -63,6 +64,8 @@ module.exports = class RouteController {
         this.#io = io;
         this.#db = db;
         this.#blob = blob;
+        
+        this.#languages = [ 'de', 'en' ]
         this.#languagePackages = new Map();
         this.#languagePackages.set('de', germanLanguagePackage);
         this.#languagePackages.set('en', englishLaguagePackage);
@@ -129,6 +132,13 @@ module.exports = class RouteController {
         });
 
         this.#app.get('/language', (request, response) => {
+            const selectedLanguage = request.query.type
+
+            if (!selectedLanguage || !this.#languages.includes(selectedLanguage)) {
+                const viewToRender = 'page-not-found'
+                return this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+            }
+
             request.session.language = request.query.type;
             response.redirect(request.header('Referer') || "/")
         });
@@ -272,12 +282,12 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username));
+                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
                 }
 
                 defaultParameters = { title: '', startingTime: '', remarks: '', maxParticipants: '' }
 
-                response.render(viewToRender, this.#getLoggedInParameters({ ...defaultParameters, uploading: true }, request.session.username))
+                response.render(viewToRender, this.#getLoggedInParameters(request, { ...defaultParameters, uploading: true }))
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     const from = process.env.VIMSU_NOREPLY_EMAIL
@@ -467,7 +477,7 @@ module.exports = class RouteController {
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
-                response.render('page-not-found', this.#getLoggedInParameters({}, request.session.username));
+                response.render('page-not-found', this.#getLoggedInParameters(request, {}));
             } else {
                 const viewToRender = 'register'
                 let parameters = { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', forename: '' }
@@ -601,7 +611,7 @@ module.exports = class RouteController {
                     parameter = defaultParameters
                 }
 
-                response.render('account-settings', this.#getLoggedInParameters(parameter, request.session.username));
+                response.render('account-settings', this.#getLoggedInParameters(request, parameter));
             }
             else {
                 response.render('page-not-found');
@@ -644,7 +654,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username));
+                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
                 }
 
                 const accountData = {
@@ -679,7 +689,7 @@ module.exports = class RouteController {
                         parameter = { ...defaultParameters, editAccountFailed: true }
                     }
 
-                    response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username));
+                    response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
                 })
             } else if (clickedButton === "deleteAccountButton") {
                 return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, Settings.ACCOUNTDB_SUFFIX, this.#db).then(ppantIdOfDeletedAcc => {
@@ -703,7 +713,7 @@ module.exports = class RouteController {
 
                         response.redirect('/logout');
                     } else {
-                        response.render(viewToRender, this.#getLoggedInParameters({ ...defaultParameters, deleteAccountFailed: true }, request.session.username));
+                        response.render(viewToRender, this.#getLoggedInParameters(request, { ...defaultParameters, deleteAccountFailed: true }));
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
@@ -717,7 +727,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username))
+                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter))
                 }
 
                 return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
@@ -740,7 +750,7 @@ module.exports = class RouteController {
                         parameter = { ...defaultParameters, changePasswordFailed: true }
                     }
 
-                    response.render(viewToRender, this.#getLoggedInParameters(parameter, request.session.username))
+                    response.render(viewToRender, this.#getLoggedInParameters(request, parameter))
                 })
             }
         })
@@ -805,32 +815,35 @@ module.exports = class RouteController {
         });
     }
 
-    #getLoggedInParameters = function (otherParameters, languageData, username) {
-        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: username }
+    #getLoggedInParameters = function (request, otherParameters) {
+        const languageData = this.#languagePackages.get(this.#getLanguage(request));
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: request.session.username }
     }
 
-    #getNotLoggedInParameters = function (otherParameters, languageData) {
+    #getNotLoggedInParameters = function (request, otherParameters) {
+        const languageData = this.#languagePackages.get(this.#getLanguage(request));
         return { ...otherParameters, languageData: languageData }
     }
 
     #renderView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {
-        var languageData = this.#languagePackages.get(this.#getLanguage(request));
         if (request.session.loggedin === true) {
-            return response.render(loggedInViewToRender, this.#getLoggedInParameters(loggedInParameter, languageData, request.session.username));
+            return response.render(loggedInViewToRender, this.#getLoggedInParameters(request, loggedInParameter));
         } else {
-            return response.render(notLoggedInViewToRender, this.#getNotLoggedInParameters(notLoggedInParameter, languageData));
+            return response.render(notLoggedInViewToRender, this.#getNotLoggedInParameters(request, notLoggedInParameter));
         }
     }
 
     #getLanguage = function (request) {
         let language = request.session.language;
+
         if (!language) {
-            language = request.acceptsLanguages('de', 'en');
+            language = request.acceptsLanguages(...this.#languages);
             if (!language) {
                 language = Settings.DEFAULT_LANGUAGE;
             }
             request.session.language = language;
         }
+        
         return language;
     }
 
