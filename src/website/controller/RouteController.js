@@ -130,7 +130,7 @@ module.exports = class RouteController {
 
         this.#app.get('/language', (request, response) => {
             request.session.language = request.query.type;
-            response.redirect(request.header('Referer'))
+            response.redirect(request.header('Referer') || "/")
         });
 
         this.#app.get('/about-us', (request, response) => {
