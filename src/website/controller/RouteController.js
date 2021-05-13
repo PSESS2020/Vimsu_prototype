@@ -798,9 +798,9 @@ module.exports = class RouteController {
     #renderView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {
         if (request.session.loggedin === true) {
             return response.render(loggedInViewToRender, this.#getLoggedInParameters(loggedInParameter, request.session.username));
-        } else {
-            return response.render(notLoggedInViewToRender, notLoggedInParameter);
-        }
+        } 
+            
+        return response.render(notLoggedInViewToRender, notLoggedInParameter);
     }
 
     #getErrorParameter = function (defaultParameters, errors) {
