@@ -128,13 +128,9 @@ module.exports = class RouteController {
             this.#renderView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
         });
 
-        this.#app.post('/', (request, response) => {
-            const clickedLanguageButton = request.body.languageButton;
-
-            request.session.language = clickedLanguageButton;
-
-            const viewToRender = 'home'
-            this.#renderView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
+        this.#app.get('/language', (request, response) => {
+            request.session.language = request.query.type;
+            response.redirect(request.header('Referer'))
         });
 
         this.#app.get('/about-us', (request, response) => {

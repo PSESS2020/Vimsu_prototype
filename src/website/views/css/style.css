@@ -332,6 +332,12 @@ input, textarea {
   background: var(--black-color);
 }
 
+.footer-link {
+  border: none; 
+  background: none; 
+  color: var(--white-color);
+}
+
 @media all and (min-width: 992px) {
   .navbar .nav-item .dropdown-menu {
     display: none;
