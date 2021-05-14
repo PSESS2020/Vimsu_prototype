@@ -1,0 +1,55 @@
+{
+    "homepage": {
+        "vimsuName": "Virtual Interactive Meeting Simulator",
+        "discoverVimsu": "Temukan pengalaman konferensi virtual 2.5D bersama kami!",
+        "enterConference": "Masuk ke dalam konferensi",
+        "register": "Daftar secara gratis sekarang",
+        "logIn": "Masuk"
+    },
+
+    "header": {
+        "home": "beranda",
+        "aboutUs": "tentang kami",
+        "tutorial": "tutorial",
+        "contactUs": "hubungi kami",
+        "dashboard": "dasbor saya",
+        "uploadVideo": "unggah video",
+        "accountSettings": "pengaturan akun",
+        "logOut": "keluar"
+    },
+
+    "accountSettings": {
+        "editAccountInfo": "Edit Informasi Akun",
+        "changeSuccess": "Perubahan yang Anda buat sudah disimpan",
+        "usernameTaken": "Nama pengguna yang kamu masukan sudah terdaftar",
+        "emailTaken": "Email yang kamu masukan sudah terdaftar.",
+        "changeError": "Terjadi kesalahan saat menyimpan perubahan Anda. Silahkan coba lagi.",
+        "invalidUsername": "Nama pengguna yang kamu masukan tidak sesuai dengan kriteria kami.",
+        "invalidEmail": "Email yang kamu masukan tidak valid. Silahkan coba lagi.",
+        "invalidTitle": "Titel tidak valid. Silahkan pilih titel dari opsi yang kami berikan.",
+        "emptyForename": "Nama depan tidak boleh kosong.",
+        "deleteAccountFail": "Terjadi kesalahan saat menghapus akun Anda. Silahkan coba lagi.",
+        "requiredFields": "Harus diisi",
+        "saveChanges": "Simpan perubahan",
+        "deleteAccount": "Hapus akun",
+        "changePassword": "Ubah Kata Sandi",
+        "changePasswordSuccess": "Kata sandi Anda sudah diubah.",
+        "oldPasswordWrong": "Kata sandi lama Anda tidak sesuai.",
+        "passwordsDontMatch": "Kata sandi baru yang Anda masukan tidak sesuai.",
+        "emptyPassword": "Kata sandi tidak boleh kosong.",
+        "changePasswordFail": "Terjadi kesalahan saat mengubah kata sandi Anda. Silahkan coba lagi.",
+        "oldPassword": "Kata sandi lama",
+        "newPassword": "Kata sandi baru",
+        "confirmPassword": "Konfirmasi kata sandi baru"  
+    },
+
+    "userData": {
+        "username": "Nama pengguna",
+        "email": "Email",
+        "forename": "Nama depan",
+        "title": "Titel",
+        "surname": "Nama belakang",
+        "job": "Pekerjaan",
+        "company": "Perusahaan/Sekolah"
+    }
+}

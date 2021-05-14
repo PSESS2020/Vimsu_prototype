@@ -21,6 +21,7 @@ const LectureService = require('../../game/app/server/services/LectureService');
 //languages
 const germanLanguagePackage = require("../views/language/de.json");
 const englishLaguagePackage = require("../views/language/en.json");
+const indonesianLaguagePackage = require("../views/language/id.json");
 
 /**
  * The Route Controller
@@ -67,7 +68,7 @@ module.exports = class RouteController {
         this.#languagePackages = new Map();
         this.#languagePackages.set('de', germanLanguagePackage);
         this.#languagePackages.set('en', englishLaguagePackage);
-
+        this.#languagePackages.set('id', indonesianLaguagePackage);
 
         this.#serverController = new ServerController(this.#io, this.#db, this.#blob);
         this.#init();
