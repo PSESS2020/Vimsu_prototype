@@ -127,7 +127,7 @@ module.exports = class RouteController {
 
         this.#app.get('/', (request, response) => {
             const viewToRender = 'home'
-            this.#renderView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
+            this.#renderGeneralView(request, response, viewToRender, { conferenceId: Settings.CONFERENCE_ID }, viewToRender, {})
         });
 
         this.#app.get('/language', (request, response) => {
@@ -135,7 +135,7 @@ module.exports = class RouteController {
 
             if (!selectedLanguage || ![...this.#languagePackages.keys()].includes(selectedLanguage)) {
                 const viewToRender = 'page-not-found'
-                return this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+                return this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
             }
 
             request.session.language = request.query.type;
@@ -144,12 +144,12 @@ module.exports = class RouteController {
 
         this.#app.get('/about-us', (request, response) => {
             const viewToRender = 'about-us'
-            this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+            this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
         });
 
         this.#app.get('/tutorial', (request, response) => {
             const viewToRender = 'tutorial'
-            this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+            this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
         });
 
         this.#app.get('/contact-us', (request, response) => {
@@ -158,7 +158,7 @@ module.exports = class RouteController {
             const viewToRender = 'contact-us'
             const parameter = { email: '', message: '', vimsu_default_email: vimsuDefaultEmail }
 
-            this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+            this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
         });
 
         this.#app.post('/contact-us', (request, response) => {
@@ -180,7 +180,7 @@ module.exports = class RouteController {
 
             if (isError) {
                 parameter = this.#getErrorParameter(defaultParameters, errors)
-                return this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+                return this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
             }
 
             const filteredMessage = request.body.message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
@@ -217,7 +217,7 @@ module.exports = class RouteController {
                     parameter = { ...defaultParameters, sendMessageFailed: true }
                 }
 
-                this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+                this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
             })
         })
 
@@ -229,11 +229,11 @@ module.exports = class RouteController {
                     if (account /* TODO Production && !account.isActive*/) {
                         return AccountService.activateAccount(account.accountId, request.params.token, dbSuffix, this.#db).then(result => {
                             const parameter = { verifySuccess: result }
-                            this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+                            this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
                         })
                     } else {
                         viewToRender = 'page-not-found'
-                        this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+                        this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
                     }
                 })
 
@@ -242,13 +242,13 @@ module.exports = class RouteController {
 
         this.#app.get('/privacy-policy', (request, response) => {
             const viewToRender = 'privacy-policy'
-            this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+            this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
         });
 
         /* Only needed when video storage is required for this conference */
         if (Settings.VIDEOSTORAGE_ACTIVATED) {
             this.#app.get('/my-dashboard/upload', (request, response) => {
-                this.#renderView(request, response, 'upload', { title: '', startingTime: '', remarks: '', maxParticipants: '' }, 'page-not-found', {})
+                this.#renderGeneralView(request, response, 'upload', { title: '', startingTime: '', remarks: '', maxParticipants: '' }, 'page-not-found', {})
             });
 
             this.#app.post('/my-dashboard/upload', (request, response) => {
@@ -281,12 +281,12 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
+                    return this.#renderLoggedInView(request, response, viewToRender, parameter)
                 }
 
                 defaultParameters = { title: '', startingTime: '', remarks: '', maxParticipants: '' }
 
-                response.render(viewToRender, this.#getLoggedInParameters(request, { ...defaultParameters, uploading: true }))
+                this.#renderLoggedInView(request,response,viewToRender, { ...defaultParameters, uploading: true })
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     const from = process.env.VIMSU_NOREPLY_EMAIL
@@ -318,14 +318,14 @@ module.exports = class RouteController {
         }
 
         this.#app.get('/login', (request, response) => {
-            this.#renderView(request, response, 'page-not-found', {}, 'login', { usernameOrEmail: '' })
+            this.#renderGeneralView(request, response, 'page-not-found', {}, 'login', { usernameOrEmail: '' })
         });
 
         this.#app.get('/conference/:id', (request, response) => {
             if (request.session.loggedin === true && request.params.id === Settings.CONFERENCE_ID) {
                 return response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
             } else {
-                response.render('page-not-found');
+                this.#renderNotLoggedInView(request, response, 'page-not-found', {});
             }
         })
 
@@ -342,7 +342,7 @@ module.exports = class RouteController {
 
             if (isError) {
                 parameter = this.#getErrorParameter(defaultParameters, errors)
-                return response.render(viewToRender, this.#getNotLoggedInParameters(request, parameter));
+                return this.#renderNotLoggedInView(request, response, viewToRender, parameter);
             }
 
             return AccountService.verifyLoginData(request.body.usernameOrEmail, request.body.password, dbSuffix, this.#db).then(user => {
@@ -364,7 +364,7 @@ module.exports = class RouteController {
 
                     response.redirect('/');
                 } else {
-                    response.render(viewToRender, this.#getNotLoggedInParameters(request, { ...defaultParameters, wrongLoginData: true }));
+                    this.#renderNotLoggedInView(request, response, viewToRender, { ...defaultParameters, wrongLoginData: true });
                 }
 
                 response.end();
@@ -380,7 +380,7 @@ module.exports = class RouteController {
                         viewToRender = 'page-not-found'
                     }
 
-                    this.#renderView(request, response, viewToRender, {}, viewToRender, {});
+                    this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {});
                 })
             });
 
@@ -399,7 +399,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+                    return this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
                 }
 
                 return AccountService.resetPassword(request.params.token, request.body.newPassword, dbSuffix, this.#db).then(({ username, email, success }) => {
@@ -418,12 +418,12 @@ module.exports = class RouteController {
                         parameter = { ...defaultParameters, changePasswordFailed: true }
                     }
 
-                    this.#renderView(request, response, viewToRender, parameter, viewToRender, parameter)
+                    this.#renderGeneralView(request, response, viewToRender, parameter, viewToRender, parameter)
                 })
             });
 
             this.#app.get('/forgot-password', (request, response) => {
-                this.#renderView(request, response, 'page-not-found', {}, 'forgot-password', { email: '' })
+                this.#renderGeneralView(request, response, 'page-not-found', {}, 'forgot-password', { email: '' })
             });
 
             this.#app.post('/forgot-password', (request, response) => {
@@ -440,7 +440,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, parameter);
+                    return this.#renderNotLoggedInView(request, response, viewToRender, parameter);
                 }
 
                 return AccountService.generateForgotPasswordToken(request.body.email, dbSuffix, this.#db).then(({ username, token }) => {
@@ -465,27 +465,27 @@ module.exports = class RouteController {
                                 parameter = { ...defaultParameters, sendMessageFailed: true }
                             }
 
-                            response.render(viewToRender, parameter);
+                            this.#renderNotLoggedInView(request, response, viewToRender, parameter);
                         })
                     }
 
-                    response.render(viewToRender, parameter);
+                    this.#renderNotLoggedInView(request, response, viewToRender, parameter);
                 })
             });
         }
 
         this.#app.get('/register', (request, response) => {
             if (request.session.loggedin === true) {
-                response.render('page-not-found', this.#getLoggedInParameters(request, {}));
+                this.#renderLoggedInView(request, response, 'page-not-found', {})
             } else {
                 const viewToRender = 'register'
-                let parameters = { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', forename: '' }
+                let parameter = { advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, username: '', forename: '' }
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
-                    parameters = { ...parameters, email: '', surname: '', title: '', job: '', company: '', titleOptions: titleOptions }
+                    parameter = { ...parameter, email: '', surname: '', title: '', job: '', company: '', titleOptions: titleOptions }
                 }
 
-                response.render(viewToRender, parameters);
+                this.#renderNotLoggedInView(request, response, viewToRender, parameter);
             }
         });
 
@@ -523,7 +523,7 @@ module.exports = class RouteController {
 
             if (isError) {
                 parameter = this.#getErrorParameter(defaultParameters, errors)
-                return response.render(viewToRender, parameter);
+                return this.#renderNotLoggedInView(request, response, viewToRender, parameter);
             }
 
             const accountData = {
@@ -564,7 +564,7 @@ module.exports = class RouteController {
                             parameter = { ...defaultParameters, registerFailed: true }
                         }
 
-                        response.render(viewToRender, parameter)
+                        this.#renderNotLoggedInView(request, response, viewToRender, parameter);
                     })
                 } else if (!Settings.ADVANCED_REGISTRATION_SYSTEM && res instanceof Account) {
                     request.session.accountId = res.getAccountID();
@@ -585,7 +585,7 @@ module.exports = class RouteController {
                     parameter = { ...defaultParameters, registerFailed: true }
                 }
 
-                response.render(viewToRender, parameter)
+                this.#renderNotLoggedInView(request, response, viewToRender, parameter);
             })
 
         });
@@ -595,7 +595,7 @@ module.exports = class RouteController {
                 request.session.destroy();
                 response.redirect('/');
             } else {
-                response.render('page-not-found');
+                this.#renderNotLoggedInView(request, response, 'page-not-found', {});
             }
         });
 
@@ -610,10 +610,10 @@ module.exports = class RouteController {
                     parameter = defaultParameters
                 }
 
-                response.render('account-settings', this.#getLoggedInParameters(request, parameter));
+                this.#renderLoggedInView(request, response, 'account-settings', parameter)
             }
             else {
-                response.render('page-not-found');
+                this.#renderNotLoggedInView(request, response, 'page-not-found', {});
             }
         })
 
@@ -653,7 +653,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
+                    return this.#renderLoggedInView(request, response, viewToRender, parameter)
                 }
 
                 const accountData = {
@@ -688,7 +688,7 @@ module.exports = class RouteController {
                         parameter = { ...defaultParameters, editAccountFailed: true }
                     }
 
-                    response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
+                    this.#renderLoggedInView(request, response, viewToRender, parameter)
                 })
             } else if (clickedButton === "deleteAccountButton") {
                 return ParticipantService.deleteAccountAndParticipant(accountId, request.session.username, Settings.ACCOUNTDB_SUFFIX, this.#db).then(ppantIdOfDeletedAcc => {
@@ -712,7 +712,7 @@ module.exports = class RouteController {
 
                         response.redirect('/logout');
                     } else {
-                        response.render(viewToRender, this.#getLoggedInParameters(request, { ...defaultParameters, deleteAccountFailed: true }));
+                        this.#renderLoggedInView(request, response, viewToRender, { ...defaultParameters, deleteAccountFailed: true })
                     }
                 })
             } else if (clickedButton === "changePasswordButton") {
@@ -726,7 +726,7 @@ module.exports = class RouteController {
 
                 if (isError) {
                     parameter = this.#getErrorParameter(defaultParameters, errors)
-                    return response.render(viewToRender, this.#getLoggedInParameters(request, parameter))
+                    return this.#renderLoggedInView(request, response, viewToRender, parameter)
                 }
 
                 return AccountService.changePassword(request.session.username, request.body.oldPassword, request.body.newPassword, dbSuffix, this.#db).then(res => {
@@ -749,17 +749,21 @@ module.exports = class RouteController {
                         parameter = { ...defaultParameters, changePasswordFailed: true }
                     }
 
-                    response.render(viewToRender, this.#getLoggedInParameters(request, parameter))
+                    this.#renderLoggedInView(request, response, viewToRender, parameter)
                 })
             }
         })
 
         this.#app.get('*', (request, response) => {
             const viewToRender = 'page-not-found'
-            this.#renderView(request, response, viewToRender, {}, viewToRender, {})
+            this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
         });
     }
 
+    /**
+     * @private Get mail options with default template
+     * @method module:RouteController#getMailOptionsWithDefaultTemplate
+     */
     #getMailOptionsWithDefaultTemplate = function (username, senderEmail, receiverEmail, button, subject, message, messageReason) {
         const htmlTemplatePath = path.join(__dirname, '../views/email-template/default-template.html');
         const source = fs.readFileSync(htmlTemplatePath, 'utf-8').toString();
@@ -790,6 +794,10 @@ module.exports = class RouteController {
         }
     }
 
+    /**
+     * @private Handle sending email with Nodemailer
+     * @method module:RouteController#sendMail
+     */
     #sendMail = async function (mailOptions, email, emailPassword) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
@@ -814,24 +822,70 @@ module.exports = class RouteController {
         });
     }
 
+    /**
+     * @private Get logged in parameters for rendering view
+     * @method module:RouteController#getLoggedInParameters
+     */
     #getLoggedInParameters = function (request, otherParameters) {
         const languageData = this.#languagePackages.get(this.#getLanguage(request));
         return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: request.session.username }
     }
 
+    /**
+     * @private Get not logged in parameters for rendering view
+     * @method module:RouteController#getNotLoggedInParameters
+     */
     #getNotLoggedInParameters = function (request, otherParameters) {
         const languageData = this.#languagePackages.get(this.#getLanguage(request));
         return { ...otherParameters, languageData: languageData, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM }
     }
 
-    #renderView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {
+    /**
+     * @private Get error parameters for rendering view
+     * @method module:RouteController#getErrorParameter
+     */
+     #getErrorParameter = function (defaultParameters, errors) {
+        for (const error of errors) {
+            if (error.value === true) {
+                return { ...defaultParameters, [error.name]: true }
+            }
+        }
+
+        return undefined
+    }
+
+    /**
+     * @private Render view for logged in and not logged in case. 
+     * @method module:RouteController#renderGeneralView
+     */
+    #renderGeneralView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {
         if (request.session.loggedin === true) {
-            return response.render(loggedInViewToRender, this.#getLoggedInParameters(request, loggedInParameter));
+            return this.#renderLoggedInView(request, response, loggedInViewToRender, loggedInParameter)
         } else {
-            return response.render(notLoggedInViewToRender, this.#getNotLoggedInParameters(request, notLoggedInParameter));
+            return this.#renderNotLoggedInView(request, response, notLoggedInViewToRender, notLoggedInParameter);
         }
     }
 
+    /**
+     * @private Render view for logged in case. 
+     * @method module:RouteController#renderLoggedInView
+     */
+    #renderLoggedInView = function (request, response, viewToRender, parameter) {
+        return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
+    }
+
+    /**
+     * @private Render view for not logged in case. 
+     * @method module:RouteController#renderNotLoggedInView
+     */
+    #renderNotLoggedInView = function (request, response, viewToRender, parameter) {
+        return response.render(viewToRender, this.#getNotLoggedInParameters(request, parameter));
+    }
+
+    /**
+     * @private Get session language. If not set, then get default language
+     * @method module:RouteController#getLanguage
+     */
     #getLanguage = function (request) {
         let language = request.session.language;
 
@@ -844,15 +898,5 @@ module.exports = class RouteController {
         }
 
         return language;
-    }
-
-    #getErrorParameter = function (defaultParameters, errors) {
-        for (const error of errors) {
-            if (error.value === true) {
-                return { ...defaultParameters, [error.name]: true }
-            }
-        }
-
-        return undefined
     }
 }
