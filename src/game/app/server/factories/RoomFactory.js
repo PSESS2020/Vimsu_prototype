@@ -313,28 +313,6 @@ module.exports = class RoomFactory {
 
     }
 
-    // TODO move to DoorFactory
-    /**
-     * Take the desired name & variant of a logo and gets it from
-     * the DoorLogos-object.
-     * 
-     * @method module:RoomFactory#getDoorLogo
-     * 
-     * @param {String} logoName name of the logo
-     * @param {String} logoVariant variant of the logo
-     *  
-     * @returns {String} The key for the image asset of the logo
-     */
-    #getDoorLogo = function (logoName, logoVariant) {
-        if (DoorLogos.hasOwnProperty(logoName)) {
-            let logo = DoorLogos[logoName];
-            return logo[logoVariant];
-        } else {
-            throw new Error(logoName + " is not a legal argument for the door logo value");
-        }
-        
-    }
-
     /**
      * Decoded the position-field of the object data, which exists in
      * three 'flavors':
