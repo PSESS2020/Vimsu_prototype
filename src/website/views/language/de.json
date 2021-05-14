@@ -37,7 +37,7 @@
         "oldPasswordWrong": "Das alte Passwort ist nicht korrekt. Bitte versuchen Sie es erneut.",
         "passwordsDontMatch": "Die neuen Passwörter stimmen nicht überein. Bitte versuchen Sie es erneut.",
         "emptyPassword": "Passwörter dürfen nicht leer sein.",
-        "changePasswordFail": "Beim Ändern ihres Passworts ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "changePasswordFail": "Beim Ändern Ihres Passworts ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
         "oldPassword": "Altes Passwort",
         "newPassword": "Neues Passwort",
         "confirmPassword": "Neues Passwort bestätigen"  
