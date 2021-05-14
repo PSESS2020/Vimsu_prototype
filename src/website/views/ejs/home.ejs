@@ -10,8 +10,8 @@
 		<%- include('partials/header') %>
         <section class="row align-items-center justify-content-center" id="content">
             <div class="col-lg-6 col-md-12 col-sm-12" id="title">
-                <h2>Virtual Interactive Meeting Simulator</h2>
-                <h6><%=languageData.discoverVIMSU%></h6>
+                <h2><%=languageData.vimsuName%></h2>
+                <h6><%=languageData.discoverVimsu%></h6>
                 <% if (locals.loggedIn === true) { %>
                   <a class="btn primary-button mt-4 p-2" href="/conference/<%=conferenceId%>">
                     <span><%=languageData.enterConference%></span>
