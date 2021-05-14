@@ -98,14 +98,6 @@ module.exports = class GameObject {
     /* ##################################################################### */
 
     /**
-     * The game object names needs to be unique equivalent to the asset keys in the room decorators. 
-     * If a new object with an unknown object type is added, then the new ObjectType has to be added to GameObjectType.js.
-     * Further a new ObjectView.js needs to be implemented in the client and added to the GameObjectViewFactory.js.
-     * Also when objects should overlap, then first push the background object to the object array and then the foreground objects.
-     */
-
-
-    /**
      * @method module:GameObjectFactory#createGameObject
      * 
      * @param {String} roomId 

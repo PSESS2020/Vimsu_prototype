@@ -104,9 +104,24 @@ module.exports = class RoomFactory {
     }
 
     /**
+     * Takes a list of data-packets, formatted as JSON, parses the relevant data
+     * and passes it to GameObjectFactory to create new GameObject instances.
      * 
-     * @param {*} mapElements 
-     * @returns 
+     * @param {Array of { type:         GameObjectType, 
+     *                    position:     int[2],
+     *                    ?variation:   String,
+     *                    ?isClickable: Boolean,
+     *                    ?iFrameData:  { title:  String,
+     *                                    url:    String,
+     *                                    width:  number,
+     *                                    height: number },
+     *                    ?story:       String             
+     *                    ?width:       int,
+     *                    ?length:      int,
+     *                    ?isSolid:     Boolean,
+     *                    ?assetSet:    String[] OR String[][] }} mapElements
+     * 
+     * @returns {GameObject[]} Array of newly created map elements.
      */
     #buildMapElements = function (roomId, mapElements) {
         let listOfElements = []
@@ -120,9 +135,24 @@ module.exports = class RoomFactory {
     }
 
     /**
+     * Takes a list of data-packets, formatted as JSON, parses the relevant data
+     * and passes it to GameObjectFactory to create new GameObject instances.
      * 
-     * @param {*} gameObjects 
-     * @returns 
+     * @param {Array of { type:         GameObjectType, 
+     *                    position:     int[2],
+     *                    ?variation:   String,
+     *                    ?isClickable: Boolean,
+     *                    ?iFrameData:  { title:  String,
+     *                                    url:    String,
+     *                                    width:  number,
+     *                                    height: number },
+     *                    ?story:       String             
+     *                    ?width:       int,
+     *                    ?length:      int,
+     *                    ?isSolid:     Boolean,
+     *                    ?assetSet:    String[] OR String[][] }} gameObjects
+     *  
+     * @returns {GameObject[]} Array of newly created game objects.
      */
     #buildGameObjects = function (roomId, gameObjects) {
         let listOfObjects = []
@@ -136,15 +166,15 @@ module.exports = class RoomFactory {
     }
 
     /**
-     * Takes a list of data-packets, stored in JSON, parses the relevant data
+     * Takes a list of data-packets, formatted as JSON, parses the relevant data
      * and passes it to the NPCfactory to create new NPC instances.
      * 
-     * npcData = { name: String, position: int[2], direction: Direction,
-     *             dialog: String[] }
-     * 
-     * @param {Object[]} npcs
+     * @param { Array of { name:      String,
+     *                     position:  int[2], 
+     *                     direction: Direction,
+     *                     dialog:    String[]  } } npcs
      *  
-     * @returns 
+     * @returns {NPC[]} An array of all created NPCs
      */
     #buildNPCs = function (roomId, npcs) {
         let listOfNPCs = []
@@ -343,7 +373,7 @@ module.exports = class RoomFactory {
                 this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
             }
         } else {
-            this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
+            this.#objFactory.createGameObject(roomId, objData).forEach(elem => listToAppend.push(elem))
         }
     }
 
