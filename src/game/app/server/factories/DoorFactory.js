@@ -159,7 +159,7 @@ module.exports = class DoorFactory {
         } else if (wallSide === GlobalStrings.RIGHT) {
             enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         } else {
-            throw new Error(wallSide + " is not a legal option for the wallside of a door.");
+            throw new Error(`${wallSide} is not a legal option for the wallside of a door.`);
         }
 
         let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
@@ -233,21 +233,24 @@ module.exports = class DoorFactory {
     }
 
     /**
-     * TODO 
-     * @param {*} logoName 
-     * @param {*} logoVariant 
-     * @returns 
+     * Take the desired name & variant of a logo and gets it from
+     * the DoorLogos-object.
+     * 
+     * @method module:DoorFactory#getDoorLogo
+     * 
+     * @param {String} logoName name of the logo
+     * @param {String} logoVariant variant of the logo
+     *  
+     * @returns {String} The key for the image asset of the logo
      */
     getDoorLogo (logoName, logoVariant) {
-        if (DoorLogos.hasOwnProperty(logoName)) {
-            let logo = DoorLogos[logoName]
-            if (logo.hasOwnProperty(logoVariant)) {
-                return logo[logoVariant]
-            } else {
-                // TODO
-            }
-        } else {
-            // TODO
+        var logo
+        if (DoorLogos.hasOwnProperty(logoName)) { logo = DoorLogos[logoName] }
+        else { 
+            DoorLogos[GlobalStrings.DEFAULT]
+            console.log(`${logoName} is not a known door logo. Reverted to ${GlobalStrings.DEFAULT}.`) 
         }
+        if (logo.hasOwnProperty(logoVariant)) { return logo[logoVariant] } 
+        else { throw new Error(`${logoVariant} is not a known variation of the the door logo ${logo}.`) }
     }
 } 

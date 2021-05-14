@@ -102,14 +102,18 @@ module.exports = class GameObject {
      * 
      * @param {String} roomId 
      * @param { { type:         GameObjectType, 
-     *            position:     number[2],
+     *            position:     int[2],
      *            ?variation:   String,
      *            ?isClickable: Boolean,
      *            ?iFrameData:  { title:  String,
      *                            url:    String,
      *                            width:  number,
      *                            height: number },
-     *            ?story:       String             } } objData
+     *            ?story:       String             
+     *            ?width:       int,
+     *            ?length:      int,
+     *            ?isSolid:     Boolean,
+     *            ?assetSet:    String[] OR String[][] } } objData
      * 
      * @returns {GameObject[]} An array containing all parts making up the
      *                         object defined by the passed data 
@@ -146,9 +150,9 @@ module.exports = class GameObject {
 
         // Check if custom options have been passed. If not, load default
         // ones from GameObjectInfo.
-        if (width     === undefined) { width     = GameObjectInfo.getInfo(type, "width") }
-        if (length    === undefined) { length    = GameObjectInfo.getInfo(type, "length") }
-        if (isSolid   === undefined) { isSolid   = GameObjectInfo.getInfo(type, "isSolid") }
+        if (width    === undefined) { width    = GameObjectInfo.getInfo(type, "width") }
+        if (length   === undefined) { length   = GameObjectInfo.getInfo(type, "length") }
+        if (isSolid  === undefined) { isSolid  = GameObjectInfo.getInfo(type, "isSolid") }
         if (assetSet === undefined) { assetSet = GameObjectInfo.getAsset(type, variation) }
         
         let i = 0
