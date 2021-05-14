@@ -64,5 +64,17 @@
         "forgotPassword": "Forgot your password?",
         "noAccount": "Don't have an account yet?",
         "signUpNow": "Sign up now!"
+    },
+
+    "contactUs": {
+        "loveToHear": "We'd love to hear from you!",
+        "reachUsAt": "You can reach us by email at ",
+        "or": "or...",
+        "stayAnonymous": "If you'd prefer to stay anonymous, just leave us a message below :)",
+        "messageSent": "We have received your message, thank you!",
+        "messageSentFail": "There's an error while sending your message. Please try again.",
+        "emptyMessage": "Message cannot be empty.",
+        "yourMessage": "Your message",
+        "sendMessage": "Send message"
     }
 }

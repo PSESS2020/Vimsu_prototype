@@ -64,5 +64,17 @@
         "forgotPassword": "Passwort vergessen?",
         "noAccount": "Noch keinen Account?",
         "signUpNow": "Jetzt registrieren!"
+    },
+
+    "contactUs": {
+        "loveToHear": "Wir freuen uns über jegliche Art von Feedback!",
+        "reachUsAt": "Schreiben Sie einfach eine E-Mail an ",
+        "or": "oder...",
+        "stayAnonymous": "schreiben Sie Ihre Nachricht einfach anonym in das untere Eingabefenster :)",
+        "messageSent": "Wir haben Ihre Nachricht erhalten. Danke!",
+        "messageSentFail": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "emptyMessage": "Die Nachricht darf nicht leer sein.",
+        "yourMessage": "Ihre Nachricht",
+        "sendMessage": "Nachricht senden"
     }
 }
