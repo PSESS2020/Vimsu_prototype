@@ -1,4 +1,6 @@
 {
+    "noJavaScript": "Your browser does not support JavaScript!",
+
     "homepage": {
         "vimsuName": "Virtual Interactive Meeting Simulator",
         "discoverVimsu": "Discover the 2.5D virtual conference experience with us!",
@@ -50,7 +52,8 @@
         "title": "Title",
         "surname": "Surname",
         "job": "Job/Profession",
-        "company": "Company/School"
+        "company": "Company/School",
+        "password": "Password"
     },
 
     "logIn": {

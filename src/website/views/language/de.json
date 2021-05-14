@@ -1,4 +1,6 @@
 {
+    "noJavaScript": "Ihr Browser unterstützt kein JavaScript!",
+    
     "homepage": {
         "vimsuName": "Virtual Interactive Meeting Simulator",
         "discoverVimsu": "Entdecke die virtuelle Konferenz in 2.5D mit uns!",
