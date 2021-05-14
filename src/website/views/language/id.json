@@ -3,6 +3,10 @@
 
     "underConstruction": "Ups! Halaman ini masih dibangun. Silahkan coba kembali nanti!",
 
+    "pageNotFound": "404 Error - Halaman yang Anda cari tidak ditemukan",
+
+    "privacyPolicy": "Kebijakan Pribadi",
+
     "homepage": {
         "vimsuName": "Virtual Interactive Meeting Simulator",
         "discoverVimsu": "Temukan pengalaman konferensi virtual 2.5D bersama kami!",
