@@ -342,7 +342,7 @@ module.exports = class RouteController {
 
             if (isError) {
                 parameter = this.#getErrorParameter(defaultParameters, errors)
-                return response.render(viewToRender, parameter);
+                return response.render(viewToRender, this.#getNotLoggedInParameters(request, parameter));
             }
 
             return AccountService.verifyLoginData(request.body.usernameOrEmail, request.body.password, dbSuffix, this.#db).then(user => {
@@ -364,7 +364,7 @@ module.exports = class RouteController {
 
                     response.redirect('/');
                 } else {
-                    response.render(viewToRender, { ...defaultParameters, wrongLoginData: true });
+                    response.render(viewToRender, this.#getNotLoggedInParameters(request, { ...defaultParameters, wrongLoginData: true }));
                 }
 
                 response.end();

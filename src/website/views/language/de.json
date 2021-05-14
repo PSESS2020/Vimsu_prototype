@@ -50,6 +50,15 @@
         "title": "Titel",
         "surname": "Nachname",
         "job": "Beruf",
-        "company": "Unternehmen/Schule"
+        "company": "Unternehmen/Schule",
+        "password": "Passwort"
+    },
+
+    "logIn": {
+        "wrongFields": "Nutzername/E-Mail und Passwort passen nicht zusammen. Bitte versuchen Sie es erneut.",
+        "emptyFields": "Felder dürfen nicht leer sein.",
+        "forgotPassword": "Passwort vergessen?",
+        "noAccount": "Noch keinen Account?",
+        "signUpNow": "Jetzt registrieren!"
     }
 }
