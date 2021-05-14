@@ -78,7 +78,7 @@
         "sendMessage": "Nachricht senden"
     },
 
-    "resetPassword": {
+    "forgotPassword": {
         "linkSent": "Wir haben einen Link an your_email gesendet, mit dem Sie ihr Passwort zurücksetzen können.",
         "resetPassword": "Passwort zurücksetzen"
     }
