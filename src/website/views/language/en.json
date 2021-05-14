@@ -76,5 +76,10 @@
         "emptyMessage": "Message cannot be empty.",
         "yourMessage": "Your message",
         "sendMessage": "Send message"
+    },
+
+    "forgotPassword": {
+        "linkSent": "We have sent you a link to your_email to reset your password.",
+        "resetPassword": "Reset Password"
     }
 }

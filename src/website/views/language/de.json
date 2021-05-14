@@ -76,5 +76,10 @@
         "emptyMessage": "Die Nachricht darf nicht leer sein.",
         "yourMessage": "Ihre Nachricht",
         "sendMessage": "Nachricht senden"
+    },
+
+    "resetPassword": {
+        "linkSent": "Wir haben einen Link an your_email gesendet, mit dem Sie ihr Passwort zurücksetzen können.",
+        "resetPassword": "Passwort zurücksetzen"
     }
 }
