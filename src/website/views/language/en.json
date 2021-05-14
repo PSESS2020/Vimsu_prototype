@@ -23,7 +23,7 @@
     },
 
     "accountSettings": {
-        "editAccountInfo": "Edit Account Info",
+        "editAccountInfo": "Account Information",
         "changeSuccess": "Your changes have been saved.",
         "usernameTaken": "The username you entered is already taken.",
         "emailTaken": "The email you entered is already registered",

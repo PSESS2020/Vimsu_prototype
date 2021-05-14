@@ -23,7 +23,7 @@
     },
 
     "accountSettings": {
-        "editAccountInfo": "Edit Informasi Akun",
+        "editAccountInfo": "Informasi Akun",
         "changeSuccess": "Perubahan yang Anda buat sudah disimpan",
         "usernameTaken": "Nama pengguna yang Anda masukan sudah terdaftar",
         "emailTaken": "Email yang Anda masukan sudah terdaftar.",

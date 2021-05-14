@@ -103,12 +103,14 @@
                                             </div>
                                         </div>
                                     <% } %>
-                                    <button class="primary-button mt-4 p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
-                                        <span><%=languageData.accountSettings.saveChanges%></span>
-                                    </button>
-                                    <button class="warning-button mt-4 ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 p-2" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
-                                        <span><%=languageData.accountSettings.deleteAccount%></span>
-                                    </button>
+                                    <div class="d-flex align-items-left justify-content-center mt-4">
+                                        <button class="primary-button p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
+                                            <span><%=languageData.accountSettings.saveChanges%></span>
+                                        </button>
+                                        <button class="warning-button p-2 ml-3" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
+                                            <span><%=languageData.accountSettings.deleteAccount%></span>
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         
