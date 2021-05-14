@@ -1,16 +1,20 @@
 {
-    "vimsuName": "Virtual Interactive Meeting Simulator",
-    "discoverVimsu": "Discover the 2.5D virtual conference experience with us!",
-    "enterConference": "Enter conference",
-    "register": "Try it now for free",
-    "logIn": "Sign in",
+    "homepage": {
+        "vimsuName": "Virtual Interactive Meeting Simulator",
+        "discoverVimsu": "Discover the 2.5D virtual conference experience with us!",
+        "enterConference": "Enter conference",
+        "register": "Try it now for free",
+        "logIn": "Sign in"
+    },
 
-    "home": "home",
-    "aboutUs": "about us",
-    "tutorial": "tutorial",
-    "contactUs": "contact us",
-    "dashboard": "my dashboard",
-    "uploadVideo": "upload video",
-    "accountSettings": "account settings",
-    "logOut": "log out"
+    "header": {
+        "home": "home",
+        "aboutUs": "about us",
+        "tutorial": "tutorial",
+        "contactUs": "contact us",
+        "dashboard": "my dashboard",
+        "uploadVideo": "upload video",
+        "accountSettings": "account settings",
+        "logOut": "log out"
+    },
 }

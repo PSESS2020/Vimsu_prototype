@@ -21,26 +21,26 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/" id="home"><%=languageData.home%></a>
+                <a class="nav-link" href="/" id="home"><%=languageData.header.home%></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/about-us"><%=languageData.aboutUs%></a>
+                <a class="nav-link" href="/about-us"><%=languageData.header.aboutUs%></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/tutorial"><%=languageData.tutorial%></a>
+                <a class="nav-link" href="/tutorial"><%=languageData.header.tutorial%></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/contact-us"><%=languageData.contactUs%></a>
+                <a class="nav-link" href="/contact-us"><%=languageData.header.contactUs%></a>
             </li>
             <% if (locals.loggedIn===true) { %>
                 <% if (locals.videoStorageActivated) { %>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <%=languageData.dashboard%>
+                            <%=languageData.header.dashboard%>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/my-dashboard/upload"><%=languageData.uploadVideo%></a>
+                            <a class="dropdown-item" href="/my-dashboard/upload"><%=languageData.header.uploadVideo%></a>
                         </div>
                     </li>
                 <% } %>
@@ -50,8 +50,8 @@
                         <%=username%>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/<%=username%>/account-settings"><%=languageData.accountSettings%></a>
-                        <a class="dropdown-item" href="/logout"><%=languageData.logOut%></a>
+                        <a class="dropdown-item" href="/<%=username%>/account-settings"><%=languageData.header.accountSettings%></a>
+                        <a class="dropdown-item" href="/logout"><%=languageData.header.logOut%></a>
                     </div>
                 </li>
             <% } %>
