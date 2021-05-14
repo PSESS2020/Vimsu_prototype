@@ -1,5 +1,6 @@
 const fileUpload = require('express-fileupload');
 const expressSession = require('express-session');
+const cookieParser = require('cookie-parser');
 const MemoryStore = require('memorystore')(expressSession);
 const bodyParser = require('body-parser');
 const AccountService = require('../services/AccountService');
@@ -124,6 +125,7 @@ module.exports = class RouteController {
         });
 
         this.#app.use(sessionMiddleware);
+        this.#app.use(cookieParser());
 
         this.#app.get('/', (request, response) => {
             const viewToRender = 'home'
@@ -138,7 +140,7 @@ module.exports = class RouteController {
                 return this.#renderGeneralView(request, response, viewToRender, {}, viewToRender, {})
             }
 
-            request.session.language = request.query.type;
+            response.cookie('language', request.query.type)
             response.redirect(request.header('Referer') || "/")
         });
 
@@ -286,7 +288,7 @@ module.exports = class RouteController {
 
                 defaultParameters = { title: '', startingTime: '', remarks: '', maxParticipants: '' }
 
-                this.#renderLoggedInView(request,response,viewToRender, { ...defaultParameters, uploading: true })
+                this.#renderLoggedInView(request, response, viewToRender, { ...defaultParameters, uploading: true })
 
                 if (Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     const from = process.env.VIMSU_NOREPLY_EMAIL
@@ -592,8 +594,11 @@ module.exports = class RouteController {
 
         this.#app.get('/logout', (request, response) => {
             if (request.session.loggedin === true) {
-                request.session.destroy();
-                response.redirect('/');
+                request.session.destroy((err) => {
+                    if (!err) {
+                        response.redirect('/');
+                    }
+                });
             } else {
                 this.#renderNotLoggedInView(request, response, 'page-not-found', {});
             }
@@ -826,8 +831,8 @@ module.exports = class RouteController {
      * @private Get logged in parameters for rendering view
      * @method module:RouteController#getLoggedInParameters
      */
-    #getLoggedInParameters = function (request, otherParameters) {
-        const languageData = this.#languagePackages.get(this.#getLanguage(request));
+    #getLoggedInParameters = function (request, response, otherParameters) {
+        const languageData = this.#languagePackages.get(this.#getLanguage(request, response));
         return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: request.session.username }
     }
 
@@ -835,8 +840,8 @@ module.exports = class RouteController {
      * @private Get not logged in parameters for rendering view
      * @method module:RouteController#getNotLoggedInParameters
      */
-    #getNotLoggedInParameters = function (request, otherParameters) {
-        const languageData = this.#languagePackages.get(this.#getLanguage(request));
+    #getNotLoggedInParameters = function (request, response, otherParameters) {
+        const languageData = this.#languagePackages.get(this.#getLanguage(request, response));
         return { ...otherParameters, languageData: languageData, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM }
     }
 
@@ -844,7 +849,7 @@ module.exports = class RouteController {
      * @private Get error parameters for rendering view
      * @method module:RouteController#getErrorParameter
      */
-     #getErrorParameter = function (defaultParameters, errors) {
+    #getErrorParameter = function (defaultParameters, errors) {
         for (const error of errors) {
             if (error.value === true) {
                 return { ...defaultParameters, [error.name]: true }
@@ -871,7 +876,7 @@ module.exports = class RouteController {
      * @method module:RouteController#renderLoggedInView
      */
     #renderLoggedInView = function (request, response, viewToRender, parameter) {
-        return response.render(viewToRender, this.#getLoggedInParameters(request, parameter));
+        return response.render(viewToRender, this.#getLoggedInParameters(request, response, parameter));
     }
 
     /**
@@ -879,22 +884,22 @@ module.exports = class RouteController {
      * @method module:RouteController#renderNotLoggedInView
      */
     #renderNotLoggedInView = function (request, response, viewToRender, parameter) {
-        return response.render(viewToRender, this.#getNotLoggedInParameters(request, parameter));
+        return response.render(viewToRender, this.#getNotLoggedInParameters(request, response, parameter));
     }
 
     /**
      * @private Get session language. If not set, then get default language
      * @method module:RouteController#getLanguage
      */
-    #getLanguage = function (request) {
-        let language = request.session.language;
+    #getLanguage = function (request, response) {
+        let language = request.cookies['language'];
 
         if (!language) {
             language = request.acceptsLanguages(...[...this.#languagePackages.keys()]);
             if (!language) {
                 language = Settings.DEFAULT_LANGUAGE;
             }
-            request.session.language = language;
+            response.cookie('language', language);
         }
 
         return language;
