@@ -770,8 +770,8 @@ module.exports = class RouteController {
     #sendMail = async function (mailOptions, email, emailPassword) {
         return new Promise(function (resolve, reject) {
             const smtpTransport = nodemailer.createTransport({
-                service: "Gmail",
-                port: 465,
+                service: process.env.VIMSU_NOREPLY_EMAIL_SMTP_SERVICE,
+                port: process.env.VIMSU_NOREPLY_EMAIL_SMTP_PORT,
                 secure: true,
                 auth: {
                     user: email,
