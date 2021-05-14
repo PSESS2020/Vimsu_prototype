@@ -123,13 +123,15 @@ module.exports = class GameObject {
      *                         object defined by the passed data 
      */
     createGameObject (roomId, objData) {
-        // Destructuring the object for easier reference and a more flexible
-        // method.
         // TODO type-checking
-        // TODO This is where we will add support for custom options
-        // TODO split in multiples for constants, variables and custom
-        const { type, position: [xPos, yPos] } = objData
-        var { variation, isClickable, iFrameData, story } = objData
+        
+        // Destructuring the object for easier reference and a more flexible
+        // method. The last two lines don't need to be separate, it's just
+        // to signify that these are two different "levels" of customization.
+        const { type, position: [xPos, yPos] }            = objData // mandatory
+        var { variation, isClickable, iFrameData, story } = objData // optional
+        var { width, length, isSolid, assetSet }          = objData // custom
+        
         let returnData = []
 
         if (isClickable === undefined) {
@@ -139,6 +141,9 @@ module.exports = class GameObject {
 
         if (variation === undefined) { variation = GlobalStrings.DEFAULT }
         
+        // TODO this might cause additional parts to visually clash with
+        //      the rest of the object if a custom assetSet has been
+        //      defined
         if (GameObjectInfo.hasProperty(type, "parts")) {
             let parts = GameObjectInfo.getInfo(type, "parts")
             parts.forEach( partData => {
@@ -147,19 +152,23 @@ module.exports = class GameObject {
             })
         }
 
-        width = GameObjectInfo.getInfo(type, "width")
-        length = GameObjectInfo.getInfo(type, "length")
-
+        // Check if custom options have been passed. If not, load default
+        // ones from GameObjectInfo.
+        if (width     === undefined) { width     = GameObjectInfo.getInfo(type, "width") }
+        if (length    === undefined) { length    = GameObjectInfo.getInfo(type, "length") }
+        if (isSolid   === undefined) { isSolid   = GameObjectInfo.getInfo(type, "isSolid") }
+        if (assetSet === undefined) { assetSet = GameObjectInfo.getAsset(type, variation) }
+        
         let i = 0
-        GameObjectInfo.getAsset(type, variation).forEach(assetLinePart => {
+        assetSet.forEach(assetLinePart => {
             if (assetLinePart instanceof Array) {
                 let j = 0
                 assetLinePart.forEach(assetColPart => {
-                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isClickable, iFrameData, story))
+                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isSolid, isClickable, iFrameData, story))
                     j++
                 })
             } else {
-                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isClickable, iFrameData, story))
+                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isSolid, isClickable, iFrameData, story))
             }
             i++
         })

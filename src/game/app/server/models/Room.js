@@ -147,7 +147,7 @@ module.exports = class Room {
         listOfElements.forEach(element => {
             TypeChecker.isInstanceOf(element, GameObject)
         })
-        this.setMapElements(this.#listOfMapElements.concat(listOfElements))
+        this.setMapElements([...this.#listOfMapElements, ...listOfElements])
     }
 
     /**
@@ -161,7 +161,7 @@ module.exports = class Room {
         listOfObjects.forEach(element => {
             TypeChecker.isInstanceOf(element, GameObject)
         })
-        this.setGameObjects(this.#listOfGameObjects.concat(listOfObjects))
+        this.setGameObjects([...this.#listOfGameObjects, ...listOfObjects])
     }
 
     /**
@@ -175,7 +175,7 @@ module.exports = class Room {
         NPClist.forEach(element => {
             TypeChecker.isInstanceOf(element, NPC)
         })
-        this.setNPCs(this.#listOfNPCs.concat(NPClist))
+        this.setNPCs([...this.#listOfNPCs, ...NPClist])
     }
 
     /**
@@ -189,7 +189,7 @@ module.exports = class Room {
         doorList.forEach(element => {
             TypeChecker.isInstanceOf(element, Door)
         })
-        this.setDoors(this.#listOfNPCs.concat(doorList))
+        this.setDoors([...this.#listOfDoors, ...doorList])
     }
 
     /**

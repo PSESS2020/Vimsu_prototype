@@ -50,6 +50,7 @@ module.exports = class RoomFactory {
      * @returns {Room} The fully built room
      */
     buildRoomFrom(roomData) {
+        // TODO add destructuring
         var type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
         var room = new Room(this.#roomID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
 
@@ -73,32 +74,31 @@ module.exports = class RoomFactory {
 
     /**
      * 
-     * @param {*} wallstyle 
-     * @param {*} tilestyle 
-     * @param {*} width 
-     * @param {*} length 
-     * @returns 
+     * @param {String} wallstyle The desired wall variation
+     * @param {String} tilestyle The desired tile variation
+     * @param {integer} width    The width of the room
+     * @param {integer} length   The length of the room
+     *  
+     * @returns {GameObject[]}   An array containing all wall and tile objects
+     *                           that make up the room
      */
-    #buildWallsAndTiles = function(roomId, wallstyle, tilestyle, width, length) {
+    #buildWallsAndTiles = function (roomId, wallstyle, tilestyle, width, length) {
         var listOfWallsAndTiles = []
         if (wallstyle === undefined) wallstyle = GlobalStrings.DEFAULT
         if (tilestyle === undefined) tilestyle = GlobalStrings.DEFAULT
         // ADD TILES
         for (var i = 0; i < length; i++) {
             for (var j = 0; j < width; j++) {
-                // TODO replace
-                listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.TILE, i, j, false));
+                listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.TILE, position: [i, j], variation: tilestyle }) )
             }
         }
         // ADD LEFT WALLS
         for (var i = 0; i < length; i++) {
-            // TODO replace
-            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.LEFTWALL, i, -1, false));
+            listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [i, -1], variation: wallstyle }) )
         }
         // ADD RIGHT WALLS
         for (var j = 0; j < width; j++) {
-            // TODO replace
-            listOfWallsAndTiles.push(this.#objFactory.createCustomObject(roomId, GameObjectType.RIGHTWALL, room.getLength(), j, false));
+            listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [length, j], variation: wallstyle }) )
         }
         return listOfWallsAndTiles
     }
@@ -113,8 +113,6 @@ module.exports = class RoomFactory {
         // ADD MAPELEMENTS
         // this includes windows, schedule usw.
         // objData = {type, position, isClickable, iFrameData, story, variation}
-        // TODO replace
-        // TODO this no longer knows roomData-Object
         mapElements.forEach(objData => {
             this.#decodePositionDataAndCreate(roomId, objData, listOfElements)
         })
@@ -131,8 +129,6 @@ module.exports = class RoomFactory {
         // ADD OBJECTS
         // tables, plants, food and more
         // objData = {type, position, isClickable, iFrameData, story, variation}
-        // TODO replace
-        // TODO this no longer knows roomData-Object
         gameObjects.forEach(objData => {
             this.#decodePositionDataAndCreate(roomId, objData, listOfObjects)
         })
@@ -150,8 +146,6 @@ module.exports = class RoomFactory {
      *  
      * @returns 
      */
-
-        // TODO this no longer knows roomData-Object
     #buildNPCs = function (roomId, npcs) {
         let listOfNPCs = []
         npcs.forEach(npcData => {
@@ -325,136 +319,32 @@ module.exports = class RoomFactory {
      * @param {Int} roomId id of the room we're putting stuff into
      * @param {Object} objData data of the object we're creating
      * @param {Array[Object]} listToAppend list the final object is 
-     *                                       being put into
+     *                                     being put into
      */
     #decodePositionDataAndCreate = function (roomId, objData, listToAppend) {
-            // Not the cleanest way, but workable
-            // TODO refactor
-            if (objData.position.every(element => Array.isArray(element))) {
-                objData.position.forEach( position => {
-                    // copy objData
-                    let creationData = Object.assign( {}, objData )
-                    // set positions to proper value
-                    creationData.position = position;
-                    this.#decodePositionDataAndCreate(roomId, creationData, listToAppend);
-                })
-            } else if (objData.position.some(element => Array.isArray(element)) && objData.position.some(element => !Array.isArray(element))) { 
-                // we assume that position has only two fields
-                let line = (objData.position[0] instanceof Array) ? objData.position[0] : objData.position[1];
-                for (let i = 0; i < line.length; i++) {
-                    // copy objData
-                    let creationData = Object.assign( {}, objData )
-                    // set positions to proper value
-                    creationData.position = (objData.position[0] instanceof Array) ? [line[i], objData.position[1]] : [objData.position[0], line[i]];
-                    this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
-                }
-            } else {
+        // Not the cleanest way, but workable
+        // TODO refactor
+        if (objData.position.every(element => Array.isArray(element))) {
+            objData.position.forEach( position => {
+                // copy objData
+                let creationData = Object.assign( {}, objData )
+                // set positions to proper value
+                creationData.position = position;
+                this.#decodePositionDataAndCreate(roomId, creationData, listToAppend);
+            })
+        } else if (objData.position.some(element => Array.isArray(element)) && objData.position.some(element => !Array.isArray(element))) { 
+            // we assume that position has only two fields
+            let line = (objData.position[0] instanceof Array) ? objData.position[0] : objData.position[1];
+            for (let i = 0; i < line.length; i++) {
+                // copy objData
+                let creationData = Object.assign( {}, objData )
+                // set positions to proper value
+                creationData.position = (objData.position[0] instanceof Array) ? [line[i], objData.position[1]] : [objData.position[0], line[i]];
                 this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
             }
-    }
-
-    // TODO move to GameObjectFactory
-    /**
-     * Takes a data object defining a GameObject-instance to
-     * be created, reads it out and then creates all instances
-     * of the GameObject-class specified by the data object
-     * by calling the GameObjectFactory
-     * 
-     * This is a very hacky solution and not super nice, there
-     * is no polymorphism and a tom of conditionals.
-     * TODO it would be nice if this could be refactored in the
-     *      near future.
-     * 
-     * @method module:RoomFactory#createObjectsFromData
-     * 
-     * @param {Int} roomId id of the room we're putting stuff into
-     * @param {Object} objData data of the object we're creating
-     * @param {Array[Object]} listToAppend list the final object is 
-     *                                       being put into
-     */
-    #createObjectsFromData = function (roomId, objData, listToAppend) {
-        // TODO support for custom options
-
-        if (objData.isClickable === undefined) {
-            objData.isClickable = false;
-            objData.iFrameData = undefined;
-        }
-
-        if (objData.variation === undefined) {
-            objData.variation = GlobalStrings.DEFAULT
-        }
-
-        // if the object has additional parts, create them
-        if (GameObjectInfo.hasProperty(objData.type, "parts")) {
-            let parts = GameObjectInfo.getInfo(objData.type, "parts");
-            parts.forEach( partData => {
-                this.#createObjectsFromData(roomId, {
-                    type: partData.type,
-                    position: [ objData.position[0] + partData.offset_x, objData.position[1] + partData.offset_y ],
-                    isClickable: objData.isClickable,
-                    iFrameData: objData.iFrameData,
-                    story: objData.story,
-                    variation: partData.variation
-                }, listToAppend)
-            })
-        }
-
-        // TODO rewrite
-        if (GameObjectInfo.hasProperty(objData.type, "isMultiPart")) {
-            var size = GameObjectInfo.getInfo(objData.type, "size");
-            var width = GameObjectInfo.getInfo(objData.type, "width");
-            var length = GameObjectInfo.getInfo(objData.type, "length");
-            for (let i = 0; i < size[0]; i ++) {
-                let assets = GameObjectInfo.getInfo(objData.type, "assetName");
-                if (assets[i] instanceof Array) {
-                    for (let j = 0; j < Math.min(size[1], assets[i].length); j ++) {
-                        listToAppend.push(this.#objFactory.createObjectPart(roomId,
-                            objData.type,
-                            objData.position[0] + i * length,
-                            objData.position[1] + j * width,
-                            objData.isClickable,
-                            objData.iFrameData,
-                            objData.story,
-                            { x: i, y: j }))
-                    }
-                } else {
-                    listToAppend.push(this.#objFactory.createObjectVariation(roomId,
-                        objData.type,
-                        objData.position[0] + i * length,
-                        objData.position[1],
-                        objData.isClickable,
-                        objData.iFrameData,
-                        objData.story,
-                        i
-                    ));
-                }
-            }
-            
-        } else if (GameObjectInfo.hasProperty(objData.type, "hasVariation")) {
-            // if no variation defined, set to default,
-            // else do nothing
-            objData.variation == undefined ? objData.variation = 0 : {};
-            listToAppend.push(this.#objFactory.createObjectVariation(
-                roomId,
-                objData.type,
-                objData.position[0],
-                objData.position[1],
-                objData.isClickable,
-                objData.iFrameData,
-                objData.story,
-                objData.variation
-            ));           
         } else {
-            listToAppend.push(this.#objFactory.createCustomObject(
-                roomId,
-                objData.type,
-                objData.position[0],
-                objData.position[1],
-                objData.isClickable,
-                objData.iFrameData,
-                objData.story
-            ));
-        }      
+            this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
+        }
     }
 
 }

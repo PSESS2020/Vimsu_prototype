@@ -60,7 +60,7 @@ class GameObjectInfo {
     /**              - isSolid*: Boolean                             **/
     /**              - width*: integer                               **/
     /**              - length*: integer                              **/
-    /**              - assetName*: String                            **/
+    /**              - assetSet*: String                            **/
     /**                         OR String[]                          **/
     /**                         OR String[][] (see below)            **/
     /**              - hasVariation: Boolean  (see below)            **/
@@ -70,14 +70,14 @@ class GameObjectInfo {
     /**              - parts: Object[]             (see below)       **/
     /**                                                              **/
     /**   (d) Some notes on the more advanced options:               **/
-    /**       hasVariation: If this flag is set, the assetName must  **/
+    /**       hasVariation: If this flag is set, the assetSet must  **/
     /**                     be an array of strings. When adding an   **/
     /**                     in the floorplan, you can then specify   **/
     /**                     a variation by giving a valid index.     **/
     /**                     A different image will be drawn.         **/
     /**        isMultiPart: If this flag is set, the size-attribute  **/
     /**                     must be added to the object, and the     **/
-    /**                     assetName must be of type String[i][j_i] **/
+    /**                     assetSet must be of type String[i][j_i] **/
     /**                     with i = size[0], j_i <= size[1].        **/
     /**                     (so the length of the arrays need not be **/
     /**                     the same for all)                        **/
@@ -107,7 +107,7 @@ class GameObjectInfo {
     /**       the advanced options should be used in conjunction.    **/
     /**       (unless you know what you're doing)                    **/
     /**                                                              **/
-    /** NOTE: The strings in the assetName must be property-keys     **/
+    /** NOTE: The strings in the assetSet must be property-keys     **/
     /**       from the /client/shared/AssetPaths-file.               **/
     /****__________________________________________________________****/
 
@@ -121,7 +121,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: {
+            assetSet: {
                 [GlobalStrings.DEFAULT]: ["blank"],
             }
         },
@@ -131,7 +131,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
@@ -139,7 +139,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_selected"],
             }
         },
@@ -147,7 +147,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
@@ -155,7 +155,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
@@ -165,7 +165,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftwall_default"],
             }
         },
@@ -173,8 +173,8 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "rightwall_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["rightwall_default"],
             }
         },
 
@@ -187,7 +187,7 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
+            assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
             }
         },
@@ -196,9 +196,9 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "rightwindow_default0",
-                withSill:                "rightwindow_default1",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["rightwindow_default0"],
+                withSill:                ["rightwindow_default1"],
             }
         },
         [GameObjectType.LEFTWINDOW]: {
@@ -206,9 +206,9 @@ class GameObjectInfo {
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "leftwindow_default0",
-                withSill:                "leftwindow_default1",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["leftwindow_default0"],
+                withSill:                ["leftwindow_default1"],
             }
         },
         [GameObjectType.PICTUREFRAME]: {
@@ -216,8 +216,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: [["rightwallframe_default0", "rightwallframe_default1", "rightwallframe_default2"]],
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: [ ["rightwallframe_default0", "rightwallframe_default1", "rightwallframe_default2"] ],
             }
         },
         [GameObjectType.CONFERENCELOGO]: {
@@ -227,16 +227,14 @@ class GameObjectInfo {
              *  (ii) Set size-field (this is the size
              *       of the completed object, whereas
              *       width and length give part-size)
-             * (iii) assetName needs to be array of
+             * (iii) assetSet needs to be array of
              *       arrays, size[0] * size[1].    */
             isMultiPart: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: ["leftconferencelogo_default0",
-                "leftconferencelogo_default1", "leftconferencelogo_default2",
-                "leftconferencelogo_default3", "leftconferencelogo_default4"],
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: [ "leftconferencelogo_default0", "leftconferencelogo_default1", "leftconferencelogo_default2","leftconferencelogo_default3", "leftconferencelogo_default4" ],
             }
         },
         
@@ -245,8 +243,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "plant_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["plant_default"],
             }
         },    
 
@@ -256,11 +254,11 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "leftchair_default",
-                leftBack:                "leftchairback_default", 
-                rightFront:              "rightchair_default", 
-                rightBack:               "rightchairback_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["leftchair_default"],
+                leftBack:                ["leftchairback_default"], 
+                rightFront:              ["rightchair_default"], 
+                rightBack:               ["rightchairback_default"],
             }
         },
         [GameObjectType.SOFA]: {
@@ -268,9 +266,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "leftsofa_default",
-                rightFacing:             "rightsofa_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["leftsofa_default"],
+                rightFacing:             ["rightsofa_default"],
             }
         },
 
@@ -281,8 +279,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "table_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["table_default"],
             }
         },
         [GameObjectType.LARGETABLE]: {
@@ -290,17 +288,17 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "righttable_default",
-                turnedLeft:              "lefttable_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["righttable_default"],
+                turnedLeft:              ["lefttable_default"],
             }
         },
         [GameObjectType.SMALLTABLE]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "smalldinnertable_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["smalldinnertable_default"],
             }
         },
 
@@ -309,8 +307,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "canteencounter_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["canteencounter_default"],
             }
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
@@ -324,8 +322,8 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "receptionCounterFrontPart_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["receptionCounterFrontPart_default"],
             }
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
@@ -334,9 +332,9 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "receptionCounterLeftPart_default",
-                rightPart:               "receptionCounterRightPart_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["receptionCounterLeftPart_default"],
+                rightPart:               ["receptionCounterRightPart_default"],
             }
         },
 
@@ -345,16 +343,16 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 2 * Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "drinks_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["drinks_default"],
             }
         },
         [GameObjectType.TEA]: {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "tea_default",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["tea_default"],
             }
         },
         [GameObjectType.SMALLFOOD]: {
@@ -363,11 +361,11 @@ class GameObjectInfo {
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
-            assetName: { 
-                [GlobalStrings.DEFAULT]: "koeriWurst_default",
-                bothSides:               "koeriWurst_bothSides",
-                upperSide:               "koeriWurst_upperSide",
-                lowerSide:               "koeriWurst_lowerSide",
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["koeriWurst_default"],
+                bothSides:               ["koeriWurst_bothSides"],
+                upperSide:               ["koeriWurst_upperSide"],
+                lowerSide:               ["koeriWurst_lowerSide"],
             }
         },
     });
@@ -396,7 +394,7 @@ class GameObjectInfo {
 
     /**
      * Takes a GameObjectType and a key <variation> as arguments.
-     * Checks if the assetName-object contains a path indexed by
+     * Checks if the assetSet-object contains a path indexed by
      * the key. If yes, returns it. If no, returns default asset.
      * 
      * TypeChecking should be done by whoever calls this method!
@@ -410,7 +408,7 @@ class GameObjectInfo {
      *                   If no path indexed, return default.  
      */
     static getAsset (objectType, variation) {
-        let assets = GameObjectInfo.getInfo(objectType, assetName)
+        let assets = GameObjectInfo.getInfo(objectType, assetSet)
         
         if (TypeChecker.stringIsInteger(variation)) {
             let keys = Object.keys(assets)
