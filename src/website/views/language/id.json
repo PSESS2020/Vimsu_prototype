@@ -1,4 +1,8 @@
 {
+    "noJavaScript": "Browser Anda tidak mendukung JavaScript!",
+
+    "underConstruction": "Ups! Halaman ini masih dibangun. Silahkan coba kembali nanti!",
+
     "homepage": {
         "vimsuName": "Virtual Interactive Meeting Simulator",
         "discoverVimsu": "Temukan pengalaman konferensi virtual 2.5D bersama kami!",
@@ -50,6 +54,15 @@
         "title": "Titel",
         "surname": "Nama belakang",
         "job": "Pekerjaan",
-        "company": "Perusahaan/Sekolah"
+        "company": "Perusahaan/Sekolah",
+        "password": "Kata Sandi"
+    },
+
+    "logIn": {
+        "wrongFields": "Nama pengguna/email dan kata sandi yang Anda masukan tidak sesuai. Silahkan coba lagi.",
+        "emptyFields": "Isian tidak boleh kosong.",
+        "forgotPassword": "Lupa kata sandi?",
+        "noAccount": "Belum punya akun?",
+        "signUpNow": "Daftar sekarang!"
     }
 }
