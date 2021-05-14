@@ -17,4 +17,39 @@
         "accountSettings": "account settings",
         "logOut": "log out"
     },
+
+    "accountSettings": {
+        "editAccountInfo": "Edit Account Info",
+        "changeSuccess": "Your changes have been saved.",
+        "usernameTaken": "The username you entered is already taken.",
+        "emailTaken": "The email you entered is already registered",
+        "changeError": "There's an error while saving your changes. Please try again.",
+        "invalidUsername": "The username you entered doesn't match our criteria.",
+        "invalidEmail": "The email you entered is invalid. Please try again",
+        "invalidTitle": "Invalid title. Please choose a title from the options we provided.",
+        "emptyForename": "Forename cannot be empty.",
+        "deleteAccountFail": "There's an error while deleting your account. Please try again.",
+        "requiredFields": "Required fields",
+        "saveChanges": "Save changes",
+        "deleteAccount": "Delete account",
+        "changePassword": "Change Password",
+        "changePasswordSuccess": "Your password has been changed.",
+        "oldPasswordWrong": "Your old password is wrong.",
+        "passwordsDontMatch": "New passwords do not match.",
+        "emptyPassword": "Passwords cannot be empty.",
+        "changePasswordFail": "There's an error while changing your password. Please try again.",
+        "oldPassword": "Old password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password"  
+    },
+
+    "userData": {
+        "username": "Username",
+        "email": "Email",
+        "forename": "Forename",
+        "title": "Title",
+        "surname": "Surname",
+        "job": "Job/Profession",
+        "company": "Company/School"
+    }
 }

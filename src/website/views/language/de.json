@@ -17,4 +17,39 @@
         "accountSettings": "Account Einstellungen",
         "logOut": "Abmelden"
     },
+
+    "accountSettings": {
+        "editAccountInfo": "Account Informationen",
+        "changeSuccess": "Ihre Änderungen wurden gespeichert.",
+        "usernameTaken": "Der von Ihnen eingegebene Nutzername ist bereits vergeben.",
+        "emailTaken": "Die von Ihnen eingegebene E-Mail Adresse ist bereits vergeben.",
+        "changeError": "Beim Speichern Ihrer Änderungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "invalidUsername": "Der von Ihnen eingegebene Nutzername erfüllt nicht die vorgeschriebenen Kriterien. Bitte versuchen Sie es erneut.",
+        "invalidEmail": "Die von Ihnen eingegebene E-Mail Adresse ist ungültig. Bitte versuchen Sie es erneut.",
+        "invalidTitle": "Der von Ihnen angegebene Titel ist ungültig. Bitte wählen Sie einen der angebotenen Titel aus.",
+        "emptyForename": "Der Vorname darf nicht leer sein.",
+        "deleteAccountFail": "Beim Löschen Ihres Accounts ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "requiredFields": "Pflichtfelder",
+        "saveChanges": "Änderungen speichern",
+        "deleteAccount": "Account löschen",
+        "changePassword": "Passwort ändern",
+        "changePasswordSuccess": "Ihr Passwort wurde erfolgreich geändert.",
+        "oldPasswordWrong": "Das alte Passwort ist nicht korrekt. Bitte versuchen Sie es erneut.",
+        "passwordsDontMatch": "Die neuen Passwörter stimmen nicht überein. Bitte versuchen Sie es erneut.",
+        "emptyPassword": "Passwörter dürfen nicht leer sein.",
+        "changePasswordFail": "Beim Ändern ihres Passworts ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "oldPassword": "Altes Passwort",
+        "newPassword": "Neues Passwort",
+        "confirmPassword": "Neues Passwort bestätigen"  
+    },
+
+    "userData": {
+        "username": "Nutzername",
+        "email": "E-Mail Adresse",
+        "forename": "Vorname",
+        "title": "Titel",
+        "surname": "Nachname",
+        "job": "Beruf",
+        "company": "Unternehmen/Schule"
+    }
 }
