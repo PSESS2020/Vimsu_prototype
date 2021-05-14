@@ -1,6 +1,8 @@
 {
     "noJavaScript": "Ihr Browser unterstützt kein JavaScript!",
-    
+
+    "underConstruction": "Ups! An dieser Seite wird gerade noch gearbeitet. Bitte kommen Sie zu einem späteren Zeitpunkt wieder!",
+
     "homepage": {
         "vimsuName": "Virtual Interactive Meeting Simulator",
         "discoverVimsu": "Entdecke die virtuelle Konferenz in 2.5D mit uns!",
