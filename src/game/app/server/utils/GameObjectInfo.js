@@ -122,7 +122,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: {
-                [GlobalStrings.DEFAULT]: "blank",
+                [GlobalStrings.DEFAULT]: ["blank"],
             }
         },
 
@@ -132,7 +132,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: { 
-                [GlobalStrings.DEFAULT]: "tile_default",
+                [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
         [GameObjectType.SELECTED_TILE]: {
@@ -140,7 +140,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: { 
-                [GlobalStrings.DEFAULT]: "tile_selected",
+                [GlobalStrings.DEFAULT]: ["tile_selected"],
             }
         },
         [GameObjectType.LEFTTILE]: {
@@ -148,7 +148,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: { 
-                [GlobalStrings.DEFAULT]: "tile_default",
+                [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
         [GameObjectType.RIGHTTILE]: {
@@ -156,7 +156,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: { 
-                [GlobalStrings.DEFAULT]: "tile_default",
+                [GlobalStrings.DEFAULT]: ["tile_default"],
             }
         },
 
@@ -166,7 +166,7 @@ class GameObjectInfo {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetName: { 
-                [GlobalStrings.DEFAULT]: "leftwall_default",
+                [GlobalStrings.DEFAULT]: ["leftwall_default"],
             }
         },
         [GameObjectType.RIGHTWALL]: {
@@ -213,7 +213,6 @@ class GameObjectInfo {
         },
         [GameObjectType.PICTUREFRAME]: {
             isMultiPart: true,
-            size: [1, 3],
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -231,7 +230,6 @@ class GameObjectInfo {
              * (iii) assetName needs to be array of
              *       arrays, size[0] * size[1].    */
             isMultiPart: true,
-            size: [5, 1],
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -388,11 +386,47 @@ class GameObjectInfo {
      * @returns {*} The information saved for the passed GameObjectType
      *              under the passed key (if it exists).
      */
-    static getInfo(objectType, key) {
+    static getInfo (objectType, key) {
         if (GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)) {
             return GameObjectInfo.#INFORMATION[objectType][key];
         } else {
-            throw new Error("The passed GameObjectType " + objectType + " does not have the property " + key);
+            throw new Error(`The passed GameObjectType ${objectType} does not have the property ${key}`);
+        }
+    }
+
+    /**
+     * Takes a GameObjectType and a key <variation> as arguments.
+     * Checks if the assetName-object contains a path indexed by
+     * the key. If yes, returns it. If no, returns default asset.
+     * 
+     * TypeChecking should be done by whoever calls this method!
+     * 
+     * @method module:GameObjectInfo#getAsset
+     * 
+     * @param {String} objectType 
+     * @param {String} variation
+     *  
+     * @returns {String} The asset-path indexed by the passed variation.
+     *                   If no path indexed, return default.  
+     */
+    static getAsset (objectType, variation) {
+        let assets = GameObjectInfo.getInfo(objectType, assetName)
+        
+        if (TypeChecker.stringIsInteger(variation)) {
+            let keys = Object.keys(assets)
+            let parsed = parseInt(variation, 10)
+            if (-1 < parsed < keys.length) { variation = keys[length] }
+            else {
+                console.log(`WARNING! The GameObjectType ${objectType} does only have ${keys.length} variations, so  ${parsed} does not index one. Reverted to ${GlobalStrings.DEFAULT}.`)
+                variation = GlobalStrings.DEFAULT
+            }  
+        }
+
+        if (assets.hasOwnProperty(variation)) {
+            return assets[variation]
+        } else {
+            console.log(`WARNING! The GameObjectType ${objectType} does not have a variation called ${variation}. Reverted to ${GlobalStrings.DEFAULT}.`);
+            return assets[GlobalStrings.DEFAULT]
         }
     }
 
@@ -409,7 +443,7 @@ class GameObjectInfo {
      * @returns {Boolean} If the object specified by the passed type
      *                    has a property indexed by the passed key
      */
-    static hasProperty(objectType, key) {
+    static hasProperty (objectType, key) {
         return GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)
     }
     

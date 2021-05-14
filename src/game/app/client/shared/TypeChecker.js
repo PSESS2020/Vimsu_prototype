@@ -84,6 +84,18 @@ class TypeChecker {
             throw new TypeError(object + ' is not an enum of ' + Enum + '!')
         }
     }
+
+    /**
+     * @static Checks if the string passed is a integer
+     * 
+     * @param {String} string
+     *  
+     * @returns {Boolean} Whether the passed string is an integer
+     *                    or not 
+     */
+    static stringIsInteger (string) {
+        return (!isNaN(parseInt(string, 10)) && !isNaN(string)) ? true : false;
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

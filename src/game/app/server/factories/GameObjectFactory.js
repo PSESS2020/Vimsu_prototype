@@ -106,6 +106,7 @@ module.exports = class GameObject {
 
 
     /**
+     * @method module:GameObjectFactory#createGameObject
      * 
      * @param {String} roomId 
      * @param { { type:         GameObjectType, 
@@ -116,47 +117,54 @@ module.exports = class GameObject {
      *                            url:    String,
      *                            width:  number,
      *                            height: number },
-     *            ?story:       String             } } objData 
+     *            ?story:       String             } } objData
+     * 
+     * @returns {GameObject[]} An array containing all parts making up the
+     *                         object defined by the passed data 
      */
     createGameObject (roomId, objData) {
         // Destructuring the object for easier reference and a more flexible
         // method.
+        // TODO type-checking
         // TODO This is where we will add support for custom options
         // TODO split in multiples for constants, variables and custom
         const { type, position: [xPos, yPos] } = objData
         var { variation, isClickable, iFrameData, story } = objData
+        let returnData = []
 
         if (isClickable === undefined) {
             isClickable = false
             iFrameData = story = undefined
         }
 
-        if (variation == undefined) variation = GlobalStrings.DEFAULT
+        if (variation === undefined) { variation = GlobalStrings.DEFAULT }
         
-        // TODO type-checking
-        // TODO handle multi-part objects
         if (GameObjectInfo.hasProperty(type, "parts")) {
             let parts = GameObjectInfo.getInfo(type, "parts")
             parts.forEach( partData => {
-                
+                const { type, offset_x, offset_y, variation } = partData
+                this.createGameObject(roomId, { type, position: [ xPos + offset_x, yPos + offset_y ], isClickable, iFrameData, variation }).forEach(elem => returnData.push(elem))
             })
         }
 
-        // TODO if variation is int, turn into String
+        width = GameObjectInfo.getInfo(type, "width")
+        length = GameObjectInfo.getInfo(type, "length")
 
-        return new GameObject(
-            this.#generateGameObjectID(),
-            type,
-            // assetName
-            // width
-            // length
-            new Position(roomId, xPos, yPos),
-            isClickable,
-            iFrameData,
-            story,
-        )
+        let i = 0
+        GameObjectInfo.getAsset(type, variation).forEach(assetLinePart => {
+            if (assetLinePart instanceof Array) {
+                let j = 0
+                assetLinePart.forEach(assetColPart => {
+                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isClickable, iFrameData, story))
+                    j++
+                })
+            } else {
+                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isClickable, iFrameData, story))
+            }
+            i++
+        })
 
-
+        return returnData
     }
 
 }

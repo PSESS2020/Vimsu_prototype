@@ -324,18 +324,19 @@ module.exports = class RoomFactory {
      * 
      * @param {Int} roomId id of the room we're putting stuff into
      * @param {Object} objData data of the object we're creating
-     * @param {Array[Object]} listToPushInto list the final object is 
+     * @param {Array[Object]} listToAppend list the final object is 
      *                                       being put into
      */
-    #decodePositionDataAndCreate = function (roomId, objData, listToPushInto) {
+    #decodePositionDataAndCreate = function (roomId, objData, listToAppend) {
             // Not the cleanest way, but workable
+            // TODO refactor
             if (objData.position.every(element => Array.isArray(element))) {
                 objData.position.forEach( position => {
                     // copy objData
                     let creationData = Object.assign( {}, objData )
                     // set positions to proper value
                     creationData.position = position;
-                    this.#decodePositionDataAndCreate(roomId, creationData, listToPushInto);
+                    this.#decodePositionDataAndCreate(roomId, creationData, listToAppend);
                 })
             } else if (objData.position.some(element => Array.isArray(element)) && objData.position.some(element => !Array.isArray(element))) { 
                 // we assume that position has only two fields
@@ -345,10 +346,10 @@ module.exports = class RoomFactory {
                     let creationData = Object.assign( {}, objData )
                     // set positions to proper value
                     creationData.position = (objData.position[0] instanceof Array) ? [line[i], objData.position[1]] : [objData.position[0], line[i]];
-                    listToPushInto.push(this.#objFactory.createGameObject(roomId, creationData))
+                    this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
                 }
             } else {
-                listToPushInto.push(this.#objFactory.createGameObject(roomId, creationData))
+                this.#objFactory.createGameObject(roomId, creationData).forEach(elem => listToAppend.push(elem))
             }
     }
 
@@ -368,10 +369,10 @@ module.exports = class RoomFactory {
      * 
      * @param {Int} roomId id of the room we're putting stuff into
      * @param {Object} objData data of the object we're creating
-     * @param {Array[Object]} listToPushInto list the final object is 
+     * @param {Array[Object]} listToAppend list the final object is 
      *                                       being put into
      */
-    #createObjectsFromData = function (roomId, objData, listToPushInto) {
+    #createObjectsFromData = function (roomId, objData, listToAppend) {
         // TODO support for custom options
 
         if (objData.isClickable === undefined) {
@@ -394,7 +395,7 @@ module.exports = class RoomFactory {
                     iFrameData: objData.iFrameData,
                     story: objData.story,
                     variation: partData.variation
-                }, listToPushInto)
+                }, listToAppend)
             })
         }
 
@@ -407,7 +408,7 @@ module.exports = class RoomFactory {
                 let assets = GameObjectInfo.getInfo(objData.type, "assetName");
                 if (assets[i] instanceof Array) {
                     for (let j = 0; j < Math.min(size[1], assets[i].length); j ++) {
-                        listToPushInto.push(this.#objFactory.createObjectPart(roomId,
+                        listToAppend.push(this.#objFactory.createObjectPart(roomId,
                             objData.type,
                             objData.position[0] + i * length,
                             objData.position[1] + j * width,
@@ -417,7 +418,7 @@ module.exports = class RoomFactory {
                             { x: i, y: j }))
                     }
                 } else {
-                    listToPushInto.push(this.#objFactory.createObjectVariation(roomId,
+                    listToAppend.push(this.#objFactory.createObjectVariation(roomId,
                         objData.type,
                         objData.position[0] + i * length,
                         objData.position[1],
@@ -433,7 +434,7 @@ module.exports = class RoomFactory {
             // if no variation defined, set to default,
             // else do nothing
             objData.variation == undefined ? objData.variation = 0 : {};
-            listToPushInto.push(this.#objFactory.createObjectVariation(
+            listToAppend.push(this.#objFactory.createObjectVariation(
                 roomId,
                 objData.type,
                 objData.position[0],
@@ -444,7 +445,7 @@ module.exports = class RoomFactory {
                 objData.variation
             ));           
         } else {
-            listToPushInto.push(this.#objFactory.createCustomObject(
+            listToAppend.push(this.#objFactory.createCustomObject(
                 roomId,
                 objData.type,
                 objData.position[0],
