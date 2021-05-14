@@ -3,5 +3,14 @@
     "discoverVimsu": "Entdecke die virtuelle Konferenz in 2.5D mit uns!",
     "enterConference": "Konferenz betreten",
     "register": "Jetzt kostenlos ausprobieren",
-    "logIn": "Anmelden"
+    "logIn": "Anmelden",
+
+    "home": "Home",
+    "aboutUs": "Über uns",
+    "tutorial": "Tutorial",
+    "contactUs": "Kontakt",
+    "dashboard": "Mein Dashboard",
+    "uploadVideo": "Video hochladen",
+    "accountSettings": "Account Einstellungen",
+    "logOut": "Abmelden"
 }
