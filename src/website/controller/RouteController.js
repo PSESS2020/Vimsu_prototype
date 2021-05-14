@@ -820,7 +820,7 @@ module.exports = class RouteController {
 
     #getNotLoggedInParameters = function (request, otherParameters) {
         const languageData = this.#languagePackages.get(this.#getLanguage(request));
-        return { ...otherParameters, languageData: languageData }
+        return { ...otherParameters, languageData: languageData, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM }
     }
 
     #renderView = function (request, response, loggedInViewToRender, loggedInParameter, notLoggedInViewToRender, notLoggedInParameter) {

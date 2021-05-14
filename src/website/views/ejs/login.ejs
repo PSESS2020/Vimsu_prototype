@@ -25,7 +25,11 @@
                             required value="<%=usernameOrEmail%>">
                     </div>
                     <div class="form-group">
-                        <label for="password" class="input-label justify-content-between">Password<a class="link" href="/forgot-password" style="float: right; text-align: right">Forgot your password?</a></label>
+                        <label for="password" class="input-label justify-content-between">Password
+                            <% if (locals.advancedRegistrationSystem) { %>
+                                <a class="link" href="/forgot-password" style="float: right; text-align: right">Forgot your password?</a>
+                            <% } %>
+                        </label>
                         <input type="password" class="form-control" id="passwordInput" name="password" placeholder=""
                             required>
                     </div>
