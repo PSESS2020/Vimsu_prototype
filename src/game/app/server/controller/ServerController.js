@@ -295,7 +295,8 @@ module.exports = class ServerController {
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
                             isIFrameObject: gameObject.getIFrameData() !== undefined,
-                            story: gameObject.getStory()
+                            story: gameObject.getStory(),
+                            meeting: gameObject.getMeetingData()
                         });
                     });
 

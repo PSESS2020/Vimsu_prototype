@@ -428,9 +428,9 @@ class ClientController {
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject, mapElement.story))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject, mapElement.story, mapElement.meetingData))
             if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
-                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.story, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
+                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.story, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.lengt, mapElement.meetingData);
             }
         });
 
@@ -438,9 +438,9 @@ class ClientController {
         var listOfGameObjects = [];
         listOfGameObjectsData.forEach(element => {
             listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject, element.story));
+                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject, element.story, element.meetingData));
             if (element.isClickable && (element.width > 1 || element.length > 1)) {
-                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.story, element.cordX, element.cordY, element.width, element.length);
+                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.story, element.cordX, element.cordY, element.width, element.length, meetingData);
             }
         });
 
@@ -1988,12 +1988,14 @@ class ClientController {
      * @param {String} id same as parent object (to retrieve iFrame
      *                    data)
      * @param {Boolean} isIFrameObject same as parent object
+     * @param {String[]} story same as parent object
+     * @param {Object} meetingData same as parent object
      * @param {Int} cordX x cord of parent object
      * @param {Int} cordY y cord of parent object
      * @param {Int} width width of parent object
      * @param {Int} length length of parent object
      */
-    addDummyClickersTo(listToAddTo, id, isIFrameObject, story, cordX, cordY, width, length) {
+    addDummyClickersTo(listToAddTo, id, isIFrameObject, story, meetingData, cordX, cordY, width, length) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < length; j++) {
                 listToAddTo.push(
@@ -2006,7 +2008,8 @@ class ClientController {
                         new PositionClient(cordX + i, cordY + j),
                         true,
                         isIFrameObject,
-                        story
+                        story,
+                        meetingData
                     )
                 )
             }

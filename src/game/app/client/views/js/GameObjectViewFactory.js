@@ -125,10 +125,14 @@ class GameObjectViewFactory {
      * @param {boolean} isClickable true if object is clickable, otherwise false
      * @param {boolean} isIFrameObject true if object is an IFrameObject, otherwise false
      * @param {?number} gameObjectID ID of this gameObject if it exists
+     * @param {String[]} story text message that is displayed on click
+     *                         (if clickable)
+     * @param {Object} meetingData Object containing the data of the meeting
+     *                             that will be opened on click.
      *
-     * @return {GameObjectView} GameObjectViw instance
+     * @return {GameObjectView} GameObjectView instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID, story) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID, story, meetingData) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
@@ -152,8 +156,10 @@ class GameObjectViewFactory {
             var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable && isIFrameObject) {
                 gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
+            } else if (isClickable && meetingData !== undefined) {
+                gameObjectView = new MeetingObjectView(gameObjectImage, [], pos, offset, objectName, meetingData, this.eventManager)
             } else if (isClickable && story !== undefined) {
-                gameObjectView = new GameObjectWithStoryView(gameObjectImage, [], pos, offset, objectName, gameObjectID, gameObjectID, story, gameObjectType);
+                gameObjectView = new StoryObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, gameObjectID, story, gameObjectType);
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }

@@ -21,6 +21,7 @@ class GameObjectClient {
     isClickable;
     isIFrameObject;
     story;
+    meetingData;
 
     /**
      * Creates an instance of Game Object on client-side
@@ -35,8 +36,10 @@ class GameObjectClient {
      * @param {boolean} isIFrameObject true if object is an IFrameObject, false otherwise
      * @param {String[]} story text message that is displayed on click
      *                         (if clickable)
+     * @param {Object} meetingData Object containing the data of the meeting
+     *                             that will be opened on click.
      */
-    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject, story) {
+    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject, story, meetingData) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
@@ -59,7 +62,7 @@ class GameObjectClient {
         this.position = position;
         this.isClickable = isClickable;
         this.isIFrameObject = isIFrameObject;
-        this.story = story;
+        this.meetingData = meetingData;
     }
 
     /**
@@ -142,6 +145,16 @@ class GameObjectClient {
      */
     getStory() {
         return this.story;
+    }
+
+    /**
+     * Gets game object meeting data
+     * 
+     * @returns {Object} Object containing the data of the meeting that will be 
+     *                   opened on click.
+     */
+    getMeetingData() {
+        return this.meetingData;
     }
 }
 
