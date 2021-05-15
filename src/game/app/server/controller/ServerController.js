@@ -1204,11 +1204,13 @@ module.exports = class ServerController {
                 let creatorUsername = creator.getBusinessCard().getUsername();
 
                 //check if the invited friends are friends with the creator. if not, remove the partner from the list.
-                chatPartnerIDList.forEach((chatPartnerID, index) => {
+                for (let index = 0; index < chatPartnerIDList.length; index++) {
+                    const chatPartnerID = chatPartnerIDList[index]
                     if (!creator.hasFriend(chatPartnerID)) {
                         chatPartnerIDList.splice(index, 1);
+                        break;
                     };
-                })
+                }
 
                 if (chatId) {
                     //group chat already exists
@@ -2124,10 +2126,13 @@ module.exports = class ServerController {
      */
     getDoorByID(doorID) {
         for (let i = 0; i < this.#allDoors.length; i++) {
-            if (this.#allDoors[i].getId() === doorID) {
-                return this.#allDoors[i];
+            const door = this.#allDoors[i]
+            if (door.getId() === doorID) {
+                return door;
             }
         }
+
+        return undefined;
     }
 
     /**
@@ -3185,7 +3190,7 @@ module.exports = class ServerController {
      * @return {boolean} true if chat is a chat from an existing group, false otherwise
      */
     #isChatFromGroup = function(chatId) {
-        for (let group of this.#groups.values()) {
+        for (const group of this.#groups.values()) {
             if (group.getGroupChat().getId() === chatId) {
                 return true;
             }
@@ -3532,11 +3537,12 @@ module.exports = class ServerController {
      */
     getRoomById(roomId) {
         for (let i = 0; i < this.#rooms.length; i++) {
-            let room = this.#rooms[i];
+            const room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
                 return room;
             }
         }
+
         return undefined;
     }
 

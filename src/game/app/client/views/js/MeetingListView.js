@@ -53,12 +53,11 @@ class MeetingListView extends WindowView {
      * @param {String} meetingId meeting ID
      */
     deleteMeeting(meetingId) {
-        this.meetings.forEach((meeting, index) => {
-
-            if (meeting.id === meetingId) {
+        for (let index = 0; index < this.meetings.length; index++) {
+            if (this.meetings[index].id === meetingId) {
                 this.meetings.splice(index, 1);
             }
-        });
+        };
 
         $("#meetingEntry" + meetingId).remove()
         if (!this.handleEmptyMeetingList(this.meetings)) return;

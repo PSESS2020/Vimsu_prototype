@@ -270,9 +270,11 @@ module.exports = class Lecture {
         TypeChecker.isString(participantId);
 
         //Remove participant Id from list of active participants
-        if (this.#activeParticipants.includes(participantId)) {
-            let index = this.#activeParticipants.indexOf(participantId);
-            this.#activeParticipants.splice(index, 1);
+        for (let index = 0; index < this.#activeParticipants.length; index++) {
+            if (this.#activeParticipants[index] === participantId) {
+                this.#activeParticipants.splice(index, 1);
+                break;
+            }
         }
 
         this.#tokenList.forEach(element => {
@@ -296,7 +298,7 @@ module.exports = class Lecture {
                     element[1] = leaveDate;
                 }
             }
-        });
+        })
     }
 
     /**

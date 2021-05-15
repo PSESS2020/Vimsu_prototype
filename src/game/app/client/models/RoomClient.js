@@ -176,11 +176,13 @@ class RoomClient {
      */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
-        this.listOfPPants.forEach((participant, index) => {
-            if (participant.getId() === participantId) {
+
+        for (let index = 0; index < this.listOfPPants.length; index++) {
+            if (this.listOfPPants[index].getId() === participantId) {
                 this.listOfPPants.splice(index, 1);
+                return;
             }
-        });
+        }
     }
 
     /**
@@ -189,13 +191,15 @@ class RoomClient {
      */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
-        var result;
-        this.listOfPPants.forEach(ppant => {
-            if (ppantID === ppant.getId()) {
-                result = ppant;
+
+        for (let index = 0; index < this.listOfPPants.length; index++) {
+            const ppant = this.listOfPPants[index]
+            if (ppant.getId() === ppantID) {
+                return ppant
             }
-        });
-        return result;
+        }
+
+        return undefined;
     }
 
     /**

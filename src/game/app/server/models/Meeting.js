@@ -106,12 +106,14 @@ module.exports = class Meeting {
      */
     removeMember(ppantId) {
         TypeChecker.isString(ppantId);
-        this.#memberIdList.forEach((memberId, index) => {
+        for (let index = 0; index < this.#memberIdList.length; index++) {
+            const memberId = this.#memberIdList[index]
             if (memberId === ppantId) {
                 this.#memberIdList.splice(index, 1);
                 return true;
             }
-        });
+        }
+    
         return false;
     }
 

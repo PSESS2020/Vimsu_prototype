@@ -69,11 +69,12 @@ class ChatParticipantListView extends Views {
      * @param {String} username username
      */
     removeFromChatParticipantList(username) {
-        this.usernames.forEach((parUsername, index) => {
-            if (parUsername === username) {
+        for (let index = 0; index < this.usernames.length; index++) {
+            if (this.usernames[index] === username) {
                 this.usernames.splice(index, 1);
+                break;
             }
-        });
+        }
 
         $("#chatParticipantEntry" + username).remove()
     }

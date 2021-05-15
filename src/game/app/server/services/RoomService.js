@@ -89,7 +89,7 @@ module.exports = class RoomService {
      */
     #roomNotAlreadyCreated = function (roomId) {
         for (let i = 0; i < this.#rooms.length; i++) {
-            let room = this.#rooms[i];
+            const room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
                 return false;
             }

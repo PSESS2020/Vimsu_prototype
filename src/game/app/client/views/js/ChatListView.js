@@ -129,11 +129,12 @@ class ChatListView extends WindowView {
    * @param {String} chatId chat ID
    */
   deleteChat(chatId) {
-    this.chats.forEach((chat, index) => {
-      if (chat.chatId === chatId) {
+    for (let index = 0; index < this.chats.length; index++) {
+      if (this.chats[index].chatId === chatId) {
         this.chats.splice(index, 1);
+        break;
       }
-    });
+    }
 
     $("#chatListEntry" + chatId).remove();
     if (!this.handleEmptyChats(this.chats)) return;
@@ -173,7 +174,9 @@ class ChatListView extends WindowView {
    * @param {Object} message chat message
    */
   addNewMessage(chatID, message) {
-    this.chats.forEach(chat => {
+    for (let index = 0; index < this.chats.length; index++) {
+      const chat = this.chats[index];
+
       if (chat.chatId === chatID) {
 
         let msgText = message.msgText;
@@ -181,7 +184,7 @@ class ChatListView extends WindowView {
         if (msgText.length > 35) {
           msgText = msgText.slice(0, 35) + "...";
         } else if (msgText.includes('<br/>')) {
-            msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
+          msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
         }
 
         chat.timestamp = message.timestamp;
@@ -199,8 +202,10 @@ class ChatListView extends WindowView {
         $("#chatTimestamp" + chatID).text(timestamp);
         $("#chatPreviewMessage" + chatID).empty();
         $("#chatPreviewMessage" + chatID).text(previewMessage);
+
+        break;
       }
-    });
+    };
 
     this.draw(this.chats, this.ownUsername)
   }

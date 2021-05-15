@@ -37,11 +37,13 @@ module.exports = class Schedule {
         TypeChecker.isString(lectureId);
 
         for (var i = 0; i < this.#lectureList.length; i++) {
-            var lecture = this.#lectureList[i];
+            const lecture = this.#lectureList[i];
             if (lecture.getId() === lectureId) {
                 return lecture;
             }
         }
+
+        return undefined;
     }
 
     /**
@@ -54,7 +56,7 @@ module.exports = class Schedule {
         var currentLectures = [];
 
         for (var i = 0; i < this.#lectureList.length; i++) {
-            var lecture = this.#lectureList[i];
+            const lecture = this.#lectureList[i];
 
             if (lecture.isAccessible() && !lecture.isHidden()) {
                 currentLectures.push(lecture);

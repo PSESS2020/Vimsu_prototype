@@ -356,11 +356,13 @@ module.exports = class Door {
     closeDoorFor(ppantID) {
         TypeChecker.isString(ppantID);
 
-        this.#isOpenFor.forEach((id, index) => {
+        for (let index = 0; index < this.#isOpenFor.length; index++) {
+            const id = this.#isOpenFor[index]
             if (id === ppantID) {
                 this.#isOpenFor.splice(index, 1);
+                break;
             }
-        });
+        }
 
         if (!this.#isClosedFor.includes(ppantID)) {
             this.#isClosedFor.push(ppantID);
@@ -376,11 +378,13 @@ module.exports = class Door {
     openDoorFor(ppantID) {
         TypeChecker.isString(ppantID);
 
-        this.#isClosedFor.forEach((id, index) => {
+        for (let index = 0; index < this.#isClosedFor.length; index++) {
+            const id = this.#isClosedFor[index]
             if (id === ppantID) {
                 this.#isClosedFor.splice(index, 1);
+                break;
             }
-        });
+        }
 
         if (!this.#isOpenFor.includes(ppantID)) {
             this.#isOpenFor.push(ppantID);
