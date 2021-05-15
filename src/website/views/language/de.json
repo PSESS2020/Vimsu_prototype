@@ -29,8 +29,8 @@
     "accountSettings": {
         "editAccountInfo": "Account Informationen",
         "changeSuccess": "Ihre Änderungen wurden gespeichert.",
-        "usernameTaken": "Der von Ihnen eingegebene Nutzername ist bereits vergeben.",
-        "emailTaken": "Die von Ihnen eingegebene E-Mail Adresse ist bereits vergeben.",
+        "usernameTaken": "Der von Ihnen eingegebene Nutzername ist bereits vergeben. Bitte versuchen Sie es erneut.",
+        "emailTaken": "Die von Ihnen eingegebene E-Mail Adresse ist bereits vergeben. Bitte versuchen Sie es erneut.",
         "changeError": "Beim Speichern Ihrer Änderungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
         "invalidUsername": "Der von Ihnen eingegebene Nutzername erfüllt nicht die vorgeschriebenen Kriterien. Bitte versuchen Sie es erneut.",
         "invalidEmail": "Die von Ihnen eingegebene E-Mail Adresse ist ungültig. Bitte versuchen Sie es erneut.",

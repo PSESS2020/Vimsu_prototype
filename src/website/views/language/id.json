@@ -29,10 +29,10 @@
     "accountSettings": {
         "editAccountInfo": "Informasi Akun",
         "changeSuccess": "Perubahan yang Anda buat sudah disimpan",
-        "usernameTaken": "Nama pengguna yang Anda masukan sudah terdaftar",
-        "emailTaken": "Email yang Anda masukan sudah terdaftar.",
+        "usernameTaken": "Nama pengguna yang Anda masukan sudah terdaftar. Silahkan coba lagi.",
+        "emailTaken": "Email yang Anda masukan sudah terdaftar. Silahkan coba lagi.",
         "changeError": "Terjadi kesalahan saat menyimpan perubahan Anda. Silahkan coba lagi.",
-        "invalidUsername": "Nama pengguna yang Anda masukan tidak sesuai dengan kriteria kami.",
+        "invalidUsername": "Nama pengguna yang Anda masukan tidak sesuai dengan kriteria kami. Silahkan coba lagi.",
         "invalidEmail": "Email yang Anda masukan tidak valid. Silahkan coba lagi.",
         "invalidTitle": "Titel tidak valid. Silahkan pilih titel dari opsi yang kami berikan.",
         "emptyForename": "Nama depan tidak boleh kosong.",
@@ -42,8 +42,8 @@
         "deleteAccount": "Hapus akun",
         "changePassword": "Ubah Kata Sandi",
         "changePasswordSuccess": "Kata sandi Anda sudah diubah.",
-        "oldPasswordWrong": "Kata sandi lama Anda tidak sesuai.",
-        "passwordsDontMatch": "Kata sandi baru yang Anda masukan tidak sesuai.",
+        "oldPasswordWrong": "Kata sandi lama Anda tidak sesuai. Silahkan coba lagi.",
+        "passwordsDontMatch": "Kata sandi baru yang Anda masukan tidak sesuai. Silahkan coba lagi.",
         "emptyPassword": "Kata sandi tidak boleh kosong.",
         "changePasswordFail": "Terjadi kesalahan saat mengubah kata sandi Anda. Silahkan coba lagi.",
         "oldPassword": "Kata sandi lama",
@@ -91,5 +91,16 @@
         "success": "Verifikasi berhasil!",
         "signInNow": "Masuk sekarang",
         "fail": "Verifikasi tidak berhasil! Silahkan coba lagi."
+    },
+
+    "register": {
+        "signUp": "Daftar",
+        "success": "Kami telah mengirim link verifikasi ke your_email. Silahkan klik link tersebut untuk menyelesaikan proses registrasi.",
+        "passwordsDontMatch": "Kata sandi tidak sesuai. Silahkan coba lagi.",
+        "fail": "Terjadi kesalahan saat mendaftarkan akun Anda. Silahkan coba lagi.",
+        "confirmPassword": "Konfirmasi kata sandi",
+        "alreadyHaveAccount": "Sudah punya akun?",
+        "signInNow": "Masuk sekarang!",
+        "signUpNow": "Daftar sekarang"
     }
 }
