@@ -85,5 +85,11 @@
     "forgotPassword": {
         "linkSent": "Kami telah mengirim link ke your_email untuk mengubah kata sandi Anda.",
         "resetPassword": "Ubah Kata Sandi"
+    },
+
+    "verification": {
+        "success": "Verifikasi berhasil!",
+        "signInNow": "Masuk sekarang",
+        "fail": "Verifikasi tidak berhasil! Silahkan coba lagi."
     }
 }
