@@ -85,5 +85,11 @@
     "forgotPassword": {
         "linkSent": "We have sent you a link to your_email to reset your password.",
         "resetPassword": "Reset Password"
+    },
+
+    "verification:": {
+        "success": "Verification successful!",
+        "signInNow": "Sign in now",
+        "fail": "Verification failed! Please try again."
     }
 }

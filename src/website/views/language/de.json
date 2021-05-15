@@ -85,5 +85,11 @@
     "forgotPassword": {
         "linkSent": "Wir haben einen Link an your_email gesendet, mit dem Sie ihr Passwort zurücksetzen können.",
         "resetPassword": "Passwort zurücksetzen"
+    },
+    
+    "verification:": {
+        "success": "Verifizierung erfolgreich!",
+        "signInNow": "Jetzt anmelden",
+        "fail": "Verifizierung fehlgeschlagen! Bitte versuchen Sie es erneut."
     }
 }
