@@ -91,5 +91,16 @@
         "success": "Verifizierung erfolgreich!",
         "signInNow": "Jetzt anmelden",
         "fail": "Verifizierung fehlgeschlagen! Bitte versuchen Sie es erneut."
+    },
+
+    "register": {
+        "signUp": "Registrieren",
+        "success": "Wir haben einen Verfizierungslink an your_email gesendet. Bitte bestätigen Sie Ihre Registrierung über diesen Link.",
+        "passwordsDontMatch": "Die Passwörter stimmen nicht überein. Bitte versuchen Sie es erneut.",
+        "fail": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "confirmPassword": "Passwort bestätigen",
+        "alreadyHaveAccount": "Schon einen Account?",
+        "signInNow": "Jetzt anmelden!",
+        "signUpNow": "Jetzt registrieren"
     }
 }

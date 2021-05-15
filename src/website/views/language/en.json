@@ -91,5 +91,16 @@
         "success": "Verification successful!",
         "signInNow": "Sign in now",
         "fail": "Verification failed! Please try again."
+    },
+
+    "register": {
+        "signUp": "Sign Up",
+        "success": "We have sent you a verification link to your_email. Please follow the link to complete the registration.",
+        "passwordsDontMatch": "Passwords do not match.",
+        "fail": "There's an error while registering your account. Please try again.",
+        "confirmPassword": "Confirm password",
+        "alreadyHaveAccount": "Already have an account?",
+        "signInNow": "Sign in now!",
+        "signUpNow": "Sign up now"
     }
 }
