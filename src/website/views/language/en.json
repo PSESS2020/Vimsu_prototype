@@ -87,7 +87,7 @@
         "resetPassword": "Reset Password"
     },
 
-    "verification:": {
+    "verification": {
         "success": "Verification successful!",
         "signInNow": "Sign in now",
         "fail": "Verification failed! Please try again."

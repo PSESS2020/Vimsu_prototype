@@ -87,7 +87,7 @@
         "resetPassword": "Passwort zurücksetzen"
     },
     
-    "verification:": {
+    "verification": {
         "success": "Verifizierung erfolgreich!",
         "signInNow": "Jetzt anmelden",
         "fail": "Verifizierung fehlgeschlagen! Bitte versuchen Sie es erneut."
