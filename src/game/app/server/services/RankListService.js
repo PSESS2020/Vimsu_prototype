@@ -17,10 +17,10 @@ module.exports = class RankListService {
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
-     * @param {Number} currentRankListLength current rank list length on rank list board
-     * @param {Number} lastRank last rank on rank list board
-     * @param {Number} lastPoints last points on rank list board
-     * @param {Number} lastPointsLength number of participants with last points
+     * @param {?Number} currentRankListLength current rank list length on rank list board
+     * @param {?Number} lastRank last rank on rank list board
+     * @param {?Number} lastPoints last points on rank list board
+     * @param {?Number} lastPointsLength number of participants with last points
      * @param {?Number} limit search limit
      * 
      * @return {Object} rank list

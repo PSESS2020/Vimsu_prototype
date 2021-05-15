@@ -96,7 +96,7 @@ module.exports = class db {
      * 
      * @return {Object[]} documents
      */
-    findAllInCollection(collectionName, sortedBy) {
+    findAllInCollection(collectionName, sortedBy = {}) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
@@ -122,7 +122,7 @@ module.exports = class db {
      * 
      * @return {Object[]} documents
      */
-    findInCollection(collectionName, query, projection, sortedBy, skipLength, limitLength) {
+    findInCollection(collectionName, query, projection = {}, sortedBy = {}, skipLength = 0, limitLength = 0) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
@@ -145,7 +145,7 @@ module.exports = class db {
      * 
      * @return {Object} document
      */
-    findOneInCollection(collectionName, query, projection) {
+    findOneInCollection(collectionName, query, projection = {}) {
         TypeChecker.isString(collectionName);
         var collection = this.#vimsudb.collection(collectionName);
 
