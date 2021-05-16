@@ -19,11 +19,6 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const LectureService = require('../../game/app/server/services/LectureService');
 
-//languages
-const germanLanguagePackage = require("../views/language/de.json");
-const englishLanguagePackage = require("../views/language/en.json");
-const indonesianLanguagePackage = require("../views/language/id.json");
-
 /**
  * The Route Controller
  * @module RouteController
@@ -66,10 +61,12 @@ module.exports = class RouteController {
         this.#db = db;
         this.#blob = blob;
 
+        //Load all available language files from language folder
         this.#languagePackages = new Map();
-        this.#languagePackages.set('de', germanLanguagePackage);
-        this.#languagePackages.set('en', englishLanguagePackage);
-        this.#languagePackages.set('id', indonesianLanguagePackage);
+        fs.readdirSync(__dirname + "/../views/language").forEach(file => {
+            let lang = file.replace('.json', '');
+            this.#languagePackages.set(lang, require("../views/language/" + file));
+        });
 
         this.#serverController = new ServerController(this.#io, this.#db, this.#blob);
         this.#init();
@@ -833,7 +830,9 @@ module.exports = class RouteController {
      */
     #getLoggedInParameters = function (request, response, otherParameters) {
         const languageData = this.#languagePackages.get(this.#getLanguage(request, response));
-        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, languageData: languageData, username: request.session.username }
+        const availableLanguages = Array.from(this.#languagePackages.keys());
+        return { ...otherParameters, videoStorageActivated: Settings.VIDEOSTORAGE_ACTIVATED, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM, loggedIn: true, 
+                    availableLanguages: availableLanguages, languageData: languageData, username: request.session.username }
     }
 
     /**
@@ -842,7 +841,8 @@ module.exports = class RouteController {
      */
     #getNotLoggedInParameters = function (request, response, otherParameters) {
         const languageData = this.#languagePackages.get(this.#getLanguage(request, response));
-        return { ...otherParameters, languageData: languageData, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM }
+        const availableLanguages = Array.from(this.#languagePackages.keys());
+        return { ...otherParameters, availableLanguages: availableLanguages, languageData: languageData, advancedRegistrationSystem: Settings.ADVANCED_REGISTRATION_SYSTEM }
     }
 
     /**

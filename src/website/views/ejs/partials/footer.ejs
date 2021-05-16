@@ -1,17 +1,14 @@
 <section class="d-flex align-items-center justify-content-between" id="footer">
     <span>&copy 2020-2021 VIMSU</span>
     <form action="/language" method="GET">
-        <button class="footer-link" type="submit" name="type" value="de">
-            DE
-        </button>
-        |
-        <button class="footer-link" type="submit" name="type" value="en">
-            EN
-        </button>
-        |
-        <button class="footer-link" type="submit" name="type" value="id">
-            ID
-        </button>
+        <% for (let i = 0; i < availableLanguages.length; i++) { %>
+            <button class="footer-link" type="submit" name="type" value="<%= availableLanguages[i] %>">
+                <%= availableLanguages[i].toUpperCase() %> 
+            </button>
+            <% if (i < availableLanguages.length - 1) { %>
+                |
+            <% } %>
+        <% } %>
     </form>
     <a href="/privacy-policy">
         <%=languageData.privacyPolicy%>
