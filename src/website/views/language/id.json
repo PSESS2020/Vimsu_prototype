@@ -102,5 +102,25 @@
         "alreadyHaveAccount": "Sudah punya akun?",
         "signInNow": "Masuk sekarang!",
         "signUpNow": "Daftar sekarang"
+    },
+
+    "upload": {
+        "createLecture": "Membuat seminar",
+        "success": "Slot seminar sudah dibuat. Anda berhak meninggalkan halaman ini.",
+        "noFiles": "Belum ada file yang diunggah. Silahkan unggah video.",
+        "tooLarge": "Ukuran file melebihi 50 MB. Silahkan coba lagi.",
+        "wrongFileType": "Tipe file tidak didukung. Silahkan coba lagi.",
+        "wrongTypeMaxPpants": "Jumlah maksimal peserta harus berupa bilangan bulat.",
+        "invalidDate": "Waktu mulai harus berupa tanggal yang valid.",
+        "emptyTitle": "Judul seminar tidak boleh kosong.",
+        "errorUpload": "Terjadi kesalahan saat mengunggah video. Silahkan coba lagi.",
+        "errorCreateSlot": "Terjadi kesalahan saat membuat slot seminar. Silahkan coba lagi.",
+        "lectureTitle": "Judul",
+        "startingTime": "Waktu mulai",
+        "remarks": "Catatan",
+        "limitedSeats": "Kursi terbatas",
+        "maxParticipants": "# Peserta",
+        "video": "Video",
+        "supportedFiles": "File yang didukung: .mp4 || Ukuran maks. : 50 MB"
     }
 }
