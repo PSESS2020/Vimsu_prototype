@@ -56,6 +56,7 @@ class MeetingListView extends WindowView {
         for (let index = 0; index < this.meetings.length; index++) {
             if (this.meetings[index].id === meetingId) {
                 this.meetings.splice(index, 1);
+                break;
             }
         };
 
