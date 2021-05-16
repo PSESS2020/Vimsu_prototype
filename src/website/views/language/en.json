@@ -102,5 +102,25 @@
         "alreadyHaveAccount": "Already have an account?",
         "signInNow": "Sign in now!",
         "signUpNow": "Sign up now"
+    },
+
+    "upload": {
+        "createLecture": "Create lecture",
+        "success": "Lecture slot is successfully created. You may exit this page.",
+        "noFiles": "No files were uploaded. Please upload a video.",
+        "tooLarge": "File size exceeded 50 MB.",
+        "wrongFileType": "Unsupported file type.",
+        "wrongTypeMaxPpants": "Max participants must be an integer.",
+        "invalidDate": "Starting time must be a valid date.",
+        "emptyTitle": "Lecture title cannot be empty.",
+        "errorUpload": "There's an error while uploading the video. Please try again.",
+        "errorCreateSlot": "There's an error while creating the slot. Please try again.",
+        "lectureTitle": "Title",
+        "startingTime": "Starting time",
+        "remarks": "Remarks",
+        "limitedSeats": "Limited seats",
+        "maxParticipants": "# Participants",
+        "video": "Video",
+        "supportedFiles": "Supported file: .mp4 || Max. size: 50 MB"
     }
 }

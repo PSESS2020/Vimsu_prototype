@@ -102,5 +102,25 @@
         "alreadyHaveAccount": "Schon einen Account?",
         "signInNow": "Jetzt anmelden!",
         "signUpNow": "Jetzt registrieren"
+    },
+    
+    "upload": {
+        "createLecture": "Vortrag erstellen",
+        "success": "Slot für Ihren Vortrag wurde erfolgreich erstellt. Sie können diese Seite nun verlassen.",
+        "noFiles": "Es wurde keine Datei hochgeladen. Bitte laden Sie ein Video hoch.",
+        "tooLarge": "Dateigröße überschreitet 50 MB.",
+        "wrongFileType": "Dateiformat wird nicht unterstützt.",
+        "wrongTypeMaxPpants": "Die Anzahl der maximalen Teilnehmer muss ein Integer sein.",
+        "invalidDate": "Der Startzeitpunkt muss ein valides Datum sein.",
+        "emptyTitle": "Der Vortragstitel darf nicht leer sein.",
+        "errorUpload": "Beim Hochladen Ihres Videos ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "errorCreateSlot": "Beim Erstellen Ihres Vortragsslots ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "lectureTitle": "Titel",
+        "startingTime": "Startzeitpunkt",
+        "remarks": "Bemerkungen",
+        "limitedSeats": "Begrenzte Sitzplätze",
+        "maxParticipants": "# Teilnehmer",
+        "video": "Video",
+        "supportedFiles": "Unterstütztes Dateiformat: .mp4 || Maximale Dateigröße: 50 MB"
     }
 }
