@@ -105,7 +105,7 @@
     },
 
     "upload": {
-        "createLecture": "Membuat seminar",
+        "createLecture": "Buat seminar",
         "success": "Slot seminar sudah dibuat. Anda berhak meninggalkan halaman ini.",
         "noFiles": "Belum ada file yang diunggah. Silahkan unggah video.",
         "tooLarge": "Ukuran file melebihi 50 MB. Silahkan coba lagi.",
