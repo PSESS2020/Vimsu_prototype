@@ -12,6 +12,7 @@ class ClientController {
     ownParticipant;
     ownBusinessCard;
     gameView;
+    selectedLanguageData;
     isVideoConference;
     displayName;
 
@@ -84,6 +85,7 @@ class ClientController {
             this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
+        this.gameView.setLanguageData(this.selectedLanguageData);
         this.gameView.drawStatusBar();
         this.gameView.drawHUD(this.ownBusinessCard.getUsername(), this.isVideoConference);
         this.gameView.initOwnAvatarView(this.ownParticipant);
@@ -171,6 +173,7 @@ class ClientController {
      */
     setUpSocket = function () {
         this.socket.on('isVideoConference', this.handleFromServerSetIsVideoConference.bind(this));
+        this.socket.on('selectedLanguageData', this.handleFromServerSetSelectedLanguageData.bind(this));
         this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
         this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
@@ -281,6 +284,15 @@ class ClientController {
         TypeChecker.isBoolean(isVideoConference);
 
         this.isVideoConference = isVideoConference;
+    }
+
+    /**
+     * Message from server, receives language data from selected language
+     * 
+     * @param {json} languageData
+     */
+    handleFromServerSetSelectedLanguageData = function (languageData) {
+        this.selectedLanguageData = languageData;
     }
 
     /**

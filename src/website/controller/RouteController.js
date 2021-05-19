@@ -322,6 +322,7 @@ module.exports = class RouteController {
 
         this.#app.get('/conference/:id', (request, response) => {
             if (request.session.loggedin === true && request.params.id === Settings.CONFERENCE_ID) {
+                request.session.languageData = this.#languagePackages.get(this.#getLanguage(request, response));
                 return response.sendFile(path.join(__dirname + '../../../game/app/client/views/html/canvas.html'));
             } else {
                 this.#renderNotLoggedInView(request, response, 'page-not-found', {});

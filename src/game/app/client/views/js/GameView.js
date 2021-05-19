@@ -8,6 +8,7 @@ class GameView {
 
     updateList = [];
     gameViewInit;
+    languageData;
 
     currentMapView;
 
@@ -131,6 +132,15 @@ class GameView {
     setGameViewInit(bool) {
         TypeChecker.isBoolean(bool);
         this.gameViewInit = bool;
+    }
+
+    /**
+     * Sets game view language data
+     * 
+     * @param {json} languageData language data
+     */
+    setLanguageData(languageData) {
+        this.languageData = languageData;
     }
 
     /**
