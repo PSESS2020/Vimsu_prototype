@@ -122,5 +122,19 @@
         "maxParticipants": "# Teilnehmer",
         "video": "Video",
         "supportedFiles": "Unterstütztes Dateiformat: .mp4 || Maximale Dateigröße: 50 MB"
+    },
+
+    "conference": {
+        "hud": {
+            "ranklist": "Rangliste",
+            "achievements": "Erfolge",
+            "schedule": "Zeitplan",
+            "meetings": "Gruppenmeetings",
+            "friendlist": "Freundesliste",
+            "chats": "Chats",
+            "leave": "Verlassen",
+            "showNotification": "Benachrichtigung anzeigen",
+            "hideNotification": "Benachrichtigung ausblenden"
+        }
     }
 }

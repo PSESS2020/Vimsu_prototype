@@ -92,11 +92,11 @@
         <div class="d-flex flex-column ml-auto" style="width: 250px;">
             <div style="z-index: 5">
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showNotifBar" onclick=""
-                    href="" style="float:right; text-align: right;"><small>Show notification (<span
+                    href="" style="float:right; text-align: right;"><small><span id="showNotificationText"></span> (<span
                             id="unreadNotif"></span>)</small>
                 </a>
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideNotifBar" href=""
-                    onclick="" style="float:right; text-align: right;"><small>Hide notification</small>
+                    onclick="" style="float:right; text-align: right;"><small><span id="hideNotificationText"></span></small>
                 </a>
             </div>
             <div id="notifBar"></div>
@@ -114,7 +114,7 @@
                     <i class="fa fa-globe fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Ranklist
+                    <p id="ranklistText"></p>
                 </div>
             </a>
         </div>
@@ -125,7 +125,7 @@
                     <i class="fa fa-star fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row align-items-center justify-content-center navbarIconsText">
-                    Achievements
+                    <p id="achievementsText"></p>
                 </div>
             </a>
         </div>
@@ -136,7 +136,7 @@
                     <i class="fa fa-table fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Schedule
+                    <p id="scheduleText"></p>
                 </div>
             </a>
         </div>
@@ -147,7 +147,7 @@
                     <i class="fas fa-video fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Group Meetings
+                    <p id="meetingsText"></p>
                 </div>
             </a>
         </div>
@@ -158,7 +158,7 @@
                     <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Friendlist
+                    <p id="friendListText"></p>
                 </div>
             </a>
         </div>
@@ -169,7 +169,7 @@
                     <i class="fa fa-comments-o fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Chats
+                    <p id="chatsText"></p>
                 </div>
             </a>
         </div>
@@ -180,7 +180,7 @@
                     <i class="fa fa-sign-out fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Leave
+                    <p id="leaveText"></p>
                 </div>
             </a>
         </div>

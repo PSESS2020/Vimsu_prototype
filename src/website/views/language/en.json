@@ -122,5 +122,19 @@
         "maxParticipants": "# Participants",
         "video": "Video",
         "supportedFiles": "Supported file: .mp4 || Max. size: 50 MB"
+    },
+
+    "conference": {
+        "hud": {
+            "ranklist": "Ranklist",
+            "achievements": "Achievements",
+            "schedule": "Schedule",
+            "meetings": "Group Meetings",
+            "friendlist": "Friendlist",
+            "chats": "Chats",
+            "leave": "Leave",
+            "showNotification": "Show notification",
+            "hideNotification": "Hide notification"
+        }
     }
 }

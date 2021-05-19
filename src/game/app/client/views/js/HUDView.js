@@ -70,6 +70,23 @@ class HUDView extends Views {
     }
 
     /**
+     * Draws text of whole HUD in passed language
+     * 
+     * @param {json} hudLanguageData language data for HUD
+     */
+    drawText(hudLanguageData) {
+        $('#ranklistText').text(hudLanguageData.ranklist);
+        $('#achievementsText').text(hudLanguageData.achievements);
+        $('#scheduleText').text(hudLanguageData.schedule);
+        $('#meetingsText').text(hudLanguageData.meetings);
+        $('#friendListText').text(hudLanguageData.friendlist);
+        $('#chatsText').text(hudLanguageData.chats);
+        $('#leaveText').text(hudLanguageData.leave);
+        $('#showNotificationText').text(hudLanguageData.showNotification);
+        $('#hideNotificationText').text(hudLanguageData.hideNotification);
+    }
+
+    /**
      * Draws profile username
      * 
      * @param {String} username username
