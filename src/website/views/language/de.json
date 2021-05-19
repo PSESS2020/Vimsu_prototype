@@ -134,7 +134,38 @@
             "chats": "Chats",
             "leave": "Verlassen",
             "showNotification": "Benachrichtigung anzeigen",
-            "hideNotification": "Benachrichtigung ausblenden"
+            "hideNotification": "Benachrichtigung ausblenden",
+            "statusBar": {
+                "fps": "FPS",
+                "location": "Standort",
+                "ping": "Ping",
+                "group": "Gruppe",
+                "lostConnection": "Verbindung zum Server verloren.",
+                "reconnect": "Verbindung zum Server wird wiederhergestellt...",
+                "days": {
+                    "monday": "Montag",
+                    "tuesday": "Dienstag",
+                    "wednesday": "Mittwoch",
+                    "thursday": "Donnerstag",
+                    "friday": "Freitag",
+                    "saturday": "Samstag",
+                    "sunday": "Sonntag"
+                },
+                "months": {
+                    "january": "Januar",
+                    "february": "Februar",
+                    "march": "März",
+                    "april": "April",
+                    "may": "Mai",
+                    "june": "Juni",
+                    "july": "Juli",
+                    "august": "August",
+                    "september": "September",
+                    "october": "Oktober",
+                    "november": "November",
+                    "december": "Dezember"
+                }
+            }
         }
     }
 }

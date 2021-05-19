@@ -21,11 +21,17 @@ class DateParser {
     /**
      * Parse date without seconds
      * 
+     * @param {json} daysLanguageData language data for days
+     * @param {json} monthsLanguageData language data for months
+     * 
      * @return {String} parsed date
      */
-    parse() {
-        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    parse(daysLanguageData, monthsLanguageData) {
+        var days = [daysLanguageData.sunday, daysLanguageData.monday, daysLanguageData.tuesday, daysLanguageData.wednesday, 
+                    daysLanguageData.thursday, daysLanguageData.friday, daysLanguageData.saturday];
+        var months = [monthsLanguageData.january, monthsLanguageData.february, monthsLanguageData.march, monthsLanguageData.april, monthsLanguageData.may, 
+                    monthsLanguageData.june, monthsLanguageData.july, monthsLanguageData.august, monthsLanguageData.september, monthsLanguageData.october, 
+                    monthsLanguageData.november, monthsLanguageData.december]
 
         var parsedDate = days[this.date.getDay()] + ", " + this.printTwoDigitsNumber(this.date.getDate()) + " "
             + months[this.date.getMonth()] + " " + this.date.getFullYear() + " " + this.parseOnlyTime();
@@ -36,10 +42,13 @@ class DateParser {
     /**
      * Parse date with seconds
      * 
+     * @param {json} daysLanguageData language data for days
+     * @param {json} monthsLanguageData language data for months
+     * 
      * @return {String} parsed date
      */
-    parseWithSeconds() {
-        var parsedDate = this.parse() + ":" + this.printTwoDigitsNumber(this.date.getSeconds());
+    parseWithSeconds(daysLanguageData, monthsLanguageData) {
+        var parsedDate = this.parse(daysLanguageData, monthsLanguageData) + ":" + this.printTwoDigitsNumber(this.date.getSeconds());
         return parsedDate;
     }
 

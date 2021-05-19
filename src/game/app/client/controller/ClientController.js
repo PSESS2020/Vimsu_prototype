@@ -12,7 +12,6 @@ class ClientController {
     ownParticipant;
     ownBusinessCard;
     gameView;
-    selectedLanguageData;
     isVideoConference;
     displayName;
 
@@ -85,7 +84,6 @@ class ClientController {
             this.gameView.initRoomView(assetPaths, map, objectMap, listOfNPCs, roomName);
         }
 
-        this.gameView.setLanguageData(this.selectedLanguageData);
         this.gameView.drawStatusBar();
         this.gameView.drawHUD(this.ownBusinessCard.getUsername(), this.isVideoConference);
         this.gameView.initOwnAvatarView(this.ownParticipant);
@@ -287,12 +285,12 @@ class ClientController {
     }
 
     /**
-     * Message from server, receives language data from selected language
+     * Message from server, receives language data from selected language and sends it directly to view
      * 
      * @param {json} languageData
      */
     handleFromServerSetSelectedLanguageData = function (languageData) {
-        this.selectedLanguageData = languageData;
+        this.gameView.setLanguageData(languageData);
     }
 
     /**

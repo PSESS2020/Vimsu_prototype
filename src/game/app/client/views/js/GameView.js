@@ -135,12 +135,15 @@ class GameView {
     }
 
     /**
-     * Sets game view language data
+     * Sets game view language data and distributes language packages to every other view 
      * 
      * @param {json} languageData language data
      */
     setLanguageData(languageData) {
         this.languageData = languageData;
+
+        this.hudView.setLanguageData(languageData.hud);
+        this.statusBar.setLanguageData(languageData.hud.statusBar);
     }
 
     /**
@@ -309,7 +312,7 @@ class GameView {
     }
 
     /**
-     * Draws HUD. If this is not a video conference, removes schedule button from HUD
+     * Draws profile in HUD. If this is not a video conference, removes schedule button from HUD
      * 
      * @param {String} username username
      * @param {boolean} isVideoConference isVideoConference
@@ -318,7 +321,6 @@ class GameView {
         TypeChecker.isString(username);
         TypeChecker.isBoolean(isVideoConference);
 
-        this.hudView.drawText(this.languageData.hud);
         this.hudView.drawProfile(username);
 
         if (!isVideoConference) 

@@ -74,7 +74,7 @@ class HUDView extends Views {
      * 
      * @param {json} hudLanguageData language data for HUD
      */
-    drawText(hudLanguageData) {
+    setLanguageData(hudLanguageData) {
         $('#ranklistText').text(hudLanguageData.ranklist);
         $('#achievementsText').text(hudLanguageData.achievements);
         $('#scheduleText').text(hudLanguageData.schedule);
