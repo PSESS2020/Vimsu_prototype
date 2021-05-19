@@ -174,7 +174,7 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('isVideoConference', Settings.VIDEOSTORAGE_ACTIVATED);
 
                 /* Sends ppant selected language data */
-                const languageData = socket.request.session.languageData;
+                const languageData = socket.request.session.conferenceLanguageData;
                 this.#io.to(socket.id).emit('selectedLanguageData', languageData);
 
                 //variables for creating account instance

@@ -318,7 +318,7 @@ class GameView {
         TypeChecker.isString(username);
         TypeChecker.isBoolean(isVideoConference);
 
-        this.hudView.drawText(this.languageData.conference.hud);
+        this.hudView.drawText(this.languageData.hud);
         this.hudView.drawProfile(username);
 
         if (!isVideoConference) 
