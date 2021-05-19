@@ -73,5 +73,8 @@ module.exports = Object.freeze({
     DISPLAY_NAME: DisplayName.USERNAME,
 
     /* Suffix of account collection in DB: account collection name = accountsACCOUNTDB_SUFFIX */
-    ACCOUNTDB_SUFFIX: ""
+    ACCOUNTDB_SUFFIX: "",
+
+    /* Decides which language is selected as default if clients preferred language is not available */
+    DEFAULT_LANGUAGE: "en"
 });

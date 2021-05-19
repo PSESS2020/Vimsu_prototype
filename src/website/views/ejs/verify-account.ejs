@@ -15,13 +15,13 @@
                         <i class="fa fa-user-check fa-4x"></i>
                     </div>
                     <div class="mt-4">
-                        Verification successful!
+                        <%=languageData.verification.success%>
                     </div>
                     
                     <% if (locals.loggedIn !== true) { %>
                         <div>
                             <a class="btn primary-button mt-4 p-2" href="/login">
-                                <span>Sign in now</span>
+                                <span><%=languageData.verification.signInNow%></span>
                             </a>
                         </div>
                     <% } %>  
@@ -30,7 +30,7 @@
                         <i class="fa fa-user-times fa-4x"></i>
                     </div>
                    <div class="mt-4">
-                        Verification failed! Please try again.
+                        <%=languageData.verification.fail%>
                    </div>
                 <% } %>
             </div>
