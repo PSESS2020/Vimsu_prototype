@@ -300,7 +300,7 @@ class LectureView extends WindowView {
      * @param {String} ownUsername current participant's username
      */
     appendMessage(message, ownUsername) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+        var timestamp = new DateParser().parseOnlyTime(new Date(message.timestamp))
 
         const isOwnParticipant = message.username === ownUsername
 

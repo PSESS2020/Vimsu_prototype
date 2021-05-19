@@ -47,7 +47,7 @@ class CurrentLecturesView extends WindowView {
         }
 
         lectures.forEach(lecture => {
-            var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
+            var startingTime = new DateParser().parseOnlyTime(new Date(lecture.startingTime));
 
             $('#currentLecturesContainer').append(`
                 <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-3 p-3">

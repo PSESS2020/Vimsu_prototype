@@ -164,7 +164,7 @@ class ChatThreadView extends WindowView {
     appendMessage = (message) => {
         this.eventManager.handleRemoveNewMessageNotif(message.senderUsername, this.chat.chatId);
 
-        var timestamp = new DateParser(new Date(message.timestamp)).parse();
+        var timestamp = new DateParser().parse(new Date(message.timestamp));
         var senderUsername;
         if (message.senderUsername) {
             senderUsername = message.senderUsername + ":"

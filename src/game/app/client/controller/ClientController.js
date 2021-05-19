@@ -285,12 +285,15 @@ class ClientController {
     }
 
     /**
-     * Message from server, receives language data from selected language and sends it directly to view
+     * Message from server, receives language data from selected language and sends it directly to view and dateParser
      * 
      * @param {json} languageData
      */
     handleFromServerSetSelectedLanguageData = function (languageData) {
         this.gameView.setLanguageData(languageData);
+
+        /* Init DateParser and emit languageData */
+        new DateParser(languageData.days, languageData.months);
     }
 
     /**
@@ -975,7 +978,7 @@ class ClientController {
     handleFromServerNewGlobalAnnouncement = function (moderatorUsername, messageText) {
         TypeChecker.isString(moderatorUsername);
         TypeChecker.isString(messageText);
-        var timestamp = new DateParser(new Date()).parseOnlyTime();
+        var timestamp = new DateParser().parseOnlyTime(new Date());
         var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
         this.gameView.initGlobalChatView(messageHeader, messageText);
     }

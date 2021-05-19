@@ -91,7 +91,7 @@ class ScheduleListView extends WindowView {
                 return;
             }
 
-            var startingTime = new DateParser(lecture.startingTime).parse();
+            var startingTime = new DateParser().parse(lecture.startingTime);
 
             $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
                 <tr id="${"schedulerow" + lecture.id}">

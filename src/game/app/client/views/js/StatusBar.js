@@ -31,7 +31,7 @@ class StatusBar extends Views {
      */
     drawClock = function () {
         $('#time').empty()
-        let now = new DateParser(new Date()).parseWithSeconds(this.statusBarLanguageData.days, this.statusBarLanguageData.months);
+        let now = new DateParser().parseWithSeconds(new Date());
         $('#time').text(now);
     }
 

@@ -6,35 +6,36 @@
  */
 class DateParser {
 
-    date;
+    days;
+    months;
 
     /**
-     * creates an instance of Date parser
-     * 
-     * @param {Date} date date
+     * The Date Parser
      */
-    constructor(date) {
-        TypeChecker.isDate(date);
-        this.date = date;
+    constructor(daysLanguageData, monthsLanguageData) {
+        if (!!DateParser.instance) {
+            return DateParser.instance;
+        }
+
+        DateParser.instance = this;
+
+        this.days = [daysLanguageData.sunday, daysLanguageData.monday, daysLanguageData.tuesday, daysLanguageData.wednesday, 
+            daysLanguageData.thursday, daysLanguageData.friday, daysLanguageData.saturday];
+        this.months = [monthsLanguageData.january, monthsLanguageData.february, monthsLanguageData.march, monthsLanguageData.april, monthsLanguageData.may, 
+            monthsLanguageData.june, monthsLanguageData.july, monthsLanguageData.august, monthsLanguageData.september, monthsLanguageData.october, 
+            monthsLanguageData.november, monthsLanguageData.december]
     }
 
     /**
      * Parse date without seconds
      * 
-     * @param {json} daysLanguageData language data for days
-     * @param {json} monthsLanguageData language data for months
+     * @param {Date} date 
      * 
      * @return {String} parsed date
      */
-    parse(daysLanguageData, monthsLanguageData) {
-        var days = [daysLanguageData.sunday, daysLanguageData.monday, daysLanguageData.tuesday, daysLanguageData.wednesday, 
-                    daysLanguageData.thursday, daysLanguageData.friday, daysLanguageData.saturday];
-        var months = [monthsLanguageData.january, monthsLanguageData.february, monthsLanguageData.march, monthsLanguageData.april, monthsLanguageData.may, 
-                    monthsLanguageData.june, monthsLanguageData.july, monthsLanguageData.august, monthsLanguageData.september, monthsLanguageData.october, 
-                    monthsLanguageData.november, monthsLanguageData.december]
-
-        var parsedDate = days[this.date.getDay()] + ", " + this.printTwoDigitsNumber(this.date.getDate()) + " "
-            + months[this.date.getMonth()] + " " + this.date.getFullYear() + " " + this.parseOnlyTime();
+    parse(date) { 
+        var parsedDate = this.days[date.getDay()] + ", " + this.printTwoDigitsNumber(date.getDate()) + " "
+            + this.months[date.getMonth()] + " " + date.getFullYear() + " " + this.parseOnlyTime(date);
 
         return parsedDate;
     }
@@ -42,23 +43,24 @@ class DateParser {
     /**
      * Parse date with seconds
      * 
-     * @param {json} daysLanguageData language data for days
-     * @param {json} monthsLanguageData language data for months
+     * @param {Date} date 
      * 
      * @return {String} parsed date
      */
-    parseWithSeconds(daysLanguageData, monthsLanguageData) {
-        var parsedDate = this.parse(daysLanguageData, monthsLanguageData) + ":" + this.printTwoDigitsNumber(this.date.getSeconds());
+    parseWithSeconds(date) {
+        var parsedDate = this.parse(date) + ":" + this.printTwoDigitsNumber(date.getSeconds());
         return parsedDate;
     }
 
     /**
      * Parse only time without seconds
      * 
+     * @param {Date} date 
+     * 
      * @return {String} parsed time
      */
-    parseOnlyTime() {
-        var parsedDate = this.printTwoDigitsNumber(this.date.getHours()) + ":" + this.printTwoDigitsNumber(this.date.getMinutes());
+    parseOnlyTime(date) {
+        var parsedDate = this.printTwoDigitsNumber(date.getHours()) + ":" + this.printTwoDigitsNumber(date.getMinutes());
         return parsedDate;
     }
 

@@ -75,7 +75,7 @@ class ChatListView extends WindowView {
     let previewMessage = chat.previewMessage;
 
     if (chat.timestamp && chat.timestamp instanceof Date) {
-      timestamp = new DateParser(chat.timestamp).parse();
+      timestamp = new DateParser().parse(chat.timestamp);
     } else {
       timestamp = "no messages";
     }
