@@ -36,12 +36,20 @@ function index() {
 
     gameView.onResize();
 
+    var timeout;
+
     window.onresize = () => {
-      resizeCanvas(
-        window.innerWidth,
-        window.innerHeight
-      );
-      gameView.onResize();
+      if(timeout === undefined)
+      {
+        timeout = setTimeout(()=>{
+          resizeCanvas(
+            window.innerWidth,
+            window.innerHeight
+          );
+          gameView.onResize();
+          timeout = undefined;
+        }, 50);
+      }
     }
 
     // Start the first frame request
@@ -57,7 +65,7 @@ function index() {
     canvasContext.mozImageSmoothingEnabled = enabled;
     canvasContext.msImageSmoothingEnabled = enabled;
     canvasContext.imageSmoothingEnabled = enabled;
-    canvasContext.imageSmoothingQuality = "low";
+    canvasContext.imageSmoothingQuality = "high";
   }
 
   /**
@@ -82,57 +90,54 @@ function index() {
    * @param {number} screenHeight
    */
   const resizeCanvas = (screenWidth, screenHeight) => {
-    let stepSize = 0.05;
-    let newScaleFactor = stepSize;
+    let newScaleFactor;
+    let scaleFactorOffset = 0.02;
     let newWidth;
     let newHeight;
 
-    do
+    if(screenWidth > 2 * screenHeight)
     {
-      newScaleFactor += stepSize;
-      newWidth = screenWidth / newScaleFactor;
-      newHeight = screenHeight / newScaleFactor;
+      newScaleFactor = Math.floor(((screenHeight / GAME_HEIGHT) + Number.EPSILON) * 100) / 100;
+      newScaleFactor -= scaleFactorOffset;
     }
-    while(newWidth > GAME_WIDTH && newScaleFactor < 1);
-
-    if(screenWidth > 3 * screenHeight)
-      return;
-
-    if( screenWidth > 2 * screenHeight)
+    else
     {
-      let scale = stepSize;
-      let tempHeight = 2 * screenHeight;
-      let temp = tempHeight * scale;
-
-      while(screenWidth > tempHeight + temp)
-      {
-        scale += stepSize;
-        temp = tempHeight * scale;
-      }
-      
-      newScaleFactor -= scale;
-      newWidth = screenWidth / newScaleFactor;
-      newHeight = screenHeight / newScaleFactor;
+      newScaleFactor = Math.round(((screenWidth / GAME_WIDTH) + Number.EPSILON) * 100) / 100;
+      newScaleFactor += scaleFactorOffset;
     }
 
-    if(newScaleFactor < 0.3)
-      newScaleFactor = 0.3;
-      
-    newWidth = 2 * Math.floor(newWidth / 2);
-    newHeight = 2 * Math.floor(newHeight / 2);
+    if(newScaleFactor < 0.1)
+    {
+      newScaleFactor = 0.1;
+    }
+    else
+    /* Force best possible resolution */
+    if(newScaleFactor < 1 + scaleFactorOffset && newScaleFactor > 1 - scaleFactorOffset)
+    { 
+      newScaleFactor = 1;
+    }
+
+    newWidth = 2 * Math.floor((screenWidth / newScaleFactor) / 2);
+    newHeight = 2 * Math.floor((screenHeight / newScaleFactor) / 2);
 
     $("#mapCanvas").css({width: newWidth, height: newHeight}).attr({width: newWidth, height: newHeight});
     $("#avatarCanvas").css({width: newWidth, height: newHeight}).attr({width : newWidth, height: newHeight});
 
-    var props = {position: "absolute", top: 0, left: 0, transform: `scale3d(${newScaleFactor}, ${newScaleFactor}, ${newScaleFactor})`, width: newWidth, height: newHeight};
-    props["transform-origin"] = `0 0 0`;
+    var props = {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      transform: `scale3d(${newScaleFactor}, ${newScaleFactor}, ${newScaleFactor})`,
+      width: newWidth,
+      height: newHeight,
+      "transform-origin": `0 0 0`
+    };
+
     $('#gameDiv').css(props);
 
-    let style = {};
-    style["font-size"] = Math.round(Settings.HUD_FONT_SIZE * newScaleFactor);
-    $("html").css(style);
+    $("html").css({"font-size": Math.round(Settings.HUD_FONT_SIZE * newScaleFactor)});
 
-    if(newScaleFactor < 1)
+    if(newScaleFactor < 0.5)
     {
       setCanvasSharpness(ctx_map, true);
       setCanvasSharpness(ctx_avatar, true);
