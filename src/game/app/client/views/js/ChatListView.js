@@ -99,23 +99,29 @@ class ChatListView extends WindowView {
 
     // Now we want to append each chat as a clickable element
     $("#chatListModal .modal-body .list-group").prepend(`
-        <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
-          <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
-            <div class="row w-100">
-              <div class="col-2 px-0">
-                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
-              </div>
-              <div class="col-10 text-left">
-                <label class="name lead">${chat.title}</label>
-                <br>
-                <span class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
-                <br>
-                <span class ="small p-0 wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>                                
-              </div>  
-            </div>
-          </a>
-        </li>
-      `);
+        <li class="list-group-item bg-transparent chatthread pl-0 pr-0" id="${"chatListEntry" + chat.chatId}">
+            <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
+                <div class="d-flex flex-row justify-content-between pl-0 pr-0">
+                    <div class="col-3 mx-auto my-auto">
+                        <div class="d-flex flex-row justify-content-center align-items-center my-auto">
+                            <i class="fa fa-user fa-4x navbarIcons"></i>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                          <label class="name lead wrapword">${chat.title}</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                            <span class="small" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
+                        </div>
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                            <span class ="small wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>
+                        </div>
+                    </div>
+                  </div>
+              </a>
+          </li>
+    `);
 
     $("#chat" + chat.chatId).off();
     $("#chat" + chat.chatId).on("click", () => {

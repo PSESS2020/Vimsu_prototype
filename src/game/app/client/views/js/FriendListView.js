@@ -52,32 +52,37 @@ class FriendListView extends WindowView {
 
         this.businessCards.forEach(businessCard => {
             $('#friendListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent chatthread" id="${"friend" + businessCard.getParticipantId()}">
-                    <div class="d-flex justify-content-between">
-                        <div class="row w-100">
-                            <div class="col-2 px-0 my-auto">
-                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
+                <li class="list-group-item bg-transparent chatthread pl-0 pr-0" id="${"friend" + businessCard.getParticipantId()}">
+                    <div class="d-flex flex-row justify-content-between pl-0 pr-0">
+                            <div class="col-3 mx-auto my-auto">
+                                <div class="d-flex flex-row justify-content-center align-items-center">
+                                    <i class="fa fa-user fa-4x navbarIcons"></i>
+                                </div>
                             </div>
-                            <div class="col-9 text-left">
-                                <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                                <br> 
-                                <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                <br>
-                                <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                <span class="small">${businessCard.getEmail()}</span>
+                            <div class="col-9">
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    <label class="name lead wrapword">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
+                                </div>
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    <span class="fa fa-briefcase fa-fw mr-2" data-toggle="tooltip" title="" data-original-title=""></span>
+                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                </div>
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    <span class="fa fa-envelope fa-fw mr-2" data-toggle="tooltip" data-original-title="" title=""></span>
+                                    <span class="small">${businessCard.getEmail()}</span>
+                                </div>
                             </div>
-                        </div>
-                    
-                        <span class="mr-4 mt-n3">
-                            <a class="action_button nav-item nav-link" href="" style="position: absolute;" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: rgba(34, 43, 46, 0) !important; border: 0rem;" aria-labelledby="dropdownFriendOption">
-                                <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
-                                <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                            <div class="ml-n5 mt-n1">
+                                <div class="d-flex flex-row mt-n3">
+                                        <a class="action_button nav-item nav-link" href="" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: rgba(34, 43, 46, 0) !important; border: 0rem;" aria-labelledby="dropdownFriendOption">
+                                            <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
+                                            <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                                        </div>
+                                </div>
                             </div>
-                        </span>
                     </div>  
                 </li>
             `)

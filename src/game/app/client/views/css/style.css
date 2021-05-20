@@ -1,10 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
+/******************************************************/
+/*************** Rule to calculate rem ****************/
+/******************************************************/
+/** 1rem === 16px therefore                          **/
+/** x rem = desired pixel size / 16px                  **/
+/******************************************************/
+
+:root {
+  --hr-color: rgba(0, 0, 0, .1);
+  --black-color: rgb(15, 15, 15);
+  --tosca-color: rgb(72, 148, 160);
+  --red-color: rgb(254, 92, 54);
+  --orange-color: rgb(255, 180, 73);
+  --light-red-color: rgb(254, 92, 54, .3);
+  --light-orange-color: rgb(255, 180, 73, .3);
+  --light-tosca-color: rgb(72, 148, 160, .1);
+  --white-color: antiquewhite;
+}
+
 * {
   margin: 0rem;
   padding: 0rem;
   scroll-behavior: smooth;
-  color: antiquewhite;
+  color: var(--white-color);
 }
 
 /**
@@ -32,6 +51,7 @@ table {
   font-size: 1rem;
 }
 
+/* modal section start*/
 body.modal-open {
   overflow: hidden;
 }
@@ -39,6 +59,17 @@ body.modal-open {
 .modal-backdrop {
   background: none;
 }
+
+.modal-dialog {
+  max-width: 31.25rem;
+  margin: 1.75rem auto;
+}
+
+.modal-dialog-centered {
+  min-height: calc(100% - 3.5rem);
+}
+
+/* modal section end */
 
 input,
 textarea {
@@ -50,7 +81,8 @@ textarea {
   outline: none !important;
   -webkit-appearance:none !important;
   box-shadow: none !important;
-  border-color: antiquewhite;
+  border-color: var(--white-color);
+  color: var(--white-color);
 }
 
 #overlay{
@@ -179,7 +211,6 @@ form button:hover {
 
 #allchatWindow {
   left: -15.625rem;
-  position: absolute;
   width: 15.625rem;
 }
 
@@ -200,7 +231,7 @@ form button:hover {
 
 #allchatHeaderText {
   border-radius: 0rem 0.3125rem 0rem 0rem; 
-  border-bottom: 0.0625rem solid antiquewhite;
+  border-bottom: 0.0625rem solid var(--white-color);
 }
 
 #allchatMessageInput {
@@ -247,7 +278,7 @@ vertical-align: middle;
 
 .currentLecturesContainer {
   border-style: solid;
-  border-color: antiquewhite;
+  border-color: var(--white-color);
   border-radius: 0.625rem;
   background-color: rgba(24, 30, 32, 0.699);
 }
@@ -275,7 +306,7 @@ button:disabled {
 
 .lectureChatContainer {
   border-style: solid;
-  border-color: antiquewhite;
+  border-color: var(--white-color);
   border-radius: 0.625rem;
   background-color: rgb(33, 41, 44);
 }
@@ -328,7 +359,7 @@ button:disabled {
   position: fixed;
   background-color:rgba(34, 43, 46, 1) !important;
   display: none; 
-  border: 0.0625rem solid antiquewhite;
+  border: 0.0625rem solid var(--white-color);
   border-radius: 0.625rem;
   z-index: 1060;
   top: 50%; 
@@ -475,7 +506,7 @@ button:disabled {
   background-color:rgba(34, 43, 46, 1) !important;
   padding: 0rem !important;
   overflow: scroll;
-  border-color: antiquewhite;
+  border-color: var(--white-color);
   border-style: solid;
   border-width: small;
   border-radius: 0.625rem;
@@ -514,15 +545,15 @@ button:disabled {
 
 .table thead tr th{
   border-top: none;
-  border-bottom: 2pt solid antiquewhite
+  border-bottom: 2pt solid var(--white-color)
 }
 
 .table tbody tr th{
-  border-bottom: 1pt solid antiquewhite;
+  border-bottom: 1pt solid var(--white-color);
 }
 
 .table tbody tr td{
-  border-bottom: 1pt solid antiquewhite;
+  border-bottom: 1pt solid var(--white-color);
 }
 
 .table tbody tr:last-child th {
@@ -534,14 +565,14 @@ button:disabled {
 }
 
 .list-group-item:first-child { 
-  border-top: 1pt solid antiquewhite !important;
+  border-top: 1pt solid var(--white-color) !important;
 }
 
 .list-group-item {
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
-  border-bottom: 1pt solid antiquewhite !important;
+  border-bottom: 1pt solid var(--white-color) !important;
   border-radius: 0rem 0rem 0rem 0rem !important;
   background: none;
 }
@@ -551,7 +582,6 @@ button:disabled {
 }
 
 .achievement-icon {
-  font-size: 7.5rem;
   opacity: 1;                /* Opacity (Transparency) */
   -webkit-filter: blur(0rem);    /* Blur */
   -moz-filter: blur(0rem);
@@ -567,7 +597,7 @@ button:disabled {
 }
 
 .achievementBox {
-  border: 0.0625rem solid antiquewhite; 
+  border: 0.0625rem solid var(--white-color); 
   border-top: none; 
   border-radius: 0rem 0rem 0.3125rem 0.3125rem; 
   min-width: 4.375rem;
