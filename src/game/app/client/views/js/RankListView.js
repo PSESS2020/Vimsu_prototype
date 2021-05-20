@@ -7,7 +7,8 @@
 class RankListView extends WindowView {
 
     rankList;
-    eventManager
+    eventManager;
+    languageData;
 
     /**
      * Creates an instance of RankListView
@@ -36,6 +37,7 @@ class RankListView extends WindowView {
     draw(rankList, ownUsername, emptyRankList) {
         $('#ranklistwait').hide();
 
+        $('#bestParticipantsText').text(this.languageData.bestParticipants);
         if (emptyRankList) {
             $('#rankListModal .modal-body #ranklistrow').empty();
             this.rankList = [];
@@ -43,7 +45,7 @@ class RankListView extends WindowView {
 
         if (rankList.length < 1) {
             if (emptyRankList) {
-                $('#noranklist').text("There are no participants in this conference yet.");
+                $('#noranklist').text(this.languageData.noParticipants);
             }
             
             return;
@@ -111,5 +113,12 @@ class RankListView extends WindowView {
                 this.eventManager.handleLoadMoreRankList(this.rankList.length, lastRank, lastPoints, lastPointsLength);
             }
         });
+    }
+
+    /**
+     * @param {json} languageData 
+     */
+    setLanguageData(languageData) {
+        this.languageData = languageData;
     }
 }

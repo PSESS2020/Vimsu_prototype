@@ -28,7 +28,7 @@ class AchievementView extends WindowView {
         $('#achievementWait').hide()
         $('#achievementModalContent').empty();
 
-        $('#achievementText').text(this.languageData.yourAchievements);
+        $('#yourAchievementsText').text(this.languageData.yourAchievements);
         achievements.forEach(achievement => {
             var level = achievement.currentLevel;
             var maxLevel = achievement.maxLevel;

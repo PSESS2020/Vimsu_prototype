@@ -146,6 +146,7 @@ class GameView {
         this.statusBar.setLanguageData(languageData.hud.statusBar);
         this.allchatView.setLanguageData(languageData.hud.allchat);
         this.achievementView.setLanguageData(languageData.achievements);
+        this.rankListView.setLanguageData(languageData.ranklist);
     }
 
     /**

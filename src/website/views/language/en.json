@@ -178,6 +178,10 @@
             "nextTarget": "Target: [<currentCount> / <nextTarget>]",
             "completed": "Completed",
             "level": "Level"
+        },
+        "ranklist": {
+            "bestParticipants": "Best Participants",
+            "noParticipants": "There are no participants in this conference yet."
         }
     }
 }
