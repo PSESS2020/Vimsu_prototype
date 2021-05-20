@@ -144,6 +144,7 @@ class GameView {
 
         this.hudView.setLanguageData(languageData.hud);
         this.statusBar.setLanguageData(languageData.hud.statusBar);
+        this.allchatView.setLanguageData(languageData.hud.allchat);
     }
 
     /**

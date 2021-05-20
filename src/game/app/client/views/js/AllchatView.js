@@ -7,6 +7,7 @@
 class AllchatView extends Views {
 
     lastCommands = [];
+    languageData;
 
     /**
      * Creates an instance of Allchat View
@@ -103,19 +104,19 @@ class AllchatView extends Views {
      * @param {String} ownUsername current participant's username
      */
     draw(roomName, messages, ownUsername) {
-        $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName.toLowerCase() + ' chat message ...'
-        $('#allchatHeaderText').text(roomName + ' Chat');
+        $('#allchatMessageInput')[0].placeholder = this.languageData.enterMessage.replace('<roomName>', roomName);
+        $('#allchatHeaderText').text(roomName + ' ' + this.languageData.chat);
 
         $("#unreadAllchatMessage").text(0)
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
-            <small>Show ${roomName.toLowerCase()} chat messages</small>
+            <small>${this.languageData.showMessages.replace('<roomName>', roomName)}</small>
         `)
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text("The " + roomName.toLowerCase() + " chat is somehow quiet. Send some love here?")
+            $('#noAllchat').text(this.languageData.quietChat.replace('<roomName>', roomName))
             return;
         }
 
@@ -175,5 +176,12 @@ class AllchatView extends Views {
         if (!isOwnParticipant) {
             $("#unreadAllchatMessage").text(++currentCounter)
         }
+    }
+
+    /**
+     * @param {json} languageData 
+     */
+    setLanguageData(languageData) {
+        this.languageData = languageData;
     }
 }
