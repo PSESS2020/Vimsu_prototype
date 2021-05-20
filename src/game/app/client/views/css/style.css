@@ -28,6 +28,10 @@ body {
   user-select: none;
 }
 
+table {
+  font-size: 1rem;
+}
+
 body.modal-open {
   overflow: hidden;
 }
@@ -191,10 +195,10 @@ form button:hover {
 
 #allChatHeader {
   font-size: 1rem;
+  background-color: rgba(15, 15, 15, 0.8);
 }
 
 #allchatHeaderText {
-  background-color: rgba(15, 15, 15, 0.8); 
   border-radius: 0rem 0.3125rem 0rem 0rem; 
   border-bottom: 0.0625rem solid antiquewhite;
 }
@@ -506,10 +510,6 @@ button:disabled {
 
 .showRoomChat:hover {
   opacity: .5;
-}
-
-.table {
-  font-size: 1rem;
 }
 
 .table thead tr th{

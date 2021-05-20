@@ -15,6 +15,9 @@ class IsometricEngine {
     tileWidth = Settings.TILE_WIDTH;
     tileHeight = Settings.TILE_HEIGHT;
 
+    mapContextWidth;
+    mapContextHeight;
+
     loader;
 
     /**
@@ -49,6 +52,7 @@ class IsometricEngine {
         this.mapNumTilesY = mapNumTilesY;
 
         this.setMapOriginXY(canvasWidth, canvasHeight);
+        this.setMapContextXY(canvasWidth, canvasHeight);
     }
 
     /**
@@ -74,8 +78,21 @@ class IsometricEngine {
         TypeChecker.isInt(canvasWidth);
         TypeChecker.isInt(canvasHeight);
 
-        this.mapOriginX = canvasWidth / 2 - this.mapNumTilesX * this.tileHeight;
-        this.mapOriginY = canvasHeight / 2;
+        this.mapOriginX = Math.floor(canvasWidth / 2 - this.mapNumTilesX * this.tileHeight);
+        this.mapOriginY = Math.floor(canvasHeight / 2);
+    }
+
+    /**
+     * Sets width and height of canvas context
+     * @param {number} contextWidth width of context
+     * @param {number} contextHeight height of canvas context
+     */
+    setMapContextXY(contextWidth, contextHeight) {
+        TypeChecker.isInt(contextWidth);
+        TypeChecker.isInt(contextHeight);
+
+        this.mapContextWidth = contextWidth;
+        this.mapContextHeight = contextHeight;
     }
 
     /**
