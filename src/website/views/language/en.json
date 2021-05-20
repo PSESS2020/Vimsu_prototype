@@ -172,6 +172,12 @@
             "october": "October",
             "november": "November",
             "december": "December"
+        },
+        "achievements": {
+            "yourAchievements": "Your achievements",
+            "nextTarget": "Target: [<currentCount> / <nextTarget>]",
+            "completed": "Completed",
+            "level": "Level"
         }
     }
 }
