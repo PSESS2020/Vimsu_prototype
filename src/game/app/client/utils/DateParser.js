@@ -10,11 +10,19 @@ class DateParser {
     months;
 
     /**
-     * The Date Parser
+     * creates an instance of DateParser only if there is not an instance already.
+     * Otherwise the existing instance will be returned.
+     * 
+     * @param {?json} daysLanguageData language data for days, only needs to be passed when this constructor is called for the first time
+     * @param {?json} monthsLanguageData language data for months, only needs to be passed when this constructor is called for the first time
      */
     constructor(daysLanguageData, monthsLanguageData) {
         if (!!DateParser.instance) {
             return DateParser.instance;
+        }
+
+        if (daysLanguageData === undefined || monthsLanguageData === undefined) {
+            throw new Error("Don't forget to pass language data for days and months if DataParser is accessed for the first time!");
         }
 
         DateParser.instance = this;
