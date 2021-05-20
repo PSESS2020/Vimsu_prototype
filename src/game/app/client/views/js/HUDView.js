@@ -72,18 +72,18 @@ class HUDView extends Views {
     /**
      * Draws text of whole HUD in passed language
      * 
-     * @param {json} hudLanguageData language data for HUD
+     * @param {json} languageData language data for HUD
      */
-    setLanguageData(hudLanguageData) {
-        $('#ranklistText').text(hudLanguageData.ranklist);
-        $('#achievementsText').text(hudLanguageData.achievements);
-        $('#scheduleText').text(hudLanguageData.schedule);
-        $('#meetingsText').text(hudLanguageData.meetings);
-        $('#friendListText').text(hudLanguageData.friendlist);
-        $('#chatsText').text(hudLanguageData.chats);
-        $('#leaveText').text(hudLanguageData.leave);
-        $('#showNotificationText').text(hudLanguageData.showNotification);
-        $('#hideNotificationText').text(hudLanguageData.hideNotification);
+    setLanguageData(languageData) {
+        $('#ranklistText').text(languageData.ranklist);
+        $('#achievementsText').text(languageData.achievements);
+        $('#scheduleText').text(languageData.schedule);
+        $('#meetingsText').text(languageData.meetings);
+        $('#friendListText').text(languageData.friendlist);
+        $('#chatsText').text(languageData.chats);
+        $('#leaveText').text(languageData.leave);
+        $('#showNotificationText').text(languageData.showNotification);
+        $('#hideNotificationText').text(languageData.hideNotification);
     }
 
     /**

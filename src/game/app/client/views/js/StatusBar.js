@@ -8,7 +8,7 @@ class StatusBar extends Views {
 
     connectionStatus;
     fps;
-    statusBarLanguageData;
+    languageData;
 
     /**
      * Creates an instance of StatusBar
@@ -40,7 +40,7 @@ class StatusBar extends Views {
      */
     drawFPS = function() {
         $('#fps').empty();
-        $('#fps').text(this.statusBarLanguageData.fps + ': ' + this.fps + ', ');
+        $('#fps').text(this.languageData.fps + ': ' + this.fps + ', ');
         this.fps = 0;
     }
 
@@ -50,11 +50,11 @@ class StatusBar extends Views {
     drawConnectionStatus = function () {
         if (this.connectionStatus === ConnectionState.DISCONNECTED) {
             $('#connectionStatus').empty();
-            $('#connectionStatus').text(this.statusBarLanguageData.lostConnection);
+            $('#connectionStatus').text(this.languageData.lostConnection);
             $('#connectionStatus').show();
         } else if (this.connectionStatus === ConnectionState.RECONNECTED) {
             $('#connectionStatus').empty();
-            $('#connectionStatus').text(this.statusBarLanguageData.reconnect);
+            $('#connectionStatus').text(this.languageData.reconnect);
             $('#connectionStatus').show();
         }
     }
@@ -80,7 +80,7 @@ class StatusBar extends Views {
     updateLocation(location) {
         TypeChecker.isString(location);
         $('#location').empty();
-        $('#location').text(this.statusBarLanguageData.location + ": " + location);
+        $('#location').text(this.languageData.location + ": " + location);
     }
 
     /**
@@ -97,7 +97,7 @@ class StatusBar extends Views {
      */
     updatePing(ms) {
         $('#ping').empty();
-        $('#ping').text(this.statusBarLanguageData.ping + ': ' + ms + 'ms');
+        $('#ping').text(this.languageData.ping + ': ' + ms + 'ms');
     }
 
     /**
@@ -113,11 +113,11 @@ class StatusBar extends Views {
             $('#connectionStatus').empty();
         } else if (this.connectionStatus === ConnectionState.DISCONNECTED) {
             $('#connectionStatus').empty();
-            $('#connectionStatus').text(this.statusBarLanguageData.lostConnection);
+            $('#connectionStatus').text(this.languageData.lostConnection);
             $('#connectionStatus').show();
         } else if (this.connectionStatus === ConnectionState.RECONNECTED) {
             $('#connectionStatus').empty();
-            $('#connectionStatus').text(this.statusBarLanguageData.reconnect);
+            $('#connectionStatus').text(this.languageData.reconnect);
             $('#connectionStatus').show();
         }
     }
@@ -130,7 +130,7 @@ class StatusBar extends Views {
     addGroupName(groupName) {
         TypeChecker.isString(groupName);
         $('#group').empty();
-        $('#group').text(this.statusBarLanguageData.group + ": " + groupName);
+        $('#group').text(this.languageData.group + ": " + groupName);
         $('#group').show();
     }
 
@@ -143,9 +143,9 @@ class StatusBar extends Views {
     }
 
     /**
-     * @param {json} statusBarLanguageData 
+     * @param {json} languageData 
      */
-    setLanguageData(statusBarLanguageData) {
-        this.statusBarLanguageData = statusBarLanguageData;
+    setLanguageData(languageData) {
+        this.languageData = languageData;
     }
 }
