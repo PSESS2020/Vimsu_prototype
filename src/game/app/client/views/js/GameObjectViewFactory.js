@@ -97,8 +97,7 @@ class GameObjectViewFactory {
         
         if (gameMapElementImage !== undefined) {
             var offset = this.calculateMapElementOffset(gameMapElementImage, gameObjectType);
-            // Strange fix to make sure left & right tiles
-            // are displayed properly....
+            // Strange fix to make sure left & right tiles are displayed properly
             if (gameObjectType === GameObjectType.LEFTTILE) {
                 pos = new PositionClient(pos.getCordX(), pos.getCordY() + 1);
             } else if (gameObjectType === GameObjectType.RIGHTTILE){

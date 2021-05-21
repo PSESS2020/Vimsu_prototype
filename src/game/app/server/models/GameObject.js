@@ -19,8 +19,7 @@ module.exports = class GameObject {
     #isSolid;
     #gameObjectType;
     #isClickable;
-    #iFrameData;
-    #story
+    #onClickData;
 
     /**
      * Creates a game object instance
@@ -34,16 +33,11 @@ module.exports = class GameObject {
      * @param {Position} position game object position
      * @param {boolean} isSolid game object solidity
      * @param {boolean} isClickable game object clickable status
-     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
-     * @param {?String} iFrameData.title title of iFrame
-     * @param {?String} iFrameData.url URL of iFrame
-     * @param {?number} iFrameData.width width of iframe in px
-     * @param {?number} iFrameData.height height of iframe in px
-     * @param {?String[]} story Array of strings if clicking this
-     *                          displays a text message, otherwise
-     *                          undefined
+     * @param {?Object} onClickData
+     * TODO add more precise documentation on properties, contents
+     * and variations of onClickData-object
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData, story) {
+    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, onClickData) {
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);

@@ -100,16 +100,16 @@ module.exports = class GameObject {
     /**
      * @method module:GameObjectFactory#createGameObject
      * 
+     * The onClickData contains information about what is supposed to happen
+     * when the object is clicked. It can be either an iFrameData object, an
+     * array of strings (so a story) or a set of meeting data.
+     * 
      * @param {String} roomId 
      * @param { { type:         GameObjectType, 
      *            position:     int[2],
      *            ?variation:   String,
      *            ?isClickable: Boolean,
-     *            ?iFrameData:  { title:  String,
-     *                            url:    String,
-     *                            width:  number,
-     *                            height: number },
-     *            ?story:       String             
+     *            ?onClickData: Object,
      *            ?width:       int,
      *            ?length:      int,
      *            ?isSolid:     Boolean,
@@ -124,15 +124,15 @@ module.exports = class GameObject {
         // Destructuring the object for easier reference and a more flexible
         // method. The last two lines don't need to be separate, it's just
         // to signify that these are two different "levels" of customization.
-        const { type, position: [xPos, yPos] }            = objData // mandatory
-        var { variation, isClickable, iFrameData, story } = objData // optional
-        var { width, length, isSolid, assetSet }          = objData // custom
+        const { type, position: [xPos, yPos] }      = objData    // mandatory
+        var { variation, isClickable, onclickData } = objData    // optional
+        var { width, length, isSolid, assetSet }    = objData    // custom
         
         let returnData = []
 
         if (isClickable === undefined) {
             isClickable = false
-            iFrameData = story = undefined
+            // maybe delete onClickData here
         }
 
         if (variation === undefined) { variation = GlobalStrings.DEFAULT }
@@ -144,7 +144,7 @@ module.exports = class GameObject {
             let parts = GameObjectInfo.getInfo(type, "parts")
             parts.forEach( partData => {
                 const { type, offset_x, offset_y, variation } = partData
-                this.createGameObject(roomId, { type, position: [ xPos + offset_x, yPos + offset_y ], isClickable, iFrameData, variation }).forEach(elem => returnData.push(elem))
+                this.createGameObject(roomId, { type, position: [ xPos + offset_x, yPos + offset_y ], isClickable, onClickData, variation }).forEach(elem => returnData.push(elem))
             })
         }
 
@@ -160,11 +160,11 @@ module.exports = class GameObject {
             if (assetLinePart instanceof Array) {
                 let j = 0
                 assetLinePart.forEach(assetColPart => {
-                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isSolid, isClickable, iFrameData, story))
+                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isSolid, isClickable, onClickData))
                     j++
                 })
             } else {
-                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isSolid, isClickable, iFrameData, story))
+                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isSolid, isClickable, onClickData))
             }
             i++
         })
