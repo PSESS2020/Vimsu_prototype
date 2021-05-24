@@ -135,6 +135,18 @@
             "leave": "Leave",
             "showNotification": "Show notification",
             "hideNotification": "Hide notification",
+            "tooltips": {
+                "points": "Your points",
+                "rank": "Your rank",
+                "profile": "Profile",
+                "ranklist": "Ranklist of conference participants",
+                "achievements": "Achievement list",
+                "schedule": "Presentation schedule",
+                "meetings": "Meeting list",
+                "friendlist": "Friend list and received friend request list",
+                "chats": "Chat list",
+                "leave": "Leave conference"
+            },
             "statusBar": {
                 "fps": "FPS",
                 "location": "Location",
@@ -147,7 +159,11 @@
                 "chat": "Chat",
                 "showMessages": "Show <roomName> chat messages",
                 "enterMessage": "Enter <roomName> chat message ...",
-                "quietChat": "The <roomName> chat is somehow quiet. Send some love here?"
+                "quietChat": "The <roomName> chat is somehow quiet. Send some love here?",
+                "tooltips": {
+                    "sendMessage": "Send",
+                    "emojis": "Pick emojis"
+                }
             }
         },
         "days": {

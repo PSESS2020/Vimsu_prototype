@@ -86,6 +86,16 @@ class HUDView extends ViewWithLanguageData {
         $('#leaveText').text(this.languageData.leave);
         $('#showNotificationText').text(this.languageData.showNotification);
         $('#hideNotificationText').text(this.languageData.hideNotification);
+        document.getElementById("points").title = this.languageData.tooltips.points;
+        document.getElementById("rank").title = this.languageData.tooltips.rank;
+        document.getElementById("profileButton").title = this.languageData.tooltips.profile;
+        document.getElementById("rankListButton").title = this.languageData.tooltips.ranklist;
+        document.getElementById("achievementListButton").title = this.languageData.tooltips.achievements;
+        document.getElementById("scheduleListButton").title = this.languageData.tooltips.schedule;
+        document.getElementById("meetingListButton").title = this.languageData.tooltips.meetings;
+        document.getElementById("friendListButton").title = this.languageData.tooltips.friendlist;
+        document.getElementById("chatListButton").title = this.languageData.tooltips.chats;
+        document.getElementById("nav_leave_button" ).title = this.languageData.tooltips.leave;
     }
 
     /**

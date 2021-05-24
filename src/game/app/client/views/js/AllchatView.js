@@ -103,6 +103,8 @@ class AllchatView extends ViewWithLanguageData {
      * @param {String} ownUsername current participant's username
      */
     draw(roomName, messages, ownUsername) {
+        document.getElementById("allchatEmojiTrigger").title = this.languageData.tooltips.emojis;
+        document.getElementById("allchatSendButton").title = this.languageData.tooltips.sendMessage;
         $('#allchatMessageInput')[0].placeholder = this.languageData.enterMessage.replace('<roomName>', roomName);
         $('#allchatHeaderText').text(roomName + ' ' + this.languageData.chat);
 

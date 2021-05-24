@@ -135,6 +135,18 @@
             "leave": "Verlassen",
             "showNotification": "Benachrichtigung anzeigen",
             "hideNotification": "Benachrichtigung ausblenden",
+            "tooltips": {
+                "points": "Deine Punkte",
+                "rank": "Dein Rang",
+                "profile": "Profil",
+                "ranklist": "Rangliste der Konferenzteilnehmer",
+                "achievements": "Liste deiner Erfolge",
+                "schedule": "Präsentationszeitplan",
+                "meetings": "Liste deiner Meetings",
+                "friendlist": "Freundesliste und Freundschaftsanfragen",
+                "chats": "Liste deiner Chats",
+                "leave": "Konferenz verlassen"
+            },
             "statusBar": {
                 "fps": "FPS",
                 "location": "Standort",
@@ -147,7 +159,11 @@
                 "chat": "Chat",
                 "showMessages": "<roomName> Chat Nachrichten anzeigen",
                 "enterMessage": "<roomName> Chat Nachricht eingeben...",
-                "quietChat": "Der <roomName> Chat ist momentan sehr ruhig. Vielleicht mal eine Nachricht dalassen?"
+                "quietChat": "Der <roomName> Chat ist momentan sehr ruhig. Vielleicht mal eine Nachricht dalassen?",
+                "tooltips": {
+                    "sendMessage": "Senden",
+                    "emojis": "Emojis auswählen"
+                }
             }
         },
         "days": {
