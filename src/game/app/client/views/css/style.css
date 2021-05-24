@@ -3,8 +3,8 @@
 /******************************************************/
 /*************** Rule to calculate rem ****************/
 /******************************************************/
-/** 1rem === 16px therefore                          **/
-/** x rem = desired pixel size / 16px                  **/
+/** In our software holds 1rem === 16px              **/
+/** therefore x rem = desired pixel size / 16px      **/
 /******************************************************/
 
 :root {
@@ -51,38 +51,14 @@ table {
   font-size: 1rem;
 }
 
-/* modal section start*/
 body.modal-open {
   overflow: hidden;
 }
-
-.modal-backdrop {
-  background: none;
-}
-
-.modal-dialog {
-  max-width: 31.25rem;
-  margin: 1.75rem auto;
-}
-
-.modal-dialog-centered {
-  min-height: calc(100% - 3.5rem);
-}
-
-/* modal section end */
 
 input,
 textarea {
      -moz-user-select: text;
      outline: none;
-}
-
-.form-control:focus {
-  outline: none !important;
-  -webkit-appearance:none !important;
-  box-shadow: none !important;
-  border-color: var(--white-color);
-  color: var(--white-color);
 }
 
 #overlay{
@@ -167,11 +143,6 @@ form button {
 
 form button:hover {
   opacity: 0.8;
-}
-
-.modal-body-large {
-  overflow: auto; 
-  height: 31.25rem
 }
 
 #connectionStatus {
@@ -469,73 +440,6 @@ button:disabled {
   padding: 0.3125rem 0.5rem;
 }
 
-.modal-header {
-  text-align: center;
-  background-color: rgba(24, 30, 32, 0.699);
-  font-size: 1.875rem;
-  border-color: transparent !important; 
-  box-shadow: 0rem 0rem 0rem transparent;
-  overflow-x: scroll;
-  overflow-y: scroll;
-}
-
-.modal-header .dropdown-menu, .modal-header, .modal-content{
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.modal-header .dropdown-menu::-webkit-scrollbar, 
-.modal-header::-webkit-scrollbar, 
-.modal-content::-webkit-scrollbar {
-  display: none;
-}
-
-
-.modal-header, 
-.modal-header .dropdown {
-  position: static !important;
-}
-
-.modal-header .dropdown-menu {
-  width: 29rem !important;
-  min-height: 31.3125rem !important;
-  background-color: rgba(34, 43, 46, 1) !important;
-}
-
-.modal-content {
-  background-color:rgba(34, 43, 46, 1) !important;
-  padding: 0rem !important;
-  overflow: scroll;
-  border-color: var(--white-color);
-  border-style: solid;
-  border-width: small;
-  border-radius: 0.625rem;
-  box-shadow: 0rem 0rem 0rem transparent;
- }
-
-.modal-body-center {
-  overflow: auto; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-}
-
- .close {
-  background-color: transparent !important; 
-  border-color: transparent !important; 
-  opacity: 1;
-  outline: none !important;
-  box-shadow: none !important;
-  position: relative; 
-}
-
-.close:hover {
-  background-color: transparent !important; 
-  border-color: transparent !important; 
-  opacity: .5 !important;
-  box-shadow: 0rem 0rem 0rem transparent;
-}
-
 /*.showRoomChat {
 }*/
 
@@ -564,19 +468,6 @@ button:disabled {
   border-bottom: none;
 }
 
-.list-group-item:first-child { 
-  border-top: 1pt solid var(--white-color) !important;
-}
-
-.list-group-item {
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1pt solid var(--white-color) !important;
-  border-radius: 0rem 0rem 0rem 0rem !important;
-  background: none;
-}
-
 .chatthread:hover {
   background-color:rgba(24, 30, 32, 0.699) !important;
 }
@@ -602,18 +493,6 @@ button:disabled {
   border-radius: 0rem 0rem 0.3125rem 0.3125rem; 
   min-width: 4.375rem;
   height: 2.1875rem;
-}
-
-.progress {
-  width: 100%;
-  height: 0.3125rem;
-}
-
-/*.spinner-border {
-}*/
-
-.tooltip-inner {
-  background: none;
 }
 
 ::-webkit-scrollbar {
