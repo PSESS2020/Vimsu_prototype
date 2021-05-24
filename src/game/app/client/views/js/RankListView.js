@@ -8,7 +8,6 @@ class RankListView extends WindowView {
 
     rankList;
     eventManager;
-    languageData;
 
     /**
      * Creates an instance of RankListView
@@ -113,12 +112,5 @@ class RankListView extends WindowView {
                 this.eventManager.handleLoadMoreRankList(this.rankList.length, lastRank, lastPoints, lastPointsLength);
             }
         });
-    }
-
-    /**
-     * @param {json} languageData 
-     */
-    setLanguageData(languageData) {
-        this.languageData = languageData;
     }
 }

@@ -58,11 +58,4 @@ class AchievementView extends WindowView {
             `)
         })
     }
-
-    /**
-     * @param {json} languageData 
-     */
-    setLanguageData(languageData) {
-        this.languageData = languageData;
-    }
 }

@@ -4,10 +4,9 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class AllchatView extends Views {
+class AllchatView extends ViewWithLanguageData {
 
     lastCommands = [];
-    languageData;
 
     /**
      * Creates an instance of Allchat View
@@ -176,12 +175,5 @@ class AllchatView extends Views {
         if (!isOwnParticipant) {
             $("#unreadAllchatMessage").text(++currentCounter)
         }
-    }
-
-    /**
-     * @param {json} languageData 
-     */
-    setLanguageData(languageData) {
-        this.languageData = languageData;
     }
 }

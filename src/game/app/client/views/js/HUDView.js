@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class HUDView extends Views {
+class HUDView extends ViewWithLanguageData {
 
     /**
      * Creates an instance of HUDView
@@ -70,30 +70,22 @@ class HUDView extends Views {
     }
 
     /**
-     * Draws text of whole HUD in passed language
-     * 
-     * @param {json} languageData language data for HUD
-     */
-    setLanguageData(languageData) {
-        $('#ranklistText').text(languageData.ranklist);
-        $('#achievementsText').text(languageData.achievements);
-        $('#scheduleText').text(languageData.schedule);
-        $('#meetingsText').text(languageData.meetings);
-        $('#friendListText').text(languageData.friendlist);
-        $('#chatsText').text(languageData.chats);
-        $('#leaveText').text(languageData.leave);
-        $('#showNotificationText').text(languageData.showNotification);
-        $('#hideNotificationText').text(languageData.hideNotification);
-    }
-
-    /**
-     * Draws profile username
+     * Draws HUD with passed username
      * 
      * @param {String} username username
      */
-    drawProfile(username) {
+    draw(username) {
         $('#profilePlaceholder').empty();
         $('#profilePlaceholder').text(username);
+        $('#ranklistText').text(this.languageData.ranklist);
+        $('#achievementsText').text(this.languageData.achievements);
+        $('#scheduleText').text(this.languageData.schedule);
+        $('#meetingsText').text(this.languageData.meetings);
+        $('#friendListText').text(this.languageData.friendlist);
+        $('#chatsText').text(this.languageData.chats);
+        $('#leaveText').text(this.languageData.leave);
+        $('#showNotificationText').text(this.languageData.showNotification);
+        $('#hideNotificationText').text(this.languageData.hideNotification);
     }
 
     /**

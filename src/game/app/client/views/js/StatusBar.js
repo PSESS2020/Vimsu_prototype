@@ -4,11 +4,10 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class StatusBar extends Views {
+class StatusBar extends ViewWithLanguageData {
 
     connectionStatus;
     fps;
-    languageData;
 
     /**
      * Creates an instance of StatusBar
@@ -140,12 +139,5 @@ class StatusBar extends Views {
     removeGroupName() {
         $('#group').empty();
         $('#group').hide();
-    }
-
-    /**
-     * @param {json} languageData 
-     */
-    setLanguageData(languageData) {
-        this.languageData = languageData;
     }
 }
