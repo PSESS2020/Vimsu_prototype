@@ -18,9 +18,7 @@ class HUDView extends ViewWithLanguageData {
             return HUDView.instance;
         }
 
-        HUDView.instance = this;
-
-        $('[data-toggle="tooltip"]').tooltip()
+        HUDView.instance = this
 
         $('#rankListButton').off();
         $('#rankListButton').on('click', () => {
@@ -96,6 +94,8 @@ class HUDView extends ViewWithLanguageData {
         document.getElementById("friendListButton").title = this.languageData.tooltips.friendlist;
         document.getElementById("chatListButton").title = this.languageData.tooltips.chats;
         document.getElementById("nav_leave_button" ).title = this.languageData.tooltips.leave;
+
+        $('[data-toggle="tooltip"]').tooltip()
     }
 
     /**
