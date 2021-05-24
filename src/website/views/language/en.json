@@ -198,6 +198,25 @@
         "ranklist": {
             "bestParticipants": "Best Participants",
             "noParticipants": "There are no participants in this conference yet."
+        },
+        "schedule": {
+            "noLectureFound": "Sorry, no lecture is found.",
+            "seconds": "secs",
+            "scheduleList": "Schedule",
+            "lectureTitle": "Title",
+            "oratorName": "Orator Name",
+            "startingTime": "Starting time",
+            "durationInMin": "Duration (Minutes)",
+            "seatAmount": "Seat Amount",
+            "remarks": "Remarks",
+            "status": "Status",
+            "states": {
+                "Coming soon": "Coming soon",
+                "Opened": "Opened",
+                "Running": "Running",
+                "Expired": "Expired"
+            },
+            "allExpired": "Sorry, all lectures have expired."
         }
     }
 }

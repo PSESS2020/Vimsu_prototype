@@ -35,8 +35,17 @@ class ScheduleListView extends WindowView {
         $('#noschedule').empty();
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
+        $('#scheduleListText').text(this.languageData.scheduleList);
+        $('#lectureTitleText').text(this.languageData.lectureTitle);
+        $('#oratorNameText').text(this.languageData.oratorName);
+        $('#startingTimeText').text(this.languageData.startingTime);
+        $('#durationInMinText').text(this.languageData.durationInMin);
+        $('#seatAmountText').text(this.languageData.seatAmount);
+        $('#remarksText').text(this.languageData.remarks);
+        $('#statusText').text(this.languageData.status);
+
         if (lectures.length < 1) {
-            $('#noschedule').text("Sorry, no lecture is found.");
+            $('#noschedule').text(this.languageData.noLectureFound);
             return;
         }
 
@@ -78,13 +87,13 @@ class ScheduleListView extends WindowView {
             var currentTimeDifferenceStopToShow = now - stopToShow - this.timeOffset;
 
             if (currentTimeDifferenceStartToShow >= 0 && currentTimeDifferenceStartingTime < 0) {
-                var status = LectureStatus.OPENED;
-                var seconds = (-1) * Math.round(currentTimeDifferenceStartingTime / 1000) + " secs";
+                var status = this.languageData.states[LectureStatus.OPENED];
+                var seconds = (-1) * Math.round(currentTimeDifferenceStartingTime / 1000) + " " + this.languageData.seconds;
             } else if (currentTimeDifferenceStartingTime >= 0 && currentTimeDifferenceStopToShow <= 0) {
-                var status = LectureStatus.RUNNING;
-                var seconds = Math.round(currentTimeDifferenceStartingTime / 1000) + " secs";
+                var status = this.languageData.states[LectureStatus.RUNNING];
+                var seconds = Math.round(currentTimeDifferenceStartingTime / 1000) + " " + this.languageData.seconds;
             } else if (currentTimeDifferenceStartToShow < 0 && currentTimeDifferenceStartingTime < 0) {
-                var status = LectureStatus.PENDING;
+                var status = this.languageData.states[LectureStatus.PENDING];
                 var seconds = '';
             } else {
                 //expired lectures won't be shown
@@ -106,13 +115,13 @@ class ScheduleListView extends WindowView {
                 </tr>
             `)
 
-            if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
+            if (status === this.languageData.states[LectureStatus.RUNNING] || status === this.languageData.states[LectureStatus.OPENED]) {
                 document.getElementById("schedulerow" + lecture.id).style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
         })
 
         if (count === 0) {
-            $('#noschedule').text("Sorry, all lectures have expired.");
+            $('#noschedule').text(this.languageData.allExpired);
             clearInterval(interval);
         }
     }

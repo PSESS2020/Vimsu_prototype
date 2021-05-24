@@ -198,6 +198,25 @@
         "ranklist": {
             "bestParticipants": "Die besten Teilnehmer",
             "noParticipants": "An dieser Konferenz hat noch niemand teilgenommen."
+        },
+        "schedule": {
+            "noLectureFound": "Es wurde leider kein Vortrag gefunden",
+            "seconds": "s",
+            "scheduleList": "Zeitplan",
+            "lectureTitle": "Titel",
+            "oratorName": "Name Redner",
+            "startingTime": "Startzeitpunkt",
+            "durationInMin": "Dauer in Minuten",
+            "seatAmount": "Anzahl der Sitzplätze",
+            "remarks": "Bemerkungen",
+            "status": "Status",
+            "states": {
+                "Coming soon": "Startet demnächst",
+                "Opened": "Geöffnet",
+                "Running": "Läuft gerade",
+                "Expired": "Abgelaufen"
+            },
+            "allExpired": "Leider sind alle Vorträge bereits abgelaufen."
         }
     }
 }

@@ -147,6 +147,7 @@ class GameView {
         this.allchatView.setLanguageData(languageData.hud.allchat);
         this.achievementView.setLanguageData(languageData.achievements);
         this.rankListView.setLanguageData(languageData.ranklist);
+        this.scheduleListView.setLanguageData(languageData.schedule);
     }
 
     /**
