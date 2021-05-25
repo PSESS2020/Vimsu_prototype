@@ -261,6 +261,10 @@
             "emptyGroupName": "Gruppenname war leer",
             "noFriends": "Keine Freunde zum Einladen",
             "selectAtLeastOne": "Bitte wähle mindestens einen Freund aus!"
+        },
+        "externalWebsite": {
+            "fullscreenMode": "Zu Vollbild wechseln",
+            "normalMode": "Zu normaler Größe zurückwechseln"
         }
     }
 }

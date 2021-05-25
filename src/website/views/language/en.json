@@ -261,6 +261,10 @@
             "emptyGroupName": "Group name was empty",
             "noFriends": "No friends to invite",
             "selectAtLeastOne": "Please select at least one friend!"
+        },
+        "externalWebsite": {
+            "fullscreenMode": "Switch to fullscreen",
+            "normalMode": "Switch back to normal size"
         }
     }
 }
