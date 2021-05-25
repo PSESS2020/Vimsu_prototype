@@ -8,15 +8,15 @@
 /******************************************************/
 
 :root {
-  --hr-color: rgba(0, 0, 0, .1);
   --black-color: rgb(15, 15, 15);
-  --tosca-color: rgb(72, 148, 160);
-  --red-color: rgb(254, 92, 54);
-  --orange-color: rgb(255, 180, 73);
-  --light-red-color: rgb(254, 92, 54, .3);
-  --light-orange-color: rgb(255, 180, 73, .3);
-  --light-tosca-color: rgb(72, 148, 160, .1);
+  --semi-light-black-color: rgb(24, 30, 32);
+  --semi-light-black-color-a: rgba(24, 30, 32, 0.699);
+  --light-black-color: rgb(34, 43, 46);
+  --strong-black-color-a: rgba(15, 15, 15, 0.8);
+  --grey-color: rgb(68, 68, 68);
+  --cyan-color: #028090;
   --white-color: antiquewhite;
+  --strong-white-color-a: rgba(255, 255, 255, 0.8);
 }
 
 * {
@@ -37,7 +37,7 @@ body {
   font-weight: 400;
   line-height: 1.5;
   text-align: left;
-  background-color: rgb(15, 15, 15);
+  background-color: var(--black-color);
 
   width: 100%;
   height: 100%;
@@ -70,7 +70,7 @@ textarea {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background-color: rgb(15,15,15);
+  background-color: var(--black-color);
   z-index: 2000;
   transition: 1s 0.4s;
 }
@@ -119,6 +119,10 @@ video::-webkit-media-controls-timeline {
   z-index: 1;
 }
 
+.emoji-picker {
+  font-size: 1rem;
+}
+
 form {
   border-radius: 0.3125rem;
   top: 0;
@@ -136,7 +140,7 @@ form input {
 form button {
   outline: none !important;
   box-shadow: none !important;
-  background: rgb(15, 15, 15);
+  background: var(--black-color);
   border: none;
   padding: 0.125rem;
 }
@@ -146,7 +150,7 @@ form button:hover {
 }
 
 #connectionStatus {
-  background-color: rgba(255, 255, 255, 0.8); 
+  background-color: var(--light-white-color); 
   padding: 0.3125rem; 
   border-radius: 0.625rem; 
   color: firebrick; 
@@ -156,7 +160,7 @@ form button:hover {
 
 #notifBar {
   font-size: 0.9375rem;
-  background: rgba(15, 15, 15, 0.8);
+  background: var(--strong-black-color-a);
   border-radius: 0rem;
   overflow-y: scroll;
   z-index: 5;
@@ -187,7 +191,7 @@ form button:hover {
 
 #allChatBox {
   font-size: 0.9375rem;
-  background:rgba(15, 15, 15, 0.8);
+  background: var(--strong-black-color-a);
   overflow-y: scroll;
   border-radius: 0rem 0rem 0.3125rem 0rem;
   margin: 0rem;
@@ -197,7 +201,7 @@ form button:hover {
 
 #allChatHeader {
   font-size: 1rem;
-  background-color: rgba(15, 15, 15, 0.8);
+  background-color: var(--strong-black-color-a);
 }
 
 #allchatHeaderText {
@@ -207,7 +211,7 @@ form button:hover {
 
 #allchatMessageInput {
   outline: none;
-  background-color: rgb(15, 15, 15); 
+  background-color: var(--black-color); 
   font-size: 0.875rem;
   width: 14.0625rem;
 }
@@ -251,7 +255,7 @@ vertical-align: middle;
   border-style: solid;
   border-color: var(--white-color);
   border-radius: 0.625rem;
-  background-color: rgba(24, 30, 32, 0.699);
+  background-color: var(--semi-light-black-color-a);
 }
 
 .lectureChatInput {
@@ -283,7 +287,7 @@ button:disabled {
 }
 
 .lectureVideoWindow {
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   padding: 0rem !important;
   overflow: scroll;
   display: none; 
@@ -297,19 +301,19 @@ button:disabled {
 }
 
 .lectureVideoHeader {
-  background-color: rgba(24, 30, 32, 1);
+  background-color: var(--semi-light-black-color);
   font-size: 1.875rem;
 }
 
 .lectureChatHeader {
-  background-color: rgba(24, 30, 32, 1);
+  background-color: var(--semi-light-black-color);
   border-color: transparent !important; 
   border-radius: 0.625rem 0.625rem 0rem 0rem;
 }
 
 .window-header {
   font-size: 1.875rem;
-  background-color: rgba(24, 30, 32, 0.699);
+  background-color: var(--semi-light-black-color-a);
   border-radius: 0.625rem 0.625rem 0rem 0rem;
   box-shadow: 0rem 0rem 0rem transparent; 
   font-size: 1.25rem;
@@ -322,13 +326,13 @@ button:disabled {
   border-radius: 0rem 0rem 0.625rem 0.625rem; 
   margin: 0;
   padding: 0;
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   height: 90%;
 }
 
 .window {
   position: fixed;
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   display: none; 
   border: 0.0625rem solid var(--white-color);
   border-radius: 0.625rem;
@@ -339,7 +343,7 @@ button:disabled {
 }
 
 .externalWebsiteWindow {
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   padding: 0rem !important;
   overflow-y: auto;
   display: none; 
@@ -353,7 +357,7 @@ button:disabled {
 }
 
 .viewBlockerWindow {
-  background-color:rgba(15, 15, 15, 1) !important;
+  background-color: var(--black-color) !important;
   padding: 0rem !important;
   overflow: hidden;
   display: none; 
@@ -367,14 +371,14 @@ button:disabled {
 }
 
 .btn-lecture {
-  background-color: #028090;
+  background-color: var(--cyan-color);
   border: none;
   border-radius: 0.1875rem;
   text-decoration: none;
 }
 
 .btn-lecture:hover {
-  background-color: #028090;
+  background-color: var(--cyan-color);
   border: none;
   border-radius: 0.1875rem;
   text-decoration: none;
@@ -389,7 +393,7 @@ button:disabled {
 }
 
 .btn-blue {
-  background-color: #028090;
+  background-color: var(--cyan-color);
 }
 
 .btn-blue:hover {
@@ -399,13 +403,13 @@ button:disabled {
 
 .btn-white {
   background-color: rgb(231, 218, 200);
-  color: rgba(34, 43, 46, 1);
+  color: var(--light-black-color);
 }
 
 .btn-white:hover {
   opacity: 1;
   background-color: rgb(212, 202, 188);
-  color: rgba(34, 43, 46, 1);
+  color: var(--light-black-color);
 }
 
 .messageBubbleMyself {
@@ -418,7 +422,7 @@ button:disabled {
 
 .messageBubbleOthers {
   max-width: 25vw;
-  background-color: rgb(68, 68, 68);
+  background-color: var(--grey-color);
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -426,7 +430,7 @@ button:disabled {
 
 .allChatMessageBubbleMyself {
   max-width: 12.5rem;
-  background-color: rgb(68, 68, 68);
+  background-color: var(--grey-color);
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -434,7 +438,7 @@ button:disabled {
 
 .allChatMessageBubbleOthers {
   max-width: 12.5rem;
-  background-color: rgb(68, 68, 68);
+  background-color: var(--grey-color);
   border: none !important;
   border-radius: 0.3125rem !important;
   padding: 0.3125rem 0.5rem;
@@ -469,7 +473,7 @@ button:disabled {
 }
 
 .chatthread:hover {
-  background-color:rgba(24, 30, 32, 0.699) !important;
+  background-color: var(--semi-light-black-color-a) !important;
 }
 
 .achievement-icon {
