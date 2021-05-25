@@ -47,6 +47,10 @@ class ChatListView extends WindowView {
 
     $('#yourChatsText').text(this.languageData.yourChats);
     $('#initGroupChatText').text(this.languageData.group);
+    $('#createGroupChatText').text(this.languageData.createGroupChat);
+    $('#createGroupChatInviteText').text(this.languageData.inviteFriends);
+    document.getElementById('inviteFriendsBtn').title = this.languageData.tooltips.inviteFriends;
+    document.getElementById('groupNameInput').placeholder = this.languageData.enterGroupName;
 
     if (!this.handleEmptyChats(chats)) return;
 

@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-dialog-centered mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="scheduleModalTitle"><span id="scheduleListText"></span></h5>
+                <h5 class="modal-title" id="scheduleModalTitle">
+                    <span id="scheduleListText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -58,7 +60,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="businessCardModalTitle"><span id="businessCardText"></span></h5>
+                <h5 class="modal-title" id="businessCardModalTitle">
+                    <span id="businessCardText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -138,7 +142,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="achievementsModalTitle"><span id="yourAchievementsText"></span></h5>
+                <h5 class="modal-title" id="achievementsModalTitle">
+                    <span id="yourAchievementsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -184,7 +190,9 @@
     <div class="modal-dialog modal-dialog-centered mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rankListModalTitle"><span id="bestParticipantsText"></span></h5>
+                <h5 class="modal-title" id="rankListModalTitle">
+                    <span id="bestParticipantsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -232,14 +240,18 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="chatListModalTitle"><span id="yourChatsText"></span></h5>
+                <h5 class="modal-title" id="chatListModalTitle">
+                    <span id="yourChatsText"></span>
+                </h5>
                 <div class="d-flex flex-row justify-content-end">
                     <div class="friendRequestListButton">
                         <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat" href=""
                             style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat">
                             <i class="fa fa-edit navbarIcons"
                                 style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                            <small style="color: antiquewhite; font-size: 10px;"><span id="initGroupChatText"></span></small>
+                            <small style="color: antiquewhite; font-size: 10px;">
+                                <span id="initGroupChatText"></span>
+                            </small>
                         </a>
                     </div>
                     <div>
@@ -272,7 +284,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
             <div class="modal-header">
-                <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
+                <h5 class="modal-title" id="inputGroupNameModalTitle">
+                    <span id="createGroupChatText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -280,10 +294,10 @@
             <div class="modal-body modal-body-center modal-body-large">
                 <form id="groupName" action="" style="text-align: center; width: 100%">
                     <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
-                        placeholder="Enter group name" maxlength="64" required autocomplete="off" />
-                    <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
-                        style=" width: auto;">Invite
-                        Friends</button>
+                        maxlength="64" required autocomplete="off" />
+                    <button id="inviteFriendsBtn" class="btn btn-blue mt-3" style=" width: auto;">
+                        <span id="createGroupChatInviteText"></span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -318,7 +332,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
             <div class="modal-header">
-                <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
+                <h5 class="modal-title" id="inviteFriendsModalTitle">
+                    <span id="inviteFriendsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -334,11 +350,13 @@
 
                 </ul>
                 </br>
-                <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!
+                <div id="noinvitedfriends" style="display: none; color: red">
+                    <span id="selectAtLeastOneText"></span>
                 </div>
                 <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
-                    friends to group chat</button>
+                <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">
+                    <span id="inviteFriendsToChatText"></span>
+                </button>
             </div>
         </div>
     </div>

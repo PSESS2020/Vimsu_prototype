@@ -253,7 +253,14 @@
             "enterMessage": "Enter message ...",
             "send": "Send",
             "chatParticipantList": "Chat Participant List",
-            "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?"
+            "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?",
+            "createGroupChat": "Create Group Chat",
+            "inviteFriends": "Invite Friends",
+            "enterGroupName": "Enter group name",
+            "tooManyFriends": "You may only invite limit friend(s)! Please unselect diff friend(s).",
+            "emptyGroupName": "Group name was empty",
+            "noFriends": "No friends to invite",
+            "selectAtLeastOne": "Please select at least one friend!"
         }
     }
 }

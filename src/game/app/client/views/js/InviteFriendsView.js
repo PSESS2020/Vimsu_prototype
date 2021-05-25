@@ -47,6 +47,10 @@ class InviteFriendsView extends WindowView {
         $('#toomanyinvitedfriends').empty();
         $('#createGroupChat').hide();
 
+        $('#inviteFriendsText').text(this.languageData.chats.inviteFriends);
+        $('#selectAtLeastOneText').text(this.languageData.chats.selectAtLeastOne);
+        $('#inviteFriendsToChatText').text(this.languageData.chats.tooltips.inviteFriends);
+
         this.invitedFriends = [];
 
         if (businessCards) {
@@ -74,8 +78,9 @@ class InviteFriendsView extends WindowView {
                                     <label class="name lead">${fullname}</label>
                                     ${businessCard.getJob() || businessCard.getCompany() ?
                                         `<div>
-                                            <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                            <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : this.languageData.businessCard.unknown) + 
+                                                " " + this.languageData.businessCard.at + " " + 
+                                                (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.businessCard.unknown)}
                                         </div>`
                                     : 
                                         ``
@@ -129,7 +134,7 @@ class InviteFriendsView extends WindowView {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').empty();
                         var diff = this.invitedFriends.length - this.limit;
-                        $('#toomanyinvitedfriends').text("You may only invite " + this.limit + " friend(s)! Please unselect " + diff + " friend(s).");
+                        $('#toomanyinvitedfriends').text(this.languageData.chats.tooManyFriends.replace('limit', this.limit).replace('diff', diff));
                         $('#toomanyinvitedfriends').show();
                     }
                 })
@@ -137,7 +142,7 @@ class InviteFriendsView extends WindowView {
 
             $('#createGroupChat').show();
         } else {
-            $('#inviteFriendsModal .modal-body').text("Group name was empty!")
+            $('#inviteFriendsModal .modal-body').text(this.languageData.chats.emptyGroupName)
         }
     }
 
@@ -196,7 +201,7 @@ class InviteFriendsView extends WindowView {
    */
     handleEmptyInviteFriends(businessCards) {
         if (businessCards && businessCards.length < 1) {
-            $('#nofriendtoinvite').text("No friends to invite.");
+            $('#nofriendtoinvite').text(this.languageData.chats.noFriends);
             return false;
         }
 

@@ -253,7 +253,14 @@
             "enterMessage": "Nachricht eingeben ...",
             "send": "Senden",
             "chatParticipantList": "Chatteilnehmer",
-            "confirmLeaveChat": "Sicher dass du den Chat chat_name verlassen möchtest?"
+            "confirmLeaveChat": "Sicher dass du den Chat chat_name verlassen möchtest?",
+            "createGroupChat": "Gruppenchat erstellen",
+            "inviteFriends": "Freunde einladen",
+            "enterGroupName": "Gruppenname eingeben",
+            "tooManyFriends": "Du kannst maximal limit Freunde einladen. Bitte entferne diff Freunde.",
+            "emptyGroupName": "Gruppenname war leer",
+            "noFriends": "Keine Freunde zum Einladen",
+            "selectAtLeastOne": "Bitte wähle mindestens einen Freund aus!"
         }
     }
 }
