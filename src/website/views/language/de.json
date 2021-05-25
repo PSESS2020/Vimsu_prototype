@@ -272,6 +272,7 @@
             "tooltips": {
                 "sendCode": "Sendet den eingegebenen Code"
             }
-        }
+        },
+        "loadingConference": "Konferenz wird geladen percentagePlaceholder . . ."
     }
 }

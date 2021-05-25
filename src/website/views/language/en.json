@@ -272,6 +272,7 @@
             "tooltips": {
                 "sendCode": "Sends the code you entered in the input field"
             }
-        }
+        },
+        "loadingConference": "Loading Conference percentagePlaceholder . . ."
     }
 }

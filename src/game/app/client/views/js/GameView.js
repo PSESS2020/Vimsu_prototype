@@ -57,7 +57,6 @@ class GameView {
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.gameViewInit = false;
-        this.gameEngine = new IsometricEngine();
     }
     
     /**
@@ -76,6 +75,7 @@ class GameView {
      * @param {json} languageData language data
      */
     initViews = function (languageData) {
+        this.gameEngine = new IsometricEngine(new LoadingView(languageData.loadingConference));
         this.hudView = new HUDView(this.eventManager, languageData.hud);
         this.statusBar = new StatusBar(languageData.hud.statusBar);
         this.notifBar = new NotificationBar(this.eventManager);
@@ -404,7 +404,8 @@ class GameView {
      * Updates FPS
      */
     updateFPS() {
-        this.statusBar.updateFPS();
+        if (this.statusBar !== undefined)
+            this.statusBar.updateFPS();
     }
 
     /**
