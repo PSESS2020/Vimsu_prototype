@@ -265,6 +265,13 @@
         "externalWebsite": {
             "fullscreenMode": "Switch to fullscreen",
             "normalMode": "Switch back to normal size"
+        },
+        "enterCode": {
+            "enterCode": "Enter code",
+            "sendCode": "Send code",
+            "tooltips": {
+                "sendCode": "Sends the code you entered in the input field"
+            }
         }
     }
 }

@@ -31,6 +31,11 @@ class EnterCodeView extends WindowView {
      * @param {String} doorId 
      */
     draw(doorId) {
+        $('#enterCodeText').text(this.languageData.enterCode);
+        $('#sendCodeText').text(this.languageData.sendCode);
+        document.getElementById("codeInput").placeholder = this.languageData.enterCode + '...';
+        document.getElementById("sendCodeBtn").title = this.languageData.tooltips.sendCode;
+
         $('#enteredCode').on('submit', (event) => {
             event.preventDefault();
             let enteredCode = $('#codeInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");

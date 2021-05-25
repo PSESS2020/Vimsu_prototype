@@ -154,6 +154,7 @@ class GameView {
         this.chatThreadView.setLanguageData(languageData.chats);
         this.inviteFriendsView.setLanguageData({chats: languageData.chats, businessCard: languageData.businessCard});     
         this.externalWebsiteView.setLanguageData(languageData.externalWebsite);   
+        this.enterCodeView.setLanguageData(languageData.enterCode);
     }
 
     /**

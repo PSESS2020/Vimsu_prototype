@@ -265,6 +265,13 @@
         "externalWebsite": {
             "fullscreenMode": "Zu Vollbild wechseln",
             "normalMode": "Zu normaler Größe zurückwechseln"
+        },
+        "enterCode": {
+            "enterCode": "Code eingeben",
+            "sendCode": "Code senden",
+            "tooltips": {
+                "sendCode": "Sendet den eingegebenen Code"
+            }
         }
     }
 }
