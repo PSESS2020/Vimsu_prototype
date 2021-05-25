@@ -22,7 +22,7 @@
             requirejs(['../client/views/js/Views',
                 '../client/utils/Settings'], () => {
 
-                    requirejs([
+                    requirejs(['../client/views/js/ViewWithLanguageData',
                         '../client/utils/ImageLoader',
                         '../client/utils/GameObjectOffsets',
                         '../client/utils/ImageCache',
@@ -32,8 +32,7 @@
                         '../client/utils/SpriteSheet',
                         '../client/utils/algorithms/AStar',], () => {
 
-                            requirejs(['../client/views/js/ViewWithLanguageData',
-                                '../client/views/js/WindowView',
+                            requirejs(['../client/views/js/WindowView',
                                 '../client/views/js/MapView',
                                 '../client/views/js/GameMapElementView',
                                 '../client/views/js/AvatarView',
