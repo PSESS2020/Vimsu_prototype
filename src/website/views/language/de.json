@@ -217,6 +217,22 @@
                 "Expired": "Abgelaufen"
             },
             "allExpired": "Leider sind alle Vorträge bereits abgelaufen."
+        },
+        "businessCard": {
+            "businessCard": "Visitenkarte",
+            "profession": "Beruf",
+            "at": "bei",
+            "unknown": "Unbekannt",
+            "email": "E-Mail",
+            "rank": "Rang",
+            "role": "Rolle",
+            "roles": {
+                "moderator": "Moderator",
+                "participant": "Teilnehmer"
+            },
+            "tooltips": {
+                "chatNow": "Visitenkarte schließen und chatten"
+            }
         }
     }
 }

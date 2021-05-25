@@ -217,6 +217,22 @@
                 "Expired": "Expired"
             },
             "allExpired": "Sorry, all lectures have expired."
+        },
+        "businessCard": {
+            "businessCard": "Business Card",
+            "profession": "Profession",
+            "at": "at",
+            "unknown": "Unknown",
+            "email": "Email",
+            "rank": "Rank",
+            "role": "Role",
+            "roles": {
+                "moderator": "Moderator",
+                "participant": "Participant"
+            },
+            "tooltips": {
+                "chatNow": "Close business card and chat now"
+            }
         }
     }
 }

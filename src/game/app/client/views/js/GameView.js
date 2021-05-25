@@ -148,6 +148,8 @@ class GameView {
         this.achievementView.setLanguageData(languageData.achievements);
         this.rankListView.setLanguageData(languageData.ranklist);
         this.scheduleListView.setLanguageData(languageData.schedule);
+        this.businessCardView.setLanguageData(languageData.businessCard);
+        this.profileView.setLanguageData(languageData.businessCard);
     }
 
     /**

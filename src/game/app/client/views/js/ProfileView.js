@@ -47,24 +47,24 @@ class ProfileView extends WindowView {
                 <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
                     ${businessCard.getJob() || businessCard.getCompany() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                            <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
+                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >${this.languageData.profession}</td>
+                            <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : this.languageData.unknown) + 
+                                " " + this.languageData.at + " "  + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.unknown)}</td>
                         </tr>`
                     : 
                         ``
                     }
                     ${businessCard.getEmail() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
+                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.languageData.email}</td>
                             <td style="padding: 15px">${businessCard.getEmail()}</td>
                         </tr>`
                     : 
                         ``
                     }
                     <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                        <td style="padding: 15px">${isModerator ? "Moderator" : "Participant"}</td>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.languageData.role}</td>
+                        <td style="padding: 15px">${isModerator ? this.languageData.roles.moderator : this.languageData.roles.participant}</td>
                     </tr>
                 </table>
             </div>

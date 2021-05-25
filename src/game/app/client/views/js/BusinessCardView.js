@@ -37,6 +37,8 @@ class BusinessCardView extends WindowView {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isFriend, rank, isModerator) {
+        $('#businessCardText').text(this.languageData.businessCard);
+        
         let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
                        (businessCard.getForename() + " ") + 
                        (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
@@ -53,28 +55,28 @@ class BusinessCardView extends WindowView {
             <table id="${"profile" + businessCard.getParticipantId()}" style = "color: antiquewhite; width:100%; margin-left: 0">
                 ${businessCard.getJob() || businessCard.getCompany() ?
                     `<tr>
-                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                        <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                            " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
+                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >${this.languageData.profession}</td>
+                        <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : this.languageData.unknown) + 
+                            " " + this.languageData.at + " " + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.unknown)}</td>
                     </tr>`
                 : 
                     ``
                 }
                 ${isFriend || !isModerator ?
                     `<tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${isFriend ? "Email" : "Rank"}</td>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${isFriend ? this.languageData.email : this.languageData.rank}</td>
                         <td style="padding: 15px">${isFriend ? businessCard.getEmail() : rank}</td>
                     </tr>`
                 : 
                     ``
                 }
                 <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                    <td style="padding: 15px">${isModerator ? "Moderator" : "Participant"}</td>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">${this.languageData.role}</td>
+                    <td style="padding: 15px">${isModerator ? this.languageData.roles.moderator : this.languageData.roles.participant}</td>
                 </tr>
             </table>
             </br>
-            <button id="${"chatnow" + businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
+            <button id="${"chatnow" + businessCard.getParticipantId()}" title ="${this.languageData.tooltips.chatNow}" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
         `)
 
