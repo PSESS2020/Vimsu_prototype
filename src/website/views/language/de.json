@@ -253,7 +253,7 @@
             "enterMessage": "Nachricht eingeben ...",
             "send": "Senden",
             "chatParticipantList": "Chatteilnehmer",
-            "confirmLeaveChat": "Sicher dass du den Chat your_chat verlassen möchtest?"
+            "confirmLeaveChat": "Sicher dass du den Chat chat_name verlassen möchtest?"
         }
     }
 }
