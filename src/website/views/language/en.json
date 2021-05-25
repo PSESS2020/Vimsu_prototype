@@ -233,6 +233,27 @@
             "tooltips": {
                 "chatNow": "Close business card and chat now"
             }
+        },
+        "chats": {
+            "yourChats": "Your chats",
+            "group": "Group",
+            "noMessages": "no messages",
+            "noChats": "No chats found. Let's connect with others!",
+            "tooltips": {
+                "openChat": "Open chat",
+                "addFriend": "Add friend",
+                "videoCall": "(Video) call with chat participants",
+                "showMembers": "Show chat participant list",
+                "inviteFriends": "Invite friends to group chat",
+                "leaveChat": "Leave chat",
+                "emojis": "Pick emojis",
+                "requestSent": "Friend request sent",
+                "sendRequest": "Send friend request"
+            },
+            "enterMessage": "Enter message ...",
+            "send": "Send",
+            "chatParticipantList": "Chat Participant List",
+            "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?"
         }
     }
 }

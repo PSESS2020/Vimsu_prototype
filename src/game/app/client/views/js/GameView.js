@@ -150,6 +150,9 @@ class GameView {
         this.scheduleListView.setLanguageData(languageData.schedule);
         this.businessCardView.setLanguageData(languageData.businessCard);
         this.profileView.setLanguageData(languageData.businessCard);
+        this.chatListView.setLanguageData(languageData.chats);
+        this.chatThreadView.setLanguageData(languageData.chats);
+        
     }
 
     /**

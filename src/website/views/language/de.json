@@ -233,6 +233,27 @@
             "tooltips": {
                 "chatNow": "Visitenkarte schließen und chatten"
             }
+        },
+        "chats": {
+            "yourChats": "Deine Chats",
+            "group": "Gruppe",
+            "noMessages": "keine Nachrichten",
+            "noChats": "Keine Chats gefunden. Connecte dich mit anderen Nutzern!",
+            "tooltips": {
+                "openChat": "Chat öffnen",
+                "addFriend": "Freund hinzufügen",
+                "videoCall": "Videochat mit Chatteilnehmern",
+                "showMembers": "Chatteilnehmer anzeigen",
+                "inviteFriends": "Freunde zu Gruppenchat einladen",
+                "leaveChat": "Chat verlassen",
+                "emojis": "Emojis auswählen",
+                "requestSent": "Freundschaftsanfrage gesendet",
+                "sendRequest": "Freundschaftsanfrage senden"
+            },
+            "enterMessage": "Nachricht eingeben ...",
+            "send": "Senden",
+            "chatParticipantList": "Chatteilnehmer",
+            "confirmLeaveChat": "Sicher dass du den Chat your_chat verlassen möchtest?"
         }
     }
 }
