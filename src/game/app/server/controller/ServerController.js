@@ -1363,21 +1363,38 @@ module.exports = class ServerController {
                 if (!ppant)
                     return;
 
+                let meetListData = [];
+
+                // moderators get all group meetings, no matter what group they are part of
+                if (ppant.getIsModerator()) {
+                    this.#groups.forEach(group => {
+                        let groupMeeting = group.getMeeting();
+                        meetListData.push({
+                            id: groupMeeting.getId(),
+                            domain: Settings.DEFAULT_MEETINGDOMAIN,
+                            name: groupMeeting.getName(),
+                            password: groupMeeting.getPassword()
+                        });
+                    })
+                }
+                    
                 /* get participants meetings and prepare data object
                  * that we are going to send to client. */
                 let meetList = ppant.getMeetingList();
-                let meetListData = [];
 
                 /* for each meeting get (randomly generated) id, which
                  * we need to generate the URL as well as the name, which
                  * is what the meeting will get listed as. */
                 meetList.forEach(meeting => {
-                    meetListData.push({
-                        id: meeting.getId(),
-                        domain: Settings.DEFAULT_MEETINGDOMAIN,
-                        name: meeting.getName(),
-                        password: meeting.getPassword()
-                    });
+                    // dont add groupMeeting twice when ppant is moderator and part of a group
+                    if (!meetListData.some(meetingObject => meetingObject.id === meeting.getId())) {
+                        meetListData.push({
+                            id: meeting.getId(),
+                            domain: Settings.DEFAULT_MEETINGDOMAIN,
+                            name: meeting.getName(),
+                            password: meeting.getPassword()
+                        });
+                    }
                 });
 
                 // send everything to client

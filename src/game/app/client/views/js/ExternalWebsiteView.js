@@ -42,14 +42,11 @@ class ExternalWebsiteView extends WindowView {
 
         $('#externalWebsiteWindowBody' + gameObjectID).append(`
             <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
-                allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+                allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
         `);
 
         const handleClose = () => {
-            if (fullScreenMode) {
-                this.exitFullscreenMode(gameObjectID, width, height);
-                fullScreenMode = false;
-            }
+            this.exitFullscreenMode(gameObjectID, width, height);
 
             /* Needed to stop video */
             $('.iframeclass').each(function () {
@@ -111,6 +108,8 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("iframe" + gameObjectID).width = '100%';
         document.getElementById("iframe" + gameObjectID).height = '100%';
         document.getElementById("iframe" + gameObjectID).scrolling = 'yes';
+        $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-maximize');
+        $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-minimize');
     }
 
     /**
@@ -126,6 +125,8 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("iframe" + gameObjectID).width = width;
         document.getElementById("iframe" + gameObjectID).height = height;
         document.getElementById("iframe" + gameObjectID).scrolling = 'no';
+        $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-minimize');
+        $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-maximize');
     }
 
     /**
@@ -140,7 +141,7 @@ class ExternalWebsiteView extends WindowView {
                     <div class="p-3 d-flex window-header">
                         <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
                         <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-2 pr-2">
-                            <i class="fa fa-window-maximize" style=" transform: scale(0.8);"></i>
+                            <i id="fullscreenBtnImage${gameObjectID}" class="fa fa-window-maximize" style=" transform: scale(0.8);"></i>
                         </button>
                         <button id="closeBtn${gameObjectID}" class="close btn pl-1 pr-1">
                             <i class="fa fa-close"></i>
