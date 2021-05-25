@@ -15,9 +15,10 @@ class ChatThreadView extends WindowView {
      * Creates an instance of ChatThreadView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for chatThread view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!ChatThreadView.instance) {
             return ChatThreadView.instance;

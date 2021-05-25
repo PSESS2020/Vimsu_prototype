@@ -8,15 +8,19 @@ class AchievementView extends WindowView {
 
     /**
      * Creates an instance of Achievement View
+     * 
+     * @param {json} languageData language data for achievement view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!AchievementView.instance) {
             return AchievementView.instance;
         }
 
         AchievementView.instance = this;
+        
+        $('#yourAchievementsText').text(this.languageData.yourAchievements);
     }
 
     /**
@@ -28,7 +32,6 @@ class AchievementView extends WindowView {
         $('#achievementWait').hide()
         $('#achievementModalContent').empty();
 
-        $('#yourAchievementsText').text(this.languageData.yourAchievements);
         achievements.forEach(achievement => {
             var level = achievement.currentLevel;
             var maxLevel = achievement.maxLevel;

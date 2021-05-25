@@ -14,9 +14,10 @@ class ChatListView extends WindowView {
    * Creates an instance of ChatListView
    *
    * @param {EventManager} eventManager event manager
+   * @param {json} languageData language data for chatlist view
    */
-  constructor(eventManager) {
-    super();
+  constructor(eventManager, languageData) {
+    super(languageData);
 
     if (!!ChatListView.instance) {
       return ChatListView.instance;
@@ -32,6 +33,9 @@ class ChatListView extends WindowView {
       $('#inputGroupNameModal').modal('show')
       $('#groupNameInput').trigger('focus')
     });
+
+    $('#yourChatsText').text(this.languageData.yourChats);
+    $('#initGroupChatText').text(this.languageData.group);
   }
 
   /**
@@ -44,13 +48,6 @@ class ChatListView extends WindowView {
     $("#chatListWait").hide();
     $("#nochat").empty();
     $("#chatListModal .modal-body .list-group").empty();
-
-    $('#yourChatsText').text(this.languageData.yourChats);
-    $('#initGroupChatText').text(this.languageData.group);
-    $('#createGroupChatText').text(this.languageData.createGroupChat);
-    $('#createGroupChatInviteText').text(this.languageData.inviteFriends);
-    document.getElementById('inviteFriendsBtn').title = this.languageData.tooltips.inviteFriends;
-    document.getElementById('groupNameInput').placeholder = this.languageData.enterGroupName;
 
     if (!this.handleEmptyChats(chats)) return;
 

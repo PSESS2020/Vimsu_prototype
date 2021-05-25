@@ -68,42 +68,41 @@ class GameView {
     initEventManager(clientController) {
         TypeChecker.isInstanceOf(clientController, ClientController)
         this.eventManager = new EventManager(clientController);
-
-        //initialize some Views at the very beginning
-        this.initViews();
     } 
 
     /**
-     * initializes View instances
+     * initializes View instances with language data
+     * 
+     * @param {json} languageData language data
      */
-    initViews = function () {
-        this.hudView = new HUDView(this.eventManager);
-        this.statusBar = new StatusBar();
+    initViews = function (languageData) {
+        this.hudView = new HUDView(this.eventManager, languageData.hud);
+        this.statusBar = new StatusBar(languageData.hud.statusBar);
         this.notifBar = new NotificationBar(this.eventManager);
-        this.allchatView = new AllchatView(this.eventManager);
-        new InputGroupNameView(this.eventManager);
+        this.allchatView = new AllchatView(this.eventManager, languageData.hud.allchat);
+        new InputGroupNameView(this.eventManager, languageData.chats);
         this.currentLecturesView = new CurrentLecturesView(this.eventManager);
         this.lectureView = new LectureView(this.eventManager);
         this.friendRequestListView = new FriendRequestListView(this.eventManager);
         this.friendListView = new FriendListView(this.eventManager);
-        this.inviteFriendsView = new InviteFriendsView(this.eventManager);
-        this.chatListView = new ChatListView(this.eventManager);
+        this.inviteFriendsView = new InviteFriendsView(this.eventManager, {chats: languageData.chats, businessCard: languageData.businessCard});
+        this.chatListView = new ChatListView(this.eventManager, languageData.chats);
         this.meetingListView = new MeetingListView(this.eventManager);
         this.videoMeetingView = new VideoMeetingView(this.eventManager);
-        this.chatThreadView = new ChatThreadView(this.eventManager);
+        this.chatThreadView = new ChatThreadView(this.eventManager, languageData.chats);
         this.chatParticipantListView = new ChatParticipantListView();
-        this.scheduleListView = new ScheduleListView();
+        this.scheduleListView = new ScheduleListView(languageData.schedule);
         this.globalChatView = new GlobalChatView();
         this.largerGlobalChatView = new LargerGlobalChatView();
-        this.profileView = new ProfileView();
-        this.rankListView = new RankListView(this.eventManager);
+        this.profileView = new ProfileView(languageData.businessCard);
+        this.rankListView = new RankListView(this.eventManager, languageData.ranklist);
         this.npcStoryView = new NPCStoryView();
-        this.externalWebsiteView = new ExternalWebsiteView();
+        this.externalWebsiteView = new ExternalWebsiteView(languageData.externalWebsite);
         this.newAchievementView = new NewAchievementView();
-        this.achievementView = new AchievementView();
-        this.businessCardView = new BusinessCardView(this.eventManager);
+        this.achievementView = new AchievementView(languageData.achievements);
+        this.businessCardView = new BusinessCardView(this.eventManager, languageData.businessCard);
         this.successesBar = new SuccessesBar();
-        this.enterCodeView = new EnterCodeView(this.eventManager);
+        this.enterCodeView = new EnterCodeView(this.eventManager, languageData.enterCode);
     }
 
     /**
@@ -132,29 +131,6 @@ class GameView {
     setGameViewInit(bool) {
         TypeChecker.isBoolean(bool);
         this.gameViewInit = bool;
-    }
-
-    /**
-     * Sets game view language data and distributes language packages to every other view 
-     * 
-     * @param {json} languageData language data
-     */
-    setLanguageData(languageData) {
-        this.languageData = languageData;
-
-        this.hudView.setLanguageData(languageData.hud);
-        this.statusBar.setLanguageData(languageData.hud.statusBar);
-        this.allchatView.setLanguageData(languageData.hud.allchat);
-        this.achievementView.setLanguageData(languageData.achievements);
-        this.rankListView.setLanguageData(languageData.ranklist);
-        this.scheduleListView.setLanguageData(languageData.schedule);
-        this.businessCardView.setLanguageData(languageData.businessCard);
-        this.profileView.setLanguageData(languageData.businessCard);
-        this.chatListView.setLanguageData(languageData.chats);
-        this.chatThreadView.setLanguageData(languageData.chats);
-        this.inviteFriendsView.setLanguageData({chats: languageData.chats, businessCard: languageData.businessCard});     
-        this.externalWebsiteView.setLanguageData(languageData.externalWebsite);   
-        this.enterCodeView.setLanguageData(languageData.enterCode);
     }
 
     /**
@@ -323,7 +299,7 @@ class GameView {
     }
 
     /**
-     * Draws HUD. If this is not a video conference, removes schedule button from HUD
+     * Draws profile in HUD. If this is not a video conference, removes schedule button from HUD
      * 
      * @param {String} username username
      * @param {boolean} isVideoConference isVideoConference
@@ -332,7 +308,7 @@ class GameView {
         TypeChecker.isString(username);
         TypeChecker.isBoolean(isVideoConference);
 
-        this.hudView.draw(username);
+        this.hudView.drawProfile(username);
 
         if (!isVideoConference) 
             this.hudView.removeScheduleButton();

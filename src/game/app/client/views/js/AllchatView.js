@@ -12,15 +12,19 @@ class AllchatView extends ViewWithLanguageData {
      * Creates an instance of Allchat View
      * 
      * @param {EventManager} eventManager event manager instance
+     * @param {json} languageData language data for allchat view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!AllchatView.instance) {
             return AllchatView.instance;
         }
 
         AllchatView.instance = this;
+
+        document.getElementById("allchatEmojiTrigger").title = this.languageData.tooltips.emojis;
+        document.getElementById("allchatSendButton").title = this.languageData.tooltips.sendMessage;
 
         $("#allchatWindow").hide()
 
@@ -103,11 +107,8 @@ class AllchatView extends ViewWithLanguageData {
      * @param {String} ownUsername current participant's username
      */
     draw(roomName, messages, ownUsername) {
-        document.getElementById("allchatEmojiTrigger").title = this.languageData.tooltips.emojis;
-        document.getElementById("allchatSendButton").title = this.languageData.tooltips.sendMessage;
         $('#allchatMessageInput')[0].placeholder = this.languageData.enterMessage.replace('<roomName>', roomName);
         $('#allchatHeaderText').text(roomName + ' ' + this.languageData.chat);
-
         $("#unreadAllchatMessage").text(0)
 
         $('#showRoomChat').empty();

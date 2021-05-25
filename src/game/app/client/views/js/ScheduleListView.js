@@ -11,9 +11,11 @@ class ScheduleListView extends WindowView {
 
     /**
      * Creates an instance of ScheduleListView
+     * 
+     * @param {json} languageData language data for schedule view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!ScheduleListView.instance) {
             return ScheduleListView.instance;
@@ -22,6 +24,15 @@ class ScheduleListView extends WindowView {
         ScheduleListView.instance = this;
 
         this.lectures = [];
+
+        $('#scheduleListText').text(this.languageData.scheduleList);
+        $('#lectureTitleText').text(this.languageData.lectureTitle);
+        $('#oratorNameText').text(this.languageData.oratorName);
+        $('#startingTimeText').text(this.languageData.startingTime);
+        $('#durationInMinText').text(this.languageData.durationInMin);
+        $('#seatAmountText').text(this.languageData.seatAmount);
+        $('#remarksText').text(this.languageData.remarks);
+        $('#statusText').text(this.languageData.status);
     }
 
     /**
@@ -34,15 +45,6 @@ class ScheduleListView extends WindowView {
         $('#scheduleWait').hide()
         $('#noschedule').empty();
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
-
-        $('#scheduleListText').text(this.languageData.scheduleList);
-        $('#lectureTitleText').text(this.languageData.lectureTitle);
-        $('#oratorNameText').text(this.languageData.oratorName);
-        $('#startingTimeText').text(this.languageData.startingTime);
-        $('#durationInMinText').text(this.languageData.durationInMin);
-        $('#seatAmountText').text(this.languageData.seatAmount);
-        $('#remarksText').text(this.languageData.remarks);
-        $('#statusText').text(this.languageData.status);
 
         if (lectures.length < 1) {
             $('#noschedule').text(this.languageData.noLectureFound);

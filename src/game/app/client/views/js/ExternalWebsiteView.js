@@ -8,9 +8,11 @@ class ExternalWebsiteView extends WindowView {
 
     /**
      * Creates an instance of ExternalWebsiteView
+     * 
+     * @param {json} languageData language data for externalWebsite view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!ExternalWebsiteView.instance) {
             return ExternalWebsiteView.instance;

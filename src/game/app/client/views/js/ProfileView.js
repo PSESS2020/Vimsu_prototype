@@ -7,9 +7,11 @@
 class ProfileView extends WindowView {
     /**
      * Creates an instance of ProfileView
+     * 
+     * @param {json} languageData language data for profile view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!ProfileView.instance) {
             return ProfileView.instance;

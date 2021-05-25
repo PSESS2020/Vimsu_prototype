@@ -290,7 +290,7 @@ class ClientController {
      * @param {json} languageData
      */
     handleFromServerSetSelectedLanguageData = function (languageData) {
-        this.gameView.setLanguageData(languageData);
+        this.gameView.initViews(languageData);
 
         /* Init DateParser and emit languageData */
         new DateParser(languageData.days, languageData.months);

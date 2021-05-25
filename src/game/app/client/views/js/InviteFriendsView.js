@@ -17,9 +17,10 @@ class InviteFriendsView extends WindowView {
      * Creates an instance of InviteFriendsView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for inviteFriends view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!InviteFriendsView.instance) {
             return InviteFriendsView.instance;
@@ -28,6 +29,10 @@ class InviteFriendsView extends WindowView {
         InviteFriendsView.instance = this;
 
         this.eventManager = eventManager;
+
+        $('#inviteFriendsText').text(this.languageData.chats.inviteFriends);
+        $('#selectAtLeastOneText').text(this.languageData.chats.selectAtLeastOne);
+        $('#inviteFriendsToChatText').text(this.languageData.chats.tooltips.inviteFriends);
     }
 
     /**
@@ -46,10 +51,6 @@ class InviteFriendsView extends WindowView {
         $('#toomanyinvitedfriends').hide();
         $('#toomanyinvitedfriends').empty();
         $('#createGroupChat').hide();
-
-        $('#inviteFriendsText').text(this.languageData.chats.inviteFriends);
-        $('#selectAtLeastOneText').text(this.languageData.chats.selectAtLeastOne);
-        $('#inviteFriendsToChatText').text(this.languageData.chats.tooltips.inviteFriends);
 
         this.invitedFriends = [];
 

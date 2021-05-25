@@ -11,9 +11,11 @@ class StatusBar extends ViewWithLanguageData {
 
     /**
      * Creates an instance of StatusBar
+     * 
+     * @param {json} languageData language data for statusBar
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!StatusBar.instance) {
             return StatusBar.instance;

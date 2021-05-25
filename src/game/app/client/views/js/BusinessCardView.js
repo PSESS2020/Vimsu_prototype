@@ -11,9 +11,10 @@ class BusinessCardView extends WindowView {
      * Creates an instance of BusinessCardView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for businesscard view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!BusinessCardView.instance) {
             return BusinessCardView.instance;
@@ -26,6 +27,7 @@ class BusinessCardView extends WindowView {
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
             $('#businessCardModal .modal-body').empty()
         })
+        $('#businessCardText').text(this.languageData.businessCard);
     }
 
     /**
@@ -37,8 +39,6 @@ class BusinessCardView extends WindowView {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isFriend, rank, isModerator) {
-        $('#businessCardText').text(this.languageData.businessCard);
-        
         let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
                        (businessCard.getForename() + " ") + 
                        (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 

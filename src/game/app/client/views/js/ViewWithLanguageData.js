@@ -10,21 +10,16 @@
 
     /**
      * @abstract abstract ViewWithLanguageData class
+     * 
+     * @param {json} languageData language data for specific view
      */
-    constructor() {
+    constructor(languageData) {
         super();
 
         if (new.target === ViewWithLanguageData) {
             throw new Error("Cannot construct abstract ViewWithLanguageData instances directly");
         }
-    }
 
-    /**
-     * Sets language data
-     * 
-     * @param {json} languageData language data
-     */
-    setLanguageData(languageData) {
         this.languageData = languageData;
     }
 }

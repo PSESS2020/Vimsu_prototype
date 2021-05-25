@@ -8,9 +8,11 @@ class WindowView extends ViewWithLanguageData {
 
     /**
      * @abstract abstract WindowView class
+     * 
+     * @param {json} languageData language data for specific view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (new.target === WindowView) {
             throw new Error("Cannot construct abstract WindowView instances directly");
