@@ -19,9 +19,7 @@ class GameObjectClient {
     position;
     gameObjectType;
     isClickable;
-    isIFrameObject;
-    story;
-    meetingData;
+    onClickData;
 
     /**
      * Creates an instance of Game Object on client-side

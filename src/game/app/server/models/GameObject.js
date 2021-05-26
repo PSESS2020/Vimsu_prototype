@@ -36,6 +36,10 @@ module.exports = class GameObject {
      * @param {?Object} onClickData
      * TODO add more precise documentation on properties, contents
      * and variations of onClickData-object
+     * TODO note: onClickData needs to posess getData-method
+     *      is this a good idea? Maybe better to create different classes
+     *      for the different types of data, as different kinds of data
+     *      also require different kind of client side handling...
      */
     constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, onClickData) {
 
@@ -48,6 +52,7 @@ module.exports = class GameObject {
         TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
 
+        /*
         if (iFrameData !== undefined) {
             TypeChecker.isInstanceOf(iFrameData, Object);
             TypeChecker.isString(iFrameData.title);
@@ -55,6 +60,7 @@ module.exports = class GameObject {
             TypeChecker.isInt(iFrameData.height);
             TypeChecker.isString(iFrameData.url);
         }
+        */
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -66,8 +72,7 @@ module.exports = class GameObject {
         this.#position = position;
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;
-        this.#iFrameData = iFrameData;
-        this.#story = ((story === undefined) ? [''] : story);
+        this.#onClickData = onClickData; // TODO add default.
     }
 
     /**
@@ -150,23 +155,21 @@ module.exports = class GameObject {
         return this.#isClickable;
     }
 
-    /**
-     * Gets game object iFrameData if it exists, otherwise undefined
-     * @method module:GameObject#getIFrameData
-     * 
-     * @return {?Object} iFrameData or undefined
-     */
-    getIFrameData() {
-        return this.#iFrameData;
+    getOnClickData() {
+        this.#onClickData.getData();
     }
-
-    /**
-     * Gets game object story. May be empty array.
-     * @method module:GameObject#getStory
-     * 
-     * @returns {String[]} story (may be empty array)
-     */
-    getStory() {
-        return this.#story;
-    }
+    /*
+    getState() {
+        return {
+            id:,
+            type:,
+            name:,
+            width:,
+            length:,
+            cordX:,
+            cordY:,
+            isClickable:,
+            onClickData:
+        }
+    }*/
 }

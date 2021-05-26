@@ -269,9 +269,11 @@ class ClientController {
         }
     }
 
-    /*  */
+    /*************************/
     /*  RECEIVE FROM SERVER  */
-    /*  */
+    /*************************/
+
+    // TODO use object destructuring
 
     /**
      * Message from server, gives you information if this conference is with video storage or without video storage
@@ -387,8 +389,8 @@ class ClientController {
             TypeChecker.isInt(mapElement.length);
             TypeChecker.isInt(mapElement.cordX);
             TypeChecker.isInt(mapElement.cordY);
-            TypeChecker.isBoolean(mapElement.isClickable);
-            TypeChecker.isBoolean(mapElement.isIFrameObject);
+            //TypeChecker.isBoolean(mapElement.isClickable);
+            //TypeChecker.isBoolean(mapElement.isIFrameObject);
 
         });
         TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
@@ -401,8 +403,8 @@ class ClientController {
             TypeChecker.isInt(gameObject.length);
             TypeChecker.isInt(gameObject.cordX);
             TypeChecker.isInt(gameObject.cordY);
-            TypeChecker.isBoolean(gameObject.isClickable);
-            TypeChecker.isBoolean(gameObject.isIFrameObject);
+            //TypeChecker.isBoolean(gameObject.isClickable);
+            //TypeChecker.isBoolean(gameObject.isIFrameObject);
         });
         TypeChecker.isInstanceOf(npcData, Array);
         npcData.forEach(npc => {
@@ -425,12 +427,13 @@ class ClientController {
         });
 
         //tranform MapElements to GameObjectClients
+        // TODO combine type-checking and transforming
         var listOfMapElements = [];
         listOfMapElementsData.forEach(mapElement => {
             listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.isIFrameObject, mapElement.story, mapElement.meetingData))
+                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.onClickData))
             if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
-                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.isIFrameObject, mapElement.story, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.lengt, mapElement.meetingData);
+                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.onClickData, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
             }
         });
 
@@ -1995,7 +1998,7 @@ class ClientController {
      * @param {Int} width width of parent object
      * @param {Int} length length of parent object
      */
-    addDummyClickersTo(listToAddTo, id, isIFrameObject, story, meetingData, cordX, cordY, width, length) {
+    addDummyClickersTo(listToAddTo, id, onClickData, cordX, cordY, width, length) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < length; j++) {
                 listToAddTo.push(
@@ -2007,9 +2010,7 @@ class ClientController {
                         Settings.SMALL_OBJECT_LENGTH,
                         new PositionClient(cordX + i, cordY + j),
                         true,
-                        isIFrameObject,
-                        story,
-                        meetingData
+                        onClickData
                     )
                 )
             }

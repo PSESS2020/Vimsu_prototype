@@ -212,14 +212,15 @@ class MapView extends Views {
      * @param {PositionClient} position game object position
      */
     createObjectView = function(gameObject, position) {
+        // TODO
         var objectType = gameObject.getGameObjectType();
-        var object = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getIsIFrameObject(), gameObject.getId(), gameObject.getStory());
+        var objectView = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getOnClickData());
 
-        if (object != null) {
-            this.gameObjects.push(object);
+        if (objectView != null) {
+            this.gameObjects.push(objectView);
 
             if (gameObject.getIsClickable())
-                this.clickableObjects.push(object);
+                this.clickableObjects.push(objectView);
         }
     }
 

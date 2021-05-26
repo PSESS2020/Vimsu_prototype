@@ -103,8 +103,10 @@ class GameObjectViewFactory {
             } else if (gameObjectType === GameObjectType.RIGHTTILE){
                 pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
             }
-            if (isClickable && gameObjectType === GameObjectType.LEFTSCHEDULE) {
-                gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, offset), pos, offset, objectName, this.eventManager);
+            if (isClickable) {
+                // TODO
+                // pass data and offset override
+                gameMapElementView = this.createGameObjectView(/* pass data */)
             } else {
                 gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
             }
@@ -131,20 +133,14 @@ class GameObjectViewFactory {
      *
      * @return {GameObjectView} GameObjectView instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, isIFrameObject, gameObjectID, story, meetingData) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, onClickData) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
-        TypeChecker.isBoolean(isClickable);
-        TypeChecker.isBoolean(isIFrameObject);
 
-        if (gameObjectID !== undefined) 
-            TypeChecker.isInt(gameObjectID);
-        
-        if (story !== undefined) {
-            TypeChecker.isInstanceOf(story, Array);
-            story.forEach(element => TypeChecker.isString(element));
-        }
+        // Destructuring
+        const { type } = onClickData
+        TypeChecker.isEnumOf(type, OnClickDataType)
 
         var gameObjectView = null;
         var gameObjectImage;
@@ -153,12 +149,8 @@ class GameObjectViewFactory {
 
         if (gameObjectImage !== undefined) {
             var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
-            if (isClickable && isIFrameObject) {
-                gameObjectView = new IFrameObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, this.eventManager);
-            } else if (isClickable && meetingData !== undefined) {
-                gameObjectView = new MeetingObjectView(gameObjectImage, [], pos, offset, objectName, meetingData, this.eventManager)
-            } else if (isClickable && story !== undefined) {
-                gameObjectView = new StoryObjectView(gameObjectImage, [], pos, offset, objectName, gameObjectID, gameObjectID, story, gameObjectType);
+            if (isClickable) {
+                gameObjectView = ClickableObjectViewCreators[type](onClickData)
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }
@@ -237,5 +229,10 @@ class GameObjectViewFactory {
             return { x: this.tileColumnWidth * offset.x, y: (this.tileRowHeight / 2) - image.width + offset.y } 
         }
     }
+
+    // TODO
+    // finish up
+    // also maybe move this into own file
+    
 
 }

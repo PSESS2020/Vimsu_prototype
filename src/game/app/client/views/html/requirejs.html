@@ -20,7 +20,8 @@
         '../client/models/RoomClient'], () => {
 
             requirejs(['../client/views/js/Views',
-                '../client/utils/Settings'], () => {
+                '../client/utils/Settings',
+                '../client/shared/OnClickDataType'], () => {
 
                     requirejs(['../client/views/js/ViewWithLanguageData',
                         '../client/utils/ImageLoader',
@@ -36,7 +37,8 @@
                                 '../client/views/js/MapView',
                                 '../client/views/js/GameMapElementView',
                                 '../client/views/js/AvatarView',
-                                '../client/views/js/LoadingView'], () => {
+                                '../client/views/js/LoadingView',
+                                '../client/utils/ClickableObjectViewCreators'], () => {
 
                                     requirejs([
                                         '../client/views/js/EmojiPicker',

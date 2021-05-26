@@ -274,8 +274,7 @@ module.exports = class ServerController {
                             cordX: mapElement.getPosition().getCordX(),
                             cordY: mapElement.getPosition().getCordY(),
                             isClickable: mapElement.getClickable(),
-                            isIFrameObject: mapElement.getIFrameData() !== undefined,
-                            story: mapElement.getStory(),
+                            onClickData: mapElement.getOnClickData()
                         });
                     });
 
@@ -294,9 +293,7 @@ module.exports = class ServerController {
                             cordX: gameObject.getPosition().getCordX(),
                             cordY: gameObject.getPosition().getCordY(),
                             isClickable: gameObject.getClickable(),
-                            isIFrameObject: gameObject.getIFrameData() !== undefined,
-                            story: gameObject.getStory(),
-                            meeting: gameObject.getMeetingData()
+                            onClickData: mapElement.getOnClickData()
                         });
                     });
 
