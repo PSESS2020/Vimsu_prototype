@@ -5,6 +5,7 @@ const Direction = require('../../client/shared/Direction.js');
 const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const GlobalStrings = require('../../client/shared/GlobalStrings.js');
 const DoorLogos = require('../utils/DoorLogos.js');
+const Messages = require('../utils/Messages.js');
 
 /**
  * The Door Factory
@@ -136,36 +137,45 @@ module.exports = class DoorFactory {
      * 
      * @method module:DoorFactory#createCustomDoor
      * 
-     * @param {String} assetPath // The path to the logo being portrayed
-     *                           // above the door
-     * @param {String} wallSide 
-     * @param {Position} mapPosition 
-     * @param {Position} targetPosition 
-     * @param {Direction} directionOnExit 
-     * @param {Boolean} isOpen 
-     * @param {String} closedMessage 
-     * @param {String} codeToOpen 
+     * @param { String } roomId 
+     * @param { wallSide:         String,
+     *          ?logo:            String, 
+     *          positionOfDoor:   int[2],
+     *          positionOnExit:   Array[2],
+     *          directionOnExit:  Direction,
+     *          ?isOpen:          Boolean,
+     *          ?closedMessage:   String[],
+     *          ?codeToOpen:      String     } doorData 
      * 
      * @returns {Door} A door instance with the passed attributes
      */
-    createCustomDoor(assetPath, wallSide, mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen) {
+    createCustomDoor(roomId, doorData) {
 
-        this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
+        // TODO add handling for Lecture Doors
+        // maybe make it determined by logo?
+        //this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
+
+        const { wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit } = doorData
+        var { logo, isOpen, closedMessage, codeToOpen } = doorData
 
         var enterPositionData;
 
-        if (wallSide === GlobalStrings.LEFT) {
+        if ( wallSide === GlobalStrings.LEFT ) {
             enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        } else if (wallSide === GlobalStrings.RIGHT) {
+        } else if ( wallSide === GlobalStrings.RIGHT ) {
             enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
         } else {
             throw new Error(`${wallSide} is not a legal option for the wallside of a door.`);
         }
 
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
+        assetPath = this.#getDoorLogo(logo, wallSide)
 
-        
+        if ( isOpen        === undefined) { isOpen        = true }
+        if ( closedMessage === undefined) { closedMessage = Messages.STANDARDDOORCLOSED }
+
+        const { enterPositions, enterPositionWithoutClick } = enterPositionData
+
+        // TODO redo
         let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
         let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
 
@@ -174,11 +184,11 @@ module.exports = class DoorFactory {
         return new Door(doorId,   
                 TypeOfDoor[wallSide + "_DOOR"], 
                 assetPath,
-                mapPosition, 
+                new Position(roomId, xPos, yPos), 
                 enterPositionWithoutClick, 
                 enterPositions, 
                 targetPosition, 
-                directionOnExit, 
+                new Position(idExit, xExit, yExit),
                 isOpen, 
                 closedMessage, 
                 codeToOpen);      
@@ -243,11 +253,11 @@ module.exports = class DoorFactory {
      *  
      * @returns {String} The key for the image asset of the logo
      */
-    getDoorLogo (logoName, logoVariant) {
+    #getDoorLogo = function (logoName, logoVariant) {
         var logo
         if (DoorLogos.hasOwnProperty(logoName)) { logo = DoorLogos[logoName] }
         else { 
-            DoorLogos[GlobalStrings.DEFAULT]
+            logo = DoorLogos[GlobalStrings.DEFAULT]
             console.log(`${logoName} is not a known door logo. Reverted to ${GlobalStrings.DEFAULT}.`) 
         }
         if (logo.hasOwnProperty(logoVariant)) { return logo[logoVariant] } 

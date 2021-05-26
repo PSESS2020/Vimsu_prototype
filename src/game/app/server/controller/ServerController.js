@@ -23,7 +23,6 @@ const GroupChat = require('../models/GroupChat');
 const dbClient = require('../../../../config/db');
 const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
-const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
 const Participant = require('../models/Participant.js');
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');

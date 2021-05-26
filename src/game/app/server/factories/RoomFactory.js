@@ -52,7 +52,7 @@ module.exports = class RoomFactory {
     buildRoomFrom(roomData) {
         // TODO add destructuring
         var type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
-        var room = new Room(this.#roomID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
+        var room = new Room(roomData.ID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
 
         room.addMapElements(
             this.#buildWallsAndTiles(
@@ -107,7 +107,7 @@ module.exports = class RoomFactory {
      * Takes a list of data-packets, formatted as JSON, parses the relevant data
      * and passes it to GameObjectFactory to create new GameObject instances.
      * 
-     * @param {Array of { type:         GameObjectType, 
+     * @param { Array of { type:         GameObjectType, 
      *                    position:     int[2],
      *                    ?variation:   String,
      *                    ?isClickable: Boolean,
@@ -119,7 +119,7 @@ module.exports = class RoomFactory {
      *                    ?width:       int,
      *                    ?length:      int,
      *                    ?isSolid:     Boolean,
-     *                    ?assetSet:    String[] OR String[][] }} mapElements
+     *                    ?assetSet:    String[] OR String[][] } } mapElements
      * 
      * @returns {GameObject[]} Array of newly created map elements.
      */
@@ -195,7 +195,7 @@ module.exports = class RoomFactory {
     }
 
     /**
-     * 
+     * TODO add documentation
      * @param {*} doors 
      */
     #buildDoors = function (roomId, doors) {
@@ -207,48 +207,8 @@ module.exports = class RoomFactory {
         // doorData = {wallSide, logo, positionOfDoor,
         //            positionOnExit, directionOnExit, isOpen,
         //            closedMessage, codeToOpen}
-        doors.forEach(doorData => {     
-            if (doorData.logo === undefined) {
-                doorData.logo = "default";
-            }
-
-            let logo = this.#getDoorLogo(doorData.logo, doorData.wallSide);
-            if (doorData.isOpen === undefined) {
-                listOfDoors.push(
-                    this.#doorFactory.createCustomDoor(logo,
-                        doorData.wallSide,
-                        new Position(this.#roomID,
-                            doorData.positionOfDoor[0],
-                            doorData.positionOfDoor[1]),
-                        new Position(doorData.positionOnExit[0],
-                            doorData.positionOnExit[1],
-                            doorData.positionOnExit[2]),
-                        doorData.directionOnExit,
-                        true, // isOpen
-                        DoorClosedMessages.STANDARDDOORCLOSED) // closedMessage
-                );         
-            } else {
-                // this requires error handling for when a door
-                // is defined as closed but there is no message
-                // or code to open defined
-                if (doorData.closedMessage === undefined) {
-                    doorData.closedMessage = DoorClosedMessages.STANDARDDOORCLOSED
-                }
-                listOfDoors.push(
-                    this.#doorFactory.createCustomDoor(logo,
-                        doorData.wallSide,
-                        new Position(this.#roomID,
-                            doorData.positionOfDoor[0],
-                            doorData.positionOfDoor[1]),
-                        new Position(doorData.positionOnExit[0],
-                            doorData.positionOnExit[1],
-                            doorData.positionOnExit[2]),
-                        doorData.directionOnExit,
-                        doorData.isOpen,
-                        doorData.closedMessage,
-                        doorData.codeToOpen)
-                );
-            }   
+        doors.forEach(doorData => {          
+            listOfDoors.push(this.#doorFactory(roomId, doorData))
 
             // Create tile inside of door
             // if door is on the left side, same x, one less y
@@ -256,8 +216,8 @@ module.exports = class RoomFactory {
             let xPos = (doorData.wallSide == GlobalStrings.RIGHT) ? doorData.positionOfDoor[0] + 1 : doorData.positionOfDoor[0];
             let yPos = (doorData.wallSide == GlobalStrings.LEFT) ? doorData.positionOfDoor[1] - 1 : doorData.positionOfDoor[1];
 
+            // TODO this is now broken
             listOfMapElements.push(this.#objFactory.createCustomObject(this.#roomID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
-
         })
 
         // TODO redo

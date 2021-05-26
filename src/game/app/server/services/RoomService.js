@@ -3,7 +3,7 @@ const Room = require('../models/Room.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const Floorplan = require('../utils/Floorplan.js');
-const RoomFactory = require('../models/RoomFactory.js');
+const RoomFactory = require('../factories/RoomFactory.js');
 
 /**
  * The Room Service
