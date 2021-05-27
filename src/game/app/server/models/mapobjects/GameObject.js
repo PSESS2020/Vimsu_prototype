@@ -1,6 +1,6 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const GameObjectType = require('../../client/shared/GameObjectType.js');
-const Position = require('./Position.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const GameObjectType = require('../../../client/shared/GameObjectType.js');
+const Position = require('../Position.js');
 
 /**
  * The Game Object Model
@@ -158,18 +158,23 @@ module.exports = class GameObject {
     getOnClickData() {
         this.#onClickData.getData();
     }
-    /*
+
+    /**
+     * 
+     * @returns {Object} An unchangeable object containing all information
+     *                   about the current state of the object
+     */
     getState() {
-        return {
-            id:,
-            type:,
-            name:,
-            width:,
-            length:,
-            cordX:,
-            cordY:,
-            isClickable:,
-            onClickData:
-        }
-    }*/
+        return Object.freeze({
+            id: this.getId(),
+            type: this.getGameObjectType(),
+            name: this.getName(),
+            width: this.getWidth(),
+            length: this.getLength(),
+            cordX: this.getPosition().getCordX(),
+            cordY: this.getPosition().getCordY(),
+            isClickable: this.getClickable(),
+            onClickData: this.getOnClickData()
+        })
+    }
 }

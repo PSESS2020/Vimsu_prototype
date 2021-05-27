@@ -1,9 +1,9 @@
-const GameObject = require('../models/GameObject.js');
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const GameObjectType = require('../../client/shared/GameObjectType.js');
-const Position = require('../models/Position.js');
-const GameObjectInfo = require('../utils/GameObjectInfo.js');
-const GlobalStrings = require('../../client/shared/GlobalStrings.js');
+const GameObject = require('../mapobjects/GameObject.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const GameObjectType = require('../../../client/shared/GameObjectType.js');
+const Position = require('../Position.js');
+const GameObjectInfo = require('../../utils/GameObjectInfo.js');
+const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 
 
 /**

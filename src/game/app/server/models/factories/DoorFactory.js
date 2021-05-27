@@ -1,11 +1,11 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Door = require('../models/Door.js');
-const Position = require('../models/Position.js');
-const Direction = require('../../client/shared/Direction.js');
-const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
-const GlobalStrings = require('../../client/shared/GlobalStrings.js');
-const DoorLogos = require('../utils/DoorLogos.js');
-const Messages = require('../utils/Messages.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const Door = require('../mapobjects/Door.js');
+const Position = require('../Position.js');
+const Direction = require('../../../client/shared/Direction.js');
+const TypeOfDoor = require('../../../client/shared/TypeOfDoor.js');
+const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
+const DoorLogos = require('../../utils/DoorLogos.js');
+const Messages = require('../../utils/Messages.js');
 
 /**
  * The Door Factory

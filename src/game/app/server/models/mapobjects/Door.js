@@ -1,7 +1,7 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Position = require('./Position.js');
-const Direction = require('../../client/shared/Direction.js');
-const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const Position = require('../Position.js');
+const Direction = require('../../../client/shared/Direction.js');
+const TypeOfDoor = require('../../../client/shared/TypeOfDoor.js');
 
 /**
  * The Door Model

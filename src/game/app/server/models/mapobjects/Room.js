@@ -1,12 +1,12 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const TypeOfRoom = require('../../../client/shared/TypeOfRoom.js');
 const GameObject = require('./GameObject.js');
-const Participant = require('./Participant.js');
-const Position = require('./Position.js');
+const Participant = require('../Participant.js');
+const Position = require('../Position.js');
 const Door = require('./Door.js');
 const NPC = require('./NPC.js');
-const TypeOfDoor = require('../../client/shared/TypeOfDoor.js');
-const Settings = require('../../client/utils/Settings.js');
+const TypeOfDoor = require('../../../client/shared/TypeOfDoor.js');
+const Settings = require('../../../client/utils/Settings.js');
 
 /**
  * The Room Model

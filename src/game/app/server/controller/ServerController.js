@@ -264,17 +264,7 @@ module.exports = class ServerController {
                     let mapElementsData = [];
 
                     mapElements.forEach(mapElement => {
-                        mapElementsData.push({
-                            id: mapElement.getId(),
-                            type: mapElement.getGameObjectType(),
-                            name: mapElement.getName(),
-                            width: mapElement.getWidth(),
-                            length: mapElement.getLength(),
-                            cordX: mapElement.getPosition().getCordX(),
-                            cordY: mapElement.getPosition().getCordY(),
-                            isClickable: mapElement.getClickable(),
-                            onClickData: mapElement.getOnClickData()
-                        });
+                        mapElementsData.push(mapElement.getState());
                     });
 
                     //Get GameObjects of the starting room
@@ -283,17 +273,7 @@ module.exports = class ServerController {
 
                     //Sends all gameObjects of starting room to client
                     gameObjects.forEach(gameObject => {
-                        gameObjectData.push({
-                            id: gameObject.getId(),
-                            type: gameObject.getGameObjectType(),
-                            name: gameObject.getName(),
-                            width: gameObject.getWidth(),
-                            length: gameObject.getLength(),
-                            cordX: gameObject.getPosition().getCordX(),
-                            cordY: gameObject.getPosition().getCordY(),
-                            isClickable: gameObject.getClickable(),
-                            onClickData: mapElement.getOnClickData()
-                        });
+                        gameObjectData.push(gameObject.getState());
                     });
 
                     //Get all NPCs from starting room
@@ -302,14 +282,7 @@ module.exports = class ServerController {
 
                     //Sends all NPCs to client
                     npcs.forEach(npc => {
-                        npcData.push({
-                            id: npc.getId(),
-                            name: npc.getName(),
-                            cordX: npc.getPosition().getCordX(),
-                            cordY: npc.getPosition().getCordY(),
-                            direction: npc.getDirection(),
-                            shirtColor: npc.getShirtColor()
-                        });
+                        npcData.push(npcData.getState());
                     });
 
                     //Get all doors from starting room
@@ -318,14 +291,7 @@ module.exports = class ServerController {
 
                     //Sends all doors to client
                     doors.forEach(door => {
-                        doorData.push({
-                            id: door.getId(),
-                            typeOfDoor: door.getTypeOfDoor(),
-                            name: door.getName(),
-                            cordX: door.getMapPosition().getCordX(),
-                            cordY: door.getMapPosition().getCordY(),
-                            targetRoomId: door.getTargetRoomId()
-                        });
+                        doorData.push(door.getState());
                     });
 
                     //Emit this business card to other participants in the room
