@@ -78,7 +78,7 @@ class GameView {
         this.gameEngine = new IsometricEngine(new LoadingView(languageData.loadingConference));
         this.hudView = new HUDView(this.eventManager, languageData.hud);
         this.statusBar = new StatusBar(languageData.hud.statusBar);
-        this.notifBar = new NotificationBar(this.eventManager);
+        this.notifBar = new NotificationBar(this.eventManager, languageData.hud.notifBar);
         this.allchatView = new AllchatView(this.eventManager, languageData.hud.allchat);
         new InputGroupNameView(this.eventManager, languageData.chats);
         this.currentLecturesView = new CurrentLecturesView(this.eventManager, languageData.currentLectures);

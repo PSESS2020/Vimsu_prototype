@@ -165,6 +165,15 @@
                     "sendMessage": "Send",
                     "emojis": "Pick emojis"
                 }
+            },
+            "notifBar": {
+                "newMessage": "New message from usernamePlaceholder.",
+                "newChat": "usernamePlaceholder init chat with you.",
+                "newGroupChat": "usernamePlaceholder invited you to the group chat groupNamePlaceholder.",
+                "newMeeting": "You were invited to the video meeting meetingNamePlaceholder.",
+                "newFriendRequest": "New friend request from usernamePlaceholder.",
+                "requestAccepted": "usernamePlaceholder accepted your friend request.",
+                "inCall": "You are in call with meetingNamePlaceholder."
             }
         },
         "days": {

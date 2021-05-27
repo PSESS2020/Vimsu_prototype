@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class NotificationBar extends Views {
+class NotificationBar extends ViewWithLanguageData {
 
     eventManager;
 
@@ -12,9 +12,10 @@ class NotificationBar extends Views {
      * Creates an instance of NotificationBar
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for NotificationBar
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!NotificationBar.instance) {
             return NotificationBar.instance;
@@ -73,7 +74,7 @@ class NotificationBar extends Views {
      */
     drawNewMessage(senderUsername, chatId) {
         const id = this.getNewMessageId(senderUsername, chatId)
-        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
+        this.addNewNotificationDiv(id, `${this.languageData.newMessage.replace('usernamePlaceholder', senderUsername)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -99,7 +100,7 @@ class NotificationBar extends Views {
      */
     drawNewChat(senderUsername, chatId) {
         const id = this.getNewChatId(chatId)
-        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true)
+        this.addNewNotificationDiv(id, `${this.languageData.newChat.replace('usernamePlaceholder', senderUsername)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -126,7 +127,7 @@ class NotificationBar extends Views {
      */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
         const id = this.getNewGroupChatId(chatId)
-        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true)
+        this.addNewNotificationDiv(id,  `${this.languageData.newGroupChat.replace('usernamePlaceholder', creatorUsername).replace('groupNamePlaceholder', groupName)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -152,7 +153,7 @@ class NotificationBar extends Views {
      */
     drawNewMeeting(meetingName, meetingID) {
         const id = this.getNewMeetingId(meetingID)
-        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true)
+        this.addNewNotificationDiv(id, `${this.languageData.newMeeting.replace('meetingNamePlaceholder', meetingName)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -178,7 +179,7 @@ class NotificationBar extends Views {
      */
     drawNewFriendRequest(senderUsername) {
         const id = this.getNewFriendRequestId(senderUsername)
-        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true)
+        this.addNewNotificationDiv(id, `${this.languageData.newFriendRequest.replace('usernamePlaceholder', senderUsername)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -207,7 +208,7 @@ class NotificationBar extends Views {
      */
     drawNewFriend(friendUsername) {
         const id = this.getNewFriendId(friendUsername)
-        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true)
+        this.addNewNotificationDiv(id, `${this.languageData.requestAccepted.replace('usernamePlaceholder', friendUsername)}`, true)
 
         $('#' + id).on('click', (e) => {
             this.removeNotifDiv(id)
@@ -233,7 +234,7 @@ class NotificationBar extends Views {
      */
     drawMinimizedMeeting(meeting) {
         const id = this.getMinimizedMeetingId(meeting.id)
-        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false)
+        this.addNewNotificationDiv(id, `${this.languageData.inCall.replace('meetingNamePlaceholder', meeting.name)}`, false)
 
         $('#' + id).on('click', (e) => {
             $('#meetingWindow').show();
