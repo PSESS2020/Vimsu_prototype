@@ -81,8 +81,8 @@ class GameView {
         this.notifBar = new NotificationBar(this.eventManager);
         this.allchatView = new AllchatView(this.eventManager, languageData.hud.allchat);
         new InputGroupNameView(this.eventManager, languageData.chats);
-        this.currentLecturesView = new CurrentLecturesView(this.eventManager);
-        this.lectureView = new LectureView(this.eventManager);
+        this.currentLecturesView = new CurrentLecturesView(this.eventManager, languageData.currentLectures);
+        this.lectureView = new LectureView(this.eventManager, languageData.lecture);
         this.friendRequestListView = new FriendRequestListView(this.eventManager);
         this.friendListView = new FriendListView(this.eventManager);
         this.inviteFriendsView = new InviteFriendsView(this.eventManager, {chats: languageData.chats, businessCard: languageData.businessCard});

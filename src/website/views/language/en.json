@@ -273,6 +273,37 @@
                 "sendCode": "Sends the code you entered in the input field"
             }
         },
-        "loadingConference": "Loading Conference percentagePlaceholder . . ."
+        "loadingConference": "Loading Conference percentagePlaceholder . . .",
+        "currentLectures": {
+            "by": "By",
+            "start": "Start",
+            "duration": "Duration",
+            "minutes": "minutes",
+            "seats": "seats",
+            "participants": "participants",
+            "fullLecture": "Lecture is currently full.",
+            "enter": "Enter",
+            "currentLectures": "Current Lectures",
+            "noLectures": "Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later."
+        },
+        "lecture": {
+            "lectureChat": "Lecture Chat",
+            "questionsAfterLecture": "You can ask questions in this chat after the lecture.",
+            "chatAfterLecture": "This chat will be opened after the lecture.",
+            "moderatorRights": "You have the right to close the lecture or to ban participants after the lecture.",
+            "secondsTill": "seconds left till the",
+            "presentationStarts": "presentation starts",
+            "notOverWithToken": "The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?",
+            "notOverOrator": "The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?",
+            "notOverWithoutToken": "The lecture is not over! Are you sure you want to leave?",
+            "comeBackOnTime": "When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!",
+            "send": "Send",
+            "enterMessage": "Enter message",
+            "tokenMessages": {
+                "revoke": "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. Please remember to follow chat etiquette.",
+                "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
+                "hasToken": "You obtained a question token!"
+            }
+        }
     }
 }

@@ -273,6 +273,37 @@
                 "sendCode": "Sendet den eingegebenen Code"
             }
         },
-        "loadingConference": "Konferenz wird geladen percentagePlaceholder . . ."
+        "loadingConference": "Konferenz wird geladen percentagePlaceholder . . .",
+        "currentLectures": {
+            "by": "Von",
+            "start": "Beginn",
+            "duration": "Dauer",
+            "minutes": "Minuten",
+            "seats": "Sitzplätze",
+            "participants": "Teilnehmer",
+            "fullLecture": "Vortrag ist momentan voll.",
+            "enter": "Beitreten",
+            "currentLectures": "Laufende Vorträge",
+            "noLectures": "Vorträge werden hier 10 Minuten vor Start angezeigt. Wirf einen Blick auf den Zeitplan an und komme später wieder."
+        },
+        "lecture": {
+            "lectureChat": "Vortragschat",
+            "questionsAfterLecture": "Du kannst nach dem Vortrag Fragen stellen.",
+            "chatAfterLecture": "Der Chat wird nach dem Vortrag geöffnet.",
+            "moderatorRights": "Du hast nach dem Vortrag das Recht, den Vortrag zu schließen und Teilnehmer zu bannen.",
+            "secondsTill": "Sekunden bis die",
+            "presentationStarts": "Präsentation startet",
+            "notOverWithToken": "Der Vortrag ist nicht zu Ende! Wenn du ihn verlässt, hast du 5 Minuten Zeit zurückzukommen. Brauchst du länger, läuft dein Token ab. Sicher, dass du den Vortrag verlassen möchtest?",
+            "notOverOrator": "Der Vortrag ist nicht zu Ende! Um die Fragen der Zuhörer zu beantworten musst du rechtzeitig vor Ende des Vortrags zurück sein. Sicher, dass du den Vortrag verlassen möchtest?",
+            "notOverWithoutToken": "Der Vortrag ist nicht zu Ende! Sicher, dass du den Vortrag verlassen möchtest?",
+            "comeBackOnTime": "Wenn du gehst, hast du 5 Minuten nach Vortragsbeginn Zeit, zurückzukommen. Nach dieser Zeit läuft dein Token für diesen Vortrag ab. Komme rechtzeitig wieder!",
+            "send": "Senden",
+            "enterMessage": "Nachricht eingeben",
+            "tokenMessages": {
+                "revoke": "Dein Token wurde von einem Moderator oder vom Redner widerrufen. Aus diesem Grund kannst du keine Fragen mehr in den Vortragschat schreiben. Bitte befolge zukünftig die Chatregeln.",
+                "timeout": "Du hast mehr als 5 Minuten des Vortrags verpasst. Aus diesem Grund kannst du keine Fragen in den Vortragschat schreiben.",
+                "hasToken": "Du hast den Frage-Token erhalten!"
+            }
+        }
     }
 }
