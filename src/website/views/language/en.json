@@ -332,6 +332,7 @@
                 "openMeeting": "Open meeting",
                 "minimizeMeeting": "Minimize meeting, voice chat will stay active"
             }
-        }
+        },
+        "npcSays": "npcNamePlaceholder says..."
     }
 }

@@ -96,7 +96,7 @@ class GameView {
         this.largerGlobalChatView = new LargerGlobalChatView();
         this.profileView = new ProfileView(languageData.businessCard);
         this.rankListView = new RankListView(this.eventManager, languageData.ranklist);
-        this.npcStoryView = new NPCStoryView();
+        this.npcStoryView = new NPCStoryView(languageData.npcSays);
         this.externalWebsiteView = new ExternalWebsiteView(languageData.externalWebsite);
         this.newAchievementView = new NewAchievementView();
         this.achievementView = new AchievementView(languageData.achievements);
