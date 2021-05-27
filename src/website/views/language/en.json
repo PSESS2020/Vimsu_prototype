@@ -334,6 +334,11 @@
                 "minimizeMeeting": "Minimize meeting, voice chat will stay active"
             }
         },
-        "npcSays": "npcNamePlaceholder says..."
+        "npcSays": "npcNamePlaceholder says...",
+        "newAchievement": {
+            "unlocked": "New Achievement Unlocked!",
+            "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Now Unlocked!",
+            "unlockedWithDescription": "You have unlocked a new achievement: descriptionPlaceholder"
+        }
     }
 }

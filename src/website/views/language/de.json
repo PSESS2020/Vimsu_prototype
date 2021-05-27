@@ -334,6 +334,11 @@
                 "minimizeMeeting": "Meeting minmieren, Sprachchat bleibt aktiv"
             }
         },
-        "npcSays": "npcNamePlaceholder sagt..."
+        "npcSays": "npcNamePlaceholder sagt...",
+        "newAchievement": {
+            "unlocked": "Neuen Erfolg freigeschalten!",
+            "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder jetzt freigeschalten!",
+            "unlockedWithDescription": "Du hast einen neuen Erfolg freigeschalten: descriptionPlaceholder"
+        }
     }
 }

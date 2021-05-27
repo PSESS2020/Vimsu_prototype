@@ -98,7 +98,7 @@ class GameView {
         this.rankListView = new RankListView(this.eventManager, languageData.ranklist);
         this.npcStoryView = new NPCStoryView(languageData.npcSays);
         this.externalWebsiteView = new ExternalWebsiteView(languageData.externalWebsite);
-        this.newAchievementView = new NewAchievementView();
+        this.newAchievementView = new NewAchievementView(languageData.newAchievement);
         this.achievementView = new AchievementView(languageData.achievements);
         this.businessCardView = new BusinessCardView(this.eventManager, languageData.businessCard);
         this.successesBar = new SuccessesBar();
