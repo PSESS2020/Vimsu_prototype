@@ -13,9 +13,10 @@ class FriendListView extends WindowView {
      * Creates an instance of FriendListView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for friendList view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!FriendListView.instance) {
             return FriendListView.instance;
@@ -33,6 +34,9 @@ class FriendListView extends WindowView {
             $('#friendRequestListWait').show();
             this.eventManager.handleFriendRequestListClicked();
         })
+
+        $('#yourFriendListText').text(this.languageData.friendList.friendList);
+        $('#requestsText').text(this.languageData.friendList.requests);
     }
 
     /**
@@ -67,8 +71,8 @@ class FriendListView extends WindowView {
                                 <label class="name lead">${fullname}</label>
                                 ${businessCard.getJob() || businessCard.getCompany() ?
                                     `<div>
-                                        <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                            " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                        <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : this.languageData.businessCard.unknown) + 
+                                            " " + this.languageData.businessCard.at + " " + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.businessCard.unknown)}
                                     </div>`
                                 : 
                                     ``
@@ -88,8 +92,12 @@ class FriendListView extends WindowView {
                                 <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="min-width: 5px; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
-                                <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
-                                <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                                <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.chatNow}" type="button">
+                                    ${this.languageData.friendList.chat}
+                                </button>
+                                <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.removeFriend}" type="button">
+                                    ${this.languageData.friendList.unfriend}
+                                </button>
                             </div>
                         </span>
                     </div>  
@@ -106,7 +114,7 @@ class FriendListView extends WindowView {
             $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
                 this.eventManager.handleRemoveNewFriendNotif(businessCard.getUsername());
 
-                var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
+                var result = confirm(this.languageData.friendList.sureToRemove.replace('usernamePlaceholder', businessCard.getUsername()));
                 if (result)
                     this.eventManager.handleRemoveFriend(businessCard.getParticipantId());
                 else
@@ -152,7 +160,7 @@ class FriendListView extends WindowView {
      */
     handleEmptyFriendlist(businessCards) {
         if (businessCards && businessCards.length < 1) {
-            $('#nofriend').text("No friend is found. Chat with others and send some friend requests!");
+            $('#nofriend').text(this.languageData.friendList.noFriends);
             return false;
         }
 

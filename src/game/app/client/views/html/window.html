@@ -80,7 +80,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
+                <h5 class="modal-title" id="friendListModalTitle">
+                    <span id="yourFriendListText"></span>
+                </h5>
                 <div class="d-flex flex-row justify-content-end">
                     <div class="friendRequestListButton">
                         <a class="action_button nav-item nav-link d-flex flex-column"
@@ -88,7 +90,9 @@
                             data-toggle="modal" title="Received friend requests" href="">
                             <i class="fa fa-user-plus navbarIcons"
                                 style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                            <small style="color: antiquewhite; font-size: 10px;">Requests</small>
+                            <small style="color: antiquewhite; font-size: 10px;">
+                                <span id="requestsText"></span>
+                            </small>
                         </a>
                     </div>
                     <div>
@@ -118,7 +122,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
             <div class="modal-header">
-                <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
+                <h5 class="modal-title" id="friendRequestListModalTitle">
+                    <span id="yourFriendRequestListText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>

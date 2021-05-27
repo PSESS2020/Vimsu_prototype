@@ -304,6 +304,26 @@
                 "timeout": "Du hast mehr als 5 Minuten des Vortrags verpasst. Aus diesem Grund kannst du keine Fragen in den Vortragschat schreiben.",
                 "hasToken": "Du hast den Frage-Token erhalten!"
             }
+        },
+        "friendList": {
+            "friendList": "Freundesliste",
+            "requests": "Anfrage",
+            "friendRequestList": "Freundschaftsanfragen",
+            "sureToRemove": "Sicher, dass du usernamePlaceholder von deiner Freundesliste entfernen möchtest?",
+            "noFriends": "Keine Freunde gefunden. Chatte mit anderen und versende Freundschaftsanfragen!",
+            "noRequests": "Keine Freundschaftsanfragen erhalten",
+            "unfriend": "Freund entfernen",
+            "accept": "Annehmen",
+            "reject": "Ablehnen",
+            "accepted": "Angenommen",
+            "rejected": "Abgelehnt",
+            "chat": "Chat",
+            "tooltips": {
+                "chatNow": "Freundesliste schließen und chatten",
+                "removeFriend": "Von Freundesliste entfernen",
+                "acceptRequest": "Anfrage akzeptieren und als Freund hinzufügen",
+                "rejectRequest": "Anfrage ablehnen"
+            }
         }
     }
 }

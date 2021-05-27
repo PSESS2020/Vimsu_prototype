@@ -13,9 +13,10 @@ class FriendRequestListView extends WindowView {
      * Creates an instance of FriendRequestListView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for friendRequestList view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!FriendRequestListView.instance) {
             return FriendRequestListView.instance;
@@ -24,6 +25,7 @@ class FriendRequestListView extends WindowView {
         FriendRequestListView.instance = this;
 
         this.eventManager = eventManager;
+        $('#yourFriendRequestListText').text(this.languageData.friendList.friendRequestList);
     }
 
     /**
@@ -67,20 +69,28 @@ class FriendRequestListView extends WindowView {
                         <label class="name lead">${fullname}</label>
                         ${businessCard.getJob() || businessCard.getCompany() ?
                             `<div>
-                                <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                    " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : this.languageData.businessCard.unknown) + 
+                                    " " + this.languageData.businessCard.at + " " + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.businessCard.unknown)}
                             </div>`
                         : 
                             ``
                         }
                     </div>
                     <div class="col-2")>
-                        <button id="${"accept" + businessCard.getParticipantId()}" title="Remove from friend request and add to friend list" class="btn btn-blue " style="width: 75px;">Accept</button>
-                        <button id="${"reject" + businessCard.getParticipantId()}" title="Remove from friend request and reject" class="btn btn-white" style="margin-top: 10px; width: 75px;">Reject</button>
-                        <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">Accepted</h6>
-                        <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>Reject</button>
-                        <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-blue" type ="button" style="cursor: not-allowed; display: none;" disabled>Accept</button>
-                        <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">Rejected</h6>
+                        <button id="${"accept" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.acceptRequest}" class="btn btn-blue " style="width: 75px;">
+                            ${this.languageData.friendList.accept}
+                        </button>
+                        <button id="${"reject" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.rejectRequest}" class="btn btn-white" style="margin-top: 10px; width: 75px;">
+                            ${this.languageData.friendList.reject}
+                        </button>
+                        <h6 style="margin-top: 9px; display: none;" id="${"accepted" + businessCard.getParticipantId()}">${this.languageData.friendList.accepted}</h6>
+                        <button id="${"rejectdisable" + businessCard.getParticipantId()}" class="btn btn-white" type ="button" style="margin-top: 10px; cursor: not-allowed; display:none;" disabled>
+                            ${this.languageData.friendList.reject}
+                        </button>
+                        <button id="${"acceptdisable" + businessCard.getParticipantId()}" class="btn btn-blue" type ="button" style="cursor: not-allowed; display: none;" disabled>
+                            ${this.languageData.friendList.accept}
+                        </button>
+                        <h6 style="margin-top: 20px; margin-left: 4px; display:none" id="${"rejected" + businessCard.getParticipantId()}">${this.languageData.friendList.rejected}</h6>
                     </div>
                 </div>
             </li>
@@ -164,7 +174,7 @@ class FriendRequestListView extends WindowView {
      */
     handleEmptyFriendRequestList(businessCards) {
         if (businessCards && businessCards.length < 1) {
-            $('#nofriendrequest').text("No friend request received.")
+            $('#nofriendrequest').text(this.languageData.friendList.noRequests)
             return false;
         }
 

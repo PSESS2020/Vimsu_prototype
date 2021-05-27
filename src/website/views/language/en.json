@@ -304,6 +304,26 @@
                 "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
                 "hasToken": "You obtained a question token!"
             }
+        },
+        "friendList": {
+            "friendList": "Friend List",
+            "requests": "Requests",
+            "friendRequestList": "Friend Request List",
+            "sureToRemove": "Are you sure you want to remove usernamePlaceholder from your friend list?",
+            "noFriends": "No friends were found. Chat with others and send some friend requests!",
+            "noRequests": "No friend requests received.",
+            "unfriend": "Unfriend",
+            "chat": "Chat",
+            "accept": "Accept",
+            "reject": "Reject",
+            "accepted": "Accepted",
+            "rejected": "Rejected",
+            "tooltips": {
+                "chatNow": "Close friend list and chat now",
+                "removeFriend": "Remove from friend list",
+                "acceptRequest": "Remove from friend request and add to friend list",
+                "rejectRequest": "Remove from friend request and reject"
+            }
         }
     }
 }
