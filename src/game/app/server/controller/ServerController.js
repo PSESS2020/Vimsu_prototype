@@ -23,7 +23,7 @@ const GroupChat = require('../models/GroupChat');
 const dbClient = require('../../../../config/db');
 const blobClient = require('../../../../config/blob');
 const TypeChecker = require('../../client/shared/TypeChecker');
-const Participant = require('../models/Participant.js');
+const Participant = require('../models/mapobjects/Participant.js');
 const Group = require('../models/Group.js');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
 const GroupService = require('../services/GroupService');
@@ -282,7 +282,7 @@ module.exports = class ServerController {
 
                     //Sends all NPCs to client
                     npcs.forEach(npc => {
-                        npcData.push(npcData.getState());
+                        npcData.push(npc.getState());
                     });
 
                     //Get all doors from starting room

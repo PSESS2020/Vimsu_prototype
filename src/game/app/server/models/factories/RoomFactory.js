@@ -1,15 +1,15 @@
-const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
-const Room = require('../models/Room.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
+const TypeOfRoom = require('../../../client/shared/TypeOfRoom.js');
+const Room = require('../mapobjects/Room.js');
 const GameObjectFactory = require('./GameObjectFactory.js');
 const DoorFactory = require('./DoorFactory.js');
-const Position = require('../models/Position.js');
+const Position = require('../Position.js');
 const NPCFactory = require('./NPCFactory.js');
-const GameObjectType = require('../../client/shared/GameObjectType.js');
-const GlobalStrings = require('../../client/shared/GlobalStrings.js');
-const GameObjectInfo = require('../utils/GameObjectInfo.js');
 const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
-const DoorLogos = require('../utils/DoorLogos.js');
+const GameObjectType = require('../../../client/shared/GameObjectType.js');
+const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
+const GameObjectInfo = require('../../utils/GameObjectInfo.js');
+const DoorLogos = require('../../utils/DoorLogos.js');
 
 /**
  * Churns out Room instances. Singleton.

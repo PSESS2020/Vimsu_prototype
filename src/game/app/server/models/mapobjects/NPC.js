@@ -107,4 +107,15 @@ module.exports = class NPC {
     getShirtColor() {
         return this.#shirtColor;
     }
+
+    getState() {
+        return Object.freeze({
+            id: this.getId(),
+            name: this.getName(),
+            cordX: this.getPosition().getCordX(),
+            cordY: this.getPosition().getCordY(),
+            direction: this.getDirection(),
+            shirtColor: this.getShirtColor()
+        })
+    }
 }

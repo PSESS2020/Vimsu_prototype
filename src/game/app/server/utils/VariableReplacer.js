@@ -1,5 +1,5 @@
 const Participant = require("../models/Participant")
-const Room = require("../models/Room")
+const Room = require("../models/mapobjects/Room")
 
 /**
  * A simple static class that can be used to replace the variables in an

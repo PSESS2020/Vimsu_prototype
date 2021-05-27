@@ -1,6 +1,6 @@
 const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Room = require('./Room.js');
+const Room = require('./mapobjects/Room.js');
 
 /**
  * The Allchat Context Model

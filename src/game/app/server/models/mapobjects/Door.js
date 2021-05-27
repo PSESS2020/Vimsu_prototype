@@ -401,6 +401,17 @@ module.exports = class Door {
         return this.#closedMessage;
     }
 
+    getState() {
+        return Object.freeze({
+            id: this.getId(),
+            type: this.getTypeOfDoor(),
+            name: this.getName(),
+            cordX: door.getMapPosition().getCordX(),
+            cordY: door.getMapPosition().getCordY(),
+            targetRoomId: this.getTargetRoomId()
+        })
+    }
+
     /**
      * Gets if this door is a lecture door or not
      * @method module:Door#isLectureDoor

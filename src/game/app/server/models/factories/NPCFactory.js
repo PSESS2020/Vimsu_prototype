@@ -1,8 +1,8 @@
-const NPC = require('../models/NPC.js');
-const Position = require('../models/Position.js');
-const Direction = require('../../client/shared/Direction.js');
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const NPCDialog = require('../utils/NPCDialog.js');
+const NPC = require('../mapobjects/NPC.js');
+const Position = require('../Position.js');
+const Direction = require('../../../client/shared/Direction.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const NPCDialog = require('../../utils/NPCDialog.js');
 
 /**
  * The NPC Factory

@@ -1,9 +1,9 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Room = require('../models/Room.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
+const Room = require('../models/mapobjects/Room.js');
 const Floorplan = require('../utils/Floorplan.js');
-const RoomFactory = require('../factories/RoomFactory.js');
+const RoomFactory = require('../models/factories/RoomFactory.js');
 
 /**
  * The Room Service
