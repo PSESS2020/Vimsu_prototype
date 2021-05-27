@@ -87,8 +87,8 @@ class GameView {
         this.friendListView = new FriendListView(this.eventManager, {friendList: languageData.friendList, businessCard: languageData.businessCard});
         this.inviteFriendsView = new InviteFriendsView(this.eventManager, {chats: languageData.chats, businessCard: languageData.businessCard});
         this.chatListView = new ChatListView(this.eventManager, languageData.chats);
-        this.meetingListView = new MeetingListView(this.eventManager);
-        this.videoMeetingView = new VideoMeetingView(this.eventManager);
+        this.meetingListView = new MeetingListView(this.eventManager, languageData.meetings);
+        this.videoMeetingView = new VideoMeetingView(this.eventManager, languageData.meetings);
         this.chatThreadView = new ChatThreadView(this.eventManager, languageData.chats);
         this.chatParticipantListView = new ChatParticipantListView();
         this.scheduleListView = new ScheduleListView(languageData.schedule);

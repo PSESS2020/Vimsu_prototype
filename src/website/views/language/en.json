@@ -324,6 +324,14 @@
                 "acceptRequest": "Remove from friend request and add to friend list",
                 "rejectRequest": "Remove from friend request and reject"
             }
+        },
+        "meetings": {
+            "yourMeetings": "Your meetings",
+            "noMeetings": "No meetings found.",
+            "tooltips": {
+                "openMeeting": "Open meeting",
+                "minimizeMeeting": "Minimize meeting, voice chat will stay active"
+            }
         }
     }
 }

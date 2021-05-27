@@ -13,9 +13,10 @@ class MeetingListView extends WindowView {
      * Creates an instance of MeetingListView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for meetingList view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!MeetingListView.instance) {
             return MeetingListView.instance;
@@ -25,6 +26,8 @@ class MeetingListView extends WindowView {
 
         this.eventManager = eventManager;
         this.meetings = [];
+
+        $('#yourMeetingsText').text(this.languageData.yourMeetings);
     }
 
     /**
@@ -87,7 +90,7 @@ class MeetingListView extends WindowView {
 
         $('#meetingListModal .modal-body .list-group').prepend(`
             <li class="list-group-item bg-transparent chatthread" id="${"meetingEntry" + meeting.id}">
-                <a class="" style="color: antiquewhite" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
+                <a class="" style="color: antiquewhite" title="${this.languageData.tooltips.openMeeting}" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                         <div class="row w-100">
                             <div class="col-2 px-0 my-auto">
                                 <i class="fa fa-video fa-4x navbarIcons"></i>
@@ -118,7 +121,7 @@ class MeetingListView extends WindowView {
      */
      handleEmptyMeetingList(meetings) {
         if (meetings && meetings.length < 1) {
-            $('#nomeeting').text("No meetings found. Let's connect with others!")
+            $('#nomeeting').text(this.languageData.noMeetings)
             return false;
         }
 

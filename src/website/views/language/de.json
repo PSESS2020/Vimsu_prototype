@@ -324,6 +324,14 @@
                 "acceptRequest": "Anfrage akzeptieren und als Freund hinzufügen",
                 "rejectRequest": "Anfrage ablehnen"
             }
+        },
+        "meetings": {
+            "yourMeetings": "Deine Meetings",
+            "noMeetings": "Kein Meeting gefunden.",
+            "tooltips": {
+                "openMeeting": "Meeting öffnen",
+                "minimizeMeeting": "Meeting minmieren, Sprachchat bleibt aktiv"
+            }
         }
     }
 }
