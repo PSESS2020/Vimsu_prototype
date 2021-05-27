@@ -135,6 +135,7 @@
             "leave": "Verlassen",
             "showNotification": "Benachrichtigung anzeigen",
             "hideNotification": "Benachrichtigung ausblenden",
+            "confirmLeave": "Sicher, dass du die Konferenz verlassen möchtest?",
             "tooltips": {
                 "points": "Deine Punkte",
                 "rank": "Dein Rang",

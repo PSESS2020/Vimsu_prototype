@@ -135,6 +135,7 @@
             "leave": "Leave",
             "showNotification": "Show notification",
             "hideNotification": "Hide notification",
+            "confirmLeave": "Are you sure you want to leave the conference?",
             "tooltips": {
                 "points": "Your points",
                 "rank": "Your rank",

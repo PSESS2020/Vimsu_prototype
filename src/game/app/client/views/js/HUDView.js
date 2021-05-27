@@ -39,7 +39,7 @@ class HUDView extends ViewWithLanguageData {
         document.getElementById("meetingListButton").title = this.languageData.tooltips.meetings;
         document.getElementById("friendListButton").title = this.languageData.tooltips.friendlist;
         document.getElementById("chatListButton").title = this.languageData.tooltips.chats;
-        document.getElementById("nav_leave_button" ).title = this.languageData.tooltips.leave;
+        document.getElementById("nav_leave_button").title = this.languageData.tooltips.leave;
 
         $('[data-toggle="tooltip"]').tooltip();
 
@@ -87,6 +87,10 @@ class HUDView extends ViewWithLanguageData {
         $('#profileButton').on('click', () => {
             $('#profileModal').modal('show');
             eventManager.handleProfileClicked();
+        })
+
+        $('#nav_leave_button').on('click', () => {
+            return confirm(this.languageData.confirmLeave);
         })
     }
 
