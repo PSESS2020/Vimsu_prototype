@@ -359,6 +359,7 @@ class ClientController {
     }
 
     /**
+     * TODO redo comments
      * Third message from Server, gives you information of starting room
      * 
      * @param {number} roomId room ID
@@ -374,47 +375,13 @@ class ClientController {
      * @param {number[][]} occupationMap occupation map
      */
     handleFromServerUpdateRoom = function (assetPaths, roomData) {
-
-        //tranform MapElements to GameObjectClients
-        // TODO combine type-checking and transforming
-        var listOfMapElements = [];
-        listOfMapElementsData.forEach(mapElement => {
-            listOfMapElements.push(new GameObjectClient(mapElement.id, mapElement.type, mapElement.name, mapElement.width, mapElement.length,
-                new PositionClient(mapElement.cordX, mapElement.cordY), mapElement.isClickable, mapElement.onClickData))
-            if (mapElement.isClickable && (mapElement.width > 1 || mapElement.length > 1)) {
-                this.addDummyClickersTo(listOfMapElements, mapElement.id, mapElement.onClickData, mapElement.cordX, mapElement.cordY, mapElement.width, mapElement.length);
-            }
-        });
-
-        //transform GameObjects to GameObjectClients
-        var listOfGameObjects = [];
-        listOfGameObjectsData.forEach(element => {
-            listOfGameObjects.push(new GameObjectClient(element.id, element.type, element.name, element.width, element.length,
-                new PositionClient(element.cordX, element.cordY), element.isClickable, element.isIFrameObject, element.story, element.meetingData));
-            if (element.isClickable && (element.width > 1 || element.length > 1)) {
-                this.addDummyClickersTo(listOfGameObjects, element.id, element.isIFrameObject, element.story, element.cordX, element.cordY, element.width, element.length, meetingData);
-            }
-        });
-
-        //transform NPCs to NPCClients
-        var listOfNPCs = [];
-        npcData.forEach(npc => {
-            listOfNPCs.push(new NPCClient(npc.id, npc.name, new PositionClient(npc.cordX, npc.cordY), npc.direction, npc.shirtColor));
-        });
-
-        //transform Doors to DoorClients
-        var listOfDoors = [];
-        doorData.forEach(door => {
-            listOfDoors.push(new DoorClient(door.id, door.typeOfDoor, door.name, new PositionClient(door.cordX, door.cordY), door.targetRoomId));
-        });
-
         //First room? 
         if (!this.currentRoom) {
-            this.currentRoom = new RoomClient(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom = new RoomClient(assetPaths, roomData);
 
         //If not, only swap the room
         } else {
-            this.currentRoom.swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+            this.currentRoom.swapRoom(assetPaths, roomData);
             this.currentRoom.enterParticipant(this.ownParticipant);
             this.switchRoomGameView();
         }
@@ -1928,41 +1895,5 @@ class ClientController {
     handleArrowUp() {
         this.gameView.updateOwnAvatarWalking(false);
         this.sendToServerRequestMovStop();
-    }
-
-    /**
-     * Adds invisible, clickable dummy objects to map s.t.
-     * larger clickable objects can be clicked everywhere
-     * 
-     * @param {GameObjectClient[]} listToAddTo dummy objects should
-     *                                         be added to same list
-     *                                         as parent object
-     * @param {String} id same as parent object (to retrieve iFrame
-     *                    data)
-     * @param {Boolean} isIFrameObject same as parent object
-     * @param {String[]} story same as parent object
-     * @param {Object} meetingData same as parent object
-     * @param {Int} cordX x cord of parent object
-     * @param {Int} cordY y cord of parent object
-     * @param {Int} width width of parent object
-     * @param {Int} length length of parent object
-     */
-    addDummyClickersTo(listToAddTo, id, onClickData, cordX, cordY, width, length) {
-        for (let i = 0; i < width; i++) {
-            for (let j = 0; j < length; j++) {
-                listToAddTo.push(
-                    new GameObjectClient(
-                        id, 
-                        GameObjectType.BLANK,
-                        "blank",
-                        Settings.SMALL_OBJECT_WIDTH,
-                        Settings.SMALL_OBJECT_LENGTH,
-                        new PositionClient(cordX + i, cordY + j),
-                        true,
-                        onClickData
-                    )
-                )
-            }
-        }
     }
 }

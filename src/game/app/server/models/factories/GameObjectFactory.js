@@ -64,7 +64,7 @@ module.exports = class GameObject {
      *                          displays a text message, otherwise
      *                          undefined
      */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity, clickable, iFrameData, story) {
+    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity) {
         TypeChecker.isInt(roomId);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
@@ -120,6 +120,7 @@ module.exports = class GameObject {
      */
     createGameObject (roomId, objData) {
         // TODO type-checking
+        
         
         // Destructuring the object for easier reference and a more flexible
         // method. The last two lines don't need to be separate, it's just

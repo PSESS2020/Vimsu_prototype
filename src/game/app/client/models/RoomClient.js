@@ -34,6 +34,7 @@ class RoomClient {
     objectMap;
 
     /**
+     * TODO rewrite comments
      * Creates an instance of Room on client-side
      * 
      * @param {number} roomId room ID
@@ -48,14 +49,14 @@ class RoomClient {
      * @param {number} length room length
      * @param {number[][]} occupationMap room occupation map
      */
-    constructor(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
+    constructor(assetPaths, roomData) {
         if (!!RoomClient.instance) {
             return RoomClient.instance;
         }
 
         RoomClient.instance = this;
 
-        this.swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap)
+        this.swapRoom(assetPaths, roomData)
     }
 
     /**
@@ -241,32 +242,20 @@ class RoomClient {
      * @param {number} width room width
      * @param {number[][]} occupationMap room occupation map
      */
-    swapRoom(roomId, roomName, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap) {
-        TypeChecker.isInt(roomId);
-        TypeChecker.isString(roomName);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
-        TypeChecker.isInstanceOf(assetPaths, Object);
-        for (var key in assetPaths) {
-            TypeChecker.isString(assetPaths[key]);
-        }
-        TypeChecker.isInstanceOf(listOfMapElements, Array);
-        listOfGameObjects.forEach(mapElement => {
-            TypeChecker.isInstanceOf(mapElement, GameObjectClient);
-        });
-        TypeChecker.isInstanceOf(listOfGameObjects, Array);
-        listOfGameObjects.forEach(gameObject => {
-            TypeChecker.isInstanceOf(gameObject, GameObjectClient);
-        });
-        TypeChecker.isInstanceOf(listOfNPCs, Array);
-        listOfNPCs.forEach(npcPosition => {
-            TypeChecker.isInstanceOf(npcPosition, NPCClient);
-        });
-        TypeChecker.isInstanceOf(listOfDoors, Array);
-        listOfDoors.forEach(door => {
-            TypeChecker.isInstanceOf(door, DoorClient);
-        });
+    swapRoom(assetPaths, roomData) {
+        const { id, name, type, width, length, mapElementData, gameObjectData, npcData, doorData, occMap } = roomData
+
+        TypeChecker.isInt(id);
+        TypeChecker.isString(name);
+        TypeChecker.isEnumOf(type, TypeOfRoom);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
+        TypeChecker.isInstanceOf(mapElementData, Array);
+        TypeChecker.isInstanceOf(gameObjectData, Array);
+        TypeChecker.isInstanceOf(npcData, Array);
+        TypeChecker.isInstanceOf(occMap, Array);
+        TypeChecker.isInstanceOf(doorData, Array);
+        TypeChecker.isInstanceOf(occMap, Array);
         occupationMap.forEach(line => {
             TypeChecker.isInstanceOf(line, Array);
             line.forEach(element => {
@@ -274,14 +263,31 @@ class RoomClient {
             });
         });
 
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.typeOfRoom = typeOfRoom;
+        TypeChecker.isInstanceOf(assetPaths, Object);
+        for (var key in assetPaths) {
+            TypeChecker.isString(assetPaths[key]);
+        }
+        
+        this.roomId = id;
+        this.roomName = name;
+        this.typeOfRoom = type;
         this.assetPaths = assetPaths;
-        this.listOfMapElements = listOfMapElements;
-        this.listOfGameObjects = listOfGameObjects;
-        this.listOfNPCs = listOfNPCs;
-        this.listOfDoors = listOfDoors;
+        this.listOfMapElements = [] 
+        mapElementData.map( data => {
+            this.listOfMapElements( new GameObjectClient(data) );
+            if ( data.isClickable && (data.width > 1 || data.length > 1) ) {
+                this.addDummyClickers(this.listOfMapElements, data)
+            }
+        });
+        this.listOfGameObjects = []
+        gameObjectData.forEach( data => {
+            this.listOfGameObjects.push( new GameObjectClient(data) );
+            if ( data.isClickable && (data.width > 1 || data.length > 1) ) {
+                this.addDummyClickers(this.listOfGameObjects, data)
+            } 
+        });
+        this.listOfNPCs = npcData.map( data => new NPCClient(data) );
+        this.listOfDoors = doorData.map( data => new DoorClient(data) );
         this.listOfPPants = [];
         this.width = width;
         this.length = length;
@@ -343,6 +349,40 @@ class RoomClient {
             this.map[positionX][positionY + Settings.MAP_BLANK_TILES_WIDTH] = door;
 
         });
+    }
+
+    /**
+     * Adds invisible, clickable dummy objects to map s.t.
+     * larger clickable objects can be clicked everywhere
+     * 
+     * @param {GameObjectClient[]} listToAddTo dummy objects should
+     *                                         be added to same list
+     *                                         as parent object
+     * @param {objData} Object The data object containing the data
+     *                         for which the dummy clickers are added
+     */
+    addDummyClickers(listToAddTo, objData) {
+        const { id, cordX, cordY, width, length, onClickData } = objData
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < length; j++) {
+                // don't add dummy clicker where original object is clickable
+                if ( (i + j) !== 0 ) {
+                    listToAddTo.push(
+                        new GameObjectClient({
+                            id, 
+                            type: GameObjectType.BLANK,
+                            name: "blank",
+                            width: Settings.SMALL_OBJECT_WIDTH,
+                            length: Settings.SMALL_OBJECT_LENGTH,
+                            cordX: cordX + i,
+                            cordY: cordY + j,
+                            isClickable: true,
+                            onClickData
+                        })
+                    )
+                }
+            }
+        }
     }
 
     /**
