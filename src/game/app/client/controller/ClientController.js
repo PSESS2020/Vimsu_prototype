@@ -305,55 +305,12 @@ class ClientController {
      * @param {Object} initInfo initial own participant info
      */
     handleFromServerInitOwnParticipant = function (initInfo) {
+        const { id, businessCard, cordX, cordY, dir, isVisible, isModerator, shirtColor } = initInfo
+        const { forename } = businessCard
+
+        this.ownBusinessCard = new BusinessCardClient(businessCard);
+        this.ownParticipant = new ParticipantClient({ id, forename, cordX, cordY, dir, isVisible, isModerator, shirtColor });
         
-        TypeChecker.isInstanceOf(initInfo, Object);
-        TypeChecker.isString(initInfo.id);
-        TypeChecker.isInstanceOf(initInfo.businessCard, Object);
-        TypeChecker.isString(initInfo.businessCard.id);
-        TypeChecker.isString(initInfo.businessCard.username);
-        TypeChecker.isString(initInfo.businessCard.forename);
-        TypeChecker.isInt(initInfo.cordX);
-        TypeChecker.isInt(initInfo.cordY);
-        TypeChecker.isEnumOf(initInfo.dir, Direction);
-        TypeChecker.isBoolean(initInfo.isVisible);
-        TypeChecker.isBoolean(initInfo.isModerator);
-        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
-        TypeChecker.isString(initInfo.displayName);
-        if (initInfo.businessCard.title !== undefined)
-            TypeChecker.isString(initInfo.businessCard.title);
-        if (initInfo.businessCard.surname !== undefined) 
-            TypeChecker.isString(initInfo.businessCard.surname);
-        if (initInfo.businessCard.job !== undefined) 
-            TypeChecker.isString(initInfo.businessCard.job);
-        if (initInfo.businessCard.company !== undefined)   
-            TypeChecker.isString(initInfo.businessCard.company);
-        if (initInfo.businessCard.email !== undefined)  
-            TypeChecker.isString(initInfo.businessCard.email);
-
-        this.ownBusinessCard = new BusinessCardClient(
-            initInfo.businessCard.id,
-            initInfo.businessCard.username,
-            initInfo.businessCard.forename,
-            initInfo.businessCard.title,
-            initInfo.businessCard.surname,
-            initInfo.businessCard.job,
-            initInfo.businessCard.company,
-            initInfo.businessCard.email
-        );
-        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-
-        this.displayName = initInfo.displayName;
-
-        this.ownParticipant = new ParticipantClient(
-            initInfo.id,
-            this.displayName,
-            initPos,
-            initInfo.dir,
-            initInfo.isVisible,
-            initInfo.isModerator,
-            initInfo.shirtColor
-        );
-
         this.currentRoom.enterParticipant(this.ownParticipant);
         this.initGameView();
     }
@@ -494,19 +451,7 @@ class ClientController {
      * @param {Object} initInfo initial participant info
      */
     handleFromServerRoomEnteredByParticipant = function (initInfo) {
-
-        TypeChecker.isInstanceOf(initInfo, Object);
-        TypeChecker.isString(initInfo.id);
-        TypeChecker.isString(initInfo.displayName);
-        TypeChecker.isInt(initInfo.cordX);
-        TypeChecker.isInt(initInfo.cordY);
-        TypeChecker.isEnumOf(initInfo.dir, Direction);
-        TypeChecker.isBoolean(initInfo.isVisible);
-        TypeChecker.isBoolean(initInfo.isModerator);
-        TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
-
-        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initInfo.displayName, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator, initInfo.shirtColor);
+        var participant = new ParticipantClient(initInfo);
         this.currentRoom.enterParticipant(participant);
         this.gameView.initAnotherAvatarViews(participant);
     }

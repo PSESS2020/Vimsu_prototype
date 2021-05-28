@@ -32,19 +32,23 @@ class ParticipantClient {
      * @param {boolean} isModerator participant avatar moderator status
      * @param {ShirtColor} shirtColor participant avatar shirt color
      */
-    constructor(id, displayName, position, direction, isVisible, isModerator, shirtColor) {
+    constructor(ppantData) {
+
+        const { id, forename, cordX, cordY, dir, isVisible, isModerator, shirtColor } = ppantData
+
         TypeChecker.isString(id);
-        TypeChecker.isInstanceOf(position, PositionClient);
-        TypeChecker.isEnumOf(direction, Direction);
-        TypeChecker.isString(displayName);
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
+        TypeChecker.isEnumOf(dir, Direction);
+        TypeChecker.isString(forename);
         TypeChecker.isBoolean(isVisible);
         TypeChecker.isBoolean(isModerator);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.id = id;
-        this.position = position;
-        this.direction = direction;
-        this.displayName = displayName;
+        this.position = new PositionClient(cordX, cordY);
+        this.direction = dir;
+        this.forename = forename;
         this.isVisible = isVisible;
         this.isModerator = isModerator;
         this.shirtColor = shirtColor;

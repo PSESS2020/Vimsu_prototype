@@ -137,4 +137,11 @@ module.exports = class BusinessCard {
     getEmail() {
         return this.#email;
     }
+    getState() {
+        return {
+            ppantId: this.getParticipantId(),
+            username: this.getUsername(),
+            forename: this.getForename(),
+        }
+    }
 }

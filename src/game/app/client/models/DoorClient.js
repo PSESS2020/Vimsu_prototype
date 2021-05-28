@@ -27,11 +27,15 @@ class DoorClient {
      * @param {PositionClient} mapPosition door position
      * @param {number} targetRoomId target room ID
      */
-    constructor(id, typeOfDoor, name, mapPosition, targetRoomId) {
+    constructor(doorData) {
+
+        const { id, type, name, cordX, cordY, targetRoomId } = doorData;
+
         TypeChecker.isString(id);
-        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
+        TypeChecker.isEnumOf(type, TypeOfDoor);
         TypeChecker.isString(name);
-        TypeChecker.isInstanceOf(mapPosition, PositionClient);
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
 
         if (targetRoomId !== undefined)
             TypeChecker.isNumber(targetRoomId);
@@ -39,7 +43,7 @@ class DoorClient {
         this.id = id;
         this.typeOfDoor = typeOfDoor;
         this.name = name;
-        this.mapPosition = mapPosition;
+        this.mapPosition = new PositionClient(cordX, cordY);
         this.targetRoomId = targetRoomId;
     }
 

@@ -28,16 +28,20 @@ class NPCClient {
      * @param {Direction} direction NPC avatar direction
      * @param {ShirtColor} shirtColor NPC shirt color
      */
-    constructor(id, name, position, direction, shirtColor) {
+    constructor(npcData) {
+
+        const { id, name, cordX, cordY, direction, shirtColor } = npcData
+
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
-        TypeChecker.isInstanceOf(position, PositionClient);
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.id = id;
         this.name = name;
-        this.position = position;
+        this.position = new PositionClient(cordX, cordY);
         this.direction = direction;
         this.shirtColor = shirtColor;
     }

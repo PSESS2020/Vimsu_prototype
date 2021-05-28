@@ -681,7 +681,7 @@ module.exports = class Participant {
     getStateForSelf() {
         return Object.freeze({
             id: this.getId(),
-            businessCard: this.getBusinessCard(),
+            businessCard: this.getBusinessCard().getState(),
             cordX: this.getPosition().getCordX(),
             cordY: this.getPosition().getCordY(),
             dir: this.getDirection(),

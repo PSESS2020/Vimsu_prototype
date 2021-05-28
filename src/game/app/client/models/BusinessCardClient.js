@@ -31,8 +31,10 @@ class BusinessCardClient {
      * @param {?String} company participant company
      * @param {?String} email participant email
      */
-    constructor(participantId, username, forename, title, surname, job, company, email) {
-        TypeChecker.isString(participantId);
+    constructor(cardData) {
+        const { ppantId, username, forename } = cardData
+        
+        TypeChecker.isString(ppantId);
         TypeChecker.isString(username);
         TypeChecker.isString(forename);
 
@@ -47,8 +49,8 @@ class BusinessCardClient {
             TypeChecker.isString(company);
         if (email !== undefined) 
             TypeChecker.isString(email);
-        
-        this.participantId = participantId;
+
+        this.participantId = ppantId;
         this.username = username;
         this.forename = forename;
         this.title = title;
