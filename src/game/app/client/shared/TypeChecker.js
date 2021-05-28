@@ -96,6 +96,12 @@ class TypeChecker {
     static stringIsInteger (string) {
         return (!isNaN(parseInt(string, 10)) && !isNaN(string)) ? true : false;
     }
+
+    static isOffset (obj) {
+        if( !obj.hasOwnProperty("x") || !obj.hasOwnProperty("y") ) {
+            throw new TypeError(`${obj} is not a properly defined offset.`)
+        }
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

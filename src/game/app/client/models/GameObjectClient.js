@@ -14,6 +14,7 @@ class GameObjectClient {
 
     id;
     name;
+    offset;
     width;
     length;
     position;
@@ -37,30 +38,34 @@ class GameObjectClient {
      * @param {Object} meetingData Object containing the data of the meeting
      *                             that will be opened on click.
      */
-    constructor(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject, story, meetingData) {
+    constructor(data) {
+
+        const { id, type, name, offset, width, length, cordX, cordY, isClickable, onClickData } = data
 
         TypeChecker.isInt(id);
-        TypeChecker.isEnumOf(gameObjectType, GameObjectType);
+        // This can't actually be checked here, as it would make
+        // object creation more difficult
+        //TypeChecker.isEnumOf(type, GameObjectType);
         TypeChecker.isString(name);
+        TypeChecker.isOffset(offset);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
-        TypeChecker.isInstanceOf(position, PositionClient);
+        TypeChecker.isInt(cordX);
+        TypeChecker.isInt(cordY);
         TypeChecker.isBoolean(isClickable);
-        TypeChecker.isBoolean(isIFrameObject);
-        TypeChecker.isInstanceOf(story, Array);
-        story.forEach(element => TypeChecker.isString(element));
+        // TODO type checking for onClickData
         
         this.id = id;
-        this.gameObjectType = gameObjectType;
+        this.gameObjectType = type;
         this.name = name;
+        this.offset = offset;
         this.width = width;
         this.length = length;
 
         //Position of left down corner of gameObject
-        this.position = position;
+        this.position = new PositionClient(cordX, cordY);
         this.isClickable = isClickable;
-        this.isIFrameObject = isIFrameObject;
-        this.meetingData = meetingData;
+        this.onClickData = onClickData;
     }
 
     /**
@@ -126,34 +131,8 @@ class GameObjectClient {
         return this.isClickable;
     }
 
-    /**
-     * Gets game object IFrame status
-     * 
-     * @return {boolean} true if gameObject is IFrameObject, otherwise false
-     */
-     getIsIFrameObject() {
-        return this.isIFrameObject;
-    }
+    // TODO add getOnClickData
 
-    /**
-     * Gets game object story
-     * 
-     * @returns {String[]} story text message that is displayed on click
-     *                     (if clickable)
-     */
-    getStory() {
-        return this.story;
-    }
-
-    /**
-     * Gets game object meeting data
-     * 
-     * @returns {Object} Object containing the data of the meeting that will be 
-     *                   opened on click.
-     */
-    getMeetingData() {
-        return this.meetingData;
-    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {
