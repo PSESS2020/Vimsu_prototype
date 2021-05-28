@@ -536,4 +536,19 @@ module.exports = class Room {
         
         return undefined;
     }
+
+    getState() {
+        return Object.freeze({
+            id: this.getId(),
+            name: this.getRoomName(),
+            type: this.getTypeOfRoom(),
+            width: this.getWidth(),
+            length: this.getLength(),
+            mapElementData: this.getListOfMapElements().map(elem => elem.getState()),
+            gameObjectData: this.getListOfGameObjects().map(elem => elem.getState()),
+            npcData: this.getListOfNPCs().map(elem => elem.getState()),
+            doorData: this.getListOfDoors().map(elem => elem.getState()),
+            occMap: this.getOccMap()
+        })
+    }
 }

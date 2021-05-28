@@ -258,42 +258,6 @@ module.exports = class ServerController {
                     //Gets asset paths of the starting room
                     let assetPaths = AssetPaths;
 
-                    //Gets MapElements of the starting room
-                    let mapElements = currentRoom.getListOfMapElements();
-
-                    let mapElementsData = [];
-
-                    mapElements.forEach(mapElement => {
-                        mapElementsData.push(mapElement.getState());
-                    });
-
-                    //Get GameObjects of the starting room
-                    let gameObjects = currentRoom.getListOfGameObjects();
-                    let gameObjectData = [];
-
-                    //Sends all gameObjects of starting room to client
-                    gameObjects.forEach(gameObject => {
-                        gameObjectData.push(gameObject.getState());
-                    });
-
-                    //Get all NPCs from starting room
-                    let npcs = currentRoom.getListOfNPCs();
-                    let npcData = [];
-
-                    //Sends all NPCs to client
-                    npcs.forEach(npc => {
-                        npcData.push(npc.getState());
-                    });
-
-                    //Get all doors from starting room
-                    let doors = currentRoom.getListOfDoors();
-                    let doorData = [];
-
-                    //Sends all doors to client
-                    doors.forEach(door => {
-                        doorData.push(door.getState());
-                    });
-
                     //Emit this business card to other participants in the room
                     let businessCardObject = {
                         id: ppant.getId(),
@@ -310,30 +274,18 @@ module.exports = class ServerController {
                     let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
 
                     //Sends Room ID, typeOfRoom and listOfGameObjects to Client
-                    this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, currentRoom.getRoomName(), typeOfCurrentRoom,
-                        assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength(), currentRoom.getOccMap());
+                    this.#io.to(socket.id).emit('currentGameStateYourRoom', assetPaths, currentRoom.getState());
 
                     //Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor(), displayName: displayName });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', ppant.getStateForSelf());
 
                     //Initializes Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
 
                     this.#ppants.forEach((participant, id, map) => {
 
-                        if (id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
-
-                            
-                            let otherDisplayName = participant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
-                            let tempPos = participant.getPosition();
-                            let tempX = tempPos.getCordX();
-                            let tempY = tempPos.getCordY();
-                            let tempDir = participant.getDirection();
-                            let isVisible = participant.getIsVisible();
-                            let isModerator = participant.getIsModerator();
-                            let shirtColor = participant.getShirtColor();
-
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, displayName: otherDisplayName, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+                        if (id != ppant.getId() && participant.isInRoom(currentRoomId)) {
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', participant.getStateForOthers());
                         }
                     });
 
@@ -342,7 +294,7 @@ module.exports = class ServerController {
                      * participant-instance corresponding to it.
                      * This should send to all other connected sockets but not to the one
                      * that just connected */
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), displayName: displayName, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', ppant.getStateForOthers());
 
                     /* Sends current points and rank to client */
                     socket.emit('updatePoints', ppant.getAwardPoints());
@@ -761,17 +713,7 @@ module.exports = class ServerController {
 
                 var lecturesData = [];
                 lectures.forEach(lecture => {
-                    lecturesData.push(
-                        {
-                            id: lecture.getId(),
-                            title: lecture.getTitle(),
-                            remarks: lecture.getRemarks(),
-                            oratorName: lecture.getOratorName(),
-                            startingTime: lecture.getStartingTime(),
-                            maxParticipants: lecture.getMaxParticipants(),
-                            duration: lecture.getDuration()
-                        }
-                    )
+                    lecturesData.push(lecture.getData())
                 })
 
                 socket.emit('currentSchedule', lecturesData, new Date().getTime());
@@ -3574,82 +3516,11 @@ module.exports = class ServerController {
         //Get asset paths of target room
         let assetPaths = AssetPaths;
 
-        //Get MapElements of target room
-        let mapElements = targetRoom.getListOfMapElements();
-        let mapElementsData = [];
-
-        mapElements.forEach(mapElement => {
-            mapElementsData.push({
-                id: mapElement.getId(),
-                type: mapElement.getGameObjectType(),
-                name: mapElement.getName(),
-                width: mapElement.getWidth(),
-                length: mapElement.getLength(),
-                cordX: mapElement.getPosition().getCordX(),
-                cordY: mapElement.getPosition().getCordY(),
-                isClickable: mapElement.getClickable(),
-                isIFrameObject: mapElement.getIFrameData() !== undefined,
-                story: mapElement.getStory()
-            });
-        });
-
-        //get all GameObjects from target room
-        let gameObjects = targetRoom.getListOfGameObjects();
-        let gameObjectData = [];
-
-        //needed to send all gameObjects of starting room to client
-        gameObjects.forEach(gameObject => {
-            gameObjectData.push({
-                id: gameObject.getId(),
-                type: gameObject.getGameObjectType(),
-                name: gameObject.getName(),
-                width: gameObject.getWidth(),
-                length: gameObject.getLength(),
-                cordX: gameObject.getPosition().getCordX(),
-                cordY: gameObject.getPosition().getCordY(),
-                isClickable: gameObject.getClickable(),
-                isIFrameObject: gameObject.getIFrameData() !== undefined,
-                story: gameObject.getStory()
-            });
-        });
-
-        let npcs = targetRoom.getListOfNPCs();
-        let npcData = [];
-
-        //needed to init all NPCs in clients game view
-        npcs.forEach(npc => {
-            npcData.push({
-                id: npc.getId(),
-                name: npc.getName(),
-                cordX: npc.getPosition().getCordX(),
-                cordY: npc.getPosition().getCordY(),
-                direction: npc.getDirection(),
-                shirtColor: npc.getShirtColor()
-            });
-        });
-
-        //Get all Doors from starting room
-        let doors = targetRoom.getListOfDoors();
-        let doorData = [];
-
-        //needed to init all Doors in clients game view
-        doors.forEach(door => {
-            doorData.push({
-                id: door.getId(),
-                typeOfDoor: door.getTypeOfDoor(),
-                name: door.getName(),
-                cordX: door.getMapPosition().getCordX(),
-                cordY: door.getMapPosition().getCordY(),
-                targetRoomId: door.getTargetRoomId()
-            });
-        });
-
         let socketID = this.getSocketId(ppantID);
         let socket = this.getSocketObject(socketID);
 
         //emit new room data to client
-        this.#io.to(socketID).emit('currentGameStateYourRoom', targetRoomId, targetRoom.getRoomName(), targetRoomType,
-            assetPaths, mapElementsData, gameObjectData, npcData, doorData, targetRoom.getWidth(), targetRoom.getLength(), targetRoom.getOccMap());
+        this.#io.to(socketID).emit('currentGameStateYourRoom', assetPaths, targetRoom.getState());
 
         //set new position in server model
         ppant.setPosition(newPos);
@@ -3671,20 +3542,12 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, displayName: displayName, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', ppant.getStateForOthers());
 
         //Emit to participant all participant positions, that were in new room before him
         this.#ppants.forEach((ppant, id, map) => {
-            if (id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
-                let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
-                let tempPos = ppant.getPosition();
-                let tempX = tempPos.getCordX();
-                let tempY = tempPos.getCordY();
-                let tempDir = ppant.getDirection();
-                let isVisible = ppant.getIsVisible();
-                let isModerator = ppant.getIsModerator();
-                let shirtColor = ppant.getShirtColor();
-                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, displayName: displayName, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+            if (id != ppantID && ppant.isInRoom(targetRoomId)) {
+                this.#io.to(socketID).emit('roomEnteredByParticipant', ppant.getStateForOthers());
             }
         });
 

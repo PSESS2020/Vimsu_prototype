@@ -456,6 +456,18 @@ module.exports = class Lecture {
         return true;
     };
 
+    getData() {
+        return Object.freeze({
+            id: this.getId(),
+            title: this.getTitle(),
+            remarks: this.getRemarks(),
+            oratorName: this.getOratorName(),
+            startingTime: this.getStartingTime(),
+            maxParticipants: this.getMaxParticipants(),
+            duration: this.getDuration()
+        })
+    }
+
     /**
      * @private Checks participant's token
      * 

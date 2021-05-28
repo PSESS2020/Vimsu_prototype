@@ -664,4 +664,34 @@ module.exports = class Participant {
         }
         return false;
     }
+
+    isInRoom(roomId) {
+        return (this.getPosition().getRoomId() === roomId)
+    }
+
+    getStateForSelf() {
+        return Object.freeze({
+            id: this.getId(),
+            businessCard: this.getBusinessCard(),
+            cordX: this.getPosition().getCordX(),
+            cordY: this.getPosition().getCordY(),
+            dir: this.getDirection(),
+            isVisible: this.getIsVisible(),
+            isModerator: this.getIsModerator(),
+            shirtColor: this.getShirtColor(),
+        })
+    }
+
+    getStateForOthers() {
+        return Object.freeze({
+            id: this.getId(),
+            forename: this.getBusinessCard().getForename(),
+            cordX: this.getPosition().getCordX(),
+            cordY: this.getPosition().getCordY(),
+            dir: this.getDirection(),
+            isVisible: this.getIsVisible(),
+            isModerator: this.getIsModerator(),
+            shirtColor: this.getShirtColor(),
+        })
+    }
 }
