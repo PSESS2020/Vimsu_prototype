@@ -665,6 +665,15 @@ module.exports = class Participant {
         return false;
     }
 
+    /**
+     * Checks wether a ppant's current position is in a given room
+     * or not.
+     * 
+     * @param {String} roomId 
+     * 
+     * @returns {Boolean} whether the participant is currently in
+     *                    the room indexed by the passed id
+     */
     isInRoom(roomId) {
         return (this.getPosition().getRoomId() === roomId)
     }
