@@ -153,7 +153,6 @@ class MapView extends Views {
 
                 var mapObject = this.map[row][col];
                 if (mapObject !== null) {
-
                     if (mapObject instanceof Array) {
                         mapObject.forEach(object => {
                             this.createMapElementView(object, position);
