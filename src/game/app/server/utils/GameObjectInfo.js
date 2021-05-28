@@ -347,6 +347,9 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["smalldinnertable_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 20 }
             }
         },
 
@@ -357,6 +360,9 @@ class GameObjectInfo {
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["canteencounter_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 50 }
             }
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
@@ -371,6 +377,9 @@ class GameObjectInfo {
             length: 7 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["receptionCounterFrontPart_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 8 }
             }
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
@@ -381,6 +390,9 @@ class GameObjectInfo {
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["receptionCounterLeftPart_default"],
                 rightPart:               ["receptionCounterRightPart_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: -9, y: 28 }
             }
         },
 
@@ -391,6 +403,9 @@ class GameObjectInfo {
             length: 2 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["drinks_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 14, y: 12 }
             }
         },
         [GameObjectType.TEA]: {
@@ -399,6 +414,9 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tea_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: -4, y: 20 }
             }
         },
         [GameObjectType.SMALLFOOD]: {
@@ -411,6 +429,9 @@ class GameObjectInfo {
                 bothSides:               ["koeriWurst_bothSides"],
                 upperSide:               ["koeriWurst_upperSide"],
                 lowerSide:               ["koeriWurst_lowerSide"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: -4, y: 20 }
             }
         },
     });
