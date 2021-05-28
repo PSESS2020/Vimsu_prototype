@@ -330,12 +330,21 @@ class GameObjectInfo {
                 [GlobalStrings.DEFAULT]: { x: 0, y: 7 }
             }
         },
-        [GameObjectType.LARGETABLE]: {
+        [GameObjectType.RIGHTLARGETABLE]: {
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["righttable_default"],
-                turnedLeft:              ["lefttable_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 52 }
+            }
+        },
+        [GameObjectType.LEFTLARGETABLE]: {
+            width: 3 * Settings.SMALL_OBJECT_WIDTH,
+            length: Settings.SMALL_OBJECT_LENGTH,
+            assetSet: { 
+                [GlobalStrings.DEFAULT]: ["lefttable_default"],
             },
             offsets: {
                 [GlobalStrings.DEFAULT]: { x: 0, y: 52 }
