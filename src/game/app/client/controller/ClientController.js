@@ -373,58 +373,7 @@ class ClientController {
      * @param {number} length room length
      * @param {number[][]} occupationMap occupation map
      */
-    handleFromServerUpdateRoom = function (roomId, roomName, typeOfRoom, assetPaths, listOfMapElementsData, listOfGameObjectsData, npcData, doorData, width, length, occupationMap) {
-
-        TypeChecker.isInt(roomId);
-        TypeChecker.isString(roomName);
-        TypeChecker.isEnumOf(typeOfRoom, TypeOfRoom);
-        TypeChecker.isInstanceOf(assetPaths, Object);
-        TypeChecker.isInstanceOf(listOfMapElementsData, Array);
-        listOfMapElementsData.forEach(mapElement => {
-            TypeChecker.isInstanceOf(mapElement, Object);
-            TypeChecker.isInt(mapElement.id);
-            TypeChecker.isEnumOf(mapElement.type, GameObjectType);
-            TypeChecker.isString(mapElement.name);
-            TypeChecker.isInt(mapElement.width);
-            TypeChecker.isInt(mapElement.length);
-            TypeChecker.isInt(mapElement.cordX);
-            TypeChecker.isInt(mapElement.cordY);
-            //TypeChecker.isBoolean(mapElement.isClickable);
-            //TypeChecker.isBoolean(mapElement.isIFrameObject);
-
-        });
-        TypeChecker.isInstanceOf(listOfGameObjectsData, Array);
-        listOfGameObjectsData.forEach(gameObject => {
-            TypeChecker.isInstanceOf(gameObject, Object);
-            TypeChecker.isInt(gameObject.id);
-            TypeChecker.isEnumOf(gameObject.type, GameObjectType);
-            TypeChecker.isString(gameObject.name);
-            TypeChecker.isInt(gameObject.width);
-            TypeChecker.isInt(gameObject.length);
-            TypeChecker.isInt(gameObject.cordX);
-            TypeChecker.isInt(gameObject.cordY);
-            //TypeChecker.isBoolean(gameObject.isClickable);
-            //TypeChecker.isBoolean(gameObject.isIFrameObject);
-        });
-        TypeChecker.isInstanceOf(npcData, Array);
-        npcData.forEach(npc => {
-            TypeChecker.isInstanceOf(npc, Object);
-            TypeChecker.isInt(npc.id);
-            TypeChecker.isString(npc.name);
-            TypeChecker.isInt(npc.cordX);
-            TypeChecker.isInt(npc.cordY);
-            TypeChecker.isEnumOf(npc.direction, Direction);
-            TypeChecker.isEnumOf(npc.shirtColor, ShirtColor);
-        });
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
-        TypeChecker.isInstanceOf(occupationMap, Array);
-        occupationMap.forEach(line => {
-            TypeChecker.isInstanceOf(line, Array);
-            line.forEach(element => {
-                TypeChecker.isInt(element);
-            });
-        });
+    handleFromServerUpdateRoom = function (assetPaths, roomData) {
 
         //tranform MapElements to GameObjectClients
         // TODO combine type-checking and transforming

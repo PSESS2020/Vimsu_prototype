@@ -3526,12 +3526,6 @@ module.exports = class ServerController {
         ppant.setPosition(newPos);
         ppant.setDirection(direction);
 
-        //displayName, isModerator, isVisible, shirtColor
-        let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
-        let isModerator = ppant.getIsModerator();
-        let isVisible = ppant.getIsVisible();
-        let shirtColor = ppant.getShirtColor();
-
         let x = newPos.getCordX();
         let y = newPos.getCordY();
 

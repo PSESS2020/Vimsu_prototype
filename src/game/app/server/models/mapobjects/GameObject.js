@@ -13,6 +13,7 @@ module.exports = class GameObject {
 
     #id;
     #name;
+    #offset;
     #width;
     #length;
     #position;
@@ -41,11 +42,14 @@ module.exports = class GameObject {
      *      for the different types of data, as different kinds of data
      *      also require different kind of client side handling...
      */
-    constructor(id, gameObjectType, name, width, length, position, isSolid, isClickable, onClickData) {
+    constructor(id, gameObjectType, name, offset, width, length, position, isSolid, isClickable, onClickData) {
+
+        const { x, y } = offset
 
         TypeChecker.isInt(id);
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isString(name);
+        TypeChecker.isInt(x); TypeChecker.isInt(y);
         TypeChecker.isInt(width);
         TypeChecker.isInt(length);
         TypeChecker.isInstanceOf(position, Position);
@@ -65,6 +69,7 @@ module.exports = class GameObject {
         this.#id = id;
         this.#gameObjectType = gameObjectType;
         this.#name = name;
+        this.#offset = offset;
         this.#width = width;
         this.#length = length;
 
@@ -169,6 +174,7 @@ module.exports = class GameObject {
             id: this.getId(),
             type: this.getGameObjectType(),
             name: this.getName(),
+            offset: this.#offset,
             width: this.getWidth(),
             length: this.getLength(),
             cordX: this.getPosition().getCordX(),

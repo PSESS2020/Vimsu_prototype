@@ -112,7 +112,7 @@ class GameObjectInfo {
     /****__________________________________________________________****/
 
     // TODO
-    // - add custom-type object
+    // - add offset to every object
  
     // All the info for each GameObjectType
     static #INFORMATION = Object.freeze({
@@ -123,6 +123,9 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: {
                 [GlobalStrings.DEFAULT]: ["blank"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.DEFAULT_OFFSET
             }
         },
 
@@ -133,30 +136,48 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.DEFAULT_OFFSET
             }
         },
         [GameObjectType.SELECTED_TILE]: {
+            // SPECIAL PURPOSE OBJECT
+            // DO NOT USE IN FLOORPLAN
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_selected"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.DEFAULT_OFFSET
             }
         },
         [GameObjectType.LEFTTILE]: {
+            // SPECIAL PURPOSE OBJECT
+            // DO NOT USE IN FLOORPLAN
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.DEFAULT_OFFSET
             }
         },
         [GameObjectType.RIGHTTILE]: {
+            // SPECIAL PURPOSE OBJECT
+            // DO NOT USE IN FLOORPLAN
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["tile_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.DEFAULT_OFFSET
             }
         },
 
@@ -167,7 +188,11 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftwall_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.LEFTWALL_OFFSET
             }
+
         },
         [GameObjectType.RIGHTWALL]: {
             isSolid: false,
@@ -175,6 +200,9 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["rightwall_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.RIGHTWALL_OFFSET
             }
         },
 
@@ -182,42 +210,49 @@ class GameObjectInfo {
         // Schedule, Windows, Logo, Picture Frames...
         [GameObjectType.LEFTSCHEDULE]: {
             // MULTIPART OBJECT
-            isMultiPart: true,
-            size: [3, 1],
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftschedule_default0", "leftschedule_default1", "leftschedule_default2"],
-            }
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.LEFTWALL_OFFSET
+            }    
         },
         [GameObjectType.RIGHTWINDOW]: {
-            hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["rightwindow_default0"],
                 withSill:                ["rightwindow_default1"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.RIGHTWALL_OFFSET
             }
         },
         [GameObjectType.LEFTWINDOW]: {
-            hasVariation: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftwindow_default0"],
                 withSill:                ["leftwindow_default1"],
-            }
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.LEFTWALL_OFFSET
+            }    
         },
         [GameObjectType.PICTUREFRAME]: {
-            isMultiPart: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: [ ["rightwallframe_default0", "rightwallframe_default1", "rightwallframe_default2"] ],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.RIGHTWALL_OFFSET
             }
         },
         [GameObjectType.CONFERENCELOGO]: {
@@ -229,13 +264,15 @@ class GameObjectInfo {
              *       width and length give part-size)
              * (iii) assetSet needs to be array of
              *       arrays, size[0] * size[1].    */
-            isMultiPart: true,
             isSolid: false,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: [ "leftconferencelogo_default0", "leftconferencelogo_default1", "leftconferencelogo_default2","leftconferencelogo_default3", "leftconferencelogo_default4" ],
-            }
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: Settings.LEFTWALL_OFFSET
+            }    
         },
         
         // Plant 
@@ -245,12 +282,14 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["plant_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: -5, y: -10 }
             }
         },    
 
         // Seating
         [GameObjectType.CHAIR]: {
-            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -259,16 +298,21 @@ class GameObjectInfo {
                 leftBack:                ["leftchairback_default"], 
                 rightFront:              ["rightchair_default"], 
                 rightBack:               ["rightchairback_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 15, y: -6 }
             }
         },
         [GameObjectType.SOFA]: {
-            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["leftsofa_default"],
                 rightFacing:             ["rightsofa_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: -4 }
             }
         },
 
@@ -281,16 +325,20 @@ class GameObjectInfo {
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["table_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 7 }
             }
         },
         [GameObjectType.LARGETABLE]: {
-            hasVariation: true,
-            isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
                 [GlobalStrings.DEFAULT]: ["righttable_default"],
                 turnedLeft:              ["lefttable_default"],
+            },
+            offsets: {
+                [GlobalStrings.DEFAULT]: { x: 0, y: 52 }
             }
         },
         [GameObjectType.SMALLTABLE]: {
@@ -313,7 +361,6 @@ class GameObjectInfo {
         },
         [GameObjectType.RECEPTIONCOUNTER]: {
             // OBJECT WITH ADDITIONAL PARTS
-            hasAdditionalParts: true,
             parts: [
                 // type, positional offsets, maybe variation
                 {type: GameObjectType.RECEPTIONCOUNTERSIDEPART, offset_x: 1, offset_y: 0, variation: 0}, 
@@ -328,7 +375,6 @@ class GameObjectInfo {
         },
         [GameObjectType.RECEPTIONCOUNTERSIDEPART]: {
             // OBJECT WITH VARIATIONS
-            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -357,7 +403,6 @@ class GameObjectInfo {
         },
         [GameObjectType.SMALLFOOD]: {
             // OBJECT WITH VARIATIONS
-            hasVariation: true,
             isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
@@ -408,7 +453,7 @@ class GameObjectInfo {
      *                   If no path indexed, return default.  
      */
     static getAsset (objectType, variation) {
-        let assets = GameObjectInfo.getInfo(objectType, assetSet)
+        let assets = GameObjectInfo.getInfo(objectType, "assetSet")
         
         if (TypeChecker.stringIsInteger(variation)) {
             let keys = Object.keys(assets)
@@ -425,6 +470,43 @@ class GameObjectInfo {
         } else {
             console.log(`WARNING! The GameObjectType ${objectType} does not have a variation called ${variation}. Reverted to ${GlobalStrings.DEFAULT}.`);
             return assets[GlobalStrings.DEFAULT]
+        }
+    }
+
+    /**
+     * Takes a GameObjectType and a key <variation> as arguments.
+     * Checks if the offsets-object contains a path indexed by
+     * the key. If yes, returns it. If no, returns default asset.
+     * 
+     * TypeChecking should be done by whoever calls this method!
+     * 
+     * @method module:GameObjectInfo#getAsset
+     * 
+     * @param {String} objectType 
+     * @param {String} variation
+     *  
+     * @returns { { x: Integer, y: Integer } }  The asset-path indexed by the
+     *                                          passed variation. If no path 
+     *                                          indexed, return default.  
+     */
+     static getAsset (objectType, variation) {
+        let offsets = GameObjectInfo.getInfo(objectType, "offsets")
+        
+        if (TypeChecker.stringIsInteger(variation)) {
+            let keys = Object.keys(offsets)
+            let parsed = parseInt(variation, 10)
+            if (-1 < parsed < keys.length) { variation = keys[length] }
+            else {
+                //console.log(`WARNING! The GameObjectType ${objectType} does only have ${keys.length} variations, so  ${parsed} does not index one. Reverted to ${GlobalStrings.DEFAULT}.`)
+                variation = GlobalStrings.DEFAULT
+            }  
+        }
+
+        if (assets.hasOwnProperty(variation)) {
+            return offsets[variation]
+        } else {
+            //console.log(`WARNING! The GameObjectType ${objectType} does not have a variation called ${variation}. Reverted to ${GlobalStrings.DEFAULT}.`);
+            return offsets[GlobalStrings.DEFAULT]
         }
     }
 

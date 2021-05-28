@@ -124,9 +124,9 @@ module.exports = class GameObject {
         // Destructuring the object for easier reference and a more flexible
         // method. The last two lines don't need to be separate, it's just
         // to signify that these are two different "levels" of customization.
-        const { type, position: [xPos, yPos] }      = objData    // mandatory
-        var { variation, isClickable, onclickData } = objData    // optional
-        var { width, length, isSolid, assetSet }    = objData    // custom
+        const { type, position: [xPos, yPos] }           = objData  // mandatory
+        var { variation, isClickable, onClickData }      = objData  // optional
+        var { width, length, isSolid, assetSet, offset } = objData  // custom
         
         let returnData = []
 
@@ -154,17 +154,22 @@ module.exports = class GameObject {
         if (length   === undefined) { length   = GameObjectInfo.getInfo(type, "length") }
         if (isSolid  === undefined) { isSolid  = GameObjectInfo.getInfo(type, "isSolid") }
         if (assetSet === undefined) { assetSet = GameObjectInfo.getAsset(type, variation) }
+        if (offset   === undefined) { offset   = GameObjectInfo.getOffset(type, variation) }
         
         let i = 0
+        let isOffsetArray = Array.isArray(offset)
         assetSet.forEach(assetLinePart => {
+            let isOffsetItemArray = (isOffsetArray) ? (Array.isArray(offset[i])) : false
             if (assetLinePart instanceof Array) {
                 let j = 0
                 assetLinePart.forEach(assetColPart => {
-                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, width, length, new Position(roomId, xPos + i, yPos + j), isSolid, isClickable, onClickData))
+                    let partOffset = (isOffsetArray) ? ((isOffsetItemArray) ? offset[i][j] : offset[i]) : offset
+                    returnData.push(new GameObject(this.#generateGameObjectID(),type, assetColPart, partOffset, width, length, new Position(roomId, xPos + i, yPos + j), isSolid, isClickable, onClickData))
                     j++
                 })
             } else {
-                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, width, length, new Position(roomId, xPos + i, yPos), isSolid, isClickable, onClickData))
+                let partOffset = (isOffsetArray) ? offset[i] : offset
+                returnData.push(new GameObject(this.#generateGameObjectID(),type, assetLinePart, partOffset, width, length, new Position(roomId, xPos + i, yPos), isSolid, isClickable, onClickData))
             }
             i++
         })
