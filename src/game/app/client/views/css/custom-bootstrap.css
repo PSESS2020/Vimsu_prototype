@@ -141,6 +141,7 @@ button:focus {
 
 .modal-open .modal {
   padding-right: 0 !important;
+  padding-left: 0 !important;
 }
 
 .modal-dialog {
