@@ -85,16 +85,20 @@ class MeetingListView extends WindowView {
         $('#nomeeting').empty();
 
         $('#meetingListModal .modal-body .list-group').prepend(`
-            <li class="list-group-item bg-transparent chatthread" id="${"meetingEntry" + meeting.id}">
+            <li class="list-group-item bg-transparent chatthread px-0" id="${"meetingEntry" + meeting.id}">
                 <a class="" title="Open meeting" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
-                        <div class="row w-100">
-                            <div class="col-2 px-0">
-                                <i class="fa fa-video fa-4x navbarIcons"></i>
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="col-2 pr-0 my-auto">
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                <i class="fa fa-video fa-5x navbarIcons"></i>
                             </div>
-                            <div class="col-10 text-left">
-                                <label class="name lead">${meeting.name}</label>
-                            </div>  
                         </div>
+                        <div class="col-10 pl-3">
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                <span class="name lead text-truncate mr-3" title="${meeting.name}" data-toggle="tooltip">${meeting.name}</span>
+                            </div>
+                        </div>
+                    </div>
                 </a>
             </li>
         `);

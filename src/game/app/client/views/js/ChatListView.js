@@ -99,20 +99,20 @@ class ChatListView extends WindowView {
 
     // Now we want to append each chat as a clickable element
     $("#chatListModal .modal-body .list-group").prepend(`
-        <li class="list-group-item bg-transparent chatthread pl-0 pr-0" id="${"chatListEntry" + chat.chatId}">
+        <li class="list-group-item bg-transparent chatthread px-0" id="${"chatListEntry" + chat.chatId}">
             <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
-                <div class="d-flex flex-row justify-content-between pl-0 pr-0">
-                    <div class="col-3 mx-auto my-auto">
+                <div class="d-flex flex-row px-0">
+                    <div class="col-2 pr-0 my-auto">
                         <div class="d-flex flex-row justify-content-center align-items-center my-auto">
-                            <i class="fa fa-user fa-4x navbarIcons"></i>
+                            <i class="fa fa-user fa-5x navbarIcons"></i>
                         </div>
                     </div>
-                    <div class="col-9">
+                    <div class="col-10 pl-4">
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                          <label class="name lead wrapword">${chat.title}</label>
+                          <label class="name lead text-truncate" title="${chat.title}" data-toggle="tooltip">${chat.title}</label>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <span class="small" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
+                            <span class="small text-truncate" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
                             <span class ="small wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>
@@ -219,7 +219,7 @@ class ChatListView extends WindowView {
           <div class="modal" id=${"chatThreadModal" + chatID} role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
           aria-hidden="true" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-                <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">

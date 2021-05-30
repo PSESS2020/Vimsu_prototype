@@ -35,10 +35,12 @@ class ProfileView extends WindowView {
         this.businessCard = businessCard;
         this.isModerator = isModerator;
 
+        let userTitle = this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")";
         $('#profileModal .modal-header').append(`
-            <h5 class="modal-title d-inline-block" id="profileModalTitle">
-            <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-            ${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
+            <h5 class="modal-title d-inline-block" id="profileModalTitle" title="${userTitle}" data-toggle="tooltip">
+                <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
+                ${userTitle}
+            </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             </button>

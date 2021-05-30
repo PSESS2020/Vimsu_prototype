@@ -51,28 +51,30 @@ class FriendListView extends WindowView {
         this.businessCards = sortedBusinessCards;
 
         this.businessCards.forEach(businessCard => {
+            let userTitle = businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")";
+
             $('#friendListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent chatthread pl-0 pr-0" id="${"friend" + businessCard.getParticipantId()}">
-                    <div class="d-flex flex-row justify-content-between pl-0 pr-0">
-                            <div class="col-3 mx-auto my-auto">
+                <li class="list-group-item bg-transparent chatthread px-0" id="${"friend" + businessCard.getParticipantId()}">
+                    <div class="d-flex flex-row">
+                            <div class="col-2 pr-0 my-auto">
                                 <div class="d-flex flex-row justify-content-center align-items-center">
-                                    <i class="fa fa-user fa-4x navbarIcons"></i>
+                                    <i class="fa fa-user fa-5x navbarIcons"></i>
                                 </div>
                             </div>
-                            <div class="col-9">
+                            <div class="col-9 pr-0 pl-4">
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <label class="name lead wrapword">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
+                                    <label class="name lead text-truncate" title="${userTitle}" data-toggle="tooltip">${userTitle}</label>
                                 </div>
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <span class="fa fa-briefcase fa-fw mr-2" data-toggle="tooltip" title="" data-original-title=""></span>
-                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                    <span class="fa fa-briefcase fa-fw mr-2"></span>
+                                    <span class"text-truncate">${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
                                 </div>
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <span class="fa fa-envelope fa-fw mr-2" data-toggle="tooltip" data-original-title="" title=""></span>
-                                    <span class="small">${businessCard.getEmail()}</span>
+                                    <span class="fa fa-envelope fa-fw mr-2"></span>
+                                    <span class="small text-truncate">${businessCard.getEmail()}</span>
                                 </div>
                             </div>
-                            <div class="ml-n5 mt-n1">
+                            <div class="col-1 p-0 ml-1 mt-n1">
                                 <div class="d-flex flex-row mt-n3">
                                         <a class="action_button nav-item nav-link" href="" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fa fa-sort-desc fa-2x navbarIcons"></i>

@@ -58,9 +58,9 @@ class RankListView extends WindowView {
                         <div class="card-body">
                             <div class="card-text" id="${"cardtext" + ppant.participantId}">
                                 <div class="row">
-                                    <div class="col-md-auto">${ppant.rank}</div>
-                                    <div class="col-md-auto">${ppant.username}</div>
-                                    <div class="col text-right">${ppant.points + "P"}</div>
+                                    <div class="col-1 pr-0 text-nowrap">${ppant.rank}</div>
+                                    <div class="col-8 pr-0 text-truncate" title="${ppant.username}" data-toggle="tooltip">${ppant.username}</div>
+                                    <div class="col-3 pl-0 text-right text-truncate" title="${ppant.points + "P"}" data-toggle="tooltip">${ppant.points + "P"}</div>
                                 </div>
                             </div>
                         </div>

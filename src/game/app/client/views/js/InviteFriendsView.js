@@ -59,30 +59,40 @@ class InviteFriendsView extends WindowView {
             this.chatId = chatId;
 
             this.businessCards.forEach(businessCard => {
+                let userTitle = businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")";
+
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
-                        <li class="list-group-item bg-transparent" >
-                            <div class="row w-100">
-                                <div class="col-2 px-0">
-                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 0.3125rem" ></i>
+                        <li class="list-group-item bg-transparent px-0" >
+                            <div class="d-flex flex-row">
+                                <div class="col-2 pr-0 my-auto">
+                                    <div class="d-flex flex-row justify-content-center align-items-center">
+                                        <i class="fa fa-user fa-5x navbarIcons"></i>
+                                    </div>
                                 </div>
-                                <div class="col-9 text-left">
-                                    <label class="name lead">${businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")"}</label>
-                                    <br> 
-                                    <span class="fa fa-briefcase fa-fw" data-toggle="tooltip" title="" data-original-title=""></span>
-                                    <span >${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
-                                    <br>
-                                    <span class="fa fa-envelope fa-fw" data-toggle="tooltip" data-original-title="" title=""></span>
-                                    <span class="small">${businessCard.getEmail()}</span>
+                                <div class="col-9 pr-0 pl-4">
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        <label class="name lead text-truncate" title="${userTitle}" data-toggle="tooltip">${userTitle}</label>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        <span class="fa fa-briefcase fa-fw mr-2"></span>
+                                        <span class="text-truncate">${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        <span class="fa fa-envelope fa-fw mr-2"></span>
+                                        <span class="small text-truncate">${businessCard.getEmail()}</span>
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -0.4375rem; margin-left: 0.3125rem; outline: none; box-shadow: none;" class="btn">
-                                        <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
-                                    </button>
-                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -0.4375rem; margin-left: 0.3125rem; outline: none; box-shadow: none" class="btn">
-                                        <i class="fa fa-check-circle fa-2x navbarIcons"></i>
-                                    </button>
-                                </div>    
+                                <div class="col-1 p-0 ml-n1">
+                                    <div class="d-flex flex-row mt-n2">
+                                        <button id="${"invite" + businessCard.getParticipantId()}" style="outline: none; box-shadow: none;" class="btn">
+                                            <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
+                                        </button>
+                                        <button id="${"selected" + businessCard.getParticipantId()}" style="outline: none; box-shadow: none" class="btn">
+                                            <i class="fa fa-check-circle fa-2x navbarIcons"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                     </ul>
