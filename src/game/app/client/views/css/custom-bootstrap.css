@@ -139,6 +139,10 @@ button:focus {
 }
 /* end of new classes*/
 
+.modal-open .modal {
+  padding-right: 0 !important;
+}
+
 .modal-dialog {
   max-width: 31.25rem;
   margin: 1.75rem auto;

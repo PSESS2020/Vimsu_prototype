@@ -35,6 +35,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.1.1/dist/index.min.js"></script>
+    <script>
+        /**
+         * When documents has scrollbars, then bootstrap adds padding to compensate scrollbar wideness.
+         * Nevertheless this mechanics behaviour is buggy when using overlapping modals.
+         * Bootstrap dev team explicitly say that they not support overlapping modals.
+         * Therefore this workaround is quite handy.*/
+        $(document).on('hidden.bs.modal', function () {
+            if($('.modal.show').length)
+            {
+                $('body').addClass('modal-open');
+            }
+        });
+    </script>
 
     <!--OTHER REQUIREMENTS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />

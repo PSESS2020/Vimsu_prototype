@@ -51,10 +51,6 @@ table {
   font-size: 1rem;
 }
 
-body.modal-open {
-  overflow: hidden;
-}
-
 input,
 textarea {
      -moz-user-select: text;
