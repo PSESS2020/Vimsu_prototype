@@ -159,7 +159,7 @@ button:focus {
 }
 
 .modal-content {
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--forest-green) !important;
   padding: 0rem !important;
   overflow: scroll;
   border-color: var(--white-color);
@@ -175,7 +175,7 @@ button:focus {
 
 .modal-header {
   text-align: center;
-  background-color: rgba(24, 30, 32, 0.699);
+  background-color: var(--strong-dark-forest-green-a);
   font-size: 1.875rem;
   border-color: transparent !important; 
   box-shadow: 0rem 0rem 0rem transparent;
@@ -202,7 +202,7 @@ button:focus {
 .modal-header .dropdown-menu {
   width: 29rem !important;
   min-height: 31.3125rem !important;
-  background-color: rgba(34, 43, 46, 1) !important;
+  background-color: var(--forest-green) !important;
 }
 
 .modal-scrollbar-measure {

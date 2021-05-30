@@ -17,6 +17,8 @@
   --cyan-color: #028090;
   --white-color: antiquewhite;
   --strong-white-color-a: rgba(255, 255, 255, 0.8);
+  --forest-green: rgb(34, 43, 46);
+  --strong-dark-forest-green-a: rgba(24, 30, 32, 0.699);
 }
 
 * {
