@@ -68,7 +68,7 @@ class ChatThreadView extends WindowView {
 
         this.messages.forEach((message) => {
             this.appendMessage(message);
-        })
+        });
 
         this.updateFriendRequestButton(this.chat.chatId, this.chat.areFriends, this.chat.friendRequestSent);
 
@@ -114,10 +114,10 @@ class ChatThreadView extends WindowView {
         if (areFriends) {
             $('#chatFriendRequestButton' + this.chat.chatId).hide();
         } else if (friendRequestSent) {
-            this.disableFriendRequestBtn()
+            this.disableFriendRequestBtn();
             $('#chatFriendRequestButton' + this.chat.chatId).show();
         } else {
-            this.enableFriendRequestBtn()
+            this.enableFriendRequestBtn();
             $('#chatFriendRequestButton' + this.chat.chatId).show();
         }
     }
@@ -194,7 +194,7 @@ class ChatThreadView extends WindowView {
                 <div class="d-flex flex-column align-items-start ml-2">
                     <small style="opacity: 0.3; padding: 0.3125rem 0rem 0.3125rem 0rem">${timestamp}</small>
                     <div class="messageBubbleOthers">
-                        ${this.chat.groupChat && senderUsername? `<small><b>${senderUsername}</b></small><br>` : ``}
+                        ${this.chat.groupChat && senderUsername ? `<small><b>${senderUsername}</b></small><br>` : ``}
                         <small class="wrapword" style="text-align: left;">${message.msgText}</small>
                     </div>
                 </div>
@@ -210,10 +210,10 @@ class ChatThreadView extends WindowView {
      */
     disableFriendRequestBtn = () => {
         const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.chat.chatId);
-        chatFriendRequestButton.disabled = true
-        chatFriendRequestButton.style.opacity = "0.5"
-        chatFriendRequestButton.style.cursor = "not-allowed"
-        chatFriendRequestButton.title = "Friend request sent"
+        chatFriendRequestButton.disabled = true;
+        chatFriendRequestButton.style.opacity = "0.5";
+        chatFriendRequestButton.style.cursor = "not-allowed";
+        chatFriendRequestButton.title = "Friend request sent";
     }
 
     /**
@@ -221,10 +221,10 @@ class ChatThreadView extends WindowView {
      */
     enableFriendRequestBtn = () => {
         const chatFriendRequestButton = document.getElementById("chatFriendRequestButton" + this.chat.chatId);
-        chatFriendRequestButton.disabled = false
-        chatFriendRequestButton.style.opacity = "1"
-        chatFriendRequestButton.style.cursor = "pointer"
-        chatFriendRequestButton.title = "Send friend request"
+        chatFriendRequestButton.disabled = false;
+        chatFriendRequestButton.style.opacity = "1";
+        chatFriendRequestButton.style.cursor = "pointer";
+        chatFriendRequestButton.title = "Send friend request";
     }
 
     /**
@@ -232,7 +232,7 @@ class ChatThreadView extends WindowView {
      */
     initButtons = () => {
         $('#chatMessageInput' + this.chat.chatId).trigger('focus');
-        
+
         $('#chatMessageInput' + this.chat.chatId).off();
         $('#chatMessageInputGroup' + this.chat.chatId).off();
 
@@ -260,7 +260,7 @@ class ChatThreadView extends WindowView {
         $('#chatLeaveButton' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            var result = confirm(`Are you sure you want to leave from the chat with ${this.chat.title}?`)
+            var result = confirm(`Are you sure you want to leave from the chat with ${this.chat.title}?`);
 
             if (result) {
                 $('#chatThreadModal' + this.chat.chatId).modal('hide');
@@ -280,7 +280,7 @@ class ChatThreadView extends WindowView {
                 return;
             }
 
-            this.updateFriendRequestButton(this.chat.chatId, false, true)
+            this.updateFriendRequestButton(this.chat.chatId, false, true);
 
             this.eventManager.handleSendFriendRequest(this.chat.partnerId, this.chat.chatId);
         });
@@ -294,7 +294,7 @@ class ChatThreadView extends WindowView {
             this.eventManager.handleChatMeetingButtonClicked(this.chat.chatId);
         });
 
-        $('#chatParticipantListBtn' + this.chat.chatId).off()
+        $('#chatParticipantListBtn' + this.chat.chatId).off();
         $('#chatParticipantListBtn' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
@@ -303,15 +303,15 @@ class ChatThreadView extends WindowView {
             }
 
             if (!($('#chatParticipantListModal' + this.chat.chatId).length)) {
-                this.addNewChatParticipantListWindow(this.chat.chatId)
+                this.addNewChatParticipantListWindow(this.chat.chatId);
             }
 
             $('#chatParticipantListModal' + this.chat.chatId).modal('show');
 
             this.eventManager.handleShowChatParticipantList(this.chat.chatId);
-        })
+        });
 
-        $('#inviteFriendsBtn' + this.chat.chatId).off()
+        $('#inviteFriendsBtn' + this.chat.chatId).off();
         $('#inviteFriendsBtn' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
@@ -331,7 +331,7 @@ class ChatThreadView extends WindowView {
             this.eventManager.handleInviteFriendsClicked(this.chat.title, this.chat.chatId);
         });
 
-        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.chat.chatId}`)
+        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.chat.chatId}`);
     }
 
     addNewChatParticipantListWindow = () => {
@@ -359,6 +359,6 @@ class ChatThreadView extends WindowView {
                     </div>
                 </div>
             </div>
-        `)
+        `);
     }
 }

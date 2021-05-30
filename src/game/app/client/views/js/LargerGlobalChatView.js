@@ -22,8 +22,8 @@ class LargerGlobalChatView extends WindowView {
             $('#closeLargerGlobalChatButton').off();
             $('#closeLargerGlobalChatButton').on('click', (event) => {
                 $('#largerGlobalChat').hide();
-            })
-        })
+            });
+        });
     }
 
     /**

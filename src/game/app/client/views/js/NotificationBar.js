@@ -24,11 +24,11 @@ class NotificationBar extends Views {
 
         this.eventManager = eventManager;
 
-        $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length);
 
         $('#showNotifBar').hide();
 
-        const notifBar = document.getElementById("notifBar")
+        const notifBar = document.getElementById("notifBar");
 
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
@@ -39,7 +39,7 @@ class NotificationBar extends Views {
 
             $('#showNotifBar').hide();
             $('#hideNotifBar').show();
-        })
+        });
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
             $("#notifBar").animate({ "max-height": "0rem" }, Settings.TOGGLE_SPEED);
@@ -47,11 +47,11 @@ class NotificationBar extends Views {
             setTimeout(() => {
                 notifBar.style.display = "none";
                 notifBar.style.zIndex = "0";
-            }, Settings.TOGGLE_SPEED)
+            }, Settings.TOGGLE_SPEED);
 
             $('#hideNotifBar').hide();
             $('#showNotifBar').show();
-        })
+        });
     }
 
     /**
@@ -62,12 +62,12 @@ class NotificationBar extends Views {
      */
     drawNewMessage(senderUsername, chatId) {
         const id = 'notifMessage' + senderUsername + chatId
-        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
+        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
     }
 
     /**
@@ -78,12 +78,12 @@ class NotificationBar extends Views {
      */
     drawNewChat(senderUsername, chatId) {
         const id = 'notifChat' + chatId
-        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true)
+        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
     }
 
     /**
@@ -95,12 +95,12 @@ class NotificationBar extends Views {
      */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
         const id = 'notifGroupChat' + chatId
-        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true)
+        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
     }
 
     /**
@@ -111,13 +111,13 @@ class NotificationBar extends Views {
      */
     drawNewMeeting(meetingName, meetingID) {
         const id = 'notifMeeting' + meetingID;
-        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true)
+        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#meetingListModal').modal('show');
             return this.eventManager.handleMeetingListClicked();
-        })
+        });
     }
 
     /**
@@ -126,17 +126,17 @@ class NotificationBar extends Views {
      * @param {String} senderUsername requester username
      */
     drawNewFriendRequest(senderUsername) {
-        const id = 'notifFriendRequest' + senderUsername
-        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true)
+        const id = 'notifFriendRequest' + senderUsername;
+        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#nofriendrequest').empty();
-            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal .modal-body .list-group').empty();
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
             return this.eventManager.handleFriendRequestListClicked();
-        })
+        });
     }
 
     /**
@@ -145,14 +145,14 @@ class NotificationBar extends Views {
      * @param {String} friendUsername friend username
      */
     drawNewFriend(friendUsername) {
-        const id = 'notifFriend' + friendUsername
-        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true)
+        const id = 'notifFriend' + friendUsername;
+        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#friendListModal').modal('show');
             return this.eventManager.handleFriendListClicked();
-        })
+        });
     }
 
     /**
@@ -161,14 +161,14 @@ class NotificationBar extends Views {
      * @param {Object} meeting minimizedmeeting
      */
     drawMinimizedMeeting(meeting) {
-        const id = 'runningMeeting' + meeting.id
-        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false)
+        const id = 'runningMeeting' + meeting.id;
+        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false);
 
         $('#' + id).on('click', (e) => {
             $('#meetingWindow').show();
             $('#meetingWindowWait').show();
             return this.eventManager.handleMeetingJoined(meeting);
-        })
+        });
     }
 
     /**
@@ -190,14 +190,14 @@ class NotificationBar extends Views {
                         </div>
                     </a>
                 </div>
-            `)
+            `);
 
-        $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length);
 
         if (closeable) {
             $('#close' + id).on('click', (e) => {
-                this.removeNotifDiv(id)
-            })
+                this.removeNotifDiv(id);
+            });
         } else {
             document.getElementById(`close${id}`).disabled = true;
         }
@@ -207,6 +207,6 @@ class NotificationBar extends Views {
 
     removeNotifDiv(id) {
         $('#' + id + 'Div').remove();
-        $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length);
     }
 }

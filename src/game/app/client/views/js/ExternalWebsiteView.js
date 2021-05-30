@@ -160,7 +160,7 @@
                         </div>
                     </div>
                 </div>
-            `)
+            `);
         }
 
         $('#externalWebsiteModal' + gameObjectID).modal('show');

@@ -29,8 +29,8 @@ class ChatListView extends WindowView {
     $('#newGroupChat').off();
     $('#newGroupChat').on('click', (event) => {
       event.preventDefault();
-      $('#inputGroupNameModal').modal('show')
-      $('#groupNameInput').trigger('focus') 
+      $('#inputGroupNameModal').modal('show');
+      $('#groupNameInput').trigger('focus');
     });
   }
 
@@ -168,7 +168,7 @@ class ChatListView extends WindowView {
   addNewChat(chat) {
     if (!this.chats.includes(chat)) {
       this.chats.push(chat);
-      this.appendNewChat(chat)
+      this.appendNewChat(chat);
     }
   }
 
@@ -205,7 +205,7 @@ class ChatListView extends WindowView {
       }
     });
 
-    this.draw(this.chats, this.ownUsername)
+    this.draw(this.chats, this.ownUsername);
   }
 
   /**

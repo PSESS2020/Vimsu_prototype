@@ -45,9 +45,9 @@ class EmojiPicker extends Views {
         });
 
         trigger.addEventListener('click', (event) => {
-            event.preventDefault()
+            event.preventDefault();
             picker.togglePicker(trigger);
             $('.wrapper')[0].style.zIndex = 1050;
-        })
+        });
     }
 }

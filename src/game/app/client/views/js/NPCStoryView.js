@@ -27,8 +27,8 @@ class NPCStoryView extends WindowView {
      * @param {String} npcId NPC id
      */
     draw(name, story, npcId) {
-        $('#npcStoryWait' + npcId).hide()
-        $(`#npcStoryModal${npcId} .modal-header`).empty()
+        $('#npcStoryWait' + npcId).hide();
+        $(`#npcStoryModal${npcId} .modal-header`).empty();
         $('#npcStory' + npcId).empty();
         
         $(`#npcStoryModal${npcId} .modal-header`).append(`
@@ -36,7 +36,7 @@ class NPCStoryView extends WindowView {
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-        `)
+        `);
 
         for (var i = 0; i < story.length; i++) {
             $('#npcStory' + npcId).append(`
@@ -106,7 +106,7 @@ class NPCStoryView extends WindowView {
                         </div>
                     </div>
                 </div>
-            `)
+            `);
         }
 
         $('#npcStoryModal' + npcId).modal('show');

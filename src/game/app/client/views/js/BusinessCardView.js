@@ -28,8 +28,8 @@ class BusinessCardView extends WindowView {
         this.eventManager = eventManager;
 
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
-            $('#businessCardModal .modal-body').empty()
-        })
+            $('#businessCardModal .modal-body').empty();
+        });
     }
 
     /**
@@ -74,13 +74,13 @@ class BusinessCardView extends WindowView {
             </br>
             <button id="${"chatnow" + this.businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
-        `)
+        `);
 
         $('#chatnow' + this.businessCard.getParticipantId()).off();
         $('#chatnow' + this.businessCard.getParticipantId()).on('click', (event) => {
             $('#businessCardModal').modal('hide');
             this.eventManager.handleChatNowClicked(this.businessCard.getParticipantId());
-        })
+        });
 
     }
 }

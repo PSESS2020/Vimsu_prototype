@@ -25,7 +25,7 @@ class AchievementView extends WindowView {
      * @param {Object[]} achievements achievements
      */
     draw(achievements) {
-        $('#achievementWait').hide()
+        $('#achievementWait').hide();
         $('#achievementModalContent').empty();
 
         achievements.forEach(achievement => {
@@ -54,7 +54,7 @@ class AchievementView extends WindowView {
                     <small>${achievement.description}</small>
                     <br><br>
                 </div>
-            `)
-        })
+            `);
+        });
     }
 }

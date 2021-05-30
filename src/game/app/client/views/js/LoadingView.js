@@ -41,6 +41,6 @@ class LoadingView extends Views {
             $("#mapCanvas").show();
             $("#avatarCanvas").show();
             $("#windowHTML").show();
-        }, 400)
+        }, 400);
     }
 }

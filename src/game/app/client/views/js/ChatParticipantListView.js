@@ -46,8 +46,8 @@ class ChatParticipantListView extends Views {
                         </div>
                     </div>
                 </li>
-            `)
-        })
+            `);
+        });
     }
 
     /**
@@ -75,7 +75,7 @@ class ChatParticipantListView extends Views {
             }
         });
 
-        $("#chatParticipantEntry" + username).remove()
+        $("#chatParticipantEntry" + username).remove();
     }
 
 }

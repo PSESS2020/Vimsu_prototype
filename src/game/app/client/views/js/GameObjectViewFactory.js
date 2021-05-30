@@ -139,8 +139,8 @@ class GameObjectViewFactory {
             TypeChecker.isInt(gameObjectID);
         
         if (story !== undefined) {
-            TypeChecker.isInstanceOf(story, Array)
-            story.forEach(element => TypeChecker.isString(element))
+            TypeChecker.isInstanceOf(story, Array);
+            story.forEach(element => TypeChecker.isString(element));
         }
 
         var gameObjectView = null;

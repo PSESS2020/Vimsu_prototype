@@ -34,14 +34,14 @@ class FriendRequestListView extends WindowView {
     draw(businessCards) {
         $('#friendRequestListWait').hide();
         $('#nofriendrequest').empty();
-        $('#friendRequestListModal .modal-body .list-group').empty()
+        $('#friendRequestListModal .modal-body .list-group').empty();
 
-        if (!this.handleEmptyFriendRequestList(businessCards)) return
+        if (!this.handleEmptyFriendRequestList(businessCards)) return;
 
         this.businessCards = businessCards;
         this.businessCards.forEach(businessCard => {
             this.appendFriendRequest(businessCard);
-        })
+        });
     }
 
     /**
@@ -75,7 +75,7 @@ class FriendRequestListView extends WindowView {
                     </div>
                 </div>
             </li>
-        `)
+        `);
 
         $('#accept' + businessCard.getParticipantId()).off();
         $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
@@ -84,7 +84,7 @@ class FriendRequestListView extends WindowView {
 
             event.stopPropagation();
             this.eventManager.handleAcceptRequestClicked(businessCard);
-        })
+        });
 
         $('#reject' + businessCard.getParticipantId()).off();
         $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
@@ -93,7 +93,7 @@ class FriendRequestListView extends WindowView {
 
             event.stopPropagation();
             this.eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
-        })
+        });
     }
 
     /**
@@ -109,7 +109,7 @@ class FriendRequestListView extends WindowView {
             }
         });
 
-        $("#friendRequest" + participantId).remove()
+        $("#friendRequest" + participantId).remove();
         if (!this.handleEmptyFriendRequestList(this.businessCards)) return;
     }
 
@@ -120,21 +120,21 @@ class FriendRequestListView extends WindowView {
      * @param {boolean} isAccepted true if request accepted, otherwise false
      */
     update(participantId, isAccepted) {
-        $('#accept' + participantId).hide()
-        $('#reject' + participantId).hide()
+        $('#accept' + participantId).hide();
+        $('#reject' + participantId).hide();
 
         if (isAccepted) {
-            $('#accepted' + participantId).show()
-            $('#rejectdisable' + participantId).show()
+            $('#accepted' + participantId).show();
+            $('#rejectdisable' + participantId).show();
 
         } else {
-            $('#rejected' + participantId).show()
-            $('#acceptdisable' + participantId).show()
+            $('#rejected' + participantId).show();
+            $('#acceptdisable' + participantId).show();
         }
 
         setTimeout(() => {
             this.deleteFriendRequest(participantId);
-        }, 300)
+        }, 300);
     }
 
     /**
@@ -157,7 +157,7 @@ class FriendRequestListView extends WindowView {
      */
     handleEmptyFriendRequestList(businessCards) {
         if (businessCards && businessCards.length < 1) {
-            $('#nofriendrequest').text("No friend request received.")
+            $('#nofriendrequest').text("No friend request received.");
             return false;
         }
 

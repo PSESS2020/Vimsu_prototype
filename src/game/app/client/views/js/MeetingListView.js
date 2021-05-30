@@ -44,7 +44,7 @@ class MeetingListView extends WindowView {
         this.meetings.forEach(meeting => {
             // Now we want to append each meeting as a clickable element
             this.appendNewMeeting(meeting);
-        })
+        });
     }
 
     /**
@@ -60,7 +60,7 @@ class MeetingListView extends WindowView {
             }
         });
 
-        $("#meetingEntry" + meetingId).remove()
+        $("#meetingEntry" + meetingId).remove();
         if (!this.handleEmptyMeetingList(this.meetings)) return;
     };
 
@@ -97,7 +97,7 @@ class MeetingListView extends WindowView {
                         </div>
                 </a>
             </li>
-        `)
+        `);
 
         $('#meeting' + meeting.id).off();
         $('#meeting' + meeting.id).on('click', () => {
@@ -106,7 +106,7 @@ class MeetingListView extends WindowView {
             $('#meetingWindow').show();
             $('#meetingWindowWait').show();
             this.eventManager.handleMeetingJoined(meeting); 
-        })
+        });
     }
 
     /**
@@ -117,7 +117,7 @@ class MeetingListView extends WindowView {
      */
      handleEmptyMeetingList(meetings) {
         if (meetings && meetings.length < 1) {
-            $('#nomeeting').text("No meetings found. Let's connect with others!")
+            $('#nomeeting').text("No meetings found. Let's connect with others!");
             return false;
         }
 

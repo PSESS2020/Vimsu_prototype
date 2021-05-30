@@ -29,8 +29,8 @@ class ProfileView extends WindowView {
      */
     draw(businessCard, isModerator) {
         $('#profileWait').hide();
-        $('#profileModal .modal-header').empty()
-        $('#profileModal .modal-body').empty()
+        $('#profileModal .modal-header').empty();
+        $('#profileModal .modal-body').empty();
 
         this.businessCard = businessCard;
         this.isModerator = isModerator;
@@ -42,7 +42,7 @@ class ProfileView extends WindowView {
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
             </button>
-        `)
+        `);
 
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">
@@ -61,6 +61,6 @@ class ProfileView extends WindowView {
                     </tr>
                 </table>
             </div>
-        `)
+        `);
     }
 }

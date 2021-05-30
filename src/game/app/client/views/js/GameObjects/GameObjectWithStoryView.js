@@ -27,8 +27,8 @@ class GameObjectWithStoryView extends GameObjectView {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
 
         this.gameObjectID = gameObjectID;
-        this.id = id
-        this.story = story
+        this.id = id;
+        this.story = story;
 
         this.descriptor = descriptor[0] + descriptor.slice(1, descriptor.length).toLowerCase();
     }
@@ -46,8 +46,8 @@ class GameObjectWithStoryView extends GameObjectView {
      * Called if participant clicks the plant
      */
     onclick() {
-        const npcStoryView = new NPCStoryView()
-        npcStoryView.addNewNPCStoryWindow(this.id)
+        const npcStoryView = new NPCStoryView();
+        npcStoryView.addNewNPCStoryWindow(this.id);
         npcStoryView.draw(this.descriptor, this.story, this.id);
     }
 }

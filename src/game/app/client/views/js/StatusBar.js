@@ -30,7 +30,7 @@ class StatusBar extends Views {
      * draws game clock
      */
     drawClock = function () {
-        $('#time').empty()
+        $('#time').empty();
         let now = new DateParser(new Date()).parseWithSeconds();
         $('#time').text(now);
     }

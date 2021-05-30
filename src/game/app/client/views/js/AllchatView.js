@@ -20,17 +20,17 @@ class AllchatView extends Views {
 
         AllchatView.instance = this;
 
-        $("#allchatWindow").hide()
+        $("#allchatWindow").hide();
 
         $('#showRoomChat').on('click', (event) => {
             event.preventDefault();
-            this.showAllchatBox()
-        })
+            this.showAllchatBox();
+        });
         
         $('#allchatWindowMinimize').on('click', (event) => {
             event.preventDefault();
-            this.hideAllchatBox()
-        })
+            this.hideAllchatBox();
+        });
 
         const sendMessage = (event) => {
             event.preventDefault();
@@ -38,13 +38,13 @@ class AllchatView extends Views {
             let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             if (messageVal !== '') {
-                eventManager.handleAllchatMessageInput(messageVal)
+                eventManager.handleAllchatMessageInput(messageVal);
                 $('#allchatMessageInput').val('');
                 return false;
             }
         }
 
-        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput")
+        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput");
 
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
@@ -55,7 +55,7 @@ class AllchatView extends Views {
         });
 
         $('#allchat').on('submit', (event) => {
-            sendMessage(event)
+            sendMessage(event);
         });
     }
 
@@ -73,25 +73,25 @@ class AllchatView extends Views {
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
             <small>Show ${roomName.toLowerCase()} chat messages</small>
-        `)
+        `);
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text("The " + roomName + " chat is somehow quiet. Send some love here?")
+            $('#noAllchat').text("The " + roomName + " chat is somehow quiet. Send some love here?");
             return;
         }
 
         messages.forEach((message) => {
-            this.appendMessage(message, ownUsername)
-        })
+            this.appendMessage(message, ownUsername);
+        });
 
         setTimeout(() => {
             $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-        }, 500)
+        }, 500);
     }
 
     showAllchatBox() {
-        $("#allchatWindow").show()
+        $("#allchatWindow").show();
         $("#allchatWindow").animate({"left":"0.9375rem"}, Settings.TOGGLE_SPEED);
         $('#showRoomChat').hide();
     }
@@ -100,8 +100,8 @@ class AllchatView extends Views {
         $("#allchatWindow").animate({"left":"-15.625rem"}, Settings.TOGGLE_SPEED);
             
         setTimeout(() => {
-            $("#allchatWindow").hide()
-        }, Settings.TOGGLE_SPEED)
+            $("#allchatWindow").hide();
+        }, Settings.TOGGLE_SPEED);
         
         $('#showRoomChat').show();
     }
@@ -115,9 +115,9 @@ class AllchatView extends Views {
     appendMessage(message, ownUsername) {
         $('#noAllchat').empty();
 
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
 
-        const isOwnParticipant = message.username === ownUsername
+        const isOwnParticipant = message.username === ownUsername;
 
         const messageDiv =
             `

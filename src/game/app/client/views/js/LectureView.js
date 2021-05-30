@@ -56,7 +56,7 @@ class LectureView extends WindowView {
 
             $(document).on('click', ".closeButton", () => {
                 this.leaveLecture();
-            })
+            });
 
         });
 
@@ -88,7 +88,7 @@ class LectureView extends WindowView {
 
         $('#lectureVideo').append(`
             <video id="${"lectureVideo" + this.lectureId}" width="100%" height = "100%" controls preload controlsList="nodownload" src="${videoUrl}"></video>
-        `)
+        `);
         this.video = $(`#lectureVideo${this.lectureId}`)[0]; // get the first element otherwise the video is wrapped as jquery object
 
         // set default controls
@@ -107,13 +107,13 @@ class LectureView extends WindowView {
             this.video.addEventListener('pause', () => {
                 if (this.lectureStatus === LectureStatus.RUNNING)
                     this.video.play();
-            })
+            });
 
             this.video.addEventListener('play', () => {
                 if (this.lectureStatus === LectureStatus.OVER)
                     this.video.pause();
-            })
-        })
+            });
+        });
     }
 
     /**
@@ -146,7 +146,7 @@ class LectureView extends WindowView {
 
         $('#closeButton').append(`
             <button id="${this.lectureId}" class="ml-auto pl-1 pr-1 closeButton" style="background-color: transparent !important; border-color: transparent !important; box-shadow: 0rem 0rem 0rem transparent;" name="closeLectureVideoButton" type="button"><i class="fa fa-close"></i></button>
-        `)
+        `);
 
         //participant with token
         if (this.hasToken && !this.isOrator && !this.isModerator) {
@@ -207,14 +207,14 @@ class LectureView extends WindowView {
                     <div>seconds left till the</div>
                     <div>presentation starts</div>
                 </div>
-            `)
+            `);
 
             this.lectureStatus = LectureStatus.PENDING;
 
             var newTimeLeft = (-1) * Math.round(this.currentTimeDifference / 1000);
             if (this.timeLeft !== newTimeLeft) {
                 this.timeLeft = newTimeLeft;
-                $('#countdown').empty()
+                $('#countdown').empty();
                 $('#countdown').append(`<div style="font-size: 2.5rem;" class="animate__animated animate__bounceIn"><b>${this.timeLeft}</b></div>`);
             }
         }
@@ -252,22 +252,22 @@ class LectureView extends WindowView {
 
             //participant with token
             if (this.hasToken && !this.isOrator && !this.isModerator)
-                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?')
+                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?');
 
             //orator
             else if (this.isOrator)
-                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?')
+                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?');
 
             //participant without token or moderator
             else
-                shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?')
+                shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?');
 
             if (shouldLeave)
                 this.close();
         }
 
         else if (this.lectureStatus === LectureStatus.PENDING) {
-            alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!')
+            alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!');
             this.close();
         }
 
@@ -300,7 +300,7 @@ class LectureView extends WindowView {
      * @param {String} ownUsername current participant's username
      */
     appendMessage(message, ownUsername) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime()
+        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
 
         const isOwnParticipant = message.username === ownUsername
 
@@ -329,7 +329,7 @@ class LectureView extends WindowView {
         $('#lectureChatMessages').empty();
         if (lectureChat.length > 0) {
             for (var i = 0; i < lectureChat.length; i++) {
-                this.appendMessage(lectureChat[i], ownUsername)
+                this.appendMessage(lectureChat[i], ownUsername);
             }
         }
     }
@@ -353,12 +353,12 @@ class LectureView extends WindowView {
                     <div class="input-group-append">
                         <button id="lectureChatButton" class="btn btn-blue mr-3" type="button">Send</button>
                     </div>
-                `)
+                `);
             }
 
             $('#tokenIcon').append(`
                 <i class="fa fa-question-circle fa-4x"></i>
-            `)
+            `);
 
             $('#tokenLabel').append(TokenMessages.HASTOKEN);
         }
@@ -369,7 +369,7 @@ class LectureView extends WindowView {
 
             $('#tokenIcon').append(`
                 <i class="fa fa-times-circle fa-4x"></i>
-            `)
+            `);
 
             $('#tokenLabel').append(message);
         }

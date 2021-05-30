@@ -66,13 +66,13 @@ class RankListView extends WindowView {
                         </div>
                     </div>
                 </div>
-            `)
+            `);
 
             if (ppant.rank == 1 || ppant.rank == 2 || ppant.rank == 3)
                 document.getElementById("cardtext" + ppant.participantId).style.fontWeight = "bold";
 
             if (ppant.username === ownUsername)
                 document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 0.25rem 0.25rem ' + color;
-        })
+        });
     }
 }

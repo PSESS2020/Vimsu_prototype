@@ -28,11 +28,11 @@ class FriendListView extends WindowView {
         $('#friendRequestList').off();
         $('#friendRequestList').on('click', (event) => {
             $('#nofriendrequest').empty();
-            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal .modal-body .list-group').empty();
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
             this.eventManager.handleFriendRequestListClicked();
-        })
+        });
     }
 
     /**
@@ -47,7 +47,7 @@ class FriendListView extends WindowView {
 
         if (!this.handleEmptyFriendlist(businessCards)) return;
 
-        const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
+        const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()));
         this.businessCards = sortedBusinessCards;
 
         this.businessCards.forEach(businessCard => {
@@ -83,16 +83,16 @@ class FriendListView extends WindowView {
                                         </div>
                                 </div>
                             </div>
-                    </div>  
+                    </div>
                 </li>
-            `)
+            `);
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
             $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
                 if ($('#notifFriendDiv' + businessCard.getUsername()).length)
                     $('#notifFriendDiv' + businessCard.getUsername()).remove();
                 this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
-            })
+            });
 
             $('#delete' + businessCard.getParticipantId()).off();
             $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
@@ -104,8 +104,8 @@ class FriendListView extends WindowView {
                     this.eventManager.handleRemoveFriend(businessCard.getParticipantId());
                 else
                     event.stopImmediatePropagation();
-            })
-        })
+            });
+        });
     }
 
     /**
@@ -121,7 +121,7 @@ class FriendListView extends WindowView {
             }
         });
 
-        $("#friend" + participantId).remove()
+        $("#friend" + participantId).remove();
         if (!this.handleEmptyFriendlist(this.businessCards)) return;
     }
 

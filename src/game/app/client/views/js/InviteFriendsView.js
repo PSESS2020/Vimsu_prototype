@@ -50,9 +50,9 @@ class InviteFriendsView extends WindowView {
         this.invitedFriends = [];
 
         if (businessCards) {
-            if (!this.handleEmptyInviteFriends(businessCards)) return
+            if (!this.handleEmptyInviteFriends(businessCards)) return;
 
-            const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
+            const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()));
             this.businessCards = sortedBusinessCards;
             this.groupName = groupName;
             this.limit = limit;
@@ -86,20 +86,20 @@ class InviteFriendsView extends WindowView {
                             </div>
                         </li>
                     </ul>
-                `)
+                `);
 
                 $('#invite' + businessCard.getParticipantId()).on('click', (event) => {
                     this.invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
-                })
+                });
 
                 $('#selected' + businessCard.getParticipantId()).on('click', (event) => {
                     let index = this.invitedFriends.indexOf(businessCard.getParticipantId());
                     this.invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
                     $('#invite' + businessCard.getParticipantId()).show();
-                })
+                });
 
                 $('#createGroupChat').off();
                 $('#createGroupChat').on('click', (event) => {
@@ -119,12 +119,12 @@ class InviteFriendsView extends WindowView {
                         $('#toomanyinvitedfriends').text("You may only invite " + this.limit + " friend(s)! Please unselect " + diff + " friend(s).");
                         $('#toomanyinvitedfriends').show();
                     }
-                })
+                });
             });
 
             $('#createGroupChat').show();
         } else {
-            $('#inviteFriendsModal .modal-body').text("Group name was empty!")
+            $('#inviteFriendsModal .modal-body').text("Group name was empty!");
         }
     }
 
@@ -168,8 +168,8 @@ class InviteFriendsView extends WindowView {
             });
 
             if (found) {
-                $("#invitefriend" + participantId).remove()
-                if (!this.handleEmptyInviteFriends(this.businessCards)) return
+                $("#invitefriend" + participantId).remove();
+                if (!this.handleEmptyInviteFriends(this.businessCards)) return;
             }
         }
     }

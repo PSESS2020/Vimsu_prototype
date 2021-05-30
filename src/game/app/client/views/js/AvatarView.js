@@ -179,7 +179,7 @@ class AvatarView extends Views {
      * @abstract Initializes sprite animation
      */
     initSpriteAnimation() {
-        throw new Error('initSpriteAnimation() has to be implemented!')
+        throw new Error('initSpriteAnimation() has to be implemented!');
     }
 
     /**
@@ -200,6 +200,6 @@ class AvatarView extends Views {
      * @abstract Updates avatar view
      */
     update() {
-        throw new Error('update() has to be implemented!')
+        throw new Error('update() has to be implemented!');
     }
 }

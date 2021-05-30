@@ -25,7 +25,7 @@ class SuccessesBar extends Views {
      * @param {number} points points
      */
     updatePoints(points) {
-        $('#pointBox').empty()
+        $('#pointBox').empty();
         $('#pointBox').text(points);
 
     }
@@ -36,7 +36,7 @@ class SuccessesBar extends Views {
      * @param {?number} rank rank
      */
     updateRank(rank) {
-        $('#rankBox').empty()
+        $('#rankBox').empty();
 
         if (rank)
             $('#rankBox').text(rank);
