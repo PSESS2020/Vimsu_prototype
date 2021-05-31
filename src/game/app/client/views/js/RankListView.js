@@ -54,13 +54,13 @@ class RankListView extends WindowView {
 
             $('#rankListModal .modal-body #ranklistrow').append(`
                 <div class="col-sm-4 mb-2 mt-2">
-                    <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0rem; border-color: ${color}; color: ${color}; border-style: groove;">
+                    <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0rem; border-color: ${color}; border-style: groove;">
                         <div class="card-body">
                             <div class="card-text" id="${"cardtext" + ppant.participantId}">
                                 <div class="row">
-                                    <div class="col-1 pr-0 text-nowrap">${ppant.rank}</div>
-                                    <div class="col-8 pr-0 text-truncate" title="${ppant.username}" data-toggle="tooltip">${ppant.username}</div>
-                                    <div class="col-3 pl-0 text-right text-truncate" title="${ppant.points + "P"}" data-toggle="tooltip">${ppant.points + "P"}</div>
+                                    <div class="col-1 pr-0 text-nowrap" style="color: ${color}">${ppant.rank}</div>
+                                    <div class="col-8 pr-0 text-truncate" style="color: ${color}" title="${ppant.username}" data-toggle="tooltip">${ppant.username}</div>
+                                    <div class="col-3 pl-0 text-right text-truncate" style="color: ${color}" title="${ppant.points + "P"}" data-toggle="tooltip">${ppant.points + "P"}</div>
                                 </div>
                             </div>
                         </div>

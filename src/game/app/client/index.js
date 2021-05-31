@@ -135,7 +135,12 @@ function index() {
 
     $('#gameDiv').css(props);
 
-    $("html").css({"font-size": Math.round(Settings.HUD_FONT_SIZE * newScaleFactor)});
+    let fontSizePadding = 0;
+
+    if(newScaleFactor < 1)
+      fontSizePadding = 2;
+
+    $("html").css({"font-size": Math.round(Settings.HUD_FONT_SIZE * newScaleFactor) + fontSizePadding});
 
     if(newScaleFactor < 0.5)
     {

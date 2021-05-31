@@ -145,17 +145,12 @@ button:focus {
 }
 
 .modal-dialog {
-  max-width: 31.25rem;
-  margin: 1.75rem auto;
+  max-width: 30rem;
+  margin: auto;
 }
 
 .modal-dialog-centered {
   min-height: calc(100% - 3.5rem);
-}
-
-.modal.fade .modal-dialog {
-  -webkit-transform: translate(0, -3.125rem);
-  transform: translate(0, -3.125rem);
 }
 
 .modal-content {
