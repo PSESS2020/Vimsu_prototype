@@ -6,6 +6,8 @@
  */
 class AllchatView extends Views {
 
+    lastCommands = [];
+
     /**
      * Creates an instance of Allchat View
      * 
@@ -32,31 +34,65 @@ class AllchatView extends Views {
             this.hideAllchatBox();
         });
 
+        let counter = -1;
+
         const sendMessage = (event) => {
             event.preventDefault();
             //Replace needed to replace html tags.
-            let messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             if (messageVal !== '') {
+                counter = -1;
                 eventManager.handleAllchatMessageInput(messageVal);
                 $('#allchatMessageInput').val('');
                 return false;
             }
         }
 
-        new EmojiPicker().draw('bottom-start', "allchat-emoji-trigger", "allchatMessageInput");
+        const putCommandOnInput = () => {
+            var input = $('#allchatMessageInput');
+            input.val(this.lastCommands[counter] ? this.lastCommands[counter] : input.val());
+
+            var inputLength = input.val().length;
+            setTimeout(() => {
+                input[0].focus();
+                input[0].setSelectionRange(inputLength, inputLength);
+            }, 1)
+        }
+
+        new EmojiPicker().draw('allchatEmojiTrigger', 'allchatEmojiPicker', 'allchatMessageInput');
 
         $('#allchat').on('keydown', (event) => {
             event.stopPropagation();
-
-            if (event.keyCode === 13) {
+            
+            if (event.key === 'Enter' && !event.shiftKey) {
                 sendMessage(event);
+            } else if (event.key === 'ArrowUp') {
+                if (counter !== this.lastCommands.length - 1) {
+                    ++counter;
+                }
+
+                putCommandOnInput();
+            } else if (event.key === 'ArrowDown') {
+                if (counter !== 0) {
+                    --counter;
+                }
+
+                putCommandOnInput();
             }
         });
 
         $('#allchat').on('submit', (event) => {
             sendMessage(event);
         });
+    }
+
+    /**
+     * Adds command into last commands array
+     * @param {String} command last command
+     */
+    saveCommand(command) {
+        this.lastCommands.unshift(command);
     }
 
     /**
@@ -86,27 +122,24 @@ class AllchatView extends Views {
         messages.forEach((message) => {
             this.appendMessage(message, ownUsername);
         });
-
-        setTimeout(() => {
-            $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
-        }, 500);
     }
 
     showAllchatBox() {
-        $("#allchatWindow").show()
-        $("#allchatWindow").animate({"left":"0.9375rem"}, Settings.TOGGLE_SPEED);
+        $("#allchatWindow").show();
+        $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
+        $("#allchatWindow").animate({ "left": "0.9375rem" }, Settings.TOGGLE_SPEED);
         $('#showRoomChatDiv').hide();
-        $("#unreadAllchatMessage").text(0)
+        $("#unreadAllchatMessage").text(0);
     }
 
     hideAllchatBox() {
-        $("#allchatWindow").animate({"left":"-15.625rem"}, Settings.TOGGLE_SPEED);
-            
+        $("#allchatWindow").animate({ "left": "-15.625rem" }, Settings.TOGGLE_SPEED);
+
         setTimeout(() => {
             $("#allchatWindow").hide();
         }, Settings.TOGGLE_SPEED);
-        
-        $("#unreadAllchatMessage").text(0)
+
+        $("#unreadAllchatMessage").text(0);
         $('#showRoomChatDiv').show();
     }
 

@@ -241,6 +241,61 @@ class EventManager {
     handleRemoveMinimizedMeetingNotif(meetingId) {
         this.clientController.handleFromViewRemoveMinimizedMeetingNotif(meetingId);
     }
+
+    /**
+     * called from view when a message is read
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
+    handleRemoveNewMessageNotif(senderUsername, chatId) {
+        this.clientController.handleFromViewRemoveNewMessageNotif(senderUsername, chatId);
+    }
+
+    /**
+     * called from view when a chat is read
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleRemoveNewChatNotif(chatId) {
+        this.clientController.handleFromViewRemoveNewChatNotif(chatId);
+    }
+
+    /**
+     * called from view when a group chat is read
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleRemoveNewGroupChatNotif(chatId) {
+        this.clientController.handleFromViewRemoveNewGroupChatNotif(chatId);
+    }
+
+    /**
+     * called from view when meeting list is shown
+     * 
+     * @param {String} meetingID meeting ID
+     */
+     handleRemoveNewMeetingNotif(meetingID) {
+        this.clientController.handleFromViewRemoveNewMeetingNotif(meetingID);
+    }
+
+    /**
+     * called from view when friend request is shown
+     * 
+     * @param {String} senderUsername requester username
+     */
+     handleRemoveNewFriendRequestNotif(senderUsername) {
+        this.clientController.handleFromViewRemoveNewFriendRequestNotif(senderUsername);
+    }
+
+    /**
+     * called from view when friend list is shown
+     * 
+     * @param {String} friendUsername friend username
+     */
+     handleRemoveNewFriendNotif(friendUsername) {
+        this.clientController.handleFromViewRemoveNewFriendNotif(friendUsername);
+    }
     
     /**
      * called from view when chat meeting button is clicked
@@ -326,6 +381,18 @@ class EventManager {
      */
     handleRankListClicked() {
         this.clientController.handleFromViewShowRankList();
+    }
+
+    /**
+     * called from View to load more rank list data
+     * 
+     * @param {Number} currentRankListLength current rank list length on rank list board
+     * @param {Number} lastRank last rank on rank list board
+     * @param {Number} lastPoints last points on rank list board
+     * @param {Number} lastPointsLength number of participants with last points
+     */
+    handleLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength) {
+        this.clientController.handleFromViewLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength);
     }
 
     /**

@@ -3,7 +3,7 @@ const Message = require('../models/Message');
 const OneToOneChat = require('../models/OneToOneChat');
 const GroupChat = require('../models/GroupChat');
 const ObjectId = require('mongodb').ObjectID;
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const db = require('../../../../config/db')
 
 /**
@@ -222,6 +222,31 @@ module.exports = class ChatService {
                 }
                 
                 return loadedChat;
+            } else {
+                console.log("could not find chat with chatId" + chatId);
+                return false;
+            }
+        })
+    }
+
+    /**
+     * gets the member list from chat with chatId
+     * @static @method module:ChatService#loadChat
+     * 
+     * @param {String} chatId chat ID
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return {Chat} Chat instance if found, otherwise false
+     */
+    static loadMemberList(chatId, conferenceId, vimsudb) {
+        TypeChecker.isString(chatId);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+    
+        return vimsudb.findOneInCollection("chats_" + conferenceId, { chatId: chatId }).then(chat => {
+            if (chat) {
+                return chat.memberId;
             } else {
                 console.log("could not find chat with chatId" + chatId);
                 return false;

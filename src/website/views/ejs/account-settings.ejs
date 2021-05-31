@@ -28,90 +28,89 @@
                             <div class="tab-pane" id="nav-edit-account" role="tabpanel"
                                 aria-labelledby="nav-edit-account-tab">
                                 <form action="" method="POST">
-                                    <h5 class="mb-4">Edit Account Info</h5>
+                                    <h5 class="mb-4"><%=languageData.accountSettings.editAccountInfo%></h5>
                                     <div class="row justify-content-left mb-3 m-0 p-0">
                                         <% if (locals.editAccountSuccess === true) { %>
-                                            <small class="success"><i class="fa fa-check-circle"></i> Your changes have been saved.</small>
+                                            <small class="success"><i class="fa fa-check-circle"></i> <%=languageData.accountSettings.changeSuccess%></small>
                                         <% } else if (locals.usernameTaken === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> The username
-                                                you entered is already taken</small>
-                                        <% } else if (locals.emailTaken === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> The email you
-                                                entered is already registered</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.usernameTaken%> </small>
+                                        <% } else if (locals.advancedRegistrationSystem && locals.emailTaken === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.emailTaken%> </small>
                                         <% } else if (locals.editAccountFailed === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> There's an
-                                                error while saving your changes. Please try again.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.changeError%></small>
                                         <% } else if (locals.invalidUsernameString === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> The username
-                                                you entered doesn't match our criteria.</small>
-                                        <% } else if (locals.invalidEmail === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> The email you
-                                                entered is invalid. Please try again.</small>
-                                        <% } else if(locals.invalidTitle === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> Invalid title.
-                                                Please choose a title from the options we provided.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.invalidUsername%></small>
+                                        <% } else if (locals.advancedRegistrationSystem && locals.invalidEmail === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.invalidEmail%></small>
+                                        <% } else if(locals.advancedRegistrationSystem && locals.invalidTitle === true) { %>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.invalidTitle%></small>
                                         <% } else if(locals.invalidForename === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> Forename cannot be empty.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.emptyForename%></small>
                                         <% } else if (locals.deleteAccountFailed === true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> There's an error while deleting your account. Please try again.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.deleteAccountFail%></small>
                                         <% } %>
                                     </div>
-                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
+                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* <%=languageData.accountSettings.requiredFields%></small></div>
                                     <div class="form-group">
-                                        <label for="username" class="input-label">Username&nbsp<span class="warning">*</span></label>
+                                        <label for="username" class="input-label"><%=languageData.userData.username%>&nbsp<span class="warning">*</span></label>
                                         <input class="form-control" type="text" id="usernameInput" name="username"
-                                            value="<%=username%>" maxlength="10" required>
+                                            value="<%=username%>" maxlength="32" required>
                                     </div>
+                                    <% if (locals.advancedRegistrationSystem) { %>
+                                        <div class="form-group">
+                                            <label for="email" class="input-label"><%=languageData.userData.email%>&nbsp<span class="warning">*</span></label>
+                                            <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" required>
+                                        </div>
+                                    <% } %>
                                     <div class="form-group">
-                                        <label for="email" class="input-label">Email&nbsp<span class="warning">*</span></label>
-                                        <input class="form-control" type="text" name="email" id="emailInput" value="<%=email%>" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="forename" class="input-label">Forename&nbsp<span class="warning">*</span></label>
+                                        <label for="forename" class="input-label"><%=languageData.userData.forename%>&nbsp<span class="warning">*</span></label>
                                         <input type="text" class="form-control" id="inputForename" name="forename"
                                             value="<%=forename%>" required>
                                     </div>
                 
-                                    <div class="form-row">
-                                        <div class="form-group col-6">
-                                            <label for="title" class="input-label">Title</label>
-                                            <select class="form-control" name="title" id="inputTitle" required>
-                                                <option selected>Title</option>
-                                                <option>Mr.</option>
-                                                <option>Mrs.</option>
-                                                <option>Ms.</option>
-                                                <option>Miss</option>
-                                                <option>Dr.</option>
-                                                <option>Prof.</option>
-                                                <option>Rev.</option>
-                                            </select>
-                                        </div>
+                                    <% if (locals.advancedRegistrationSystem) { %>
+                                        <div class="form-row">
+                                            <div class="form-group col-6">
+                                                <label for="title" class="input-label"><%=languageData.userData.title%></label>
+                                                <select class="form-control" name="title" id="inputTitle">
+                                                    <option selected value=""><%=languageData.userData.title%></option>
+                                                    <% 
+                                                        titleOptions.map(option => { 
+                                                    %>
+                                                        <option <%=title === option ? "selected" : "" %>><%=option %></option>
+                                                    <% }) %>
+                                                </select>
+                                            </div>
                                         
-                                        <div class="form-group col-6">
-                                            <label for="surname" class="input-label">Surname</label>
-                                            <input type="text" class="form-control" id="inputSurname" name="surname"
-                                                value="<%=surname%>">
+                                            
+                                            <div class="form-group col-6">
+                                                <label for="surname" class="input-label"><%=languageData.userData.surname%></label>
+                                                <input type="text" class="form-control" id="inputSurname" name="surname"
+                                                    value="<%=surname%>">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="form-row">
-                                        <div class="form-group col-6">
-                                            <label for="job" class="input-label">Job/Profession</label>
-                                            <input type="text" class="form-control" id="inputJob" name="job"
-                                                value="<%=job%>">
+                                        <div class="form-row">
+                                            <div class="form-group col-6">
+                                                <label for="job" class="input-label"><%=languageData.userData.job%></label>
+                                                <input type="text" class="form-control" id="inputJob" name="job"
+                                                    value="<%=job%>">
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="company" class="input-label"><%=languageData.userData.company%></label>
+                                                <input type="text" class="form-control" id="inputCompany" name="company"
+                                                    value="<%=company%>">
+                                            </div>
                                         </div>
-                                        <div class="form-group col-6">
-                                            <label for="company" class="input-label">Company/School</label>
-                                            <input type="text" class="form-control" id="inputCompany" name="company"
-                                                value="<%=company%>">
-                                        </div>
+                                    <% } %>
+                                    <div class="d-flex align-items-left justify-content-center mt-4">
+                                        <button class="primary-button p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
+                                            <span><%=languageData.accountSettings.saveChanges%></span>
+                                        </button>
+                                        <button class="warning-button p-2 ml-3" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
+                                            <span><%=languageData.accountSettings.deleteAccount%></span>
+                                        </button>
                                     </div>
-                                    <button class="primary-button mt-4 p-2" type="submit" name="accountSettingsButton" value="saveChangesButton">
-                                        <span>Save changes</span>
-                                    </button>
-                                    <button class="warning-button mt-4 ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 p-2" type="submit" name="accountSettingsButton" value="deleteAccountButton" onclick="confirmDeleteAccount(event)">
-                                        <span>Delete account</span>
-                                    </button>
                                 </form>
                             </div>
                         
@@ -119,44 +118,42 @@
                             <div class="tab-pane" id="nav-change-password" role="tabpanel"
                                 aria-labelledby="nav-change-password-tab">
                                 <form action="" method="POST">
-                                    <h5 class="mb-4">Change Password</h5>
+                                    <h5 class="mb-4"><%=languageData.accountSettings.changePassword%></h5>
                                     <div class="row justify-content-left mb-3 m-0 p-0">
                                         <% if (locals.changePasswordSuccess===true) { %>
-                                            <small class="success"><i class="fa fa-check-circle"></i> Your password has
-                                                been changed.</small>
+                                            <small class="success"><i class="fa fa-check-circle"></i> <%=languageData.accountSettings.changePasswordSuccess%></small>
                                         <% } else if (locals.oldPasswordWrong===true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> Your old password is wrong.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.oldPasswordWrong%></small>
                                         <% } else if (locals.passwordsDontMatch===true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> New passwords do not match.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.passwordsDontMatch%></small>
                                         <% } else if (locals.invalidPassword===true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> Passwords cannot be empty.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.emptyPassword%></small>
                                         <% } else if (locals.changePasswordFailed===true) { %>
-                                            <small class="error"><i class="fa fa-times-circle"></i> There's an error while changing your password. 
-                                                Please try again.</small>
+                                            <small class="error"><i class="fa fa-times-circle"></i> <%=languageData.accountSettings.changePasswordFail%></small>
                                         <% } %>
                                     </div>
-                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* Required fields</small></div>
+                                    <div class="row justify-content-left m-0 mb-2 p-0"><small class="warning">* <%=languageData.accountSettings.requiredFields%></small></div>
                                     <div class="form-group">
-                                        <label for="oldPassword" class="input-label">Old password&nbsp<span class="warning">*</span></label>
+                                        <label for="oldPassword" class="input-label"><%=languageData.accountSettings.oldPassword%>&nbsp<span class="warning">*</span></label>
                                         <input class="form-control" type="password" id="oldPasswordInput" name="oldPassword"
                                             required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="newPassword" class="input-label">New password&nbsp<span class="warning">*</span></label>
+                                        <label for="newPassword" class="input-label"><%=languageData.accountSettings.newPassword%>&nbsp<span class="warning">*</span></label>
                                         <input type="password" class="form-control" id="newPasswordInput" name="newPassword"
                                             required>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="retypeNewPassword" class="input-label">Confirm new password&nbsp<span class="warning">*</span></label>
+                                        <label for="retypeNewPassword" class="input-label"><%=languageData.accountSettings.confirmPassword%>&nbsp<span class="warning">*</span></label>
                                         <input type="password" class="form-control" id="retypeNewPasswordInput" name="retypedNewPassword"
                                             required>
                                     </div>
 
                                     <button class="primary-button mt-4 p-2" type="submit"
                                         name="accountSettingsButton" value="changePasswordButton">
-                                        <span>Change password</span>
+                                        <span><%=languageData.accountSettings.changePassword%></span>
                                     </button>
                                 </form>
                             </div>
@@ -169,12 +166,7 @@
     <%- include('partials/footer') %>
 
     <script>
-        $(document).ready(() => {
-            var title = "<%=title%>";
-            document.getElementById("inputTitle").value = title ? title : "Title";
-        })
-
-        $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-10 characters containing only numbers, letters, and characters such as dash, underscore, or dot. No 2 characters in a row or any characters at the start or at the end.'});
+        $('#usernameInput').tooltip({'trigger':'focus', 'title': '2-32 characters containing only numbers, letters, and characters such as dash, underscore, or dot. 2 characters in a row or any characters at the start or at the end are not allowed.'});
 
         function confirmDeleteAccount(e) {
             if (!confirm("Are you sure you want to delete your account permanently?")) {

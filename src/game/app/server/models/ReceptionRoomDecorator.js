@@ -2,12 +2,12 @@ const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const Room = require('./Room');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Messages = require('../utils/Messages.js');
+const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 
 /**
  * The Reception Room Decorator Model
@@ -101,7 +101,7 @@ module.exports = class ReceptionRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT, false, Messages.FIRSTDOORCLOSED));
+        listOfDoors.push(doorService.createFoyerDoor(new Position(Settings.RECEPTION_ID, 2, -1), new Position(Settings.FOYER_ID, 24, 21), Direction.DOWNLEFT, false, DoorClosedMessages.FIRSTDOORCLOSED));
         listOfMapElements.push(objService.createDefaultLeftTile(Settings.RECEPTION_ID, 2, -2, false, false));
 
         //Assign lists to room and build occupation map

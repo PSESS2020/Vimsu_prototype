@@ -6,7 +6,7 @@ const ParticipantClient = require('../../../src/game/app/client/models/Participa
 const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 
 var id;
-var username;
+var displayName;
 var position;
 var direction;
 var isVisible;
@@ -19,18 +19,18 @@ describe('ParticipantClient test', function () {
     //test data
     beforeEach(function () {
         id = TestUtil.randomString();
-        username = TestUtil.randomString();
+        displayName = TestUtil.randomString();
         position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
         direction = Direction.DOWNLEFT;
         isVisible = TestUtil.randomBool();
         isModerator = TestUtil.randomBool();
         shirtColor = ShirtColor.BLUE;
-        ppant = new ParticipantClient(id, username, position, direction, isVisible, isModerator, shirtColor);
+        ppant = new ParticipantClient(id, displayName, position, direction, isVisible, isModerator, shirtColor);
     });
 
     it('test getters', function () {
         expect(ppant.getId()).to.be.a('string').and.to.equal(id);
-        expect(ppant.getUsername()).to.be.a('string').and.to.equal(username);
+        expect(ppant.getDisplayName()).to.be.a('string').and.to.equal(displayName);
         expect(ppant.getPosition()).to.be.instanceOf(PositionClient).and.to.equal(position);
         expect(ppant.getDirection()).to.equal(direction);
         expect(ppant.getIsVisible()).to.equal(isVisible);

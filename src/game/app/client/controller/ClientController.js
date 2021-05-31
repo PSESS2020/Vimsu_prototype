@@ -13,6 +13,7 @@ class ClientController {
     ownBusinessCard;
     gameView;
     isVideoConference;
+    displayName;
 
     /**
      * creates an instance of ClientController only if there is not an instance already.
@@ -45,7 +46,7 @@ class ClientController {
      * @return {RoomClient}
      */
     getCurrentRoom() {
-       return this.currentRoom; 
+        return this.currentRoom; 
     }
 
     /**
@@ -84,7 +85,7 @@ class ClientController {
         }
 
         this.gameView.drawStatusBar();
-        this.gameView.drawHUD(this.ownParticipant.getUsername(), this.isVideoConference);
+        this.gameView.drawHUD(this.ownBusinessCard.getUsername(), this.isVideoConference);
         this.gameView.initOwnAvatarView(this.ownParticipant);
         this.gameView.initCanvasEvents();
 
@@ -155,7 +156,7 @@ class ClientController {
                 this.gameView.updateConnectionStatus(ConnectionState.DISCONNECTED);
                 
                 if (reason === "transport close" || reason === "ping timeout" || reason === "transport error") {
-                    window.setTimeout(() => { this.openSocketConnection() }, 5000 );
+                    setTimeout(() => { this.openSocketConnection() }, 5000 );
                 } else {
                     this.socket.close();
                 }
@@ -295,41 +296,49 @@ class ClientController {
         TypeChecker.isInstanceOf(initInfo.businessCard, Object);
         TypeChecker.isString(initInfo.businessCard.id);
         TypeChecker.isString(initInfo.businessCard.username);
-        TypeChecker.isString(initInfo.businessCard.title);
-        TypeChecker.isString(initInfo.businessCard.surname);
         TypeChecker.isString(initInfo.businessCard.forename);
-        TypeChecker.isString(initInfo.businessCard.job);
-        TypeChecker.isString(initInfo.businessCard.company);
-        TypeChecker.isString(initInfo.businessCard.email);
         TypeChecker.isInt(initInfo.cordX);
         TypeChecker.isInt(initInfo.cordY);
         TypeChecker.isEnumOf(initInfo.dir, Direction);
         TypeChecker.isBoolean(initInfo.isVisible);
         TypeChecker.isBoolean(initInfo.isModerator);
         TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
-
-        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
+        TypeChecker.isString(initInfo.displayName);
+        if (initInfo.businessCard.title !== undefined)
+            TypeChecker.isString(initInfo.businessCard.title);
+        if (initInfo.businessCard.surname !== undefined) 
+            TypeChecker.isString(initInfo.businessCard.surname);
+        if (initInfo.businessCard.job !== undefined) 
+            TypeChecker.isString(initInfo.businessCard.job);
+        if (initInfo.businessCard.company !== undefined)   
+            TypeChecker.isString(initInfo.businessCard.company);
+        if (initInfo.businessCard.email !== undefined)  
+            TypeChecker.isString(initInfo.businessCard.email);
 
         this.ownBusinessCard = new BusinessCardClient(
             initInfo.businessCard.id,
             initInfo.businessCard.username,
+            initInfo.businessCard.forename,
             initInfo.businessCard.title,
             initInfo.businessCard.surname,
-            initInfo.businessCard.forename,
             initInfo.businessCard.job,
             initInfo.businessCard.company,
             initInfo.businessCard.email
         );
+        var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
+
+        this.displayName = initInfo.displayName;
 
         this.ownParticipant = new ParticipantClient(
             initInfo.id,
-            this.ownBusinessCard.getUsername(),
+            this.displayName,
             initPos,
             initInfo.dir,
             initInfo.isVisible,
             initInfo.isModerator,
             initInfo.shirtColor
         );
+
         this.currentRoom.enterParticipant(this.ownParticipant);
         this.initGameView();
     }
@@ -556,7 +565,7 @@ class ClientController {
 
         TypeChecker.isInstanceOf(initInfo, Object);
         TypeChecker.isString(initInfo.id);
-        TypeChecker.isString(initInfo.username);
+        TypeChecker.isString(initInfo.displayName);
         TypeChecker.isInt(initInfo.cordX);
         TypeChecker.isInt(initInfo.cordY);
         TypeChecker.isEnumOf(initInfo.dir, Direction);
@@ -565,7 +574,7 @@ class ClientController {
         TypeChecker.isEnumOf(initInfo.shirtColor, ShirtColor);
 
         var initPos = new PositionClient(initInfo.cordX, initInfo.cordY);
-        var participant = new ParticipantClient(initInfo.id, initInfo.username, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator, initInfo.shirtColor);
+        var participant = new ParticipantClient(initInfo.id, initInfo.displayName, initPos, initInfo.dir, initInfo.isVisible, initInfo.isModerator, initInfo.shirtColor);
         this.currentRoom.enterParticipant(participant);
         this.gameView.initAnotherAvatarViews(participant);
     }
@@ -619,8 +628,9 @@ class ClientController {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     handleFromServerBusinessCard = function (businessCardObject, rank, isModerator) {
+
         let businessCard = new BusinessCardClient(businessCardObject.id, businessCardObject.username,
-            businessCardObject.title, businessCardObject.surname, businessCardObject.forename,
+            businessCardObject.forename, businessCardObject.title, businessCardObject.surname,
             businessCardObject.job, businessCardObject.company, businessCardObject.email);
 
         //check if ppant is a friend or not
@@ -644,7 +654,7 @@ class ClientController {
         if (friendListData) {
             var friendList = [];
             friendListData.forEach(data => {
-                friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+                friendList.push(new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email));
             });
         } else {
             var friendList = undefined;
@@ -668,7 +678,7 @@ class ClientController {
     handleFromServerFriendList = function (friendListData) {
         var friendList = [];
         friendListData.forEach(data => {
-            friendList.push(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            friendList.push(new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email));
         });
         this.gameView.initFriendListView(friendList);
     }
@@ -681,7 +691,7 @@ class ClientController {
     handleFromServerFriendRequestList = function (friendRequestListData) {
         var friendRequestList = [];
         friendRequestListData.forEach(data => {
-            friendRequestList.unshift(new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email));
+            friendRequestList.push(new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email));
         });
 
         this.gameView.initFriendRequestListView(friendRequestList);
@@ -694,7 +704,7 @@ class ClientController {
      * @param {String} chatId chat ID with the requester
      */
     handleFromServerNewFriendRequest = function (data, chatId) {
-        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        var friendRequest = new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email);
         this.gameView.addFriendRequest(friendRequest);
         this.gameView.updateChatThread(chatId, false, true);
         this.gameView.drawNewFriendRequest(data.username);
@@ -707,7 +717,7 @@ class ClientController {
      * @param {String} chatId chat ID with this friend
      */
     handleFromServerAcceptedFriendRequest = function (data, chatId) {
-        var friend = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+        var friend = new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email);
         this.gameView.addFriend(friend);
         this.gameView.updateChatThread(chatId, true, false);
         this.gameView.drawNewFriend(data.username);
@@ -754,12 +764,13 @@ class ClientController {
     }
 
     /**
-     * Is called after server send the answer of ranklistclick
+     * Is called after server sends the answer of ranklistclick
      * 
      * @param {Object} rankList rank list
+     * @param {Boolean} emptyRankList if rank list should be emptied
      */
-    handleFromServerRankList = function (rankList) {
-        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername());
+    handleFromServerRankList = function (rankList, emptyRankList) {
+        this.gameView.initRankListView(rankList, this.ownBusinessCard.getUsername(), emptyRankList);
     }
 
     /**
@@ -809,7 +820,7 @@ class ClientController {
      */
     handleFromServerAddToInviteFriends = function (data, hasLeftChat) {
         if (data) {
-            var businessCard = new BusinessCardClient(data.friendId, data.username, data.title, data.surname, data.forename, data.job, data.company, data.email);
+            var businessCard = new BusinessCardClient(data.friendId, data.username, data.forename, data.title, data.surname, data.job, data.company, data.email);
         } else
             var businessCard = undefined;
 
@@ -983,6 +994,7 @@ class ClientController {
      * Receives from server that client has been removed from the conference
      */
     handleFromServerRemoved = function () {
+        $("#windowHTML").show();
         $('#viewBlocker').show();
     };
 
@@ -1062,7 +1074,7 @@ class ClientController {
      * 
      * @param {Object} meeting meeting
      */
-     handleFromServerNewMeeting = function (meeting) {
+    handleFromServerNewMeeting = function (meeting) {
         TypeChecker.isInstanceOf(meeting, Object);
         TypeChecker.isString(meeting.id);
         TypeChecker.isString(meeting.domain);
@@ -1174,7 +1186,7 @@ class ClientController {
      * 
      * @param {boolean} modState true if you become a moderator, false otherwise
      */
-    handleFromServerChangeYourModState = function(modState) {
+    handleFromServerChangeYourModState = function (modState) {
         TypeChecker.isBoolean(modState);
 
         this.gameView.setOwnModState(modState);
@@ -1187,7 +1199,7 @@ class ClientController {
      * @param {boolean} modState true if the user becomes a moderator, false otherwise
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherModState = function(modState, ppantID) {
+    handleFromServerChangeOtherModState = function (modState, ppantID) {
         TypeChecker.isBoolean(modState);
         TypeChecker.isString(ppantID);
 
@@ -1204,7 +1216,7 @@ class ClientController {
      * 
      * @param {ShirtColor} shirtColor new shirt color
      */
-    handleFromServerChangeYourShirtColor = function(shirtColor) {
+    handleFromServerChangeYourShirtColor = function (shirtColor) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 
         this.gameView.setOwnShirtColor(shirtColor);
@@ -1217,7 +1229,7 @@ class ClientController {
      * @param {ShirtColor} shirtColor new shirt color
      * @param {String} ppantID ID of that ppant
      */
-    handleFromServerChangeOtherShirtColor = function(shirtColor, ppantID) {
+    handleFromServerChangeOtherShirtColor = function (shirtColor, ppantID) {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         TypeChecker.isString(ppantID);
 
@@ -1234,7 +1246,7 @@ class ClientController {
      * 
      * @param {String} groupName name of joined group
      */
-    handleFromServerJoinGroup = function(groupName) {
+    handleFromServerJoinGroup = function (groupName) {
         TypeChecker.isString(groupName);
 
         this.gameView.addGroupName(groupName);
@@ -1285,7 +1297,7 @@ class ClientController {
      * 
      * @param {String} meetingID meetingID of left meeting
      */
-    handleFromServerLeaveMeeting = function(meetingID) {
+    handleFromServerLeaveMeeting = function (meetingID) {
         TypeChecker.isString(meetingID);
 
         this.gameView.removeMeeting(meetingID);
@@ -1330,8 +1342,11 @@ class ClientController {
             TypeChecker.isString(text);
             this.socket.emit('sendMessage', text);
 
-            if (!(text.startsWith("\\") && this.ownParticipant.getIsModerator()))
+            if (!(text.startsWith("\\") && this.ownParticipant.getIsModerator())) {
                 this.gameView.showAllchatBox()
+            } else if (text.startsWith("\\") && this.ownParticipant.getIsModerator()) {
+                this.gameView.saveCommand(text);
+            }
         }
         else {
             this.gameView.appendAllchatMessage(this.getSendMessageFailureText(), this.ownBusinessCard.getUsername())
@@ -1621,6 +1636,20 @@ class ClientController {
     }
 
     /**
+     * Gets more rank list data from server
+     * 
+     * @param {Number} currentRankListLength current rank list length on rank list board
+     * @param {Number} lastRank last rank on rank list board
+     * @param {Number} lastPoints last points on rank list board
+     * @param {Number} lastPointsLength number of participants with last points
+     */
+    handleFromViewLoadMoreRankList(currentRanklistLength, lastRank, lastPoints, lastPointsLength) {
+        if (this.socketReady()) {
+            this.socket.emit('getMoreDataRankList', currentRanklistLength, lastRank, lastPoints, lastPointsLength);
+        }
+    }
+
+    /**
      * Gets the list of chats the user is in - one-on-one and group - from the server. 
      */
     handleFromViewShowChatList() {
@@ -1659,7 +1688,7 @@ class ClientController {
         TypeChecker.isString(meeting.name);
         TypeChecker.isString(meeting.password);
 
-        this.gameView.initVideoMeetingView(meeting, this.ownParticipant.getUsername());
+        this.gameView.initVideoMeetingView(meeting, this.displayName);
     }
 
     /**
@@ -1698,6 +1727,74 @@ class ClientController {
         TypeChecker.isString(meetingId);
 
         this.gameView.removeMinimizedMeetingNotif(meetingId);
+    }
+
+    /**
+     * Removes message notif
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewMessageNotif(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewMessageNotif(senderUsername, chatId);
+    }
+
+    /**
+     * Removes chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewChatNotif(chatId);
+    }
+
+    /**
+     * removes group chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     handleFromViewRemoveNewGroupChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.gameView.removeNewGroupChatNotif(chatId);
+    }
+
+    /**
+     * removes meeting notif
+     * 
+     * @param {String} meetingID meeting ID
+     */
+    handleFromViewRemoveNewMeetingNotif(meetingID) {
+        TypeChecker.isString(meetingID);
+
+        this.gameView.removeNewMeetingNotif(meetingID);
+    }
+
+    /**
+     * removes new friend request notif
+     * 
+     * @param {String} senderUsername requester username
+     */
+     handleFromViewRemoveNewFriendRequestNotif(senderUsername) {
+        TypeChecker.isString(senderUsername);
+
+        this.gameView.removeNewFriendRequestNotif(senderUsername);
+    }
+
+    /**
+     * removes new friend notif
+     * 
+     * @param {String} friendUsername friend username
+     */
+     handleFromViewRemoveNewFriendNotif(friendUsername) {
+        TypeChecker.isString(friendUsername);
+
+        this.gameView.removeNewFriendNotif(friendUsername);
     }
 
     /**

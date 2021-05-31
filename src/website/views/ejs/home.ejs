@@ -10,18 +10,18 @@
 		<%- include('partials/header') %>
         <section class="row align-items-center justify-content-center" id="content">
             <div class="col-lg-6 col-md-12 col-sm-12" id="title">
-                <h2>Virtual Interactive Meeting Simulator</h2>
-                <h6>Discover the 2.5D virtual conference experience with us!</h6>
+                <h2><%=languageData.homepage.vimsuName%></h2>
+                <h6><%=languageData.homepage.discoverVimsu%></h6>
                 <% if (locals.loggedIn === true) { %>
                   <a class="btn primary-button mt-4 p-2" href="/conference/<%=conferenceId%>">
-                    <span>Enter conference</span>
+                    <span><%=languageData.homepage.enterConference%></span>
                   </a>
                 <% } else { %>
                   <a class="btn primary-button mt-4 p-2" href="/register">
-                    <span>Try it now for free</span>
+                    <span><%=languageData.homepage.register%></span>
                   </a>
                   <a class="btn primary-button ml-xl-3 ml-lg-1 ml-md-2 ml-sm-3 ml-1 mt-4 p-2" href="/login">
-                    <span>Sign in</span>
+                    <span><%=languageData.homepage.logIn%></span>
                   </a>
                 <% } %>
             </div>

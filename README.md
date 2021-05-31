@@ -112,9 +112,8 @@ You can create an account and access the conference by following the steps below
 
 1. Go to the VIMSU homepage.
 2. Click the `Register` button.
-3. Enter your username and e-mail address and click the `Verify` button.
-4. Fill out the rest of the registration form and click the `Register Now` button.
-5. Click the yellow button that says `Enter Conference >>`.
+3. Fill out the registration form and click the `Register Now` button.
+4. Click the button that says `Enter Conference`.
 
 After you have created an account, you will be able to use it to log into any VIMSU instance that uses the same database as the one you created your account on.
 
@@ -124,7 +123,7 @@ You can upload lectures by following the steps below:
 1. Go to the VIMSU homepage and log into your account.
 2. Press the `Upload` button.
 3. Enter your lecture data and select the video you want to upload.
-4. Press the `Create lecture and upload video` button.
+4. Press the `Create lecture` button.
 
 At this point, the lecture should have been uploaded successfully, but it still has to be accepted.
 

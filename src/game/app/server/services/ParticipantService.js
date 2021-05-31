@@ -3,7 +3,7 @@ const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction');
 const BusinessCard = require('../models/BusinessCard');
 const Participant = require('../models/Participant');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const ObjectId = require('mongodb').ObjectID;
 const Account = require('../../../../website/models/Account');
 const AccountService = require('../../../../website/services/AccountService');
@@ -87,9 +87,9 @@ module.exports = class ParticipantService {
                         accountId,
                         new BusinessCard(par.participantId,
                             account.getUsername(),
+                            account.getForename(),
                             account.getTitle(),
                             account.getSurname(),
-                            account.getForename(),
                             account.getJob(),
                             account.getCompany(),
                             account.getEmail()),
@@ -183,9 +183,9 @@ module.exports = class ParticipantService {
                             accountId,
                             new BusinessCard(par.participantId,
                                 account.getUsername(),
+                                account.getForename(),
                                 account.getTitle(),
                                 account.getSurname(),
-                                account.getForename(),
                                 account.getJob(),
                                 account.getCompany(),
                                 account.getEmail()),
@@ -268,7 +268,7 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, { accountId: 1 }).then(par => {
             if (par) {
-                return AccountService.getAccountUsername(par.accountId, '', vimsudb).then(username => {
+                return AccountService.getAccountUsername(par.accountId, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(username => {
                     return username;
                 })
             }
@@ -277,6 +277,34 @@ module.exports = class ParticipantService {
                 return false;
             }
 
+        })
+    }
+
+    /**
+     * @static Gets participant's ID from the database by username
+     * @method module:ParticipantService#getIDByUsername
+     * 
+     * @param {String} username username of participant
+     * @param {String} conferenceId conference ID
+     * @param {db} vimsudb db instance
+     * 
+     * @return {String|undefined} ID, if ppant exists. Undefined otherwise
+     */
+    static getIDByUsername(username, conferenceId, vimsudb) {
+        TypeChecker.isString(username);
+        TypeChecker.isString(conferenceId);
+        TypeChecker.isInstanceOf(vimsudb, db);
+    
+        return AccountService.getAccountByUsernameOrEmail(username, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(acc => {
+            if (acc) {
+                return vimsudb.findOneInCollection("participants_" + conferenceId, { accountId: acc.accountId }).then(par => {
+                        return par.participantId;
+                });
+            }
+            else {
+                console.log("participant with username " + username + " is not found in collection participants_" + conferenceId);
+                return undefined;
+            }
         })
     }
 
@@ -298,12 +326,12 @@ module.exports = class ParticipantService {
 
         return vimsudb.findOneInCollection("participants_" + conferenceId, { participantId: participantId }, "").then(par => {
             if (par) {
-                return AccountService.getAccountById(par.accountId, '', vimsudb).then(account => {
+                return AccountService.getAccountById(par.accountId, Settings.ACCOUNTDB_SUFFIX, vimsudb).then(account => {
                     return new BusinessCard(par.participantId,
                         account.username,
+                        account.forename,
                         account.title,
                         account.surname,
-                        account.forename,
                         account.job,
                         account.company,
                         account.email);

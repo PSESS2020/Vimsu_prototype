@@ -1,0 +1,126 @@
+{
+    "noJavaScript": "Dein Browser unterstützt kein JavaScript!",
+
+    "underConstruction": "Ups! An dieser Seite wird gerade noch gearbeitet. Bitte komme zu einem späteren Zeitpunkt wieder!",
+
+    "pageNotFound": "404 Fehler - Die gesuchte Seite wurde nicht gefunden",
+
+    "privacyPolicy": "Impressum",
+
+    "homepage": {
+        "vimsuName": "Virtual Interactive Meeting Simulator",
+        "discoverVimsu": "Entdecke die virtuelle Konferenz in 2.5D mit uns!",
+        "enterConference": "Konferenz betreten",
+        "register": "Jetzt kostenlos ausprobieren",
+        "logIn": "Anmelden"
+    },
+
+    "header": {
+        "home": "Home",
+        "aboutUs": "Über uns",
+        "tutorial": "Tutorial",
+        "contactUs": "Kontakt",
+        "dashboard": "Mein Dashboard",
+        "uploadVideo": "Video hochladen",
+        "accountSettings": "Account Einstellungen",
+        "logOut": "Abmelden"
+    },
+
+    "accountSettings": {
+        "editAccountInfo": "Account Informationen",
+        "changeSuccess": "Deine Änderungen wurden gespeichert.",
+        "usernameTaken": "Der eingegebene Nutzername ist bereits vergeben. Bitte versuche es erneut.",
+        "emailTaken": "Die eingegebene E-Mail Adresse ist bereits vergeben. Bitte versuche es erneut.",
+        "changeError": "Beim Speichern deiner Änderungen ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "invalidUsername": "Der eingegebene Nutzername erfüllt nicht die vorgeschriebenen Kriterien. Bitte versuche es erneut.",
+        "invalidEmail": "Die eingegebene E-Mail Adresse ist ungültig. Bitte versuche es erneut.",
+        "invalidTitle": "Der angegebene Titel ist ungültig. Bitte wähle einen der angebotenen Titel aus.",
+        "emptyForename": "Der Vorname darf nicht leer sein.",
+        "deleteAccountFail": "Beim Löschen deines Accounts ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "requiredFields": "Pflichtfelder",
+        "saveChanges": "Änderungen speichern",
+        "deleteAccount": "Account löschen",
+        "changePassword": "Passwort ändern",
+        "changePasswordSuccess": "Dein Passwort wurde erfolgreich geändert.",
+        "oldPasswordWrong": "Das alte Passwort ist nicht korrekt. Bitte versuche es erneut.",
+        "passwordsDontMatch": "Die neuen Passwörter stimmen nicht überein. Bitte versuche es erneut.",
+        "emptyPassword": "Passwörter dürfen nicht leer sein.",
+        "changePasswordFail": "Beim Ändern deines Passworts ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "oldPassword": "Altes Passwort",
+        "newPassword": "Neues Passwort",
+        "confirmPassword": "Neues Passwort bestätigen"  
+    },
+
+    "userData": {
+        "username": "Nutzername",
+        "email": "E-Mail Adresse",
+        "forename": "Vorname",
+        "title": "Titel",
+        "surname": "Nachname",
+        "job": "Beruf",
+        "company": "Unternehmen/Schule",
+        "password": "Passwort"
+    },
+
+    "logIn": {
+        "wrongFields": "Nutzername/E-Mail und Passwort passen nicht zusammen. Bitte versuche es erneut.",
+        "emptyFields": "Felder dürfen nicht leer sein.",
+        "forgotPassword": "Passwort vergessen?",
+        "noAccount": "Noch keinen Account?",
+        "signUpNow": "Jetzt registrieren!"
+    },
+
+    "contactUs": {
+        "loveToHear": "Wir freuen uns über jegliche Art von Feedback!",
+        "reachUsAt": "Schreibe einfach eine E-Mail an ",
+        "or": "oder...",
+        "stayAnonymous": "schreibe deine Nachricht einfach anonym in das untere Eingabefenster :)",
+        "messageSent": "Wir haben deine Nachricht erhalten. Danke!",
+        "messageSentFail": "Beim Senden deiner Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "emptyMessage": "Die Nachricht darf nicht leer sein.",
+        "yourMessage": "Deine Nachricht",
+        "sendMessage": "Nachricht senden"
+    },
+
+    "forgotPassword": {
+        "linkSent": "Wir haben einen Link an your_email gesendet, mit dem du dein Passwort zurücksetzen können.",
+        "resetPassword": "Passwort zurücksetzen"
+    },
+    
+    "verification": {
+        "success": "Verifizierung erfolgreich!",
+        "signInNow": "Jetzt anmelden",
+        "fail": "Verifizierung fehlgeschlagen! Bitte versuche es erneut."
+    },
+
+    "register": {
+        "signUp": "Registrieren",
+        "success": "Wir haben einen Verfizierungslink an your_email gesendet. Bitte bestätige deine Registrierung über diesen Link.",
+        "passwordsDontMatch": "Die Passwörter stimmen nicht überein. Bitte versuche es erneut.",
+        "fail": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "confirmPassword": "Passwort bestätigen",
+        "alreadyHaveAccount": "Schon einen Account?",
+        "signInNow": "Jetzt anmelden!",
+        "signUpNow": "Jetzt registrieren"
+    },
+    
+    "upload": {
+        "createLecture": "Vortrag erstellen",
+        "success": "Slot für deinen Vortrag wurde erfolgreich erstellt. Du kannst diese Seite nun verlassen.",
+        "noFiles": "Es wurde keine Datei hochgeladen. Bitte lade ein Video hoch.",
+        "tooLarge": "Dateigröße überschreitet 50 MB. Bitte versuche es erneut.",
+        "wrongFileType": "Dateiformat wird nicht unterstützt. Bitte versuche es erneut.",
+        "wrongTypeMaxPpants": "Die Anzahl der maximalen Teilnehmer muss eine positive und ganze Zahl sein.",
+        "invalidDate": "Der Startzeitpunkt muss ein valides Datum sein.",
+        "emptyTitle": "Der Vortragstitel darf nicht leer sein.",
+        "errorUpload": "Beim Hochladen deines Videos ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "errorCreateSlot": "Beim Erstellen deines Vortragsslots ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+        "lectureTitle": "Titel",
+        "startingTime": "Startzeitpunkt",
+        "remarks": "Bemerkungen",
+        "limitedSeats": "Begrenzte Sitzplätze",
+        "maxParticipants": "# Teilnehmer",
+        "video": "Video",
+        "supportedFiles": "Unterstütztes Dateiformat: .mp4 || Maximale Dateigröße: 50 MB"
+    }
+}

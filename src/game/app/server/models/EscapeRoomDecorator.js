@@ -2,12 +2,12 @@ const RoomDecorator = require('../models/RoomDecorator.js');
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const DoorService = require('../services/DoorService.js');
 const Position = require('./Position.js');
 const Room = require('./Room');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const Messages = require('../utils/Messages.js');
+const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
 
 /**
@@ -90,7 +90,7 @@ module.exports = class EscapeRoomDecorator extends RoomDecorator {
         let doorService = new DoorService();
         let listOfDoors = [];
 
-        listOfDoors.push(doorService.createFoodCourtDoor(new Position(Settings.ESCAPEROOM_ID, this.#room.getLength(), this.#room.getWidth() - 5), new Position(Settings.FOODCOURT_ID, RoomDimensions.FOODCOURT_LENGTH - 1, RoomDimensions.FOODCOURT_WIDTH - 2), Direction.DOWNLEFT, true, Messages.STANDARDDOORCLOSED));
+        listOfDoors.push(doorService.createFoodCourtDoor(new Position(Settings.ESCAPEROOM_ID, this.#room.getLength(), this.#room.getWidth() - 5), new Position(Settings.FOODCOURT_ID, RoomDimensions.FOODCOURT_LENGTH - 1, RoomDimensions.FOODCOURT_WIDTH - 2), Direction.DOWNLEFT, true, DoorClosedMessages.STANDARDDOORCLOSED));
         listOfMapElements.push(objService.createDefaultRightTile(Settings.ESCAPEROOM_ID, this.#room.getLength() + 1, this.#room.getWidth() - 5, false, false));
 
         //Assign lists to room and build occupation map

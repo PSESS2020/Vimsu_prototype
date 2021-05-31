@@ -1,7 +1,7 @@
 const GameObject = require('../models/GameObject.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../client/shared/GameObjectType.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const Position = require('../models/Position.js');
 const GameObjectInfo = require('../utils/GameObjectInfo.js');
 

@@ -125,11 +125,13 @@ module.exports = class Chat {
     removeMessage(msgId) {
         TypeChecker.isString(msgId);
 
-        this.#messageList.forEach((msg, index) => {
+        for (let index = 0; index < this.#messageList.length; index++) {
+            const msg = this.#messageList[index]
             if (msg.getMessageId() === msgId) {
                 this.#messageList.splice(index, 1);
+                return;
             }
-        });
+        }
     }
 
     /**
@@ -141,12 +143,13 @@ module.exports = class Chat {
     removeParticipant(participantId) {
         TypeChecker.isString(participantId);
 
-        this.#participantList.forEach((participant, index) => {
-
+        for (let index = 0; index < this.#participantList.length; index++) {
+            const participant = this.#participantList[index]
             if (participant === participantId) {
                 this.#participantList.splice(index, 1);
+                return;
             }
-        });
+        }
     }
 
     /**
@@ -159,11 +162,6 @@ module.exports = class Chat {
     includesChatMember(ppantID) {
         TypeChecker.isString(ppantID);
 
-        for (let i = 0; i < this.#participantList.length; i++) { 
-            if (this.#participantList[i] === ppantID) {
-                return true;
-            }
-        }
-        return false;
+        return this.#participantList.includes(ppantID);
     }
 }

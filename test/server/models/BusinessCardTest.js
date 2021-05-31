@@ -9,7 +9,7 @@ var forename = "Max";
 var job = "Professor";
 var company = "KIT";
 var email = "maxmustermann@kit.edu";
-var businessCard = new BusinessCard(participantId, username, title, surname, forename, job, company, email);
+var businessCard = new BusinessCard(participantId, username, forename, title, surname, job, company, email);
 
 
 describe("BusinessCard Test getter", function () {

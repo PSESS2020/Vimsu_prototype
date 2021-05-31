@@ -1,5 +1,5 @@
 /**
- * Port commands that a moderator/orator can enter
+ * Port commands that a moderator can enter in allchat
  * @module PortCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
@@ -7,11 +7,11 @@
  */
 module.exports = Object.freeze({
     PORTTO: {
-        string: "position",
-        method: "portTo"
+        string: "group",
+        method: "portGroup"
     },
     PORTTOUSER: {
         string: "user",
-        method: "portToUser"
+        method: "portUser"
     }
 });

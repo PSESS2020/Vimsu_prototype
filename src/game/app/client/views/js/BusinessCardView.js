@@ -5,10 +5,6 @@
  * @version 1.0.0
  */
 class BusinessCardView extends WindowView {
-    businessCard;
-    isFriend;
-    rank;
-    isModerator;
     eventManager;
 
     /**
@@ -41,46 +37,52 @@ class BusinessCardView extends WindowView {
      * @param {boolean} isModerator true if moderator, otherwise false
      */
     draw(businessCard, isFriend, rank, isModerator) {
-        this.businessCard = businessCard;
-        this.isFriend = isFriend;
-        this.rank = rank;
-        this.isModerator = isModerator;
+        let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                       (businessCard.getForename() + " ") + 
+                       (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                       (" (@" + businessCard.getUsername() + ")");
 
-        $('#businessCardWait' + this.businessCard.getParticipantId()).remove();
+        $('#businessCardWait' + businessCard.getParticipantId()).remove();
 
         $('#businessCardModal .modal-body').append(`
                 
             <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 0.3125rem; text-align: center">
             <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
-            ${this.businessCard.getTitle() + " " + this.businessCard.getForename() + " " + this.businessCard.getSurname() + " (@" + this.businessCard.getUsername() + ")"}</h5>
+            ${fullname}</h5>
             </br>
-            <table id="${"profile" + this.businessCard.getParticipantId()}" style = "width:100%; margin-left: 0">
-                <tr>
-                    <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
-                    <td style="padding: 0.9375rem">${this.businessCard.getJob() + " at " + this.businessCard.getCompany()}</td>
-                </tr>
-                ${this.isFriend || !this.isModerator ?
-                `<tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${this.isFriend ? "Email" : "Rank"}</td>
-                    <td style="padding: 0.9375rem">${this.isFriend ? this.businessCard.getEmail() : this.rank}</td>
-                </tr>`
-                : ``
+            <table id="${"profile" + businessCard.getParticipantId()}" style = "width:100%; margin-left: 0">
+                ${businessCard.getJob() || businessCard.getCompany() ?
+                    `<tr>
+                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
+                        <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                            " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
+                    </tr>`
+                : 
+                    ``
+                }
+                ${isFriend || !isModerator ?
+                    `<tr>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${isFriend ? "Email" : "Rank"}</td>
+                        <td style="padding: 0.9375rem">${isFriend ? businessCard.getEmail() : rank}</td>
+                    </tr>`
+                : 
+                    ``
                 }
                 <tr>
                     <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Role</td>
-                    <td style="padding: 0.9375rem">${this.isModerator ? "Moderator" : "Participant"}</td>
+                    <td style="padding: 0.9375rem">${isModerator ? "Moderator" : "Participant"}</td>
                 </tr>
             </table>
             </br>
-            <button id="${"chatnow" + this.businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
+            <button id="${"chatnow" + businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
         `);
 
-        $('#chatnow' + this.businessCard.getParticipantId()).off();
-        $('#chatnow' + this.businessCard.getParticipantId()).on('click', (event) => {
+        $('#chatnow' + businessCard.getParticipantId()).off();
+        $('#chatnow' + businessCard.getParticipantId()).on('click', () => {
             $('#businessCardModal').modal('hide');
-            this.eventManager.handleChatNowClicked(this.businessCard.getParticipantId());
-        });
+            this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
+        })
 
     }
 }

@@ -315,12 +315,13 @@ module.exports = class Room {
     */
     exitParticipant(participantId) {
         TypeChecker.isString(participantId);
-        this.#listOfPPants.forEach((participant, index) => {
+        for (let index = 0; index < this.#listOfPPants.length; index++) {
+            const participant = this.#listOfPPants[index]
             if (participant.getId() === participantId) {
                 this.#listOfPPants.splice(index, 1);
+                return;
             }
-        });
-
+        }
     }
 
     /**
@@ -332,13 +333,15 @@ module.exports = class Room {
      */
     includesParticipant(ppantID) {
         TypeChecker.isString(ppantID);
-        var returnValue = false;
-        this.#listOfPPants.forEach(ppant => {
+
+        for (let index = 0; index < this.#listOfPPants.length; index++) {
+            const ppant = this.#listOfPPants[index]
             if (ppant.getId() === ppantID) {
-                returnValue = true;
+                return true;
             }
-        });
-        return returnValue;
+        }
+
+        return false;
     }
 
     /**
@@ -350,13 +353,15 @@ module.exports = class Room {
      */
     getParticipant(ppantID) {
         TypeChecker.isString(ppantID);
-        var result;
-        this.#listOfPPants.forEach(ppant => {
-            if (ppantID === ppant.getId()) {
-                result = ppant;
+
+        for (let index = 0; index < this.#listOfPPants.length; index++) {
+            const ppant = this.#listOfPPants[index]
+            if (ppant.getId() === ppantID) {
+                return ppant;
             }
-        });
-        return result;
+        }
+        
+        return undefined;
     }
 
     /**
@@ -456,6 +461,8 @@ module.exports = class Room {
                 return this.#listOfDoors[i];
             }
         }
+
+        return undefined;
     }
 
     /**
@@ -470,5 +477,7 @@ module.exports = class Room {
                 return this.#listOfDoors[i];
             }
         }
+        
+        return undefined;
     }
 }

@@ -33,8 +33,8 @@ class NPCStoryView extends WindowView {
         
         $(`#npcStoryModal${npcId} .modal-header`).append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle${npcId}">${name + " says..."}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                <i class="fa fa-close"></i>
             </button>
         `);
 
@@ -49,7 +49,7 @@ class NPCStoryView extends WindowView {
                 </button>
 
                 <script>
-                    $("#backwardStory${npcId}${i}").on('click', function(event) {
+                    $("#backwardStory${npcId}${i}").on('click', function() {
                         $('#story${npcId}${i}').hide();
                         $('#backwardStory${npcId}${i}').hide();
                         $('#forwardStory${npcId}${i}').hide();
@@ -60,7 +60,7 @@ class NPCStoryView extends WindowView {
                             $('#backwardStory${npcId}${i - 1}').show();
                         }
                     })    
-                    $("#forwardStory${npcId}${i}").on('click', function(event) {
+                    $("#forwardStory${npcId}${i}").on('click', function() {
                         $('#story${npcId}${i}').hide();
                         $('#backwardStory${npcId}${i}').hide();
                         $('#forwardStory${npcId}${i}').hide();

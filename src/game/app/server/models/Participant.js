@@ -9,7 +9,7 @@ const Task = require('./Task.js');
 const OneToOneChat = require('./OneToOneChat.js');
 const TypeOfTask = require('../utils/TypeOfTask');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const Meeting = require('./Meeting.js');
 
 /**
@@ -287,7 +287,7 @@ module.exports = class Participant {
      */
     joinMeeting(meeting) {
         TypeChecker.isInstanceOf(meeting, Meeting);
-        if(!this.#meetingList.includes(meeting)) {
+        if (!this.#meetingList.includes(meeting)) {
             this.#meetingList.push(meeting);
         }
     }
@@ -301,14 +301,14 @@ module.exports = class Participant {
     leaveMeeting(meetingId) {
         TypeChecker.isString(meetingId);
 
-        this.#meetingList.forEach(meeting => {
-            if(meeting.getId() === meetingId) {
+        for (let index = 0; index < this.#meetingList.length; index++) {
+            const meeting = this.#meetingList[index]
+            if (meeting.getId() === meetingId) {
                 meeting.removeMember(this.#id);
-                let index = this.#meetingList.indexOf(meeting);
                 this.#meetingList.splice(index, 1);
+                return;
             }
-        })
-
+        }
     }
 
     /**
@@ -480,12 +480,14 @@ module.exports = class Participant {
     removeChat(chatId) {
         TypeChecker.isString(chatId);
 
-        this.#chatList.forEach((chat, index) => {
+        for (let index = 0; index < this.#chatList.length; index++) {
+            const chat = this.#chatList[index]
             if (chat.getId() === chatId) {
                 chat.removeParticipant(this.#id);
                 this.#chatList.splice(index, 1);
+                return;
             }
-        });
+        }
     }
 
     /**
@@ -497,11 +499,13 @@ module.exports = class Participant {
     updateChat(updatedChat) {
         TypeChecker.isInstanceOf(updatedChat, Chat);
 
-        this.#chatList.forEach((chat, index) => {
+        for (let index = 0; index < this.#chatList.length; index++) {
+            let chat = this.#chatList[index]
             if (chat.getId() === updatedChat.getId()) {
-                this.#chatList[index] = updatedChat;
+                chat = updatedChat;
+                return;
             }
-        });
+        }
     }
 
     /**
@@ -591,6 +595,8 @@ module.exports = class Participant {
                 return this.#chatList[i];
             }
         }
+
+        return undefined;
     };
 
     /**

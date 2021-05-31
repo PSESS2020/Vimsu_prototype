@@ -1,0 +1,126 @@
+{
+    "noJavaScript": "Your browser does not support JavaScript!",
+
+    "underConstruction": "Ups! This page is still under construction. Please come back again later!",
+
+    "pageNotFound": "404 Error - The page you're looking for is not found",
+
+    "privacyPolicy": "Privacy Policy",
+
+    "homepage": {
+        "vimsuName": "Virtual Interactive Meeting Simulator",
+        "discoverVimsu": "Discover the 2.5D virtual conference experience with us!",
+        "enterConference": "Enter conference",
+        "register": "Try it now for free",
+        "logIn": "Sign in"
+    },
+
+    "header": {
+        "home": "home",
+        "aboutUs": "about us",
+        "tutorial": "tutorial",
+        "contactUs": "contact us",
+        "dashboard": "my dashboard",
+        "uploadVideo": "upload video",
+        "accountSettings": "account settings",
+        "logOut": "log out"
+    },
+
+    "accountSettings": {
+        "editAccountInfo": "Account Information",
+        "changeSuccess": "Your changes have been saved.",
+        "usernameTaken": "The username you entered is already taken. Please try again.",
+        "emailTaken": "The email you entered is already registered. Please try again.",
+        "changeError": "There's an error while saving your changes. Please try again.",
+        "invalidUsername": "The username you entered doesn't match our criteria. Please try again.",
+        "invalidEmail": "The email you entered is invalid. Please try again",
+        "invalidTitle": "Invalid title. Please choose a title from the options we provided.",
+        "emptyForename": "Forename cannot be empty.",
+        "deleteAccountFail": "There's an error while deleting your account. Please try again.",
+        "requiredFields": "Required fields",
+        "saveChanges": "Save changes",
+        "deleteAccount": "Delete account",
+        "changePassword": "Change Password",
+        "changePasswordSuccess": "Your password has been changed.",
+        "oldPasswordWrong": "Your old password is wrong. Please try again.",
+        "passwordsDontMatch": "New passwords do not match. Please try again.",
+        "emptyPassword": "Passwords cannot be empty.",
+        "changePasswordFail": "There's an error while changing your password. Please try again.",
+        "oldPassword": "Old password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password"  
+    },
+
+    "userData": {
+        "username": "Username",
+        "email": "Email",
+        "forename": "Forename",
+        "title": "Title",
+        "surname": "Surname",
+        "job": "Job/Profession",
+        "company": "Company/School",
+        "password": "Password"
+    },
+
+    "logIn": {
+        "wrongFields": "Entered username/email and entered password do not match. Please try again.",
+        "emptyFields": "Fields cannot be empty.",
+        "forgotPassword": "Forgot your password?",
+        "noAccount": "Don't have an account yet?",
+        "signUpNow": "Sign up now!"
+    },
+
+    "contactUs": {
+        "loveToHear": "We'd love to hear from you!",
+        "reachUsAt": "You can reach us by email at ",
+        "or": "or...",
+        "stayAnonymous": "If you'd prefer to stay anonymous, just leave us a message below :)",
+        "messageSent": "We have received your message, thank you!",
+        "messageSentFail": "There's an error while sending your message. Please try again.",
+        "emptyMessage": "Message cannot be empty.",
+        "yourMessage": "Your message",
+        "sendMessage": "Send message"
+    },
+
+    "forgotPassword": {
+        "linkSent": "We have sent you a link to your_email to reset your password.",
+        "resetPassword": "Reset Password"
+    },
+
+    "verification": {
+        "success": "Verification successful!",
+        "signInNow": "Sign in now",
+        "fail": "Verification failed! Please try again."
+    },
+
+    "register": {
+        "signUp": "Sign Up",
+        "success": "We have sent you a verification link to your_email. Please follow the link to complete the registration.",
+        "passwordsDontMatch": "Passwords do not match. Please try again.",
+        "fail": "There's an error while registering your account. Please try again.",
+        "confirmPassword": "Confirm password",
+        "alreadyHaveAccount": "Already have an account?",
+        "signInNow": "Sign in now!",
+        "signUpNow": "Sign up now"
+    },
+
+    "upload": {
+        "createLecture": "Create lecture",
+        "success": "Lecture slot is successfully created. You may exit this page.",
+        "noFiles": "No files were uploaded. Please upload a video.",
+        "tooLarge": "File size exceeded 50 MB. Please try again.",
+        "wrongFileType": "Unsupported file type. Please try again.",
+        "wrongTypeMaxPpants": "Max participants must be an integer.",
+        "invalidDate": "Starting time must be a valid date.",
+        "emptyTitle": "Lecture title cannot be empty.",
+        "errorUpload": "There's an error while uploading the video. Please try again.",
+        "errorCreateSlot": "There's an error while creating the slot. Please try again.",
+        "lectureTitle": "Title",
+        "startingTime": "Starting time",
+        "remarks": "Remarks",
+        "limitedSeats": "Limited seats",
+        "maxParticipants": "# Participants",
+        "video": "Video",
+        "supportedFiles": "Supported file: .mp4 || Max. size: 50 MB"
+    }
+}

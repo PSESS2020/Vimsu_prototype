@@ -71,7 +71,7 @@ module.exports = class LectureService {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
 
-        return vimsudb.findInCollection("lectures", { conferenceId: conferenceId, isAccepted: true }, {}).then(lectures => {
+        return vimsudb.findInCollection("lectures", { conferenceId: conferenceId, isAccepted: true }).then(lectures => {
             if (lectures.length > 0) {
                 return lectures;
             }
@@ -80,6 +80,37 @@ module.exports = class LectureService {
                 return false;
             }
 
+        })
+    }
+
+    /**
+     * @static Deletes all lectures from the database where the orator has the ID accountID
+     * @method module:LectureService#deleteLecturesByOratorId
+     * 
+     * @param {db} vimsudb db instance
+     * @param {blobClient} blob blob instance
+     * @param {String} accountId account ID of orator
+     * 
+     * @return {boolean} true by success, otherwise false
+     */
+    static deleteLecturesByOratorId(vimsudb, blob, accountId) {
+        TypeChecker.isInstanceOf(vimsudb, db);
+        TypeChecker.isInstanceOf(blob, blobClient);
+        TypeChecker.isString(accountId);
+
+        return vimsudb.findInCollection("lectures", { oratorId: accountId }).then(lectures => {
+            if (lectures.length > 0) {
+                lectures.forEach(lecture => {
+                    blob.deleteFile("lectures", lecture.videoId);
+                    vimsudb.deleteOneFromCollection("lectures", { lectureId: lecture.lectureId });
+                });
+                console.log('Lectures from orator with ' + accountId + ' deleted.');
+                return true;
+            }
+            else {
+                console.log('No lectures from orator with ' + accountId + ' found.');
+                return false;
+            }
         })
     }
 

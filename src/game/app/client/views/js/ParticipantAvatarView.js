@@ -17,7 +17,7 @@ class ParticipantAvatarView extends AvatarView {
     standingDownRightAnimation;
     currentAnimation;
     walking = false;
-    username;
+    displayName;
     isModerator;
     isOwnAvatar;
 
@@ -31,14 +31,14 @@ class ParticipantAvatarView extends AvatarView {
      * @param {Direction} direction avatar direction
      * @param {ShirtColor} shirtColor avatar shirt color
      * @param {String} participantId participant ID
-     * @param {String} username username
+     * @param {String} displayName name that is displayed above avatar
      * @param {boolean} isVisible true if visible, otherwise false
      * @param {boolean} isModerator true if moderator, otherwise false
      * @param {boolean} isOwnAvatar true if own avatar, otherwise false
      * @param {IsometricEngine} gameEngine game engine instance
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(position, direction, shirtColor, participantId, username, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
+    constructor(position, direction, shirtColor, participantId, displayName, isVisible, isModerator, isOwnAvatar, gameEngine, eventManager) {
         super(position, direction, shirtColor);
         TypeChecker.isString(participantId);
 
@@ -46,7 +46,15 @@ class ParticipantAvatarView extends AvatarView {
         this.initSpriteAnimation();
 
         this.currentAnimation = this.standingDownRightAnimation;
-        this.username = username;
+
+        //calculate maximum number of displayName characters that can be drawn without being to big for rectangle
+        ctx_avatar.font = Settings.FONT_SIZE + "px sans-serif";
+        let maxNameLength = displayName.length;
+        while (ctx_avatar.measureText(displayName.slice(0, maxNameLength)).width > Settings.AVATAR_WIDTH * 1.5) 
+        maxNameLength--;
+
+        this.displayName = displayName.length > maxNameLength ? displayName.slice(0, maxNameLength - 1) + ".." : displayName;
+            
         super.setVisibility(isVisible);
         this.isModerator = isModerator;
         this.isOwnAvatar = isOwnAvatar;
@@ -160,8 +168,13 @@ class ParticipantAvatarView extends AvatarView {
             ctx_avatar.textAlign = "center";
             ctx_avatar.fillRect(screenX - Settings.AVATAR_WIDTH / 4, screenY - 2, Settings.AVATAR_WIDTH * 1.5, Settings.FONT_SIZE + 2);
 
-            ctx_avatar.fillStyle = "black";
-            ctx_avatar.fillText(this.username, screenX + Settings.AVATAR_WIDTH / 2, screenY);
+            if (this.isModerator) {
+                ctx_avatar.fillStyle = Settings.MODERATOR_NAME_COLOR;
+            } else {
+                ctx_avatar.fillStyle = Settings.PARTICIPANT_NAME_COLOR;
+            }
+
+            ctx_avatar.fillText(this.displayName, screenX + Settings.AVATAR_WIDTH / 2, screenY);
 
             this.currentAnimation.draw(screenX, screenY); //TODO pass position of avatar
         }

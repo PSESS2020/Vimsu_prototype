@@ -59,8 +59,10 @@ class InviteFriendsView extends WindowView {
             this.chatId = chatId;
 
             this.businessCards.forEach(businessCard => {
-                let userTitle = businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")";
-
+                let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                               (businessCard.getForename() + " ") + 
+                               (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                               (" (@" + businessCard.getUsername() + ")");
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
                         <li class="list-group-item bg-transparent px-0" >
@@ -72,15 +74,26 @@ class InviteFriendsView extends WindowView {
                                 </div>
                                 <div class="col-9 pr-0 pl-4">
                                     <div class="d-flex flex-row justify-content-start align-items-center">
-                                        <label class="name lead text-truncate" title="${userTitle}" data-toggle="tooltip">${userTitle}</label>
+                                        <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
                                     </div>
                                     <div class="d-flex flex-row justify-content-start align-items-center">
-                                        <span class="fa fa-briefcase fa-fw mr-2"></span>
-                                        <span class="text-truncate">${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                        ${businessCard.getJob() || businessCard.getCompany() ?
+                                            `<div>
+                                                <i class="fa fa-briefcase fa-fw mr-2"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                    " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                            </div>`
+                                        : 
+                                            ``
+                                        }
                                     </div>
                                     <div class="d-flex flex-row justify-content-start align-items-center">
-                                        <span class="fa fa-envelope fa-fw mr-2"></span>
-                                        <span class="small text-truncate">${businessCard.getEmail()}</span>
+                                        ${businessCard.getEmail() ?
+                                            `<div>
+                                                <i class="fa fa-envelope fa-fw mr-2"></i>${businessCard.getEmail()}
+                                            </div>`
+                                        : 
+                                            ``
+                                        }
                                     </div>
                                 </div>
                                 <div class="col-1 p-0 ml-n1">
@@ -98,13 +111,13 @@ class InviteFriendsView extends WindowView {
                     </ul>
                 `);
 
-                $('#invite' + businessCard.getParticipantId()).on('click', (event) => {
+                $('#invite' + businessCard.getParticipantId()).on('click', () => {
                     this.invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
                 });
 
-                $('#selected' + businessCard.getParticipantId()).on('click', (event) => {
+                $('#selected' + businessCard.getParticipantId()).on('click', () => {
                     let index = this.invitedFriends.indexOf(businessCard.getParticipantId());
                     this.invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
@@ -112,7 +125,7 @@ class InviteFriendsView extends WindowView {
                 });
 
                 $('#createGroupChat').off();
-                $('#createGroupChat').on('click', (event) => {
+                $('#createGroupChat').on('click', () => {
                     if (this.invitedFriends.length > 0 && this.invitedFriends.length < this.limit + 1) {
                         $('#noinvitedfriends').hide();
                         $('#toomanyinvitedfriends').hide();
@@ -170,12 +183,13 @@ class InviteFriendsView extends WindowView {
 
         if (participantId) {
             var found = false;
-            this.businessCards.forEach((businessCard, index) => {
-                if (businessCard.getParticipantId() === participantId) {
+            for (let index = 0; index < this.businessCards.length; index++) {
+                if (this.businessCards[index].getParticipantId() === participantId) {
                     this.businessCards.splice(index, 1);
                     found = true;
+                    break;
                 }
-            });
+            }
 
             if (found) {
                 $("#invitefriend" + participantId).remove();

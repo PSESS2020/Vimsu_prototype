@@ -60,11 +60,9 @@ class ChatThreadView extends WindowView {
 
         $('#chatThreadModalTitle' + this.chat.chatId).text(chat.title).attr("title", chat.title);
 
-        if ($('#notifChatDiv' + this.chat.chatId).length)
-            $('#notifChatDiv' + this.chat.chatId).remove();
+        this.eventManager.handleRemoveNewChatNotif(this.chat.chatId);
 
-        if ($('#notifGroupChatDiv' + this.chat.chatId).length)
-            $('#notifGroupChatDiv' + this.chat.chatId).remove();
+        this.eventManager.handleRemoveNewGroupChatNotif(this.chat.chatId);
 
         this.messages.forEach((message) => {
             this.appendMessage(message);
@@ -164,9 +162,7 @@ class ChatThreadView extends WindowView {
      * @param {Object} message message
      */
     appendMessage = (message) => {
-        if ($('#notifMessageDiv' + message.senderUsername + this.chat.chatId).length) {
-            $('#notifMessageDiv' + message.senderUsername + this.chat.chatId).remove();
-        }
+        this.eventManager.handleRemoveNewMessageNotif(message.senderUsername, this.chat.chatId);
 
         var timestamp = new DateParser(new Date(message.timestamp)).parse();
         var senderUsername;
@@ -239,7 +235,7 @@ class ChatThreadView extends WindowView {
         $('#chatMessageInputGroup' + this.chat.chatId).on('keydown', (event) => {
             event.stopPropagation();
 
-            if (event.keyCode === 13) {
+            if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
                 this.sendMessage();
             }
@@ -330,8 +326,6 @@ class ChatThreadView extends WindowView {
 
             this.eventManager.handleInviteFriendsClicked(this.chat.title, this.chat.chatId);
         });
-
-        new EmojiPicker().draw('top-start', "chatthread-emoji-trigger", `chatMessageInput${this.chat.chatId}`);
     }
 
     addNewChatParticipantListWindow = () => {
@@ -342,8 +336,8 @@ class ChatThreadView extends WindowView {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>Chat Participant List</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-close"></i>
                             </button>
                         </div>
                         <div class="modal-body modal-body-large">

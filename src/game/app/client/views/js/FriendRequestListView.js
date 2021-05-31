@@ -50,9 +50,12 @@ class FriendRequestListView extends WindowView {
      * @param {BusinessCardClient} businessCard 
      */
     appendFriendRequest(businessCard) {
+        let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                       (businessCard.getForename() + " ") + 
+                       (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                       (" (@" + businessCard.getUsername() + ")");
+    
         $('#nofriendrequest').empty();
-
-        let userTitle = businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")";
 
         $('#friendRequestListModal .modal-body .list-group').prepend(`
             <li class="list-group-item bg-transparent px-0" id="${"friendRequest" + businessCard.getParticipantId()}">
@@ -64,11 +67,17 @@ class FriendRequestListView extends WindowView {
                     </div>
                     <div class="col-8 pr-0 pl-4">
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <label class="name lead text-truncate" title="${userTitle}" data-toggle="tooltip">${userTitle}</label>
+                            <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <span class="fa fa-briefcase fa-fw mr-2"></span>
-                            <span class="small text-truncate">${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                            ${businessCard.getJob() || businessCard.getCompany() ?
+                                `<div>
+                                    <i class="fa fa-briefcase fa-fw mr-2"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                        " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                </div>`
+                            : 
+                                ``
+                            }
                         </div>
                     </div>
                     <div class="col-2 p-0 my-auto">
@@ -87,8 +96,7 @@ class FriendRequestListView extends WindowView {
 
         $('#accept' + businessCard.getParticipantId()).off();
         $('#accept' + businessCard.getParticipantId()).on('click', (event) => {
-            if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
+            this.eventManager.handleRemoveNewFriendRequestNotif(businessCard.getUsername());
 
             event.stopPropagation();
             this.eventManager.handleAcceptRequestClicked(businessCard);
@@ -96,8 +104,7 @@ class FriendRequestListView extends WindowView {
 
         $('#reject' + businessCard.getParticipantId()).off();
         $('#reject' + businessCard.getParticipantId()).on('click', (event) => {
-            if ($('#notifFriendRequestDiv' + businessCard.getUsername()).length)
-                $('#notifFriendRequestDiv' + businessCard.getUsername()).remove();
+            this.eventManager.handleRemoveNewFriendRequestNotif(businessCard.getUsername());
 
             event.stopPropagation();
             this.eventManager.handleRejectRequestClicked(businessCard.getParticipantId());
@@ -110,12 +117,12 @@ class FriendRequestListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriendRequest(participantId) {
-        this.businessCards.forEach((businessCard, index) => {
-
-            if (businessCard.getParticipantId() === participantId) {
+        for (let index = 0; index < this.businessCards.length; index++) {
+            if (this.businessCards[index].getParticipantId() === participantId) {
                 this.businessCards.splice(index, 1);
+                break;
             }
-        });
+        }
 
         $("#friendRequest" + participantId).remove();
         if (!this.handleEmptyFriendRequestList(this.businessCards)) return;

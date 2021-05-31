@@ -1,9 +1,10 @@
 const Direction = require('../../client/shared/Direction');
 const ShirtColor = require('../../client/shared/ShirtColor.js');
+const DisplayName = require('../../client/shared/DisplayName.js');
 
 /**
- * other constants
- * @module Settings
+ * Settings for default conference
+ * @module Settings_Default
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -27,6 +28,9 @@ module.exports = Object.freeze({
     MAXNUMMESSAGES_GROUPCHAT: 100,
     MAXNUMMESSAGES_ONETOONECHAT: 100,
     MAXGROUPPARTICIPANTS: 255,
+
+    /* Ranklist Constants */
+    MAXNUMRANKLIST: 21,
 
     /* Object Constants */
     SMALL_OBJECT_WIDTH: 1,
@@ -58,5 +62,19 @@ module.exports = Object.freeze({
     VIDEOSTORAGE_ACTIVATED: true,
 
     /* Decides wheter chat meeting is allowed or not */
-    CHATMEETING_ACIVATED: true
+    CHATMEETING_ACIVATED: true,
+
+    /* Decides which registration system is used */
+    /* Advanced registration system includes username, title, surname, forename, job, company, email */
+    /* Non advanced registration system just includes username and forename (+ registration time) */
+    ADVANCED_REGISTRATION_SYSTEM: true,
+
+    /* Name that is displayed above avatar and in meetings */
+    DISPLAY_NAME: DisplayName.USERNAME,
+
+    /* Suffix of account collection in DB: account collection name = accountsACCOUNTDB_SUFFIX */
+    ACCOUNTDB_SUFFIX: "",
+
+    /* Decides which language is selected as default if clients preferred language is not available */
+    DEFAULT_LANGUAGE: "en"
 });

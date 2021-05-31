@@ -135,11 +135,12 @@ class ChatListView extends WindowView {
    * @param {String} chatId chat ID
    */
   deleteChat(chatId) {
-    this.chats.forEach((chat, index) => {
-      if (chat.chatId === chatId) {
+    for (let index = 0; index < this.chats.length; index++) {
+      if (this.chats[index].chatId === chatId) {
         this.chats.splice(index, 1);
+        break;
       }
-    });
+    }
 
     $("#chatListEntry" + chatId).remove();
     if (!this.handleEmptyChats(this.chats)) return;
@@ -179,12 +180,17 @@ class ChatListView extends WindowView {
    * @param {Object} message chat message
    */
   addNewMessage(chatID, message) {
-    this.chats.forEach(chat => {
+    for (let index = 0; index < this.chats.length; index++) {
+      const chat = this.chats[index];
+
       if (chat.chatId === chatID) {
-        if (message.msgText.length > 35) {
-          var msgText = message.msgText.slice(0, 35) + "...";
-        } else {
-          var msgText = message.msgText;
+
+        let msgText = message.msgText;
+
+        if (msgText.length > 35) {
+          msgText = msgText.slice(0, 35) + "...";
+        } else if (msgText.includes('<br/>')) {
+          msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
         }
 
         chat.timestamp = message.timestamp;
@@ -202,8 +208,10 @@ class ChatListView extends WindowView {
         $("#chatTimestamp" + chatID).text(timestamp);
         $("#chatPreviewMessage" + chatID).empty();
         $("#chatPreviewMessage" + chatID).text(previewMessage);
+
+        break;
       }
-    });
+    };
 
     this.draw(this.chats, this.ownUsername);
   }
@@ -253,12 +261,13 @@ class ChatListView extends WindowView {
                                 </button>
                             </div>
                             <div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                                  <i class="fa fa-close" style="transform: scale(0.8); margin-top: 2px;"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="modal-body d-flex flex-column modal-body-large">
                         <div id=${"chatThreadWait" + chatID} style="text-align: center;">
                           <div class="spinner-border" role="status">
@@ -268,12 +277,13 @@ class ChatListView extends WindowView {
                         <div id=${"chatThreadModalList" + chatID} class="mb-3"
                             style="width: 100%; height: 100%; overflow-y: scroll; overflow-x: hidden">
                         </div>
+                        
                         <div class="d-flex">
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
-                                <button id="chatthread-emoji-trigger" class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
-                                <input id=${"chatMessageInput" + chatID} type="text"
-                                    style="background-color: #1b1e24; border-color: antiquewhite; border-radius: 0.3125rem 0rem 0rem 0.3125rem;"
-                                    class="form-control" placeholder="Enter message ..." autocomplete="off">
+                                
+                                <button id=${"chatthreadEmojiTrigger" + chatID} class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
+                                <textarea id=${"chatMessageInput" + chatID} type="text"
+                                    class="form-control chatInputGroup" placeholder="Enter message ..." autocomplete="off" rows="1"></textarea>
                                 <div class="input-group-append">
                                     <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
                                 </div>
@@ -283,7 +293,14 @@ class ChatListView extends WindowView {
                 </div>
             </div>
         </div>
+        <div style="position: relative; width: 0; height: 0; display: none; z-index: 1070" id=${"chatthreadEmojiPicker" + chatID + "Div"}>
+          <div style="position: fixed; top: calc(50% + 100px); top: -moz-calc(50% + 100px); top: -webkit-calc(50% + 100px); top: -o-calc(50% + 100px); left: calc(50% - 50px); left: -moz-calc(50% - 50px); left: -webkit-calc(50% - 50px); left: -o-calc(50% - 50px); transform: translate(-50%, -50%);">
+              <emoji-picker class="dark" id=${"chatthreadEmojiPicker" + chatID}></emoji-picker>
+          </div>
+        </div>
       `);
+
+      new EmojiPicker().draw('chatthreadEmojiTrigger' + chatID, 'chatthreadEmojiPicker' + chatID, `chatMessageInput${chatID}`)
     }
 
     $("#chatThreadModal" + chatID).modal("show");

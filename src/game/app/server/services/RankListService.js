@@ -17,57 +17,81 @@ module.exports = class RankListService {
      * 
      * @param {String} conferenceId conference ID
      * @param {db} vimsudb db instance
+     * @param {?Number} currentRankListLength current rank list length on rank list board
+     * @param {?Number} lastRank last rank on rank list board
+     * @param {?Number} lastPoints last points on rank list board
+     * @param {?Number} lastPointsLength number of participants with last points
+     * @param {?Number} limit search limit
      * 
      * @return {Object} rank list
      */
-    static #getRankList = function (conferenceId, vimsudb) {
+    static #getRankList = function (conferenceId, vimsudb, currentRankListLength = 0, lastRank = 1, lastPoints = 0, lastPointsLength = 0, limit = 0) {
         TypeChecker.isString(conferenceId);
         TypeChecker.isInstanceOf(vimsudb, db);
+        TypeChecker.isInt(currentRankListLength);
+        TypeChecker.isInt(lastRank);
+        TypeChecker.isInt(lastPoints);
+        TypeChecker.isInt(lastPointsLength);
 
-        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }).then(ppants => {
-            var rankList = ppants.sort((a, b) => b.points - a.points);
+        return vimsudb.findInCollection("participants_" + conferenceId, { isModerator: false }, { participantId: 1, points: 1 }, { points: -1, participantId: 1 }, currentRankListLength, limit).then(rankList => {
+            let lastIndex;
+            let nextRank;
 
-            var rank = 1;
-            for (var i = 0; i < rankList.length; i++) {
-                // increase rank only if current points less than previous
-                if (i > 0 && rankList[i].points < rankList[i - 1].points) {
-                    rank = i + 1;
+            //determine number of participants with last points
+            for (let i = 0; i < rankList.length; i++) {
+                lastIndex = i;
+
+                if (rankList[i].points === lastPoints) {
+                    lastPointsLength++;
+                    rankList[i].rank = lastRank;
+                } else {
+                    nextRank = lastRank + lastPointsLength;
+                    rankList[i].rank = nextRank;
+                    break;
                 }
+            }
+
+            let rank = nextRank;
+            let counter = 1;
+
+            for (let i = lastIndex + 1; i < rankList.length; i++, ++counter) {
+                if (i > 0 && rankList[i].points < rankList[i - 1].points) {
+                    // increase rank only if current points less than previous
+                    rank = nextRank + counter;
+                }
+
                 rankList[i].rank = rank;
             }
+
             return rankList;
         })
     }
 
     /**
-     * @static gets rank list with participant usernames, splices the list until the lastRank
+     * @static gets rank list with participant usernames
      * @method module:RankListService#getRankListWithUsername
      * 
      * @param {String} conferenceId conference ID
-     * @param {number} lastRank last rank to be shown in the rank list
      * @param {db} vimsudb db instance
+     * @param {Number} limit search limit
+     * @param {Number} currentRankListLength current rank list length on rank list board
+     * @param {Number} lastRank last rank on rank list board
+     * @param {Number} lastPoints last points on rank list board
      * 
-     * @return {Object} rank list until place lastRank
+     * @return {Object} rank list with usernames
      */
-    static getRankListWithUsername(conferenceId, lastRank, vimsudb) {
+    static getRankListWithUsername(conferenceId, vimsudb, limit = 0, currentRankListLength = 0, lastRank = 1, lastPoints = 0, lastPointsLength = 0) {
         TypeChecker.isString(conferenceId);
-        TypeChecker.isInt(lastRank);
         TypeChecker.isInstanceOf(vimsudb, db);
+        TypeChecker.isInt(currentRankListLength);
+        TypeChecker.isInt(lastRank);
+        TypeChecker.isInt(lastPoints);
+        TypeChecker.isInt(lastPointsLength);
+        TypeChecker.isInt(limit);
 
-        return this.#getRankList(conferenceId, vimsudb).then(rankList => {
-            var rankListLength = 1;
-            for (var i = rankList.length - 1; i >= 0; i--) {
-
-                if (rankList[i].rank <= lastRank) {
-                    rankListLength = rankListLength + i;
-                    rankList = rankList.slice(0, rankListLength);
-                    break;
-                }
-            }
-
+        return this.#getRankList(conferenceId, vimsudb, currentRankListLength, lastRank, lastPoints, lastPointsLength, limit).then(rankList => {
             return Promise.all(rankList.map(async ppant => {
-                const username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb)
-                ppant.username = username;
+                ppant.username = await ParticipantService.getUsername(ppant.participantId, conferenceId, vimsudb);
             })).then(res => {
                 return rankList;
             })
@@ -91,12 +115,7 @@ module.exports = class RankListService {
 
         return this.#getRankList(conferenceId, vimsudb).then(rankList => {
             let idx = rankList.findIndex(ppant => ppant.participantId === participantId);
-            if (idx < 0)
-                var rank = undefined;
-            else
-                var rank = rankList[idx].rank;
-
-            return rank;
+            return idx >= 0 ? rankList[idx].rank : undefined;
         })
     }
-} 
+}

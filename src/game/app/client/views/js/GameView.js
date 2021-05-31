@@ -95,7 +95,7 @@ class GameView {
         this.globalChatView = new GlobalChatView();
         this.largerGlobalChatView = new LargerGlobalChatView();
         this.profileView = new ProfileView();
-        this.rankListView = new RankListView();
+        this.rankListView = new RankListView(this.eventManager);
         this.npcStoryView = new NPCStoryView();
         this.externalWebsiteView = new ExternalWebsiteView();
         this.newAchievementView = new NewAchievementView();
@@ -495,7 +495,7 @@ class GameView {
                 participant.getDirection(),
                 participant.getShirtColor(),
                 participant.getId(),
-                participant.getUsername(),
+                participant.getDisplayName(),
                 participant.getIsVisible(),
                 participant.getIsModerator(),
                 false,
@@ -605,10 +605,10 @@ class GameView {
         let startingDir = ownParticipant.getDirection();
         let shirtColor = ownParticipant.getShirtColor();
         let id = ownParticipant.getId();
-        let username = ownParticipant.getUsername();
+        let displayName = ownParticipant.getDisplayName();
         let isModerator = ownParticipant.getIsModerator();
 
-        this.ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, username, true, isModerator, true, this.gameEngine, this.eventManager);
+        this.ownAvatarView = new ParticipantAvatarView(startingPos, startingDir, shirtColor, id, displayName, true, isModerator, true, this.gameEngine, this.eventManager);
         this.addToUpdateList(this.ownAvatarView);
     }
 
@@ -943,9 +943,10 @@ class GameView {
      * 
      * @param {Object[]} rankList rank list
      * @param {String} ownUsername current participant username
+     * @param {Boolean} emptyRankList true if ranklist should be emptied
      */
-    initRankListView(rankList, ownUsername) {
-        this.rankListView.draw(rankList, ownUsername);
+    initRankListView(rankList, ownUsername, emptyRankList) {
+        this.rankListView.draw(rankList, ownUsername, emptyRankList);
     }
 
     /**
@@ -961,11 +962,11 @@ class GameView {
      * Draws jitsi meeting window
      * 
      * @param {Object} meeting joined meeting
-     * @param {String} ownUsername own username that is shown in meeting
+     * @param {String} ownDisplayName own display name that is shown in meeting
      * 
      */
-    initVideoMeetingView(meeting, ownUsername) {
-        this.videoMeetingView.draw(meeting, ownUsername);
+    initVideoMeetingView(meeting, ownDisplayName) {
+        this.videoMeetingView.draw(meeting, ownDisplayName);
     }
 
     /**
@@ -1093,6 +1094,14 @@ class GameView {
      */
     showAllchatBox() {
         this.allchatView.showAllchatBox();
+    }
+
+    /**
+     * Adds command into last commands array in allchat
+     * @param {String} command last command
+     */
+    saveCommand(command) {
+        this.allchatView.saveCommand(command);
     }
 
     /**
@@ -1335,7 +1344,75 @@ class GameView {
      removeMinimizedMeetingNotif(meetingId) {
         TypeChecker.isString(meetingId);
 
-        this.notifBar.removeNotifDiv('runningMeeting' + meetingId);
+        this.notifBar.removeNotifDiv(this.notifBar.getMinimizedMeetingId(meetingId));
+    }
+
+    /**
+     * Removes new message notif
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     */
+     removeNewMessageNotif(senderUsername, chatId) {
+        TypeChecker.isString(senderUsername);
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewMessageId(senderUsername, chatId));
+    }
+
+    /**
+     * Removes new chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+     removeNewChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewChatId(chatId));
+    }
+
+    /**
+     * Removes new group chat notif
+     * 
+     * @param {String} chatId chat ID
+     */
+    removeNewGroupChatNotif(chatId) {
+        TypeChecker.isString(chatId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewGroupChatId(chatId));
+    }
+
+    /**
+     * removes meeting notif
+     * 
+     * @param {String} meetingId meeting ID
+     */
+    removeNewMeetingNotif(meetingId) {
+        TypeChecker.isString(meetingId);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewMeetingId(meetingId));
+    }
+
+    /**
+     * removes new friend request notif
+     * 
+     * @param {String} senderUsername requester username
+     */
+    removeNewFriendRequestNotif(senderUsername) {
+        TypeChecker.isString(senderUsername);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewFriendRequestId(senderUsername));
+    }
+
+    /**
+     * removes new friend notif
+     * 
+     * @param {String} friendUsername friend username
+     */
+     removeNewFriendNotif(friendUsername) {
+        TypeChecker.isString(friendUsername);
+
+        this.notifBar.removeNotifDiv(this.notifBar.getNewFriendId(friendUsername));
     }
 
     /**

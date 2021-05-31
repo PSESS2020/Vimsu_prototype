@@ -38,17 +38,17 @@ class LectureView extends WindowView {
 
         /* sets functions when document is ready, without this it is not possible to assign functions to
           appended buttons */
-        $(document).ready(() => {
-            $(document).on('click', '#lectureChatButton', () => {
-                this.sendMessage(event);
+        $(() => {
+            $(document).on('click', '#lectureChatButton', (e) => {
+                this.sendMessage(e);
             });
 
             $(document).on('keydown', (e) => {
                 if (document.activeElement === $("#lectureChatInput")[0]) {
                     e.stopPropagation();
 
-                    if (e.keyCode === 13)
-                        this.sendMessage(event);
+                    if (e.key === 'Enter' && !e.shiftKey)
+                        this.sendMessage(e);
                 }
             });
 
@@ -202,7 +202,7 @@ class LectureView extends WindowView {
         if (this.currentTimeDifference < 0) {
             $('#lecturePending').remove();
             $('#lectureVideo').append(`
-                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1053; padding: 15%;" class="text-center">
+                <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1080; padding: 15%;" class="text-center">
                     <div id="countdown"></div>
                     <div>seconds left till the</div>
                     <div>presentation starts</div>
@@ -284,7 +284,7 @@ class LectureView extends WindowView {
 
         $('#lectureVideo').empty();
         $('#lectureVideoWindow').hide();
-        
+
         this.eventManager.handleLectureLeft(this.lectureId);
 
         if (this.video !== undefined) {
@@ -349,9 +349,9 @@ class LectureView extends WindowView {
         if (this.hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
-                    <input id="lectureChatInput" type="text" style="background-color: #1b1e24;" class="form-control" autocomplete="off" placeholder="Enter message ...">
+                    <textarea id="lectureChatInput" type="text" class="form-control chatInputGroup" autocomplete="off" placeholder="Enter message ..." rows="1"></textarea>
                     <div class="input-group-append">
-                        <button id="lectureChatButton" class="btn btn-blue mr-3" type="button">Send</button>
+                        <button id="lectureChatButton" class="btn btn-blue" type="button">Send</button>
                     </div>
                 `);
             }

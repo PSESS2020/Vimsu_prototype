@@ -1,5 +1,5 @@
 /**
- * Door commands that a moderator/orator can enter
+ * Door commands that a moderator can enter in allchat
  * @module DoorCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher

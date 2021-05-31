@@ -9,12 +9,12 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
  * 
  * 
  */
-module.exports = class Meeting{
+module.exports = class Meeting {
 
-    #meetingId      
-    #meetingName    
-    #password       
-    #memberIdList   
+    #meetingId
+    #meetingName
+    #password
+    #memberIdList
 
     /**
      * Creates an Meeting instance
@@ -38,7 +38,7 @@ module.exports = class Meeting{
         this.#meetingName = name;
         this.#memberIdList = memberIDs;
         this.#password = password;
-    } 
+    }
 
     /**
      * Simple getter.
@@ -89,7 +89,7 @@ module.exports = class Meeting{
      */
     addMember(ppantId) {
         TypeChecker.isString(ppantId);
-        if(!this.#memberIdList.includes(ppantId)) {
+        if (!this.#memberIdList.includes(ppantId)) {
             this.#memberIdList.push(ppantId);
             return true;
         }
@@ -106,14 +106,27 @@ module.exports = class Meeting{
      */
     removeMember(ppantId) {
         TypeChecker.isString(ppantId);
-        this.#memberIdList.forEach(memberId => {
+        for (let index = 0; index < this.#memberIdList.length; index++) {
+            const memberId = this.#memberIdList[index]
             if (memberId === ppantId) {
-                let index = this.#memberIdList.indexOf(memberId);
                 this.#memberIdList.splice(index, 1);
                 return true;
             }
-        });
+        }
+    
         return false;
     }
 
+    /**
+     * Checks if ppant with ppantID is currently in this meeting
+     * @method module:Meeting#includesMember
+     * 
+     * @param {String} ppantID participant ID
+     * @return {boolean} true if ppant is meeting member, false otherwise
+     */
+    includesMember(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        return this.#memberIdList.includes(ppantID);
+    }
 }

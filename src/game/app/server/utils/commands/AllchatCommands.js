@@ -1,6 +1,6 @@
 /**
- * General commands that a moderator/orator can enter
- * @module Commands
+ * General commands that a moderator can enter in allchat
+ * @module AllchatCommands
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
@@ -9,10 +9,6 @@ module.exports = Object.freeze({
     GLOBAL: {
         string: "global",
         method: "globalMsg"
-    },
-    GLOBALNOTE: {
-        string: "testmsg",
-        method: "globalNote"
     },
     MESSAGE: {
         string: "msg",
@@ -29,22 +25,6 @@ module.exports = Object.freeze({
     UNMUTE: {
         string: "unmute",
         method: "unmuteUser"
-    },
-    REVOKETOKEN: {
-        string: "revoke",
-        method: "muteUser"
-    },
-    GRANTTOKEN: {
-        string: "grant",
-        method: "unmuteUser"
-    },
-    UNBANPLAYER: {
-        string: "unban",
-        method: "unbanUser"
-    },
-    CLOSE: {
-        string: "close",
-        method: "close"
     },
     HELP: {
         string: "help",
@@ -70,8 +50,12 @@ module.exports = Object.freeze({
         string: "group",
         method: "handleGroupCommand"
     },
-    ROOMS: {
-        string: "rooms",
-        method: "logAllRooms"
+    ROOM: {
+        string: "room",
+        method: "handleRoomCommand"
+    },
+    USERLOG: {
+        string: "userlog",
+        method: "logAllParticipants"
     }
 });

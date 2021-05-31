@@ -26,7 +26,7 @@ class FriendListView extends WindowView {
         this.eventManager = eventManager;
 
         $('#friendRequestList').off();
-        $('#friendRequestList').on('click', (event) => {
+        $('#friendRequestList').on('click', () => {
             $('#nofriendrequest').empty();
             $('#friendRequestListModal .modal-body .list-group').empty();
             $('#friendRequestListModal').modal('show');
@@ -51,7 +51,10 @@ class FriendListView extends WindowView {
         this.businessCards = sortedBusinessCards;
 
         this.businessCards.forEach(businessCard => {
-            let userTitle = businessCard.getTitle() + " " + businessCard.getForename() + " " + businessCard.getSurname() + " (@" + businessCard.getUsername() + ")";
+            let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
+                           (businessCard.getForename() + " ") + 
+                           (businessCard.getSurname() ? businessCard.getSurname() + " " : "") + 
+                           (" (@" + businessCard.getUsername() + ")");
 
             $('#friendListModal .modal-body .list-group').append(`
                 <li class="list-group-item bg-transparent chatthread px-0" id="${"friend" + businessCard.getParticipantId()}">
@@ -63,15 +66,26 @@ class FriendListView extends WindowView {
                             </div>
                             <div class="col-9 pr-0 pl-4">
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <label class="name lead text-truncate" title="${userTitle}" data-toggle="tooltip">${userTitle}</label>
+                                    <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
                                 </div>
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <span class="fa fa-briefcase fa-fw mr-2"></span>
-                                    <span class"text-truncate">${businessCard.getJob() + " at " + businessCard.getCompany()}</span>
+                                    ${businessCard.getJob() || businessCard.getCompany() ?
+                                        `<div>
+                                            <i class="fa fa-briefcase fa-fw mr-2"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
                                 </div>
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <span class="fa fa-envelope fa-fw mr-2"></span>
-                                    <span class="small text-truncate">${businessCard.getEmail()}</span>
+                                    ${businessCard.getEmail() ?
+                                        `<div>
+                                            <i class="fa fa-envelope fa-fw mr-2"></i>${businessCard.getEmail()}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
                                 </div>
                             </div>
                             <div class="col-1 p-0 ml-1 mt-n1">
@@ -90,16 +104,14 @@ class FriendListView extends WindowView {
             `);
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
-            $('#chatfriend' + businessCard.getParticipantId()).on('click', (event) => {
-                if ($('#notifFriendDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendDiv' + businessCard.getUsername()).remove();
+            $('#chatfriend' + businessCard.getParticipantId()).on('click', () => {
+                this.eventManager.handleRemoveNewFriendNotif(businessCard.getUsername());
                 this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
             });
 
             $('#delete' + businessCard.getParticipantId()).off();
             $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
-                if ($('#notifFriendDiv' + businessCard.getUsername()).length)
-                    $('#notifFriendDiv' + businessCard.getUsername()).remove();
+                this.eventManager.handleRemoveNewFriendNotif(businessCard.getUsername());
 
                 var result = confirm('Are you sure you want to remove ' + businessCard.getUsername() + ' from your friend list?');
                 if (result)
@@ -116,12 +128,12 @@ class FriendListView extends WindowView {
      * @param {String} participantId participant ID
      */
     deleteFriend(participantId) {
-        this.businessCards.forEach((businessCard, index) => {
-
-            if (businessCard.getParticipantId() === participantId) {
+        for (let index = 0; index < this.businessCards.length; index++) {
+            if (this.businessCards[index].getParticipantId() === participantId) {
                 this.businessCards.splice(index, 1);
+                break;
             }
-        });
+        }
 
         $("#friend" + participantId).remove();
         if (!this.handleEmptyFriendlist(this.businessCards)) return;

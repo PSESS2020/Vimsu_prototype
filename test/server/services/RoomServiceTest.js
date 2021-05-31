@@ -1,6 +1,6 @@
 const RoomService = require('../../../src/game/app/server/services/RoomService.js');
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const chai = require('chai');
 const { expect } = require('chai');
 const assert = chai.assert;

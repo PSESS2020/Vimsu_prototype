@@ -55,8 +55,12 @@ table {
 
 input,
 textarea {
-     -moz-user-select: text;
-     outline: none;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  outline: none;
+  resize: none;
 }
 
 #overlay{
@@ -156,6 +160,22 @@ form button:hover {
   text-align: center;
 }
 
+.list-group, 
+#profileModal, 
+#businessCardModal .modal-body, 
+.messageBubbleMyself, 
+.messageBubbleOthers,
+.allChatMessageBubbleMyself,
+.allChatMessageBubbleOthers,
+#scheduleModal .modal-body #schedule,
+#globalChatMessage,
+#largerGlobalChatMessage {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 #notifBar {
   font-size: 0.9375rem;
   background: var(--strong-black-color-a);
@@ -217,6 +237,13 @@ form button:hover {
 /*#allchatMessages div {
 }*/
 
+.chatInputGroup {
+  background-color: #1b1e24 !important; 
+  color: antiquewhite !important; 
+  border-color: antiquewhite !important; 
+  border-radius: 5px 0px 0px 5px !important;
+}
+
 .navbarIcons {
   transform: scale(0.8)
 }
@@ -256,11 +283,6 @@ vertical-align: middle;
   background-color: var(--semi-light-black-color-a);
 }
 
-.lectureChatInput {
-  background-color: #1b1e24; 
-  outline: none;
-}
-
 .closeBtn {
   background-color: transparent !important; 
   border-color: transparent !important; 
@@ -282,25 +304,6 @@ button:disabled {
   border-color: var(--white-color);
   border-radius: 0.625rem;
   background-color: rgb(33, 41, 44);
-}
-
-.lectureVideoWindow {
-  background-color: var(--light-black-color) !important;
-  padding: 0rem !important;
-  overflow: scroll;
-  display: none; 
-  position: fixed; 
-  top: 0rem; 
-  left: 0rem; 
-  border-radius: 0.625rem; 
-  z-index: 350; 
-  width: 100%; 
-  height: 100%;
-}
-
-.lectureVideoHeader {
-  background-color: var(--semi-light-black-color);
-  font-size: 1.875rem;
 }
 
 .lectureChatHeader {
@@ -363,23 +366,9 @@ button:disabled {
   top: 0rem; 
   left: 0rem; 
   border-radius: 0.625rem; 
-  z-index: 2000; 
+  z-index: 5000; 
   width: 100%; 
   height: 100%;
-}
-
-.btn-lecture {
-  background-color: var(--cyan-color);
-  border: none;
-  border-radius: 0.1875rem;
-  text-decoration: none;
-}
-
-.btn-lecture:hover {
-  background-color: var(--cyan-color);
-  border: none;
-  border-radius: 0.1875rem;
-  text-decoration: none;
 }
 
 .btn-blue, .btn-white {

@@ -6,7 +6,7 @@ const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
 const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
 const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
 const EscapeRoomDecorator = require('../models/EscapeRoomDecorator.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const Floorplan = require('../utils/Floorplan.js');
 const RoomDecorator = require('../models/RoomDecorator.js');
 const RoomFactory = require('../models/RoomFactory.js');
@@ -89,7 +89,7 @@ module.exports = class RoomService {
      */
     #roomNotAlreadyCreated = function (roomId) {
         for (let i = 0; i < this.#rooms.length; i++) {
-            let room = this.#rooms[i];
+            const room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
                 return false;
             }

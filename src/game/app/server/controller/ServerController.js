@@ -1,7 +1,7 @@
 const Position = require('../models/Position.js');
 const Direction = require('../../client/shared/Direction.js');
 const RoomService = require('../services/RoomService.js');
-const Settings = require('../utils/Settings.js');
+const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const CommandHandler = require('../models/CommandHandler.js');
 const AllchatContext = require('../models/AllchatContext.js');
 const LectureContext = require('../models/LectureContext.js');
@@ -11,7 +11,7 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../utils/TypeOfTask.js')
-const Messages = require('../utils/Messages.js');
+const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 const ParticipantService = require('../services/ParticipantService.js');
@@ -196,7 +196,7 @@ module.exports = class ServerController {
                     }
 
                     let currentRoomId = ppant.getPosition().getRoomId();
-                    let currentRoom = this.#getRoomById(currentRoomId);
+                    let currentRoom = this.getRoomById(currentRoomId);
 
                     /* In case the ppant is at a position that no longer exists in the current floorplan
                      * or is no longer walkable, we move him to the startposition */ 
@@ -204,11 +204,12 @@ module.exports = class ServerController {
                         ppant.setPosition(new Position(Settings.STARTROOM_ID, Settings.STARTPOSITION_X, Settings.STARTPOSITION_Y));
                         ppant.setDirection(Settings.STARTDIRECTION);
                         currentRoomId = Settings.STARTROOM_ID;
-                        currentRoom = this.#getRoomById(currentRoomId);
+                        currentRoom = this.getRoomById(currentRoomId);
                     }
                     let typeOfCurrentRoom = currentRoom.getTypeOfRoom();
 
                     socket.ppantID = ppant.getId();
+                    socket.username = ppant.getBusinessCard().getUsername();
 
                     //Join Room Channel
                     socket.join(currentRoomId.toString());
@@ -338,12 +339,15 @@ module.exports = class ServerController {
                         email: email
                     };
 
+                    //name that is displayed in meetings and above avatar
+                    let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
+
                     //Sends Room ID, typeOfRoom and listOfGameObjects to Client
                     this.#io.to(socket.id).emit('currentGameStateYourRoom', currentRoomId, currentRoom.getRoomName(), typeOfCurrentRoom,
                         assetPaths, mapElementsData, gameObjectData, npcData, doorData, currentRoom.getWidth(), currentRoom.getLength(), currentRoom.getOccMap());
 
                     //Sends the start-position, participant Id and business card back to the client so the avatar can be initialized and displayed in the right cell
-                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
+                    this.#io.to(socket.id).emit('initOwnParticipantState', { id: ppant.getId(), businessCard: businessCardObject, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor(), displayName: displayName });
 
                     //Initializes Allchat
                     this.#io.to(socket.id).emit('initAllchat', currentRoom.getMessages());
@@ -352,8 +356,8 @@ module.exports = class ServerController {
 
                         if (id != ppant.getId() && participant.getPosition().getRoomId() === currentRoomId) {
 
-                            let username = participant.getBusinessCard().getUsername();
-
+                            
+                            let otherDisplayName = participant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
                             let tempPos = participant.getPosition();
                             let tempX = tempPos.getCordX();
                             let tempY = tempPos.getCordY();
@@ -362,7 +366,7 @@ module.exports = class ServerController {
                             let isModerator = participant.getIsModerator();
                             let shirtColor = participant.getShirtColor();
 
-                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+                            this.#io.to(socket.id).emit('roomEnteredByParticipant', { id: id, displayName: otherDisplayName, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
                         }
                     });
 
@@ -371,7 +375,7 @@ module.exports = class ServerController {
                      * participant-instance corresponding to it.
                      * This should send to all other connected sockets but not to the one
                      * that just connected */
-                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), username: businessCardObject.username, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
+                    socket.to(currentRoomId.toString()).emit('roomEnteredByParticipant', { id: ppant.getId(), displayName: displayName, cordX: ppant.getPosition().getCordX(), cordY: ppant.getPosition().getCordY(), dir: ppant.getDirection(), isVisible: ppant.getIsVisible(), isModerator: ppant.getIsModerator(), shirtColor: ppant.getShirtColor() });
 
                     /* Sends current points and rank to client */
                     socket.emit('updatePoints', ppant.getAwardPoints());
@@ -403,9 +407,9 @@ module.exports = class ServerController {
                     return;
 
                 let roomID = participant.getPosition().getRoomId();
-                let room = this.#getRoomById(roomID);
+                let room = this.getRoomById(roomID);
                 let username = participant.getBusinessCard().getUsername();
-                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 /* Adding the possibility of chat-based commands for moderators.
                  * Checks if the participant is a moderator and if the first character
@@ -424,13 +428,13 @@ module.exports = class ServerController {
                     let input = text.substring(1).split(" ");
                     new CommandHandler(this).handleCommand(socket,
                         new AllchatContext(this, room),
-                        input, username);
+                        input);
                 } else {
                     // If the message contains a command, we don't want to be handled like a regular message
 
                     // muted ppants can't post messages into any allchat
                     if (this.#muteList.includes(socket.request.session.accountId)) {
-                        this.sendNotification(socket.id, Messages.MUTE);
+                        this.sendNotification(socket.id, CommandMessages.MUTE);
                         return;
                     }
 
@@ -509,7 +513,7 @@ module.exports = class ServerController {
                     }
                 } 
 
-                let currentRoom = this.#getRoomById(roomId);
+                let currentRoom = this.getRoomById(roomId);
 
                 //Collision Checking
 
@@ -581,7 +585,7 @@ module.exports = class ServerController {
                 let lectureID = socket.currentLecture; // socket.currentLecture is the lecture the participant is currently in
                 let lecture = this.#conference.getSchedule().getLecture(lectureID);
                 let lectureChat = lecture.getLectureChat();
-                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 if (!lecture.isOpened() && !lecture.isEnded()) {
                     return;
@@ -654,7 +658,7 @@ module.exports = class ServerController {
                 let lecture = schedule.getLecture(lectureId);
 
                 if (lecture.isBanned(socket.request.session.accountId)) {
-                    this.sendNotification(socket.id, Messages.REMOVAL);
+                    this.sendNotification(socket.id, CommandMessages.REMOVAL);
                     return;
                 }
 
@@ -846,7 +850,7 @@ module.exports = class ServerController {
 
                 //Check if ppant with targetID is a friend
                 //if so, emit the email. if not, emit the rank
-                if (ppant.hasFriend(targetID)) {
+                if (ppant.hasFriend(targetID) && Settings.ADVANCED_REGISTRATION_SYSTEM) {
                     businessCardObject.email = businessCard.getEmail();
                     socket.emit('businessCard', businessCardObject, targetRank, target.getIsModerator());
                 } else {
@@ -882,10 +886,17 @@ module.exports = class ServerController {
                 socket.emit('achievements', achData);
             });
 
-            /* handles rank list clicked, show rank list*/
+            /* handles rank list clicked, show rank list */
             socket.on('getRankList', () => {
-                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, 30, this.#db).then(rankList => {
-                    socket.emit('rankList', rankList);
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, this.#db, Settings.MAXNUMRANKLIST).then(rankList => {
+                    socket.emit('rankList', rankList, true);
+                })
+            })
+
+            /* handles rank list load more */
+            socket.on('getMoreDataRankList', (currentRankListLength, lastRank, lastPoints, lastPointsLength) => {
+                RankListService.getRankListWithUsername(Settings.CONFERENCE_ID, this.#db, Settings.MAXNUMRANKLIST, currentRankListLength, lastRank, lastPoints, lastPointsLength).then(rankList => {
+                    socket.emit('rankList', rankList, false);
                 })
             })
 
@@ -939,8 +950,8 @@ module.exports = class ServerController {
                 let ppantID = socket.ppantID;
                 groupName = groupName.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
-                if (!groupName || groupName.length > 20) {
-                    //group name is empty or has length more than 20 chars
+                if (!groupName || groupName.length > 64) {
+                    //group name is empty or has length more than 64 chars
 
                     socket.emit('inviteFriends', undefined, groupName, undefined, undefined);
                 } else {
@@ -1193,11 +1204,13 @@ module.exports = class ServerController {
                 let creatorUsername = creator.getBusinessCard().getUsername();
 
                 //check if the invited friends are friends with the creator. if not, remove the partner from the list.
-                chatPartnerIDList.forEach((chatPartnerID, index) => {
+                for (let index = 0; index < chatPartnerIDList.length; index++) {
+                    const chatPartnerID = chatPartnerIDList[index]
                     if (!creator.hasFriend(chatPartnerID)) {
                         chatPartnerIDList.splice(index, 1);
+                        break;
                     };
-                })
+                }
 
                 if (chatId) {
                     //group chat already exists
@@ -1286,6 +1299,8 @@ module.exports = class ServerController {
                         let previewText = lastMessage.getMessageText();
                         if (previewText.length > 35) {
                             previewText = previewText.slice(0, 35) + "...";
+                        } else if (previewText.includes('<br/>')) {
+                            previewText = previewText.substr(0, previewText.indexOf('<br/>')) + "...";
                         }
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {
@@ -1344,21 +1359,38 @@ module.exports = class ServerController {
                 if (!ppant)
                     return;
 
+                let meetListData = [];
+
+                // moderators get all group meetings, no matter what group they are part of
+                if (ppant.getIsModerator()) {
+                    this.#groups.forEach(group => {
+                        let groupMeeting = group.getMeeting();
+                        meetListData.push({
+                            id: groupMeeting.getId(),
+                            domain: Settings.DEFAULT_MEETINGDOMAIN,
+                            name: groupMeeting.getName(),
+                            password: groupMeeting.getPassword()
+                        });
+                    })
+                }
+                    
                 /* get participants meetings and prepare data object
                  * that we are going to send to client. */
                 let meetList = ppant.getMeetingList();
-                let meetListData = [];
 
                 /* for each meeting get (randomly generated) id, which
                  * we need to generate the URL as well as the name, which
                  * is what the meeting will get listed as. */
                 meetList.forEach(meeting => {
-                    meetListData.push({
-                        id: meeting.getId(),
-                        domain: Settings.DEFAULT_MEETINGDOMAIN,
-                        name: meeting.getName(),
-                        password: meeting.getPassword()
-                    });
+                    // dont add groupMeeting twice when ppant is moderator and part of a group
+                    if (!meetListData.some(meetingObject => meetingObject.id === meeting.getId())) {
+                        meetListData.push({
+                            id: meeting.getId(),
+                            domain: Settings.DEFAULT_MEETINGDOMAIN,
+                            name: meeting.getName(),
+                            password: meeting.getPassword()
+                        });
+                    }
                 });
 
                 // send everything to client
@@ -1530,7 +1562,7 @@ module.exports = class ServerController {
                     return;
 
                 let senderUsername = sender.getBusinessCard().getUsername();
-                msgText = msgText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                msgText = msgText.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br/>');
 
                 if (sender.isMemberOfChat(chatId)) {
                     //gets list of chat participants to which send the message to
@@ -1814,7 +1846,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let npc = this.#getRoomById(currentRoomId).getNPC(npcID);
+                let npc = this.getRoomById(currentRoomId).getNPC(npcID);
 
                 //prevents server to crash when client emits wrong NPC ID
                 if (!npc) {
@@ -1852,7 +1884,7 @@ module.exports = class ServerController {
                     return;
 
                 let currentRoomId = ppant.getPosition().getRoomId();
-                let gameObject = this.#getRoomById(currentRoomId).getGameObject(gameObjectID);
+                let gameObject = this.getRoomById(currentRoomId).getGameObject(gameObjectID);
 
                 //prevents server to crash when client emits wrong GameObject ID
                 if (!gameObject) {
@@ -1893,9 +1925,9 @@ module.exports = class ServerController {
                 }
 
                 if (door.enterCodeToOpen(ppantID, enteredCode)) {
-                    this.sendNotification(socket.id, Messages.CORRECTCODE);
+                    this.sendNotification(socket.id, CommandMessages.CORRECTCODE);
                 } else {
-                    this.sendNotification(socket.id, Messages.WRONGCODE);
+                    this.sendNotification(socket.id, CommandMessages.WRONGCODE);
                 }
             });
 
@@ -1921,7 +1953,7 @@ module.exports = class ServerController {
                 ParticipantService.updateParticipantDirection(ppantID, Settings.CONFERENCE_ID, direction, this.#db);
 
                 //remove participant from room
-                this.#getRoomById(currentRoomId).exitParticipant(ppantID);
+                this.getRoomById(currentRoomId).exitParticipant(ppantID);
 
                 this.#socketMap.delete(socket.id);
                 this.#ppants.delete(ppantID);
@@ -1995,14 +2027,14 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets ID of username based on its username
-     * @method module:ServerController#getIdOf
+     * Gets ID of username based on its username. Only returns an ID if user is currently online
+     * @method module:ServerController#getIdOfOnlineParticipant
      * 
      * @param {String} username username
      * 
-     * @return {String} participantId
+     * @return {String|undefined} participantId, if user exists and is currently online. Undefined otherwise
      */
-    getIdOf(username) {
+    getIdOfOnlineParticipant(username) {
         TypeChecker.isString(username);
 
         var id;
@@ -2015,6 +2047,28 @@ module.exports = class ServerController {
     };
 
     /**
+     * Gets ID of username based on its username. It doesn't matter if user is online or not
+     * @method module:ServerController#getIdOfParticipant
+     * 
+     * @param {String} username username
+     * 
+     * @return {String|undefined} participantId, if user exists. Undefined otherwise
+     */
+    async getIdOfParticipant(username) {
+        TypeChecker.isString(username);
+
+        let id = this.getIdOfOnlineParticipant(username);
+
+        if (id !== undefined) {
+            return id;
+
+        //User is currently offline or does not exist, try to get ID from DB. Will return undefined if user was not found
+        } else {
+            return ParticipantService.getIDByUsername(username, Settings.CONFERENCE_ID, this.#db);
+        }
+    }
+
+    /**
      * Gets all rooms of current conference
      * @method module:ServerController#getRooms
      * 
@@ -2023,6 +2077,51 @@ module.exports = class ServerController {
      */
     getRooms() {
         return this.#rooms;
+    }
+
+     /**
+     * Gets all group instances
+     * @method module:ServerController#getGroups
+     * 
+     * @return {Group[]} groups
+     * 
+     */
+    getGroups() {
+        return Array.from(this.#groups.values());
+    }
+
+    /**
+     * Gets all participant instances that are currently online
+     * @method module:ServerController#getOnlineParticipants
+     * 
+     * @return {Participant[]} online participants
+     * 
+     */
+    getOnlineParticipants() {
+        return Array.from(this.#ppants.values());
+    }
+
+    /**
+     * Gets all participant instances that are currently online and member of the passed group instance
+     * @method module:ServerController#getOnlineGroupMemberIDs
+     * 
+     * @param {Group} group group
+     * 
+     * @return {String[]} memberIDs of members that are currently online
+     * 
+     */
+    getOnlineGroupMemberIDs(group) {
+        TypeChecker.isInstanceOf(group, Group);
+
+        let groupMemberIDs = group.getGroupMemberIDs();
+        let onlineGroupMemberIDs = [];
+        groupMemberIDs.forEach(memberID => {
+            if (this.#ppants.get(memberID) !== undefined) {
+                onlineGroupMemberIDs.push(memberID);
+            }
+        });
+
+        return onlineGroupMemberIDs;
     }
 
     /**
@@ -2044,10 +2143,13 @@ module.exports = class ServerController {
      */
     getDoorByID(doorID) {
         for (let i = 0; i < this.#allDoors.length; i++) {
-            if (this.#allDoors[i].getId() === doorID) {
-                return this.#allDoors[i];
+            const door = this.#allDoors[i]
+            if (door.getId() === doorID) {
+                return door;
             }
         }
+
+        return undefined;
     }
 
     /**
@@ -2161,7 +2263,7 @@ module.exports = class ServerController {
 
     /**
      * Teleports ppant with ppantID to passed position if possible
-     * @method module:ServerController#moveParticipantToPosition
+     * @method module:ServerController#teleportParticipantToPosition
      * 
      * @param {String} ppantID ID of moved ppant
      * @param {Position} position new position of user
@@ -2176,17 +2278,17 @@ module.exports = class ServerController {
         let newRoomID = position.getRoomId();
         let direction = ppant.getDirection();
 
-        //ppant went offline
+        //ppant is not online
         if (!ppant) {
             return false; 
         }
 
         //room does not exist
-        if (this.#getRoomById(newRoomID) === undefined) {
+        if (this.getRoomById(newRoomID) === undefined) {
             return false;
         }
 
-        let newRoom = this.#getRoomById(newRoomID);
+        let newRoom = this.getRoomById(newRoomID);
 
         //passed position is invalid
         if (newRoom.checkForCollision(position)) {
@@ -2199,39 +2301,97 @@ module.exports = class ServerController {
     }
 
     /**
-     * Teleports ppant with ppantID to ppant with passed username
-     * @method module:ServerController#moveParticipantToParticipant
+     * Teleports ppant with ppantID to ppant with targetID
+     * @method module:ServerController#teleportParticipantToParticipant
      * 
      * @param {String} ppantID ID of moved ppant
-     * @param {String} username username of other ppant
+     * @param {String} targetID ID of target ppant
      * 
      * @return {boolean} true by success, false otherwise
      */    
-    teleportParticipantToParticipant(ppantID, username) {
+    teleportParticipantToParticipant(ppantID, targetID) {
         TypeChecker.isString(ppantID);
-        TypeChecker.isString(username);
+        TypeChecker.isString(targetID);
 
         let ppant = this.#ppants.get(ppantID);
+        let target = this.#ppants.get(targetID);
 
-        //ppant went offline
-        if (!ppant) {
+        //one of the ppants is not online
+        if (!ppant || !target) {
             return false; 
         }
 
-        let otherPPantID = this.getIdOf(username);
-
-        //other ppant does not exist or is offline
-        if (otherPPantID === undefined) {
-            return false;
-        } 
-
-        let otherPPant = this.#ppants.get(otherPPantID);
-
-        let newPosition = otherPPant.getPosition();
+        let newPosition = target.getPosition();
         let direction = ppant.getDirection();
 
         this.#changeParticipantPosition(ppant, newPosition, direction);
         return true;
+    }
+
+    /**
+     * Teleports all group members in group with groupName to passed position if possible
+     * @method module:ServerController#teleportGroupToPosition
+     * 
+     * @param {String} groupName name of group
+     * @param {Position} position new position of group members
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    teleportGroupToPosition(groupName, position) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isInstanceOf(position, Position);
+
+        let group = this.#groups.get(groupName);
+
+        if (group === undefined) {
+            return false;
+        }
+
+        let onlineGroupMemberIDs = this.getOnlineGroupMemberIDs(group);
+
+        if (onlineGroupMemberIDs.length < 1) {
+            return false;
+        }
+
+        let portSuccess = true;
+        onlineGroupMemberIDs.forEach(memberID => {
+            portSuccess = portSuccess && this.teleportParticipantToPosition(memberID, position);
+        });
+
+        return portSuccess;
+    }
+
+    /**
+     * Teleports all group members in group with groupName to ppant with targetID
+     * @method module:ServerController#teleportGroupToParticipant
+     * 
+     * @param {String} groupName name of group
+     * @param {String} targetID ID of target ppant
+     * 
+     * @return {boolean} true by success, false otherwise
+     */
+    teleportGroupToParticipant(groupName, targetID) {
+        TypeChecker.isString(groupName);
+        TypeChecker.isString(targetID);
+
+        let group = this.#groups.get(groupName);
+
+        if (group === undefined) {
+            return false;
+        }
+
+        let onlineGroupMemberIDs = this.getOnlineGroupMemberIDs(group);
+
+        if (onlineGroupMemberIDs.length < 1) {
+            return false;
+        }
+
+        let portSuccess = true;
+        onlineGroupMemberIDs.forEach(memberID => {
+            portSuccess = portSuccess && this.teleportParticipantToParticipant(memberID, targetID);
+        });
+       
+        return portSuccess;
     }
 
     /**
@@ -2247,38 +2407,39 @@ module.exports = class ServerController {
         TypeChecker.isString(username);
         TypeChecker.isBoolean(modState);
 
-        let ppantID = this.getIdOf(username);
+        return this.getIdOfParticipant(username).then(ppantID => {
 
-        //user does not exist or is offline
-        if (ppantID === undefined) {
-            return false;
-        }
+            //user does not exist
+            if (ppantID === undefined) {
+                return false;
+            }
 
-        let ppant = this.#ppants.get(ppantID);
-        let socketID = this.getSocketId(ppantID);
+            let ppant = this.#ppants.get(ppantID);
+            let socketID = this.getSocketId(ppantID);
 
-        //user went offline
-        if (ppant === undefined || socketID === undefined) {
-            return false;
-        }
+            //user is online
+            if (ppant !== undefined && socketID !== undefined) {
+                ppant.setIsModerator(modState);
 
-        ppant.setIsModerator(modState);
+                ppant.setIsModerator(modState);
 
-        let socket = this.getSocketObject(socketID);
+                let socket = this.getSocketObject(socketID);
+    
+                //Emit to ppant that his mod state changed and notfiy him
+                if (modState) {
+                    this.sendNotification(socketID, CommandMessages.YOUARENOWMOD);
+                } else {
+                    this.sendNotification(socketID, CommandMessages.YOUARENOLONGERMOD);
+                }
+                socket.emit('your mod state changed', modState);
 
-        //Emit to ppant that his mod state changed and notfiy him
-        if (modState) {
-            this.sendNotification(socketID, Messages.YOUARENOWMOD);
-        } else {
-            this.sendNotification(socketID, Messages.YOUARENOLONGERMOD);
-        }
-        socket.emit('your mod state changed', modState);
-        
-        //Emit to all other ppants in room that mod state of this ppant changed
-        let currentRoomId = ppant.getPosition().getRoomId();
-        socket.to(currentRoomId.toString()).emit('other mod state changed', modState, ppantID);
+                //Emit to all other ppants in room that mod state of this ppant changed
+                let currentRoomId = ppant.getPosition().getRoomId();
+                socket.to(currentRoomId.toString()).emit('other mod state changed', modState, ppantID); 
+            }
 
-        return ParticipantService.changeModState(ppantID, Settings.CONFERENCE_ID, modState, this.#db);
+            return ParticipantService.changeModState(ppantID, Settings.CONFERENCE_ID, modState, this.#db);
+        })
     }
 
     /**
@@ -2315,6 +2476,7 @@ module.exports = class ServerController {
                   
                     this.#handleGroupChatCreationWithoutOwner(memberIDs, groupChat, "GroupCreator");
                     this.#handleGroupMeetingCreation(memberIDs, groupMeeting);
+                    this.#handleLeaveOldGroup(memberIDs, groupName);
         
                     memberIDs.forEach(memberID => {
                         let member = this.#ppants.get(memberID);
@@ -2324,12 +2486,11 @@ module.exports = class ServerController {
                             
                             let socket = this.getSocketObject(socketID);
                             
-                            this.#handleLeaveOldGroup(member, groupName);
                             this.#handleChangeShirtColor(member, groupColor, socket);
                     
                             //Notify user that he joined a new group (right now only for status bar)
                             socket.emit('join group', groupName);
-                            this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
+                            this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
                         }
                     });
                 })    
@@ -2376,7 +2537,7 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group');
-                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
+                this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
             }
         });
 
@@ -2424,25 +2585,26 @@ module.exports = class ServerController {
         
         this.#handleJoinGroupChat(memberIDs, groupChat, "GroupCreator");
         this.#handleJoinGroupMeeting(memberIDs, groupMeeting);
+        this.#handleLeaveOldGroup(memberIDs, groupName);
 
         memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            let socketID = this.getSocketId(memberID);
-
-            if (member !== undefined && socketID !== undefined && !group.includesGroupMember(memberID)) {
-          
-                let socket = this.getSocketObject(socketID);
-                
+            if (!group.includesGroupMember(memberID)) {
                 group.addGroupMember(memberID);
                 GroupService.addGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
 
-                this.#handleLeaveOldGroup(member, groupName);
-                this.#handleChangeShirtColor(member, groupColor, socket);
+                let member = this.#ppants.get(memberID);
+                let socketID = this.getSocketId(memberID);
+                if (member !== undefined && socketID !== undefined) {
+            
+                    let socket = this.getSocketObject(socketID);
+                    
+                    this.#handleChangeShirtColor(member, groupColor, socket);
 
-                //Notify user that he joined a new group (right now only for status bar)
-                socket.emit('join group', groupName);
-                this.sendNotification(socketID, Messages.YOUJOINEDGROUP(groupName));
-            }
+                    //Notify user that he joined a new group (right now only for status bar)
+                    socket.emit('join group', groupName);
+                    this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
+                }
+        }   
         });
         return true;
     }
@@ -2475,25 +2637,27 @@ module.exports = class ServerController {
         let groupMeeting = group.getMeeting();
         let meetingID = groupMeeting.getId();
 
-        this.#handleLeaveGroupMeeting(memberIDs, meetingID);
         memberIDs.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            let socketID = this.getSocketId(memberID);
+            if (group.includesGroupMember(memberID)) {
 
-            this.#handleLeaveChat(memberID, groupChatID);
-
-            if (member !== undefined && socketID !== undefined && group.includesGroupMember(memberID)) {
-
-                let socket = this.getSocketObject(socketID);
-
+                this.#handleLeaveGroupMeeting([memberID], meetingID);
+                this.#handleLeaveChat(memberID, groupChatID);
                 group.removeGroupMember(memberID);
                 GroupService.removeGroupMember(groupName, memberID, Settings.CONFERENCE_ID, this.#db);
-                
-                this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
 
-                //Notify user that he left a group, client changes status bar and removes groupChat from View
-                socket.emit('leave group');
-                this.sendNotification(socketID, Messages.YOULEFTGROUP(groupName));
+                let member = this.#ppants.get(memberID);
+                let socketID = this.getSocketId(memberID);
+
+                if (member !== undefined && socketID !== undefined) {
+
+                    let socket = this.getSocketObject(socketID);
+                    
+                    this.#handleChangeShirtColor(member, Settings.DEFAULT_SHIRTCOLOR_PPANT, socket);
+
+                    //Notify user that he left a group, client changes status bar and removes groupChat from View
+                    socket.emit('leave group');
+                    this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
+                }
             }
         });
 
@@ -2512,34 +2676,37 @@ module.exports = class ServerController {
      * 
      * @method module:ServerController#handleLeaveOldGroup
      * 
-     * @param {Participant} member new member instance
+     * @param {String[]} memberIDs memberIDs of new group
      * @param {String} newGroupName name of new group
      */
-    #handleLeaveOldGroup = function(member, newGroupName) {
-        TypeChecker.isInstanceOf(member, Participant);
+    #handleLeaveOldGroup = function(memberIDs, newGroupName) {
+        TypeChecker.isInstanceOf(memberIDs, Array);
+        memberIDs.forEach(groupMemberID => {
+            TypeChecker.isString(groupMemberID);
+        });
         TypeChecker.isString(newGroupName);
 
-        let memberID = member.getId();
+        memberIDs.forEach(memberID => {
+            this.#groups.forEach((otherGroup, otherGroupName) => {
+                if (otherGroupName !== newGroupName && otherGroup.includesGroupMember(memberID)) {
+                    otherGroup.removeGroupMember(memberID);
+                    let newMemberIDs = otherGroup.getGroupMemberIDs();
 
-        this.#groups.forEach((otherGroup, otherGroupName) => {
-            if (otherGroupName !== newGroupName && otherGroup.includesGroupMember(memberID)) {
-                otherGroup.removeGroupMember(memberID);
-                let newMemberIDs = otherGroup.getGroupMemberIDs();
+                    //if other group has no longer members, delete it from map
+                    if (newMemberIDs.length < 1) {
+                        this.#groups.delete(otherGroupName);
+                    }
+                    GroupService.removeGroupMember(otherGroupName, memberID, Settings.CONFERENCE_ID, this.#db);
 
-                //if other group has no longer members, delete it from map
-                if (newMemberIDs.length < 1) {
-                    this.#groups.delete(otherGroupName);
+                    let otherGroupChat = otherGroup.getGroupChat();
+                    let otherGroupChatID = otherGroupChat.getId();
+                    let otherGroupMeeting = otherGroup.getMeeting();
+                    let otherGroupMeetingID = otherGroupMeeting.getId();
+
+                    this.#handleLeaveChat(memberID, otherGroupChatID);
+                    this.#handleLeaveGroupMeeting([memberID], otherGroupMeetingID);
                 }
-                GroupService.removeGroupMember(otherGroupName, memberID, Settings.CONFERENCE_ID, this.#db);
-
-                let otherGroupChat = otherGroup.getGroupChat();
-                let otherGroupChatID = otherGroupChat.getId();
-                let otherGroupMeeting = otherGroup.getMeeting();
-                let otherGroupMeetingID = otherGroupMeeting.getId();
-
-                this.#handleLeaveChat(memberID, otherGroupChatID);
-                this.#handleLeaveGroupMeeting([memberID], otherGroupMeetingID);
-            }
+            });
         });
     }
 
@@ -2615,17 +2782,19 @@ module.exports = class ServerController {
         };
                 
         memberIDList.forEach(memberID => {
-            let member = this.#ppants.get(memberID);
-            meeting.addMember(memberID);
+            if (!meeting.includesMember(memberID)) {
+                let member = this.#ppants.get(memberID);
+                meeting.addMember(memberID);
 
-            let socketID = this.getSocketId(memberID);
-            if(member !== undefined && socketID !== undefined) {
-                member.joinMeeting(meeting);
+                let socketID = this.getSocketId(memberID);
+                if(member !== undefined && socketID !== undefined) {
+                    member.joinMeeting(meeting);
 
-                this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
-                this.#io.to(socketID).emit('newMeeting', meetingData);
+                    this.#io.to(socketID).emit('gotNewMeeting', meetingName, meetingID);
+                    this.#io.to(socketID).emit('newMeeting', meetingData);
+                }
+                MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
             }
-            MeetingService.addParticipant(meetingID, memberID, Settings.CONFERENCE_ID, this.#db);
         });
     }
 
@@ -2668,7 +2837,6 @@ module.exports = class ServerController {
 
         let memberIDs = meeting.getMemberIdList();
         let meetingID = meeting.getId();
-        let meetingName = meeting.getName();
 
         memberIDs.forEach(memberID => {
             let member = this.#ppants.get(memberID);
@@ -2785,6 +2953,13 @@ module.exports = class ServerController {
             return;
         }
 
+        //Remove every ID that is already part of the chat from list
+        chatPartnerIDList.forEach((newChatPartnerID, index) => {
+            if (existingChatPartnerIDList.includes(newChatPartnerID)) {
+                chatPartnerIDList.splice(index, 1);
+            }
+        });
+
         Promise.all(chatPartnerIDList.map(async newChatPartnerID => {
                 
             if (newChatPartnerID !== creatorID && !existingChatPartnerIDList.includes(newChatPartnerID)) {
@@ -2820,6 +2995,8 @@ module.exports = class ServerController {
         
                         if (previewText.length > 35) {
                             previewText = previewText.slice(0, 35) + "...";
+                        } else if (previewText.includes('<br/>')) {
+                            previewText = previewText.substr(0, previewText.indexOf('<br/>')) + "...";
                         }
 
                         let inviteButton = true;
@@ -2913,74 +3090,91 @@ module.exports = class ServerController {
      * @param {String} memberID memberID
      * @param {String} chatID group chat ID
      */
-     #handleLeaveChat = function(memberID, chatID) {
+    #handleLeaveChat = async function(memberID, chatID) {
         TypeChecker.isString(memberID);
         TypeChecker.isString(chatID);
     
         let socketID = this.getSocketId(memberID);
         let member = this.#ppants.get(memberID);
+        let memberBusinessCard;
+        let chatPartnerIDList;
 
+        //participant is online
         if (member !== undefined && socketID !== undefined && member.isMemberOfChat(chatID)) {
+            memberBusinessCard = member.getBusinessCard();
+            var socket = this.getSocketObject(socketID);
+            chatPartnerIDList = member.getChat(chatID).getParticipantList();
 
-            let memberBusinessCard = member.getBusinessCard();
-            let memberUsername = memberBusinessCard.getUsername();
-            let socket = this.getSocketObject(socketID);
-            let chatPartnerIDList = member.getChat(chatID).getParticipantList();
+        //participant is not online and is forced to leave a chat
+        } else {
+            memberBusinessCard = await ParticipantService.getBusinessCard(memberID, Settings.CONFERENCE_ID, this.#db);
+            chatPartnerIDList = await ChatService.loadMemberList(chatID, Settings.CONFERENCE_ID, this.#db);
 
-            let msgText = "*VIMSU Bot* " + memberUsername + " has left the chat";
+            //participant does not exist or is not member of this chat, should not happen
+            if (!memberBusinessCard || !chatPartnerIDList.includes(memberID)) {
+                return;
+            }
+        }
 
-            ChatService.createChatMessage(chatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
-                chatPartnerIDList.forEach(chatPartnerID => {
-                    let chatPartner = this.#ppants.get(chatPartnerID);
+        let memberUsername = memberBusinessCard.getUsername();
+        let msgText = "*VIMSU Bot* " + memberUsername + " has left the chat";
 
-                    //Checks if receiver of message is online
-                    if (chatPartnerID !== memberID && chatPartner !== undefined) {
+        ChatService.createChatMessage(chatID, '', '', msgText, Settings.CONFERENCE_ID, this.#db).then(msg => {
+            chatPartnerIDList.forEach(chatPartnerID => {
+                let chatPartner = this.#ppants.get(chatPartnerID);
 
-                        let chatPartnerChat = chatPartner.getChat(chatID);
+                //Checks if receiver of message is online
+                if (chatPartnerID !== memberID && chatPartner !== undefined) {
 
-                        if (chatPartnerChat !== undefined) {
-                            chatPartnerChat.addMessage(msg);
-                            chatPartnerChat.removeParticipant(memberID);
-                        }
+                    let chatPartnerChat = chatPartner.getChat(chatID);
 
-                        if (chatPartnerChat instanceof GroupChat) {
-                            this.#io.in(chatID).emit('removeFromChatParticipantList', chatID, memberUsername);
-
-                            if (chatPartner.hasFriend(memberID)) {
-                                var memberBusinessCardData = {
-                                    friendId: memberBusinessCard.getParticipantId(),
-                                    username: memberUsername,
-                                    title: memberBusinessCard.getTitle(),
-                                    surname: memberBusinessCard.getSurname(),
-                                    forename: memberBusinessCard.getForename(),
-                                    job: memberBusinessCard.getJob(),
-                                    company: memberBusinessCard.getCompany(),
-                                    email: memberBusinessCard.getEmail()
-                                }
-    
-                                this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', memberBusinessCardData, true)
-                            } else
-                                this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
-                        }
+                    if (chatPartnerChat !== undefined) {
+                        chatPartnerChat.addMessage(msg);
+                        chatPartnerChat.removeParticipant(memberID);
                     }
-                });
 
-                var msgToEmit = {
-                    senderUsername: msg.getUsername(),
-                    msgId: msg.getMessageId(),
-                    senderId: msg.getSenderId(),
-                    timestamp: msg.getTimestamp(),
-                    msgText: msg.getMessageText()
-                };
+                    if (chatPartnerChat instanceof GroupChat) {
+                        this.#io.in(chatID).emit('removeFromChatParticipantList', chatID, memberUsername);
 
-                //distribute chat messages after leaving chat
-                this.#io.in(chatID).emit('newChatMessage', chatID, msgToEmit);
-
+                        if (chatPartner.hasFriend(memberID)) {
+                            var memberBusinessCardData = {
+                                friendId: memberBusinessCard.getParticipantId(),
+                                username: memberUsername,
+                                title: memberBusinessCard.getTitle(),
+                                surname: memberBusinessCard.getSurname(),
+                                forename: memberBusinessCard.getForename(),
+                                job: memberBusinessCard.getJob(),
+                                company: memberBusinessCard.getCompany(),
+                                email: memberBusinessCard.getEmail()
+                            }
+    
+                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', memberBusinessCardData, true)
+                        } else
+                            this.#io.to(this.getSocketId(chatPartnerID)).emit('addToInviteFriends', undefined, true)
+                    }
+                }
             });
+            
+
+            var msgToEmit = {
+                senderUsername: msg.getUsername(),
+                msgId: msg.getMessageId(),
+                senderId: msg.getSenderId(),
+                timestamp: msg.getTimestamp(),
+                msgText: msg.getMessageText()
+            };
+
+            //distribute chat messages after leaving chat
+            this.#io.in(chatID).emit('newChatMessage', chatID, msgToEmit);
+
+        });
+
+        if (socket !== undefined && member !== undefined) {
             socket.emit('leave chat', chatID);
             member.removeChat(chatID);
             socket.leave(chatID);
         }
+        
         ChatService.removeParticipant(chatID, memberID, Settings.CONFERENCE_ID, this.#db);
     }
 
@@ -3013,7 +3207,7 @@ module.exports = class ServerController {
      * @return {boolean} true if chat is a chat from an existing group, false otherwise
      */
     #isChatFromGroup = function(chatId) {
-        for (let group of this.#groups.values()) {
+        for (const group of this.#groups.values()) {
             if (group.getGroupChat().getId() === chatId) {
                 return true;
             }
@@ -3216,7 +3410,7 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let lectureDoor = this.#getRoomById(currentRoomId).getLectureDoor();
+        let lectureDoor = this.getRoomById(currentRoomId).getLectureDoor();
 
         //check if participant is in right position to enter room
         if (!lectureDoor.isValidEnterPosition(enterPosition)) {
@@ -3302,15 +3496,15 @@ module.exports = class ServerController {
 
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
-        let currentRoom = this.#getRoomById(currentRoomId);
+        let currentRoom = this.getRoomById(currentRoomId);
 
         //prevents server to crash when client emits a non existing room ID
-        if (!this.#getRoomById(targetRoomId)) {
+        if (!this.getRoomById(targetRoomId)) {
             console.log('Client emitted wrong Room-ID!');
             return;
         }
 
-        let targetRoom = this.#getRoomById(targetRoomId);
+        let targetRoom = this.getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         //get door from current room to target room
@@ -3358,13 +3552,14 @@ module.exports = class ServerController {
      *                 the conference has such room. Returns
      *                 undefined otherwise.
      */
-    #getRoomById = function (roomId) {
+    getRoomById(roomId) {
         for (let i = 0; i < this.#rooms.length; i++) {
-            let room = this.#rooms[i];
+            const room = this.#rooms[i];
             if (room.getRoomId() == roomId) {
                 return room;
             }
         }
+
         return undefined;
     }
 
@@ -3386,10 +3581,10 @@ module.exports = class ServerController {
 
         let currentPosition = ppant.getPosition();
         let currentRoomId = currentPosition.getRoomId();
-        let currentRoom = this.#getRoomById(currentRoomId);
+        let currentRoom = this.getRoomById(currentRoomId);
 
         let targetRoomId = newPos.getRoomId();
-        let targetRoom = this.#getRoomById(targetRoomId);
+        let targetRoom = this.getRoomById(targetRoomId);
         let targetRoomType = targetRoom.getTypeOfRoom();
 
         currentRoom.exitParticipant(ppantID);
@@ -3479,8 +3674,8 @@ module.exports = class ServerController {
         ppant.setPosition(newPos);
         ppant.setDirection(direction);
 
-        //Get username, isModerator, isVisible, shirtColor
-        let username = ppant.getBusinessCard().getUsername();
+        //displayName, isModerator, isVisible, shirtColor
+        let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
         let isModerator = ppant.getIsModerator();
         let isVisible = ppant.getIsVisible();
         let shirtColor = ppant.getShirtColor();
@@ -3495,12 +3690,12 @@ module.exports = class ServerController {
         socket.to(currentRoomId.toString()).emit('remove player', ppantID);
 
         //Emit to all participants in new room, that participant is joining
-        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, username: username, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+        socket.to(targetRoomId.toString()).emit('roomEnteredByParticipant', { id: ppantID, displayName: displayName, cordX: x, cordY: y, dir: direction, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
 
         //Emit to participant all participant positions, that were in new room before him
         this.#ppants.forEach((ppant, id, map) => {
             if (id != ppantID && ppant.getPosition().getRoomId() === targetRoomId) {
-                let username = ppant.getBusinessCard().getUsername();
+                let displayName = ppant.getBusinessCard()['get' + Settings.DISPLAY_NAME]();
                 let tempPos = ppant.getPosition();
                 let tempX = tempPos.getCordX();
                 let tempY = tempPos.getCordY();
@@ -3508,7 +3703,7 @@ module.exports = class ServerController {
                 let isVisible = ppant.getIsVisible();
                 let isModerator = ppant.getIsModerator();
                 let shirtColor = ppant.getShirtColor();
-                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, username: username, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
+                this.#io.to(socketID).emit('roomEnteredByParticipant', { id: id, displayName: displayName, cordX: tempX, cordY: tempY, dir: tempDir, isVisible: isVisible, isModerator: isModerator, shirtColor: shirtColor });
             }
         });
 
@@ -3518,7 +3713,7 @@ module.exports = class ServerController {
             socket.join(targetRoomId.toString());
         }
 
-        this.#io.to(socketID).emit('initAllchat', this.#getRoomById(targetRoomId).getMessages());
+        this.#io.to(socketID).emit('initAllchat', this.getRoomById(targetRoomId).getMessages());
 
     }
 

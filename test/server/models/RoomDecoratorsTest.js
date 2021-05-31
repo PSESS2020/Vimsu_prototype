@@ -13,7 +13,7 @@ const NPC = require('../../../src/game/app/server/models/NPC');
 
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
 
-const Settings = require('../../../src/game/app/server/utils/Settings.js');
+const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const RoomDimensions = require('../../../src/game/app/server/utils/RoomDimensions.js');
 
 foyerAssetPaths = {
