@@ -327,7 +327,6 @@ button:disabled {
 }
 
 .window-header {
-  font-size: 1.875rem;
   background-color: var(--semi-light-black-color-a);
   border-radius: 0.625rem 0.625rem 0rem 0rem;
   box-shadow: 0rem 0rem 0rem transparent; 

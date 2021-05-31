@@ -50,7 +50,7 @@ class ChatThreadView extends WindowView {
     draw(chat, ownUsername) {
         this.chat = chat;
         this.messages = chat.messages;
-        this.ownUsername = ownUsername
+        this.ownUsername = ownUsername;
 
         this.initButtons();
 

@@ -84,7 +84,7 @@ class ChatListView extends WindowView {
       previewMessage = chat.previewUsername + ": " + chat.previewMessage;
     }
 
-    return { timestamp, previewMessage }
+    return { timestamp, previewMessage };
   }
 
   /**
@@ -300,7 +300,7 @@ class ChatListView extends WindowView {
         </div>
       `);
 
-      new EmojiPicker().draw('chatthreadEmojiTrigger' + chatID, 'chatthreadEmojiPicker' + chatID, `chatMessageInput${chatID}`)
+      new EmojiPicker().draw('chatthreadEmojiTrigger' + chatID, 'chatthreadEmojiPicker' + chatID, `chatMessageInput${chatID}`);
     }
 
     $("#chatThreadModal" + chatID).modal("show");

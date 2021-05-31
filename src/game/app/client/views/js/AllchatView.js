@@ -36,8 +36,6 @@ class AllchatView extends Views {
 
         let counter = -1;
 
-        let counter = -1;
-
         const sendMessage = (event) => {
             event.preventDefault();
             //Replace needed to replace html tags.

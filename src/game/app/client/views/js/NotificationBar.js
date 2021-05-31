@@ -66,17 +66,6 @@ class NotificationBar extends Views {
     }
 
     /**
-     * Gets new message notif id
-     * 
-     * @param {String} senderUsername message sender username
-     * @param {String} chatId chat ID
-     * @returns new message notif id
-     */
-    getNewMessageId(senderUsername, chatId) {
-        return 'notifMessage' + senderUsername + chatId;
-    }
-
-    /**
      * Draws new message notification
      * 
      * @param {String} senderUsername message sender username
@@ -103,16 +92,6 @@ class NotificationBar extends Views {
     }
 
     /**
-     * Gets new chat notif id
-     * 
-     * @param {String} chatId chat ID
-     * @returns new chat notif id
-     */
-    getNewChatId(chatId) {
-        return 'notifChat' + chatId;
-    }
-
-    /**
      * Draws new chat notification
      * 
      * @param {String} senderUsername chat requester username
@@ -126,16 +105,6 @@ class NotificationBar extends Views {
             this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
         });
-    }
-
-    /**
-     * Gets new group chat notif id
-     * 
-     * @param {String} chatId chat ID
-     * @returns new group chat notif id
-     */
-    getNewGroupChatId(chatId) {
-        return 'notifGroupChat' + chatId;
     }
 
     /**
@@ -176,16 +145,6 @@ class NotificationBar extends Views {
     }
 
     /**
-     * Gets new meeting notif id
-     * 
-     * @param {String} meetingID meeting ID
-     * @returns new meeting notif id
-     */
-    getNewMeetingId(meetingID) {
-        return 'notifMeeting' + meetingID;
-    }
-
-    /**
      * Draws new meeting notification
      * 
      * @param {String} meetingName meeting name
@@ -200,16 +159,6 @@ class NotificationBar extends Views {
             $('#meetingListModal').modal('show');
             return this.eventManager.handleMeetingListClicked();
         });
-    }
-
-    /**
-     * Gets new friend request notif id
-     * 
-     * @param {String} senderUsername requester username
-     * @returns new friend request notif id
-     */
-    getNewFriendRequestId(senderUsername) {
-        return 'notifFriendRequest' + senderUsername;
     }
 
     /**
@@ -252,16 +201,6 @@ class NotificationBar extends Views {
     }
 
     /**
-     * Gets new friend notif id
-     * 
-     * @param {String} friendUsername friend username
-     * @returns new friend notif id
-     */
-    getNewFriendId(friendUsername) {
-        return 'notifFriend' + friendUsername;
-    }
-
-    /**
      * Draws new friend notification
      * 
      * @param {String} friendUsername friend username
@@ -275,16 +214,6 @@ class NotificationBar extends Views {
             $('#friendListModal').modal('show');
             return this.eventManager.handleFriendListClicked();
         });
-    }
-
-    /**
-     * Gets minimized meeting notif id
-     * 
-     * @param {String} meetingId meeting id
-     * @returns minimized meeting notif id
-     */
-    getMinimizedMeetingId(meetingId) {
-        return 'runningMeeting' + meetingId;
     }
 
     /**

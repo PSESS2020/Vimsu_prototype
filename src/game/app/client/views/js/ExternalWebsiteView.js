@@ -55,7 +55,7 @@ class ExternalWebsiteView extends WindowView {
             });
 
             $('#externalWebsiteWindow' + gameObjectID).hide();
-        }
+        };
 
         $('#fullscreenBtn' + gameObjectID).off();
         $('#fullscreenBtn' + gameObjectID).on('click', (event) => {
