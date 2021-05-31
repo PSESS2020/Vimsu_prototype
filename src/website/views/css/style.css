@@ -67,7 +67,7 @@ body {
 .header {
   display: flex;
   justify-content: center;
-  height: 6.25rem;
+  height: 100px;
   align-items: center;
 }
 
@@ -78,9 +78,9 @@ body {
 #vimsu-text {
   font-family: 'Fredoka One', cursive;
   color: var(--white-color);
-  font-size: 2.5rem;
-  letter-spacing: 0.625rem;
-  margin-right: -0.625rem;
+  font-size: 40px;
+  letter-spacing: 10px;
+  margin-right: -10px;
 }
 
 #logo-text {
@@ -100,12 +100,12 @@ body {
 }
 
 #logo img {
-  max-width: 3.25rem;
+  max-width: 52px;
   max-height: 80%;
 }
 
 #logo-text img {
-  max-width: 10rem;
+  max-width: 160px;
   max-height: 100%;
 }
 
@@ -114,7 +114,7 @@ hr {
 }
 
 .nav-item {
-  margin: 0rem 1.25rem;
+  margin: 0px 20px;
 }
 
 a, a:hover {
@@ -141,7 +141,7 @@ a, a:hover {
 }
 
 .nav-tabs {
-  border-bottom: 0.0625rem solid var(--white-color);
+  border-bottom: 1px solid var(--white-color);
   width: 100%;
   justify-content: center;
 }
@@ -153,16 +153,16 @@ a, a:hover {
 
 .nav-tabs .nav-link:hover {
   color: var(--tosca-color) !important;
-  margin-bottom: -0.125rem;
+  margin-bottom: -2px;
   border-color: transparent;
-  border-bottom: 0.1875rem solid transparent;
+  border-bottom: 3px solid transparent;
 }
 
 .nav-tabs .nav-link.active {
   background-color: transparent;
   border-color: var(--white-color);
-  border-bottom: 0.1875rem solid var(--black-color);
-  margin-bottom: -0.125rem;
+  border-bottom: 3px solid var(--black-color);
+  margin-bottom: -2px;
   color: var(--tosca-color) !important;
 }
 
@@ -173,9 +173,9 @@ a, a:hover {
 .primary-button {
   color: var(--white-color);
   background-color: transparent;
-  border: 0.0625rem solid var(--white-color);
+  border: 1px solid var(--white-color);
   border-radius: .25rem;
-  min-width: 6.25rem;
+  min-width: 100px;
   -webkit-transition: all 0.2s ease-in-out 0s;
   -moz-transition: all 0.2s ease-in-out 0s;
   -o-transition: all 0.2s ease-in-out 0s;
@@ -194,9 +194,9 @@ a, a:hover {
 .warning-button {
   color: var(--red-color);
   background-color: transparent;
-  border: 0.0625rem solid var(--red-color);
+  border: 1px solid var(--red-color);
   border-radius: .25rem;
-  min-width: 6.25rem;
+  min-width: 100px;
   -webkit-transition: all 0.2s ease-in-out 0s;
   -moz-transition: all 0.2s ease-in-out 0s;
   -o-transition: all 0.2s ease-in-out 0s;
@@ -213,7 +213,7 @@ a, a:hover {
 
 #form {
   border-radius: .25rem;
-  border: 0.0625rem solid var(--white-color);
+  border: 1px solid var(--white-color);
   padding: 1rem 1rem;
 }
 
@@ -246,12 +246,12 @@ a, a:hover {
 #footer {
   background-color: var(--tosca-color);
   color: var(--white-color);
-  font-size: 0.625rem;
-  padding: 0.625rem 5vw;
+  font-size: 10px;
+  padding: 10px 5vw;
 }
 
 hr {
-  border-top: 0.0625rem solid var(--white-color)
+  border-top: 1px solid var(--white-color)
 }
 
 textarea {
@@ -260,11 +260,11 @@ textarea {
 
 .form-control, .form-control-custom {
   background-color: transparent;
-  border: 0.0625rem solid var(--white-color);
+  border: 1px solid var(--white-color);
   border-radius: .25rem;
   padding: .25rem;
   color: var(--white-color);
-  font-size: 0.8125rem;
+  font-size: 13px;
 }
 
 .form-control:focus {
@@ -278,7 +278,7 @@ option {
 
 .input-label {
   text-align: left;
-  font-size: 0.8125rem;
+  font-size: 13px;
   display: flex;
 }
 
@@ -328,7 +328,7 @@ input, textarea {
 .tooltip-inner {
   color: var(--white-color);
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.8125rem;
+  font-size: 13px;
   background: var(--black-color);
 }
 
@@ -355,7 +355,7 @@ input, textarea {
 
 @media (min-width: 575.98px) {
   #footer {
-    padding: 0.625rem 15vh;
+    padding: 10px 15vh;
   }
 }
 
@@ -368,21 +368,21 @@ input, textarea {
     height: 100%;
   }
   hr {
-    margin: 0.625rem;
+    margin: 10px;
   }
   .form-control {
-    font-size: 0.75rem;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 991.98px) {
   #title {
     text-align: center;
-    margin-top: 1.875rem;
+    margin-top: 30px;
   }
   #slideshow {
-    margin-top: 1.875rem;
-    margin-bottom: 1.875rem;
+    margin-top: 30px;
+    margin-bottom: 30px;
   }
 }
 
