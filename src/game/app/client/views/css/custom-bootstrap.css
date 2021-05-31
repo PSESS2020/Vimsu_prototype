@@ -209,6 +209,7 @@ button:focus {
 
 .tooltip-inner {
   background: none;
+  color: var(--white-color);
 }
 
 .carousel-control-prev-icon,

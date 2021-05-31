@@ -33,7 +33,7 @@ class NotificationBar extends Views {
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
 
-            $("#notifBar").animate({ "max-height": "22.5rem" }, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "right": "0.9375rem" }, Settings.TOGGLE_SPEED);
             notifBar.style.display = "block";
             notifBar.style.zIndex = "5";
 
@@ -42,7 +42,7 @@ class NotificationBar extends Views {
         });
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
-            $("#notifBar").animate({ "max-height": "0rem" }, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "right": "-15.625rem" }, Settings.TOGGLE_SPEED);
 
             setTimeout(() => {
                 notifBar.style.display = "none";
@@ -62,7 +62,7 @@ class NotificationBar extends Views {
      * @returns new message notif id
      */
     getNewMessageId(senderUsername, chatId) {
-        return 'notifMessage' + senderUsername + chatId
+        return 'notifMessage' + senderUsername + chatId;
     }
 
     /**
@@ -88,7 +88,7 @@ class NotificationBar extends Views {
      * @returns new chat notif id
      */
     getNewChatId(chatId) {
-        return 'notifChat' + chatId
+        return 'notifChat' + chatId;
     }
 
     /**
@@ -114,7 +114,7 @@ class NotificationBar extends Views {
      * @returns new group chat notif id
      */
     getNewGroupChatId(chatId) {
-        return 'notifGroupChat' + chatId
+        return 'notifGroupChat' + chatId;
     }
 
     /**
@@ -168,7 +168,7 @@ class NotificationBar extends Views {
      * @returns new friend request notif id
      */
     getNewFriendRequestId(senderUsername) {
-        return 'notifFriendRequest' + senderUsername
+        return 'notifFriendRequest' + senderUsername;
     }
 
     /**
@@ -197,7 +197,7 @@ class NotificationBar extends Views {
      * @returns new friend notif id
      */
     getNewFriendId(friendUsername) {
-        return 'notifFriend' + friendUsername
+        return 'notifFriend' + friendUsername;
     }
 
     /**
