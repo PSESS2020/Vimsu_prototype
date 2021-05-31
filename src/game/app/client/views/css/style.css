@@ -121,8 +121,10 @@ video::-webkit-media-controls-timeline {
   z-index: 1;
 }
 
-.emoji-picker {
-  font-size: 1rem;
+emoji-picker {
+  height: 25rem;
+  --indicator-height: 0.1875rem;
+  --outline-size: 0.125rem;
 }
 
 form {

@@ -105,6 +105,7 @@ button:focus {
 }
 
 .close {
+  font-size: 1.35rem;
   background-color: transparent !important; 
   border-color: transparent !important; 
   opacity: 1;
