@@ -29,8 +29,8 @@ class ChatListView extends WindowView {
     $('#newGroupChat').off();
     $('#newGroupChat').on('click', (event) => {
       event.preventDefault();
-      $('#inputGroupNameModal').modal('show')
-      $('#groupNameInput').trigger('focus')
+      $('#inputGroupNameModal').modal('show');
+      $('#groupNameInput').trigger('focus');
     });
   }
 
@@ -99,23 +99,29 @@ class ChatListView extends WindowView {
 
     // Now we want to append each chat as a clickable element
     $("#chatListModal .modal-body .list-group").prepend(`
-        <li class="list-group-item bg-transparent chatthread" id="${"chatListEntry" + chat.chatId}">
-          <a class="" style="color: antiquewhite" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
-            <div class="row w-100">
-              <div class="col-2 px-0 my-auto">
-                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
-              </div>
-              <div class="col-10 text-left">
-                <label class="name lead">${chat.title}</label>
-                <div class="small p-0" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">
-                  ${timestamp}
-                </div>
-                <div class ="small p-0 wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</div>                                
-              </div>  
-            </div>
-          </a>
-        </li>
-      `);
+        <li class="list-group-item bg-transparent chatthread px-0" id="${"chatListEntry" + chat.chatId}">
+            <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
+                <div class="d-flex flex-row px-0">
+                    <div class="col-2 pr-0 my-auto">
+                        <div class="d-flex flex-row justify-content-center align-items-center my-auto">
+                            <i class="fa fa-user fa-5x navbarIcons"></i>
+                        </div>
+                    </div>
+                    <div class="col-10 pl-4">
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                          <label class="name lead text-truncate" title="${chat.title}" data-toggle="tooltip">${chat.title}</label>
+                        </div>
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                            <span class="small text-truncate" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
+                        </div>
+                        <div class="d-flex flex-row justify-content-start align-items-center">
+                            <span class ="small wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>
+                        </div>
+                    </div>
+                  </div>
+              </a>
+          </li>
+    `);
 
     $("#chat" + chat.chatId).off();
     $("#chat" + chat.chatId).on("click", () => {
@@ -163,7 +169,7 @@ class ChatListView extends WindowView {
   addNewChat(chat) {
     if (!this.chats.includes(chat)) {
       this.chats.push(chat);
-      this.appendNewChat(chat)
+      this.appendNewChat(chat);
     }
   }
 
@@ -207,7 +213,7 @@ class ChatListView extends WindowView {
       }
     };
 
-    this.draw(this.chats, this.ownUsername)
+    this.draw(this.chats, this.ownUsername);
   }
 
   /**
@@ -221,37 +227,37 @@ class ChatListView extends WindowView {
           <div class="modal" id=${"chatThreadModal" + chatID} role="dialog" aria-labelledby=${"chatThreadModalTitle" + chatID}
           aria-hidden="true" data-focus-on="input:first">
             <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-                <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
                             <div>
                                 <button id=${"chatFriendRequestButton" + chatID} class="close btn" style="display: none" title="Add friend">
-                                    <i class="fa fa-user-plus navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
+                                    <i class="fa fa-user-plus navbarIcons" style="margin-top: 0.125rem;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
                                 <button id=${"chatMeetingButton" + chatID} class="close btn" style="display: none" title="(Video) call with chat participants">
-                                    <i class="fa fa-video navbarIcons" style="margin-top: 2px;" aria-hidden="true"></i>
+                                    <i class="fa fa-video navbarIcons" style="margin-top: 0.125rem;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
                                 <a class="action_button nav-item nav-link close btn" style="display: none" title="Show chat participant list"
                                     role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-info-circle navbarIcons"
-                                        style="transform: scale(0.8); margin-top: 1px;"></i>
+                                        style="transform: scale(0.8); margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
                                 <a class="action_button nav-item nav-link close btn" style="display: none" title="Invite friends to group chat"
                                     role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-plus-square navbarIcons"
-                                        style="transform: scale(0.8); margin-top: 1px;"></i>
+                                        style="transform: scale(0.8); margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
                                 <button id=${"chatLeaveButton" + chatID} class="close btn" style="display: none" title="Leave chat">
-                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 2px"></i>
+                                    <i class="fa fa-sign-out navbarIcons" style="margin-top: 0.125rem"></i>
                                 </button>
                             </div>
                             <div>

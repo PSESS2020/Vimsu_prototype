@@ -28,11 +28,11 @@ class FriendListView extends WindowView {
         $('#friendRequestList').off();
         $('#friendRequestList').on('click', () => {
             $('#nofriendrequest').empty();
-            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal .modal-body .list-group').empty();
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
             this.eventManager.handleFriendRequestListClicked();
-        })
+        });
     }
 
     /**
@@ -47,7 +47,7 @@ class FriendListView extends WindowView {
 
         if (!this.handleEmptyFriendlist(businessCards)) return;
 
-        const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
+        const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()));
         this.businessCards = sortedBusinessCards;
 
         this.businessCards.forEach(businessCard => {
@@ -57,50 +57,57 @@ class FriendListView extends WindowView {
                            (" (@" + businessCard.getUsername() + ")");
 
             $('#friendListModal .modal-body .list-group').append(`
-                <li class="list-group-item bg-transparent chatthread" id="${"friend" + businessCard.getParticipantId()}">
-                    <div class="d-flex justify-content-between">
-                        <div class="row w-100">
-                            <div class="col-2 px-0 my-auto">
-                                <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                <li class="list-group-item bg-transparent chatthread px-0" id="${"friend" + businessCard.getParticipantId()}">
+                    <div class="d-flex flex-row">
+                            <div class="col-2 pr-0 my-auto">
+                                <div class="d-flex flex-row justify-content-center align-items-center">
+                                    <i class="fa fa-user fa-5x navbarIcons"></i>
+                                </div>
                             </div>
-                            <div class="col-9 text-left">
-                                <label class="name lead">${fullname}</label>
-                                ${businessCard.getJob() || businessCard.getCompany() ?
-                                    `<div>
-                                        <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                            " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
-                                    </div>`
-                                : 
-                                    ``
-                                }
-                                ${businessCard.getEmail() ?
-                                    `<div>
-                                        <i class="fa fa-envelope fa-fw mr-1"></i>${businessCard.getEmail()}
-                                    </div>`
-                                : 
-                                    ``
-                                }
+                            <div class="col-9 pr-0 pl-4">
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
+                                </div>
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    ${businessCard.getJob() || businessCard.getCompany() ?
+                                        `<div>
+                                            <i class="fa fa-briefcase fa-fw mr-2"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
+                                </div>
+                                <div class="d-flex flex-row justify-content-start align-items-center">
+                                    ${businessCard.getEmail() ?
+                                        `<div>
+                                            <i class="fa fa-envelope fa-fw mr-2"></i>${businessCard.getEmail()}
+                                        </div>`
+                                    : 
+                                        ``
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    
-                        <span class="mr-4 mt-n3">
-                            <a class="action_button nav-item nav-link" href="" style="position: absolute;" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" style="min-width: 5px; background-color: rgba(34, 43, 46, 0) !important; border: 0px;" aria-labelledby="dropdownFriendOption">
-                                <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
-                                <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                            <div class="col-1 p-0 ml-1 mt-n1">
+                                <div class="d-flex flex-row mt-n3">
+                                        <a class="action_button nav-item nav-link" href="" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: rgba(34, 43, 46, 0) !important; border: 0rem;" aria-labelledby="dropdownFriendOption">
+                                            <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="Close friend list and chat now" type="button">Chat</button>
+                                            <button class="dropdown-item btn btn-white" id="${"delete" + businessCard.getParticipantId()}" title="Remove from friend list" type="button">Unfriend</button>
+                                        </div>
+                                </div>
                             </div>
-                        </span>
-                    </div>  
+                    </div>
                 </li>
-            `)
+            `);
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
             $('#chatfriend' + businessCard.getParticipantId()).on('click', () => {
                 this.eventManager.handleRemoveNewFriendNotif(businessCard.getUsername());
                 this.eventManager.handleChatNowClicked(businessCard.getParticipantId());
-            })
+            });
 
             $('#delete' + businessCard.getParticipantId()).off();
             $('#delete' + businessCard.getParticipantId()).on('click', (event) => {
@@ -111,8 +118,8 @@ class FriendListView extends WindowView {
                     this.eventManager.handleRemoveFriend(businessCard.getParticipantId());
                 else
                     event.stopImmediatePropagation();
-            })
-        })
+            });
+        });
     }
 
     /**
@@ -128,7 +135,7 @@ class FriendListView extends WindowView {
             }
         }
 
-        $("#friend" + participantId).remove()
+        $("#friend" + participantId).remove();
         if (!this.handleEmptyFriendlist(this.businessCards)) return;
     }
 

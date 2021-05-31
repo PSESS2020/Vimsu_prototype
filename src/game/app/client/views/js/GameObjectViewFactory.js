@@ -26,8 +26,8 @@ class GameObjectViewFactory {
         this.eventManager = eventManager;
 
         //gets map tile size
-        this.tileColumnWidth = this.gameEngine.getTileColumnWidth();
-        this.tileRowHeight = this.gameEngine.getTileRowHeight();
+        this.tileColumnWidth = this.gameEngine.getTileWidth();
+        this.tileRowHeight = this.gameEngine.getTileHeight();
     }
 
     /**
@@ -139,8 +139,8 @@ class GameObjectViewFactory {
             TypeChecker.isInt(gameObjectID);
         
         if (story !== undefined) {
-            TypeChecker.isInstanceOf(story, Array)
-            story.forEach(element => TypeChecker.isString(element))
+            TypeChecker.isInstanceOf(story, Array);
+            story.forEach(element => TypeChecker.isString(element));
         }
 
         var gameObjectView = null;

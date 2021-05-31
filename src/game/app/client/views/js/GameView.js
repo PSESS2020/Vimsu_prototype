@@ -65,7 +65,7 @@ class GameView {
      * @param {ClientController} clientController ClientController instance
      */
     initEventManager(clientController) {
-        TypeChecker.isInstanceOf(clientController, ClientController)
+        TypeChecker.isInstanceOf(clientController, ClientController);
         this.eventManager = new EventManager(clientController);
 
         //initialize some Views at the very beginning
@@ -245,7 +245,7 @@ class GameView {
                     && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
                     npcView.onClick();
                 }
-            })
+            });
         }//check if clicked tile is outside the walkable area
         else if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
             this.currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
@@ -275,6 +275,17 @@ class GameView {
             //Point&Click movement event
             this.eventManager.handlePlayGroundClicked(startCords, selectedTileCords);
         }
+    }
+
+    /**
+     * Updates GameView's origin and redraws map
+     */
+    onResize() {
+        if (this.currentMapView === null || this.currentMapView === undefined)
+            return;
+            
+        this.gameEngine.setMapOriginXY(ctx_map.canvas.width, ctx_map.canvas.height);
+        this.currentMapView.refreshDisplay();
     }
     
     /**
@@ -475,7 +486,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participantAvatarView => participantAvatarView.getId() === participant.getId());
         
         if (index >= 0) {
-            throw new Error(participant + " is already in list of participants")
+            throw new Error(participant + " is already in list of participants");
         }
 
         if (participant !== this.ownAvatarView) {
@@ -509,7 +520,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         this.anotherParticipantAvatarViews[index].setPosition(newPosition);
@@ -528,7 +539,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         this.anotherParticipantAvatarViews[index].setDirection(direction);
@@ -547,7 +558,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         this.anotherParticipantAvatarViews[index].updateWalking(isMoving);
@@ -567,7 +578,7 @@ class GameView {
         var index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === participantId);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         //Removes disconnected Avatar from participant avatar views
@@ -657,7 +668,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         this.anotherParticipantAvatarViews[index].setIsModerator(modState);
@@ -687,7 +698,7 @@ class GameView {
         let index = this.anotherParticipantAvatarViews.findIndex(participant => participant.getId() === ppantID);
 
         if (index < 0) {
-            throw new Error(participantId + " is not in list of participants")
+            throw new Error(participantId + " is not in list of participants");
         }
 
         this.anotherParticipantAvatarViews[index].updateShirtColor(shirtColor);
@@ -820,9 +831,9 @@ class GameView {
         TypeChecker.isInstanceOf(businessCards, Array);
         businessCards.forEach(busCard => {
             TypeChecker.isInstanceOf(busCard, BusinessCardClient);
-        })
+        });
 
-        this.friendListView.draw(businessCards)
+        this.friendListView.draw(businessCards);
     }
 
     /**
@@ -838,13 +849,13 @@ class GameView {
             TypeChecker.isInstanceOf(businessCards, Array);
             businessCards.forEach(busCard => {
                 TypeChecker.isInstanceOf(busCard, BusinessCardClient);
-            })
+            });
         }
 
         TypeChecker.isString(groupName);
 
         if (limit)
-            TypeChecker.isInt(limit)
+            TypeChecker.isInt(limit);
         if (chatId)
             TypeChecker.isString(chatId);
 
@@ -881,7 +892,7 @@ class GameView {
         TypeChecker.isInstanceOf(story, Array);
         story.forEach(element => {
             TypeChecker.isString(element);
-        })
+        });
 
         this.npcStoryView.draw(name, story, npcId);
     }
@@ -1263,11 +1274,11 @@ class GameView {
      * @param {String[]} usernames list of usernames
      */
     drawChatParticipantList(chatId, usernames) {
-        TypeChecker.isString(chatId)
+        TypeChecker.isString(chatId);
         TypeChecker.isInstanceOf(usernames, Array);
         usernames.forEach(username => {
             TypeChecker.isString(username);
-        })
+        });
         this.chatParticipantListView.draw(chatId, usernames);
     }
 
@@ -1450,7 +1461,7 @@ class GameView {
         TypeChecker.isInstanceOf(businessCards, Array);
         businessCards.forEach(busCard => {
             TypeChecker.isInstanceOf(busCard, BusinessCardClient);
-        })
+        });
 
         this.friendRequestListView.draw(businessCards);
     }

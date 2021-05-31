@@ -20,53 +20,53 @@ class HUDView extends Views {
 
         HUDView.instance = this;
 
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip();
 
         $('#rankListButton').off();
         $('#rankListButton').on('click', () => {
             $('#rankListModal').modal('show');
             eventManager.handleRankListClicked();
-        })
+        });
 
         $('#scheduleListButton').off();
         $('#scheduleListButton').on('click', () => {
             $('#noschedule').empty();
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
             $('#scheduleModal').modal('show');
-            $('#scheduleWait').show()
+            $('#scheduleWait').show();
             eventManager.handleScheduleClicked();
-        })
+        });
 
         $('#achievementListButton').off();
         $('#achievementListButton').on('click', () => {
             $('#achievementsModal').modal('show');
             eventManager.handleAchievementsClicked();
-        })
+        });
 
         $('#friendListButton').off();
         $('#friendListButton').on('click', () => {
             $('#friendListModal').modal('show');
             eventManager.handleFriendListClicked();
-        })
+        });
 
         $('#meetingListButton').off();
         $('#meetingListButton').on('click', () => {
             $('#meetingListModal').modal('show');
             eventManager.handleMeetingListClicked();
-        })
+        });
 
 
         $('#chatListButton').off();
         $('#chatListButton').on('click', () => {
             $('#chatListModal').modal('show');
             eventManager.handleChatListClicked();
-        })
+        });
 
         $('#profileButton').off();
         $('#profileButton').on('click', () => {
             $('#profileModal').modal('show');
             eventManager.handleProfileClicked();
-        })
+        });
     }
 
     /**

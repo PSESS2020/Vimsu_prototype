@@ -113,7 +113,8 @@ class MapView extends Views {
         this.gameEngine = new IsometricEngine();
 
         super.setVisibility(true);
-        var assetImages = await this.gameEngine.initGameEngine(assetPaths, map.length, map[0].length);
+        this.gameEngine.initGameEngine(ctx_map.canvas.width, ctx_map.canvas.height, map.length, map[0].length);
+        var assetImages = await this.gameEngine.loadImages(assetPaths);
         if(!super.isVisible())
             return;
 
@@ -460,7 +461,7 @@ class MapView extends Views {
      * Updates objects screen position and redraws them
      */
     refreshDisplay() {
-        ctx_map.clearRect(0, 0, GameConfig.CTX_WIDTH, GameConfig.CTX_HEIGHT);
+        ctx_map.clearRect(0, 0, ctx_map.canvas.width, ctx_map.canvas.height);
         
         if(super.isVisible()) {
             this.updateMapElements();

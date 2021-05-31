@@ -192,7 +192,7 @@ class ParticipantAvatarView extends AvatarView {
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-            `)
+            `);
             this.eventManager.handleAvatarClick(this.participantId);
         }
     }

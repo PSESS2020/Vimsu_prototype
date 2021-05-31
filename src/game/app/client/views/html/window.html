@@ -63,7 +63,7 @@
                     <i class="fa fa-close"></i>
                 </button>
             </div>
-            <div class="modal-body" style="overflow: auto; max-height: 500px">
+            <div class="modal-body" style="overflow: auto; max-height: 31.25rem">
             </div>
         </div>
     </div>
@@ -83,8 +83,8 @@
                             style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="friendRequestList"
                             data-toggle="modal" title="Received friend requests" href="">
                             <i class="fa fa-user-plus navbarIcons"
-                                style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                            <small style="color: antiquewhite; font-size: 10px;">Requests</small>
+                                style="transform: scale(0.6); margin-bottom: -0.4375rem; margin-top: -0.3125rem;"></i>
+                            <small style="font-size: 0.625rem;">Requests</small>
                         </a>
                     </div>
                     <div>
@@ -112,7 +112,7 @@
 <div class="modal" id="friendRequestListModal" tabindex="-1" role="dialog" aria-labelledby="friendRequestListModalTitle"
     data-focus-on="input:first">
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
@@ -238,8 +238,8 @@
                         <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat" href=""
                             style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat">
                             <i class="fa fa-edit navbarIcons"
-                                style="transform: scale(0.6); margin-bottom: -7px; margin-top: -5px;"></i>
-                            <small style="color: antiquewhite; font-size: 10px;">Group</small>
+                                style="transform: scale(0.6); margin-bottom: -0.4375rem; margin-top: -0.3125rem;"></i>
+                            <small style="font-size: 0.625rem;">Group</small>
                         </a>
                     </div>
                     <div>
@@ -270,7 +270,7 @@
 <div class="modal" id="inputGroupNameModal" tabindex="-1" role="dialog" aria-labelledby="inputGroupNameModalTitle"
     data-focus-on="input:first">
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
@@ -279,7 +279,7 @@
             </div>
             <div class="modal-body modal-body-center modal-body-large">
                 <form id="groupName" action="" style="text-align: center; width: 100%">
-                    <input id="groupNameInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                    <input id="groupNameInput" style="width: 100%; background-color: #1b1e24;"
                         placeholder="Enter group name" maxlength="64" required autocomplete="off" />
                     <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
                         style=" width: auto;">Invite
@@ -293,16 +293,16 @@
 <div class="modal" id="inputEnterCodeModal" tabindex="-1" role="dialog" aria-labelledby="inputEnterCodeModalTitle"
     data-focus-on="input:first">
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
             </div>
-            <div class="modal-body modal-body-center" style="height: 200px;">
+            <div class="modal-body modal-body-center" style="height: 12.5rem;">
                 <form id="enteredCode" action="" style="text-align: center; width: 100%">
-                    <input id="codeInput" style="width: 100%; background-color: #1b1e24; color: antiquewhite"
+                    <input id="codeInput" style="width: 100%; background-color: #1b1e24;"
                         placeholder="Enter code" required autocomplete="off" />
                     <button class="btn btn-blue mt-3" title="Sends the code you entered in the input field"
                         style=" width: auto;"> Send Code
@@ -316,7 +316,7 @@
 <div class="modal" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModalTitle"
     aria-hidden="true" data-focus-on="input:first">
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
@@ -351,7 +351,7 @@
 <div class="window" id="lectureVideoWindow" style="width: 100%; height: 100%; z-index: 1070">
     <div class="p-3 d-flex window-header align-items-center">
         <h5 class="ml-2" id="lectureTitleLabel"></h5>
-        <div class="ml-3" style="font-size: small; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
+        <div class="ml-3" style="font-size: 0.8rem; vertical-align: text-bottom;" id="lectureSpeakerLabel"></div>
         <div class="self-align-end ml-auto pl-1 pr-1 close" id="closeButton"></div>
     </div>
     <div class="p-3 window-content d-flex justify-content-between">
@@ -366,9 +366,9 @@
         </div>
         <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-1 mb-6">
             <div class="lectureChatHeader">
-                <p class="mt-2" style="text-align: center; font-size: large;">Chat</p>
+                <p class="mt-2" style="text-align: center; font-size: 1.25rem;">Chat</p>
             </div>
-            <div id="lectureChatMessages" style="height:300px; overflow-y: auto;" class="mr-2 ml-2">
+            <div id="lectureChatMessages" style="height:18.75rem; overflow-y: auto;" class="mr-2 ml-2">
             </div>
             <div id="lectureChatInputGroup" class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom" style="width: auto">
             </div>
@@ -379,8 +379,8 @@
 <div class="window" id="meetingWindow" style="width: 100%; height: 100%;">
     <div class="p-3 d-flex window-header">
         <div id="meetingWindowTitle"></div>
-        <button id="meetingWindowMinimize" class="close btn ml-auto pl-2 pr-2">
-            <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 1px;"></i>
+        <button id="meetingWindowMinimize" class="close btn ml-auto px-2">
+            <i class="fa fa-window-minimize" style=" transform: scale(0.6); margin-top: 0.0625rem;"></i>
         </button>
         <button id="meetingWindowClose" class="close btn pl-1 pr-1">
             <i class="fa fa-close"></i>
@@ -420,13 +420,13 @@
             </div>
             <div class="col-12">
                 <div id="removalMessage" class="row ml-auto mr-auto">
-                    <div style="font-size: large; position: absolute; top: 30%; width: 100%; text-align:center;">
+                    <div style="font-size: 1.25rem; position: absolute; top: 30%; width: 100%; text-align:center;">
                         <h5>You have been removed from this conference.</h5>
                     </div>
                     <div style="position: absolute; width:100%; top: 60%;">
                         <a class="action_button nav-item nav-link" href="/">
                             <!--<i class="fa fa-sign-out fa-4x navbarIcons" style="position:absolute; left: 40%;"></i>-->
-                            <p class="navbarIconsText" style="margin-left: 7px; width: 100%; text-align: center;">
+                            <p class="navbarIconsText" style="margin-left: 0.4375rem; width: 100%; text-align: center;">
                                 Return to Homepage.</p>
                         </a>
                     </div>
@@ -440,14 +440,14 @@
 <div class="modal" id="globalChat" tabindex="-1" role="dialog" aria-labelledby="globalChatWindowHeaderText"
     data-focus-on="input:first" style="z-index: 10000">
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
-        <div class="modal-content" style="background-color:rgba(34, 43, 46, 1) !important;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="globalChatWindowHeaderText"></h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
             </div>
-            <div class="modal-body" style="overflow: auto; max-height: 500px;">
+            <div class="modal-body" style="overflow: auto; max-height: 31.25rem;">
                 <div id="globalChatMessage" style="text-align: left;">
                 </div>
             </div>

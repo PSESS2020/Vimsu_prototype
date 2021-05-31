@@ -50,9 +50,9 @@ class InviteFriendsView extends WindowView {
         this.invitedFriends = [];
 
         if (businessCards) {
-            if (!this.handleEmptyInviteFriends(businessCards)) return
+            if (!this.handleEmptyInviteFriends(businessCards)) return;
 
-            const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()))
+            const sortedBusinessCards = businessCards.sort((a, b) => a.getForename().localeCompare(b.getForename()));
             this.businessCards = sortedBusinessCards;
             this.groupName = groupName;
             this.limit = limit;
@@ -65,54 +65,64 @@ class InviteFriendsView extends WindowView {
                                (" (@" + businessCard.getUsername() + ")");
                 $('#inviteFriendsModal .modal-body .list-group').append(`
                     <ul id="${"invitefriend" + businessCard.getParticipantId()}">
-                        <li class="list-group-item bg-transparent" >
-                            <div class="row w-100">
-                                <div class="col-2 px-0 my-auto">
-                                    <i class="fa fa-user fa-5x navbarIcons" style="margin-left: 5px" ></i>
+                        <li class="list-group-item bg-transparent px-0" >
+                            <div class="d-flex flex-row">
+                                <div class="col-2 pr-0 my-auto">
+                                    <div class="d-flex flex-row justify-content-center align-items-center">
+                                        <i class="fa fa-user fa-5x navbarIcons"></i>
+                                    </div>
                                 </div>
-                                <div class="col-9 text-left">
-                                    <label class="name lead">${fullname}</label>
-                                    ${businessCard.getJob() || businessCard.getCompany() ?
-                                        `<div>
-                                            <i class="fa fa-briefcase fa-fw mr-1"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
-                                        </div>`
-                                    : 
-                                        ``
-                                    }
-                                    ${businessCard.getEmail() ?
-                                        `<div>
-                                            <i class="fa fa-envelope fa-fw mr-1"></i>${businessCard.getEmail()}
-                                        </div>`
-                                    : 
-                                        ``
-                                    }
+                                <div class="col-9 pr-0 pl-4">
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        ${businessCard.getJob() || businessCard.getCompany() ?
+                                            `<div>
+                                                <i class="fa fa-briefcase fa-fw mr-2"></i>${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                                                    " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}
+                                            </div>`
+                                        : 
+                                            ``
+                                        }
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        ${businessCard.getEmail() ?
+                                            `<div>
+                                                <i class="fa fa-envelope fa-fw mr-2"></i>${businessCard.getEmail()}
+                                            </div>`
+                                        : 
+                                            ``
+                                        }
+                                    </div>
                                 </div>
-                                <div class="col-1">
-                                    <button id="${"invite" + businessCard.getParticipantId()}" style="position: absolute; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none;" class="btn">
-                                        <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
-                                    </button>
-                                    <button id="${"selected" + businessCard.getParticipantId()}" style="position: absolute; display: none; margin-top: -7px; margin-left: 5px; outline: none; box-shadow: none" class="btn">
-                                        <i class="fa fa-check-circle fa-2x navbarIcons"></i>
-                                    </button>
-                                </div>    
+                                <div class="col-1 p-0 ml-n1">
+                                    <div class="d-flex flex-row mt-n2">
+                                        <button id="${"invite" + businessCard.getParticipantId()}" style="outline: none; box-shadow: none;" class="btn">
+                                            <i class="fa fa-plus-circle fa-2x navbarIcons"></i>
+                                        </button>
+                                        <button id="${"selected" + businessCard.getParticipantId()}" style="outline: none; box-shadow: none" class="btn">
+                                            <i class="fa fa-check-circle fa-2x navbarIcons"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                     </ul>
-                `)
+                `);
 
                 $('#invite' + businessCard.getParticipantId()).on('click', () => {
                     this.invitedFriends.push(businessCard.getParticipantId());
                     $('#invite' + businessCard.getParticipantId()).hide();
                     $('#selected' + businessCard.getParticipantId()).show();
-                })
+                });
 
                 $('#selected' + businessCard.getParticipantId()).on('click', () => {
                     let index = this.invitedFriends.indexOf(businessCard.getParticipantId());
                     this.invitedFriends.splice(index, 1);
                     $('#selected' + businessCard.getParticipantId()).hide();
                     $('#invite' + businessCard.getParticipantId()).show();
-                })
+                });
 
                 $('#createGroupChat').off();
                 $('#createGroupChat').on('click', () => {
@@ -132,12 +142,12 @@ class InviteFriendsView extends WindowView {
                         $('#toomanyinvitedfriends').text("You may only invite " + this.limit + " friend(s)! Please unselect " + diff + " friend(s).");
                         $('#toomanyinvitedfriends').show();
                     }
-                })
+                });
             });
 
             $('#createGroupChat').show();
         } else {
-            $('#inviteFriendsModal .modal-body').text("Group name was empty!")
+            $('#inviteFriendsModal .modal-body').text("Group name was empty!");
         }
     }
 
@@ -182,8 +192,8 @@ class InviteFriendsView extends WindowView {
             }
 
             if (found) {
-                $("#invitefriend" + participantId).remove()
-                if (!this.handleEmptyInviteFriends(this.businessCards)) return
+                $("#invitefriend" + participantId).remove();
+                if (!this.handleEmptyInviteFriends(this.businessCards)) return;
             }
         }
     }

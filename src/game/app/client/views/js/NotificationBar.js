@@ -24,34 +24,34 @@ class NotificationBar extends Views {
 
         this.eventManager = eventManager;
 
-        $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length);
 
         $('#showNotifBar').hide();
 
-        const notifBar = document.getElementById("notifBar")
+        const notifBar = document.getElementById("notifBar");
 
         $('#showNotifBar').on('click', (event) => {
             event.preventDefault();
 
-            $("#notifBar").animate({ "max-height": "360px" }, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "right": "0.9375rem" }, Settings.TOGGLE_SPEED);
             notifBar.style.display = "block";
             notifBar.style.zIndex = "5";
 
             $('#showNotifBar').hide();
             $('#hideNotifBar').show();
-        })
+        });
         $('#hideNotifBar').on('click', (event) => {
             event.preventDefault();
-            $("#notifBar").animate({ "max-height": "0px" }, Settings.TOGGLE_SPEED);
+            $("#notifBar").animate({ "right": "-15.625rem" }, Settings.TOGGLE_SPEED);
 
             setTimeout(() => {
                 notifBar.style.display = "none";
                 notifBar.style.zIndex = "0";
-            }, Settings.TOGGLE_SPEED)
+            }, Settings.TOGGLE_SPEED);
 
             $('#hideNotifBar').hide();
             $('#showNotifBar').show();
-        })
+        });
     }
 
     /**
@@ -62,7 +62,18 @@ class NotificationBar extends Views {
      * @returns new message notif id
      */
     getNewMessageId(senderUsername, chatId) {
-        return 'notifMessage' + senderUsername + chatId
+        return 'notifMessage' + senderUsername + chatId;
+    }
+
+    /**
+     * Gets new message notif id
+     * 
+     * @param {String} senderUsername message sender username
+     * @param {String} chatId chat ID
+     * @returns new message notif id
+     */
+    getNewMessageId(senderUsername, chatId) {
+        return 'notifMessage' + senderUsername + chatId;
     }
 
     /**
@@ -72,13 +83,13 @@ class NotificationBar extends Views {
      * @param {String} chatId chat ID
      */
     drawNewMessage(senderUsername, chatId) {
-        const id = this.getNewMessageId(senderUsername, chatId)
-        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true)
+        const id = this.getNewMessageId(senderUsername, chatId);
+        this.addNewNotificationDiv(id, `New message from ${senderUsername}.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
     }
 
     /**
@@ -88,7 +99,17 @@ class NotificationBar extends Views {
      * @returns new chat notif id
      */
     getNewChatId(chatId) {
-        return 'notifChat' + chatId
+        return 'notifChat' + chatId;
+    }
+
+    /**
+     * Gets new chat notif id
+     * 
+     * @param {String} chatId chat ID
+     * @returns new chat notif id
+     */
+    getNewChatId(chatId) {
+        return 'notifChat' + chatId;
     }
 
     /**
@@ -98,13 +119,13 @@ class NotificationBar extends Views {
      * @param {String} chatId chat ID
      */
     drawNewChat(senderUsername, chatId) {
-        const id = this.getNewChatId(chatId)
-        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true)
+        const id = this.getNewChatId(chatId);
+        this.addNewNotificationDiv(id, `${senderUsername} init chat with you.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
     }
 
     /**
@@ -114,7 +135,17 @@ class NotificationBar extends Views {
      * @returns new group chat notif id
      */
     getNewGroupChatId(chatId) {
-        return 'notifGroupChat' + chatId
+        return 'notifGroupChat' + chatId;
+    }
+
+    /**
+     * Gets new group chat notif id
+     * 
+     * @param {String} chatId chat ID
+     * @returns new group chat notif id
+     */
+    getNewGroupChatId(chatId) {
+        return 'notifGroupChat' + chatId;
     }
 
     /**
@@ -125,13 +156,23 @@ class NotificationBar extends Views {
      * @param {String} chatId chat ID
      */
     drawNewGroupChat(groupName, creatorUsername, chatId) {
-        const id = this.getNewGroupChatId(chatId)
-        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true)
+        const id = this.getNewGroupChatId(chatId);
+        this.addNewNotificationDiv(id, `${creatorUsername} invited you to the group chat '${groupName}'.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             return this.eventManager.handleChatThreadClicked(chatId);
-        })
+        });
+    }
+
+    /**
+     * Gets new meeting notif id
+     * 
+     * @param {String} meetingID meeting ID
+     * @returns new meeting notif id
+     */
+    getNewMeetingId(meetingID) {
+        return 'notifMeeting' + meetingID;
     }
 
     /**
@@ -151,14 +192,14 @@ class NotificationBar extends Views {
      * @param {String} meetingID meeting ID
      */
     drawNewMeeting(meetingName, meetingID) {
-        const id = this.getNewMeetingId(meetingID)
-        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true)
+        const id = this.getNewMeetingId(meetingID);
+        this.addNewNotificationDiv(id, `You were invited to the video meeting '${meetingName}'.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#meetingListModal').modal('show');
             return this.eventManager.handleMeetingListClicked();
-        })
+        });
     }
 
     /**
@@ -168,7 +209,17 @@ class NotificationBar extends Views {
      * @returns new friend request notif id
      */
     getNewFriendRequestId(senderUsername) {
-        return 'notifFriendRequest' + senderUsername
+        return 'notifFriendRequest' + senderUsername;
+    }
+
+    /**
+     * Gets new friend request notif id
+     * 
+     * @param {String} senderUsername requester username
+     * @returns new friend request notif id
+     */
+    getNewFriendRequestId(senderUsername) {
+        return 'notifFriendRequest' + senderUsername;
     }
 
     /**
@@ -177,17 +228,17 @@ class NotificationBar extends Views {
      * @param {String} senderUsername requester username
      */
     drawNewFriendRequest(senderUsername) {
-        const id = this.getNewFriendRequestId(senderUsername)
-        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true)
+        const id = this.getNewFriendRequestId(senderUsername);
+        this.addNewNotificationDiv(id, `New friend request from ${senderUsername}.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#nofriendrequest').empty();
-            $('#friendRequestListModal .modal-body .list-group').empty()
+            $('#friendRequestListModal .modal-body .list-group').empty();
             $('#friendRequestListModal').modal('show');
             $('#friendRequestListWait').show();
             return this.eventManager.handleFriendRequestListClicked();
-        })
+        });
     }
 
     /**
@@ -197,7 +248,17 @@ class NotificationBar extends Views {
      * @returns new friend notif id
      */
     getNewFriendId(friendUsername) {
-        return 'notifFriend' + friendUsername
+        return 'notifFriend' + friendUsername;
+    }
+
+    /**
+     * Gets new friend notif id
+     * 
+     * @param {String} friendUsername friend username
+     * @returns new friend notif id
+     */
+    getNewFriendId(friendUsername) {
+        return 'notifFriend' + friendUsername;
     }
 
     /**
@@ -206,14 +267,14 @@ class NotificationBar extends Views {
      * @param {String} friendUsername friend username
      */
     drawNewFriend(friendUsername) {
-        const id = this.getNewFriendId(friendUsername)
-        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true)
+        const id = this.getNewFriendId(friendUsername);
+        this.addNewNotificationDiv(id, `${friendUsername} accepted your friend request.`, true);
 
         $('#' + id).on('click', (e) => {
-            this.removeNotifDiv(id)
+            this.removeNotifDiv(id);
             $('#friendListModal').modal('show');
             return this.eventManager.handleFriendListClicked();
-        })
+        });
     }
 
     /**
@@ -223,7 +284,17 @@ class NotificationBar extends Views {
      * @returns minimized meeting notif id
      */
     getMinimizedMeetingId(meetingId) {
-        return 'runningMeeting' + meetingId
+        return 'runningMeeting' + meetingId;
+    }
+
+    /**
+     * Gets minimized meeting notif id
+     * 
+     * @param {String} meetingId meeting id
+     * @returns minimized meeting notif id
+     */
+    getMinimizedMeetingId(meetingId) {
+        return 'runningMeeting' + meetingId;
     }
 
     /**
@@ -232,14 +303,14 @@ class NotificationBar extends Views {
      * @param {Object} meeting minimizedmeeting
      */
     drawMinimizedMeeting(meeting) {
-        const id = this.getMinimizedMeetingId(meeting.id)
-        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false)
+        const id = this.getMinimizedMeetingId(meeting.id);
+        this.addNewNotificationDiv(id, `You are in call with ${meeting.name}.`, false);
 
         $('#' + id).on('click', (e) => {
             $('#meetingWindow').show();
             $('#meetingWindowWait').show();
             return this.eventManager.handleMeetingJoined(meeting);
-        })
+        });
     }
 
     /**
@@ -250,7 +321,7 @@ class NotificationBar extends Views {
      * @param {Boolean} closeable true if the notification can be closed
      */
     addNewNotificationDiv(id, text, closeable) {
-        if ($('#' + id + 'Div').length > 0) return
+        if ($('#' + id + 'Div').length > 0) return;
         
         $('#notifBar').prepend(`
                 <div id="${id + 'Div'}" class="d-flex list-group-item notifBarDiv justify-content-between">
@@ -261,14 +332,14 @@ class NotificationBar extends Views {
                         </div>
                     </a>
                 </div>
-            `)
+            `);
 
-        $('#unreadNotif').text($("#notifBar > div").length)
+        $('#unreadNotif').text($("#notifBar > div").length);
 
         if (closeable) {
             $('#close' + id).on('click', (e) => {
-                this.removeNotifDiv(id)
-            })
+                this.removeNotifDiv(id);
+            });
         } else {
             document.getElementById(`close${id}`).disabled = true;
         }
@@ -279,7 +350,7 @@ class NotificationBar extends Views {
     removeNotifDiv(id) {
         if ($('#' + id + 'Div').length) {
             $('#' + id + 'Div').remove();
-            $('#unreadNotif').text($("#notifBar > div").length)
+            $('#unreadNotif').text($("#notifBar > div").length);
         }
     }
 }

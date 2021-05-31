@@ -27,8 +27,8 @@ class NPCStoryView extends WindowView {
      * @param {String} npcId NPC id
      */
     draw(name, story, npcId) {
-        $('#npcStoryWait' + npcId).hide()
-        $(`#npcStoryModal${npcId} .modal-header`).empty()
+        $('#npcStoryWait' + npcId).hide();
+        $(`#npcStoryModal${npcId} .modal-header`).empty();
         $('#npcStory' + npcId).empty();
         
         $(`#npcStoryModal${npcId} .modal-header`).append(`
@@ -36,11 +36,11 @@ class NPCStoryView extends WindowView {
             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-close"></i>
             </button>
-        `)
+        `);
 
         for (var i = 0; i < story.length; i++) {
             $('#npcStory' + npcId).append(`
-                <p style="background-color: rgba(0, 0, 0, 0); padding: 5px; text-align: left; display:none" id='${"story" + npcId + i.toString()}'>${story[i]}</p>
+                <p style="background-color: rgba(0, 0, 0, 0); padding: 0.3125rem; text-align: left; display:none" id='${"story" + npcId + i.toString()}'>${story[i]}</p>
                 <button style="float:left; display: none; outline: none; box-shadow: none" class="btn" id='${"backwardStory" + npcId + i.toString()}'>
                     <i class="fa fa-arrow-left fa-3x navbarIcons"></i>
                 </button>
@@ -106,7 +106,7 @@ class NPCStoryView extends WindowView {
                         </div>
                     </div>
                 </div>
-            `)
+            `);
         }
 
         $('#npcStoryModal' + npcId).modal('show');

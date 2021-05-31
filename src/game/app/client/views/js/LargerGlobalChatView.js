@@ -21,18 +21,18 @@ class LargerGlobalChatView extends WindowView {
         $('#closeLargerGlobalChatButton').off();
         $('#closeLargerGlobalChatButton').on('click', () => {
             $('#largerGlobalChat').hide();
-        })
+        });
 
         $(document).on('mouseup', (e) => {
             const largerGlobalChat = $('#largerGlobalChat');
 
             if (largerGlobalChat.is(':visible')) {
-                const descendants = [largerGlobalChat, $('#allchatMessageInput'), $('#globalChat'), $('#allchatSendButton')]
+                const descendants = [largerGlobalChat, $('#allchatMessageInput'), $('#globalChat'), $('#allchatSendButton')];
                 let isNotDescendant = true;
 
                 descendants.forEach(descendant => {
-                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-                })
+                    isNotDescendant = !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                });
 
                 // if the target of the click isn't the container nor a descendant of the container
                 if (isNotDescendant) {
@@ -69,7 +69,7 @@ class LargerGlobalChatView extends WindowView {
      * @param {String} text message text
      */
     addMessage = function (text) {
-        var $newMessageBody = $("<div style='font-size: medium; overflow-wrap: break-word;'></div><br>");
+        var $newMessageBody = $("<div style='font-size: 1rem; overflow-wrap: break-word;'></div><br>");
         $newMessageBody.text(text);
         $('#largerGlobalChatMessage').append($newMessageBody);
     };

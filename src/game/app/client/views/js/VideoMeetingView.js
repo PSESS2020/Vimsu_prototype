@@ -35,7 +35,7 @@ class VideoMeetingView extends WindowView {
 
             this.jitsi.dispose();
             $('#meetingWindow').hide();
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
         });
 
         // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
@@ -45,7 +45,7 @@ class VideoMeetingView extends WindowView {
 
             this.isMinimized = true;
             $('#meetingWindow').hide();
-            this.eventManager.handleAddMinimizedMeetingNotif(this.currentMeeting)
+            this.eventManager.handleAddMinimizedMeetingNotif(this.currentMeeting);
         });
     }
 
@@ -70,7 +70,7 @@ class VideoMeetingView extends WindowView {
             if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
                 this.isMinimized = false;
                 this.jitsi.dispose();
-                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
+                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
             }
         }
 
@@ -101,12 +101,12 @@ class VideoMeetingView extends WindowView {
             if (event.role === "moderator") {
                 this.executeCommand('password', meeting.password);
             }
-        })
+        });
 
         // join a protected channel
         this.jitsi.on('passwordRequired', function () {
             this.executeCommand('password', meeting.password);
-        })
+        });
 
         // When user leaves meeting, then jitsi-object is disposed
         this.jitsi.on('readyToClose', function () {
@@ -125,7 +125,7 @@ class VideoMeetingView extends WindowView {
             this.isMinimized = false;
             this.jitsi.dispose();
             $('#meetingWindow').hide();
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id)
+            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
         }
     }
 }

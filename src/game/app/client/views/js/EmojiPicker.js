@@ -26,30 +26,30 @@ class EmojiPicker extends Views {
      * @param {String} inputId input field id
      */
     draw(emojiTriggerId, emojiPickerId, inputId) {
-        $('#' + emojiTriggerId).off()
+        $('#' + emojiTriggerId).off();
         $('#' + emojiTriggerId).on('click', (event) => {
             event.preventDefault();
 
             if ($('#' + emojiPickerId + 'Div').css('display') !== 'none') {
-                $('#' + emojiPickerId + 'Div').hide()
+                $('#' + emojiPickerId + 'Div').hide();
             } else {
-                $('#' + emojiPickerId + 'Div').show()
+                $('#' + emojiPickerId + 'Div').show();
 
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.search-row').setAttribute('style', 'display:none');
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.favorites').setAttribute('style', 'display:none');
             }
-        })
+        });
 
         $(document).on('mouseup', (e) => {
             const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
 
             if (emojiPickerDiv.css('display') !== 'none') {
-                const descendants = [emojiPickerDiv, $('#' + inputId), $('#' + emojiTriggerId)]
+                const descendants = [emojiPickerDiv, $('#' + inputId), $('#' + emojiTriggerId)];
                 let isNotDescendant = true;
 
                 descendants.forEach(descendant => {
-                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-                })
+                    isNotDescendant = !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                });
 
                 // if the target of the click isn't the container nor a descendant of the container
                 if (isNotDescendant) {
@@ -59,7 +59,7 @@ class EmojiPicker extends Views {
         });
 
         document.getElementById(emojiPickerId).addEventListener('emoji-click', event => {
-            this.insertAtCursor(document.getElementById(inputId), event.detail.unicode)
+            this.insertAtCursor(document.getElementById(inputId), event.detail.unicode);
         }, false);
     }
 

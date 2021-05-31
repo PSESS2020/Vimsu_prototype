@@ -37,17 +37,17 @@ class ChatParticipantListView extends Views {
         this.usernames.forEach(username => {
             $(`#chatParticipantListModal${chatId} .modal-body .list-group`).append(`
                 <li class="list-group-item bg-transparent chatthread" id="${"chatParticipantEntry" + username}">
-                    <div class="row w-100">
-                        <div class="col-12 col-sm-1 px-0">
-                            <i class="fa fa-user fa-2x navbarIcons" style="margin-left: 5px" ></i>
+                <div class="row w-100">
+                        <div class="col-1 px-0">
+                            <i class="fa fa-user fa-2x navbarIcons" style="margin-left: 0.3125rem" ></i>
                         </div>
-                        <div class="col-12 col-md-11 text-center text-sm-left">
-                            <label class="name lead">${username}</label>
+                        <div class="d-flex col-11 align-items-center text-left">
+                            <span class="name lead text-truncate" title="${username}" data-toggle="tooltip">${username}</span>
                         </div>
                     </div>
                 </li>
-            `)
-        })
+            `);
+        });
     }
 
     /**
@@ -76,7 +76,7 @@ class ChatParticipantListView extends Views {
             }
         }
 
-        $("#chatParticipantEntry" + username).remove()
+        $("#chatParticipantEntry" + username).remove();
     }
 
 }

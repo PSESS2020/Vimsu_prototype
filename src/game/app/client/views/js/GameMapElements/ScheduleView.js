@@ -34,7 +34,7 @@ class ScheduleView extends GameMapElementView {
             $('#noschedule').empty();
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
             $('#scheduleModal').modal('show');
-            $('#scheduleWait').show()
+            $('#scheduleWait').show();
             this.eventManager.handleScheduleClicked();
         }
     }

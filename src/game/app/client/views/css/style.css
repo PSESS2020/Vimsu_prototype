@@ -1,28 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-* {
-  margin: 0px;
-  padding: 0px;
-  scroll-behavior: smooth;
+/******************************************************/
+/*************** Rule to calculate rem ****************/
+/******************************************************/
+/** In our software holds 1rem === 16px              **/
+/** therefore x rem = desired pixel size / 16px      **/
+/******************************************************/
+
+:root {
+  --black-color: rgb(15, 15, 15);
+  --semi-light-black-color: rgb(24, 30, 32);
+  --semi-light-black-color-a: rgba(24, 30, 32, 0.699);
+  --light-black-color: rgb(34, 43, 46);
+  --strong-black-color-a: rgba(15, 15, 15, 0.8);
+  --grey-color: rgb(68, 68, 68);
+  --cyan-color: #028090;
+  --white-color: antiquewhite;
+  --strong-white-color-a: rgba(255, 255, 255, 0.8);
+  --forest-green: rgb(34, 43, 46);
+  --strong-dark-forest-green-a: rgba(24, 30, 32, 0.699);
 }
 
+* {
+  margin: 0rem;
+  padding: 0rem;
+  scroll-behavior: smooth;
+  color: var(--white-color);
+}
+
+/**
+* The attributes from the first block overwrite attributes inherited from bootstrap body.
+* This is necessary because #identifiers have not a higher priority than bootstrap body.
+* Classes although have.
+*/
 body {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  background-color: var(--black-color);
+
   width: 100%;
   height: 100%;
-  background-color: rgb(15, 15, 15);
   -webkit-user-select: none;
   -moz-user-select: -moz-none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Inter', sans-serif;
 }
 
-body.modal-open {
-  overflow: hidden;
-}
-
-.modal-backdrop {
-  background: none;
+table {
+  font-size: 1rem;
 }
 
 input,
@@ -35,13 +63,6 @@ textarea {
   resize: none;
 }
 
-.form-control:focus {
-  outline: none !important;
-  -webkit-appearance:none !important;
-  box-shadow: none !important;
-  border-color: antiquewhite;
-}
-
 #overlay{
   position: fixed;
   width: 100%;
@@ -51,13 +72,13 @@ textarea {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background-color: rgb(15,15,15);
+  background-color: var(--black-color);
   z-index: 2000;
   transition: 1s 0.4s;
 }
 
 #progressbar{
-  height: 1px;
+  height: 0.0625rem;
   background: white;
   position: absolute;
   width: 0;
@@ -66,18 +87,15 @@ textarea {
 
 #progressstatus{
   font-size: 0.7em;
-  letter-spacing: 3px;
+  letter-spacing: 0.1875rem;
   position: absolute;
   top: 50%;
-  margin-top: -20px;
+  margin-top: -1.25rem;
   width: 100%;
   text-align: center;
-  color: antiquewhite;
 }
 
 .canvas {
-  width: 1250px;
-  height: 610px;
   top: 0;
   bottom: 0;
   left: 0;
@@ -103,8 +121,14 @@ video::-webkit-media-controls-timeline {
   z-index: 1;
 }
 
+emoji-picker {
+  height: 12.5rem;
+  --indicator-height: 0.1875rem;
+  --outline-size: 0.125rem;
+}
+
 form {
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   top: 0;
   z-index: 3;
 } 
@@ -112,33 +136,27 @@ form {
 form input {
   outline: none;
   border: none;
-  border-radius: 5px;
-  padding: 4px;
-  width: 250px;
+  border-radius: 0.3125rem;
+  padding: 0.25rem;
+  width: 15.625rem;
 }
 
 form button {
   outline: none !important;
   box-shadow: none !important;
-  background: rgb(15, 15, 15);
+  background: var(--black-color);
   border: none;
-  color: antiquewhite;
-  padding: 2px;
+  padding: 0.125rem;
 }
 
 form button:hover {
   opacity: 0.8;
 }
 
-.modal-body-large {
-  overflow: auto; 
-  height: 500px
-}
-
 #connectionStatus {
-  background-color: rgba(255, 255, 255, 0.8); 
-  padding: 5px; 
-  border-radius: 10px; 
+  background-color: var(--strong-white-color-a);
+  padding: 0.3125rem; 
+  border-radius: 0.625rem; 
   color: firebrick; 
   z-index: 10000;
   text-align: center;
@@ -161,26 +179,29 @@ form button:hover {
 }
 
 #notifBar {
-  font-size: 15px;
-  background: rgba(15, 15, 15, 0.8);
-  border-radius: 0px;
+  font-size: 0.9375rem;
+  background: var(--strong-black-color-a);
+  border-radius: 0rem;
   overflow-y: scroll;
   z-index: 5;
-  padding-left: 10px;
-  max-height: 360px;
+  padding-left: 0.625rem;
+  max-height: 22.5rem;
   padding: 0;
+  top: 2rem;
+  right: -15.625rem;
+  position: absolute;
+  width: 15.625rem;
 }
 
 .notifBarDiv {
   background-color: none; 
-  border-radius: 0px;
-  padding: 5px;
+  border-radius: 0rem;
+  padding: 0.3125rem;
 }
 
 .notifBarText {
-  color: antiquewhite;
   text-align: right;
-  padding: 5px;
+  padding: 0.3125rem;
 }
 
 .notifBarText:hover {
@@ -188,39 +209,46 @@ form button:hover {
 }
 
 #allchatWindow {
-  left: -250px;
+  left: -15.625rem;
   position: absolute;
-  width: 250px;
+  width: 15.625rem;
 }
 
 #allChatBox {
-  font-size: 15px;
-  background:rgba(15, 15, 15, 0.8);
+  font-size: 0.9375rem;
+  background: var(--strong-black-color-a);
   overflow-y: scroll;
-  border-radius: 0px 0px 5px 0px;
-  margin: 0;
-  padding: 0;
-  height: 360px;
+  border-radius: 0rem 0rem 0.3125rem 0rem;
+  margin: 0rem;
+  padding: 0rem;
+  height: 22.5rem;
 }
 
 #allChatHeader {
-  background-color: rgba(15, 15, 15, 0.8); 
-  border-radius: 0px 5px 0px 0px; 
-  border-bottom: 1px solid antiquewhite; 
-  color: antiquewhite; 
-  font-size: medium;
+  font-size: 1rem;
+  background-color: var(--strong-black-color-a);
+}
+
+#allchatHeaderText {
+  border-radius: 0rem 0.3125rem 0rem 0rem; 
+  border-bottom: 0.0625rem solid var(--white-color);
 }
 
 #allchatMessageInput {
   outline: none;
-  background-color: rgb(15, 15, 15); 
-  color: antiquewhite;
-  font-size: 14px;
-  width: 225px;
+  background-color: var(--black-color); 
+  font-size: 0.875rem;
+  width: 14.0625rem;
 }
 
-#allchatMessages div {
-  color: antiquewhite;
+/*#allchatMessages div {
+}*/
+
+.chatInputGroup {
+  background-color: #1b1e24 !important; 
+  color: var(--white-color);
+  border-color: var(--white-color);
+  border-radius: 5px 0px 0px 5px !important;
 }
 
 .chatInputGroup {
@@ -231,13 +259,11 @@ form button:hover {
 }
 
 .navbarIcons {
-  color: antiquewhite;
   transform: scale(0.8)
 }
 
 .navbarIconsText {
-  color: antiquewhite;
-  font-size: 15px;
+  font-size: 1rem;
 }
 
 .friendRequestListButton:hover {
@@ -266,15 +292,14 @@ vertical-align: middle;
 
 .currentLecturesContainer {
   border-style: solid;
-  border-color: antiquewhite;
-  border-radius: 10px;
-  background-color: rgba(24, 30, 32, 0.699);
+  border-color: var(--white-color);
+  border-radius: 0.625rem;
+  background-color: var(--semi-light-black-color-a);
 }
 
 .closeBtn {
   background-color: transparent !important; 
   border-color: transparent !important; 
-  color: antiquewhite; 
   outline: none !important;
   -webkit-appearance:none !important;
   box-shadow: none !important;
@@ -290,45 +315,42 @@ button:disabled {
 
 .lectureChatContainer {
   border-style: solid;
-  border-color: antiquewhite;
-  border-radius: 10px;
+  border-color: var(--white-color);
+  border-radius: 0.625rem;
   background-color: rgb(33, 41, 44);
 }
 
 .lectureChatHeader {
-  background-color: rgba(24, 30, 32, 1);
+  background-color: var(--semi-light-black-color);
   border-color: transparent !important; 
-  border-radius: 10px 10px 0px 0px;
-  color: antiquewhite;
+  border-radius: 0.625rem 0.625rem 0rem 0rem;
 }
 
 .window-header {
-  color: antiquewhite;
-  font-size: 30px;
-  background-color: rgba(24, 30, 32, 0.699);
-  border-radius: 10px 10px 0px 0px;
-  box-shadow: 0px 0px 0px transparent; 
-  font-size: large;
+  font-size: 1.875rem;
+  background-color: var(--semi-light-black-color-a);
+  border-radius: 0.625rem 0.625rem 0rem 0rem;
+  box-shadow: 0rem 0rem 0rem transparent; 
+  font-size: 1.25rem;
   height: 10%;
   align-items: center;
 }
 
 .window-content {
   overflow-y: scroll;
-  border-radius: 0px 0px 10px 10px; 
+  border-radius: 0rem 0rem 0.625rem 0.625rem; 
   margin: 0;
   padding: 0;
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   height: 90%;
 }
 
 .window {
   position: fixed;
-  color: antiquewhite;
-  background-color:rgba(34, 43, 46, 1) !important;
+  background-color: var(--light-black-color) !important;
   display: none; 
-  border: 1px solid antiquewhite;
-  border-radius: 10px;
+  border: 0.0625rem solid var(--white-color);
+  border-radius: 0.625rem;
   z-index: 1060;
   top: 50%; 
   left: 50%; 
@@ -336,30 +358,28 @@ button:disabled {
 }
 
 .externalWebsiteWindow {
-  background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
-  padding: 0px !important;
+  background-color: var(--light-black-color) !important;
+  padding: 0rem !important;
   overflow-y: auto;
   display: none; 
   position: fixed; 
   top: 20%; 
   left: 30%; 
-  border-radius: 10px; 
+  border-radius: 0.625rem; 
   z-index: 1100;
   width: 40%;
   height: 45%;
 }
 
 .viewBlockerWindow {
-  background-color:rgba(15, 15, 15, 1) !important;
-  color: antiquewhite;
-  padding: 0px !important;
+  background-color: var(--black-color) !important;
+  padding: 0rem !important;
   overflow: hidden;
   display: none; 
   position: fixed; 
-  top: 0px; 
-  left: 0px; 
-  border-radius: 10px; 
+  top: 0rem; 
+  left: 0rem; 
+  border-radius: 0.625rem; 
   z-index: 5000; 
   width: 100%; 
   height: 100%;
@@ -367,173 +387,83 @@ button:disabled {
 
 .btn-blue, .btn-white {
   border: none !important;
-  box-shadow: 0px 0px 0px transparent !important;
-  border-radius: 3px !important;
+  box-shadow: 0rem 0rem 0rem transparent !important;
+  border-radius: 0.1875rem !important;
   text-decoration: none;
   text-align: center;
 }
 
 .btn-blue {
-  background-color: #028090;
-  color: antiquewhite;
+  background-color: var(--cyan-color);
+  color: var(--white-color);
 }
 
 .btn-blue:hover {
   opacity: 1;
   background-color: #017281;
-  color: antiquewhite;
 }
 
 .btn-white {
   background-color: rgb(231, 218, 200);
-  color: rgba(34, 43, 46, 1);
+  color: var(--light-black-color);
 }
 
 .btn-white:hover {
   opacity: 1;
   background-color: rgb(212, 202, 188);
-  color: rgba(34, 43, 46, 1);
+  color: var(--light-black-color);
 }
 
 .messageBubbleMyself {
   max-width: 25vw;
   background-color: rgb(0, 135, 153);
-  color: antiquewhite;
   border: none !important;
-  border-radius: 5px !important;
-  padding: 5px 8px;
+  border-radius: 0.3125rem !important;
+  padding: 0.3125rem 0.5rem;
 }
 
 .messageBubbleOthers {
   max-width: 25vw;
-  background-color: rgb(68, 68, 68);
-  color: antiquewhite;
+  background-color: var(--grey-color);
   border: none !important;
-  border-radius: 5px !important;
-  padding: 5px 8px;
+  border-radius: 0.3125rem !important;
+  padding: 0.3125rem 0.5rem;
 }
 
 .allChatMessageBubbleMyself {
-  max-width: 200px;
-  background-color: rgb(68, 68, 68);
-  color: antiquewhite;
+  max-width: 12.5rem;
+  background-color: var(--grey-color);
   border: none !important;
-  border-radius: 5px !important;
-  padding: 5px 8px;
+  border-radius: 0.3125rem !important;
+  padding: 0.3125rem 0.5rem;
 }
 
 .allChatMessageBubbleOthers {
-  max-width: 200px;
-  background-color: rgb(68, 68, 68);
-  color: antiquewhite;
+  max-width: 12.5rem;
+  background-color: var(--grey-color);
   border: none !important;
-  border-radius: 5px !important;
-  padding: 5px 8px;
+  border-radius: 0.3125rem !important;
+  padding: 0.3125rem 0.5rem;
 }
 
-.modal-header {
-  text-align: center;
-  background-color: rgba(24, 30, 32, 0.699);
-  color: antiquewhite;
-  font-size: 30px;
-  border-color: transparent !important; 
-  box-shadow: 0px 0px 0px transparent;
-  overflow-x: scroll;
-  overflow-y: scroll;
-}
-
-.modal-header .dropdown-menu, .modal-header, .modal-content{
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.modal-header .dropdown-menu::-webkit-scrollbar, 
-.modal-header::-webkit-scrollbar, 
-.modal-content::-webkit-scrollbar {
-  display: none;
-}
-
-
-.modal-header, 
-.modal-header .dropdown {
-  position: static !important;
-}
-
-.modal-header .dropdown-menu {
-  width: 464px !important;
-  min-height: 501px !important;
-  background-color: rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
-}
-
-.modal-content {
-  background-color:rgba(34, 43, 46, 1) !important;
-  color: antiquewhite;
-  padding: 0px !important;
-  overflow: scroll;
-  border-color: antiquewhite;
-  border-style: solid;
-  border-width: small;
-  border-radius: 10px;
-  box-shadow: 0px 0px 0px transparent;
- }
-
-.modal-body-center {
-  overflow: auto; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-}
-
- .close {
-  background-color: transparent !important; 
-  border-color: transparent !important; 
-  color: antiquewhite; 
-  opacity: 1;
-  outline: none !important;
-  box-shadow: none !important;
-  position: relative; 
-}
-
-.close:hover {
-  background-color: transparent !important; 
-  border-color: transparent !important; 
-  color: antiquewhite; 
-  opacity: .5 !important;
-  box-shadow: 0px 0px 0px transparent;
-}
-
-emoji-picker {
-  width: 350px;
-  height: 200px;
-  --num-columns: 9;
-  --background: rgba(34, 43, 46, 1);
-}
-
-.showRoomChat {
-  color: antiquewhite;
-}
+/*.showRoomChat {
+}*/
 
 .showRoomChat:hover {
   opacity: .5;
-  color: antiquewhite;
-}
-
-.table {
-  color: antiquewhite;
 }
 
 .table thead tr th{
   border-top: none;
-  border-bottom: 2pt solid antiquewhite
+  border-bottom: 2pt solid var(--white-color)
 }
 
 .table tbody tr th{
-  border-bottom: 1pt solid antiquewhite;
+  border-bottom: 1pt solid var(--white-color);
 }
 
 .table tbody tr td{
-  border-bottom: 1pt solid antiquewhite;
+  border-bottom: 1pt solid var(--white-color);
 }
 
 .table tbody tr:last-child th {
@@ -544,75 +474,47 @@ emoji-picker {
   border-bottom: none;
 }
 
-.list-group-item:first-child { 
-  border-top: 1pt solid antiquewhite !important;
-}
-
-.list-group-item {
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1pt solid antiquewhite !important;
-  border-radius: 0px 0px 0px 0px !important;
-  background: none;
-}
-
 .chatthread:hover {
-  background-color:rgba(24, 30, 32, 0.699) !important;
+  background-color: var(--semi-light-black-color-a) !important;
 }
 
 .achievement-icon {
-  font-size: 120px;
   opacity: 1;                /* Opacity (Transparency) */
-  -webkit-filter: blur(0px);    /* Blur */
-  -moz-filter: blur(0px);
-  filter: blur(0px);
+  -webkit-filter: blur(0rem);    /* Blur */
+  -moz-filter: blur(0rem);
+  filter: blur(0rem);
 }
 
 .achievement-blur {
   color: darkslategray;
   opacity: 0.75;                /* Opacity (Transparency) */
-  -webkit-filter: blur(8px);    /* Blur */
-  -moz-filter: blur(8px);
-  filter: blur(8px);
+  -webkit-filter: blur(0.5rem);    /* Blur */
+  -moz-filter: blur(0.5rem);
+  filter: blur(0.5rem);
 }
 
 .achievementBox {
-  border: 1px solid antiquewhite; 
+  border: 0.0625rem solid var(--white-color); 
   border-top: none; 
-  border-radius: 0px 0px 5px 5px; 
-  min-width: 70px;
-  height: 35px;
-}
-
-.progress {
-  width: 100%;
-  height: 5px;
-}
-
-.spinner-border {
-  color: antiquewhite;
-}
-
-.tooltip-inner {
-  color: antiquewhite;
-  background: none;
+  border-radius: 0rem 0rem 0.3125rem 0.3125rem; 
+  min-width: 4.375rem;
+  height: 2.1875rem;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
 }
 
 ::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
+  width: 0rem;
+  height: 0rem;
 }
 
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-track {
   background: transparent;
-  border: 0px none #ffffff;
-  border-radius: 50px;
+  border: 0rem none #ffffff;
+  border-radius: 3.125rem;
 }
 
 ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-thumb:active {

@@ -31,7 +31,7 @@ class ScheduleListView extends WindowView {
      * @param {number} timeOffset offset if client has different local time than the server
      */
     draw(lectures, timeOffset) {
-        $('#scheduleWait').hide()
+        $('#scheduleWait').hide();
         $('#noschedule').empty();
         $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
 
@@ -56,7 +56,7 @@ class ScheduleListView extends WindowView {
 
         $('#scheduleModal').on('hide.bs.modal', (e) => {
             clearInterval(interval);
-        })
+        });
     }
 
     /**
@@ -104,12 +104,12 @@ class ScheduleListView extends WindowView {
                     <td>${(lecture.remarks == '' ? '-' : '' + lecture.remarks)}</td>
                     <td>${status}<br><br><small style="opacity: 0.5">${seconds}</small></td>
                 </tr>
-            `)
+            `);
 
             if (status === LectureStatus.RUNNING || status === LectureStatus.OPENED) {
                 document.getElementById("schedulerow" + lecture.id).style.backgroundColor = 'rgba(' + 34 + ',' + 43 + ',' + 46 + ',' + 1 + ')';
             }
-        })
+        });
 
         if (count === 0) {
             $('#noschedule').text("Sorry, all lectures have expired.");

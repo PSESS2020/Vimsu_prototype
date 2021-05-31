@@ -35,8 +35,8 @@ class ExternalWebsiteView extends WindowView {
         $('#externalWebsiteWindowBody' + gameObjectID).empty();
 
         let fullScreenMode = false;
-        let width = iFrameData.width.toString() + 'px';
-        let height = iFrameData.height.toString() + 'px';
+        let width = iFrameData.width;
+        let height = iFrameData.height;
 
         $('#externalWebsiteWindowTitle' + gameObjectID).text(iFrameData.title);
 
@@ -75,7 +75,7 @@ class ExternalWebsiteView extends WindowView {
         $('#closeBtn' + gameObjectID).off();
         $('#closeBtn' + gameObjectID).on('click', (event) => {
             event.preventDefault();
-            handleClose()
+            handleClose();
         });
 
         $(document).on('mouseup', (e) => {
@@ -86,12 +86,12 @@ class ExternalWebsiteView extends WindowView {
                 let isNotDescendant = true;
 
                 descendants.forEach(descendant => {
-                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
-                })
+                    isNotDescendant = !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                });
 
                 // if the target of the click isn't the container nor a descendant of the container
                 if (isNotDescendant) {
-                    handleClose()
+                    handleClose();
                 }
             }
         });
@@ -141,7 +141,7 @@ class ExternalWebsiteView extends WindowView {
                     <div class="p-3 d-flex window-header">
                         <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
                         <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-2 pr-2">
-                            <i id="fullscreenBtnImage${gameObjectID}" class="fa fa-window-maximize" style=" transform: scale(0.8);"></i>
+                            <i id="fullscreenBtnImage${gameObjectID}" class="fa fa-window-maximize" style="transform: scale(0.8);"></i>
                         </button>
                         <button id="closeBtn${gameObjectID}" class="close btn pl-1 pr-1">
                             <i class="fa fa-close"></i>
@@ -156,7 +156,7 @@ class ExternalWebsiteView extends WindowView {
                         <div id="externalWebsiteWindowBody${gameObjectID}" align="center"></div>
                     </div>
                 </div>
-            `)
+            `);
         }
 
         $('#externalWebsiteWindow' + gameObjectID).show();

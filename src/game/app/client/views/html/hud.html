@@ -2,12 +2,12 @@
 <div class="row mt-2 justify-content-between pl-1">
     <div class="d-flex flex-row col-12">
         <div class="d-flex flex-column" style="text-align: left;">
-            <div id="time" style="color: antiquewhite"></div>
-            <div id="location" style="color: antiquewhite"></div>
-            <div id="group" style="color: antiquewhite"></div>
+            <div id="time"></div>
+            <div id="location"></div>
+            <div id="group"></div>
             <div>
-                <small id="fps" style="color: antiquewhite; opacity: 0.5"></small>
-                <small id="ping" style="color: antiquewhite; opacity: 0.5"></small>
+                <small id="fps" style="opacity: 0.5"></small>
+                <small id="ping" style="opacity: 0.5"></small>
             </div>
         </div>
         <div class="d-flex flex-column ml-4">
@@ -46,7 +46,7 @@
 
         <div class="d-flex flex-column ml-4">
             <div class="profileBox"
-                style="border: 1px solid antiquewhite; border-top: none; border-radius: 0px 0px 5px 5px; height: 50px; z-index: 300">
+                style="border: 0.0625rem solid antiquewhite; border-top: none; border-radius: 0rem 0rem 0.3125rem 0.3125rem; height: 3.125rem; z-index: 300">
                 <a class="action_button nav-item nav-link" title="Profile" href="" onclick="" id="profileButton"
                     data-toggle="modal">
                     <i class="fa fa-user navbarIcons" style="transform: scale(2)"></i>
@@ -60,7 +60,7 @@
 <!--MIDDLE HUD-->
 <div class="row mt-2 justify-content-between pl-1">
     <div class="d-flex flex-row col-12">
-        <div class="d-flex flex-column" style="width: 250px;">
+        <div class="d-flex flex-column" style="width: 15.625rem;">
             <div style="z-index: 5">
                 <a class="action_button nav-item nav-link p-0 showRoomChat" id="showRoomChatDiv" role="button"
                     onclick="" href="" style="float:left; text-align: left;"><span id="showRoomChat"></span>
@@ -70,26 +70,26 @@
                 </a>
             </div>
             <div id="allchatWindow" style="z-index: 5;">
-                <div class="pt-2 pb-2 d-flex" id="allchatHeader">
+                <div class="py-2 d-flex" id="allchatHeader">
                     <div id="allchatHeaderText"></div>
                     <button id="allchatWindowMinimize" class="close btn ml-auto">
-                        <i class="fa fa-window-minimize" style="transform: scale(0.6); margin-top: -5px;"></i>
+                        <i class="fa fa-window-minimize" style="transform: scale(0.6); margin-top: -0.3125rem;"></i>
                     </button>
                 </div>
                 <div id="allchatBox">
                     <small>
-                        <div id="noAllchat" class="wrapword pb-1 pt-1" style="color: antiquewhite; opacity: 0.5;"></div>
+                        <div id="noAllchat" class="wrapword pb-1 pt-1" style="opacity: 0.5;"></div>
                     </small>
                     <div id="allchatMessages"></div>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-column align-self-start" style="align-items: center; width: 750px">
+        <div class="d-flex flex-column ml-auto" style="align-items: center; width: 46.875rem">
             <div id="connectionStatus" style="display: none"></div>
         </div>
 
-        <div class="d-flex flex-column ml-auto" style="width: 250px;">
+        <div class="d-flex flex-column ml-auto" style="width: 15.625rem;">
             <div style="z-index: 5">
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showNotifBar" onclick=""
                     href="" style="float:right; text-align: right;"><small>Show notification (<span

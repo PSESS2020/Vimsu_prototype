@@ -3,7 +3,8 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>VIMSU</title>
+    <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+    <title>Vimsu</title>
 
     <noscript>Your browser does not support JavaScript!</noscript>
 
@@ -30,7 +31,23 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../client/views/css/custom-bootstrap.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.1.1/dist/index.min.js"></script>
+    <script>
+        /**
+         * When documents has scrollbars, then bootstrap adds padding to compensate scrollbar wideness.
+         * Nevertheless this mechanics behaviour is buggy when using overlapping modals.
+         * Bootstrap dev team explicitly say that they not support overlapping modals.
+         * Therefore this workaround is quite handy.*/
+        $(document).on('hidden.bs.modal', function () {
+            if($('.modal.show').length)
+            {
+                $('body').addClass('modal-open');
+            }
+        });
+    </script>
 
     <!--OTHER REQUIREMENTS-->
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
@@ -67,9 +84,11 @@
         <div id="progressstatus"></div>
     </div>
 
-    <!--CANVAS-->
-    <canvas id="mapCanvas" class="canvas" style="display: none"></canvas>
-    <canvas id="avatarCanvas" class="canvas" style="display: none"></canvas>
+    <div id="gameDiv">
+        <!--CANVAS-->
+        <canvas id="mapCanvas" class="canvas" style="display: none"></canvas>
+        <canvas id="avatarCanvas" class="canvas" style="display: none"></canvas>
+    </div>
 </body>
 
 </html>

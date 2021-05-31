@@ -26,8 +26,8 @@ class ProfileView extends WindowView {
      */
     draw(businessCard, isModerator) {
         $('#profileWait').hide();
-        $('#profileModal .modal-header').empty()
-        $('#profileModal .modal-body').empty()
+        $('#profileModal .modal-header').empty();
+        $('#profileModal .modal-body').empty();
 
         let fullname = (businessCard.getTitle() ? businessCard.getTitle() + " " : "") + 
                        (businessCard.getForename() + " ") + 
@@ -40,15 +40,15 @@ class ProfileView extends WindowView {
             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-close"></i>
             </button>
-        `)
+        `);
 
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">
-                <table id="profile" class="center ml-auto mr-auto" style = "color: antiquewhite;">
+                <table id="profile" class="center ml-auto mr-auto">
                     ${businessCard.getJob() || businessCard.getCompany() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 15px" >Profession</td>
-                            <td style="padding: 15px">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
+                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
+                            <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
                                 " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
                         </tr>`
                     : 
@@ -56,18 +56,18 @@ class ProfileView extends WindowView {
                     }
                     ${businessCard.getEmail() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Email</td>
-                            <td style="padding: 15px">${businessCard.getEmail()}</td>
+                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Email</td>
+                            <td style="padding: 0.9375rem">${businessCard.getEmail()}</td>
                         </tr>`
                     : 
                         ``
                     }
                     <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 15px">Role</td>
-                        <td style="padding: 15px">${isModerator ? "Moderator" : "Participant"}</td>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Role</td>
+                        <td style="padding: 0.9375rem">${isModerator ? "Moderator" : "Participant"}</td>
                     </tr>
                 </table>
             </div>
-        `)
+        `);
     }
 }
