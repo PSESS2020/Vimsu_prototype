@@ -62,6 +62,7 @@ class VideoMeetingView extends WindowView {
             //Meeting was only minimized
             if (this.currentMeeting.id === meeting.id && this.isMinimized) {
                 this.isMinimized = false;
+                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
                 return;
             }
 
@@ -107,7 +108,6 @@ class VideoMeetingView extends WindowView {
         this.jitsi.on('readyToClose', function () {
             this.dispose();
             $('#meetingWindow').hide();
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
         });
     }
 
