@@ -1,6 +1,7 @@
 const TypeChecker = require('../../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../../client/shared/GameObjectType.js');
 const Position = require('../Position.js');
+const OnClickData = require('../onclickdatatypes/OnClickData.js');
 
 /**
  * The Game Object Model
@@ -50,21 +51,12 @@ module.exports = class GameObject {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isString(name);
         TypeChecker.isInt(x); TypeChecker.isInt(y);
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
+        TypeChecker.isIntAboveZero(width);
+        TypeChecker.isIntAboveZero(length);
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
-
-        /*
-        if (iFrameData !== undefined) {
-            TypeChecker.isInstanceOf(iFrameData, Object);
-            TypeChecker.isString(iFrameData.title);
-            TypeChecker.isInt(iFrameData.width);
-            TypeChecker.isInt(iFrameData.height);
-            TypeChecker.isString(iFrameData.url);
-        }
-        */
+        TypeChecker.isInstanceOf(onClickData, OnClickData);
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -77,7 +69,7 @@ module.exports = class GameObject {
         this.#position = position;
         this.#isSolid = isSolid;
         this.#isClickable = isClickable;
-        this.#onClickData = onClickData; // TODO add default.
+        this.#onClickData = onClickData;
     }
 
     /**
@@ -160,8 +152,16 @@ module.exports = class GameObject {
         return this.#isClickable;
     }
 
+    /**
+     * Gets the data of the onclick
+     */
     getOnClickData() {
         this.#onClickData.getData();
+    }
+
+    getIFrameData() {
+        if ( 'getIFrameData' in this.#onClickData ) { this.#onClickData.getIFrameData() }
+        else { throw new Error("Tried to call getIFrameData() on none-IFrame GameObject instance. Please report this error to the developers.") }
     }
 
     /**

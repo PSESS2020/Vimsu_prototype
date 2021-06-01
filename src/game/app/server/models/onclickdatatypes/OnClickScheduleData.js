@@ -10,19 +10,16 @@ const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData")
 class OnClickScheduleData extends OnClickData {
 
     /**
-     * 
+     * @constructor module:OnClickScheduleData
      */
-    constructor() {
+    constructor() { }
 
-    }
-
-    /** */
-    getData() {
-        return {
-            type: TypeOfOnClickData.SCHEDULE,
-            
-        }
-    }
+    /**
+     * @method module:OnClickScheduleData#getData
+     * 
+     * @return {Object} the data needed to display the proper view
+     */
+    getData() { return { type: TypeOfOnClickData.SCHEDULE } }
 
 }
 

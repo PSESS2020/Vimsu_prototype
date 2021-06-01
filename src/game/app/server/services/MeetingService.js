@@ -12,19 +12,6 @@ const Meeting = require('../models/Meeting.js');
  * @version 1.0.0
  */
 module.exports = class Meetingservice {
-
-
-    /**
-     * To implement:
-     * - New Meeting                        [X]
-     * - Check for Meeting                  [X]
-     * - Load all meetings of ppant         [X]
-     * - Load specific meeting              [X]
-     * - Add participant to meeting         [X]
-     * - remove ppant                       [X]
-     * - remove all meetings (clean db)     [X]
-     */
-
     /**
      * Initializes meeting for whole conference if it does not exist already and returns it
      * 

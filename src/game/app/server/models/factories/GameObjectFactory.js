@@ -1,10 +1,9 @@
 const GameObject = require('../mapobjects/GameObject.js');
-const TypeChecker = require('../../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../../client/shared/GameObjectType.js');
 const Position = require('../Position.js');
 const GameObjectInfo = require('../../utils/GameObjectInfo.js');
 const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
-
+const OnClickEmptyData = require('../onclickdatatypes/OnClickEmptyData.js');
 
 /**
  * The Game Object Service
@@ -45,59 +44,6 @@ module.exports = class GameObject {
     }
 
     /**
-     * @private checks parameters' data type
-     * @method module:GameObjectService#checkParamTypes
-     * 
-     * @param {number} roomId room ID
-     * @param {number} width room width
-     * @param {number} length room length
-     * @param {number} xPos x position
-     * @param {number} yPos y position
-     * @param {boolean} solidity true if solid, otherwise false
-     * @param {boolean} clickable true if clickable, otherwise false
-     * @param {?Object} iFrameData iFrame data object if clicking this object opens an external website, otherwise undefined
-     * @param {?String} iFrameData.title title of iFrame
-     * @param {?String} iFrameData.url URL of iFrame
-     * @param {?number} iFrameData.width width of iframe in px
-     * @param {?number} iFrameData.height height of iframe in px
-     * @param {?String[]} story Array of strings if clicking this
-     *                          displays a text message, otherwise
-     *                          undefined
-     */
-    #checkParamTypes = function (roomId, width, length, xPos, yPos, solidity) {
-        TypeChecker.isInt(roomId);
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
-        TypeChecker.isInt(xPos);
-        TypeChecker.isInt(yPos);
-        TypeChecker.isBoolean(solidity);
-        TypeChecker.isBoolean(clickable);
-
-        if (iFrameData !== undefined) {
-            TypeChecker.isInstanceOf(iFrameData, Object);
-            TypeChecker.isString(iFrameData.title);
-            TypeChecker.isInt(iFrameData.width);
-            TypeChecker.isInt(iFrameData.height);
-            TypeChecker.isString(iFrameData.url);
-        }
-
-        if (story !== undefined) {
-            TypeChecker.isInstanceOf(story, Array);
-            story.forEach(element => TypeChecker.isString(element));
-        }
-    }
-
-    #isKnownType = function (type) {
-        if(!GameObjectType.hasOwnProperty(type)) {
-            throw new TypeError(type + ' is not a known objecttype!')
-        }
-    }
-
-    /* ##################################################################### */
-    /* ###################### GAMEOBJECT INFORMATIONS ###################### */
-    /* ##################################################################### */
-
-    /**
      * @method module:GameObjectFactory#createGameObject
      * 
      * The onClickData contains information about what is supposed to happen
@@ -119,21 +65,22 @@ module.exports = class GameObject {
      *                         object defined by the passed data 
      */
     createGameObject (roomId, objData) {
-        // TODO type-checking
-        
-        
         // Destructuring the object for easier reference and a more flexible
         // method. The last two lines don't need to be separate, it's just
         // to signify that these are two different "levels" of customization.
         const { type, position: [xPos, yPos] }           = objData  // mandatory
         var { variation, isClickable, onClickData }      = objData  // optional
         var { width, length, isSolid, assetSet, offset } = objData  // custom
+
+        if (!GameObjectInfo.hasOwnProperty(type)) {
+            throw new TypeError(type + ' is not a known objecttype!')
+        }
         
         let returnData = []
 
-        if (isClickable === undefined) {
+        if (isClickable === undefined || onClickData === undefined) {
             isClickable = false
-            // maybe delete onClickData here
+            onClickData = new OnClickEmptyData()
         }
 
         if (variation === undefined) { variation = GlobalStrings.DEFAULT }

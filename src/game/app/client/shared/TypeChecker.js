@@ -29,6 +29,17 @@ class TypeChecker {
     }
 
     /**
+     * @static Checks if value is an integer above zero
+     * 
+     * @param {*} value value
+     */
+     static isIntAboveZero(value) {
+        if ((typeof value !== 'number') || value % 1 !== 0 || !(isFinite(value) || value <= 0)) {
+            throw new TypeError(value + ' is not an integer above zero!')
+        }
+    }
+
+    /**
      * @static Checks if value is a number
      * 
      * @param {*} value value
