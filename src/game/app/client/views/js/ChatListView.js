@@ -245,14 +245,14 @@ class ChatListView extends WindowView {
                                 <a class="action_button nav-item nav-link close btn" style="display: none" title="Show chat participant list"
                                     role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-info-circle navbarIcons"
-                                        style="transform: scale(0.8); margin-top: 0.0625rem;"></i>
+                                        style="margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
                                 <a class="action_button nav-item nav-link close btn" style="display: none" title="Invite friends to group chat"
                                     role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-plus-square navbarIcons"
-                                        style="transform: scale(0.8); margin-top: 0.0625rem;"></i>
+                                        style="margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
@@ -262,7 +262,7 @@ class ChatListView extends WindowView {
                             </div>
                             <div>
                                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                                  <i class="fa fa-close" style="transform: scale(0.8); margin-top: 2px;"></i>
+                                  <i class="fa fa-close navbarIcons" style="margin-top: 0.125rem;"></i>
                                 </button>
                             </div>
                         </div>
@@ -294,7 +294,7 @@ class ChatListView extends WindowView {
             </div>
         </div>
         <div style="position: relative; width: 0; height: 0; display: none; z-index: 1070" id=${"chatthreadEmojiPicker" + chatID + "Div"}>
-          <div style="position: fixed; top: calc(50% + 100px); top: -moz-calc(50% + 100px); top: -webkit-calc(50% + 100px); top: -o-calc(50% + 100px); left: calc(50% - 50px); left: -moz-calc(50% - 50px); left: -webkit-calc(50% - 50px); left: -o-calc(50% - 50px); transform: translate(-50%, -50%);">
+          <div style="position: fixed; top: calc(50% - 1.5rem); top: -moz-calc(50% - 1.5rem); top: -webkit-calc(50% - 1.5rem); top: -o-calc(50% - 1.5rem); left: calc(50% - 13.5rem); left: -moz-calc(50% - 13.5rem); left: -webkit-calc(50% - 13.5rem); left: -o-calc(50% - 13.5rem);">
               <emoji-picker class="dark" id=${"chatthreadEmojiPicker" + chatID}></emoji-picker>
           </div>
         </div>
