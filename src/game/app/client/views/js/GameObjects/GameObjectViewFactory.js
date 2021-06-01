@@ -133,7 +133,7 @@ class GameObjectViewFactory {
      *
      * @return {GameObjectView} GameObjectView instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, onClickData) {
+    createGameObjectView(gameObjectType, pos, objectName, isClickable, onClickData, gameObjectID) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
