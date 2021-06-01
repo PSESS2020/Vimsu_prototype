@@ -9,7 +9,7 @@ const TypeOfOnClickData = Object.freeze({
     STORY: "STORY",
     MEETING: "MEETING",
     SCHEDULE: "SCHEDULE",
-
+    EMPTY: "EMPTY",
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {

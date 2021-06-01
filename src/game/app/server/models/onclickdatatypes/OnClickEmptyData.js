@@ -1,3 +1,4 @@
+const TypeOfOnClickData = require("../../../client/shared/TypeOfOnClickData")
 const OnClickData = require("./OnClickData")
 
 /**
@@ -21,7 +22,7 @@ const OnClickData = require("./OnClickData")
      *                  onClickData
      */
     getData() {
-        return { type: "EMPTY" }
+        return { type: TypeOfOnClickData.EMPTY }
     }
 }
 

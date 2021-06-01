@@ -1,3 +1,5 @@
+const TypeChecker = require("../../../shared/TypeChecker");
+
 /**
  * The Game Object View Factory
  * 
@@ -106,7 +108,7 @@ class GameObjectViewFactory {
             if (isClickable) {
                 // TODO
                 // pass data and offset override
-                gameMapElementView = this.createGameObjectView(/* pass data */)
+                gameMapElementView = ClickableObjectViewCreators[type](onClickData)
             } else {
                 gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
             }
@@ -124,12 +126,10 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if object is clickable, otherwise false
-     * @param {boolean} isIFrameObject true if object is an IFrameObject, otherwise false
      * @param {?number} gameObjectID ID of this gameObject if it exists
-     * @param {String[]} story text message that is displayed on click
-     *                         (if clickable)
-     * @param {Object} meetingData Object containing the data of the meeting
-     *                             that will be opened on click.
+     * @param {Object} onClickData object containing the data needed to
+     *                             properly handle a (clickable) object
+     *                             being clicked.
      *
      * @return {GameObjectView} GameObjectView instance
      */
@@ -150,7 +150,8 @@ class GameObjectViewFactory {
         if (gameObjectImage !== undefined) {
             var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable) {
-                gameObjectView = ClickableObjectViewCreators[type](onClickData)
+                let clickMap = this.getClickMap(gameObjectImage, pos, offset)
+                gameObjectView = ClickableObjectViewCreators[type](gameObjectImage, clickMap,)
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }
@@ -229,10 +230,4 @@ class GameObjectViewFactory {
             return { x: this.tileColumnWidth * offset.x, y: (this.tileRowHeight / 2) - image.width + offset.y } 
         }
     }
-
-    // TODO
-    // finish up
-    // also maybe move this into own file
-    
-
 }

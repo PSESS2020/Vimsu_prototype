@@ -5,15 +5,18 @@
  * @version 1.0.0
  */
 const ClickableObjectViewCreators = Object.freeze({
-    [OnClickDataType.IFRAME](onClickData) {
+    [TypeOfOnClickData.IFRAME](onClickData) {
         return new IFrameObjectView(/* TODO add data */)
     },
-    [OnClickDataType.STORY](onClickData) {
+    [TypeOfOnClickData.STORY](onClickData) {
         return new StoryObjectView(/* TODO add data */)
     },
-    [OnClickDataType.MEETING](onClickData) {
+    [TypeOfOnClickData.MEETING](onClickData) {
         return new MeetingObjectView(/* TODO add data */)
     },
+    [TypeOfOnClickData.SCHEDULE](onClickData) {
+        return new ScheduleView(/* TODO add data */)
+    }
 })
 
 if (typeof module === 'object' && typeof exports === 'object') {
