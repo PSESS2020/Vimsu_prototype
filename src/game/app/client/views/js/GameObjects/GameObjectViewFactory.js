@@ -137,6 +137,8 @@ class GameObjectViewFactory {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
+        if (gameObjectID !== undefined) 
+            TypeChecker.isInt(gameObjectID);
 
         // Destructuring
         const { type } = onClickData
@@ -151,7 +153,7 @@ class GameObjectViewFactory {
             var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable) {
                 let clickMap = this.getClickMap(gameObjectImage, pos, offset)
-                gameObjectView = ClickableObjectViewCreators[type](gameObjectImage, clickMap,)
+                gameObjectView = ClickableObjectViewCreators[type](gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, onClickData,  this.eventManager)
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }

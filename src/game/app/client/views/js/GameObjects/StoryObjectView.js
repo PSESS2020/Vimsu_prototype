@@ -34,9 +34,9 @@ class StoryObjectView extends GameObjectView {
     }
 
     /**
-     * Returns plant ID
+     * Returns object ID
      * 
-     * @returns {number} plant ID
+     * @returns {number} object ID
      */
      getGameObjectID() {
         return this.gameObjectID;

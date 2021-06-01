@@ -5,16 +5,17 @@
  * @version 1.0.0
  */
 const ClickableObjectViewCreators = Object.freeze({
-    [TypeOfOnClickData.IFRAME](onClickData) {
-        return new IFrameObjectView(/* TODO add data */)
+    [TypeOfOnClickData.IFRAME] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
+        return new IFrameObjectView(image, clickMap, position, offset, name, objectID, eventManager)
     },
-    [TypeOfOnClickData.STORY](onClickData) {
-        return new StoryObjectView(/* TODO add data */)
+    [TypeOfOnClickData.STORY] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
+        const { story } = onClickData
+        return new StoryObjectView(image, clickMap, position, offset, name, objectID, story, )
     },
-    [TypeOfOnClickData.MEETING](onClickData) {
+    [TypeOfOnClickData.MEETING] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
         return new MeetingObjectView(/* TODO add data */)
     },
-    [TypeOfOnClickData.SCHEDULE](onClickData) {
+    [TypeOfOnClickData.SCHEDULE] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
         return new ScheduleView(/* TODO add data */)
     }
 })
