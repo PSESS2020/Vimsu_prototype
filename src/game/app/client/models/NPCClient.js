@@ -34,8 +34,8 @@ class NPCClient {
 
         TypeChecker.isInt(id);
         TypeChecker.isString(name);
-        TypeChecker.isInt(cordX);
-        TypeChecker.isInt(cordY);
+        TypeChecker.isIntAboveEqual(cordX, 0);
+        TypeChecker.isIntAboveEqual(cordY, 0);
         TypeChecker.isEnumOf(direction, Direction);
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
 

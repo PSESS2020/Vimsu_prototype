@@ -8,6 +8,7 @@ const GameObjectType = require('../../../src/game/app/client/shared/GameObjectTy
 var id;
 var gameObjectType;
 var name;
+var offset;
 var width;
 var length;
 var position;
@@ -22,6 +23,7 @@ describe('GameObject test', function () {
         id = TestUtil.randomInt();
         gameObjectType = GameObjectType.TABLE;
         name = TestUtil.randomString();
+        offset = { x: TestUtil.randomInt() , y: TestUtil.randomInt() }
         width = TestUtil.randomInt();
         length = TestUtil.randomInt();
         position = new Position(TestUtil.randomInt(), TestUtil.randomInt(), TestUtil.randomInt());
@@ -31,7 +33,7 @@ describe('GameObject test', function () {
     });
 
     it('test constructor and getters', function () {
-        let gameObject = new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, iFrameData);
+        let gameObject = new GameObject(id, gameObjectType, name, offset, width, length, position, isSolid, isClickable, iFrameData);
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -45,15 +47,16 @@ describe('GameObject test', function () {
     });
 
     it('test constructor invalid input', function () {
-        expect(() => new GameObject('id', gameObjectType, name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, 'gameObjectType', name, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, 42, width, length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, 'width', length, position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, 'length', position, isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, length, 'position', isSolid, isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, length, position, 'isSolid', isClickable)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, 'isClickable')).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, 42)).to.throw(TypeError);
-        expect(() => new GameObject(id, gameObjectType, name, width, length, position, isSolid, isClickable, undefined)).to.not.throw(TypeError);
+        expect(() => new GameObject('id', gameObjectType, name, offset, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, 'gameObjectType', name, offset, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, 42, offset, width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, 'error', width, length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, 'width', length, position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, 'length', position, isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, length, 'position', isSolid, isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, length, position, 'isSolid', isClickable)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, length, position, isSolid, 'isClickable')).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, length, position, isSolid, isClickable, 42)).to.throw(TypeError);
+        expect(() => new GameObject(id, gameObjectType, name, offset, width, length, position, isSolid, isClickable, undefined)).to.not.throw(TypeError);
     });
 })

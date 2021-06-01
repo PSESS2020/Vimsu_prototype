@@ -45,13 +45,13 @@ class GameObjectClient {
         TypeChecker.isInt(id);
         // This can't actually be checked here, as it would make
         // object creation more difficult
-        //TypeChecker.isEnumOf(type, GameObjectType);
+        // TypeChecker.isEnumOf(type, GameObjectType);
         TypeChecker.isString(name);
         TypeChecker.isOffset(offset);
-        TypeChecker.isInt(width);
-        TypeChecker.isInt(length);
-        TypeChecker.isInt(cordX);
-        TypeChecker.isInt(cordY);
+        TypeChecker.isIntAboveZero(width);
+        TypeChecker.isIntAboveZero(length);
+        TypeChecker.isIntAboveEqual(cordX, 0);
+        TypeChecker.isIntAboveEqual(cordY, 0);
         TypeChecker.isBoolean(isClickable);
         // TODO type checking for onClickData
         

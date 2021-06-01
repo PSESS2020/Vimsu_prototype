@@ -34,8 +34,8 @@ class DoorClient {
         TypeChecker.isString(id);
         TypeChecker.isEnumOf(type, TypeOfDoor);
         TypeChecker.isString(name);
-        TypeChecker.isInt(cordX);
-        TypeChecker.isInt(cordY);
+        TypeChecker.isIntAboveEqual(cordX, 0);
+        TypeChecker.isIntAboveEqual(cordY, 0);
 
         if (targetRoomId !== undefined)
             TypeChecker.isNumber(targetRoomId);

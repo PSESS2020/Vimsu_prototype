@@ -8,6 +8,8 @@ const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 var id;
 var displayName;
 var position;
+var cordX;
+var cordY;
 var direction;
 var isVisible;
 var isModerator;
@@ -20,12 +22,15 @@ describe('ParticipantClient test', function () {
     beforeEach(function () {
         id = TestUtil.randomString();
         displayName = TestUtil.randomString();
-        position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
+        cordX = TestUtil.randomIntWithMin(0)
+        cordY = TestUtil.randomIntWithMin(0)
+        position = new PositionClient(cordX, cordY);
         direction = Direction.DOWNLEFT;
         isVisible = TestUtil.randomBool();
         isModerator = TestUtil.randomBool();
         shirtColor = ShirtColor.BLUE;
-        ppant = new ParticipantClient(id, displayName, position, direction, isVisible, isModerator, shirtColor);
+        // ppant = new ParticipantClient(id, displayName, position, direction, isVisible, isModerator, shirtColor);
+        // ppant = new ParticipantClient({ id, forename, cordX, cordY, dir: direction, isVisible, isModerator, shirtColor });
     });
 
     it('test getters', function () {

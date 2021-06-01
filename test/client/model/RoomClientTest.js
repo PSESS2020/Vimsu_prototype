@@ -15,6 +15,11 @@ const GameObjectType = require('../../../src/game/app/client/shared/GameObjectTy
 const Settings = require('../../../src/game/app/server/utils/' + process.env.SETTINGS_FILENAME);
 const SettingsClient = require('../../../src/game/app/client/utils/Settings.js');
 
+// TODO
+// Due to changes to the RoomClient class, this is now completely broken
+// The four lists need to be changed into lists of data objects, as
+// actual creation now gets handled inside of the RoomClient class
+
 var roomId;
 var typeOfRoom;
 var assetPaths;
@@ -57,7 +62,7 @@ describe('RoomClient test', function() {
     });
 
     it('test constructor and getters', function() {
-        let room = new RoomClient(roomId, typeOfRoom, assetPaths, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap);
+        let room = new RoomClient(assetPaths, { id: roomId, type: typeOfRoom, listOfMapElements, listOfGameObjects, listOfNPCs, listOfDoors, width, length, occupationMap });
 
         expect(room.getRoomId()).to.equal(roomId);
         expect(room.getTypeOfRoom()).to.equal(typeOfRoom);

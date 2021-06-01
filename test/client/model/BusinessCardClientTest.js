@@ -15,7 +15,7 @@ var email = "maxmustermann@kit.edu";
 
 describe("BusinessCardClient Test getter", function () {
     it("Test getParticipantId", function () {
-        expect(businessCard.getParticipantId()).to.be.a('string').and.equal(participantId);
+        expect(businessCard.getParticipantId()).to.be.a('string').and.equal(ppantId);
     })
 
     it("Test getUsername", function () {

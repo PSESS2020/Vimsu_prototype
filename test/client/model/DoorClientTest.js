@@ -9,6 +9,8 @@ var id;
 var typeOfDoor;
 var name;
 var position;
+var cordX;
+var cordY;
 var targetRoomID;
 
 describe('DoorClient test', function () {
@@ -18,12 +20,14 @@ describe('DoorClient test', function () {
         id = TestUtil.randomString();
         typeOfDoor = TypeOfDoor.LEFT_DOOR;
         name = 'door';
-        position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
+        cordX = TestUtil.randomIntWithMin(0);
+        cordY = TestUtil.randomIntWithMin(0);
+        positon = new PositionClient(cordX, cordY);
         targetRoomID = TestUtil.randomInt();
     });
 
     it('test constructor and getters', function () {
-        let door = new DoorClient(id, typeOfDoor, name, position, targetRoomID);
+        let door = new DoorClient({ id, type: typeOfDoor, name, cordX, cordY, targetRoomID });
 
         assert.equal(id, door.getId());
         assert.equal(typeOfDoor, door.getTypeOfDoor());

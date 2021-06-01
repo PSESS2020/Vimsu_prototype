@@ -11,8 +11,9 @@ var name;
 var width;
 var length;
 var position;
+var cordX;
+var cordY;
 var isClickable;
-var isIFrameObject;
 
 describe('GameObjectClient test', function () {
 
@@ -21,15 +22,16 @@ describe('GameObjectClient test', function () {
         id = TestUtil.randomInt();
         gameObjectType = GameObjectType.TABLE;
         name = TestUtil.randomString();
-        width = TestUtil.randomInt();
-        length = TestUtil.randomInt();
-        position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
+        width = TestUtil.randomIntWithMin(1);
+        length = TestUtil.randomIntWithMin(1);
+        cordX = TestUtil.randomIntWithMin(0);
+        cordY = TestUtil.randomIntWithMin(0);
+        positon = new PositionClient(cordX, cordY);
         isClickable = TestUtil.randomBool();
-        isIFrameObject = TestUtil.randomBool();
     });
 
     it('test constructor and getters', function () {
-        let gameObject = new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable, isIFrameObject);
+        let gameObject = new GameObjectClient({ id, gameObjectType, name, width, length, cordX, cordY, isClickable, isIFrameObject, });
 
         assert.equal(id, gameObject.getId());
         assert.equal(gameObjectType, gameObject.getGameObjectType());
@@ -42,13 +44,14 @@ describe('GameObjectClient test', function () {
     });
 
     it('test constructor invalid input', function () {
-        expect(() => new GameObjectClient('id', gameObjectType, name, width, length, position, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, 'gameObjectType', name, width, length, position, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, 42, width, length, position, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, 'width', length, position, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, 'length', position, isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, 'position', isClickable)).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, 'isClickable')).to.throw(TypeError);
-        expect(() => new GameObjectClient(id, gameObjectType, name, width, length, position, isClickable, 'isIFrameObject')).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id: 'id', gameObjectType, name, width, length, cordX, cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, type: 'gameObjectType', name, width, length, cordX, cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name: 42, width, length, cordX, cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name, width: 'width', length, cordX, cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name, width, length: 'length', cordX, cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name, width, length, cordX: 'cordX', cordY, isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name, width, length, cordX, cordY: 'cordY', isClickable })).to.throw(TypeError);
+        expect(() => new GameObjectClient({ id, gameObjectType, name, width, length, cordX, cordY, isClickable: 'isClickable' })).to.throw(TypeError);
+        // expect(() => new GameObjectClient({ id, gameObjectType, name, width, length, cordX, cordY, isClickable, 'isIFrameObject' })).to.throw(TypeError);
     });
 })

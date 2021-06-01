@@ -8,14 +8,16 @@ const ShirtColor = require('../../../src/game/app/client/shared/ShirtColor.js');
 
 //test data
 var id = TestUtil.randomInt();
-var position = new PositionClient(TestUtil.randomInt(), TestUtil.randomInt());
+var cordX = TestUtil.randomIntWithMin(0);
+var cordY = TestUtil.randomIntWithMin(0);
+var position = new PositionClient(cordX, cordY);
 var name = TestUtil.randomString();
 var direction = Direction.DOWNLEFT;
 var shirtColor = ShirtColor.BLUE;
 
 describe('NPCClient test', function () {
     it('test constructor and getters', function () {
-        let npc = new NPCClient(id, name, position, direction, shirtColor);
+        let npc = new NPCClient({ id, name, cordX, cordY, direction, shirtColor });
 
         assert.equal(id, npc.getId());
         assert.equal(position, npc.getPosition());
@@ -25,11 +27,12 @@ describe('NPCClient test', function () {
     });
 
     it('test constructor invalid input', function () {
-        expect(() => new NPCClient('fehler', name, position, direction, shirtColor)).to.throw(TypeError);
-        expect(() => new NPCClient(id, 42, position, direction, shirtColor)).to.throw(TypeError);
-        expect(() => new NPCClient(id, name, 'fehler', direction, shirtColor)).to.throw(TypeError);
-        expect(() => new NPCClient(id, name, position, 'fehler', shirtColor)).to.throw(TypeError);
-        expect(() => new NPCClient(id, name, position, direction, 'fehler')).to.throw(TypeError);
+        expect(() => new NPCClient({ id: 'fehler', name, cordX, cordY, direction, shirtColor })).to.throw(TypeError);
+        expect(() => new NPCClient({ id, name: 42, cordX, cordY, direction, shirtColor })).to.throw(TypeError);
+        expect(() => new NPCClient({ id, name, cordX: 'fehler', cordY,  direction, shirtColor })).to.throw(TypeError);
+        expect(() => new NPCClient({ id, name, cordX, cordY: 'fehler',  direction, shirtColor })).to.throw(TypeError);
+        expect(() => new NPCClient({ id, name, cordX, cordY, direction: 'fehler', shirtColor })).to.throw(TypeError);
+        expect(() => new NPCClient({ id, name, cordX, cordY, direction, shirtColor: 'fehler' })).to.throw(TypeError);
     });
 })
 
