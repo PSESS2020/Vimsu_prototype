@@ -31,7 +31,7 @@ class LargerGlobalChatView extends WindowView {
                 let isNotDescendant = true;
 
                 descendants.forEach(descendant => {
-                    isNotDescendant = !descendant.is(e.target) && descendant.has(e.target).length === 0;
+                    isNotDescendant &&= !descendant.is(e.target) && descendant.has(e.target).length === 0;
                 });
 
                 // if the target of the click isn't the container nor a descendant of the container
