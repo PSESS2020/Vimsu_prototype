@@ -55,10 +55,12 @@ module.exports = class LectureContext extends CommandContext {
      * Gets help message
      * @method module:LectureContext#getHelpMessage
      * 
+     * @param {json} languageData language data for messages
+     * 
      * @return {String} lecture help message
      */
-    getHelpMessage() {
-        return CommandMessages.HELPLECTURECHAT;
+    getHelpMessage(languageData) {
+        return languageData.help.listOfLectureCommands;
     };
 
     /**

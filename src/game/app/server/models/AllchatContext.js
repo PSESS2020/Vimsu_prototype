@@ -56,10 +56,12 @@ module.exports = class AllchatContext extends CommandContext {
      * Gets help messages
      * @method module:AllchatContext#getHelpMessage
      * 
+     * @param {json} languageData language data for messages
+     * 
      * @return {Object} help messages
      */
-    getHelpMessage() {
-        return CommandMessages.HELPALLCHAT;
+    getHelpMessage(languageData) {
+        return languageData.help.listOfAllchatCommands;
     };
 
     /**

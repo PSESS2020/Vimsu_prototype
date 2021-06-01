@@ -125,229 +125,309 @@
     },
 
     "conference": {
-        "hud": {
-            "ranklist": "Ranklist",
-            "achievements": "Achievements",
-            "schedule": "Schedule",
-            "meetings": "Group Meetings",
-            "friendlist": "Friendlist",
-            "chats": "Chats",
-            "leave": "Leave",
-            "showNotification": "Show notification",
-            "hideNotification": "Hide notification",
-            "confirmLeave": "Are you sure you want to leave the conference?",
-            "tooltips": {
-                "points": "Your points",
-                "rank": "Your rank",
-                "profile": "Profile",
-                "ranklist": "Ranklist of conference participants",
-                "achievements": "Achievement list",
-                "schedule": "Presentation schedule",
-                "meetings": "Meeting list",
-                "friendlist": "Friend list and received friend request list",
-                "chats": "Chat list",
-                "leave": "Leave conference"
-            },
-            "statusBar": {
-                "fps": "FPS",
-                "location": "Location",
-                "ping": "Ping",
-                "group": "Group",
-                "lostConnection": "Lost connection to the server.",
-                "reconnect": "Reconnecting to the server..."
-            },
-            "allchat": {
-                "chat": "Chat",
-                "showMessages": "Show <roomName> chat messages",
-                "enterMessage": "Enter <roomName> chat message ...",
-                "quietChat": "The <roomName> chat is somehow quiet. Send some love here?",
+        "clientView": {
+            "hud": {
+                "ranklist": "Ranklist",
+                "achievements": "Achievements",
+                "schedule": "Schedule",
+                "meetings": "Group Meetings",
+                "friendlist": "Friendlist",
+                "chats": "Chats",
+                "leave": "Leave",
+                "showNotification": "Show notification",
+                "hideNotification": "Hide notification",
+                "confirmLeave": "Are you sure you want to leave the conference?",
                 "tooltips": {
-                    "sendMessage": "Send",
-                    "emojis": "Pick emojis"
+                    "points": "Your points",
+                    "rank": "Your rank",
+                    "profile": "Profile",
+                    "ranklist": "Ranklist of conference participants",
+                    "achievements": "Achievement list",
+                    "schedule": "Presentation schedule",
+                    "meetings": "Meeting list",
+                    "friendlist": "Friend list and received friend request list",
+                    "chats": "Chat list",
+                    "leave": "Leave conference"
+                },
+                "statusBar": {
+                    "fps": "FPS",
+                    "location": "Location",
+                    "ping": "Ping",
+                    "group": "Group",
+                    "lostConnection": "Lost connection to the server.",
+                    "reconnect": "Reconnecting to the server..."
+                },
+                "allchat": {
+                    "chat": "Chat",
+                    "showMessages": "Show <roomName> chat messages",
+                    "enterMessage": "Enter <roomName> chat message ...",
+                    "quietChat": "The <roomName> chat is somehow quiet. Send some love here?",
+                    "tooltips": {
+                        "sendMessage": "Send",
+                        "emojis": "Pick emojis"
+                    }
+                },
+                "notifBar": {
+                    "newMessage": "New message from usernamePlaceholder.",
+                    "newChat": "usernamePlaceholder init chat with you.",
+                    "newGroupChat": "usernamePlaceholder invited you to the group chat groupNamePlaceholder.",
+                    "newMeeting": "You were invited to the video meeting meetingNamePlaceholder.",
+                    "newFriendRequest": "New friend request from usernamePlaceholder.",
+                    "requestAccepted": "usernamePlaceholder accepted your friend request.",
+                    "inCall": "You are in call with meetingNamePlaceholder."
                 }
             },
-            "notifBar": {
-                "newMessage": "New message from usernamePlaceholder.",
-                "newChat": "usernamePlaceholder init chat with you.",
-                "newGroupChat": "usernamePlaceholder invited you to the group chat groupNamePlaceholder.",
-                "newMeeting": "You were invited to the video meeting meetingNamePlaceholder.",
-                "newFriendRequest": "New friend request from usernamePlaceholder.",
-                "requestAccepted": "usernamePlaceholder accepted your friend request.",
-                "inCall": "You are in call with meetingNamePlaceholder."
-            }
-        },
-        "days": {
-            "monday": "Monday",
-            "tuesday": "Tuesday",
-            "wednesday": "Wednesday",
-            "thursday": "Thursday",
-            "friday": "Friday",
-            "saturday": "Saturday",
-            "sunday": "Sunday"
-        },
-        "months": {
-            "january": "January",
-            "february": "February",
-            "march": "March",
-            "april": "April",
-            "may": "May",
-            "june": "June",
-            "july": "July",
-            "august": "August",
-            "september": "September",
-            "october": "October",
-            "november": "November",
-            "december": "December"
-        },
-        "achievements": {
-            "yourAchievements": "Your achievements",
-            "nextTarget": "Target: [<currentCount> / <nextTarget>]",
-            "completed": "Completed",
-            "level": "Level"
-        },
-        "ranklist": {
-            "bestParticipants": "Best Participants",
-            "noParticipants": "There are no participants in this conference yet."
-        },
-        "schedule": {
-            "noLectureFound": "Sorry, no lecture is found.",
-            "seconds": "secs",
-            "scheduleList": "Schedule",
-            "lectureTitle": "Title",
-            "oratorName": "Orator Name",
-            "startingTime": "Starting time",
-            "durationInMin": "Duration (Minutes)",
-            "seatAmount": "Seat Amount",
-            "remarks": "Remarks",
-            "status": "Status",
-            "states": {
-                "Coming soon": "Coming soon",
-                "Opened": "Opened",
-                "Running": "Running",
-                "Expired": "Expired"
+            "days": {
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday",
+                "sunday": "Sunday"
             },
-            "allExpired": "Sorry, all lectures have expired."
-        },
-        "businessCard": {
-            "businessCard": "Business Card",
-            "profession": "Profession",
-            "at": "at",
-            "unknown": "Unknown",
-            "email": "Email",
-            "rank": "Rank",
-            "role": "Role",
-            "roles": {
-                "moderator": "Moderator",
-                "participant": "Participant"
+            "months": {
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
             },
-            "tooltips": {
-                "chatNow": "Close business card and chat now"
-            }
-        },
-        "chats": {
-            "yourChats": "Your chats",
-            "group": "Group",
-            "noMessages": "no messages",
-            "noChats": "No chats found. Let's connect with others!",
-            "tooltips": {
-                "openChat": "Open chat",
-                "addFriend": "Add friend",
-                "videoCall": "(Video) call with chat participants",
-                "showMembers": "Show chat participant list",
-                "inviteFriends": "Invite friends to group chat",
-                "leaveChat": "Leave chat",
-                "emojis": "Pick emojis",
-                "requestSent": "Friend request sent",
-                "sendRequest": "Send friend request"
+            "achievements": {
+                "yourAchievements": "Your achievements",
+                "nextTarget": "Target: [<currentCount> / <nextTarget>]",
+                "completed": "Completed",
+                "level": "Level"
             },
-            "enterMessage": "Enter message ...",
-            "send": "Send",
-            "chatParticipantList": "Chat Participant List",
-            "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?",
-            "createGroupChat": "Create Group Chat",
-            "inviteFriends": "Invite Friends",
-            "enterGroupName": "Enter group name",
-            "tooManyFriends": "You may only invite limit friend(s)! Please unselect diff friend(s).",
-            "emptyGroupName": "Group name was empty",
-            "noFriends": "No friends to invite",
-            "selectAtLeastOne": "Please select at least one friend!"
-        },
-        "externalWebsite": {
-            "fullscreenMode": "Switch to fullscreen",
-            "normalMode": "Switch back to normal size"
-        },
-        "enterCode": {
-            "enterCode": "Enter code",
-            "sendCode": "Send code",
-            "tooltips": {
-                "sendCode": "Sends the code you entered in the input field"
+            "ranklist": {
+                "bestParticipants": "Best Participants",
+                "noParticipants": "There are no participants in this conference yet."
+            },
+            "schedule": {
+                "noLectureFound": "Sorry, no lecture is found.",
+                "seconds": "secs",
+                "scheduleList": "Schedule",
+                "lectureTitle": "Title",
+                "oratorName": "Orator Name",
+                "startingTime": "Starting time",
+                "durationInMin": "Duration (Minutes)",
+                "seatAmount": "Seat Amount",
+                "remarks": "Remarks",
+                "status": "Status",
+                "states": {
+                    "Coming soon": "Coming soon",
+                    "Opened": "Opened",
+                    "Running": "Running",
+                    "Expired": "Expired"
+                },
+                "allExpired": "Sorry, all lectures have expired."
+            },
+            "businessCard": {
+                "businessCard": "Business Card",
+                "profession": "Profession",
+                "at": "at",
+                "unknown": "Unknown",
+                "email": "Email",
+                "rank": "Rank",
+                "role": "Role",
+                "roles": {
+                    "moderator": "Moderator",
+                    "participant": "Participant"
+                },
+                "tooltips": {
+                    "chatNow": "Close business card and chat now"
+                }
+            },
+            "chats": {
+                "yourChats": "Your chats",
+                "group": "Group",
+                "noMessages": "no messages",
+                "noChats": "No chats found. Let's connect with others!",
+                "tooltips": {
+                    "openChat": "Open chat",
+                    "addFriend": "Add friend",
+                    "videoCall": "(Video) call with chat participants",
+                    "showMembers": "Show chat participant list",
+                    "inviteFriends": "Invite friends to group chat",
+                    "leaveChat": "Leave chat",
+                    "emojis": "Pick emojis",
+                    "requestSent": "Friend request sent",
+                    "sendRequest": "Send friend request"
+                },
+                "enterMessage": "Enter message ...",
+                "send": "Send",
+                "chatParticipantList": "Chat Participant List",
+                "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?",
+                "createGroupChat": "Create Group Chat",
+                "inviteFriends": "Invite Friends",
+                "enterGroupName": "Enter group name",
+                "tooManyFriends": "You may only invite limit friend(s)! Please unselect diff friend(s).",
+                "emptyGroupName": "Group name was empty",
+                "noFriends": "No friends to invite",
+                "selectAtLeastOne": "Please select at least one friend!"
+            },
+            "externalWebsite": {
+                "fullscreenMode": "Switch to fullscreen",
+                "normalMode": "Switch back to normal size"
+            },
+            "enterCode": {
+                "enterCode": "Enter code",
+                "sendCode": "Send code",
+                "tooltips": {
+                    "sendCode": "Sends the code you entered in the input field"
+                }
+            },
+            "loadingConference": "Loading Conference percentagePlaceholder . . .",
+            "currentLectures": {
+                "by": "By",
+                "start": "Start",
+                "duration": "Duration",
+                "minutes": "minutes",
+                "seats": "seats",
+                "participants": "participants",
+                "fullLecture": "Lecture is currently full.",
+                "enter": "Enter",
+                "currentLectures": "Current Lectures",
+                "noLectures": "Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later."
+            },
+            "lecture": {
+                "lectureChat": "Lecture Chat",
+                "questionsAfterLecture": "You can ask questions in this chat after the lecture.",
+                "chatAfterLecture": "This chat will be opened after the lecture.",
+                "moderatorRights": "You have the right to close the lecture or to ban participants after the lecture.",
+                "secondsTill": "seconds left till the",
+                "presentationStarts": "presentation starts",
+                "notOverWithToken": "The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?",
+                "notOverOrator": "The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?",
+                "notOverWithoutToken": "The lecture is not over! Are you sure you want to leave?",
+                "comeBackOnTime": "When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!",
+                "send": "Send",
+                "enterMessage": "Enter message",
+                "tokenMessages": {
+                    "revoke": "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. Please remember to follow chat etiquette.",
+                    "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
+                    "hasToken": "You obtained a question token!"
+                }
+            },
+            "friendList": {
+                "friendList": "Friend List",
+                "requests": "Requests",
+                "friendRequestList": "Friend Request List",
+                "sureToRemove": "Are you sure you want to remove usernamePlaceholder from your friend list?",
+                "noFriends": "No friends were found. Chat with others and send some friend requests!",
+                "noRequests": "No friend requests received.",
+                "unfriend": "Unfriend",
+                "chat": "Chat",
+                "accept": "Accept",
+                "reject": "Reject",
+                "accepted": "Accepted",
+                "rejected": "Rejected",
+                "tooltips": {
+                    "chatNow": "Close friend list and chat now",
+                    "removeFriend": "Remove from friend list",
+                    "acceptRequest": "Remove from friend request and add to friend list",
+                    "rejectRequest": "Remove from friend request and reject"
+                }
+            },
+            "meetings": {
+                "yourMeetings": "Your meetings",
+                "noMeetings": "No meetings found.",
+                "tooltips": {
+                    "openMeeting": "Open meeting",
+                    "minimizeMeeting": "Minimize meeting, voice chat will stay active"
+                }
+            },
+            "npcSays": "npcNamePlaceholder says...",
+            "newAchievement": {
+                "unlocked": "New Achievement Unlocked!",
+                "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Now Unlocked!",
+                "unlockedWithDescription": "You have unlocked a new achievement: descriptionPlaceholder"
             }
         },
-        "loadingConference": "Loading Conference percentagePlaceholder . . .",
-        "currentLectures": {
-            "by": "By",
-            "start": "Start",
-            "duration": "Duration",
-            "minutes": "minutes",
-            "seats": "seats",
-            "participants": "participants",
-            "fullLecture": "Lecture is currently full.",
-            "enter": "Enter",
-            "currentLectures": "Current Lectures",
-            "noLectures": "Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later."
-        },
-        "lecture": {
-            "lectureChat": "Lecture Chat",
-            "questionsAfterLecture": "You can ask questions in this chat after the lecture.",
-            "chatAfterLecture": "This chat will be opened after the lecture.",
-            "moderatorRights": "You have the right to close the lecture or to ban participants after the lecture.",
-            "secondsTill": "seconds left till the",
-            "presentationStarts": "presentation starts",
-            "notOverWithToken": "The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?",
-            "notOverOrator": "The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?",
-            "notOverWithoutToken": "The lecture is not over! Are you sure you want to leave?",
-            "comeBackOnTime": "When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!",
-            "send": "Send",
-            "enterMessage": "Enter message",
-            "tokenMessages": {
-                "revoke": "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. Please remember to follow chat etiquette.",
-                "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
-                "hasToken": "You obtained a question token!"
+        
+        "messages": {
+            "help": {
+                "listOfAllchatCommands": {
+                    "header": "List of Commands",
+                    "body": [ "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the conference. They will not be able to reenter the conference.\nWARNING: It is not yet possible to unban a banned user!",
+                        "\\door\nDisplays a list of all door commands and how to use them.",
+                        "\\door <command>\nExecutes door command <command>. Available commands: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
+                        "\\global <message>\nPost a message into the global chat. It will display in every participants game-view as a pop-up.",
+                        "\\group\nDisplays a list of all group commands and how to use them.",
+                        "\\group <command>\nExecutes group command <command>. Available commands: add, create, delete, deleteall, log, rm.",
+                        "\\help\nThis command. Displays a list of all commands and how to use them.",
+                        "\\mod <username>\nSets a normal user with <username> to a moderator.",
+                        "\\unmod <username>\nSets a moderator with <username> to a normal user.",
+                        "\\msg\nDisplays a list of all allchat message commands and how to use them.",
+                        "\\msg <command>\nExecutes Allchat message command <command>. Available commands: log, rm, rmallby, showallby.",
+                        "\\mute <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and mutes them, meaning they will no longer be able to post messages into the allchat.",
+                        "\\unmute <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and unmutes them, meaning they will be able to post messages into the allchat again if they were previously muted.",
+                        "\\port\nDisplays a list of all port commands and how to use them.",
+                        "\\port <command>\nExecutes port command <command>. Available commands: group, user.",
+                        "\\room\nDisplays a list of all room commands and how to use them.",
+                        "\\room <command>\nExecutes room command <command>. Available commands: log, userlog.",
+                        "\\userlog\nDisplays a list of all participants that are currently online with their username."]
+                },
+                "listOfDoorCommands": {
+                    "header": "List of Door Commands",
+                    "body": [ "\\door close <doorID>\nCloses the door with ID <doorID> for everyone.",
+                        "\\door closeallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door closefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door log\nWill show a log of all available doors with ID and status information.", 
+                        "\\door log <list of roomIDs>\nWill show a log of all available doors with ID and status information in rooms whose ID is in <list of roomIDs>, each roomID separated from the next one by a whitespace character.",
+                        "\\door open <doorID>\nOpens the door with ID <doorID> for everyone.", 
+                        "\\door openallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door openfor <doorID> <list of usernames>\nOpens the door with ID <doorID> for all passed usernames in <list of usernames, each one separated from the next one by a whitespace character.",
+                        "\\door setcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>."]
+                },
+                "listOfGroupCommands": {
+                    "header": "List of Group Commands",
+                    "body": [ "\\group add <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>, each username separated from the next one by a whitespace character.",
+                        "\\group create <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                        "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
+                        "\\group deleteall\nDeletes all exisiting groups.",
+                        "\\group log\nWill show a log of all existing groups with their group name and group color.",
+                        "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>, each username separated from the next one by a whitespace character."]
+                },
+                "listOfMessageCommands": {
+                    "header": "List of Message Commands",
+                    "body": [ "\\msg log\nWill show a log of all messages send into the allchat of the room you're currently in, including the messageID and sender username of each message.",
+                        "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next one by a whitespace character, and removes the corresponding messages - if they exist - from the allchat of the room you're currently in. Will also send a warning to the senders of the messages, reminding them to follow chat etiquette.",
+                        "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all messages posted by them into the allchat of the room you're currently in. Will also send a warning to these participants, reminding them to follow chat-etiquette.",
+                        "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users."]
+                },
+                "listOfPortCommands": {
+                    "header": "List of Port Commands",
+                    "body": [  "\\port group <groupname> topos <roomID> <cordX> <cordY>\nTeleports all group members of group with groupname <groupname> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
+                        "\\port group <groupname> touser <username>\nTeleports all group members of group with groupname <groupname> to user with username <username>.",
+                        "\\port user <username> topos <roomID> <cordX> <cordY>\nTeleports user with username <username> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
+                        "\\port user <username1> touser <username2>\nTeleports user with username <username1> to user with username <username2>."]
+                },
+                "listOfRoomCommands": {
+                    "header": "List of Room Commands",
+                    "body": [ "\\room log\nDisplays a list of all existing rooms with their ID.",
+                        "\\room userlog <roomID>\nDisplays a list of all participants that are currently online and in room with ID <roomID> with their username."]
+                },
+                "listOfLectureCommands": {
+                    "header": "List of Lecture Commands",
+                    "body": [  "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the lecture. They will not be able to reenter the lecture.\nWARNING: It is not yet possible to revert this!",
+                        "\\close\nCloses the lecture and makes it inaccessible. Every current participant will be forcefully ejected and nobody will be able to rejoin the lecture. WARNING: this command can NOT be reversed.",
+                        "\\grant <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and grants them lecture tokens (if they are currently listening to the lecture and do not own one). They will be able to post messages into the lecture chat.",
+                         "\\help\nThis command. Displays a list of all lecture commands and how to use them.",
+                        "\\msg log\nWill show a log of all messages send into the lecture chat, including the messageID and senderID of each message.",
+                        "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next one by a whitespace character, and removes the corresponding messages - if they exist - from the lecture chat. Will also send a warning to the senders of the messages, reminding them to follow chat etiquette.",
+                        "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all messages posted by them into the lecture chat. Will also send a warning to these participants, reminding them to follow chat-etiquette.",
+                        "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users.", 
+                        "\\revoke <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and revokes their lecture tokens (if they own one). They will no longer be able to post messages into the lecture chat."]
+                }
             }
-        },
-        "friendList": {
-            "friendList": "Friend List",
-            "requests": "Requests",
-            "friendRequestList": "Friend Request List",
-            "sureToRemove": "Are you sure you want to remove usernamePlaceholder from your friend list?",
-            "noFriends": "No friends were found. Chat with others and send some friend requests!",
-            "noRequests": "No friend requests received.",
-            "unfriend": "Unfriend",
-            "chat": "Chat",
-            "accept": "Accept",
-            "reject": "Reject",
-            "accepted": "Accepted",
-            "rejected": "Rejected",
-            "tooltips": {
-                "chatNow": "Close friend list and chat now",
-                "removeFriend": "Remove from friend list",
-                "acceptRequest": "Remove from friend request and add to friend list",
-                "rejectRequest": "Remove from friend request and reject"
-            }
-        },
-        "meetings": {
-            "yourMeetings": "Your meetings",
-            "noMeetings": "No meetings found.",
-            "tooltips": {
-                "openMeeting": "Open meeting",
-                "minimizeMeeting": "Minimize meeting, voice chat will stay active"
-            }
-        },
-        "npcSays": "npcNamePlaceholder says...",
-        "newAchievement": {
-            "unlocked": "New Achievement Unlocked!",
-            "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Now Unlocked!",
-            "unlockedWithDescription": "You have unlocked a new achievement: descriptionPlaceholder"
         }
     }
 }

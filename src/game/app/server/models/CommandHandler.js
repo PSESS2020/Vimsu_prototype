@@ -96,9 +96,10 @@ module.exports = class CommandHandler {
      */
     handleDoorCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, CommandMessages.DOORCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, messages.help.listOfDoorCommands);
         } else {
             let doorCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -122,9 +123,10 @@ module.exports = class CommandHandler {
      */
     handleGroupCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
     
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, CommandMessages.GROUPCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, messages.help.listOfGroupCommands);
         } else {
             let groupCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -148,9 +150,10 @@ module.exports = class CommandHandler {
      */
     handleMsgCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-    
+        const messages = socket.languageData.messages;
+
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, CommandMessages.MESSAGECOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, messages.help.listOfMessageCommands);
         } else {
             let msgCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -174,9 +177,10 @@ module.exports = class CommandHandler {
      */
     handlePortCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, CommandMessages.PORTCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, messages.help.listOfPortCommands);
         } else {
             let portCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -200,9 +204,10 @@ module.exports = class CommandHandler {
      */
     handleRoomCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendLargeNotification(socket.id, CommandMessages.ROOMCOMMANDS);
+            this.#serverController.sendLargeNotification(socket.id, messages.help.listOfRoomCommands);
         } else {
             let roomCommandType = commandArgs[0];
             commandArgs = commandArgs.slice(1);
@@ -254,7 +259,7 @@ module.exports = class CommandHandler {
     printHelp(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage());
+        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage(socket.languageData.messages));
     };
 
     /**
