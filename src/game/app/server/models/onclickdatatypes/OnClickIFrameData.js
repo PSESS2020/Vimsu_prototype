@@ -1,4 +1,5 @@
 const OnClickData = require("./OnClickData");
+const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData");
 
 /**
  * @module OnClickIFrameData
@@ -8,7 +9,7 @@ const OnClickData = require("./OnClickData");
  */
 class OnClickIFrameData extends OnClickData {
     /**
-     * 
+     * @constructor module:OnClickIFrameData
      */
     constructor() {
 
@@ -17,6 +18,10 @@ class OnClickIFrameData extends OnClickData {
     /** */
     getData() {
         
+    }
+
+    getIFrameData() {
+
     }
 
 }
