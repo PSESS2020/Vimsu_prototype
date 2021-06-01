@@ -5,18 +5,18 @@ const Achievement = require('../../../../src/game/app/server/models/Achievement.
 const Message = require('../../../../src/game/app/server/models/Message.js');
 const Task = require('../../../../src/game/app/server/models/Task.js');
 const Chat = require('../../../../src/game/app/server/models/Chat.js');
-const Room = require('../../../../src/game/app/server/models/Room.js');
+const Room = require('../../../../src/game/app/server/models/mapobjects/Room.js');
 const Lecture = require('../../../../src/game/app/server/models/Lecture.js');
 const LectureChat = require('../../../../src/game/app/server/models/LectureChat.js');
-const GameObject = require('../../../../src/game/app/server/models/GameObject.js');
-const NPC = require('../../../../src/game/app/server/models/NPC.js');
-const Door = require('../../../../src/game/app/server/models/Door.js');
+const GameObject = require('../../../../src/game/app/server/models/mapobjects/GameObject.js');
+const NPC = require('../../../../src/game/app/server/models/mapobjects/NPC.js');
+const Door = require('../../../../src/game/app/server/models/mapobjects/Door.js');
 const Direction = require('../../../../src/game/app/client/shared/Direction.js');
 const TypeOfTask = require('../../../../src/game/app/server/utils/TypeOfTask.js');
 const TypeOfRoom = require('../../../../src/game/app/client/shared/TypeOfRoom.js');
 const TypeOfDoor = require('../../../../src/game/app/client/shared/TypeOfDoor.js');
 const TypeOfGameObject = require('../../../../src/game/app/client/shared/GameObjectType.js');
-const Participant = require('../../../../src/game/app/server/models/Participant.js');
+const Participant = require('../../../../src/game/app/server/models/mapobjects/Participant.js');
 const Weekdays = require('../../../server/models/TestData/Weekdays.js');
 
 class TestUtil {

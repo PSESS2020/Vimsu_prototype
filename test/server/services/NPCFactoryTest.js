@@ -1,13 +1,13 @@
 const { expect } = require('chai');
-const NPCService = require('../../../src/game/app/server/services/NPCService');
-const NPC = require('../../../src/game/app/server/models/NPC');
+const NPCFactory = require('../../../src/game/app/server/models/factories/NPCFactory');
+const NPC = require('../../../src/game/app/server/models/mapobjects/NPC');
 const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../src/game/app/client/shared/Direction');
 
 
 describe('NPCService test', function () {
     it('test create FoyerHelperNPC', function () {
-        let npcService = new NPCService();
+        let npcService = new NPCFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -27,7 +27,7 @@ describe('NPCService test', function () {
     });
 
     it('test create BasicTutorialNPC', function () {
-        let npcService = new NPCService();
+        let npcService = new NPCFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -47,7 +47,7 @@ describe('NPCService test', function () {
     });
 
     it('test create ChefNPC', function () {
-        let npcService = new NPCService();
+        let npcService = new NPCFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);

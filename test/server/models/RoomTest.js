@@ -1,9 +1,9 @@
-const Room = require('../../../src/game/app/server/models/Room.js');
+const Room = require('../../../src/game/app/server/models/mapobjects/Room.js');
 const Position = require('../../../src/game/app/server/models/Position.js');
-const Door = require('../../../src/game/app/server/models/Door.js');
-const GameObjectService = require('../../../src/game/app/server/services/GameObjectService.js');
-const NPCService = require('../../../src/game/app/server/services/NPCService.js');
-const DoorService = require('../../../src/game/app/server/services/DoorService.js');
+const Door = require('../../../src/game/app/server/models/mapobjects/Door.js');
+const GameObjectFactory = require('../../../src/game/app/server/models/factories/GameObjectFactory');
+const NPCFactory = require('../../../src/game/app/server/models/factories/NPCFactory');
+const DoorFactory = require('../../../src/game/app/server/models/factories/DoorFactory');
 const TypeOfRoom = require('../../../src/game/app/client/shared/TypeOfRoom.js');
 const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
@@ -13,8 +13,8 @@ const RoomDimensions = require('../../../src/game/app/server/utils/RoomDimension
 const TestUtil = require('./utils/TestUtil.js');
 const chai = require('chai');
 const { expect } = require('chai');
-const Participant = require('../../../src/game/app/server/models/Participant.js');
-const NPC = require('../../../src/game/app/server/models/NPC.js');
+const Participant = require('../../../src/game/app/server/models/mapobjects/Participant.js');
+const NPC = require('../../../src/game/app/server/models/mapobjects/NPC.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList.js');
 const DoorClosedMessages = require('../../../src/game/app/server/utils/messages/DoorClosedMessages.js');
 const assert = chai.assert;
@@ -31,9 +31,9 @@ var testReception;
 describe('test Room Constructor and getters', function () {
 
     before(function () {
-        testGameObjectService = new GameObjectService();
-        testNPCService = new NPCService();
-        testDoorService = new DoorService();
+        testGameObjectService = new GameObjectFactory();
+        testNPCService = new NPCFactory();
+        testDoorService = new DoorFactory();
     });
 
     it('test Foyer constructor and getters', function () {
@@ -274,10 +274,17 @@ describe('test Door handling', function () {
 
     before(function () {
         testFoyer = new Room(Settings.FOYER_ID, TypeOfRoom.FOYER, RoomDimensions.FOYER_WIDTH, RoomDimensions.FOYER_LENGTH);
+<<<<<<< HEAD
         testDoorService = new DoorService();
         testFoyer.setDoors([testDoorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, DoorClosedMessages.STANDARDDOORCLOSED),
         testDoorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, DoorClosedMessages.STANDARDDOORCLOSED),
         testDoorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, DoorClosedMessages.STANDARDDOORCLOSED)]);
+=======
+        testDoorService = new DoorFactory();
+        testFoyer.setDoors([testDoorService.createLectureDoor(new Position(Settings.FOYER_ID, 2, -1), true, Messages.STANDARDDOORCLOSED),
+        testDoorService.createFoodCourtDoor(new Position(Settings.FOYER_ID, 25, 9), new Position(Settings.FOODCOURT_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED),
+        testDoorService.createReceptionDoor(new Position(Settings.FOYER_ID, 25, 21), new Position(Settings.RECEPTION_ID, 2, 0), Direction.DOWNRIGHT, true, Messages.STANDARDDOORCLOSED)]);
+>>>>>>> 44b49e62 (started running unit tests, fixed a bunch of broken imports)
         testFoodcourt = new Room(Settings.FOODCOURT_ID, TypeOfRoom.FOODCOURT, RoomDimensions.FOODCOURT_WIDTH, RoomDimensions.FOODCOURT_LENGTH);
         testReception = new Room(Settings.RECEPTION_ID, TypeOfRoom.RECEPTION, RoomDimensions.RECEPTION_WIDTH, RoomDimensions.RECEPTION_LENGTH);
     });

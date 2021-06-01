@@ -1,4 +1,4 @@
-const Door = require('../../../src/game/app/server/models/Door.js');
+const Door = require('../../../src/game/app/server/models/mapobjects/Door.js');
 const TypeOfDoor = require('../../../src/game/app/client/shared/TypeOfDoor.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const TestUtil = require('./utils/TestUtil.js');

@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const DoorService = require('../../../src/game/app/server/services/DoorService');
-const Door = require('../../../src/game/app/server/models/Door');
+const DoorFactory = require('../../../src/game/app/server/models/factories/DoorFactory');
+const Door = require('../../../src/game/app/server/models/mapobjects/Door');
 const Position = require('../../../src/game/app/server/models/Position.js');
 const TestUtil = require('../models/utils/TestUtil');
 const Direction = require('../../../src/game/app/client/shared/Direction');
@@ -8,7 +8,7 @@ const Direction = require('../../../src/game/app/client/shared/Direction');
 
 describe('DoorService test', function () {
     it('test create LectureDoor', function () {
-        let doorService = new DoorService();
+        let doorService = new DoorFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -36,7 +36,7 @@ describe('DoorService test', function () {
     });
 
     it('test create FoyerDoor', function () {
-        let doorService = new DoorService();
+        let doorService = new DoorFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -66,7 +66,7 @@ describe('DoorService test', function () {
     });
 
     it('test create FoodCourtDoor', function () {
-        let doorService = new DoorService();
+        let doorService = new DoorFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -96,7 +96,7 @@ describe('DoorService test', function () {
     });
 
     it('test create ReceptionDoor', function () {
-        let doorService = new DoorService();
+        let doorService = new DoorFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);
@@ -126,7 +126,7 @@ describe('DoorService test', function () {
     });
 
     it('test create EscapeRoomDoor', function () {
-        let doorService = new DoorService();
+        let doorService = new DoorFactory();
         let roomId = TestUtil.randomIntWithMin(0);
         let cordX = TestUtil.randomIntWithMin(0);
         let cordY = TestUtil.randomIntWithMin(0);

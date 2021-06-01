@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const { assert } = require('chai');
 const TestUtil = require('../../server/models/utils/TestUtil.js');
-const GameObject = require('../../../src/game/app/server/models/GameObject.js');
+const GameObject = require('../../../src/game/app/server/models/mapobjects/GameObject.js');
 const Position = require('../../../src/game/app/server/models/Position.js');
 const GameObjectType = require('../../../src/game/app/client/shared/GameObjectType.js');
 

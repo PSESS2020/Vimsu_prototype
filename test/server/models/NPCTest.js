@@ -1,4 +1,4 @@
-const NPC = require('../../../src/game/app/server/models/NPC.js');
+const NPC = require('../../../src/game/app/server/models/mapobjects/NPC.js');
 const chai = require('chai');
 const Position = require('../../../src/game/app/server/models/Position.js');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');

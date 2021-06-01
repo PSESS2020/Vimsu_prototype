@@ -22,6 +22,8 @@ module.exports = class RoomFactory {
     #doorFactory;
     #npcFactory;
 
+    #roomID
+
     constructor() {
         if(!!RoomFactory.instance) {
             return RoomFactory.instance;
@@ -53,6 +55,7 @@ module.exports = class RoomFactory {
         // TODO add destructuring
         var type = (roomData.TYPE !== undefined) ? roomData.TYPE : TypeOfRoom.CUSTOM;
         var room = new Room(roomData.ID, roomData.NAME, type, roomData.WIDTH, roomData.LENGTH);
+        this.#roomID = roomData.ID
 
         room.addMapElements(
             this.#buildWallsAndTiles(
@@ -231,7 +234,7 @@ module.exports = class RoomFactory {
                     lectureDoorData.logo = "default";
                 }
         
-                let logo = this.#getDoorLogo(lectureDoorData.logo, lectureDoorData.wallSide);
+                let logo = #getDoorLogo(lectureDoorData.logo, lectureDoorData.wallSide);
                 if (lectureDoorData.isOpen === undefined) {
                     listOfDoors.push(
                         this.#doorFactory.createCustomLectureDoor(logo,

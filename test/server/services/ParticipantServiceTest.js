@@ -9,7 +9,6 @@ chai.use(chaiAsPromised);
 const sinon = require('sinon');
 
 var conferenceId = ServiceTestData.conferenceId_1;
-
 var account;
 
 const db = require('../../../src/config/db');
@@ -18,8 +17,8 @@ const Direction = require('../../../src/game/app/client/shared/Direction');
 const Task = require('../../../src/game/app/server/models/Task');
 const TypeOfTask = require('../../../src/game/app/server/utils/TypeOfTask');
 const Account = require('../../../src/website/models/Account');
-const Participant = require('../../../src/game/app/server/models/Participant');
-const BusinessCard = require('../../../src/game/app/server/models/BusinessCard');
+const Participant = require('../../../src/game/app/server/models/mapobjects/Participant');
+const BusinessCard = require('../../../src/game/app/server/models/BusinessCard.js');
 const FriendList = require('../../../src/game/app/server/models/FriendList');
 
 function generateTasks() {

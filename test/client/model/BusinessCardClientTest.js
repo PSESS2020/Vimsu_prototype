@@ -1,7 +1,7 @@
 const BusinessCardClient = require('../../../src/game/app/client/models/BusinessCardClient.js');
 const expect = require('chai').expect;
 
-var participantId = "53f";
+var ppantId = "53f";
 var username = "maxmust";
 var title = "Prof.";
 var surname = "Mustermann";
@@ -9,7 +9,8 @@ var forename = "Max";
 var job = "Professor";
 var company = "KIT";
 var email = "maxmustermann@kit.edu";
-var businessCard = new BusinessCardClient(participantId, username, forename, title, surname, job, company, email);
+// var businessCard = new BusinessCardClient(participantId, username, forename, title, surname, job, company, email);
+// var businessCard = new BusinessCardClient({ ppantId, username, forename });
 
 
 describe("BusinessCardClient Test getter", function () {

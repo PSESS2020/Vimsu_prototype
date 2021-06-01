@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const GameObjectService = require('../../../src/game/app/server/services/GameObjectService');
-const GameObject = require('../../../src/game/app/server/models/GameObject');
+const GameObjectFactory = require('../../../src/game/app/server/models/factories/GameObjectFactory');
+const GameObject = require('../../../src/game/app/server/models/mapobjects/GameObject');
 const TestUtil = require('../models/utils/TestUtil');
 
 var gameObjectService;
@@ -16,7 +16,7 @@ describe('GameObjectService test', function () {
 
     //test data
     beforeEach(function () {
-        gameObjectService = new GameObjectService();
+        gameObjectService = new GameObjectFactory();
         roomId = TestUtil.randomIntWithMin(0);
         width = TestUtil.randomIntWithMin(1);
         length = TestUtil.randomIntWithMin(1);

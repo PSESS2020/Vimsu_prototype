@@ -1,4 +1,4 @@
-const Participant = require('../../../src/game/app/server/models/Participant.js');
+const Participant = require('../../../src/game/app/server/models/mapobjects/Participant.js');
 const chai = require('chai');
 const Direction = require('../../../src/game/app/client/shared/Direction.js');
 const BusinessCard = require('../../../src/game/app/server/models/BusinessCard.js');
