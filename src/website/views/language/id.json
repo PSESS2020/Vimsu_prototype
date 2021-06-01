@@ -23,7 +23,8 @@
         "dashboard": "dashboard saya",
         "uploadVideo": "unggah video",
         "accountSettings": "pengaturan akun",
-        "logOut": "keluar"
+        "logOut": "keluar",
+        "menu": "menu"
     },
 
     "accountSettings": {

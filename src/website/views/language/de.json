@@ -23,7 +23,8 @@
         "dashboard": "Mein Dashboard",
         "uploadVideo": "Video hochladen",
         "accountSettings": "Account Einstellungen",
-        "logOut": "Abmelden"
+        "logOut": "Abmelden",
+        "menu": "Menü"
     },
 
     "accountSettings": {
