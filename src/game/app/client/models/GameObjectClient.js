@@ -131,7 +131,16 @@ class GameObjectClient {
         return this.isClickable;
     }
 
-    // TODO add getOnClickData
+    /**
+     * Gets game object onClickData
+     * 
+     * @return {Object} object containing the data needed to
+     *                  properly handle a (clickable) object
+     *                  being clicked.
+     */
+     getOnClickData() {
+        return this.onClickData;
+    }
 
 }
 

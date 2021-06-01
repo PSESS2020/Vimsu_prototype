@@ -192,7 +192,7 @@ class MapView extends Views {
             tile = this.gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
         } else {
             tileType = mapObject.getGameObjectType();
-            tile = this.gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName(), mapObject.getIsClickable());
+            tile = this.gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName(), mapObject.getIsClickable(), mapObject.getOnClickData(), mapObject.getId())
         }
 
         if (tile != null) {
@@ -213,7 +213,7 @@ class MapView extends Views {
     createObjectView = function(gameObject, position) {
         // TODO
         var objectType = gameObject.getGameObjectType();
-        var objectView = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getOnClickData());
+        var objectView = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getOnClickData(), gameObject.getId());
 
         if (objectView != null) {
             this.gameObjects.push(objectView);

@@ -9,16 +9,19 @@ const ClickableObjectViewCreators = Object.freeze({
         const { gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager } = creationData
         return new IFrameObjectView( gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager )
     },
+
     [TypeOfOnClickData.STORY] (creationData) {
         const { gameObjectImage, clickMap, pos, offset, gameObjectType, objectName, onClickData } = creationData
         const { story } = onClickData
         return new StoryObjectView( gameObjectImage, clickMap, pos, objectName, offset, objectID, story, gameObjectType )
     },
+
     [TypeOfOnClickData.MEETING] (creationData) {
         const { gameObjectImage, clickMap, pos, offset, objectName, eventManager } = creationData
         const { id, domain, name, password } = onClickData
         return new MeetingObjectView( gameObjectImage, clickMap, pos, offset, objectName, { id, domain, name, password }, eventManager )
     },
+    
     [TypeOfOnClickData.SCHEDULE] (creationData) {
         const { gameObjectImage, clickMap, pos, offset, objectName, eventManager } = creationData
         return new ScheduleView( gameObjectImage, clickMap, pos, offset, objectName, eventManager )

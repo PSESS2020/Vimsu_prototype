@@ -83,6 +83,11 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if map element is clickable, otherwise false
+     * @param {Object} onClickData object containing the data needed to
+     *                             properly handle a (clickable) object
+     *                             being clicked.
+     * @param {number} gameObjectID ID of this gameObject if it exists
+     *
      * 
      * @return {GameMapElementView} GameMapElementView instance
      */
@@ -135,10 +140,10 @@ class GameObjectViewFactory {
      * @param {PositionClient} pos position
      * @param {String} objectName object name
      * @param {boolean} isClickable true if object is clickable, otherwise false
-     * @param {?number} gameObjectID ID of this gameObject if it exists
      * @param {Object} onClickData object containing the data needed to
      *                             properly handle a (clickable) object
      *                             being clicked.
+     * @param {number} gameObjectID ID of this gameObject if it exists
      *
      * @return {GameObjectView} GameObjectView instance
      */
@@ -146,8 +151,7 @@ class GameObjectViewFactory {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
-        if (gameObjectID !== undefined) 
-            TypeChecker.isInt(gameObjectID);
+        TypeChecker.isInt(gameObjectID);
 
         // Destructuring
         const { type } = onClickData
