@@ -6,13 +6,13 @@ const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 const OnClickEmptyData = require('../onclickdatatypes/OnClickEmptyData.js');
 
 /**
- * The Game Object Service
- * @module GameObjectService
+ * The Game Object Factory
+ * @module GameObjectFactory
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class GameObject {
+class GameObjectFactory {
 
     #gameObjectIDs;
 
@@ -98,8 +98,8 @@ module.exports = class GameObject {
 
         // Check if custom options have been passed. If not, load default
         // ones from GameObjectInfo.
-        if (width    === undefined) { width    = GameObjectInfo.getInfo(type, "width") }
-        if (length   === undefined) { length   = GameObjectInfo.getInfo(type, "length") }
+        if (width    === undefined) { width    = GameObjectInfo.getInfo(type, "width")   }
+        if (length   === undefined) { length   = GameObjectInfo.getInfo(type, "length")  }
         if (isSolid  === undefined) { isSolid  = GameObjectInfo.getInfo(type, "isSolid") }
         if (assetSet === undefined) { assetSet = GameObjectInfo.getAsset(type, variation) }
         if (offset   === undefined) { offset   = GameObjectInfo.getOffset(type, variation) }
@@ -121,8 +121,10 @@ module.exports = class GameObject {
             }
             i++
         })
-
         return returnData
     }
+}
 
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = GameObjectFactory;
 }

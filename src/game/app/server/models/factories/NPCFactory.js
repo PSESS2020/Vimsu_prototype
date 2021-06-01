@@ -11,7 +11,7 @@ const NPCDialog = require('../../utils/NPCDialog.js');
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class NPCFactory {
+class NPCFactory {
 
     #npcIDs;
 
@@ -49,24 +49,24 @@ module.exports = class NPCFactory {
     /**
      * Creates a custom NPC with the passed attributes
      * 
-     * @method module:NPCFactory#createCustomNPC
+     * @method module:NPCFactory#createNPC
      * 
-     * @param {String} name 
-     * @param {String} roomId 
-     * @param {Int} xPos 
-     * @param {Int} yPos 
-     * @param {Direction} direction 
-     * @param {*} dialog 
+     * @param { { name:      String,
+     *            roomId:    Integer
+     *            position:  int[2], 
+     *            direction: Direction,
+     *            dialog:    String[]  } }  
      * 
      * @returns {NPC} An NPC instance with the passed attributes
      */
-    createCustomNPC(name, roomId, xPos, yPos, direction, dialog) {
+    createNPC(creationData) {
+        const { name, roomId, position: [xPos, yPos], direction, dialog } = creationData
+
         TypeChecker.isString(name);
         TypeChecker.isInt(roomId);
-        TypeChecker.isInt(xPos);
-        TypeChecker.isInt(yPos);
+        TypeChecker.isIntAboveEqual(xPos, 0);
+        TypeChecker.isIntAboveEqual(yPos, 0);
         TypeChecker.isEnumOf(direction, Direction);
-
         // If an entire array gets passed, it's contents are
         // used as dialog
         if(Array.isArray(dialog)) {
@@ -83,4 +83,8 @@ module.exports = class NPCFactory {
             return new NPC(this.#generateNpcID(), name, new Position(roomId, xPos, yPos), direction, npcDialog);
         }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = NPCFactory;
 }

@@ -14,7 +14,7 @@ const Messages = require('../../utils/Messages.js');
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class DoorFactory {
+class DoorFactory {
 
     #doorIDPrefixList;
 
@@ -141,7 +141,7 @@ module.exports = class DoorFactory {
      * @param { wallSide:         String,
      *          ?logo:            String, 
      *          positionOfDoor:   int[2],
-     *          positionOnExit:   Array[2],
+     *          positionOnExit:   Array[3],
      *          directionOnExit:  Direction,
      *          ?isOpen:          Boolean,
      *          ?closedMessage:   String[],
@@ -149,14 +149,9 @@ module.exports = class DoorFactory {
      * 
      * @returns {Door} A door instance with the passed attributes
      */
-    createCustomDoor(roomId, doorData) {
-
-        // TODO add handling for Lecture Doors
-        // maybe make it determined by logo?
-        //this.#checkParamTypes(TypeOfDoor[wallSide + "_DOOR"], mapPosition, targetPosition, directionOnExit, isOpen, closedMessage, codeToOpen);
-
-        const { wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit } = doorData
-        var { logo, isOpen, closedMessage, codeToOpen } = doorData
+    createDoor(creationData) {
+        const { roomId, wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit, codeToOpen } = doorData
+        var { logo, isOpen, closedMessage, isLectureDoor } = doorData
 
         var enterPositionData;
 
@@ -168,12 +163,15 @@ module.exports = class DoorFactory {
             throw new Error(`${wallSide} is not a legal option for the wallside of a door.`);
         }
 
-        assetPath = this.#getDoorLogo(logo, wallSide)
+        if ( isOpen        === undefined ) { isOpen        = true  }
+        if ( closedMessage === undefined ) { closedMessage = Messages.STANDARDDOORCLOSED }
+        if ( isLectureDoor === undefined ) { isLectureDoor = false }
+        if ( logo          === undefined ) { logo          = GlobalStrings.DEFAULT }
 
-        if ( isOpen        === undefined) { isOpen        = true }
-        if ( closedMessage === undefined) { closedMessage = Messages.STANDARDDOORCLOSED }
+       var  assetPath = this.#getDoorLogo(logo, wallSide)
 
         const { enterPositions, enterPositionWithoutClick } = enterPositionData
+        const doorTypeKey = `${wallSide}_${(isLectureDoor) ? "LECTURE" : ""}DOOR`
 
         // TODO redo
         let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
@@ -181,66 +179,8 @@ module.exports = class DoorFactory {
 
         this.#doorIDPrefixList.push(doorIdPrefix);
 
-        return new Door(doorId,   
-                TypeOfDoor[wallSide + "_DOOR"], 
-                assetPath,
-                new Position(roomId, xPos, yPos), 
-                enterPositionWithoutClick, 
-                enterPositions, 
-                targetPosition, 
-                new Position(idExit, xExit, yExit),
-                isOpen, 
-                closedMessage, 
-                codeToOpen);      
+        return new Door( doorId, TypeOfDoor[doorTypeKey], assetPath, new Position(roomId, xPos, yPos), enterPositionWithoutClick, enterPositions, new Position(idExit, xExit, yExit), directionOnExit, isOpen, closedMessage, codeToOpen )   
     } 
-
-    /**
-     * Creates a custom lecture door with the passed attributes.
-     * 
-     * @method module:DoorFactory#createCustomLectureDoor
-     * 
-     * @param {String} assetPath The path to the logo being portrayed above the door                     
-     * @param {String} wallSide Wallside, either left or right
-     * @param {Position} mapPosition lecture door position
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     * 
-     * @return {Door} lecture door instance
-     */
-    createCustomLectureDoor(assetPath, wallSide, mapPosition, isOpen, closedMessage, codeToOpen) {
-        this.#checkParamTypes(TypeOfDoor[wallSide + "_LECTUREDOOR"], mapPosition, undefined, undefined, isOpen, closedMessage, codeToOpen);
-    
-        var enterPositionData;
-
-        if (wallSide === GlobalStrings.LEFT) {
-            enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        } else if (wallSide === GlobalStrings.RIGHT) {
-            enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
-        } else {
-            throw new Error(wallSide + " is not a legal option for the wallside of a door.");
-        }
-
-        let enterPositionWithoutClick = enterPositionData.enterPositionWithoutClick;
-        let enterPositions = enterPositionData.enterPositions;
-    
-
-        let lectureDoorIdPrefix = 'L' + mapPosition.getRoomId();
-        let lectureDoorId = lectureDoorIdPrefix + '_' + this.#countDoorOccurrences(lectureDoorIdPrefix);
-
-        this.#doorIDPrefixList.push(lectureDoorIdPrefix);
-        return new Door(lectureDoorId, 
-                        TypeOfDoor[wallSide + "_LECTUREDOOR"], 
-                        assetPath,
-                        mapPosition, 
-                        enterPositionWithoutClick, 
-                        enterPositions, 
-                        undefined,
-                        undefined,
-                        isOpen, 
-                        closedMessage, 
-                        codeToOpen);   
-    }
 
     /**
      * Take the desired name & variant of a logo and gets it from
@@ -263,4 +203,8 @@ module.exports = class DoorFactory {
         if (logo.hasOwnProperty(logoVariant)) { return logo[logoVariant] } 
         else { throw new Error(`${logoVariant} is not a known variation of the the door logo ${logo}.`) }
     }
-} 
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = DoorFactory;
+}

@@ -14,7 +14,7 @@ module.exports = class Door {
 
     #id;
     #typeOfDoor;
-    #name;
+    #assetPath;
     #mapPosition;
     #enterPositionWithoutClick;
     #enterPositions;
@@ -32,7 +32,7 @@ module.exports = class Door {
      * @constructor module:Door
      * 
      * @param {String} id door ID
-     * @param {String} name door name
+     * @param {String} assetPath door name
      * @param {TypeOfDoor} typeOfDoor type of door
      * @param {Position} mapPosition door position on the map
      * @param {Object} enterPosition door valid enter position from the map without clicking the door
@@ -43,10 +43,10 @@ module.exports = class Door {
      * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
      * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
      */
-    constructor(id, typeOfDoor, name, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
+    constructor(id, typeOfDoor, assetPath, mapPosition, enterPositionWithoutClick, enterPositions, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
         TypeChecker.isString(id);
         TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor);
-        TypeChecker.isString(name);
+        TypeChecker.isString(assetPath);
         TypeChecker.isInstanceOf(mapPosition, Position);
         TypeChecker.isInstanceOf(enterPositionWithoutClick.position, Position);
         TypeChecker.isEnumOf(enterPositionWithoutClick.direction, Direction);
@@ -75,7 +75,7 @@ module.exports = class Door {
 
         this.#id = id;
         this.#typeOfDoor = typeOfDoor;
-        this.#name = name;
+        this.#assetPath = assetPath;
         this.#mapPosition = mapPosition;
         this.#enterPositionWithoutClick = enterPositionWithoutClick;
         this.#enterPositions = enterPositions;
@@ -138,12 +138,12 @@ module.exports = class Door {
 
     /**
      * Gets door name
-     * @method module:Door#getName
+     * @method module:Door#getAssetPath
      * 
      * @return {String} name
      */
-    getName() {
-        return this.#name;
+    getAssetPath() {
+        return this.#assetPath;
     }
 
     /**
@@ -405,7 +405,7 @@ module.exports = class Door {
         return Object.freeze({
             id: this.getId(),
             type: this.getTypeOfDoor(),
-            name: this.getName(),
+            name: this.getAssetPath(),
             cordX: door.getMapPosition().getCordX(),
             cordY: door.getMapPosition().getCordY(),
             targetRoomId: this.getTargetRoomId()

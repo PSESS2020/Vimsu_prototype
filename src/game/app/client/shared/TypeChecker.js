@@ -40,6 +40,19 @@ class TypeChecker {
     }
 
     /**
+     * @static Checks if value is an integer above a passed number.
+     * 
+     * @param {*} value value
+     * @param {Integer} int Integer to compare against
+     */
+    static isIntAboveEqual(value, int) {
+        TypeChecker.isInt(int)
+        if ((typeof value !== 'number') || value % 1 !== 0 || !(isFinite(value) || value < int)) {
+            throw new TypeError(`${value} is not an integer above or equal to ${int}!`)
+        }
+    }
+
+    /**
      * @static Checks if value is a number
      * 
      * @param {*} value value

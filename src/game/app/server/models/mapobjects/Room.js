@@ -80,15 +80,15 @@ module.exports = class Room {
      * Sets map elements
      * @method module:Room#setMapElements
      * 
-     * @param {GameObject[]} lisOfMapElements list of map elements
+     * @param {GameObject[]} listOfMapElements list of map elements
      */
-    setMapElements(lisOfMapElements) {
-        TypeChecker.isInstanceOf(lisOfMapElements, Array);
-        lisOfMapElements.forEach(mapElement => {
+    setMapElements(listOfMapElements) {
+        TypeChecker.isInstanceOf(listOfMapElements, Array);
+        listOfMapElements.forEach(mapElement => {
             TypeChecker.isInstanceOf(mapElement, GameObject);
         });
 
-        this.#listOfMapElements = lisOfMapElements;
+        this.#listOfMapElements = listOfMapElements;
     }
 
     /**
@@ -139,15 +139,21 @@ module.exports = class Room {
     /**
      * Takes a list of GameObjects and adds it to the
      * listOfMapElements of the instance.
+     * Despite the name, it is also possible to just
+     * add a single object.
      * 
-     * @param {GameObject[]} listOfElements 
+     * @param {GameObject OR GameObject[]} elementsToAdd
      */
-    addMapElements(listOfElements) {
-        TypeChecker.isInstanceOf(listOfElements, Array)
-        listOfElements.forEach(element => {
-            TypeChecker.isInstanceOf(element, GameObject)
-        })
-        this.setMapElements([...this.#listOfMapElements, ...listOfElements])
+    addMapElements(elementsToAdd) {
+        if (Array.isArray(elementsToAdd)) {
+            elementsToAdd.forEach(element => {
+                TypeChecker.isInstanceOf(element, GameObject)
+            })
+            this.setMapElements([...this.#listOfMapElements, ...elementsToAdd])
+        } else { 
+            TypeChecker.isInstanceOf(elementsToAdd, GameObject)
+            this.#listOfMapElements.push(elementsToAdd) 
+        }
     }
 
     /**
