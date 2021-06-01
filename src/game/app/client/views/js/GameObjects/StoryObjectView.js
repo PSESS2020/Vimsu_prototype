@@ -19,17 +19,14 @@ class StoryObjectView extends GameObjectView {
      * @param {number} screenPositionOffset object screen position offset
      * @param {String} name object name
      * @param {number} gameObjectID ID of gameObject that is represented by this view
-     * @param {string} id used to identify the text message view
      * @param {String[]} story the text messages displayed when clicked
      * @param {String} descriptor the "name" of the object
      */
-    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, gameObjectID, id, story, descriptor) {
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, gameObjectID, story, descriptor) {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
 
         this.gameObjectID = gameObjectID;
-        this.id = id;
-        this.story = story;
-
+        this.story = story
         this.descriptor = descriptor[0] + descriptor.slice(1, descriptor.length).toLowerCase();
     }
 
@@ -43,11 +40,11 @@ class StoryObjectView extends GameObjectView {
     }
 
     /**
-     * Called if participant clicks the plant
+     * Called if participant clicks the object
      */
     onclick() {
-        const npcStoryView = new NPCStoryView();
-        npcStoryView.addNewNPCStoryWindow(this.id);
-        npcStoryView.draw(this.descriptor, this.story, this.id);
+        const npcStoryView = new NPCStoryView()
+        npcStoryView.addNewNPCStoryWindow(this.gameObjectID)
+        npcStoryView.draw(this.descriptor, this.story, this.gameObjectID);
     }
 }

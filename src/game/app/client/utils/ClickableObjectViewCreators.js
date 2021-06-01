@@ -5,18 +5,23 @@
  * @version 1.0.0
  */
 const ClickableObjectViewCreators = Object.freeze({
-    [TypeOfOnClickData.IFRAME] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
-        return new IFrameObjectView(image, clickMap, position, offset, name, objectID, eventManager)
+    [TypeOfOnClickData.IFRAME] (creationData) {
+        const { gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager } = creationData
+        return new IFrameObjectView( gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager )
     },
-    [TypeOfOnClickData.STORY] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
+    [TypeOfOnClickData.STORY] (creationData) {
+        const { gameObjectImage, clickMap, pos, offset, gameObjectType, objectName, onClickData } = creationData
         const { story } = onClickData
-        return new StoryObjectView(image, clickMap, position, offset, name, objectID, story, )
+        return new StoryObjectView( gameObjectImage, clickMap, pos, objectName, offset, objectID, story, gameObjectType )
     },
-    [TypeOfOnClickData.MEETING] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
-        return new MeetingObjectView(/* TODO add data */)
+    [TypeOfOnClickData.MEETING] (creationData) {
+        const { gameObjectImage, clickMap, pos, offset, objectName, eventManager } = creationData
+        const { id, domain, name, password } = onClickData
+        return new MeetingObjectView( gameObjectImage, clickMap, pos, offset, objectName, { id, domain, name, password }, eventManager )
     },
-    [TypeOfOnClickData.SCHEDULE] (image, clickMap, position, offset, name, objectID, onClickData, eventManager) {
-        return new ScheduleView(/* TODO add data */)
+    [TypeOfOnClickData.SCHEDULE] (creationData) {
+        const { gameObjectImage, clickMap, pos, offset, objectName, eventManager } = creationData
+        return new ScheduleView( gameObjectImage, clickMap, pos, offset, objectName, eventManager )
     }
 })
 

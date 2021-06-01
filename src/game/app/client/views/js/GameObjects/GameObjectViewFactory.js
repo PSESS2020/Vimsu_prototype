@@ -86,7 +86,7 @@ class GameObjectViewFactory {
      * 
      * @return {GameMapElementView} GameMapElementView instance
      */
-    createGameMapElementView(gameObjectType, pos, objectName, isClickable) {
+    createGameMapElementView(gameObjectType, pos, objectName, isClickable, onClickData, gameObjectID) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
@@ -106,9 +106,18 @@ class GameObjectViewFactory {
                 pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
             }
             if (isClickable) {
-                // TODO
-                // pass data and offset override
-                gameMapElementView = ClickableObjectViewCreators[type](onClickData)
+                var creationData = {
+                    gameObjectType,
+                    gameObjectImage,
+                    clickMap: this.getClickMap(gameObjectImage, pos, offset),
+                    pos,
+                    offset,
+                    objectName,
+                    gameObjectID,
+                    onClickData,
+                    eventManager: this.eventManager, 
+                }
+                gameMapElementView = ClickableObjectViewCreators[type](creationData)
             } else {
                 gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
             }
@@ -152,8 +161,18 @@ class GameObjectViewFactory {
         if (gameObjectImage !== undefined) {
             var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
             if (isClickable) {
-                let clickMap = this.getClickMap(gameObjectImage, pos, offset)
-                gameObjectView = ClickableObjectViewCreators[type](gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, onClickData,  this.eventManager)
+                var creationData = {
+                    gameObjectType,
+                    gameObjectImage,
+                    clickMap: this.getClickMap(gameObjectImage, pos, offset),
+                    pos,
+                    offset,
+                    objectName,
+                    gameObjectID,
+                    onClickData,
+                    eventManager: this.eventManager, 
+                }
+                gameObjectView = ClickableObjectViewCreators[type](creationData)
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }
