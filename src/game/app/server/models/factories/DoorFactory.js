@@ -150,8 +150,8 @@ class DoorFactory {
      * @returns {Door} A door instance with the passed attributes
      */
     createDoor(creationData) {
-        const { roomId, wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit, codeToOpen } = doorData
-        var { logo, isOpen, closedMessage, isLectureDoor } = doorData
+        const { roomId, wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit, codeToOpen } = creationData
+        var { logo, isOpen, closedMessage, isLectureDoor } = creationData
 
         var enterPositionData;
 
@@ -168,7 +168,9 @@ class DoorFactory {
         if ( isLectureDoor === undefined ) { isLectureDoor = false }
         if ( logo          === undefined ) { logo          = GlobalStrings.DEFAULT }
 
-       var  assetPath = this.#getDoorLogo(logo, wallSide)
+        const assetPath = this.#getDoorLogo(logo, wallSide)
+        const doorPosition = new Position(roomId, xPos, yPos)
+        const exitPosition = (!isLectureDoor) ? new Position(idExit, xExit, yExit) : doorPosition
 
         const { enterPositions, enterPositionWithoutClick } = enterPositionData
         const doorTypeKey = `${wallSide}_${(isLectureDoor) ? "LECTURE" : ""}DOOR`
@@ -176,10 +178,9 @@ class DoorFactory {
         // TODO redo
         let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
         let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
-
         this.#doorIDPrefixList.push(doorIdPrefix);
 
-        return new Door( doorId, TypeOfDoor[doorTypeKey], assetPath, new Position(roomId, xPos, yPos), enterPositionWithoutClick, enterPositions, new Position(idExit, xExit, yExit), directionOnExit, isOpen, closedMessage, codeToOpen )   
+        return new Door(doorId, TypeOfDoor[doorTypeKey], assetPath, doorPosition, enterPositionWithoutClick, enterPositions, exitPosition, directionOnExit, isOpen, closedMessage, codeToOpen)   
     } 
 
     /**
