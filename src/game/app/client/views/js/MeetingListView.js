@@ -95,7 +95,7 @@ class MeetingListView extends WindowView {
                             </div>
                         </div>
                         <div class="col-10 pl-3">
-                            <div class="d-flex flex-row justify-content-center align-items-center">
+                            <div class="d-flex flex-row justify-content-start align-items-center">
                                 <span class="name lead text-truncate mr-3" title="${meeting.name}" data-toggle="tooltip">${meeting.name}</span>
                             </div>
                         </div>
