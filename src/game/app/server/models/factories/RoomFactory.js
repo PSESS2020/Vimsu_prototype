@@ -75,12 +75,6 @@ class RoomFactory {
             return this.#doorFactory.createDoor(Object.assign({ roomId: ID }, doorData))
         }) )
 
-        let xPos = (doorData.wallSide == GlobalStrings.RIGHT) ? doorData.positionOfDoor[0] + 1 : doorData.positionOfDoor[0];
-            let yPos = (doorData.wallSide == GlobalStrings.LEFT) ? doorData.positionOfDoor[1] - 1 : doorData.positionOfDoor[1];
-
-            // TODO this is now broken
-            listOfMapElements.push(this.#objFactory.createCustomObject(this.#roomID, GameObjectType[doorData.wallSide + "TILE"], xPos, yPos, false))
-
         room.buildOccMap();
         return room;
     }
