@@ -265,7 +265,7 @@ const Floorplan = Object.freeze({
         MAPELEMENTS: [
             {type: GameObjectType.LEFTSCHEDULE, position: [5, -1], isClickable: Settings.VIDEOSTORAGE_ACTIVATED},
             {type: GameObjectType.LEFTWINDOW, position: [[22, -1], [23, -1], [24, -1]]},
-            {type: GameObjectType.LEFTWINDOW, position: [19, -1], isClickable: true, onClickData: new OnClickStoryData(["Wow!", "The possiblities!"])},
+            {type: GameObjectType.LEFTWINDOW, position: [18, -1], isClickable: true, onClickData: new OnClickStoryData(["Wow!", "The possiblities!"])},
             {type: GameObjectType.LEFTWINDOW, position: [20, -1], isClickable: true, StoryData: ["Hmm...", "Somehow, the view is better from the one on the right."]},
             {type: GameObjectType.RIGHTWINDOW, position: [[25, 0], [25, 1], [25, 2], [25, 3], [25, 4], [25, 5], [25, 23]]},
             {type: GameObjectType.CONFERENCELOGO, position: [13, -1]},
@@ -273,8 +273,8 @@ const Floorplan = Object.freeze({
         ],
         OBJECTS: [
             {type: GameObjectType.PLANT, position: [24, 0], isClickable: true, StoryData: ["I'm a plant.", "Please do not touch me.", "My precious leaves!"]},
-            {type: GameObjectType.PLANT, position: [13, 13], isClickable: true, onClickData: new OnClickMeetingData("test meeting fsdf fafdsfdsfdsf", "https://meet.jit.si/")},
-            {type: GameObjectType.PLANT, position: [20, 20], isClickable: true, MeetingData: {name: "another test meeting fdsfdffsaffda", domain: "https://meet.jit.si/"}},
+            {type: GameObjectType.PLANT, position: [13, 13], isClickable: true, onClickData: new OnClickMeetingData("test meeting fsdf fafdsfdsfdsf")},
+            {type: GameObjectType.PLANT, position: [20, 20], isClickable: true, MeetingData: {name: "another test meeting fdsfdffsaffda"}},
             {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
             {type: GameObjectType.SOFA, position: [24, [1, 2, 3, 4, 5]], variation: 1}
         ],
