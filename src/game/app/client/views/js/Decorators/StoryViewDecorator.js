@@ -14,7 +14,7 @@
      * @param {String[]} storyData The text that will be displayed on click
      * @param {String} headerName Name that will be displayed in the header
      */
-     static decorate(viewObject, storyData, headerName) {
+     static decorate(viewObject, passedObjectID, storyData, headerName) {
         TypeChecker.isInt(passedObjectID)
         TypeChecker.isSting(headerName)
         TypeChecker.isInstanceOf(storyData, Array)

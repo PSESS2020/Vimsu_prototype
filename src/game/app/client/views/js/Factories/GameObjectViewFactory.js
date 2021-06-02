@@ -112,18 +112,9 @@ class GameObjectViewFactory {
                 TypeChecker.isInt(gameMapElementID);
                 const { type } = onClickData
                 TypeChecker.isEnumOf(type, TypeOfOnClickData)
-                var creationData = {
-                    gameObjectType: gameMapElementType,
-                    gameObjectImage: gameMapElementImage,
-                    clickMap: this.getClickMap(gameMapElementImage, pos, offset),
-                    pos,
-                    offset,
-                    objectName,
-                    gameObjectID: gameMapElementID,
-                    onClickData,
-                    eventManager: this.eventManager, 
-                }
-                gameMapElementView = ClickableObjectViewCreators[type](creationData)
+                gameMapElementView = new GameMapElementView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, offset), pos, offset, objectName);
+                var creationData = { gameObjectID: gameMapElementID, gameObjectType: gameMapElementType, onClickData,eventManager: this.eventManager }
+                ClickableObjectViewDecorators.decorate(type, gameMapElementView, creationData)
             } else {
                 gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
             }
@@ -163,18 +154,9 @@ class GameObjectViewFactory {
                 TypeChecker.isInt(gameObjectID);
                 const { type } = onClickData
                 TypeChecker.isEnumOf(type, TypeOfOnClickData)
-                var creationData = {
-                    gameObjectType,
-                    gameObjectImage,
-                    clickMap: this.getClickMap(gameObjectImage, pos, offset),
-                    pos,
-                    offset,
-                    objectName,
-                    gameObjectID,
-                    onClickData,
-                    eventManager: this.eventManager, 
-                }
-                gameObjectView = ClickableObjectViewCreators[type](creationData)
+                gameObjectView = new GameObjectView(gameObjectImage, this.getClickMap(gameObjectImage, pos, offset), pos, offset, objectName);
+                var creationData = { gameObjectID, gameObjectType, onClickData,eventManager: this.eventManager }
+                ClickableObjectViewDecorators.decorate(type, gameObjectView, creationData)
             } else {
                 gameObjectView = new GameObjectView(gameObjectImage, [], pos, offset, objectName);
             }
