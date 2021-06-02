@@ -1297,11 +1297,7 @@ module.exports = class ServerController {
                     if (chat.getMessageList().length > 0) {
                         let lastMessage = chat.getMessageList()[chat.getMessageList().length - 1];
                         let previewText = lastMessage.getMessageText();
-                        if (previewText.length > 35) {
-                            previewText = previewText.slice(0, 35) + "...";
-                        } else if (previewText.includes('<br/>')) {
-                            previewText = previewText.substr(0, previewText.indexOf('<br/>')) + "...";
-                        }
+
                         //check if chat is 1:1 with non empty msg list
                         if (chat instanceof OneToOneChat) {
                             chatListData.push({
@@ -2992,13 +2988,6 @@ module.exports = class ServerController {
                     if (loadedChat.getMessageList().length > 0) {
                         var lastMessage = loadedChat.getMessageList()[loadedChat.getMessageList().length - 1];
                         var previewText = lastMessage.getMessageText();
-        
-                        if (previewText.length > 35) {
-                            previewText = previewText.slice(0, 35) + "...";
-                        } else if (previewText.includes('<br/>')) {
-                            previewText = previewText.substr(0, previewText.indexOf('<br/>')) + "...";
-                        }
-
                         let inviteButton = true;
                         let leaveButton = false;
 

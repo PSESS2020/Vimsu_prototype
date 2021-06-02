@@ -80,6 +80,10 @@ class ChatListView extends WindowView {
       timestamp = "no messages";
     }
 
+    if (previewMessage.includes('<br/>')) {
+      previewMessage = previewMessage.replace(/<br\/>/g, ' ');
+    }
+
     if (chat.previewUsername && chat.previewUsername !== this.ownUsername) {
       previewMessage = chat.previewUsername + ": " + chat.previewMessage;
     }
@@ -115,7 +119,7 @@ class ChatListView extends WindowView {
                             <span class="small text-truncate" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <span class ="small wrapword" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}">${previewMessage}</span>
+                            <span class ="small text-truncate" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}" title="${previewMessage}" data-toggle="tooltip">${previewMessage}</span>
                         </div>
                     </div>
                   </div>
@@ -185,22 +189,13 @@ class ChatListView extends WindowView {
 
       if (chat.chatId === chatID) {
 
-        let msgText = message.msgText;
-
-        if (msgText.length > 35) {
-          msgText = msgText.slice(0, 35) + "...";
-        } else if (msgText.includes('<br/>')) {
-          msgText = msgText.substr(0, msgText.indexOf('<br/>')) + "...";
-        }
-
+        chat.previewUsername = message.senderUsername;
         chat.timestamp = message.timestamp;
+        chat.previewMessage = message.msgText;
 
         if (chat.timestamp) {
           chat.timestamp = new Date(chat.timestamp);
         }
-
-        chat.previewUsername = message.senderUsername;
-        chat.previewMessage = msgText;
 
         let { timestamp, previewMessage } = this.setChatPreview(chat);
 
