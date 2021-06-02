@@ -1,3 +1,4 @@
+const TypeOfOnClickData = require("../../client/shared/TypeOfOnClickData")
 const OnClickEmptyData = require("../models/onclickdatatypes/OnClickEmptyData")
 const OnClickIFrameData = require("../models/onclickdatatypes/OnClickIFrameData")
 const OnClickMeetingData = require("../models/onclickdatatypes/OnClickMeetingData")
