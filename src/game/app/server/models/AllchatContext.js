@@ -132,7 +132,7 @@ module.exports = class AllchatContext extends CommandContext {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;
             if (socket != undefined && !this.#serverController.isMuted(accountId)) {
-                var muteMsg = socket.languageData.messages.allchat.mute;
+                var muteMsg = socket.messages.allchat.mute;
                 this.#serverController.mute(accountId);
                 this.#serverController.sendNotification(socket.id, muteMsg);
             }
@@ -153,7 +153,7 @@ module.exports = class AllchatContext extends CommandContext {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;
             if (socket != undefined && this.#serverController.isMuted(accountId)) {
-                var unmuteMsg = socket.languageData.messages.allchat.unmute;
+                var unmuteMsg = socket.messages.allchat.unmute;
                 this.#serverController.unmute(accountId);
                 this.#serverController.sendNotification(socket.id, unmuteMsg);
             }

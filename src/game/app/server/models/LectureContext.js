@@ -82,7 +82,7 @@ module.exports = class LectureContext extends CommandContext {
         var ppantId = this.#serverController.getIdOfOnlineParticipant(userToRemove);
         if (ppantId !== undefined && this.#contextObject.hasPPant(ppantId)) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantId));
-            var removalMsg = socket.languageData.messages.lecture.removal;
+            var removalMsg = socket.messages.lecture.removal;
             this.#removeByID(ppantId, removalMsg);
         }
     };
@@ -96,7 +96,7 @@ module.exports = class LectureContext extends CommandContext {
         var activePPants = this.#contextObject.getActiveParticipants();
         for (var i = 0; i < activePPants.length; i++) {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(activePPants[i]));
-            var closedMsg = socket.languageData.messages.lecture.closed;
+            var closedMsg = socket.messages.lecture.closed;
             this.#removeByID(activePPants[i], closedMsg);
             i--;
         }
@@ -118,7 +118,7 @@ module.exports = class LectureContext extends CommandContext {
                 this.#contextObject.revokeToken(ppantID);
                 var socketid = this.#serverController.getSocketId(ppantID);
                 var socket = this.#serverController.getSocketObject(socketid);
-                var revokeMsg = socket.languageData.messages.lecture.revoke;
+                var revokeMsg = socket.messages.lecture.revoke;
                 this.#serverController.sendNotification(socketid, revokeMsg);
                 this.#serverController.emitEventTo(socketid, 'update token', false);
             }
@@ -139,7 +139,7 @@ module.exports = class LectureContext extends CommandContext {
         if (ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
             var socketid = this.#serverController.getSocketId(ppantID);
             var socket = this.#serverController.getSocketObject(socketid);
-            var grantMsg = socket.languageData.messages.lecture.grant;
+            var grantMsg = socket.messages.lecture.grant;
             this.#serverController.sendNotification(socketid, grantMsg);
             this.#serverController.emitEventTo(socketid, 'update token', true);
         };

@@ -96,7 +96,7 @@ module.exports = class CommandHandler {
      */
     handleDoorCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 1) {
             this.#serverController.sendLargeNotification(socket.id, messages.help.listOfDoorCommands);
@@ -123,7 +123,7 @@ module.exports = class CommandHandler {
      */
     handleGroupCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
     
         if (commandArgs.length < 1) {
             this.#serverController.sendLargeNotification(socket.id, messages.help.listOfGroupCommands);
@@ -150,7 +150,7 @@ module.exports = class CommandHandler {
      */
     handleMsgCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 1) {
             this.#serverController.sendLargeNotification(socket.id, messages.help.listOfMessageCommands);
@@ -177,7 +177,7 @@ module.exports = class CommandHandler {
      */
     handlePortCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 1) {
             this.#serverController.sendLargeNotification(socket.id, messages.help.listOfPortCommands);
@@ -204,7 +204,7 @@ module.exports = class CommandHandler {
      */
     handleRoomCommand(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 1) {
             this.#serverController.sendLargeNotification(socket.id, messages.help.listOfRoomCommands);
@@ -434,7 +434,7 @@ module.exports = class CommandHandler {
      */
     logAllParticipants(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
         
         let ppants = this.#serverController.getOnlineParticipants();
         let allUsernames = [];
@@ -460,7 +460,7 @@ module.exports = class CommandHandler {
      */
     logAllParticipantsByRoom(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
         
         //no roomID was passed
         if (commandArgs.length < 1) {
@@ -908,7 +908,7 @@ module.exports = class CommandHandler {
      */
     modUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         let username = commandArgs[0];
 
@@ -935,7 +935,7 @@ module.exports = class CommandHandler {
      */
     unmodUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         let username = commandArgs[0];
 
@@ -962,7 +962,7 @@ module.exports = class CommandHandler {
      */
     async createGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 3) {
             this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
@@ -1007,7 +1007,7 @@ module.exports = class CommandHandler {
      */
     deleteGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 1) {
             this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
@@ -1049,7 +1049,7 @@ module.exports = class CommandHandler {
      */
     async addGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 2) {
             this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
@@ -1085,7 +1085,7 @@ module.exports = class CommandHandler {
      */
     async removeGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
 
         if (commandArgs.length < 2) {
             this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
@@ -1143,7 +1143,7 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket socket instance
      */
     unknownCommand(socket) {
-        const messages = socket.languageData.messages;
+        const messages = socket.messages;
         this.#serverController.sendNotification(socket.id, messages.general.unknownCommand);
     }
 

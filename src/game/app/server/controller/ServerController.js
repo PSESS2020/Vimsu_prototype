@@ -174,8 +174,8 @@ module.exports = class ServerController {
                 this.#io.to(socket.id).emit('isVideoConference', Settings.VIDEOSTORAGE_ACTIVATED);
 
                 /* Sends ppant selected language data to client that is relevant for view */
-                socket.languageData = socket.request.session.conferenceLanguageData;
-                this.#io.to(socket.id).emit('selectedLanguageData', socket.languageData.clientView);
+                socket.messages = socket.request.session.conferenceLanguageData.messages;
+                this.#io.to(socket.id).emit('selectedLanguageData', socket.request.session.conferenceLanguageData.clientView);
 
                 //variables for creating account instance
                 const username = socket.request.session.username;
@@ -438,7 +438,7 @@ module.exports = class ServerController {
 
                     // muted ppants can't post messages into any allchat
                     if (this.#muteList.includes(socket.request.session.accountId)) {
-                        this.sendNotification(socket.id, CommandMessages.MUTE);
+                        this.sendNotification(socket.id, socket.messages.allchat.mute);
                         return;
                     }
 
@@ -662,7 +662,7 @@ module.exports = class ServerController {
                 let lecture = schedule.getLecture(lectureId);
 
                 if (lecture.isBanned(socket.request.session.accountId)) {
-                    this.sendNotification(socket.id, CommandMessages.REMOVAL);
+                    this.sendNotification(socket.id, socket.messages.lecture.removal);
                     return;
                 }
 
