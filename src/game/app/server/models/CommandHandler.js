@@ -259,7 +259,7 @@ module.exports = class CommandHandler {
     printHelp(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
 
-        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage(socket.languageData.messages));
+        this.#serverController.sendLargeNotification(socket.id, context.getHelpMessage(socket.messages));
     };
 
     /**
@@ -917,7 +917,9 @@ module.exports = class CommandHandler {
         } else {
             this.#serverController.setModState(username, true).then(res => {
                 if (res) {
-                    this.#serverController.sendNotification(socket.id, CommandMessages.SETMOD(username));
+                    let msg = messages.mod.modSet;
+                    msg.body = msg.body.replace('usernamePlaceholder', username);
+                    this.#serverController.sendNotification(socket.id, msg);
                 } else {
                     this.#serverController.sendNotification(socket.id, messages.general.unknownUsername);
                 }
@@ -944,7 +946,9 @@ module.exports = class CommandHandler {
         } else {
             this.#serverController.setModState(username, false).then(res => {
                 if (res) {
-                    this.#serverController.sendNotification(socket.id, CommandMessages.SETUNMOD(username));
+                    let msg = messages.mod.unmodSet;
+                    msg.body = msg.body.replace('usernamePlaceholder', username);
+                    this.#serverController.sendNotification(socket.id, msg);
                 } else {
                     this.#serverController.sendNotification(socket.id, messages.general.unknownUsername);
                 }

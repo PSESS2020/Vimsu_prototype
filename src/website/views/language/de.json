@@ -486,6 +486,24 @@
                     "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\msg' eingeben, um eine Übersicht über alle verfügbaren Message-Befehle mit Beschreibung zu erhalten."
                 }
             },
+            "mod": {
+                "modSet": {
+                    "header": "Modstatus erfolgreich gesetzt",
+                    "body": "usernamePlaceholder ist jetzt ein Moderator."
+                },
+                "unmodSet": {
+                    "header": "Modstatus erfolgreich gesetzt",
+                    "body": "usernamePlaceholder is jetzt kein Moderator mehr."
+                },
+                "youAreNowMod": {
+                    "header": "Dein Modstatus hat sich verändert",
+                    "body": "Du bist jetzt ein Moderator. Du kannst dir dir einen Überblick über alle Befehle mit '\\help' beschaffen."
+                },
+                "youAreNoLongerMod": {
+                    "header": "Dein Modstatus hat sich verändert",
+                    "body": "Du bist jetzt kein Moderator mehr."  
+                }
+            },
             "msgParts": {
                 "userLogHeader": "Liste aller aktiven Teilnehmer"
             }

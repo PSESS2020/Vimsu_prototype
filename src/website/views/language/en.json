@@ -486,6 +486,24 @@
                     "body": "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
                 }
             },
+            "mod": {
+                "modSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is now a moderator."
+                },
+                "unmodSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is no longer a moderator."
+                },
+                "youAreNowMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are now a moderator. Type in \\help to see all commands."
+                },
+                "youAreNoLongerMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are no longer a moderator."  
+                }
+            },
             "msgParts": {
                 "userLogHeader": "List of all active participants"
             }

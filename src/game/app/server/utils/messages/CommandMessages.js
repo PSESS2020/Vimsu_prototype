@@ -10,31 +10,6 @@ const MessageBodyParts = require('./MessageBodyParts.js');
 module.exports = Object.freeze({
 
     /**************************************************************************/
-    /************************** MOD ALLCHAT MESSAGES **************************/
-    /**************************************************************************/
-
-    SETMOD(username) {
-        return {
-            header: "Mod status set successfully",
-            body: username + " is now a moderator.",
-        }
-    },
-    SETUNMOD(username) {
-        return {
-            header: "Mod status set successfully",
-            body: username + " is no longer a moderator.",
-        }
-    },
-    YOUARENOWMOD: {
-        header: "Your mod state changed",
-        body: "You are now a moderator. Type in \\help to see all commands.",
-    },
-    YOUARENOLONGERMOD: {
-        header: "Your mod state changed",
-        body: "You are no longer a moderator."  
-    },
-
-    /**************************************************************************/
     /************************* DOOR ALLCHAT MESSAGES **************************/
     /**************************************************************************/
 

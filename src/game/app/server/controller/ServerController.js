@@ -2431,10 +2431,11 @@ module.exports = class ServerController {
     
                 //Emit to ppant that his mod state changed and notfiy him
                 if (modState) {
-                    this.sendNotification(socketID, CommandMessages.YOUARENOWMOD);
+                    var msg = socket.messages.mod.youAreNowMod;
                 } else {
-                    this.sendNotification(socketID, CommandMessages.YOUARENOLONGERMOD);
+                    var msg = socket.messages.mod.youAreNoLongerMod;
                 }
+                this.sendNotification(socketID, msg);
                 socket.emit('your mod state changed', modState);
 
                 //Emit to all other ppants in room that mod state of this ppant changed
