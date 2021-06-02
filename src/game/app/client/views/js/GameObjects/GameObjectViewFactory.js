@@ -161,8 +161,8 @@ class GameObjectViewFactory {
             var offset = this.calculateObjectOffset(offsets, gameObjectImage, gameObjectType);
             if (isClickable) {
                 TypeChecker.isInt(gameObjectID);
-                const { type } = onClickData
-                TypeChecker.isEnumOf(type, OnClickDataType)
+                //const { type } = onClickData
+                //TypeChecker.isEnumOf(type, OnClickDataType)
                 var creationData = {
                     gameObjectType,
                     gameObjectImage,
@@ -244,7 +244,7 @@ class GameObjectViewFactory {
      */
     calculateMapElementOffset = function (offsets, image, objectType) {
         if (offsets === undefined) {
-            offset = Settings.DEFAULT_OFFSET
+            offsets = Settings.DEFAULT_OFFSET
         }
         if (offsets === Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula

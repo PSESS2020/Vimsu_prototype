@@ -170,7 +170,7 @@ module.exports = class GameObject {
      *                   about the current state of the object
      */
     getState() {
-        return Object.freeze({
+        return {
             id: this.getId(),
             type: this.getGameObjectType(),
             name: this.getName(),
@@ -181,6 +181,6 @@ module.exports = class GameObject {
             cordY: this.getPosition().getCordY(),
             isClickable: this.getClickable(),
             onClickData: this.getOnClickData()
-        })
+        }
     }
 }
