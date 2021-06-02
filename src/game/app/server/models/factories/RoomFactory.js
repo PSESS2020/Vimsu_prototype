@@ -50,11 +50,13 @@ class RoomFactory {
      */
     buildRoomFrom(roomData) {
         const { ID, NAME, WIDTH, LENGTH, MAPELEMENTS, OBJECTS, NPCS, DOORS } = roomData
-        var { TYPE, WALLSTYLE, TILESTYLE } = roomData
+        var { TYPE, WALLSTYLE, TILESTYLE, LECTUREDOORS } = roomData
 
         if (TYPE      === undefined) { TYPE      = TypeOfRoom.DEFAULT    }
         if (WALLSTYLE === undefined) { WALLSTYLE = GlobalStrings.DEFAULT }
         if (TILESTYLE === undefined) { TILESTYLE = GlobalStrings.DEFAULT }
+
+        if (LECTUREDOORS !== undefined) { LECTUREDOORS.forEach(doorData => DOORS.push(Object.assign({ isLectureDoor: true }, doorData))) }
 
         var room = new Room(ID, NAME, TYPE, WIDTH, LENGTH);
 
