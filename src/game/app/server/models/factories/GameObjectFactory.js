@@ -4,6 +4,8 @@ const Position = require('../Position.js');
 const GameObjectInfo = require('../../utils/GameObjectInfo.js');
 const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 const OnClickEmptyData = require('../onclickdatatypes/OnClickEmptyData.js');
+const OnClickIFrameData = require('../onclickdatatypes/OnClickIFrameData.js');
+const TypeOfOnClickData = require('../../../client/shared/TypeOfOnClickData.js');
 
 /**
  * The Game Object Factory
@@ -43,6 +45,20 @@ class GameObjectFactory {
         }
     }
 
+    #onClickDataAlternateMode = function (objData) {
+        const typesToCheck = Object.values(TypeOfOnClickData)
+        const keysToCheck = Object.keys(objData).map(key => key.toLowerCase)
+        const { iFrameData, story } = objData;
+        if ( iFrameData !== undefined ) {
+            const { title, width, height, url } = iFrameData
+            return new OnClickIFrameData(title, width, height, url)
+        } else if ( story !== undefined) {
+
+        } else {
+            return new OnClickEmptyData();
+        }
+    }
+
     /**
      * @method module:GameObjectFactory#createGameObject
      * 
@@ -78,9 +94,11 @@ class GameObjectFactory {
         
         let returnData = []
 
-        if (isClickable === undefined || onClickData === undefined) {
+        if (isClickable === undefined) {
             isClickable = false
             onClickData = new OnClickEmptyData()
+        } else if (isClickable === true && onClickData === undefined) {
+            onClickData = this.#onClickDataAlternateMode(objData)
         }
 
         if (variation === undefined) { variation = GlobalStrings.DEFAULT }

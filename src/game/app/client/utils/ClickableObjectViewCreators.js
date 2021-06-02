@@ -25,7 +25,12 @@ const ClickableObjectViewCreators = Object.freeze({
     [TypeOfOnClickData.SCHEDULE] (creationData) {
         const { gameObjectImage, clickMap, pos, offset, objectName, eventManager } = creationData
         return new ScheduleView( gameObjectImage, clickMap, pos, offset, objectName, eventManager )
-    }
+    },
+
+    [TypeOfOnClickData.EMPTY] (creationData) {
+        const { gameObjectImage, clickMap, pos, offset, objectName } = creationData
+        return new GameMapElementView( gameObjectImage, clickMap, pos, offset, objectName )
+    },
 })
 
 if (typeof module === 'object' && typeof exports === 'object') {
