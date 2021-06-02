@@ -453,6 +453,41 @@
                     "header": "Keinen Nutzernamen übergeben",
                     "body": "Bitte vergiss nicht, einen Nutzernamen zu übergeben."
                 }
+            },
+            "lecture": {
+                "revoke": {
+                    "header": "Token entzogen",
+                    "body": "Dein Frage-Token wurde dir entzogen, da du gegen die Chat-Regeln verstoßen hast. Du bist jetzt nicht mehr in der Lage, Nachrichten in den Vortragschat zu schreiben."
+                },
+                "grant": {
+                    "header": "Token erhalten",
+                    "body": "Du hast den Frage-Token erhalten. Du bist jetzt in der Lage, Nachrichten in den Vortragschat zu schreiben. Bitte halte dich an die Chat-Regeln."
+                },
+                "removal": {
+                    "header": "Aus Vortrag entfernt",
+                    "body": "Du wurdest von einem Moderator aus dem Vortrag geworfen. Bitte halte dich zukünftig an die Chat-Regeln."
+                },
+                "closed": {
+                    "header": "Vortrag geschlossen",
+                    "body": "Der Redner hat seinen Vortrag geschlossen. Es ist nun nicht mehr möglich, diesem beizutreten."
+                }
+            },
+            "allchat": {
+                "mute": {
+                    "header": "Stummgeschaltet",
+                    "body": "Du wurdest stummgeschaltet, da du gegen die Chat-Regeln verstoßen hast. Du bist jetzt nicht mehr in der Lage, Nachrichten in den Allchat zu schreiben."
+                },
+                "unmute": {
+                    "header": "Stummschaltung aufgehoben",
+                    "body": "Du bist nicht mehr stummgeschaltet und bist jetzt wieder in der Lage, Nachrichten in den Allchat zu schreiben. Bitte halte dich an die Chat-Regeln."
+                },
+                "unknownCommand": {
+                    "header": "Unbekannter Message-Befehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\msg' eingeben, um eine Übersicht über alle verfügbaren Message-Befehle mit Beschreibung zu erhalten."
+                }
+            },
+            "msgParts": {
+                "userLogHeader": "Liste aller aktiven Teilnehmer"
             }
         }
     }

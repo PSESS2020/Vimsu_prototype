@@ -453,6 +453,41 @@
                     "header": "No username passed",
                     "body": "Don't forget to pass a username!"
                 }
+            },
+            "lecture": {
+                "revoke": {
+                    "header": "Token revoked",
+                    "body": "Your token has been revoked for not following chat etiquette. You will no longer be able to post messages into the lecture chat."
+                },
+                "grant": {
+                    "header": "Token granted",
+                    "body": "You have been granted a token. You will now be able to post messages into the lecture chat. Please remember to follow the chat etiquette."
+                },
+                "removal": {
+                    "header": "Removal",
+                    "body": "You have been removed from this lecture by a moderator. Please follow the general chat etiquette."
+                },
+                "closed": {
+                    "header": "Lecture closed",
+                    "body": "The orator has closed this lecture. It is no longer accessible."
+                }
+            },
+            "allchat": {
+                "mute": {
+                    "header": "Muted",
+                    "body": "You have been muted for not following proper chat etiquette. You will no longer be able to post messages into the allchat."
+                },
+                "unmute": {
+                    "header": "Unmuted",
+                    "body": "You are no longer muted and able to post messages into the allchat again. Please remember to follow the chat etiquette."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized message command",
+                    "body": "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
+                }
+            },
+            "msgParts": {
+                "userLogHeader": "List of all active participants"
             }
         }
     }

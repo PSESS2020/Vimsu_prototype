@@ -162,7 +162,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#msgCommandList, msgCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNMSGCOMMAND);
+                this.#serverController.sendNotification(socket.id, messages.allchat.unknownCommand);
             }
         }
     }
@@ -446,7 +446,7 @@ module.exports = class CommandHandler {
         if (allUsernames.length < 1) {
             this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOG(allUsernames));
+            this.#serverController.sendNotification(socket.id, {header: messages.msgParts.userLogHeader, body: allUsernames});
         }
     }
 

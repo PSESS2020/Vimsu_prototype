@@ -1,6 +1,5 @@
 const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Lecture = require('./Lecture.js');
 
 /**
@@ -55,12 +54,12 @@ module.exports = class LectureContext extends CommandContext {
      * Gets help message
      * @method module:LectureContext#getHelpMessage
      * 
-     * @param {json} languageData language data for messages
+     * @param {json} messages language data for messages
      * 
      * @return {String} lecture help message
      */
-    getHelpMessage(languageData) {
-        return languageData.help.listOfLectureCommands;
+    getHelpMessage(messages) {
+        return messages.help.listOfLectureCommands;
     };
 
     /**
@@ -82,7 +81,9 @@ module.exports = class LectureContext extends CommandContext {
 
         var ppantId = this.#serverController.getIdOfOnlineParticipant(userToRemove);
         if (ppantId !== undefined && this.#contextObject.hasPPant(ppantId)) {
-            this.#removeByID(ppantId, CommandMessages.REMOVAL);
+            var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantId));
+            var removalMsg = socket.languageData.messages.lecture.removal;
+            this.#removeByID(ppantId, removalMsg);
         }
     };
 
@@ -94,7 +95,9 @@ module.exports = class LectureContext extends CommandContext {
         this.#contextObject.hide();
         var activePPants = this.#contextObject.getActiveParticipants();
         for (var i = 0; i < activePPants.length; i++) {
-            this.#removeByID(activePPants[i], CommandMessages.CLOSED);
+            var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(activePPants[i]));
+            var closedMsg = socket.languageData.messages.lecture.closed;
+            this.#removeByID(activePPants[i], closedMsg);
             i--;
         }
     };
@@ -114,7 +117,9 @@ module.exports = class LectureContext extends CommandContext {
             if (ppantID !== undefined) {
                 this.#contextObject.revokeToken(ppantID);
                 var socketid = this.#serverController.getSocketId(ppantID);
-                this.#serverController.sendNotification(socketid, CommandMessages.REVOKE);
+                var socket = this.#serverController.getSocketObject(socketid);
+                var revokeMsg = socket.languageData.messages.lecture.revoke;
+                this.#serverController.sendNotification(socketid, revokeMsg);
                 this.#serverController.emitEventTo(socketid, 'update token', false);
             }
         }
@@ -133,7 +138,9 @@ module.exports = class LectureContext extends CommandContext {
         // If the uses did not previously posess a token, we need to inform him he now does
         if (ppantID !== undefined && this.#contextObject.grantToken(ppantID)) {
             var socketid = this.#serverController.getSocketId(ppantID);
-            this.#serverController.sendNotification(socketid, CommandMessages.GRANT);
+            var socket = this.#serverController.getSocketObject(socketid);
+            var grantMsg = socket.languageData.messages.lecture.grant;
+            this.#serverController.sendNotification(socketid, grantMsg);
             this.#serverController.emitEventTo(socketid, 'update token', true);
         };
     };
@@ -148,7 +155,6 @@ module.exports = class LectureContext extends CommandContext {
      */
     #removeByID = function (ppantId, message) {
         TypeChecker.isString(ppantId);
-        TypeChecker.isEnumOf(message, CommandMessages);
 
         var socketClient = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantId));
         this.#contextObject.leave(ppantId);

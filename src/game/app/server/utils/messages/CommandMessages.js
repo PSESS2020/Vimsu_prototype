@@ -10,55 +10,6 @@ const MessageBodyParts = require('./MessageBodyParts.js');
 module.exports = Object.freeze({
 
     /**************************************************************************/
-    /************************ LECTURECHAT MESSAGES ****************************/
-    /**************************************************************************/
-
-    REVOKE: {
-        header: "Token revoked",
-        body: "Your token has been revoked for not following chat etiquette. You will no longer " +
-              "be able to post messages into the lecture chat."
-    },
-    GRANT: {
-        header: "Token granted",
-        body: "You have been granted a token. You will now be able to post messages into the lecture " +
-              "chat. Please remember to follow the chat etiquette."
-    },
-    REMOVAL: {
-        header: "Removal",
-        body: "You have been removed from this lecture by a moderator. Please follow the " +
-              "general chat etiquette."
-    },
-    CLOSED: {
-        header: "Lecture closed",
-        body: "The orator has closed this lecture. It is no longer accessible."
-    },
-
-    /**************************************************************************/
-    /************************ GENERAL ALLCHAT MESSAGES ************************/
-    /**************************************************************************/
-
-    MUTE: {
-        header: "Muted",
-        body: "You have been muted for not following proper chat etiquette. You will no longer " +
-              "be able to post messages into the allchat."
-    },
-    UNMUTE: {
-        header: "Unmuted",
-        body: "You are no longer muted and able to post messages into the allchat again. " +
-              "Please remember to follow the chat etiquette."
-    },
-    UNKNOWNMSGCOMMAND: {
-        header: "Unrecognized message command",
-        body: "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
-    },
-    PARTICIPANTLOG(usernames) {
-        return {
-            header: "List of all participants",
-            body: usernames
-        }
-    },
-
-    /**************************************************************************/
     /************************** MOD ALLCHAT MESSAGES **************************/
     /**************************************************************************/
 
